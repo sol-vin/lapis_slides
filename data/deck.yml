@@ -46,6 +46,7 @@ slides:
 - 25_antipattern_channels
 - 26_concurrency_scenetree
 - 26d_thread_safety_policies
+- 26e_main_thread_dispatch
 - 26b_multiplayer_rpc
 - 26c_concurrency_patterns
 
