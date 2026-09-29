@@ -1,0 +1,2011 @@
+/**
+ * Lapis Presentation Theme for Reveal.js
+ * Themed with SOL.VIN Aesthetic (https://www.sol.vin)
+ * Optimized for 1280x720 (16:9) base resolution with large, readable typography
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-dark: #0f172a;
+  /* Slate 900 */
+  --card-bg: #1e293b;
+  /* Slate 800 */
+  --card-border: #334155;
+  /* Slate 700 */
+  --code-bg: #0f111a;
+  /* Dark Charcoal */
+  --code-border: #475569;
+  /* Slate 600 */
+
+  --godot-blue: #478cbf;
+  /* Godot Engine Blue */
+  --crystal-purp: #a855f7;
+  /* Crystal Vibrant Purple */
+  --cyan-accent: #06b6d4;
+  /* Neon Cyan */
+  --emerald-green: #10b981;
+  /* Emerald */
+  --coral-red: #f43f5e;
+  /* Ruby / Coral */
+  --amber-gold: #f59e0b;
+  /* Amber */
+
+  --text-white: #f8fafc;
+  /* Slate 50 */
+  --text-body: #cbd5e1;
+  /* Slate 300 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+  --text-dim: #64748b;
+  /* Slate 500 */
+}
+
+/* Global Reset for Reveal Presentation */
+.reveal {
+  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  color: var(--text-body);
+  background-color: var(--bg-dark);
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  box-sizing: border-box;
+  padding: 1.6rem 2.4rem 1.2rem 2.4rem;
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Slide Header */
+.slide-header {
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1.5px solid var(--card-border);
+  flex-shrink: 0;
+}
+
+.badge-pill {
+  display: inline-block;
+  padding: 0.25rem 0.85rem;
+  background-color: var(--card-bg);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  border: 1.5px solid var(--godot-blue);
+  color: var(--godot-blue);
+}
+
+.badge-pill.blue {
+  border-color: var(--godot-blue);
+  color: var(--godot-blue);
+}
+
+.badge-pill.purple {
+  border-color: var(--crystal-purp);
+  color: var(--crystal-purp);
+}
+
+.badge-pill.cyan {
+  border-color: var(--cyan-accent);
+  color: var(--cyan-accent);
+}
+
+.badge-pill.emerald {
+  border-color: var(--emerald-green);
+  color: var(--emerald-green);
+}
+
+.badge-pill.coral {
+  border-color: var(--coral-red);
+  color: var(--coral-red);
+}
+
+.badge-pill.amber {
+  border-color: var(--amber-gold);
+  color: var(--amber-gold);
+}
+
+.slide-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-white);
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.slide-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  line-height: 1.3;
+}
+
+/* Slide Content Layout */
+.slide-body {
+  flex: 1;
+  display: flex;
+  gap: 1.2rem;
+  overflow: hidden;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.col-1 {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.col-2 {
+  flex: 2 !important;
+  min-width: 0 !important;
+}
+
+.col-3 {
+  flex: 3 !important;
+  min-width: 0 !important;
+}
+
+/* Content Cards */
+.card {
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  flex: 1;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.card.blue {
+  border-color: var(--godot-blue);
+}
+
+.card.purple {
+  border-color: var(--crystal-purp);
+}
+
+.card.cyan {
+  border-color: var(--cyan-accent);
+}
+
+.card.emerald {
+  border-color: var(--emerald-green);
+}
+
+.card.coral {
+  border-color: var(--coral-red);
+}
+
+.card.amber {
+  border-color: var(--amber-gold);
+}
+
+.card-title {
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: var(--text-white);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+
+.card-title.blue {
+  color: var(--godot-blue);
+}
+
+.card-title.purple {
+  color: var(--crystal-purp);
+}
+
+.card-title.cyan {
+  color: var(--cyan-accent);
+}
+
+.card-title.emerald {
+  color: var(--emerald-green);
+}
+
+.card-title.coral {
+  color: var(--coral-red);
+}
+
+.card-title.amber {
+  color: var(--amber-gold);
+}
+
+ul.card-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  justify-content: space-evenly;
+}
+
+ul.card-list li {
+  font-size: 0.96rem;
+  line-height: 1.45;
+  color: var(--text-body);
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+ul.card-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--cyan-accent);
+  font-weight: bold;
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+ul.card-list li strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Compact Card Variant for dense content */
+.card.compact {
+  padding: 0.85rem 1.15rem;
+}
+
+.card.compact .card-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.card.compact ul.card-list {
+  gap: 0.35rem;
+  justify-content: flex-start;
+}
+
+.card.compact ul.card-list li {
+  font-size: 0.7rem;
+  line-height: 1.34;
+  padding-left: 1.15rem;
+}
+
+/* Code Display & Highlight.js Integration */
+.code-container {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--code-border);
+  background-color: var(--code-bg);
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.code-container.cyan {
+  border-color: var(--cyan-accent);
+}
+
+.code-container.emerald {
+  border-color: var(--emerald-green);
+}
+
+.code-container.amber {
+  border-color: var(--amber-gold);
+}
+
+.code-container.coral {
+  border-color: var(--coral-red);
+}
+
+.code-container.blue {
+  border-color: var(--godot-blue);
+}
+
+.code-header {
+  background-color: rgba(30, 41, 59, 0.85);
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Terminal Window Mockup */
+.terminal-window {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--code-border);
+  background-color: #0c101c;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.terminal-window.blue {
+  border-color: var(--godot-blue);
+}
+
+.terminal-window.cyan {
+  border-color: var(--cyan-accent);
+}
+
+.terminal-window.emerald {
+  border-color: var(--emerald-green);
+}
+
+.terminal-window.amber {
+  border-color: var(--amber-gold);
+}
+
+.terminal-header {
+  background-color: #151e32;
+  padding: 0.42rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.terminal-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.terminal-dot.red {
+  background-color: #ff5f56;
+}
+
+.terminal-dot.yellow {
+  background-color: #ffbd2e;
+}
+
+.terminal-dot.green {
+  background-color: #27c93f;
+}
+
+.terminal-title {
+  font-family: "Consolas", "Cascadia Code", monospace;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  letter-spacing: 0.03em;
+}
+
+.terminal-body {
+  padding: 0.55rem 0.85rem !important;
+  font-family: "Consolas", "Cascadia Code", "Courier New", monospace !important;
+  font-size: 0.69rem !important;
+  line-height: 1.34 !important;
+  color: #e2e8f0;
+  overflow: hidden !important;
+  flex: 1;
+  margin: 0 !important;
+  background: transparent !important;
+  box-sizing: border-box;
+}
+
+.terminal-body pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  overflow: visible !important;
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+.terminal-body code {
+  padding: 0 !important;
+  background: transparent !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  white-space: pre !important;
+  display: block !important;
+}
+
+.term-prompt {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.term-cmd {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.term-green {
+  color: #34d399;
+  font-weight: 600;
+}
+
+.term-cyan {
+  color: #38bdf8;
+}
+
+.term-yellow {
+  color: #fbbf24;
+}
+
+.term-magenta {
+  color: #c084fc;
+  font-weight: 600;
+}
+
+.term-dim {
+  color: #64748b;
+}
+
+.term-bold {
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+/* Suppress all scrollbars inside terminal-window */
+.terminal-window pre,
+.terminal-window .terminal-body pre,
+.terminal-window .terminal-body code {
+  overflow: hidden !important;
+  max-height: 100% !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.terminal-window pre::-webkit-scrollbar,
+.terminal-window .terminal-body pre::-webkit-scrollbar,
+.terminal-window .terminal-body code::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.reveal pre,
+.reveal pre.code-wrapper {
+  position: relative !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  flex: 1;
+  overflow: auto !important;
+  display: block !important;
+}
+
+.reveal pre code {
+  font-family: "Consolas", "Cascadia Code", "Courier New", monospace !important;
+  font-size: 0.80rem !important;
+  line-height: 1.28 !important;
+  padding: 0.45rem 0.8rem !important;
+  max-height: none !important;
+  background-color: transparent !important;
+  border-radius: 0;
+  display: block !important;
+  box-sizing: border-box;
+  position: relative !important;
+}
+
+/* RevealHighlight line numbers table integration */
+.reveal pre code table.hljs-ln {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.reveal pre code td.hljs-ln-line {
+  padding: 0 !important;
+  line-height: 1.28 !important;
+  font-size: inherit !important;
+}
+
+.reveal pre code td.hljs-ln-numbers {
+  width: 28px !important;
+  text-align: right !important;
+  padding-right: 14px !important;
+  color: var(--text-muted) !important;
+  user-select: none !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+  opacity: 0.45 !important;
+}
+
+.reveal pre code td.hljs-ln-code {
+  padding-left: 14px !important;
+  white-space: pre !important;
+}
+
+/* Guard against fragmented code overlays leaking out */
+.reveal pre code.fragment {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Styled Inline Code Badges */
+.reveal code:not(pre code) {
+  font-family: "Fira Code", Consolas, Monaco, "Courier New", Courier, monospace;
+  font-size: 0.88em;
+  background-color: rgba(15, 23, 42, 0.85);
+  color: #38bdf8;
+  /* Neon Sky / Cyan */
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 5px;
+  padding: 0.1em 0.42em;
+  font-weight: 600;
+  vertical-align: baseline;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  letter-spacing: -0.01em;
+  display: inline-block;
+}
+
+/* Four-Column Code Comparison Layout */
+.slide-body.four-cols {
+  gap: 0.5rem;
+}
+
+.slide-body.four-cols .code-container {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.slide-body.four-cols .code-container pre code {
+  font-size: 0.67rem !important;
+  line-height: 1.32 !important;
+  padding: 0.45rem 0.55rem !important;
+  overflow-x: hidden !important;
+  word-break: normal;
+  white-space: pre !important;
+}
+
+.slide-body.four-cols .code-header {
+  padding: 0.3rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Architecture Layer Hierarchy Diagram */
+.layer-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.layer-tier {
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.layer-tier:hover {
+  transform: translateX(4px);
+}
+
+.layer-tier.emerald {
+  border-left: 5px solid var(--emerald-green);
+  border-color: rgba(16, 185, 129, 0.4);
+  border-left-color: var(--emerald-green);
+}
+
+.layer-tier.purple {
+  border-left: 5px solid var(--crystal-purp);
+  border-color: rgba(168, 85, 247, 0.4);
+  border-left-color: var(--crystal-purp);
+}
+
+.layer-tier.cyan {
+  border-left: 5px solid var(--cyan-accent);
+  border-color: rgba(6, 182, 212, 0.4);
+  border-left-color: var(--cyan-accent);
+}
+
+.layer-tier.amber {
+  border-left: 5px solid var(--amber-gold);
+  border-color: rgba(245, 158, 11, 0.4);
+  border-left-color: var(--amber-gold);
+}
+
+.layer-tier.blue {
+  border-left: 5px solid var(--godot-blue);
+  border-color: rgba(71, 140, 191, 0.4);
+  border-left-color: var(--godot-blue);
+}
+
+.layer-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  min-width: 85px;
+  text-align: center;
+}
+
+.layer-badge.emerald {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.layer-badge.purple {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.layer-badge.cyan {
+  background: rgba(6, 182, 212, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(6, 182, 212, 0.4);
+}
+
+.layer-badge.amber {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.layer-badge.blue {
+  background: rgba(71, 140, 191, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(71, 140, 191, 0.4);
+}
+
+.layer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.layer-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layer-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.25;
+}
+
+.layer-arrow {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 0.5;
+  user-select: none;
+}
+
+/* Tables */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+  text-align: left;
+  flex: 1;
+}
+
+.matrix-table th {
+  background-color: var(--card-bg);
+  color: var(--text-white);
+  padding: 0.45rem 0.65rem;
+  border: 1.5px solid var(--card-border);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.matrix-table th.highlight {
+  background-color: var(--godot-blue);
+  color: #ffffff;
+}
+
+.matrix-table td {
+  padding: 0.36rem 0.65rem;
+  border: 1px solid var(--card-border);
+  color: var(--text-body);
+  line-height: 1.28;
+}
+
+.matrix-table tr:nth-child(even) td {
+  background-color: rgba(30, 41, 59, 0.45);
+}
+
+.matrix-table td.dim-header {
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 0.78rem;
+}
+
+.matrix-table td.lapis-col {
+  color: var(--cyan-accent);
+  font-weight: 600;
+}
+
+/* Slide Footer */
+.slide-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  border-top: 1px solid rgba(51, 65, 85, 0.4);
+  flex-shrink: 0;
+}
+
+/* Reveal Controls & Progress */
+.reveal .progress {
+  color: var(--cyan-accent);
+  height: 5px;
+}
+
+.reveal .controls {
+  color: var(--cyan-accent);
+}
+
+/* ==========================================================================
+   SOL.VIN THEME SYSTEM (https://www.sol.vin)
+   Dynamic per-slide retro console / OS palettes, terminal borders & typography
+   ========================================================================== */
+
+/* Persistent Sol.vin Deck Header Bar with Interactive 3D Wireframe Cube */
+.solvin-deck-header {
+  position: fixed;
+  top: 0.65rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 95;
+  pointer-events: auto;
+}
+
+.deck-cube-app {
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.deck-cube-app:hover {
+  transform: scale(1.08);
+}
+
+.deck-solvin-label {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--cube, var(--text-color, #f8f8f2));
+  opacity: 0.8;
+  user-select: none;
+  transition: color 0.25s ease;
+}
+
+/* Vector 3D Cube Edges */
+.cube-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.cube-edge {
+  stroke: var(--cube, var(--cube-stroke-color, var(--text-color, #f8f8f2)));
+  stroke-width: 1.8px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.2s ease;
+}
+
+.deck-cube-app:hover .cube-edge,
+.cube-app-slot:hover .cube-edge,
+.hero-cube:hover .cube-edge,
+.cube-svg:hover .cube-edge {
+  stroke: var(--cube-hover, var(--border-active, var(--accent-color, #fd971f)));
+}
+
+/* Upper-Right Corner Palette Badge - ONLY display on the currently active (.present) slide */
+.reveal .slides section:not(.present) .palette-corner-badge {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.reveal .slides section.present .palette-corner-badge {
+  position: absolute;
+  top: 1.1rem;
+  right: 2.2rem;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.32rem 0.8rem;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  background: var(--bg-window, #1e1f1c);
+  color: var(--text-color, #f8f8f2);
+  border: 1.5px solid var(--border-color, #f92672);
+  box-shadow: 3px 3px 0px var(--shadow-color, #141411);
+  border-radius: 4px;
+  z-index: 50;
+  user-select: none;
+  letter-spacing: 0.04em;
+  transition: all 0.15s ease;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.palette-corner-badge:hover {
+  border-color: var(--border-active);
+  box-shadow: 3px 3px 0px var(--border-active);
+  transform: translate(-1px, -1px);
+}
+
+.palette-corner-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-color, #fd971f);
+  display: inline-block;
+  box-shadow: 0 0 6px var(--accent-color, #fd971f);
+}
+
+/* Sol.vin Slide Component Scoping */
+.solvin-slide {
+  position: relative !important;
+  overflow: hidden !important;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Quicksand', sans-serif;
+}
+
+.solvin-slide .slide-header {
+  border-bottom: 1.5px dashed var(--border-color) !important;
+}
+
+.solvin-slide .slide-title {
+  color: var(--text-color) !important;
+  font-family: 'Quicksand', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+.solvin-slide .slide-subtitle {
+  color: var(--text-color) !important;
+  font-family: 'Quicksand', sans-serif !important;
+  opacity: 0.88;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #94a3b8 !important;
+  font-style: italic;
+}
+
+.solvin-slide .badge-pill {
+  background-color: var(--bg-window) !important;
+  color: var(--accent-color) !important;
+  border: 1.5px solid var(--border-color) !important;
+  box-shadow: 2px 2px 0px var(--shadow-color) !important;
+  border-radius: 4px !important;
+}
+
+.solvin-slide .card {
+  background-color: var(--bg-window) !important;
+  color: var(--text-color) !important;
+  border: 1.5px solid var(--border-color) !important;
+  box-shadow: 3.5px 3.5px 0px var(--shadow-color) !important;
+  border-radius: 6px !important;
+}
+
+.solvin-slide .card-title {
+  color: var(--accent-color, var(--text-color)) !important;
+  font-family: 'Quicksand', sans-serif !important;
+  font-weight: 700 !important;
+  border-bottom: 1px dashed var(--border-color) !important;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.solvin-slide .card-list li,
+.solvin-slide ul li {
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .card-list li strong,
+.solvin-slide ul li strong {
+  color: var(--accent-color, var(--text-color)) !important;
+}
+
+/* Bullet points strictly follow the active slide palette */
+.solvin-slide ul.card-list li::before,
+.solvin-slide .card-list li::before,
+.solvin-slide ul li::before {
+  color: var(--accent-color, var(--border-color)) !important;
+}
+
+.solvin-slide ul li::marker {
+  color: var(--accent-color, var(--border-color)) !important;
+}
+
+.solvin-slide .card:hover .card-list li::before,
+.solvin-slide .card:hover ul li::before {
+  color: var(--border-active) !important;
+}
+
+/* ==========================================================================
+   CODE EXAMPLE WINDOWS & TERMINAL WINDOWS (SOL.VIN PALETTE SYSTEM)
+   ========================================================================== */
+.solvin-slide .code-container {
+  background-color: var(--bg-window) !important;
+  border: 2px solid var(--border-color) !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solvin-slide .code-container:hover {
+  border-color: var(--border-active) !important;
+  box-shadow: 4px 4px 0px var(--border-active) !important;
+}
+
+/* Terminal Window strictly styled with Slide Palette */
+.solvin-slide .terminal-window {
+  background-color: var(--bg-window) !important;
+  border: 2px solid var(--border-color) !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solvin-slide .terminal-window:hover {
+  border-color: var(--border-active) !important;
+  box-shadow: 4px 4px 0px var(--border-active) !important;
+}
+
+.solvin-slide .terminal-window .terminal-header {
+  background-color: var(--bg-color) !important;
+  border-bottom: 2px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .terminal-window .terminal-title {
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .terminal-window pre,
+.solvin-slide .terminal-window .terminal-body pre,
+.solvin-slide .terminal-window .terminal-body code {
+  background-color: var(--bg-window) !important;
+  color: var(--text-color) !important;
+  font-family: 'Consolas', 'Cascadia Code', 'Courier New', monospace !important;
+  font-size: 0.80rem !important;
+  line-height: 1.35 !important;
+}
+
+.solvin-slide .terminal-window code.hljs {
+  background-color: var(--bg-window) !important;
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .terminal-window .hljs-comment {
+  color: var(--text-dim, var(--border-color)) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+}
+
+.solvin-slide .terminal-window .hljs-string {
+  color: var(--accent-secondary, var(--link-color)) !important;
+}
+
+.solvin-slide .terminal-window .hljs-keyword,
+.solvin-slide .terminal-window .hljs-selector-tag {
+  color: var(--accent-color) !important;
+  font-weight: 700 !important;
+}
+
+.solvin-slide .terminal-window .hljs-built_in {
+  color: var(--accent-tertiary, var(--border-active)) !important;
+  font-weight: 700 !important;
+}
+
+/* Window Header Bar */
+.solvin-slide .code-header,
+.solvin-slide .terminal-header {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  border-bottom: 2px solid var(--border-color) !important;
+  font-family: 'Quicksand', monospace !important;
+  font-weight: 700 !important;
+  padding: 0.38rem 0.85rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.6rem !important;
+  user-select: none !important;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.solvin-slide .code-container:hover .code-header,
+.solvin-slide .terminal-window:hover .terminal-header {
+  border-bottom-color: var(--border-active) !important;
+}
+
+.solvin-slide .code-title,
+.solvin-slide .terminal-title {
+  color: var(--text-color) !important;
+  font-family: 'Quicksand', monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+
+/* Window Dots (Close, Min, Max) strictly follow the active palette */
+.solvin-slide .terminal-dots,
+.solvin-slide .window-dots {
+  display: inline-flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.solvin-slide .terminal-dot,
+.solvin-slide .window-dot {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+  border: 1.2px solid var(--border-color) !important;
+  box-shadow: 1px 1px 0px var(--shadow-color) !important;
+  transition: transform 0.15s ease, filter 0.15s ease !important;
+  cursor: pointer !important;
+}
+
+.solvin-slide .terminal-dots:hover .terminal-dot,
+.solvin-slide .window-dots:hover .window-dot {
+  transform: scale(1.18);
+}
+
+/* Dot 1: Close button in palette primary border */
+.solvin-slide .terminal-dot.red,
+.solvin-slide .window-dot.close {
+  background-color: var(--border-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Dot 2: Minimize button in palette accent color */
+.solvin-slide .terminal-dot.yellow,
+.solvin-slide .window-dot.min {
+  background-color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Dot 3: Maximize button in palette active border */
+.solvin-slide .terminal-dot.green,
+.solvin-slide .window-dot.max {
+  background-color: var(--border-active) !important;
+  border-color: var(--border-active) !important;
+}
+
+/* Window Controls & Retro Window Buttons (_ □ ✕) strictly following palette */
+.solvin-slide .window-controls {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.solvin-slide .window-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  font-family: 'Quicksand', monospace, sans-serif !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  border-radius: 2px !important;
+  background-color: var(--bg-window, var(--bg-color)) !important;
+  color: var(--text-color) !important;
+  border: 1.2px solid var(--border-color) !important;
+  box-shadow: 1.5px 1.5px 0px var(--shadow-color) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: all 0.15s ease !important;
+}
+
+.solvin-slide .window-btn:hover {
+  background-color: var(--border-active) !important;
+  color: var(--bg-color) !important;
+  border-color: var(--border-active) !important;
+  box-shadow: 1.5px 1.5px 0px var(--border-active) !important;
+  transform: translate(-1px, -1px) !important;
+}
+
+.solvin-slide .code-lang-tag,
+.solvin-slide .terminal-badge {
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  padding: 0.1rem 0.45rem !important;
+  border-radius: 3px !important;
+  background-color: var(--bg-window, var(--bg-color)) !important;
+  color: var(--accent-color, var(--border-color)) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 1px 1px 0px var(--shadow-color) !important;
+  margin-right: 0.3rem !important;
+  transition: all 0.15s ease !important;
+}
+
+.solvin-slide .code-container:hover .code-lang-tag,
+.solvin-slide .terminal-window:hover .terminal-badge {
+  border-color: var(--border-active) !important;
+  color: var(--border-active) !important;
+}
+
+.solvin-slide .code-icon {
+  color: var(--accent-color);
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+.solvin-slide .terminal-icon {
+  color: var(--accent-color);
+  font-weight: 800;
+  font-size: 0.85em;
+}
+
+/* Four-column code headers (Slide 13) */
+.slide-body.four-cols .code-header {
+  padding: 0.28rem 0.45rem !important;
+  font-size: 0.70rem !important;
+  gap: 0.25rem !important;
+}
+
+.slide-body.four-cols .terminal-dots {
+  gap: 4px !important;
+}
+
+.slide-body.four-cols .terminal-dot {
+  width: 7px !important;
+  height: 7px !important;
+}
+
+.slide-body.four-cols .code-title {
+  font-size: 0.70rem !important;
+}
+
+.slide-body.four-cols .window-btn {
+  width: 15px !important;
+  height: 15px !important;
+  font-size: 0.60rem !important;
+}
+
+.slide-body.four-cols .code-lang-tag {
+  font-size: 0.62rem !important;
+  padding: 0.05rem 0.3rem !important;
+  margin-right: 0 !important;
+}
+
+/* Code Pre/Body Backgrounds */
+.solvin-slide .code-container pre,
+.solvin-slide .terminal-window pre,
+.solvin-slide .terminal-body pre,
+.solvin-slide .terminal-body code {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .code-container pre code,
+.solvin-slide pre code {
+  color: var(--text-color) !important;
+  background-color: transparent !important;
+}
+
+/* Line numbers in code blocks */
+.solvin-slide .reveal pre code td.hljs-ln-numbers,
+.solvin-slide pre code td.hljs-ln-numbers {
+  color: var(--text-dim, var(--text-color)) !important;
+  border-right: 1px solid var(--border-color) !important;
+  opacity: 0.55 !important;
+}
+
+.solvin-slide .reveal pre code td.hljs-ln-code,
+.solvin-slide pre code td.hljs-ln-code {
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .slide-footer {
+  border-top: 1px dashed var(--border-color) !important;
+  color: var(--text-dim, var(--text-color)) !important;
+  opacity: 0.85;
+}
+
+.solvin-slide code:not(pre code) {
+  background-color: var(--bg-window) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--accent-color) !important;
+  border-radius: 3px;
+  padding: 0.1rem 0.35rem;
+}
+
+/* Matrix Table Scoping under Sol.vin */
+.solvin-slide .matrix-table th {
+  background-color: var(--bg-window) !important;
+  color: var(--text-color) !important;
+  border: 1.5px solid var(--border-color) !important;
+}
+
+.solvin-slide .matrix-table td {
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .matrix-table tr:nth-child(even) td {
+  background-color: rgba(128, 128, 128, 0.08) !important;
+}
+
+/* ==========================================================================
+   COMPREHENSIVE SYNTAX HIGHLIGHTING STRICTLY FOLLOWING ACTIVE PALETTE
+   Overrides Atom One Dark defaults on every slide
+   ========================================================================== */
+.solvin-slide .hljs,
+.solvin-slide pre code.hljs {
+  background: transparent !important;
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .hljs-keyword,
+.solvin-slide .hljs-selector-tag,
+.solvin-slide .hljs-section {
+  color: var(--accent-color) !important;
+  font-weight: 700 !important;
+}
+
+.solvin-slide .hljs-string,
+.solvin-slide .hljs-attr,
+.solvin-slide .hljs-template-variable,
+.solvin-slide .hljs-regexp,
+.solvin-slide .hljs-addition {
+  color: var(--accent-secondary) !important;
+}
+
+.solvin-slide .hljs-title,
+.solvin-slide .hljs-title.class_,
+.solvin-slide .hljs-title.function_,
+.solvin-slide .hljs-function,
+.solvin-slide .hljs-class {
+  color: var(--border-active, var(--link-color)) !important;
+  font-weight: 700 !important;
+}
+
+.solvin-slide .hljs-type,
+.solvin-slide .hljs-built_in,
+.solvin-slide .hljs-literal {
+  color: var(--border-active, var(--accent-color)) !important;
+  font-weight: 600 !important;
+}
+
+.solvin-slide .hljs-comment,
+.solvin-slide .hljs-quote,
+.solvin-slide .hljs-doctag {
+  color: var(--text-dim) !important;
+  font-style: italic !important;
+  opacity: 0.75 !important;
+}
+
+.solvin-slide .hljs-number,
+.solvin-slide .hljs-symbol,
+.solvin-slide .hljs-bullet {
+  color: var(--accent-quaternary, var(--accent-color)) !important;
+}
+
+.solvin-slide .hljs-meta,
+.solvin-slide .hljs-meta .hljs-keyword,
+.solvin-slide .hljs-meta .hljs-string {
+  color: var(--accent-color) !important;
+  font-weight: 600 !important;
+}
+
+.solvin-slide .hljs-variable,
+.solvin-slide .hljs-params,
+.solvin-slide .hljs-punctuation,
+.solvin-slide .hljs-property,
+.solvin-slide .hljs-operator {
+  color: var(--text-color) !important;
+}
+
+.solvin-slide .hljs-deletion {
+  color: var(--border-color) !important;
+}
+
+/* ==========================================================================
+   Syntax Highlighting for Code Containers (Slide Palette Scoped)
+   ========================================================================== */
+.code-container pre,
+.code-container pre code {
+  background-color: var(--bg-window) !important;
+  color: var(--text-color) !important;
+  font-size: 0.92rem !important;
+  line-height: 1.52 !important;
+}
+
+.code-container pre code .hljs-keyword,
+.code-container pre code .hljs-selector-tag {
+  color: var(--accent-color) !important;
+  font-weight: 700 !important;
+}
+
+.code-container pre code .hljs-string,
+.code-container pre code .hljs-attr {
+  color: var(--accent-secondary, var(--link-color)) !important;
+}
+
+.code-container pre code .hljs-title,
+.code-container pre code .hljs-title.function_,
+.code-container pre code .hljs-title.class_ {
+  color: var(--border-active, var(--accent-color)) !important;
+  font-weight: 700 !important;
+}
+
+.code-container pre code .hljs-type,
+.code-container pre code .hljs-built_in,
+.code-container pre code .hljs-symbol {
+  color: var(--accent-tertiary, var(--border-active)) !important;
+}
+
+.code-container pre code .hljs-number,
+.code-container pre code .hljs-literal {
+  color: var(--accent-quaternary, var(--accent-color)) !important;
+}
+
+.code-container pre code .hljs-comment,
+.code-container pre code .hljs-quote {
+  color: var(--text-dim, var(--border-color)) !important;
+  font-style: italic !important;
+  opacity: 1 !important;
+}
+
+.code-container pre code .hljs-params,
+.code-container pre code .hljs-variable {
+  color: var(--accent-color) !important;
+}
+
+/* Terminal text styles strictly scoped to Active Slide Palette */
+.solvin-slide .term-prompt {
+  color: var(--accent-color) !important;
+  font-weight: 700;
+}
+
+.solvin-slide .term-cmd {
+  color: var(--text-color) !important;
+  font-weight: 700;
+}
+
+.solvin-slide .term-green {
+  color: var(--accent-secondary) !important;
+  font-weight: 600;
+}
+
+.solvin-slide .term-cyan {
+  color: var(--border-active) !important;
+}
+
+.solvin-slide .term-yellow {
+  color: var(--accent-color) !important;
+}
+
+.solvin-slide .term-magenta {
+  color: var(--accent-quaternary) !important;
+  font-weight: 600;
+}
+
+.solvin-slide .term-dim {
+  color: var(--text-dim) !important;
+  opacity: 0.75;
+}
+
+.solvin-slide .term-bold {
+  font-weight: 700;
+  color: var(--text-color) !important;
+}
+
+/* ==========================================================================
+   SLIDE 30: RESTRUCTURED 5-LAYER ARCHITECTURE BRIDGE
+   ========================================================================== */
+.arch-layer-card {
+  background: var(--bg-window);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--shadow-color);
+  border-radius: 4px;
+  padding: 0.20rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arch-layer-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2.5px 2.5px 0px var(--border-active);
+}
+
+.arch-layer-card.l5, .arch-layer-card.layer5 {
+  border-left: 4px solid #fbc02d;
+}
+
+.arch-layer-card.l4, .arch-layer-card.layer4 {
+  border-left: 4px solid #e91e63;
+}
+
+.arch-layer-card.l3, .arch-layer-card.layer3 {
+  border-left: 4px solid #00a859;
+}
+
+.arch-layer-card.l2, .arch-layer-card.layer2 {
+  border-left: 4px solid #df0024;
+}
+
+.arch-layer-card.l1, .arch-layer-card.layer1 {
+  border-left: 4px solid #0072ce;
+}
+
+.arch-layer-header {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.arch-layer-num {
+  font-family: 'Quicksand', monospace;
+  font-weight: 800;
+  font-size: 0.64rem;
+  padding: 0.06rem 0.35rem;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.arch-layer-num.l5, .arch-layer-num.layer5 {
+  background: #fbc02d;
+  color: #1a1a1a;
+  font-weight: 800;
+}
+
+.arch-layer-num.l4, .arch-layer-num.layer4 {
+  background: #e91e63;
+  color: #ffffff;
+}
+
+.arch-layer-num.l3, .arch-layer-num.layer3 {
+  background: #00a859;
+  color: #ffffff;
+}
+
+.arch-layer-num.l2, .arch-layer-num.layer2 {
+  background: #df0024;
+  color: #ffffff;
+}
+
+.arch-layer-num.l1, .arch-layer-num.layer1 {
+  background: #0072ce;
+  color: #ffffff;
+}
+
+.arch-layer-title {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.80rem;
+  color: var(--text-color);
+}
+
+.arch-layer-tech {
+  margin-left: auto;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-dim, var(--accent-tertiary));
+  background: var(--bg-color);
+  padding: 0.06rem 0.35rem;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+}
+
+.arch-layer-desc {
+  font-size: 0.67rem;
+  line-height: 1.18;
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
+.arch-layer-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+}
+
+.arch-pill {
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 0.04rem 0.26rem;
+  border-radius: 2px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.arch-pill.l5, .arch-pill.layer5 {
+  border-color: #fbc02d;
+  color: #fbc02d;
+}
+
+.arch-pill.l4, .arch-pill.layer4 {
+  border-color: #e91e63;
+  color: #e91e63;
+}
+
+.arch-pill.l3, .arch-pill.layer3 {
+  border-color: #00a859;
+  color: #00a859;
+}
+
+.arch-pill.l2, .arch-pill.layer2 {
+  border-color: #df0024;
+  color: #df0024;
+}
+
+.arch-pill.l1, .arch-pill.layer1 {
+  border-color: #0072ce;
+  color: #0072ce;
+}
+
+.arch-layer-flow {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.03em;
+  color: var(--accent-color);
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  opacity: 0.85;
+  line-height: 1;
+}
+
+.arch-side-card {
+  padding: 0.40rem 0.65rem !important;
+  background-color: var(--bg-window) !important;
+  border: 1.5px solid var(--border-color) !important;
+  box-shadow: 2px 2px 0px var(--shadow-color) !important;
+  border-radius: 4px !important;
+  flex: 1;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.arch-side-card .card-title {
+  font-size: 0.82rem !important;
+  margin-bottom: 0.18rem !important;
+  padding-bottom: 0.12rem !important;
+  border-bottom: 1px dashed var(--border-color) !important;
+}
+
+.arch-side-card .card-list {
+  font-size: 0.69rem !important;
+  line-height: 1.24 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.20rem !important;
+}
+
+/* ==========================================================================
+   TIMELINE COMPONENT (SLIDE 4 & CHRONOLOGICAL SLIDES)
+   Strictly themed to Sol.vin active palette tokens
+   ========================================================================== */
+.timeline-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-start;
+  gap: 0.50rem;
+}
+
+.timeline-rail-wrap {
+  position: relative;
+  width: 100%;
+  margin: 0.15rem 0 0.25rem 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 12.5%;
+  right: 12.5%;
+  height: 3px;
+  background: var(--border-color);
+  bottom: 7px;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+.timeline-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+  width: 100%;
+  z-index: 2;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.timeline-year {
+  font-family: 'Quicksand', monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.10rem 0.55rem;
+  border-radius: 3px;
+  background: var(--bg-window);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 1.5px 1.5px 0px var(--shadow-color);
+  color: var(--accent-color);
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
+}
+
+.timeline-step:hover .timeline-year {
+  border-color: var(--border-active);
+  color: var(--border-active);
+  transform: translateY(-1px);
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg-window);
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 0 0 3px var(--bg-color);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  z-index: 3;
+}
+
+.timeline-step:hover .timeline-dot {
+  transform: scale(1.3);
+  border-color: var(--border-active);
+  background: var(--border-active);
+}
+
+.timeline-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+  flex: 1;
+  align-items: stretch;
+}
+
+.timeline-card {
+  background: var(--bg-window);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--shadow-color);
+  border-radius: 4px;
+  padding: 0.55rem 0.70rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.timeline-card:hover {
+  transform: translate(-1px, -2px);
+  border-color: var(--border-active);
+  box-shadow: 3px 3px 0px var(--border-active);
+}
+
+.timeline-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 0.30rem;
+}
+
+.timeline-card-title {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.86rem;
+  line-height: 1.2;
+  color: var(--text-color);
+}
+
+.timeline-card-pill {
+  align-self: flex-start;
+  font-size: 0.60rem;
+  font-weight: 700;
+  padding: 0.05rem 0.32rem;
+  border-radius: 2px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.timeline-card .card-list {
+  font-size: 0.69rem;
+  line-height: 1.26;
+  margin: 0;
+  padding-left: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+/* ==========================================================================
+   Emoji Color Matrix Filter (Strict Monochrome Accent Tint)
+   ========================================================================== */
+.emoji-tint {
+  display: inline-block;
+  vertical-align: -0.06em;
+  margin: 0 0.12em;
+  filter: var(--emoji-filter) !important;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+/* ==========================================================================
+   Two-Step Code Comparison & Critique Overlay System
+   ========================================================================== */
+.code-only-mode .code-container pre {
+  max-height: calc(100% - 2.5rem);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.with-overlay-mode {
+  position: relative !important;
+}
+
+.dimmed-code {
+  opacity: 0.18 !important;
+  filter: blur(1.5px) !important;
+  pointer-events: none !important;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.ide-notes-overlay {
+  position: absolute !important;
+  top: 2.2rem !important;
+  bottom: 0.25rem !important;
+  left: 0 !important;
+  right: 0 !important;
+  display: flex !important;
+  gap: 1rem !important;
+  align-items: stretch !important;
+  z-index: 15 !important;
+  pointer-events: none !important;
+}
+
+.overlay-card {
+  flex: 1 !important;
+  background-color: rgba(14, 18, 28, 0.94) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 2px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  padding: 1.15rem 1.35rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.65rem !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65) !important;
+  box-sizing: border-box !important;
+  pointer-events: auto !important;
+  min-width: 0 !important;
+  animation: overlayCardIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.overlay-card.coral {
+  border-color: var(--coral-red) !important;
+  background-color: rgba(28, 14, 20, 0.95) !important;
+  box-shadow: 0 10px 32px rgba(244, 63, 94, 0.25) !important;
+}
+
+.overlay-card.emerald {
+  border-color: var(--emerald-green) !important;
+  background-color: rgba(10, 26, 18, 0.95) !important;
+  box-shadow: 0 10px 32px rgba(16, 185, 129, 0.25) !important;
+}
+
+.overlay-card-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 0.15rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-bottom: 0.45rem !important;
+}
+
+.overlay-card .card-title {
+  font-size: 1.15rem !important;
+  margin-bottom: 0 !important;
+  font-weight: 700 !important;
+  color: var(--text-color) !important;
+}
+
+.overlay-card.coral .card-title {
+  color: var(--accent-quaternary, var(--accent-color)) !important;
+}
+
+.overlay-card.emerald .card-title {
+  color: var(--accent-secondary, var(--border-active)) !important;
+}
+
+.overlay-card ul.card-list {
+  gap: 0.6rem !important;
+  justify-content: space-evenly !important;
+  display: flex !important;
+  flex-direction: column !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.overlay-card ul.card-list li {
+  font-size: 0.92rem !important;
+  line-height: 1.45 !important;
+  color: var(--text-color) !important;
+  position: relative !important;
+  padding-left: 1.25rem !important;
+}
+
+.overlay-card ul.card-list li strong {
+  color: var(--text-color) !important;
+  font-weight: 700 !important;
+}
+
+.overlay-card ul.card-list li code {
+  background: var(--bg-color) !important;
+  color: var(--accent-color) !important;
+  border: 1px solid var(--border-color) !important;
+  padding: 0.12rem 0.35rem !important;
+  border-radius: 4px !important;
+}
+
+.overlay-card ul.card-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent-color) !important;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.overlay-card.coral ul.card-list li::before {
+  color: var(--accent-quaternary, var(--accent-color)) !important;
+}
+
+.overlay-card.emerald ul.card-list li::before {
+  color: var(--accent-secondary, var(--border-active)) !important;
+}
+
+@keyframes overlayCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================================================
+   Four-Column Layout Tight Card Proportions
+   ========================================================================== */
+.four-cols .card {
+  padding: 0.75rem 0.85rem !important;
+  gap: 0.45rem !important;
+}
+
+.four-cols .card .card-title {
+  font-size: 0.95rem !important;
+  margin-bottom: 0.15rem !important;
+}
+
+.four-cols .card ul.card-list {
+  gap: 0.35rem !important;
+}
+
+.four-cols .card ul.card-list li {
+  font-size: 0.73rem !important;
+  line-height: 1.34 !important;
+  padding-left: 0.95rem !important;
+}

@@ -1,0 +1,52 @@
+---
+id: 11_antipattern_iterators
+title: 'Iterators & Collections: Imperative Loops vs. Functional Zen'
+subtitle: Manual Array Allocations & Verbose Loops vs. Composable Zero-Alloc Enumerable Pipelines
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: spaces_xp_royale
+layout: code-comparison-layout
+gdscript:
+  title: '❌ GDScript: Imperative Loops & Array Mutation'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    # Manual loop, intermediate array allocations, verbose checks
+    var active_targets: Array[String] = []
+    for node in get_tree().get_nodes_in_group("enemies"):
+        if node is Enemy and node.is_alive():
+            active_targets.append(node.unit_name.to_upper())
+
+    # Imperative predicate search with early exit flag
+    var has_boss: bool = false
+    for name in active_targets:
+        if name.begins_with("BOSS_"):
+            has_boss = true
+            break
+  points:
+  - <strong>Manual Accumulation:</strong> Allocates intermediate heap arrays and manually appends elements one-by-one.
+  - <strong>Missing Functional Primitives:</strong> Lacks standard pipeline operations (<code>map</code>, <code>select</code>, <code>reject</code>, <code>tally</code>, <code>chunk</code>).
+  - <strong>Boilerplate Flags:</strong> Requires manual <code>for</code> loops and break statements for simple boolean queries like <code>any?</code>.
+crystal:
+  title: '✨ Crystal: Zen Enumerable Chaining'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    # Fluent, type-filtered iterator pipeline (zero extra arrays)
+    active_targets = get_tree.nodes_in_group("enemies")
+      .select(Enemy)
+      .select(&.alive?)
+      .map(&.unit_name.upcase)
+
+    # Idiomatic block predicates & frequency counting
+    has_boss = active_targets.any?(&.starts_with?("BOSS_"))
+    enemy_types = active_targets.tally # Instant frequency Hash!
+  points:
+  - <strong>50+ Enumerable Methods:</strong> Clean, chained methods like <code>select</code>, <code>map</code>, <code>reject</code>, <code>tally</code>, and <code>chunk</code>.
+  - <strong>Zero GC Heap Thrashing:</strong> Lazy iterators chain without intermediate array allocations.
+  - <strong>Inlined Machine Loops:</strong> Crystal's LLVM compiler inlines closures into tight CPU loops matching raw C speed.
+takeaway:
+  badge: CLEAN CODE INVARIANT
+  text: Crystal's Enumerable module transforms clunky, bug-prone loops into clean, readable, self-documenting data pipelines.
+notes: |
+  One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators. In GDScript, transforming a collection requires creating an empty array, manually writing a for-loop, appending items one by one, and managing boolean flags for simple queries like 'any?'. In Crystal, we inherit Ruby's legendary Enumerable module: select, map, any?, and even tally for building frequency distributions. Because Crystal compiles to native LLVM code, these functional closures compile down to tight, vectorized loops with zero GC overhead.

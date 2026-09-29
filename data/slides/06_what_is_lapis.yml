@@ -1,0 +1,48 @@
+---
+id: 06_what_is_lapis
+title: What is Lapis?
+subtitle: The High-Performance Native Gameplay Toolchain for Godot 4.8+
+badge: ENGINE ARCHITECTURE • CORE VISION
+badge_color: cyan
+palette: creation
+layout: four-column-layout
+columns:
+- title: Language Bindings
+  color: cyan
+  items:
+  - <strong>Full GDExtension API:</strong> 800+ typed Crystal classes mirroring Godot's
+    ClassDB.
+  - <strong>Native LLVM Speed:</strong> Ahead-of-time compilation with zero VM interpreter
+    overhead.
+  - <strong>Static Nil Safety:</strong> Null pointer crashes eliminated at compile
+    time.
+- title: Developer Ergonomics
+  color: purple
+  items:
+  - <strong>Declarative DSL:</strong> <code>node Player < CharacterBody3D</code>.
+  - <strong>AST Macros:</strong> Automated <code>@[Export]</code>, signals, and inspector
+    metadata.
+  - <strong>Zen Clean Code:</strong> Idiomatic blocks, closures, and pattern matching.
+- title: First-Class Editor
+  color: emerald
+  items:
+  - <strong>Crystal Scripting:</strong> Attach <code>.cr</code> scripts natively in
+    Godot Editor.
+  - <strong>In-Editor LLDB:</strong> Gutter breakpoints, call stacks, and live variable
+    inspection.
+  - <strong>Instant Hot-Reload:</strong> Shadow DLL reloading on F5 with zero editor
+    restarts.
+- title: Complete Toolchain
+  color: amber
+  items:
+  - <strong>Unified CLI:</strong> <code>lapis init</code>, <code>test</code>, <code>package</code>,
+    <code>benchmarks</code>.
+  - <strong>Zero Memory Leaks:</strong> Automated quantitative leak detection with
+    Godot Performance monitors.
+  - <strong>Dual Execution:</strong> In-editor GDExtension mode + Standalone embedded
+    LibGodot host.
+notes: So what exactly is Lapis? Lapis is not just a language binding; it is a complete,
+  production-grade developer toolchain for Godot Engine 4.8+. It combines full GDExtension
+  API coverage, an expressive declarative node DSL, first-class editor integration
+  with built-in LLDB debugging, and a unified CLI for testing, packaging, and profiling.
+  It brings the joy of Crystal directly to Godot game developers.

@@ -1,0 +1,55 @@
+---
+id: 15_antipattern_structs
+title: 'Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs'
+subtitle: RefCounted & Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: emerald
+palette: monokai
+layout: code-comparison-layout
+gdscript:
+  title: '❌ GDScript: Heap RefCounted & Untyped Dictionaries'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    # Lightweight gameplay data requires heap allocation via RefCounted
+    class_name DamagePacket extends RefCounted:
+        var amount: int
+        var element: int
+        var critical: bool
+        func _init(amt: int, elem: int, crit: bool):
+            amount = amt; element = elem; critical = crit
+
+    # Or untyped dictionaries with GC churn and no autocomplete:
+    var hit_info = {"amount": 50, "element": "FIRE", "crit": true}
+    apply_damage(hit_info["ammount"]) # TYPO: returns null silently!
+  points:
+  - <strong>Heap Allocations for Tiny Data:</strong> Every data packet extends <code>RefCounted</code>, triggering individual heap allocations.
+  - <strong>Untyped Dictionaries:</strong> High memory overhead, zero editor autocomplete, and silent failure on key typos.
+  - <strong>Heavy GC Churn:</strong> Thousands of combat packets in action games cause noticeable garbage collection hitches.
+crystal:
+  title: '✨ Crystal: Stack-Allocated Value Structs'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    # Stack-allocated value struct: ZERO heap allocations, flat memory layout!
+    struct DamagePacket
+      getter amount : Int32
+      getter element : ElementType
+      getter? critical : Bool
+
+      def initialize(@amount, @element, @critical = false)
+      end
+    end
+
+    # Pass by value with full type safety and compiler autocomplete:
+    packet = DamagePacket.new(50, ElementType::Fire, critical: true)
+    apply_damage(packet) # packet.typo -> COMPILER ERROR!
+  points:
+  - <strong>Zero Heap Allocations:</strong> Stack-allocated <code>struct</code> has zero allocation cost and zero GC overhead.
+  - <strong>Cache-Line Friendly:</strong> Stored contiguously in CPU cache lines, maximizing hardware memory bandwidth.
+  - <strong>Immutable Value Semantics:</strong> Passing structs by value prevents unintended mutations across disparate game systems.
+takeaway:
+  badge: SYSTEMS SPEED • OBJECT CLEANLINESS
+  text: Stack structs provide the memory performance of C with the clean object-oriented syntax of Ruby.
+notes: |
+  In fast-paced games—bullet hells, ARPGs, particle systems—allocating tiny objects on the heap is a death sentence for performance. In GDScript, custom data structures must extend RefCounted or use untyped dictionaries. Both create heap pressure and GC churn. In Crystal, you can declare value structs: stack-allocated, contiguous in memory, and passed by value. You get zero heap allocations, zero GC pauses, and complete compile-time type safety.

@@ -1,0 +1,57 @@
+---
+id: 16_antipattern_dead_pointers
+title: 'Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection'
+subtitle: Lapis Monotonic 64-Bit Instance Tracking Eliminates ACCESS_VIOLATION (0xC0000005)
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: coral
+palette: game_station_2
+layout: code-comparison-layout
+gdscript:
+  title: '❌ GDScript / Native C++: Dangling Pointers & Crashes'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    # Combat target acquired in an earlier frame
+    var target: Enemy = $Enemies/Boss
+
+    func cast_spell(spell: Spell) -> void:
+        # Meanwhile: Boss died from a poison tick and called queue_free()!
+        # target pointer still references freed native C++ memory!
+        target.take_damage(spell.power) 
+        # 💥 FATAL CRASH: 0xC0000005 ACCESS_VIOLATION at 0x00007ff812a...
+        # Uncatchable! Instant crash to desktop with NO stack trace!
+
+        # Guard boilerplate GDScript requires everywhere:
+        if is_instance_valid(target) and not target.is_queued_for_deletion():
+            target.take_damage(spell.power)
+  points:
+  - <strong>Deallocated Native Memory:</strong> <code>queue_free()</code> frees native C++ memory; existing references retain dead pointers.
+  - <strong>Fatal Engine Segfault:</strong> Dereferencing dead pointers crashes immediately with <code>0xC0000005 ACCESS_VIOLATION</code>.
+  - <strong>Defensive Clutter:</strong> Developers must litter code with <code>is_instance_valid</code> guards across every single scene access.
+crystal:
+  title: '✨ Crystal: Monotonic 64-Bit ObjectDB Verification'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    property target : Enemy?
+
+    def cast_spell(spell : Spell) : Void
+      # 1. Monotonic 64-bit Instance ID Check:
+      # Validates instance against ObjectDB before dispatch!
+      if enemy = @target
+        enemy.take_damage(spell.power) 
+        # Safely raises Godot::DisposedObjectError if freed!
+      end
+    rescue ex : Godot::DisposedObjectError
+      # 2. Fully catchable! Retarget gracefully, ZERO crashes!
+      find_next_target
+    end
+  points:
+  - <strong>Monotonic 64-Bit Instance IDs:</strong> ObjectDB IDs never collide with recycled heap addresses.
+  - "<strong>Automatic #check_alive!:</strong> Lapis validates instance liveness before every method dispatch automatically."
+  - <strong>Catchable Exceptions:</strong> Accessing freed objects raises a catchable <code>DisposedObjectError</code> instead of segfaulting.
+takeaway:
+  badge: ZERO-SEGFAULT GUARANTEE
+  text: Lapis bridges Boehm GC and Godot ObjectDB with monotonic 64-bit ID checks, making dead-pointer segfaults impossible.
+notes: |
+  The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If your code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully.

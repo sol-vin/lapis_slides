@@ -1,0 +1,56 @@
+---
+id: 21_boilerplate_elimination
+title: 'Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++'
+subtitle: Side-by-Side Implementation of the Same Player Node with Exported Property
+  and Signal
+badge: GDSCRIPT COMPARISON • BOILERPLATE
+badge_color: purple
+palette: game_station
+layout: four-column-layout
+columns:
+- type: code
+  title: Lapis (Crystal)
+  tag: 11 Lines
+  lang: crystal
+  code: "node Player < CharacterBody3D do\r\n  @[Export(range: 1.0_f32..20.0_f32)]\r\n
+    \ property speed : Float32 = 7.0_f32\r\n\n  signal health_changed(hp : Int32)\r\n
+    \ signal died\r\n\n  def _ready : Void\r\n    Godot.print(\"Ready: #{name}\")\r\n
+    \ end\r\nend"
+- type: code
+  title: Godot C# (.NET)
+  tag: 16 Lines
+  lang: csharp
+  code: "public partial class Player\r\n  : CharacterBody3D {\r\n  [Export(PropertyHint.Range,\r\n
+    \         \"1.0,20.0\")]\r\n  public float Speed { get; set; }\r\n    = 7.0f;\r\n\n
+    \ [Signal]\r\n  public delegate void\r\n    HealthChangedEventHandler(int hp);\r\n
+    \ [Signal]\r\n  public delegate void\r\n    DiedEventHandler();\r\n\n  public
+    override void _Ready() {\r\n    GD.Print($\"Ready: {Name}\");\r\n  }\r\n}"
+- type: code
+  title: godot-rust (gdext)
+  tag: 26 Lines
+  lang: rust
+  code: "#[derive(GodotClass)]\r\n#[class(base=CharacterBody3D)]\r\npub struct Player
+    {\r\n  base: Base<CharacterBody3D>,\r\n  #[export(range = (1.0, 20.0))]\r\n  speed:
+    f32,\r\n}\r\n#[godot_api]\r\nimpl ICharacterBody3D for Player {\r\n  fn init(base:\r\n
+    \   Base<CharacterBody3D>) -> Self {\r\n    Self { base, speed: 7.0 }\r\n  }\r\n
+    \ fn ready(&mut self) {\r\n    godot_print!(\"Ready: {}\",\r\n      self.base().get_name());\r\n
+    \ }\r\n}\r\n#[godot_api]\r\nimpl Player {\r\n  #[signal]\r\n  fn health_changed(hp:
+    i32);\r\n  #[signal]\r\n  fn died();\r\n}"
+- type: code
+  title: godot-cpp (C++)
+  tag: 32 Lines
+  lang: cpp
+  code: "class Player : public CharacterBody3D {\r\n  GDCLASS(Player, CharacterBody3D);\r\n
+    \ float speed = 7.0f;\r\nprotected:\r\n  static void _bind_methods() {\r\n    ClassDB::bind_method(\r\n
+    \     D_METHOD(\"get_speed\"),\r\n      &Player::get_speed);\r\n    ClassDB::bind_method(\r\n
+    \     D_METHOD(\"set_speed\", \"s\"),\r\n      &Player::set_speed);\r\n    ADD_PROPERTY(\r\n
+    \     PropertyInfo(Variant::FLOAT,\r\n        \"speed\", PROPERTY_HINT_RANGE,\r\n
+    \       \"1.0,20.0\"),\r\n      \"set_speed\", \"get_speed\");\r\n    ADD_SIGNAL(MethodInfo(\"died\"));\r\n
+    \ }\r\npublic:\r\n  void _ready() override {\r\n    UtilityFunctions::print(\"Ready\");\r\n
+    \ }\r\n};"
+notes: 'Let''s put the four major GDExtension languages side by side. Here is the
+  exact same Player node implemented in Lapis, C#, Rust, and C++. Look at the contrast:
+  Lapis requires just 11 lines of clean, expressive code. C# requires 16 lines with
+  delegate declarations. Rust requires 26 lines with Base<T> wrapping and separate
+  impl blocks. And C++ requires over 32 lines with manual _bind_methods boilerplate.
+  Lapis delivers native machine speed without the syntactic punishment.'

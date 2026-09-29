@@ -1,0 +1,36 @@
+---
+id: 26_concurrency_scenetree
+title: 'Concurrency: SceneTree Thread Safety & Auto-Deferral'
+subtitle: Safe Cross-Thread Dispatch and State Mutation via Engine MessageQueue
+badge: CONCURRENCY ARCHITECTURE • SCENETREE
+badge_color: emerald
+palette: disinherited
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: thread_safety_guards.cr — Safe Cross-Thread Dispatch
+  tag: Crystal
+  lang: crystal
+  code: "# Thread-safe mutation via call_deferred\r\ndef offload_pathfinding(start
+    : Vector3, target : Vector3)\r\n  Thread.new do\r\n    path = compute_astar_path(start,
+    target)\r\n    \r\n    # Buffers dispatch into Godot's thread-safe MessageQueue\r\n
+    \   call_deferred(\"apply_nav_path\", path)\r\n  end\r\nend\r\n\ndef apply_nav_path(path
+    : Array(Vector3)) : Void\r\n  # Executes safely on main loop thread\r\n  @nav_agent.set_target_position(path.last)\r\nend"
+right:
+  type: card
+  title: Core Safety Invariants
+  color: emerald
+  items:
+  - <strong>Engine MessageQueue:</strong> <code>call_deferred</code> pushes dispatches
+    into Godot's thread-safe message queue.
+  - <strong>Predictable Execution:</strong> Deferred calls are processed at frame
+    boundaries on the main thread.
+  - <strong>Protects Internal Child Arrays:</strong> Guarantees Godot's native tree
+    state remains strictly single-threaded.
+  - <strong>Dead-Pointer Protection:</strong> Validates target node validity before
+    executing deferred dispatches.
+notes: Godot's MessageQueue is the bedrock of cross-thread safety. In Lapis, call_deferred
+  allows any background worker thread to schedule method executions on the main thread
+  safely. This prevents race conditions in Godot's internal node arrays and ensures
+  that game state transitions happen deterministically at frame boundaries.

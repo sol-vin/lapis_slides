@@ -1,0 +1,40 @@
+---
+id: 07_why_crystal_video
+title: Why Crystal?
+subtitle: 'Addressing the #1 Question: Why Not Rust, C++, C#, or GDScript?'
+badge: WHY CRYSTAL • THE ULTIMATE QUESTION
+badge_color: purple
+palette: fruit_osx
+layout: media-layout
+media:
+  type: video
+  src: crystalmeme.mp4
+  title: crystalmeme.mp4 — The Community Rationale
+  tag: Video (31s)
+  caption:
+    speaker: 'Señor Chang:'
+    quote: '"Why Crystal? Why not Rust? Why not C++ or C#? Why not GDScript? ... BECAUSE
+      I WANT TO!"'
+card:
+  title: 'Beyond the Meme: The Real Trade-Offs'
+  color: purple
+  items:
+  - <strong>Why Not Rust?</strong> Steep borrow checker friction in graph/scene tree
+    hierarchies; slow compile cycles; verbose FFI wrapper boilerplate.
+  - <strong>Why Not C++?</strong> Manual memory management, header-file sprawl, lack
+    of static nil safety, and dreaded <code>0xC0000005</code> access violation crashes.
+  - <strong>Why Not GDScript?</strong> Hits insurmountable CPU bottlenecks in math-heavy
+    loops, procedural generation, and N-body physics (Crystal is up to 60x faster).
+  - <strong>Why Not C#?</strong> Heavy .NET runtime overhead, GC pauses during gameplay
+    frames, and verbose enterprise boilerplate.
+  - <strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM compilation, type-inferred
+    static safety, Ruby-like expressive syntax, and <em>authentic developer satisfaction!</em>
+notes: 'Whenever you introduce a new language binding, the immediate question from
+  the community is: ''Why Crystal? Why not Rust? Why not C++ or C#? Why not just stick
+  with GDScript?'' This clip from Community captures the exact sentiment: sometimes
+  the answer is simply ''Because I want to!'' But beyond the humor, there is a profound
+  engineering reality. Rust''s borrow checker fights Godot''s scene tree; C++ suffers
+  from header sprawl and segmentation faults; GDScript hits severe throughput bottlenecks
+  in tight loops; and C# brings runtime overhead. Crystal provides the rare sweet
+  spot: raw LLVM machine speed paired with the expressive, human-first ergonomics
+  of Ruby.'

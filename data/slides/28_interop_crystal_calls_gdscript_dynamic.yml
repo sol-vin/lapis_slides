@@ -1,0 +1,40 @@
+---
+id: 28_interop_crystal_calls_gdscript_dynamic
+title: 'Crystal Calling GDScript: Dynamic Dispatch'
+subtitle: Rapid Script Prototyping and Dynamic GDScript Invocation via Variant Reflection
+badge: INTEROPERABILITY • DYNAMIC DISPATCH
+badge_color: purple
+palette: game_sprocket
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: dynamic_caller.cr — Variant Dynamic Dispatch
+  tag: Crystal
+  lang: crystal
+  code: |
+    # Retrieve a GDScript node from the scene tree
+    gd_dialogue = get_node(Godot::Node, "UI/DialogueManager")
+
+    # Dynamic method invocation with Variant marshalling
+    result = gd_dialogue.call("show_dialogue", "npc_elder_01", 100)
+
+    # Check if a GDScript node has a method before invoking
+    if gd_dialogue.has_method("custom_hook")
+      gd_dialogue.call("custom_hook")
+    end
+
+    # Dynamic property get and set
+    current_line = gd_dialogue.get("current_line").as_s
+    gd_dialogue.set("dialogue_speed", 1.5)
+right:
+  type: card
+  title: Dynamic Interop & Automated Bindings
+  color: purple
+  items:
+  - <strong>Universal Variant Marshalling:</strong> Automatically marshals numbers, strings, vectors, and arrays between Crystal and GDScript.
+  - <strong>Reflection Inspection:</strong> <code>has_method("name")</code> checks method presence at runtime before dispatching.
+  - <strong>Automated Bindings Generator:</strong> Lapis automatically parses <code>extension_api.json</code> and GDScript ASTs to generate typed wrappers with zero manual glue code.
+  - <strong>Dead-Pointer Protected:</strong> Dynamic dispatches validate node liveness via <code>#check_alive!</code> before invoking.
+notes: |
+  What about calling GDScript from Crystal? Lapis provides both flexible dynamic dispatch via .call, .get, and .set, and an automated bindings generator. Lapis inspects Godot's extension_api.json and GDScript reflection to synthesize typed Crystal wrappers with zero manual C-API boilerplate. Arguments are marshalled transparently through Godot's Variant type, and every invocation is guarded by our monotonic 64-bit instance ID check.

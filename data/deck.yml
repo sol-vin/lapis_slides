@@ -1,0 +1,54 @@
+---
+title: Lapis for Crystal
+subtitle: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
+author: sol.vin
+theme: theme.css
+resolution:
+  width: 1280
+  height: 720
+slides:
+- 01_hero
+- 02_whoami
+- 03_ruby_philosophy
+- 04_sorbet_dilemma
+- 05_birth_of_crystal
+- 06_what_is_lapis
+- 07_why_crystal_video
+- 08_effortless_access
+- 09_signals_async
+- 10_expressive_ergonomics
+- 11_antipattern_iterators
+- 11b_antipattern_anon_functions_symbols
+- 12_antipattern_nil_safety
+- 13_antipattern_pattern_matching
+- 14_antipattern_macros
+- 15_antipattern_structs
+- 16_antipattern_dead_pointers
+- 17_antipattern_async_signals
+- 18_macro_state_machines
+- 19_macro_serialization
+- 20_node_dsl
+- 21_boilerplate_elimination
+- 22_feature_matrix
+- 23_concurrency_fibers
+- 24_concurrency_threads
+- 25_antipattern_channels
+- 26_concurrency_scenetree
+- 27_interop_gdscript_calls_crystal
+- 27b_interop_type_firewall
+- 28_interop_crystal_calls_gdscript_dynamic
+- 29_interop_crystal_calls_gdscript_typed
+- 30_cli_lifecycle
+- 31_cli_codegen
+- 32_package_management
+- 33_editor_integration
+- 34_debugger_radare2
+- 35_benchmarks
+- 36_testing_zero_leak
+- 37_tool_testing_tui
+- 38_architecture_layers
+- 39_dual_modes
+- 40_packaging_dist
+- 41_live_demo_roadmap
+- 42_demo_terminal_editor
+- 43_future_roadmap

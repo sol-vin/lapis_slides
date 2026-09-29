@@ -1,0 +1,39 @@
+---
+id: 24_concurrency_threads
+title: 'Concurrency: Parallel OS Threads & Workload Offloading'
+subtitle: Utilizing Multi-Core Hardware for Heavy Computation Without Blocking Frame
+  Rates
+badge: CONCURRENCY ARCHITECTURE • OS THREADS
+badge_color: amber
+palette: entertainment_system
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: terrain_worker.cr — Background Multi-Core Worker
+  tag: Crystal
+  lang: crystal
+  code: "# Offload heavy procedural generation to native OS thread\r\nworker_thread
+    = Thread.new do\r\n  # Heavy CPU computation across hardware cores\r\n  noise
+    = FastNoiseLite.new\r\n  mesh_data = generate_marching_cubes(noise)\r\n\n  # Notify
+    main thread via thread-safe deferred dispatch\r\n  call_deferred(\"on_terrain_ready\",
+    mesh_data)\r\nend\r\n\ndef on_terrain_ready(data : MeshData) : Void\r\n  # Dispatched
+    safely on Godot main thread\r\n  update_surface_mesh(data)\r\nend"
+right:
+  type: card
+  title: OS Thread Invariants
+  color: amber
+  items:
+  - <strong>True Hardware Parallelism:</strong> <code>Thread.new</code> executes on
+    dedicated OS threads across CPU cores.
+  - <strong>SceneTree Safety Invariant:</strong> NEVER call <code>add_child</code>,
+    <code>remove_child</code>, or <code>queue_free</code> from an OS thread.
+  - <strong>Cross-Thread Dispatch via call_deferred:</strong> Push completed results
+    back to the main thread via Godot's thread-safe MessageQueue.
+  - <strong>Thread Sleep Rules:</strong> Use <code>Crystal::System::Thread.sleep</code>
+    for true OS thread sleeps.
+notes: When your game requires heavy procedural generation, pathfinding, or physics
+  computation, cooperative fibers aren't enough—you need true hardware parallelism.
+  In Lapis, you can spawn OS background threads using Thread.new. Background threads
+  crunch data across all available CPU cores without ever dropping a frame, and send
+  results back via call_deferred.

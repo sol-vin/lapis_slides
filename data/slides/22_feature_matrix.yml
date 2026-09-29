@@ -1,0 +1,54 @@
+---
+id: 22_feature_matrix
+title: Language & GDExtension Ecosystem Feature Matrix
+subtitle: Direct Feature Comparison Across Godot's Scripting & GDExtension Ecosystem
+badge: FEATURE MATRIX • ECOSYSTEM COMPARISON
+badge_color: emerald
+palette: spaces_95
+layout: matrix-layout
+headers:
+- Language / Binding
+- Execution Model
+- Compilation Speed
+- Type Safety
+- Metaprogramming
+- SceneTree Ergonomics
+rows:
+- - <strong>Lapis (Crystal)</strong>
+  - Native LLVM AOT
+  - Fast (AOT Incremental)
+  - Static + Nil Safe
+  - AST Macros (Compile-Time)
+  - Zen DSL (Ruby-like)
+- - <strong>GDScript</strong>
+  - Bytecode VM Interpreter
+  - Instant (Interpreted)
+  - Gradual / Dynamic (Runtime Nil Crash)
+  - Limited (Annotations)
+  - Native Engine Built-in
+- - <strong>Godot C# (.NET)</strong>
+  - CLR JIT / AOT
+  - Moderate
+  - Static (Runtime Null Ref)
+  - Source Generators
+  - Moderate (Partial classes)
+- - <strong>godot-rust (gdext)</strong>
+  - Native LLVM AOT
+  - Slow (Heavy Cargo build)
+  - Strict Borrow Checker
+  - Proc Macros (Complex)
+  - High friction (Base<T>)
+- - <strong>godot-cpp (C++)</strong>
+  - Native Clang/MSVC/GCC
+  - Slow (Heavy headers)
+  - Unsafe (Segfault / UB)
+  - C Preprocessor Macros
+  - Massive boilerplate
+summary: '<strong>Key Takeaway:</strong> Lapis occupies the rare architectural sweet
+  spot: native LLVM machine speed paired with the expressive, human-first ergonomics
+  of Ruby.'
+notes: 'When evaluating language bindings for Godot, developers face distinct trade-offs
+  across execution speed, compiler friction, type safety, and ergonomics. GDScript
+  is quick for scripting but hits performance walls; C# brings garbage collection
+  pauses; Rust fights the scene graph; C++ is plagued by boilerplate. Lapis occupies
+  the sweet spot: LLVM performance, static nil safety, and Ruby-like ergonomics.'

@@ -1,0 +1,35 @@
+---
+id: 32_package_management
+title: 'Package Management: Addons & Crystal Shards'
+subtitle: Leveraging the Global Crystal Shards Ecosystem Inside Godot Projects
+badge: ECOSYSTEM • SHARDS & ADDONS
+badge_color: emerald
+palette: community
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: shard.yml — Game Dependencies
+  tag: YAML
+  lang: yaml
+  code: "name: cyber_rogue\r\nversion: 0.1.0\r\n\ndependencies:\r\n  libgodot:\r\n
+    \   path: ../libgodot # Core engine bindings\r\n  fast_noise:\r\n    github: sol-vin/fast_noise
+    # Procedural generation\r\n  perlin:\r\n    github: crystal-community/perlin_noise\r\n
+    \ msgpack:\r\n    github: crystal-community/msgpack-crystal"
+right:
+  type: card
+  title: The Shards Advantage
+  color: emerald
+  items:
+  - '<strong>Full Crystal Ecosystem Access:</strong> Seamlessly install thousands
+    of community shards: math, physics, noise, networking, and serialization.'
+  - <strong>Zero Build Tooling Friction:</strong> <code>shards install</code> resolves
+    and compiles dependencies natively with zero C++ CMake headaches.
+  - <strong>Addon Isolation:</strong> Lapis addons encapsulate their dependencies
+    cleanly without polluting the root host project.
+  - <strong>Static Compilation:</strong> All shards compile directly into the final
+    game binary with dead-code stripping.
+notes: One of the greatest superpowers of Lapis is access to the broader Crystal package
+  ecosystem. Using standard shard.yml, you can pull in fast math libraries, procedural
+  noise generators, serialization engines, and AI algorithms from GitHub. They compile
+  directly into your game's binary with full link-time optimization.

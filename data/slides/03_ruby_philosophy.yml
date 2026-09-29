@@ -1,0 +1,41 @@
+---
+id: 03_ruby_philosophy
+title: 'The Philosophy of Ergonomics: The Ruby Era'
+subtitle: Optimizing for Developer Happiness, Human Syntax & Expressive Blocks
+badge: HISTORICAL CONTEXT • THE RUBY HERITAGE
+badge_color: coral
+palette: monokai
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: ruby_gameplay.rb — The Joy of Expressive Syntax
+  tag: Ruby
+  lang: ruby
+  code: "# Ruby's human-centric syntax: blocks, closures, and clean reads\r\nclass
+    Player\r\n  attr_accessor :health, :inventory\r\n\n  def initialize(health = 100)\r\n
+    \   @health = health\r\n    @inventory = []\r\n  end\r\n\n  # Idiomatic iteration
+    with blocks: natural English read\r\n  def heal_all_companions(party, amount)\r\n
+    \   party.select(&:alive?).each do |companion|\r\n      companion.health += amount\r\n
+    \     puts \"Healed #{companion.name} to #{companion.health} HP\"\r\n    end\r\n
+    \ end\r\nend"
+right:
+  type: card
+  title: Why Ruby Won Developer Hearts
+  color: coral
+  items:
+  - <strong>Developer Happiness as Primary Goal:</strong> Yukihiro 'Matz' Matsumoto
+    designed Ruby to prioritize human cognitive comfort over machine convenience.
+  - <strong>First-Class Blocks & Closures:</strong> Passing blocks to methods transformed
+    data manipulation into an expressive, natural language flow.
+  - <strong>Principle of Least Surprise (POLS):</strong> The language behaved consistently
+    and intuitively, minimizing cognitive friction.
+  - <strong>The Downside in Game Tech:</strong> Dynamic method dispatch (YARV byte
+    interpreter) was too slow for 60/120 FPS physics, frame budgets, and tight loops.
+notes: To understand why Crystal exists and why Lapis is designed the way it is, we
+  have to look back at the Ruby era. In the early 2000s, Ruby took the software world
+  by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly
+  designed Ruby for human happiness, introducing first-class blocks, elegant closures,
+  and a syntax that reads like natural English. But for game developers, Ruby's interpreted
+  virtual machine was far too slow to meet the brutal 16-millisecond frame budget
+  demanded by real-time rendering and physics engines.

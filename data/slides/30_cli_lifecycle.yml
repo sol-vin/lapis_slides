@@ -1,0 +1,34 @@
+---
+id: 30_cli_lifecycle
+title: 'The Lapis CLI: Project Lifecycle & Bootstrapping'
+subtitle: A Single Unified Developer Tool for Scaffolding, Building, and Testing
+badge: TOOLCHAIN • THE LAPIS CLI
+badge_color: cyan
+palette: classic_green
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: terminal
+  title: Terminal — lapis CLI Workflow
+  code: "# Initialize a brand new Godot + Crystal game project\r\n$ lapis init my_rpg_game
+    --template=3d-action\r\n\n# Compile GDExtension bridge and game DLL\r\n$ lapis
+    build --release\r\n\n# Launch Godot editor directly with Crystal integration\r\n$
+    lapis editor\r\n\n# Execute complete headless test suite with TUI dashboard\r\n$
+    lapis test --tui"
+right:
+  type: card
+  title: Core CLI Capabilities
+  color: cyan
+  items:
+  - <strong>Zero-Config Scaffolding:</strong> <code>lapis init</code> scaffolds ready-to-run
+    Godot projects with configured <code>shard.yml</code> and <code>project.godot</code>.
+  - <strong>Baked Embedded Assets:</strong> CLI contains all starter templates and
+    GDExtension manifests embedded via <code>BakedFileSystem</code>.
+  - <strong>Unified Toolchain:</strong> Replaces fractured shell scripts with a single
+    standardized executable.
+  - <strong>Cross-Platform Parity:</strong> Identical command behavior across Windows,
+    Linux, and macOS.
+notes: Developer tooling is just as important as the language itself. We built the
+  lapis CLI to serve as the unified developer tool for the entire project lifecycle.
+  With commands like lapis init, lapis build, lapis editor, and lapis test, developers
+  get a seamless, zero-config onboarding experience from day one.

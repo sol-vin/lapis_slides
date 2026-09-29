@@ -1,0 +1,43 @@
+---
+id: 20_node_dsl
+title: 'The Lapis DSL: Clean, Declarative Node Authoring'
+subtitle: Authoring First-Class Godot Nodes with Crystal ClassDB Integration
+badge: THE LAPIS DSL • NODE AUTHORING
+badge_color: cyan
+palette: cross_cube
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: player_character.cr — Declarative Node Definition
+  tag: Crystal
+  lang: crystal
+  code: "require \"libgodot\"\r\n\n# Declares Godot class registered in ClassDB\r\nnode
+    Player < CharacterBody3D do\r\n  # Movement speed in meters per second\r\n  @[Export(range:
+    1.0_f32..20.0_f32, step: 0.5_f32)]\r\n  property speed : Float32 = 7.0_f32\r\n\n
+    \ # Maximum hit points\r\n  @[Export(range: 10..500, step: 10)]\r\n  property
+    max_health : Int32 = 100\r\n\n  signal health_changed(current : Int32, max_health
+    : Int32)\r\n  signal died\r\n\n  def _ready : Void\r\n    Godot.print(\"Player
+    initialized: #{name}\")\r\n  end\r\n\n  def _physics_process(delta : Float64)
+    : Void\r\n    # Fixed-rate physics step\r\n  end\r\nend"
+right:
+  type: card
+  title: Clean Node DSL Invariants
+  color: cyan
+  items:
+  - <strong>Declarative node Macro:</strong> <code>node ClassName < ParentNode</code>
+    registers the class in Godot's ClassDB with zero boilerplate.
+  - <strong>Property Annotations:</strong> <code>@[Export]</code> supports ranges,
+    enums, file pickers, and tool buttons.
+  - <strong>Automated Doc Harvesting:</strong> Regular Crystal comments above classes
+    and methods are harvested into Godot's offline EditorHelp database.
+  - <strong>Native Lifecycle Hooks:</strong> Direct bindings to <code>_ready</code>,
+    <code>_process</code>, and <code>_physics_process</code>.
+  - <strong>Multiplayer RPC:</strong> <code>@[RPC]</code> configures network replication
+    mode and transfer channels.
+notes: Here is what authoring a Godot node actually looks like in Lapis. Notice how
+  clean, concise, and declarative it is. You write node Player < CharacterBody3D,
+  declare exported properties with ranges, define typed signals, and write your lifecycle
+  methods. Regular comments above properties are harvested at compile time into Godot's
+  in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or
+  Rust.

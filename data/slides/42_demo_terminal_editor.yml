@@ -1,0 +1,33 @@
+---
+id: 42_demo_terminal_editor
+title: 'Demo in Action: Terminal & Editor View'
+subtitle: Live Side-by-Side Execution of the Lapis CLI, Godot Editor, and Game Host
+badge: LIVE DEMONSTRATION • SPLIT SCREEN
+badge_color: cyan
+palette: spaces_10
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — Live Build & Test Output
+  code: "$ lapis build\r\nCompiling src/main.cr -> bin/game.dll...\r\nLinking bin/game.dll
+    [AOT LLVM]...\r\nSynchronization complete: 4 targets synced.\r\nReady for engine
+    hot-reload.\r\n\n$ lapis test --suite=combat\r\nRunning combat test suite...\r\n✔
+    Player spawned successfully\r\n✔ Damage applied: 100 -> 75\r\n✔ Zero memory leaks
+    confirmed (ΔObjects: 0)\r\nAll tests passed in 14ms!"
+right:
+  type: card
+  title: Godot Editor Live State
+  color: emerald
+  items:
+  - <strong>Scene Tree View:</strong> <code>Player</code> node attached to 3D scene
+    root.
+  - <strong>Inspector Panel:</strong> <code>move_speed = 15.0</code> with live range
+    slider.
+  - '<strong>Console Output:</strong> <code>Player initialized: Player3D</code> printed
+    from Crystal.'
+  - <strong>Debugger Dock:</strong> LLDB session ready and listening for breakpoints.
+notes: On the left side of the screen is our terminal running the Lapis CLI; on the
+  right is the Godot Editor. As we modify Crystal code in the editor or IDE, Lapis
+  rebuilds the shadow DLL in milliseconds, Godot reloads it seamlessly, and the updated
+  gameplay logic runs instantly without restarting the engine.

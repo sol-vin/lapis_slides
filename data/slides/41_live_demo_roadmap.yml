@@ -1,0 +1,37 @@
+---
+id: 41_live_demo_roadmap
+title: 'Live DEMO: End-to-End Workflow Roadmap'
+subtitle: What We're About to Build and Demonstrate Live in Front of You
+badge: LIVE DEMONSTRATION • ROADMAP
+badge_color: cyan
+palette: smile_os
+layout: timeline-layout
+cards:
+- phase: STEP 1 • TERMINAL
+  title: Scaffold Project
+  color: cyan
+  items:
+  - Run <code>lapis init live_demo</code>.
+  - Inspect generated project structure and <code>shard.yml</code>.
+- phase: STEP 2 • EDITOR
+  title: Author Player Node
+  color: purple
+  items:
+  - Attach <code>player.cr</code> in Godot.
+  - Add exported properties, signals, and movement code in Crystal.
+- phase: STEP 3 • HOT RELOAD
+  title: Instant F5 Iteration
+  color: emerald
+  items:
+  - Rebuild with F5 hot-reload.
+  - Tweak exported speeds in Inspector live.
+- phase: STEP 4 • QUALITY GATE
+  title: Run TUI Specs
+  color: amber
+  items:
+  - Run <code>lapis test --tui</code>.
+  - Verify zero memory leaks.
+notes: Now let's see it all in action. In this live demonstration, we will scaffold
+  a new game project from the terminal, author a Player node in Crystal, attach it
+  to a scene in Godot, edit exported properties in the Inspector, hit F5 for instant
+  hot-reload, and run our test suite in the TUI.

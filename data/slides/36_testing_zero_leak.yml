@@ -1,0 +1,38 @@
+---
+id: 36_testing_zero_leak
+title: 'Testing Framework: Writing Tests & Zero-Leak Proof'
+subtitle: Comprehensive Spec Testing and Mathematical Zero-Memory-Leak Verification
+badge: QUALITY GATES • ZERO-LEAK TESTING
+badge_color: emerald
+palette: spaces_2000
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: gameplay_spec.cr — Lapis::Test Suite
+  tag: Crystal
+  lang: crystal
+  code: "require \"lapis/test\"\r\n\nLapis::Test.test_suite \"Player Combat System\"
+    do\r\n  test \"spawning and taking damage\" do\r\n    player = Godot.create(Player)\r\n
+    \   player.take_damage(25)\r\n    assert_equal 75, player.health\r\n    player.destroy
+    # Clean deallocation\r\n  end\r\n\n  test \"mathematical zero memory leak verification\"
+    do\r\n    Lapis::Test.assert_no_leak do\r\n      100.times do\r\n        bullet
+    = Godot.create(Bullet)\r\n        bullet.destroy\r\n      end\r\n    end\r\n  end\r\nend"
+right:
+  type: card
+  title: Zero-Leak Mathematical Proof
+  color: emerald
+  items:
+  - <strong>Godot Performance Monitors:</strong> Queries engine singletons (<code>OBJECT_COUNT</code>,
+    <code>OBJECT_NODE_COUNT</code>, <code>MEMORY_STATIC</code>).
+  - <strong>GC Equilibrium Enforcement:</strong> Calls <code>GC.collect</code> before
+    and after iterations to settle heap state.
+  - '<strong>Strict Delta Verification:</strong> Mathematically proves that delta
+    object count is strictly zero: <code>ΔObjects == 0</code>.'
+  - <strong>Prevents Release Regressions:</strong> CI quality gates automatically
+    fail if any PR introduces a memory leak.
+notes: Memory leaks are fatal in long-running games. Lapis includes a dedicated testing
+  apparatus with mathematical zero-leak verification. Using Lapis::Test.assert_no_leak,
+  our test runner queries Godot's Performance singletons and forces GC equilibrium
+  before and after running iterations, mathematically proving that zero objects or
+  memory leaked.

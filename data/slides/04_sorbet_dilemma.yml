@@ -1,0 +1,49 @@
+---
+id: 04_sorbet_dilemma
+title: 'The Rise & Fall of Dynamic Ruby: Why Crystal Came About'
+subtitle: From Developer Joy to Enterprise Scale Walls, Bolted-On Type Tax, and the Native Solution
+badge: ARCHITECTURAL EVOLUTION • TIMELINE
+badge_color: purple
+palette: super_es
+layout: timeline-layout
+cards:
+- year: "1995-2012"
+  phase: "STAGE 1"
+  title: "The Rise of Ruby"
+  color: blue
+  items:
+  - Yukihiro Matsumoto designs Ruby for human happiness, expressive blocks, and elegant syntax.
+  - Ruby on Rails explodes: powers GitHub, Shopify, Airbnb, Twitter, Kickstarter, and Basecamp.
+  - Unrestricted dynamic duck typing fuels lightning-fast web MVP startup velocity.
+  - <strong>The Latent Danger:</strong> Zero static checks; typos and bad calls lurk until runtime.
+- year: "2013-2017"
+  phase: "STAGE 2"
+  title: "The Scale Wall"
+  color: amber
+  items:
+  - Codebases grew to millions of lines; refactoring large projects became terrifying.
+  - Tooling lacked true jump-to-definition, type hover, and reliable symbol rename.
+  - Frequent production outages caused by silent <code>NoMethodError: undefined method for nil</code>.
+  - Massive test suites with tens of thousands of tests required just to catch basic type typos.
+- year: "2017-2020"
+  phase: "STAGE 3"
+  title: "The Bolted-On Tax (Sorbet / RBS)"
+  color: coral
+  items:
+  - Stripe builds Sorbet; Ruby Core ships RBS to bolt static type checking onto YARV runtime.
+  - Verbose <code>sig { params(...).returns(...) }</code> clutters every single method definition.
+  - Metaprogramming breaks static analyzers; teams must maintain 10,000+ brittle RBI shims.
+  - <strong>The Catch:</strong> Still interpreted on YARV! Paid the full syntax tax of types with ZERO native speed gains.
+- year: "2020+"
+  phase: "STAGE 4"
+  title: "Why Crystal Came About"
+  color: emerald
+  items:
+  - Designed from day one as a compiled language with global Hindley-Milner type inference.
+  - Writes like Ruby, reads like Ruby: 95% of types are inferred with zero signature noise.
+  - Compile-time nil safety guarantees <code>NoMethodError</code> is mathematically impossible.
+  - Compiles to lean native machine code via LLVM: 50x-100x faster than Ruby/GDScript with zero VM overhead.
+notes: |
+  This timeline explains the existential dilemma that led to Crystal and why Lapis exists today. In the 2000s, Ruby took the world by storm because developer happiness and expressive blocks made building software joyful. But as companies like Stripe, Shopify, and GitHub scaled into millions of lines of code, they hit a brutal wall: silent NoMethodErrors in production, terrifying refactors, and poor IDE autocomplete.
+  To solve this, Stripe created Sorbet and Ruby introduced RBS. But bolting a type checker onto an inherently dynamic, eval-driven language creates immense friction: you're forced to wrap every single method in verbose sig blocks, battle your own metaprogramming, and babysit thousands of brittle RBI shims. And worst of all: Sorbet didn't make Ruby run any faster! You got all the syntax overhead of static types with none of the native compiler speed.
+  This is exactly why Crystal was born: to give developers the poetic soul, ergonomic blocks, and joy of Ruby, but with a built-in static type system that eliminates signature clutter through type inference, compile-time nil safety, and native LLVM machine code performance. In Lapis, you get the expressive elegance of Ruby with native C++ execution speeds in Godot.

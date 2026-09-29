@@ -1,0 +1,44 @@
+---
+id: 10_expressive_ergonomics
+title: 'Expressive Ergonomics: High-Level Language Primitives'
+subtitle: Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax
+badge: CRYSTAL ERGONOMICS • EXPRESSION
+badge_color: cyan
+palette: playbox
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: game_algorithms.cr — Higher-Order Primitives
+  tag: Crystal
+  lang: crystal
+  code: "# 1. Clean collection filtering and inlined closures\r\nenemies.select(&.alive?).each
+    do |enemy|\r\n  enemy.update_ai(delta)\r\nend\r\n\n# 2. In-place sorting with
+    zero heap allocations\r\nloot_items.sort_by! do |item|\r\n  diff = item.global_position
+    - hero.global_position\r\n  diff.length_squared\r\nend\r\n\n# 3. Pattern matching
+    on combat events\r\ncase event\r\nwhen AttackEvent\r\n  mult = event.critical?
+    ? 2.0 : 1.0\r\n  hero.take_damage(event.base_damage * mult)\r\nwhen BuffEvent\r\n
+    \ hero.apply_status(event.buff_type, duration: event.duration)\r\nwhen DeathEvent\r\n
+    \ trigger_game_over_sequence\r\nend"
+right:
+  type: card
+  title: Ergonomic Language Design
+  color: cyan
+  items:
+  - <strong>Inlined Closures:</strong> Crystal's compiler inlines block iterators
+    (<code>.each</code>, <code>.select</code>, <code>.map</code>) into raw flat loops
+    with zero allocation tax.
+  - <strong>Block Shorthand <code>&.method</code>:</strong> Write <code>enemies.select(&.alive?)</code>
+    instead of verbose anonymous functions.
+  - <strong>Exhaustive Pattern Matching:</strong> <code>case / when</code> inspects
+    types and states; compiler verifies all branches are handled.
+  - <strong>Zero-Cost Value Types:</strong> Structs, enums, and tuples live on the
+    stack without heap allocation or GC pressure.
+  - <strong>Local Type Inference:</strong> Write <code>speed = 10.0_f32</code> without
+    typing redundant declarations everywhere.
+notes: Crystal's expressive ergonomics make writing complex game logic an effortless
+  experience. Blocks and closures like .select and .sort_by! read cleanly like high-level
+  scripting languages, but Crystal's LLVM compiler inlines them into direct, flat
+  machine loops with zero heap allocations. Pattern matching with case / when lets
+  you model game state transitions cleanly and exhaustively. You get high-level algorithmic
+  expressiveness combined with bare-metal C execution efficiency.

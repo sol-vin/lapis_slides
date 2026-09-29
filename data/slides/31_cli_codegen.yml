@@ -1,0 +1,36 @@
+---
+id: 31_cli_codegen
+title: 'The Lapis CLI: Codegen, Maintenance & Packaging'
+subtitle: Automated API Generation, Addon Packaging, and Standalone Distribution
+badge: TOOLCHAIN • AUTOMATION & CODEGEN
+badge_color: amber
+palette: amigo
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: terminal
+  title: Terminal — Advanced CLI Commands
+  code: "# Dump Godot extension API and regenerate typed bindings\r\n$ lapis api generate
+    --engine=bin/godot.exe\r\n\n# Package official redistributable GDExtension addon
+    archive\r\n$ lapis package addon --output=bin/crystal_addon.zip\r\n\n# Package
+    standalone production executable game distribution\r\n$ lapis package game --platform=windows-x64
+    --release\r\n\n# Scaffold a new redistributable addon\r\n$ lapis scaffold addon
+    dialogue_system"
+right:
+  type: card
+  title: Automation & Maintenance
+  color: amber
+  items:
+  - <strong>API Generator:</strong> <code>lapis api generate</code> parses <code>extension_api.json</code>
+    and synthesizes 800+ typed Crystal classes.
+  - <strong>Packaging Pipelines:</strong> Automated bundling of dependencies, DLLs,
+    and stripped release binaries.
+  - '<strong>Diagnostic Doctor:</strong> <code>lapis doctor</code> checks environment
+    prerequisites: Crystal, LLDB, Godot, and Git.'
+  - <strong>Multi-Addon Scaffolding:</strong> Easily scaffold isolated plugins that
+    can be shared across the community.
+notes: Beyond daily development, the Lapis CLI automates maintenance tasks. lapis
+  api generate dumps Godot's GDExtension API JSON and regenerates all typed bindings
+  in seconds. lapis package bundles complete standalone games or redistributable zip
+  archives, and lapis doctor verifies that your compiler and debugger prerequisites
+  are properly configured.
