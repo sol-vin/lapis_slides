@@ -1131,15 +1131,19 @@ for name in active_targets:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Fluent, type-filtered iterator pipeline (zero extra arrays)
-active_targets = get_tree.nodes_in_group(&quot;enemies&quot;)
-  .select(Enemy)
-  .select(&amp;.alive?)
-  .map(&amp;.unit_name.upcase)
+            <pre><code class="language-crystal"># Pipeline: &#39;map as&#39; casts Node -&gt; Enemy -&gt; String
+active_targets : Array(String) =
+  get_tree.nodes_in_group(&quot;enemies&quot;)
+    .map(&amp;.as(Enemy))        # =&gt; Array(Enemy)
+    .select(&amp;.alive?)        # =&gt; Array(Enemy)
+    .map(&amp;.unit_name.upcase) # =&gt; Array(String)
 
-# Idiomatic block predicates &amp; frequency counting
-has_boss = active_targets.any?(&amp;.starts_with?(&quot;BOSS_&quot;))
-enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
+# Chaining preserves exact static types:
+has_boss : Bool =
+  active_targets.any?(&amp;.starts_with?(&quot;BOSS_&quot;))
+
+enemy_types : Hash(String, Int32) =
+  active_targets.tally # Frequency Hash!</code></pre>
           </div>
           </div>
         </div>
@@ -1216,15 +1220,19 @@ for name in active_targets:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Fluent, type-filtered iterator pipeline (zero extra arrays)
-active_targets = get_tree.nodes_in_group(&quot;enemies&quot;)
-  .select(Enemy)
-  .select(&amp;.alive?)
-  .map(&amp;.unit_name.upcase)
+            <pre><code class="language-crystal"># Pipeline: &#39;map as&#39; casts Node -&gt; Enemy -&gt; String
+active_targets : Array(String) =
+  get_tree.nodes_in_group(&quot;enemies&quot;)
+    .map(&amp;.as(Enemy))        # =&gt; Array(Enemy)
+    .select(&amp;.alive?)        # =&gt; Array(Enemy)
+    .map(&amp;.unit_name.upcase) # =&gt; Array(String)
 
-# Idiomatic block predicates &amp; frequency counting
-has_boss = active_targets.any?(&amp;.starts_with?(&quot;BOSS_&quot;))
-enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
+# Chaining preserves exact static types:
+has_boss : Bool =
+  active_targets.any?(&amp;.starts_with?(&quot;BOSS_&quot;))
+
+enemy_types : Hash(String, Int32) =
+  active_targets.tally # Frequency Hash!</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
@@ -1249,9 +1257,10 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
                 <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
-                <li><strong>50+ Enumerable Methods:</strong> Clean, chained methods like <code>select</code>, <code>map</code>, <code>reject</code>, <code>tally</code>, and <code>chunk</code>.</li>
-                <li><strong>Zero GC Heap Thrashing:</strong> Lazy iterators chain without intermediate array allocations.</li>
-                <li><strong>Inlined Machine Loops:</strong> Crystal's LLVM compiler inlines closures into tight CPU loops matching raw C speed.</li>
+                <li><strong>Downcasting with <code>map as</code>:</strong> <code>.map(&.as(Enemy))</code> statically casts base Godot nodes into typed wrappers in a single pass.</li>
+                <li><strong>Strict Type Propagation:</strong> Hindley-Milner inference tracks types across every chain step (<code>Node</code> &rarr; <code>Enemy</code> &rarr; <code>String</code>).</li>
+                <li><strong>Typed Output Chaining:</strong> Downstream methods like <code>any?</code> (<code>Bool</code>) and <code>tally</code> (<code>Hash(String, Int32)</code>) are fully compile-time checked.</li>
+                <li><strong>Zero GC Heap Thrashing:</strong> Chained functional blocks compile to inlined native machine loops with zero intermediate arrays.</li>
               </ul>
             </div>
           </div>
@@ -1267,7 +1276,8 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
           <span>Slide 13 / 57</span>
         </div>
         <aside class="notes">
-          One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators. In GDScript, transforming a collection requires creating an empty array, manually writing a for-loop, appending items one by one, and managing boolean flags for simple queries like 'any?'. In Crystal, we inherit Ruby's legendary Enumerable module: select, map, any?, and even tally for building frequency distributions. Because Crystal compiles to native LLVM code, these functional closures compile down to tight, vectorized loops with zero GC overhead.
+          One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators and type-safe transformations. In GDScript, transforming an array of nodes requires allocating an untyped array, writing manual for-loops, checking types with 'is Enemy' at runtime, and managing boolean flags for simple queries like 'any?'.
+          In Crystal, collections are powered by the Enumerable module with complete static type inference: we can downcast Godot nodes using 'map as' (.map(&.as(Enemy))), filter by predicates (.select(&.alive?)), and transform output types (.map(&.unit_name.upcase)) from Array(Node) to Array(Enemy) to Array(String). Downstream calls like .any? and .tally are statically typed with zero runtime reflection. Best of all, LLVM inlines these closures into tight, vectorized loops with zero intermediate heap allocations.
         </aside>
       </section>
 

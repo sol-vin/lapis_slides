@@ -371,15 +371,19 @@ This document outlines each slide's exact theme palette, architectural category,
   ```
 - **Crystal Code Example (`✨ Crystal: Zen Enumerable Chaining`)**:
   ```crystal
-  # Fluent, type-filtered iterator pipeline (zero extra arrays)
-  active_targets = get_tree.nodes_in_group("enemies")
-    .select(Enemy)
-    .select(&.alive?)
-    .map(&.unit_name.upcase)
+  # Pipeline: 'map as' casts Node -> Enemy -> String
+  active_targets : Array(String) =
+    get_tree.nodes_in_group("enemies")
+      .map(&.as(Enemy))        # => Array(Enemy)
+      .select(&.alive?)        # => Array(Enemy)
+      .map(&.unit_name.upcase) # => Array(String)
   
-  # Idiomatic block predicates & frequency counting
-  has_boss = active_targets.any?(&.starts_with?("BOSS_"))
-  enemy_types = active_targets.tally # Instant frequency Hash!
+  # Chaining preserves exact static types:
+  has_boss : Bool =
+    active_targets.any?(&.starts_with?("BOSS_"))
+  
+  enemy_types : Hash(String, Int32) =
+    active_targets.tally # Frequency Hash!
   ```
 - **Presenter Script**:
   > *"Examining the code side-by-side: Notice the contrast in structure, verbosity, and safety between the GDScript implementation on the left and the Crystal implementation on the right before we review the specific friction points."*
@@ -396,12 +400,13 @@ This document outlines each slide's exact theme palette, architectural category,
   - Missing Functional Primitives: Lacks standard pipeline operations (map, select, reject, tally, chunk).
   - Boilerplate Flags: Requires manual for loops and break statements for simple boolean queries like any?.
 - **✨ Crystal Zen Advantages**:
-  - 50+ Enumerable Methods: Clean, chained methods like select, map, reject, tally, and chunk.
-  - Zero GC Heap Thrashing: Lazy iterators chain without intermediate array allocations.
-  - Inlined Machine Loops: Crystal's LLVM compiler inlines closures into tight CPU loops matching raw C speed.
+  - Downcasting with map as: .map(&.as(Enemy)) statically casts base Godot nodes into typed wrappers in a single pass.
+  - Strict Type Propagation: Hindley-Milner inference tracks types across every chain step (Node &rarr; Enemy &rarr; String).
+  - Typed Output Chaining: Downstream methods like any? (Bool) and tally (Hash(String, Int32)) are fully compile-time checked.
+  - Zero GC Heap Thrashing: Chained functional blocks compile to inlined native machine loops with zero intermediate arrays.
 - **Key Takeaway**: Crystal's Enumerable module transforms clunky, bug-prone loops into clean, readable, self-documenting data pipelines.
 - **Presenter Script**:
-  > *"One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators. In GDScript, transforming a collection requires creating an empty array, manually writing a for-loop, appending items one by one, and managing boolean flags for simple queries like 'any?'. In Crystal, we inherit Ruby's legendary Enumerable module: select, map, any?, and even tally for building frequency distributions. Because Crystal compiles to native LLVM code, these functional closures compile down to tight, vectorized loops with zero GC overhead."*
+  > *"One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators and type-safe transformations. In GDScript, transforming an array of nodes requires allocating an untyped array, writing manual for-loops, checking types with 'is Enemy' at runtime, and managing boolean flags for simple queries like 'any?'. In Crystal, collections are powered by the Enumerable module with complete static type inference: we can downcast Godot nodes using 'map as' (.map(&.as(Enemy))), filter by predicates (.select(&.alive?)), and transform output types (.map(&.unit_name.upcase)) from Array(Node) to Array(Enemy) to Array(String). Downstream calls like .any? and .tally are statically typed with zero runtime reflection. Best of all, LLVM inlines these closures into tight, vectorized loops with zero intermediate heap allocations."*
 
 ---
 ### Slide 14: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen (Code Comparison)
