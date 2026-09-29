@@ -47,14 +47,15 @@ crystal:
 
       # Tuple pattern matching in a single clean expression:
       case {health, state}
-      when {..0, !State::Dead} then die!
-      when {..20, _}           then emit_low_health_warning
+      when {..0, .dead?} then nil # already dead
+      when {..0, _}      then die!
+      when {..20, _}     then emit_low_health_warning
       end
     end
   points:
   - <strong>Strongly-Typed Enums:</strong> Auto-synthesized query methods like <code>.idle?</code>, <code>.run?</code>, and <code>.dead?</code>.
   - <strong>Compiler-Enforced Exhaustiveness:</strong> Missing an enum case is a hard compile-time error.
-  - <strong>Multi-Dimensional Matching:</strong> Match on tuples (<code>case {health, state}</code>) with range and negation patterns.
+  - <strong>Multi-Dimensional Matching:</strong> Match on tuples (<code>case {health, state}</code>) with ranges (<code>..0</code>) and wildcards (<code>_</code>).
 takeaway:
   badge: CORRECT BY CONSTRUCTION
   text: Crystal makes illegal states unrepresentable and turns runtime logic oversights into helpful compiler hints.

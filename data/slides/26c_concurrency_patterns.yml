@@ -32,8 +32,13 @@ left:
 
     # Main thread drains non-blockingly during _process
     def _process(delta : Float64) : Void
-      while res = @nav_worker.results.receive?
-        apply_path(res.id, res.path) # SceneTree safe!
+      loop do
+        select
+        when res = @nav_worker.results.receive
+          apply_path(res.id, res.path) # SceneTree safe!
+        else
+          break # Channel empty, continue frame loop
+        end
       end
     end
 right:
@@ -48,5 +53,5 @@ right:
 notes: |
   Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees.
   Heavy tasks like A* pathfinding, voxel generation, and AI simulations run on dedicated OS worker threads (Thread.new). They communicate with the game through buffered channels.
-  On the main thread, _process non-blockingly drains completed results using receive? and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks!
+  On the main thread, _process non-blockingly drains completed results using a select block and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks!
   Meanwhile, cooperative gameplay fibers handle non-blocking asynchronous state machines using await without ever blocking the engine frame loop.

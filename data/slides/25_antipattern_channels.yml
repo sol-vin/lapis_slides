@@ -1,8 +1,7 @@
 ---
 id: 25_antipattern_channels
 title: 'Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels'
-subtitle: Manual Locking & SceneTree Crashes vs. Safe Background Workers & Channel
-  Drain
+subtitle: Manual Locking & SceneTree Crashes vs. Safe Background Workers & Channel Drain
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
 palette: spaces_97
@@ -11,43 +10,53 @@ gdscript:
   title: '❌ GDScript: Mutex Locking & SceneTree Hazard'
   lang: gdscript
   tag: GDScript
-  code: "var thread: Thread\r\nvar mutex: Mutex\r\nfunc _ready():\r\n    thread =
-    Thread.new(); mutex = Mutex.new()\r\n    thread.start(_worker_task)\r\n\nfunc
-    _worker_task():\r\n    var data = generate_terrain()\r\n    mutex.lock()\r\n    #
-    DANGER: Modifying SceneTree off the main thread corrupts Godot memory!\r\n    get_parent().add_child(data)
-    # CRASH: Native C++ child array corruption\r\n    mutex.unlock()"
+  code: |
+    var thread: Thread
+    var mutex: Mutex
+    func _ready():
+        thread = Thread.new(); mutex = Mutex.new()
+        thread.start(_worker_task)
+
+    func _worker_task():
+        var data = generate_terrain()
+        mutex.lock()
+        # DANGER: Modifying SceneTree off main thread corrupts memory!
+        get_parent().add_child(data)
+        # CRASH: Native C++ child array corruption
+        mutex.unlock()
   points:
-  - <strong>Manual Mutex Locking:</strong> Prone to race conditions, priority inversions,
-    and hard deadlocks.
-  - <strong>Fatal SceneTree Corruption:</strong> Modifying nodes from background threads
-    corrupts Godot's child arrays.
-  - <strong>No Typed Communication Queue:</strong> Lacks clean cross-thread actor
-    queues.
+  - <strong>Manual Mutex Locking:</strong> Prone to race conditions, priority inversions, and hard deadlocks.
+  - <strong>Fatal SceneTree Corruption:</strong> Modifying nodes from background threads corrupts Godot's child arrays.
+  - <strong>No Typed Communication Queue:</strong> Lacks clean cross-thread actor queues.
 crystal:
   title: '✨ Crystal: Buffered Actor Channels'
   lang: crystal
   tag: Crystal (Lapis)
-  code: "# Background worker thread with typed, buffered Actor Channel\r\n@channel
-    = Channel(TerrainMesh).new(capacity: 32)\r\nThread.new do\r\n  mesh = generate_terrain_mesh\r\n
-    \ @channel.send(mesh) # Lock-free thread-safe channel dispatch\r\nend\r\n\ndef
-    _process(delta : Float64) : Void\r\n  # Non-blocking drain on the main thread
-    during engine tick:\r\n  while @channel.receive?\r\n    if mesh = @channel.receive?\r\n
-    \     add_child(mesh) # 100% SceneTree thread-safe!\r\n    end\r\n  end\r\nend"
+  code: |
+    # Background worker thread with typed, buffered Actor Channel
+    @channel = Channel(TerrainMesh).new(capacity: 32)
+    Thread.new do
+      mesh = generate_terrain_mesh
+      @channel.send(mesh) # Lock-free thread-safe channel dispatch
+    end
+
+    def _process(delta : Float64) : Void
+      # Non-blocking select drain on the main thread:
+      loop do
+        select
+        when mesh = @channel.receive
+          add_child(mesh) # 100% SceneTree thread-safe!
+        else
+          break # Channel empty, continue frame loop
+        end
+      end
+    end
   points:
-  - <strong>Lock-Free Actor Model:</strong> Typed <code>Channel(T)</code> eliminates
-    manual mutexes and lock contention.
-  - <strong>Non-Blocking Frame Drain:</strong> Main thread drains channel during <code>_process</code>,
-    ensuring 100% SceneTree safety.
-  - <strong>Architectural Safety:</strong> Heavy compute stays strictly isolated from
-    the rendering loop.
+  - <strong>Lock-Free Actor Model:</strong> Typed <code>Channel(T)</code> eliminates manual mutexes and lock contention.
+  - <strong>Non-Blocking Frame Drain:</strong> Main thread drains channel via <code>select ... else break</code>, ensuring 100% SceneTree safety.
+  - <strong>Architectural Safety:</strong> Heavy compute stays strictly isolated from the rendering loop.
 takeaway:
   badge: ACTOR PATTERN CONCURRENCY
-  text: Crystal's actor channels give you parallel multi-core performance without
-    mutexes or SceneTree corruption.
-notes: In GDScript, concurrent programming is fraught with peril. Developers use Mutex
-  objects, and if a background thread accidentally touches a node in the SceneTree,
-  Godot's internal child arrays corrupt, causing an immediate engine crash. In Crystal,
-  we leverage the Actor pattern using Channel(T). Background worker threads crunch
-  heavy procedural calculations and send immutable data structures through a buffered
-  channel. On the main thread, _process non-blockingly drains the channel and safely
-  mounts nodes to the scene tree. Zero mutexes, zero deadlocks, zero crashes.
+  text: Crystal's actor channels give you parallel multi-core performance without mutexes or SceneTree corruption.
+notes: |
+  In GDScript, concurrent programming is fraught with peril. Developers use Mutex objects, and if a background thread accidentally touches a node in the SceneTree, Godot's internal child arrays corrupt, causing an immediate engine crash. In Crystal, we leverage the Actor pattern using Channel(T). Background worker threads crunch heavy procedural calculations and send immutable data structures through a buffered channel. On the main thread, _process non-blockingly drains the channel using a select block and safely mounts nodes to the scene tree. Zero mutexes, zero deadlocks, zero crashes.

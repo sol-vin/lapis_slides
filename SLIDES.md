@@ -490,46 +490,50 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: GDScript's Runtime String Lookups & Silent Typo Bugs vs. Crystal's Immediate 32-Bit Symbols & Compile-Time Typo Proofing
 - **GDScript Code Example (`❌ GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs`)**:
   ```gdscript
-  # PROBLEM 1: Silent Typo Bugs in State Machine
+  # PROBLEM 1: Dictionary String Keys — Silent Null on Typos
+  var blackboard: Dictionary = {}
+  blackboard["target_enemy"] = player_node
+  # Typo in key silently returns null, causing downstream crash:
+  var target = blackboard.get("target_enmy") # => null!
+  target.take_damage(10) # 💥 Runtime Crash: Invalid call on base Nil
+  
+  # PROBLEM 2: State Machine String Hashing & Typo Blindspots
   var state: StringName = &"patrol"
   if state == &"petrol": # ⚠️ Typo compiles silently! Logic fails at runtime.
       refuel_vehicle()
   
-  # PROBLEM 2: Dictionary Keys — Silent Null & Downstream Crashes
-  var blackboard: Dictionary = {}
-  blackboard["target_enemy"] = player_node
-  var target = blackboard.get("target_enmy") # ⚠️ Typo yields null, no error!
-  target.take_damage(10) # 💥 Runtime Crash: Invalid call on base Nil
-  
-  # PROBLEM 3: String Hashing & Global Intern Table Locks
+  # PROBLEM 3: Frame-by-Frame String Comparison & Intern Table Locks
   match current_action:
       "idle": play_animation("idle")
       "attack": deal_damage() # Hashed string lookup every frame
   
-  # PROBLEM 4: No Shorthand Method Selectors
-  # Must pass untyped StringName or allocate a lambda wrapper:
+  # PROBLEM 4: No Shorthand Method References
+  # Must write full closure or use untyped StringName method dispatch:
   call(&"on_damage_taken", 15) # Untyped string dispatch
   ```
 - **Crystal Code Example (`✨ Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing`)**:
   ```crystal
-  # SOLUTION 1: Compile-Time Typo Proofing & Exhaustive State
-  alias State = :idle | :patrol | :alert
-  state : State = :patrol
-  # state = :petrol # 🚫 COMPILE ERROR: type must be State, not :petrol!
-  
-  # SOLUTION 2: NamedTuple — Compile-Time Key Typo Proofing
+  # SOLUTION 1: NamedTuple — Compile-Time Key Typo Proofing
   blackboard = {target_enemy: player_node, alert_level: :high}
   target = blackboard[:target_enemy] # Strongly typed as Player!
-  # blackboard[:target_enmy] # 🚫 COMPILE ERROR: unknown key :target_enmy!
+  # blackboard[:target_enmy] # 🚫 COMPILE ERROR: missing key 'target_enmy'!
   
-  # SOLUTION 3: 32-Bit Immediate Integer — 1 CPU Cycle (cmp), 0 Allocations
+  # SOLUTION 2: 32-Bit Immediate Integer (cmp eax, imm32) — 0 Allocations
+  # Symbols are NOT strings: they are immediate 32-bit compiler IDs:
+  state = :patrol
+  if state == :patrol # Single machine instruction (1 CPU cycle)
+    move_to_waypoint
+  end
+  
+  # SOLUTION 3: Fast Jump-Table Matching (Zero String Hashing)
   case state
   when :idle   then play_animation("idle")
   when :patrol then patrol_route
   when :alert  then engage_combat
-  end # Exhaustive compiler jump-table, 0 heap bytes, 0 GC churn!
+  end # Pure integer comparison, 0 heap bytes, 0 GC churn!
   
   # SOLUTION 4: Symbol-to-Proc Shorthand
+  # Symbols double as zero-cost method selectors for inlined blocks:
   names = enemies.map(&.name)       # inlines .name on each item
   active = enemies.select(&.alive?) # inlines .alive? on each item
   ```
@@ -544,18 +548,18 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Title**: Symbols: String Churn & Silent Typos vs. 32-Bit Zero-Cost Identifiers
 - **Subtitle**: GDScript's Runtime String Lookups & Silent Typo Bugs vs. Crystal's Immediate 32-Bit Symbols & Compile-Time Typo Proofing
 - **⚠️ GDScript Friction & Pitfalls**:
-  - Silent Typo Bugs: String and StringName comparisons never fail at compile time. Misspellings like &"petrol" silently evaluate to false, creating insidious bugs.
   - Silent Null on Typoed Keys: Typoing a dictionary string key (blackboard.get("target_enmy")) returns null without any warning, causing crashes down the line.
+  - Silent Typo Bugs in States: String and StringName comparisons never fail at compile time. Misspellings like &"petrol" silently evaluate to false, creating insidious bugs.
   - Hashing & Intern Mutex Churn: Strings require runtime byte comparisons. StringNames require global mutex locking and hash table queries inside Godot's engine pool.
-  - Untyped State Variables: Any arbitrary string can be passed to state machines without compiler type checks or exhaustiveness guarantees.
+  - Untyped String Dispatch: Method calls and event tags via StringName lack compiler validation and cannot leverage symbol-to-proc.
 - **✨ Crystal Zen Advantages**:
+  - Compile-Time Key Typo Proofing: NamedTuple indexed by symbols catches misspelled keys at compile time (missing key 'target_enmy') with zero runtime lookups.
   - Immediate 32-Bit Integers: Symbols are NOT strings. They are immediate 32-bit integer IDs assigned by the compiler — zero heap allocations, zero GC tracking, zero pointer dereferences.
   - Single-Cycle CPU Comparisons: Evaluating state == :patrol compiles to a single CPU machine instruction (cmp). No string hashing, no string length checks.
-  - Compile-Time Typo Proofing: When combined with symbol unions (:idle | :patrol) or NamedTuple, misspelled symbol keys trigger immediate compile-time errors.
   - Symbol-to-Proc Ergonomics: Symbols double as first-class method callers: &.name and &.alive? eliminate verbose lambda wrappers while remaining fully inlined.
-- **Key Takeaway**: Symbols solve Godot's silent string typo bugs and runtime hash overhead by turning identifiers into immediate 32-bit compiler integers with single-cycle CPU comparisons.
+- **Key Takeaway**: Symbols solve Godot's silent dictionary typos and runtime string hash overhead by turning identifiers into immediate 32-bit integers with compile-time checked keys.
 - **Presenter Script**:
-  > *"Symbols are one of the most beloved features inherited from Ruby and elevated to bare-metal performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for state machines, blackboard dictionaries, and event tags. But strings introduce two massive problems: first, typos compile silently—`if state == &"petrol"` simply evaluates to false, leaving you with phantom bugs that take hours to track down. Second, strings involve runtime byte comparisons or global intern-table hash lookups. In Crystal, symbols like `:idle` and `:patrol` are not strings at all: they are immediate 32-bit integer IDs resolved at compile time. Comparing two symbols takes a single CPU clock cycle (`cmp`). When used in NamedTuples or symbol unions, typos are caught immediately by the compiler. And with symbol-to-proc (`&.name`), symbols make functional collection pipelines astonishingly clean."*
+  > *"Symbols are one of the most beloved features inherited from Ruby and elevated to bare-metal performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two massive problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, strings involve runtime byte comparisons or global intern-table hash lookups. In Crystal, symbols like `:target_enemy` and `:patrol` are not strings at all: they are immediate 32-bit integer IDs resolved at compile time. When used in NamedTuples, accessing a misspelled key is a compile-time error. Comparing two symbols takes a single CPU clock cycle (`cmp`). And with symbol-to-proc (`&.name`), symbols make functional collection pipelines extraordinarily clean."*
 
 ---
 ### Slide 18: Nil Safety: Runtime Crashes vs. Compile-Time Proof (Code Comparison)
@@ -650,8 +654,9 @@ This document outlines each slide's exact theme palette, architectural category,
   
     # Tuple pattern matching in a single clean expression:
     case {health, state}
-    when {..0, !State::Dead} then die!
-    when {..20, _}           then emit_low_health_warning
+    when {..0, .dead?} then nil # already dead
+    when {..0, _}      then die!
+    when {..20, _}     then emit_low_health_warning
     end
   end
   ```
@@ -672,7 +677,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **✨ Crystal Zen Advantages**:
   - Strongly-Typed Enums: Auto-synthesized query methods like .idle?, .run?, and .dead?.
   - Compiler-Enforced Exhaustiveness: Missing an enum case is a hard compile-time error.
-  - Multi-Dimensional Matching: Match on tuples (case {health, state}) with range and negation patterns.
+  - Multi-Dimensional Matching: Match on tuples (case {health, state}) with ranges (..0) and wildcards (_).
 - **Key Takeaway**: Crystal makes illegal states unrepresentable and turns runtime logic oversights into helpful compiler hints.
 - **Presenter Script**:
   > *"State machines are fundamental to gameplay. In GDScript, enums are essentially integers under the hood, and the match statement does not check for exhaustiveness. If you add a new state like 'STUNNED' to your enum, your existing code will silently ignore it without warning. In Crystal, enums are strongly typed, and the compiler strictly enforces exhaustive case statements. If you forget to handle a state, the compiler immediately halts with a helpful error. Plus, tuple pattern matching allows evaluating multi-variable state transitions cleanly in a single expression."*
@@ -1184,8 +1189,9 @@ This document outlines each slide's exact theme palette, architectural category,
   func _worker_task():
       var data = generate_terrain()
       mutex.lock()
-      # DANGER: Modifying SceneTree off the main thread corrupts Godot memory!
-      get_parent().add_child(data) # CRASH: Native C++ child array corruption
+      # DANGER: Modifying SceneTree off main thread corrupts memory!
+      get_parent().add_child(data)
+      # CRASH: Native C++ child array corruption
       mutex.unlock()
   ```
 - **Crystal Code Example (`✨ Crystal: Buffered Actor Channels`)**:
@@ -1198,10 +1204,13 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   
   def _process(delta : Float64) : Void
-    # Non-blocking drain on the main thread during engine tick:
-    while @channel.receive?
-      if mesh = @channel.receive?
+    # Non-blocking select drain on the main thread:
+    loop do
+      select
+      when mesh = @channel.receive
         add_child(mesh) # 100% SceneTree thread-safe!
+      else
+        break # Channel empty, continue frame loop
       end
     end
   end
@@ -1222,11 +1231,11 @@ This document outlines each slide's exact theme palette, architectural category,
   - No Typed Communication Queue: Lacks clean cross-thread actor queues.
 - **✨ Crystal Zen Advantages**:
   - Lock-Free Actor Model: Typed Channel(T) eliminates manual mutexes and lock contention.
-  - Non-Blocking Frame Drain: Main thread drains channel during _process, ensuring 100% SceneTree safety.
+  - Non-Blocking Frame Drain: Main thread drains channel via select ... else break, ensuring 100% SceneTree safety.
   - Architectural Safety: Heavy compute stays strictly isolated from the rendering loop.
 - **Key Takeaway**: Crystal's actor channels give you parallel multi-core performance without mutexes or SceneTree corruption.
 - **Presenter Script**:
-  > *"In GDScript, concurrent programming is fraught with peril. Developers use Mutex objects, and if a background thread accidentally touches a node in the SceneTree, Godot's internal child arrays corrupt, causing an immediate engine crash. In Crystal, we leverage the Actor pattern using Channel(T). Background worker threads crunch heavy procedural calculations and send immutable data structures through a buffered channel. On the main thread, _process non-blockingly drains the channel and safely mounts nodes to the scene tree. Zero mutexes, zero deadlocks, zero crashes."*
+  > *"In GDScript, concurrent programming is fraught with peril. Developers use Mutex objects, and if a background thread accidentally touches a node in the SceneTree, Godot's internal child arrays corrupt, causing an immediate engine crash. In Crystal, we leverage the Actor pattern using Channel(T). Background worker threads crunch heavy procedural calculations and send immutable data structures through a buffered channel. On the main thread, _process non-blockingly drains the channel using a select block and safely mounts nodes to the scene tree. Zero mutexes, zero deadlocks, zero crashes."*
 
 ---
 ### Slide 38: Concurrency: SceneTree Thread Safety & Auto-Deferral
@@ -1365,8 +1374,13 @@ This document outlines each slide's exact theme palette, architectural category,
   
   # Main thread drains non-blockingly during _process
   def _process(delta : Float64) : Void
-    while res = @nav_worker.results.receive?
-      apply_path(res.id, res.path) # SceneTree safe!
+    loop do
+      select
+      when res = @nav_worker.results.receive
+        apply_path(res.id, res.path) # SceneTree safe!
+      else
+        break # Channel empty, continue frame loop
+      end
     end
   end
   ```
@@ -1376,7 +1390,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Cooperative Gameplay Fibers: Non-blocking spawn fibers yield in _process via await(timer) or await(signal) without stalling engine frames.
   - Zero-Lock Message Passing: Background threads pass immutable Crystal structs, eliminating mutex contention, cache invalidation, and deadlocks.
 - **Presenter Script**:
-  > *"Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees. Heavy tasks like A* pathfinding, voxel generation, and AI simulations run on dedicated OS worker threads (Thread.new). They communicate with the game through buffered channels. On the main thread, _process non-blockingly drains completed results using receive? and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks! Meanwhile, cooperative gameplay fibers handle non-blocking asynchronous state machines using await without ever blocking the engine frame loop."*
+  > *"Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees. Heavy tasks like A* pathfinding, voxel generation, and AI simulations run on dedicated OS worker threads (Thread.new). They communicate with the game through buffered channels. On the main thread, _process non-blockingly drains completed results using a select block and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks! Meanwhile, cooperative gameplay fibers handle non-blocking asynchronous state machines using await without ever blocking the engine frame loop."*
 
 ---
 ### Slide 42: Interoperability: GDScript Calling Crystal
@@ -1927,10 +1941,10 @@ This document outlines each slide's exact theme palette, architectural category,
     - *Code*:
       ```crystal
       node Player < CharacterBody3D do
-        @[Export] property speed = 8.0_f32
+        @[Export] property speed : Float32 = 8.0_f32
         signal coin_collected(n : Int32)
-        def _physics_process(delta)
-          velocity = Vector3.new(0, 0, -speed)
+        def _physics_process(delta : Float64) : Void
+          self.velocity = Vector3.new(0, 0, -speed)
           move_and_slide
         end
       end
