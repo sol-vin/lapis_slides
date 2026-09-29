@@ -25,7 +25,6 @@ slides:
 - 05_birth_of_crystal
 - 05b_crystal_type_system
 - 10_expressive_ergonomics
-- 14_antipattern_macros
 - 14b_crystal_macro_hooks
 - 18_macro_state_machines
 - 18b_macro_fsm_implementation
@@ -44,6 +43,7 @@ slides:
 - 11c_antipattern_symbols
 - 12_antipattern_nil_safety
 - 13_antipattern_pattern_matching
+- 14_antipattern_macros
 - 15_antipattern_structs
 - 16_antipattern_dead_pointers
 - 17_antipattern_async_signals
