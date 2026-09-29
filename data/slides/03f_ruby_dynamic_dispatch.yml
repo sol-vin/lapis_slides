@@ -1,0 +1,51 @@
+---
+id: 03f_ruby_dynamic_dispatch
+title: 'Dynamic Dispatch & Mixins'
+subtitle: method_missing, send, Dynamic Proxies & Module Composition
+badge: RUBY HERITAGE • METAPROGRAMMING
+badge_color: cyan
+palette: candy
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: dynamic_dispatch_and_mixins.rb
+  tag: Ruby
+  lang: ruby
+  code: |
+    # 1. method_missing: Ghost methods & dynamic proxying
+    class EntityProxy
+      def initialize(@target); end
+
+      def method_missing(name, *args, &block)
+        if name.to_s.start_with?("can_")
+          puts "Checking capability for #{name}..."
+          true
+        else
+          @target.send(name, *args, &block) # send: dynamic dispatch
+        end
+      end
+    end
+
+    # 2. Mixin Modules: Composable horizontal behavior
+    module Damageable
+      attr_accessor :health
+      def take_damage(amount)
+        @health = [@health - amount, 0].max
+      end
+    end
+
+    class BossEnemy
+      include Damageable # Mixes in behavior without deep inheritance!
+    end
+right:
+  type: card
+  title: Dynamic Reflection & Composition
+  color: cyan
+  items:
+    - '<strong>Ghost Methods (<code>method_missing</code>):</strong> Intercepts undefined calls at runtime to synthesize dynamic query methods and transparent network proxies.'
+    - '<strong>Dynamic Dispatch via <code>send</code>:</strong> Invokes any method dynamically using symbols or strings (<code>target.send(:cast_spell, :fireball)</code>).'
+    - '<strong>Horizontal Mixin Modules:</strong> Modules share reusable behavior across unrelated classes via <code>include</code>, avoiding brittle multiple inheritance hierarchies.'
+    - '<strong>The VM Performance Cost:</strong> Runtime ancestor chain traversals and polymorphic inline cache misses make tight 60 FPS physics loops difficult to optimize.'
+notes: |
+  Ruby's dynamic reflection model gave developers magical tools like method_missing and send. With method_missing, objects can intercept calls that don't exist at compile time—enabling ActiveRecord's famous dynamic finders like find_by_name or automatic network proxying. With send, any method can be dispatched dynamically using a runtime symbol or string. And mixin modules allowed developers to compose functionality horizontally via include, extend, and prepend without the brittle complexity of multiple inheritance. But this dynamic flexibility came at a steep cost: every method call in Ruby had to traverse ancestor lookup trees and check method caches at runtime, making it virtually impossible to achieve the sub-millisecond execution speeds needed for 60 FPS physics engines. Crystal observed these patterns and realized they could be achieved at compile-time using AST macros.

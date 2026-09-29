@@ -1,0 +1,38 @@
+---
+id: 41b_demo_scaffold_hot_reload
+title: 'Demo 1: Scaffolding & Hot Reload'
+subtitle: Zero-Config Project Bootstrapping & Windows Shadow DLL Reloading
+badge: 'LIVE DEMO • PART 1: WORKFLOW'
+badge_color: cyan
+palette: spaces_vista
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: Terminal — Scaffold & Hot Reload Session
+  tag: Bash
+  lang: bash
+  code: |
+    # Step 1: Scaffold a ready-to-run Godot 4.8 game
+    $ lapis init dungeon_crawl --template=3d-action
+    ✓ Created project.godot, shard.yml, src/main.cr, scenes/
+
+    # Step 2: Open project in official Godot Editor
+    $ lapis editor
+    ✓ Godot 4.8-dev6 launched (GDExtension bridge loaded)
+
+    # Step 3: Edit code in IDE & press F5 in Godot
+    [EditorPlugin] F5 rebuild triggered: compiling bin/game.dll...
+    [Bridge] Timestamped shadow loaded: game_8421_1727641200.dll
+    ✓ 0 file locks on Windows • Game reloaded in 0.42s!
+right:
+  type: card
+  title: Developer Flow & Zero-Lock Invariants
+  color: cyan
+  items:
+    - '<strong>Zero-Config Scaffolding:</strong> <code>lapis init</code> creates a working Godot project with embedded templates and configured dependencies in seconds.'
+    - '<strong>Editor Hot Reloading:</strong> Pressing F5 in Godot triggers <code>EditorPlugin._build()</code>, recompiling <code>game.dll</code> without closing the editor.'
+    - '<strong>Windows Shadow DLL Loading:</strong> <code>crystal_bridge.cpp</code> loads timestamped shadow copies, bypassing Windows OS DLL file-locking entirely.'
+    - '<strong>Instant Viewport Feedback:</strong> Nodes, inspector properties, and <code>@[Tool]</code> scripts update live inside the Godot editor in real time.'
+notes: |
+  Let's jump into our live demo! In Part 1, we start from a clean terminal. Running lapis init scaffolds a complete, compilable Godot 4.8 project with ready-to-run scenes and shard manifests. When we run lapis editor, Godot opens up with our GDExtension bridge active. In standard C++ or Rust development on Windows, LoadLibrary locks your DLL, forcing you to close Godot every single time you want to recompile. Lapis completely solves this: our C++ bridge creates a timestamped shadow DLL copy and loads the shadow copy. When you edit Crystal code and press F5 in Godot, the editor recompiles game.dll freely and reloads in under half a second—giving you true script-like iteration speed with native compiled code.

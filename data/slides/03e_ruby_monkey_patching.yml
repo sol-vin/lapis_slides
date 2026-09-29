@@ -1,0 +1,50 @@
+---
+id: 03e_ruby_monkey_patching
+title: 'Open Classes & Monkey Patching'
+subtitle: Re-opening Existing Classes, Domain Vocabulary & Scoped Refinements
+badge: RUBY HERITAGE • METAPROGRAMMING
+badge_color: purple
+palette: creation
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: open_classes_and_refinements.rb
+  tag: Ruby
+  lang: ruby
+  code: |
+    # 1. Open Classes: Extend existing classes with domain verbs
+    class Numeric
+      def meters
+        self * 1.0
+      end
+      def kilometers
+        self * 1000.0
+      end
+    end
+
+    # Fluent units read like natural English:
+    jump_distance = 15.meters + 0.5.kilometers
+
+    # 2. Scoped Refinements: Safe, localized monkey patching
+    module GameStringExtensions
+      refine String do
+        def to_slug
+          downcase.strip.gsub(/[^\w-]/, '_')
+        end
+      end
+    end
+
+    using GameStringExtensions
+    puts "Forest Temple (Zone 1)".to_slug # => "forest_temple__zone_1_"
+right:
+  type: card
+  title: 'The Power & Peril of Open Classes'
+  color: purple
+  items:
+    - '<strong>No Class is Final:</strong> Any Ruby class—including core <code>Numeric</code> or <code>String</code>—can be re-opened anywhere at runtime to inject domain-specific methods.'
+    - '<strong>Expressive Domain Vocabulary:</strong> Powers Rails ActiveSupport (<code>5.days.ago</code>, <code>2.gigabytes</code>) and game engines with readable unit math.'
+    - '<strong>The Monkey Patching Hazard:</strong> Two third-party gems patching the same core method can cause catastrophic bugs that depend on file load order.'
+    - '<strong>Scoped Refinements:</strong> Ruby 2.0+ introduced <code>refine</code> and <code>using</code> to constrain open-class modifications strictly to a single lexical scope.'
+notes: |
+  One of Ruby's most famous and audacious capabilities is Open Classes—the ability to re-open any existing class at runtime, including core library types like Numeric, String, or Array, and inject new methods directly into them. This gave rise to monkey patching, which powered libraries like Rails ActiveSupport where you could write 5.days.ago or 2.gigabytes. While this creates unparalleled domain expressiveness, in massive codebases monkey patching is a notorious double-edged sword: if two third-party gems patch the same method in slightly different ways, subtle bugs arise depending purely on which file was loaded first. Ruby later introduced Refinements to localize these mutations lexically. Crystal preserves this open-class capability for developer convenience, but validates method signatures statically at compile time.

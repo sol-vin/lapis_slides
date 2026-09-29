@@ -1,0 +1,48 @@
+---
+id: 05b_crystal_type_system
+title: 'The Zero-Tax Type System'
+subtitle: Global Hindley-Milner Inference & Mathematically Proven Nil Safety
+badge: TYPE SYSTEM • COMPILE-TIME RIGOR
+badge_color: cyan
+palette: spaces_xp
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: type_inference_and_nil_safety.cr
+  tag: Crystal
+  lang: crystal
+  code: |
+    # Crystal writes like Ruby, but with 100% static type safety:
+    class Inventory
+      getter items = [] of String # Inferred as Array(String)
+
+      # 1. Zero signature noise: parameter & return types inferred!
+      def find_item(name)
+        @items.find { |item| item == name } # Inferred: String | Nil
+      end
+
+      def equip(name)
+        item = find_item(name)
+
+        # 2. Mathematical compile-time nil safety:
+        # item.upcase
+        # ❌ Compile Error: undefined method 'upcase' for Nil (type is String | Nil)
+
+        if item
+          # Inside guard, compiler narrows type strictly to String:
+          puts "Equipped: #{item.upcase}" # ✅ Safe!
+        end
+      end
+    end
+right:
+  type: card
+  title: How Crystal Defeats Sorbet & RBS
+  color: cyan
+  items:
+    - '<strong>Global Type Inference:</strong> Infers 95%+ of types across your entire codebase, completely eliminating verbose <code>sig { params(...).returns(...) }</code> clutter.'
+    - '<strong>Exhaustive Nil Safety:</strong> Treats <code>Nil</code> as a real type; accessing methods on nullable unions without checking fails at compile time, eliminating <code>NoMethodError</code>.'
+    - '<strong>Zero Runtime Tag Boxing:</strong> Primitives (<code>Int32</code>, <code>Float64</code>) and structs live unboxed on the stack with zero dynamic type-tag overhead.'
+    - '<strong>Native LLVM Speed:</strong> Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.'
+notes: |
+  When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
