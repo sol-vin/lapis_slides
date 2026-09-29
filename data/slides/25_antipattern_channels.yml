@@ -4,8 +4,8 @@ title: 'Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels'
 subtitle: Manual Locking & SceneTree Crashes vs. Safe Background Workers & Channel
   Drain
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
-badge_color: coral
-palette: trash80
+badge_color: cyan
+palette: spaces_97
 layout: code-comparison-layout
 gdscript:
   title: '❌ GDScript: Mutex Locking & SceneTree Hazard'

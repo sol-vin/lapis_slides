@@ -3,7 +3,7 @@ id: 40_packaging_dist
 title: 'The Packaging System: Turnkey Distribution'
 subtitle: Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers
 badge: PRODUCTION • PACKAGING & DISTRIBUTION
-badge_color: emerald
+badge_color: purple
 palette: spaces_xp_royale
 layout: two-column-layout
 ratio: 3:2
@@ -25,7 +25,7 @@ left:
 right:
   type: card
   title: Release Packaging Invariants
-  color: emerald
+  color: purple
   items:
   - <strong>Strict Addon Isolation:</strong> Packaging strictly bundles <code>crystal_integration</code>; dummy test addons are NEVER shipped.
   - <strong>Automatic DLL Synchronization:</strong> Bundles required runtime DLLs: <code>gc.dll</code>, <code>iconv-2.dll</code>, <code>pcre2-8.dll</code>.

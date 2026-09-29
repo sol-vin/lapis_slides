@@ -3,8 +3,8 @@ id: 32_package_management
 title: 'Package Management: Addons & Crystal Shards'
 subtitle: Leveraging the Global Crystal Shards Ecosystem Inside Godot Projects
 badge: ECOSYSTEM • SHARDS & ADDONS
-badge_color: emerald
-palette: community
+badge_color: purple
+palette: spaces_2000
 layout: two-column-layout
 ratio: 3:2
 left:
@@ -19,7 +19,7 @@ left:
 right:
   type: card
   title: The Shards Advantage
-  color: emerald
+  color: purple
   items:
   - '<strong>Full Crystal Ecosystem Access:</strong> Seamlessly install thousands
     of community shards: math, physics, noise, networking, and serialization.'

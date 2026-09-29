@@ -3,7 +3,7 @@ id: 26_concurrency_scenetree
 title: 'Concurrency: SceneTree Thread Safety & Auto-Deferral'
 subtitle: Safe Cross-Thread Dispatch and State Mutation via Engine MessageQueue
 badge: CONCURRENCY ARCHITECTURE • SCENETREE
-badge_color: emerald
+badge_color: cyan
 palette: disinherited
 layout: two-column-layout
 ratio: 3:2
@@ -20,7 +20,7 @@ left:
 right:
   type: card
   title: Core Safety Invariants
-  color: emerald
+  color: cyan
   items:
   - <strong>Engine MessageQueue:</strong> <code>call_deferred</code> pushes dispatches
     into Godot's thread-safe message queue.

@@ -64,7 +64,7 @@ module LapisSlides
           cr_code = cr_data["code"]?.try(&.as_s) || ""
           cr_tag = cr_data["tag"]?.try(&.as_s) || "Crystal (Lapis)"
           str << "          <div class=\"col comparison-pane solution-pane\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-active)") << "\n"
+          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-color)") << "\n"
           str << "          </div>\n"
         end
 
@@ -103,7 +103,7 @@ module LapisSlides
           cr_code = cr_data["code"]?.try(&.as_s) || ""
           cr_tag = cr_data["tag"]?.try(&.as_s) || "Crystal (Lapis)"
           str << "          <div class=\"col comparison-pane solution-pane dimmed-code\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-active)") << "\n"
+          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-color)") << "\n"
           str << "          </div>\n"
         end
 

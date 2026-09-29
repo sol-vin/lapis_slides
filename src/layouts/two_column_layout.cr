@@ -66,11 +66,53 @@ module LapisSlides
         code = data["code"]?.try(&.as_s) || ""
         str << "            <div class=\"terminal-window col\" style=\"margin: 0;\">\n"
         str << "              <div class=\"terminal-header\">\n"
-        str << "                <div class=\"terminal-dots\"><span class=\"terminal-dot red\"></span><span class=\"terminal-dot yellow\"></span><span class=\"terminal-dot green\"></span></div>\n"
+        str << "                <div class=\"terminal-dots\"><span class=\"terminal-dot dot-1\"></span><span class=\"terminal-dot dot-2\"></span><span class=\"terminal-dot dot-3\"></span></div>\n"
         str << "                <span class=\"terminal-title\">" << HTML.escape(title) << "</span>\n"
         str << "              </div>\n"
         str << "              <div class=\"terminal-body\">\n"
         str << "                <pre><code class=\"language-bash\">" << HTML.escape(code.strip) << "</code></pre>\n"
+        str << "              </div>\n"
+        str << "            </div>\n"
+      when "barchart"
+        title = data["title"]?.try(&.as_s) || "Benchmark Results (Execution Time)"
+        badge = data["badge"]?.try(&.as_s) || "LOWER IS BETTER"
+        unit = data["unit"]?.try(&.as_s) || "ms"
+        str << "            <div class=\"card barchart-card col\">\n"
+        str << "              <div class=\"card-title\">\n"
+        str << "                <span>" << LayoutRenderer.tint_emojis(HTML.escape(title)) << "</span>\n"
+        str << "                <span class=\"badge-pill\" style=\"font-size: 0.65rem; margin-left: auto; border-color: var(--border-color); color: var(--accent-color);\">" << HTML.escape(badge) << "</span>\n"
+        str << "              </div>\n"
+        str << "              <div class=\"barchart-container\">\n"
+
+        if benchmarks = data["benchmarks"]?.try(&.as_a)
+          benchmarks.each do |b|
+            b_name = b["name"]?.try(&.as_s) || ""
+            gd_ms = b["gdscript"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
+            cr_ms = b["crystal"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
+            speedup = b["speedup"]?.try(&.as_s) || sprintf("%.1fx", gd_ms / cr_ms)
+            cr_pct = [2.5, (cr_ms / gd_ms * 100.0)].max.round(1)
+
+            str << "                <div class=\"barchart-row\">\n"
+            str << "                  <div class=\"barchart-row-header\">\n"
+            str << "                    <span class=\"barchart-name\">" << LayoutRenderer.tint_emojis(HTML.escape(b_name)) << "</span>\n"
+            str << "                    <span class=\"barchart-speedup badge-pill\">" << HTML.escape(speedup) << " faster</span>\n"
+            str << "                  </div>\n"
+            str << "                  <div class=\"barchart-bars\">\n"
+            str << "                    <div class=\"barchart-bar-line\">\n"
+            str << "                      <span class=\"bar-platform\">GDScript</span>\n"
+            str << "                      <div class=\"bar-track\"><div class=\"bar-fill gdscript\" style=\"width: 100%;\"></div></div>\n"
+            str << "                      <span class=\"bar-val\">" << gd_ms.round(1) << " " << unit << "</span>\n"
+            str << "                    </div>\n"
+            str << "                    <div class=\"barchart-bar-line\">\n"
+            str << "                      <span class=\"bar-platform\">Crystal</span>\n"
+            str << "                      <div class=\"bar-track\"><div class=\"bar-fill crystal\" style=\"width: " << cr_pct << "%;\"></div></div>\n"
+            str << "                      <span class=\"bar-val\">" << cr_ms.round(1) << " " << unit << "</span>\n"
+            str << "                    </div>\n"
+            str << "                  </div>\n"
+            str << "                </div>\n"
+          end
+        end
+
         str << "              </div>\n"
         str << "            </div>\n"
       else
@@ -112,6 +154,19 @@ module LapisSlides
               code = item["code"]?.try(&.as_s) || ""
               str << "- **Terminal Command (`" << title << "`)**:\n"
               str << "  ```bash\n  " << code.strip.gsub("\n", "\n  ") << "\n  ```\n"
+            elsif item_type == "barchart"
+              title = item["title"]?.try(&.as_s) || "Benchmark Results"
+              unit = item["unit"]?.try(&.as_s) || "ms"
+              str << "- **" << title << "**:\n"
+              if benchmarks = item["benchmarks"]?.try(&.as_a)
+                benchmarks.each do |b|
+                  b_name = b["name"]?.try(&.as_s) || ""
+                  gd_ms = b["gdscript"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
+                  cr_ms = b["crystal"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
+                  speedup = b["speedup"]?.try(&.as_s) || sprintf("%.1fx", gd_ms / cr_ms)
+                  str << "  - **" << b_name << "**: GDScript `" << gd_ms.round(1) << " " << unit << "` vs Crystal `" << cr_ms.round(1) << " " << unit << "` (**" << speedup << " faster**)\n"
+                end
+              end
             else
               title = item["title"]?.try(&.as_s) || "Details"
               str << "- **" << title << "**:\n"

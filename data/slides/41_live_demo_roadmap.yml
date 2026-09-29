@@ -4,7 +4,7 @@ title: 'Live DEMO: End-to-End Workflow Roadmap'
 subtitle: What We're About to Build and Demonstrate Live in Front of You
 badge: LIVE DEMONSTRATION • ROADMAP
 badge_color: cyan
-palette: smile_os
+palette: spaces_10
 layout: timeline-layout
 cards:
 - phase: STEP 1 • TERMINAL
@@ -21,7 +21,7 @@ cards:
   - Add exported properties, signals, and movement code in Crystal.
 - phase: STEP 3 • HOT RELOAD
   title: Instant F5 Iteration
-  color: emerald
+  color: cyan
   items:
   - Rebuild with F5 hot-reload.
   - Tweak exported speeds in Inspector live.

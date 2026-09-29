@@ -9,7 +9,7 @@ layout: four-column-layout
 columns:
   - type: card
     title: 🛡️ Security & CVEs
-    color: coral
+    color: blue
     badge: RESEARCH
     items:
       - "<strong>CompTIA Certified:</strong> A+ &amp; Network+ certified."

@@ -18,7 +18,7 @@ left:
 right:
   type: card
   title: Godot Editor Live State
-  color: emerald
+  color: cyan
   items:
   - <strong>Scene Tree View:</strong> <code>Player</code> node attached to 3D scene
     root.

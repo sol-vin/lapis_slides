@@ -4,7 +4,7 @@ title: 'Crystal Calling GDScript: Dynamic Dispatch'
 subtitle: Rapid Script Prototyping and Dynamic GDScript Invocation via Variant Reflection
 badge: INTEROPERABILITY • DYNAMIC DISPATCH
 badge_color: purple
-palette: game_sprocket
+palette: spaces_vista
 layout: two-column-layout
 ratio: 3:2
 left:

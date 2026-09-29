@@ -3,8 +3,8 @@ id: 27b_interop_type_firewall
 title: 'Type Firewall: Crystal Enforces Strict Safety on GDScript'
 subtitle: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
 badge: INTEROPERABILITY • TYPE FIREWALL
-badge_color: coral
-palette: game_sprocket
+badge_color: purple
+palette: former_rain
 layout: code-comparison-layout
 gdscript:
   title: '❌ GDScript: Duck-Typing & Malformed Arguments'

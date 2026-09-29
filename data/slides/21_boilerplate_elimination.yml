@@ -5,7 +5,7 @@ subtitle: Side-by-Side Implementation of the Same Player Node with Exported Prop
   and Signal
 badge: GDSCRIPT COMPARISON • BOILERPLATE
 badge_color: purple
-palette: game_station
+palette: spaces_98
 layout: four-column-layout
 columns:
 - type: code

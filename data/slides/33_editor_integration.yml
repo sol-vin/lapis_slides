@@ -25,7 +25,7 @@ left:
 right:
   type: card
   title: Why It Changes the Game
-  color: emerald
+  color: cyan
   items:
   - <strong>No External IDE Required:</strong> You can write and edit Crystal code
     directly inside Godot's built-in code editor.

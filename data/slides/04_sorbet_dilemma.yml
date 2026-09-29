@@ -28,7 +28,7 @@ cards:
 - year: "2017-2020"
   phase: "STAGE 3"
   title: "The Bolted-On Tax (Sorbet / RBS)"
-  color: coral
+  color: amber
   items:
   - Stripe builds Sorbet; Ruby Core ships RBS to bolt static type checking onto YARV runtime.
   - Verbose <code>sig { params(...).returns(...) }</code> clutters every single method definition.
@@ -37,7 +37,7 @@ cards:
 - year: "2020+"
   phase: "STAGE 4"
   title: "Why Crystal Came About"
-  color: emerald
+  color: cyan
   items:
   - Designed from day one as a compiled language with global Hindley-Milner type inference.
   - Writes like Ruby, reads like Ruby: 95% of types are inferred with zero signature noise.

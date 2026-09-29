@@ -4,7 +4,7 @@ title: What is Lapis?
 subtitle: The High-Performance Native Gameplay Toolchain for Godot 4.8+
 badge: ENGINE ARCHITECTURE • CORE VISION
 badge_color: cyan
-palette: creation
+palette: spaces_10
 layout: four-column-layout
 columns:
 - title: Language Bindings
@@ -24,12 +24,12 @@ columns:
     metadata.
   - <strong>Zen Clean Code:</strong> Idiomatic blocks, closures, and pattern matching.
 - title: First-Class Editor
-  color: emerald
+  color: cyan
   items:
   - <strong>Crystal Scripting:</strong> Attach <code>.cr</code> scripts natively in
     Godot Editor.
-  - <strong>In-Editor LLDB:</strong> Gutter breakpoints, call stacks, and live variable
-    inspection.
+  - <strong>In-Editor r2:</strong> Gutter breakpoints, call stacks, and live radare2
+    diagnostics.
   - <strong>Instant Hot-Reload:</strong> Shadow DLL reloading on F5 with zero editor
     restarts.
 - title: Complete Toolchain

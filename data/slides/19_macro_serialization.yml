@@ -3,7 +3,7 @@ id: 19_macro_serialization
 title: 'Where Macros Shine: Zero-Reflection Serialization & Save Systems'
 subtitle: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
 badge: AST METAPROGRAMMING • ARCHITECTURE
-badge_color: emerald
+badge_color: purple
 palette: spaces_97
 layout: two-column-layout
 ratio: 3:2
@@ -22,7 +22,7 @@ left:
 right:
   type: card
   title: Why It Beats GDScript & C# Serialization
-  color: emerald
+  color: purple
   items:
   - <strong>Zero Runtime Reflection:</strong> Serialization code is synthesized by
     macros at compile time; no reflection API overhead.

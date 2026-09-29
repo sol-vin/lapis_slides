@@ -3,8 +3,8 @@ id: 11b_antipattern_anon_functions_symbols
 title: 'Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen'
 subtitle: GDScript's Clunky Lambdas & String Lookups vs. Crystal's Inlined Blocks, Chained Enumerators & 32-Bit Symbols
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
-badge_color: amber
-palette: creation
+badge_color: purple
+palette: super_es
 layout: code-comparison-layout
 gdscript:
   title: '❌ GDScript: Verbose Lambdas, Callable Allocations & Strings'

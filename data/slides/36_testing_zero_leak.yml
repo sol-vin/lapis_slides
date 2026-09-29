@@ -3,7 +3,7 @@ id: 36_testing_zero_leak
 title: 'Testing Framework: Writing Tests & Zero-Leak Proof'
 subtitle: Comprehensive Spec Testing and Mathematical Zero-Memory-Leak Verification
 badge: QUALITY GATES • ZERO-LEAK TESTING
-badge_color: emerald
+badge_color: cyan
 palette: spaces_2000
 layout: two-column-layout
 ratio: 3:2
@@ -21,7 +21,7 @@ left:
 right:
   type: card
   title: Zero-Leak Mathematical Proof
-  color: emerald
+  color: cyan
   items:
   - <strong>Godot Performance Monitors:</strong> Queries engine singletons (<code>OBJECT_COUNT</code>,
     <code>OBJECT_NODE_COUNT</code>, <code>MEMORY_STATIC</code>).

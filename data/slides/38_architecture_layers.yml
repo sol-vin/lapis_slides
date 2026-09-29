@@ -56,7 +56,7 @@ side_cards:
   - <strong>The Segfault Hazard:</strong> <code>queue_free()</code> frees native C++ memory; standard bindings dereference dead pointers, crashing with unrecoverable <code>0xC0000005</code>.
   - <strong>Monotonic ObjectDB IDs:</strong> <code>#check_alive!</code> verifies the 64-bit ID before every dispatch, raising <code>DisposedObjectError</code> instead of segfaulting.
 - title: Windows Shadow DLL Hot-Reload
-  color: emerald
+  color: cyan
   items:
   - <strong>File Locking Problem:</strong> Windows locks loaded DLLs on disk, preventing compiler writes.
   - <strong>Shadow Copy Engine:</strong> Bridge creates timestamped copies (<code>game_loaded_&lt;PID&gt;.dll</code>) leaving <code>game.dll</code> unlocked for instant F5 rebuilds.

@@ -3,8 +3,8 @@ id: 13_antipattern_pattern_matching
 title: 'Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking'
 subtitle: Untyped Enums & Brittle Matches vs. Strongly-Typed Enums & Tuple Patterns
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
-badge_color: purple
-palette: community
+badge_color: cyan
+palette: spaces_10
 layout: code-comparison-layout
 gdscript:
   title: '❌ GDScript: Non-Exhaustive Match & Untyped Enums'

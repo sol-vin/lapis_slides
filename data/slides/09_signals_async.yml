@@ -3,7 +3,7 @@ id: 09_signals_async
 title: 'Signals, Events & Async Awaiting: Zen Ergonomics'
 subtitle: Declarative Signal Connections and Non-Blocking Gameplay Coroutines
 badge: CRYSTAL ERGONOMICS • SIGNALS & EVENTS
-badge_color: emerald
+badge_color: cyan
 palette: spaces_vista
 layout: two-column-layout
 ratio: 3:2
@@ -26,7 +26,7 @@ left:
 right:
   type: card
   title: Reactive Gameplay Features
-  color: emerald
+  color: cyan
   items:
   - <strong>Closure Connections:</strong> Connect signals with clean Crystal blocks—no
     string method names or delegate boilerplate.

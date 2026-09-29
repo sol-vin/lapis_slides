@@ -3,7 +3,7 @@ id: 12_antipattern_nil_safety
 title: 'Nil Safety: Runtime Crashes vs. Compile-Time Proof'
 subtitle: 'Eliminating Godot''s #1 Runtime Exception: ''Invalid call on base Nil'''
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
-badge_color: coral
+badge_color: amber
 palette: aperture
 layout: code-comparison-layout
 gdscript:

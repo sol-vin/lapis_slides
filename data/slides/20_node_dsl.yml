@@ -4,7 +4,7 @@ title: 'The Lapis DSL: Clean, Declarative Node Authoring'
 subtitle: Authoring First-Class Godot Nodes with Crystal ClassDB Integration
 badge: THE LAPIS DSL • NODE AUTHORING
 badge_color: cyan
-palette: cross_cube
+palette: bring_me_hope
 layout: two-column-layout
 ratio: 3:2
 left:

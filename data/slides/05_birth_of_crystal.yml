@@ -3,7 +3,7 @@ id: 05_birth_of_crystal
 title: 'The Birth of Crystal: Interpreted VM to Native LLVM'
 subtitle: 'Fast as C, Slick as Ruby: The Holy Grail of Systems Game Programming'
 badge: COMPILER REVOLUTION • CRYSTAL ORIGINS
-badge_color: emerald
+badge_color: cyan
 palette: spaces_98
 layout: two-column-layout
 ratio: 3:2
@@ -22,7 +22,7 @@ left:
 right:
   type: card
   title: The Compiler Synthesis
-  color: emerald
+  color: cyan
   items:
   - <strong>Designed from Day One for Types:</strong> Crystal wasn't a dynamic language
     patched with types; it was built from scratch as a statically typed language.

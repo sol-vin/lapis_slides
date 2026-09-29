@@ -3,8 +3,8 @@ id: 03_ruby_philosophy
 title: 'The Philosophy of Ergonomics: The Ruby Era'
 subtitle: Optimizing for Developer Happiness, Human Syntax & Expressive Blocks
 badge: HISTORICAL CONTEXT • THE RUBY HERITAGE
-badge_color: coral
-palette: monokai
+badge_color: purple
+palette: super_es
 layout: two-column-layout
 ratio: 3:2
 left:
@@ -22,7 +22,7 @@ left:
 right:
   type: card
   title: Why Ruby Won Developer Hearts
-  color: coral
+  color: purple
   items:
   - <strong>Developer Happiness as Primary Goal:</strong> Yukihiro 'Matz' Matsumoto
     designed Ruby to prioritize human cognitive comfort over machine convenience.

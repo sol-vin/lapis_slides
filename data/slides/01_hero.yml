@@ -4,7 +4,7 @@ title: Lapis for Crystal
 subtitle: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
 badge: HIGH-PERFORMANCE GAMEPLAY TOOLCHAIN
 badge_color: cyan
-palette: monokai
+palette: spaces_xp_royale
 layout: hero-layout
 cube_size: 72
 cards:
@@ -21,12 +21,12 @@ cards:
   - <strong>Static Nil Safety:</strong> Compile-time null pointer elimination.
   - <strong>Clean Node DSL:</strong> Eliminates 70%+ of GDExtension boilerplate.
 - title: First-Class Editor
-  color: emerald
+  color: cyan
   items:
   - <strong>Script Parity:</strong> Attach <code>.cr</code> files via Godot Editor
     UI.
   - <strong>Built-In Highlighter:</strong> Pure Crystal tokenizer in CodeEdit.
-  - <strong>In-Editor LLDB:</strong> Gutter breakpoints & live debugging dock.
+  - <strong>In-Editor r2:</strong> Gutter breakpoints & live radare2 diagnostics.
 - title: Complete Toolchain
   color: amber
   items:

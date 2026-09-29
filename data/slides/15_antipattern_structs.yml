@@ -3,8 +3,8 @@ id: 15_antipattern_structs
 title: 'Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs'
 subtitle: RefCounted & Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
-badge_color: emerald
-palette: monokai
+badge_color: cyan
+palette: spaces_11
 layout: code-comparison-layout
 gdscript:
   title: '❌ GDScript: Heap RefCounted & Untyped Dictionaries'

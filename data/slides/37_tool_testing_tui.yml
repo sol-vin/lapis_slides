@@ -4,7 +4,7 @@ title: In-Editor Tool Testing & Standalone TUI Runner
 subtitle: Real-Time Terminal User Interface for Headless and In-Editor Test Suites
 badge: QUALITY GATES • TESTING APPARATUS
 badge_color: cyan
-palette: playtoy
+palette: spaces_31
 layout: two-column-layout
 ratio: 3:2
 left:

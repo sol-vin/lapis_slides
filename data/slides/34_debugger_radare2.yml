@@ -10,7 +10,7 @@ ratio: 1:1
 left:
   type: card
   title: Why LLDB Was Removed — The Fat Debugger Trap
-  color: coral
+  color: blue
   items:
   - <strong>Gigabyte Toolchain Bloat:</strong> Bundled 2GB+ of Clang/LLVM runtime binaries and Python dependencies, destroying lean developer onboarding.
   - <strong>Windows DWARF vs. PDB Desyncs:</strong> Struggled with MinGW DWARF and MSVC symbol table format differences, causing lost breakpoints and blank backtraces.
@@ -19,7 +19,7 @@ left:
 right:
   type: card
   title: Why radare2 (r2) is Sovereign in Lapis
-  color: emerald
+  color: cyan
   items:
   - <strong>Zero-Dependency & Instant:</strong> Pure C systems architecture; installs in seconds with zero Python runtimes or heavyweight LLVM toolchain bloat.
   - <strong>Hardware Memory Watchpoints:</strong> <code>rw &lt;addr&gt;</code> breaks CPU execution instantly at the exact machine instruction performing illegal memory writes (catching <code>0xC0000005</code>).

@@ -409,18 +409,31 @@ ul.card-list li strong {
   height: 9px;
   border-radius: 50%;
   display: inline-block;
+  background-color: var(--border-color);
+  opacity: 0.55;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
+.terminal-dot.dot-1,
 .terminal-dot.red {
-  background-color: #ff5f56;
+  background-color: var(--border-color) !important;
+  opacity: 0.55 !important;
 }
 
+.terminal-dot.dot-2,
 .terminal-dot.yellow {
-  background-color: #ffbd2e;
+  background-color: var(--border-color) !important;
+  opacity: 0.75 !important;
 }
 
+.terminal-dot.dot-3,
 .terminal-dot.green {
-  background-color: #27c93f;
+  background-color: var(--accent-color, var(--border-active)) !important;
+  opacity: 0.9 !important;
+}
+
+.terminal-dot:hover {
+  opacity: 1 !important;
 }
 
 .terminal-title {
@@ -1036,7 +1049,7 @@ ul.card-list li strong {
 
 .solvin-slide .badge-pill.emerald,
 .solvin-slide .badge-pill.solution {
-  border-color: var(--border-active) !important;
+  border-color: var(--border-color) !important;
   color: var(--accent-color) !important;
   background-color: var(--bg-window) !important;
 }
@@ -1067,13 +1080,10 @@ ul.card-list li strong {
 
 /* Palette-Scoped Card Variants */
 .solvin-slide .card.coral,
-.solvin-slide .card.antipattern {
-  border-color: var(--border-color) !important;
-}
-
 .solvin-slide .card.emerald,
+.solvin-slide .card.antipattern,
 .solvin-slide .card.solution {
-  border-color: var(--border-active) !important;
+  border-color: var(--border-color) !important;
 }
 
 .solvin-slide .card.cyan {
@@ -2004,17 +2014,16 @@ ul.card-list li strong {
 }
 
 .overlay-card.antipattern,
-.overlay-card.coral {
+.overlay-card.solution,
+.overlay-card.coral,
+.overlay-card.emerald {
   border-color: var(--border-color) !important;
   background-color: var(--bg-window) !important;
   box-shadow: 4px 4px 0px var(--shadow-color) !important;
 }
 
-.overlay-card.solution,
-.overlay-card.emerald {
+.overlay-card:hover {
   border-color: var(--border-active) !important;
-  background-color: var(--bg-window) !important;
-  box-shadow: 4px 4px 0px var(--shadow-color) !important;
 }
 
 .overlay-card-header {
@@ -2056,7 +2065,7 @@ ul.card-list li strong {
 
 .overlay-card.solution .badge-pill,
 .overlay-card.emerald .badge-pill {
-  border-color: var(--border-active) !important;
+  border-color: var(--border-color) !important;
   color: var(--accent-color) !important;
 }
 
@@ -2107,7 +2116,132 @@ ul.card-list li strong {
 
 .overlay-card.solution ul.card-list li::before,
 .overlay-card.emerald ul.card-list li::before {
-  color: var(--border-active) !important;
+  color: var(--accent-color) !important;
+}
+
+/* ==========================================================================
+   Quantitative Benchmark Bar Charts (Strict Palette Compliance)
+   ========================================================================== */
+.barchart-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.65rem !important;
+  padding: 0.95rem 1.15rem !important;
+  background-color: var(--bg-window) !important;
+  border: 2px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.barchart-card .card-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: var(--text-color) !important;
+  margin-bottom: 0.1rem !important;
+  border-bottom: 1.5px solid var(--border-color) !important;
+  padding-bottom: 0.4rem !important;
+}
+
+.barchart-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.55rem !important;
+  flex: 1 !important;
+  justify-content: space-around !important;
+}
+
+.barchart-row {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.2rem !important;
+}
+
+.barchart-row-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 0.80rem !important;
+  font-weight: 700 !important;
+  color: var(--text-color) !important;
+}
+
+.barchart-name {
+  color: var(--text-color) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.barchart-speedup.badge-pill {
+  border: 1px solid var(--accent-color) !important;
+  color: var(--accent-color) !important;
+  background: var(--bg-window) !important;
+  font-size: 0.66rem !important;
+  padding: 0.1rem 0.45rem !important;
+  font-weight: 800 !important;
+  border-radius: 4px !important;
+  white-space: nowrap !important;
+  box-shadow: 2px 2px 0px var(--shadow-color) !important;
+}
+
+.barchart-bars {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.18rem !important;
+}
+
+.barchart-bar-line {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  font-size: 0.72rem !important;
+}
+
+.bar-platform {
+  width: 65px !important;
+  color: var(--text-dim, var(--text-color)) !important;
+  font-family: "Consolas", "Cascadia Code", monospace !important;
+  font-size: 0.70rem !important;
+  flex-shrink: 0 !important;
+}
+
+.bar-track {
+  flex: 1 !important;
+  height: 12px !important;
+  background-color: var(--bg-color) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 3px !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.bar-fill.gdscript {
+  height: 100% !important;
+  background-color: var(--border-color) !important;
+  opacity: 0.75 !important;
+  border-radius: 2px !important;
+}
+
+.bar-fill.crystal {
+  height: 100% !important;
+  background-color: var(--accent-color) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 5px var(--accent-color) !important;
+}
+
+.bar-val {
+  width: 68px !important;
+  text-align: right !important;
+  font-family: "Consolas", "Cascadia Code", monospace !important;
+  font-size: 0.71rem !important;
+  color: var(--text-color) !important;
+  font-weight: 600 !important;
+  flex-shrink: 0 !important;
 }
 
 @keyframes overlayCardIn {

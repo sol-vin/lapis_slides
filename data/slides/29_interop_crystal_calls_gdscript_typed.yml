@@ -3,7 +3,7 @@ id: 29_interop_crystal_calls_gdscript_typed
 title: 'Crystal Calling GDScript: Strongly-Typed Bindings'
 subtitle: Zero-Overhead Typed Proxies for GDScript Classes Generated via Lapis CLI
 badge: INTEROPERABILITY • TYPED BINDINGS
-badge_color: emerald
+badge_color: cyan
 palette: spaces_7
 layout: two-column-layout
 ratio: 3:2
@@ -22,7 +22,7 @@ left:
 right:
   type: card
   title: Typed Binding Benefits
-  color: emerald
+  color: cyan
   items:
   - <strong>Compile-Time Type Safety:</strong> Method signatures are validated by
     Crystal's compiler; no runtime string typos.

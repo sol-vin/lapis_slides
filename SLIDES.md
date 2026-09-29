@@ -7,7 +7,7 @@ This document outlines each slide's exact theme palette, architectural category,
 ---
 
 ### Slide 1: Lapis for Crystal
-- **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
+- **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `HIGH-PERFORMANCE GAMEPLAY TOOLCHAIN`
 - **Title**: Lapis for Crystal
 - **Subtitle**: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
@@ -23,7 +23,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - **First-Class Editor**:
     - Script Parity: Attach .cr files via Godot Editor UI.
     - Built-In Highlighter: Pure Crystal tokenizer in CodeEdit.
-    - In-Editor LLDB: Gutter breakpoints & live debugging dock.
+    - In-Editor r2: Gutter breakpoints & live radare2 diagnostics.
   - **Complete Toolchain**:
     - Unified CLI: lapis init, test, package, benchmarks.
     - Dual Modes: In-editor GDExtension + Standalone host.
@@ -62,7 +62,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 3: The Philosophy of Ergonomics: The Ruby Era
-- **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
+- **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `HISTORICAL CONTEXT • THE RUBY HERITAGE`
 - **Title**: The Philosophy of Ergonomics: The Ruby Era
 - **Subtitle**: Optimizing for Developer Happiness, Human Syntax & Expressive Blocks
@@ -162,7 +162,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 6: What is Lapis?
-- **Sol.vin Theme Palette**: `creation` (Creation) [BG: `#141518` | Window: `#1e2024` | Text: `#e8e8ed` | Accent: `#d4af37`]
+- **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `ENGINE ARCHITECTURE • CORE VISION`
 - **Title**: What is Lapis?
 - **Subtitle**: The High-Performance Native Gameplay Toolchain for Godot 4.8+
@@ -176,7 +176,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Zen Clean Code: Idiomatic blocks, closures, and pattern matching.
 - **First-Class Editor**:
   - Crystal Scripting: Attach .cr scripts natively in Godot Editor.
-  - In-Editor LLDB: Gutter breakpoints, call stacks, and live variable inspection.
+  - In-Editor r2: Gutter breakpoints, call stacks, and live radare2 diagnostics.
   - Instant Hot-Reload: Shadow DLL reloading on F5 with zero editor restarts.
 - **Complete Toolchain**:
   - Unified CLI: lapis init, test, package, benchmarks.
@@ -377,7 +377,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 13: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen (Code Comparison)
-- **Sol.vin Theme Palette**: `creation` (Creation) [BG: `#141518` | Window: `#1e2024` | Text: `#e8e8ed` | Accent: `#d4af37`]
+- **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen
 - **Subtitle**: GDScript's Clunky Lambdas & String Lookups vs. Crystal's Inlined Blocks, Chained Enumerators & 32-Bit Symbols
@@ -423,7 +423,7 @@ This document outlines each slide's exact theme palette, architectural category,
 ---
 
 ### Slide 14: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen (Analysis & Critique)
-- **Sol.vin Theme Palette**: `creation` (Creation) [BG: `#141518` | Window: `#1e2024` | Text: `#e8e8ed` | Accent: `#d4af37`]
+- **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen
 - **Subtitle**: GDScript's Clunky Lambdas & String Lookups vs. Crystal's Inlined Blocks, Chained Enumerators & 32-Bit Symbols
@@ -496,7 +496,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 17: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking (Code Comparison)
-- **Sol.vin Theme Palette**: `community` (Community) [BG: `#2c001e` | Window: `#380c2a` | Text: `#f7f7f7` | Accent: `#ff6331`]
+- **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking
 - **Subtitle**: Untyped Enums & Brittle Matches vs. Strongly-Typed Enums & Tuple Patterns
@@ -543,7 +543,7 @@ This document outlines each slide's exact theme palette, architectural category,
 ---
 
 ### Slide 18: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking (Analysis & Critique)
-- **Sol.vin Theme Palette**: `community` (Community) [BG: `#2c001e` | Window: `#380c2a` | Text: `#f7f7f7` | Accent: `#ff6331`]
+- **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking
 - **Subtitle**: Untyped Enums & Brittle Matches vs. Strongly-Typed Enums & Tuple Patterns
@@ -620,7 +620,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 21: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Code Comparison)
-- **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
+- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs
 - **Subtitle**: RefCounted & Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs
@@ -660,7 +660,7 @@ This document outlines each slide's exact theme palette, architectural category,
 ---
 
 ### Slide 22: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Analysis & Critique)
-- **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
+- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs
 - **Subtitle**: RefCounted & Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs
@@ -871,7 +871,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 29: The Lapis DSL: Clean, Declarative Node Authoring
-- **Sol.vin Theme Palette**: `cross_cube` (CrossCube) [BG: `#121412` | Window: `#1a1d1a` | Text: `#e2ece2` | Accent: `#52b736`]
+- **Sol.vin Theme Palette**: `bring_me_hope` (Bluebie) [BG: `#002b55` | Window: `#003a70` | Text: `#00c8ff` | Accent: `#00e5ff`]
 - **Category Badge**: `THE LAPIS DSL • NODE AUTHORING`
 - **Title**: The Lapis DSL: Clean, Declarative Node Authoring
 - **Subtitle**: Authoring First-Class Godot Nodes with Crystal ClassDB Integration
@@ -912,7 +912,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 30: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
-- **Sol.vin Theme Palette**: `game_station` (GameStation) [BG: `#d2d2d6` | Window: `#e8e8ec` | Text: `#141418` | Accent: `#c88e00`]
+- **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `GDSCRIPT COMPARISON • BOILERPLATE`
 - **Title**: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
 - **Subtitle**: Side-by-Side Implementation of the Same Player Node with Exported Property and Signal
@@ -1092,7 +1092,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 34: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels (Code Comparison)
-- **Sol.vin Theme Palette**: `trash80` (Trash80) [BG: `#0a0d0a` | Window: `#121612` | Text: `#33ff33` | Accent: `#33ff33`]
+- **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels
 - **Subtitle**: Manual Locking & SceneTree Crashes vs. Safe Background Workers & Channel Drain
@@ -1135,7 +1135,7 @@ This document outlines each slide's exact theme palette, architectural category,
 ---
 
 ### Slide 35: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels (Analysis & Critique)
-- **Sol.vin Theme Palette**: `trash80` (Trash80) [BG: `#0a0d0a` | Window: `#121612` | Text: `#33ff33` | Accent: `#33ff33`]
+- **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels
 - **Subtitle**: Manual Locking & SceneTree Crashes vs. Safe Background Workers & Channel Drain
@@ -1184,7 +1184,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 37: Interoperability: GDScript Calling Crystal
-- **Sol.vin Theme Palette**: `game_sprocket` (GameSprocket) [BG: `#1c1e22` | Window: `#262930` | Text: `#f4f6fa` | Accent: `#0088ff`]
+- **Sol.vin Theme Palette**: `spaces_7` (Spaces 7) [BG: `#dce8f5` | Window: `#ffffff` | Text: `#1a2b3c` | Accent: `#0066cc`]
 - **Category Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
 - **Title**: Interoperability: GDScript Calling Crystal
 - **Subtitle**: Seamless Integration with GDScript Gameplay Teams and Asset Store Addons
@@ -1223,7 +1223,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 38: Type Firewall: Crystal Enforces Strict Safety on GDScript (Code Comparison)
-- **Sol.vin Theme Palette**: `game_sprocket` (GameSprocket) [BG: `#1c1e22` | Window: `#262930` | Text: `#f4f6fa` | Accent: `#0088ff`]
+- **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CODE VIEW`
 - **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
 - **Subtitle**: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
@@ -1262,7 +1262,7 @@ This document outlines each slide's exact theme palette, architectural category,
 ---
 
 ### Slide 39: Type Firewall: Crystal Enforces Strict Safety on GDScript (Analysis & Critique)
-- **Sol.vin Theme Palette**: `game_sprocket` (GameSprocket) [BG: `#1c1e22` | Window: `#262930` | Text: `#f4f6fa` | Accent: `#0088ff`]
+- **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CRITIQUE`
 - **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
 - **Subtitle**: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
@@ -1280,7 +1280,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 40: Crystal Calling GDScript: Dynamic Dispatch
-- **Sol.vin Theme Palette**: `game_sprocket` (GameSprocket) [BG: `#1c1e22` | Window: `#262930` | Text: `#f4f6fa` | Accent: `#0088ff`]
+- **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
 - **Subtitle**: Rapid Script Prototyping and Dynamic GDScript Invocation via Variant Reflection
@@ -1344,7 +1344,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 42: The Lapis CLI: Project Lifecycle & Bootstrapping
-- **Sol.vin Theme Palette**: `classic_green` (Nuke) [BG: `#0a0a0a` | Window: `#121212` | Text: `#33ff33` | Accent: `#33ff33`]
+- **Sol.vin Theme Palette**: `spaces_95` (Spaces 95) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: The Lapis CLI: Project Lifecycle & Bootstrapping
 - **Subtitle**: A Single Unified Developer Tool for Scaffolding, Building, and Testing
@@ -1400,7 +1400,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 44: Package Management: Addons & Crystal Shards
-- **Sol.vin Theme Palette**: `community` (Community) [BG: `#2c001e` | Window: `#380c2a` | Text: `#f7f7f7` | Accent: `#ff6331`]
+- **Sol.vin Theme Palette**: `spaces_2000` (Spaces 2000) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#0a246a`]
 - **Category Badge**: `ECOSYSTEM • SHARDS & ADDONS`
 - **Title**: Package Management: Addons & Crystal Shards
 - **Subtitle**: Leveraging the Global Crystal Shards Ecosystem Inside Godot Projects
@@ -1468,15 +1468,15 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 47: Quantitative Benchmarks: Crystal vs GDScript
-- **Sol.vin Theme Palette**: `cross_cube_360` (CrossCube 360) [BG: `#e4e8ec` | Window: `#ffffff` | Text: `#1e242b` | Accent: `#7fba00`]
+- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
 - **Subtitle**: Real-World Performance Comparison on Common Gameplay Workloads
 - **Benchmark Results (Execution Time)**:
-  - N-Body Gravitational Physics (10k bodies):• GDScript: 184.2 ms• Crystal (Lapis): 3.1 ms (~59x faster)
-  - Procedural Perlin Terrain Generation (256x256):• GDScript: 92.4 ms• Crystal (Lapis): 2.8 ms (~33x faster)
-  - A* Pathfinding Grid Traversal (1,000 agents):• GDScript: 64.8 ms• Crystal (Lapis): 4.2 ms (~15x faster)
-  - Raycast Query & Entity Filtering (50,000 hits):• GDScript: 45.6 ms• Crystal (Lapis): 5.1 ms (~9x faster)
+  - **N-Body Gravitational Physics (10k bodies)**: GDScript `184.2 ms` vs Crystal `3.1 ms` (**59.4x faster**)
+  - **Procedural Perlin Terrain Generation (256x256)**: GDScript `92.4 ms` vs Crystal `2.8 ms` (**33.0x faster**)
+  - **A* Pathfinding Grid Traversal (1,000 agents)**: GDScript `64.8 ms` vs Crystal `4.2 ms` (**15.4x faster**)
+  - **Raycast Query & Entity Filtering (50,000 hits)**: GDScript `45.6 ms` vs Crystal `5.1 ms` (**8.9x faster**)
 - **Why Crystal Dominates**:
   - LLVM Ahead-of-Time Compilation: Compiles down to optimized machine instructions; zero bytecode interpreter overhead.
   - Autovectorization & SIMD: Vector math operations benefit from LLVM's automatic AVX2/NEON vectorization.
@@ -1523,7 +1523,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 49: In-Editor Tool Testing & Standalone TUI Runner
-- **Sol.vin Theme Palette**: `playtoy` (PlayToy) [BG: `#8bac0f` | Window: `#9bbc0f` | Text: `#0f380f` | Accent: `#0f380f`]
+- **Sol.vin Theme Palette**: `spaces_31` (Spaces 3.1) [BG: `#ffffff` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
 - **Subtitle**: Real-Time Terminal User Interface for Headless and In-Editor Test Suites
@@ -1629,7 +1629,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 ### Slide 53: Live DEMO: End-to-End Workflow Roadmap
-- **Sol.vin Theme Palette**: `smile_os` (SmileOS) [BG: `#e6e6ea` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#b30000`]
+- **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `LIVE DEMONSTRATION • ROADMAP`
 - **Title**: Live DEMO: End-to-End Workflow Roadmap
 - **Subtitle**: What We're About to Build and Demonstrate Live in Front of You

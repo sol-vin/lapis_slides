@@ -4,7 +4,7 @@ title: 'The Lapis CLI: Project Lifecycle & Bootstrapping'
 subtitle: A Single Unified Developer Tool for Scaffolding, Building, and Testing
 badge: TOOLCHAIN • THE LAPIS CLI
 badge_color: cyan
-palette: classic_green
+palette: spaces_95
 layout: two-column-layout
 ratio: 3:2
 left:
