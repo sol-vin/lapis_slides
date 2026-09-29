@@ -1,0 +1,55 @@
+---
+id: 10b_ruby_parity_in_crystal
+title: 'Ruby Ergonomics at Compile Time'
+subtitle: 'Open Classes, Zero-Cost Blocks & with self yield Context Shifting'
+badge: CRYSTAL ERGONOMICS • RUBY PARITY
+badge_color: cyan
+palette: neon_cyber
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: ruby_parity_dsl.cr — Clean DSLs, Zero Runtime Cost
+  tag: Crystal
+  lang: crystal
+  code: |
+    # 1. Open Classes: Extend core types cleanly & safely
+    class Int32
+      def meters : Float32
+        self.to_f32 * 1.0_f32
+      end
+    end
+
+    # 2. with self yield: Static instance_exec for DSLs!
+    class CombatRoomBuilder
+      def initialize(@room : Room); end
+      def wave(enemy : Symbol, count : Int32); end
+      def reward(item : Symbol); end
+
+      # Context-shifting yield: 'with builder yield' rebinds self!
+      def self.build(room : Room, &block : CombatRoomBuilder ->)
+        builder = new(room)
+        with builder yield # self IS builder inside block!
+        builder
+      end
+    end
+
+    # Fluent declarative DSL without prefix clutter:
+    CombatRoomBuilder.build(room) do
+      wave :skeleton_archer, count: 4 # No 'builder.' needed!
+      reward :obsidian_key
+    end
+right:
+  type: card
+  title: How Crystal Matches Ruby's Soul
+  color: cyan
+  items:
+    - '<strong>Open Classes Preserved:</strong> Re-open core and library classes to inject fluent domain vocabulary, fully type-checked at compile time.'
+    - '<strong>Context Shifting via <code>with self yield</code>:</strong> Crystal''s static equivalent to Ruby''s <code>instance_exec</code> rebinds <code>self</code> inside DSL blocks with zero runtime reflection.'
+    - '<strong>Zero-Overhead Inlined Blocks:</strong> Standard <code>yield</code> calls compile directly into inlined LLVM machine code without heap closure allocations.'
+    - '<strong>Bare Words & Properties:</strong> Optional parentheses, operator overloading, and clean <code>getter</code> / <code>property</code> macros deliver pure Ruby aesthetics.'
+notes: |
+  Earlier we saw how Ruby's expressive syntax—bare words, open classes, blocks, and instance_exec—powers world-class DSLs like Rails and RSpec.
+  Crystal deliberately preserves this exact ergonomics: you can still re-open classes like Int32 or String to add clean domain verbs, and you still have optional parentheses and operator overloading.
+  Crucially, Crystal solves the instance_exec challenge with 'with self yield'. Instead of parsing strings or dynamically hacking object pointers at runtime, 'with builder yield' temporarily switches the lexical self to the receiver during compilation.
+  You get the exact same elegant builder DSL without writing 'builder.' everywhere, but it is 100% statically typed and inlined directly by LLVM with zero heap allocation or reflection overhead.

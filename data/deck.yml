@@ -25,6 +25,8 @@ slides:
 - 05_birth_of_crystal
 - 05b_crystal_type_system
 - 10_expressive_ergonomics
+- 10b_ruby_parity_in_crystal
+- 10c_static_metaprogramming_tradeoffs
 - 14b_crystal_macro_hooks
 - 18_macro_state_machines
 - 18b_macro_fsm_implementation

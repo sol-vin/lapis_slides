@@ -1,0 +1,55 @@
+---
+id: 10c_static_metaprogramming_tradeoffs
+title: "Static Trade-Offs: No 'send' & Limits of 'exec'"
+subtitle: 'The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity'
+badge: METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS
+badge_color: amber
+palette: candy
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: static_vs_dynamic.cr — No Runtime Plasticity
+  tag: Crystal
+  lang: crystal
+  code: |
+    # ❌ What Ruby allows that Crystal CANNOT do:
+    # target.send("cast_spell", 50)           # No runtime send!
+    # eval("class Boss < #{dyn_parent}; end") # No runtime eval!
+    # target.instance_variable_set("@hp", 100)# Frozen schemas!
+
+    # ✨ How Crystal solves it at Compile Time:
+    # 1. Macro method_missing (evaluated during compilation):
+    macro method_missing(call)
+      {% if call.name.starts_with?("can_") %}
+        # Synthesizes concrete, typed methods at compile time!
+        def {{call.name}} : Bool
+          true
+        end
+      {% else %}
+        super
+      {% end %}
+    end
+
+    # 2. Static unrolled dispatch instead of dynamic send:
+    case action_name
+    when "jump"   then player.jump
+    when "attack" then player.attack
+    else raise "Unknown action: #{action_name}"
+    end
+right:
+  type: card
+  title: The Limits of Static Metaprogramming
+  color: amber
+  items:
+    - '<strong>No Dynamic <code>send</code>:</strong> Crystal compiles to native LLVM symbols and static vtables. Arbitrary runtime method strings cannot be dispatched dynamically.'
+    - '<strong>Zero Runtime <code>eval</code>:</strong> Code cannot be parsed or generated from strings at runtime; all syntax manipulation occurs at compile time via AST macros.'
+    - '<strong>Limits of ''exec'':</strong> <code>with self yield</code> rebinds lexical context, but cannot inject dynamic ivars or alter object layout on the heap.'
+    - '<strong>Compile-Time <code>method_missing</code>:</strong> Macros intercept AST calls during compilation to generate real typed methods—not dynamic runtime proxies.'
+    - '<strong>The Grand Trade-Off:</strong> Giving up runtime plasticity earns 50x-100x bare-metal execution speed, SIMD vectorization, and compile-time safety.'
+notes: |
+  We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop.
+  In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object.
+  Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search!
+  Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time.
+  Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get bare-metal C++ speed, zero GC pauses, and complete compile-time type safety.
