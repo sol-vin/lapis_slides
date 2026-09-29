@@ -215,9 +215,9 @@ This document outlines each slide's exact theme palette, architectural category,
   - Rebinding self on the Fly: instance_exec temporarily switches self to the receiver inside the block, eliminating repetitive builder. prefixes.
   - The "Better Eval": Replaces dangerous string eval() with structured AST blocks—giving you syntax highlighting, linter checks, and zero injection vulnerabilities.
   - Lexical Scope Retention: Uniquely combines outer scope variable capture with inner receiver method dispatch (and accepts block arguments).
-  - The DSL Secret Weapon: This exact mechanism powered Rails routing, RSpec, and FactoryBot. Crystal achieves this at compile-time with with self yield and macros!
+  - The DSL Secret Weapon: This exact mechanism powered iconic Ruby frameworks including Rails routing (routes.rb), RSpec test suites, and FactoryBot.
 - **Presenter Script**:
-  > *"Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This single feature became the secret weapon behind RSpec's describe/it syntax, Rails routes, and FactoryBot. In Crystal, Lapis achieves this same fluent context-shifting at compile time with 'with self yield' and macro DSLs—yielding all the ergonomic beauty of Ruby with zero runtime reflection overhead."*
+  > *"Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This single feature became the secret weapon behind RSpec's describe/it syntax, Rails routes, and FactoryBot—giving Ruby the most elegant, readable configuration and testing DSLs in software engineering."*
 
 ---
 ### Slide 7: Open Classes & Monkey Patching
@@ -454,47 +454,49 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed."*
 
 ---
-### Slide 14: Ruby Ergonomics at Compile Time
+### Slide 14: The DSL Engine: with self yield & Macros
 - **Sol.vin Theme Palette**: `digital_guy` (DigitalGuy) [BG: `#000000` | Window: `#110000` | Text: `#ff0000` | Accent: `#ff0000`]
-- **Category Badge**: `CRYSTAL ERGONOMICS • RUBY PARITY`
-- **Title**: Ruby Ergonomics at Compile Time
-- **Subtitle**: Open Classes, Zero-Cost Blocks & with self yield Context Shifting
-- **Code Example (`ruby_parity_dsl.cr — Clean DSLs, Zero Runtime Cost`)**:
+- **Category Badge**: `CRYSTAL METAPROGRAMMING • COMPILE-TIME DSLs`
+- **Title**: The DSL Engine: with self yield & Macros
+- **Subtitle**: Compile-Time Context Shifting: How Rails Routes, RSpec & FactoryBot Become 100% Type-Safe
+- **Code Example (`compile_time_dsl.cr — Pure Ruby Ergonomics, Zero Cost`)**:
   ```crystal
-  # 1. Open Classes: Extend core types cleanly & safely
-  class Int32
-    def meters : Float32
-      self.to_f32 * 1.0_f32
-    end
-  end
-  
-  # 2. with self yield: Static instance_exec for DSLs!
+  # 1. Declarative Builder Class:
   class CombatRoomBuilder
-    def initialize(@room : Room); end
-    def wave(enemy : Symbol, count : Int32); end
-    def reward(item : Symbol); end
+    getter room : Room
   
-    # Context-shifting yield: 'with builder yield' rebinds self!
-    def self.build(room : Room, &block : CombatRoomBuilder ->)
-      builder = new(room)
+    def initialize(@room : Room)
+    end
+  
+    def wave(enemy : Symbol, count : Int32)
+      @room.spawn_wave(enemy, count)
+    end
+  
+    def reward(item : Symbol)
+      @room.set_chest(item)
+    end
+  
+    # 'with builder yield' rebinds self inside the caller's block!
+    def self.build(name : String, &block : CombatRoomBuilder ->) : Room
+      builder = new(Room.new(name))
       with builder yield # self IS builder inside block!
-      builder
+      builder.room
     end
   end
   
-  # Fluent declarative DSL without prefix clutter:
-  CombatRoomBuilder.build(room) do
-    wave :skeleton_archer, count: 4 # No 'builder.' needed!
-    reward :obsidian_key
+  # 2. Pure declarative DSL — zero "builder." boilerplate:
+  dungeon = CombatRoomBuilder.build("Dungeon_A1") do
+    wave :skeleton_archer, count: 4 # Calls wave on builder!
+    reward :obsidian_key            # 100% type-checked at compile time!
   end
   ```
-- **How Crystal Matches Ruby's Soul**:
-  - Open Classes Preserved: Re-open core and library classes to inject fluent domain vocabulary, fully type-checked at compile time.
-  - Context Shifting via with self yield: Crystal's static equivalent to Ruby's instance_exec rebinds self inside DSL blocks with zero runtime reflection.
-  - Zero-Overhead Inlined Blocks: Standard yield calls compile directly into inlined LLVM machine code without heap closure allocations.
-  - Bare Words & Properties: Optional parentheses, operator overloading, and clean getter / property macros deliver pure Ruby aesthetics.
+- **How Crystal Elevates Ruby's Secret Weapon**:
+  - The Secret Weapon of Ruby DSLs: In Ruby, instance_exec powered iconic frameworks like Rails routes (routes.rb), RSpec (describe/it), and FactoryBot by rebinding self.
+  - Static Context Shifting (with ... yield): Crystal achieves this exact ergonomic miracle at compile time: with builder yield rebinds self to the builder inside the block without runtime dynamic evaluation.
+  - 100% Compile-Time Verification: Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.
+  - Zero Heap & Reflection Overhead: LLVM inlines the context-shifted block directly at the call site—delivering pure declarative DSL beauty with bare-metal C execution speed.
 - **Presenter Script**:
-  > *"Earlier we saw how Ruby's expressive syntax—bare words, open classes, blocks, and instance_exec—powers world-class DSLs like Rails and RSpec. Crystal deliberately preserves this exact ergonomics: you can still re-open classes like Int32 or String to add clean domain verbs, and you still have optional parentheses and operator overloading. Crucially, Crystal solves the instance_exec challenge with 'with self yield'. Instead of parsing strings or dynamically hacking object pointers at runtime, 'with builder yield' temporarily switches the lexical self to the receiver during compilation. You get the exact same elegant builder DSL without writing 'builder.' everywhere, but it is 100% statically typed and inlined directly by LLVM with zero heap allocation or reflection overhead."*
+  > *"In the Ruby section, we saw how instance_exec was the secret weapon that made Ruby famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead."*
 
 ---
 ### Slide 15: Modules: Mixins, Traits & Namespaces
