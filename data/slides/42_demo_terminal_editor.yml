@@ -4,7 +4,7 @@ title: 'Demo in Action: Terminal & Editor View'
 subtitle: Live Side-by-Side Execution of the Lapis CLI, Godot Editor, and Game Host
 badge: LIVE DEMONSTRATION • SPLIT SCREEN
 badge_color: cyan
-palette: spaces_10
+palette: game_station
 layout: two-column-layout
 ratio: 1:1
 left:

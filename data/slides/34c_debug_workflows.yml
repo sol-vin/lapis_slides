@@ -1,0 +1,43 @@
+---
+id: 34c_debug_workflows
+title: 'Lapis Debug Helper: Triage Games, Plugins & Bridge Issues'
+subtitle: Unified Diagnostics Across Gameplay Code, In-Editor Tool Scripts & GDExtension Loader Internals
+badge: SYSTEMS DIAGNOSTICS • CLI & FORENSICS
+badge_color: purple
+palette: aperture
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: Terminal — lapis editor -d & PluginForensics
+  tag: Terminal Session
+  lang: text
+  code: |
+    $ lapis editor -d --log-file=log/editor.log
+    [Editor] Launching Godot Editor under radare2 debugger...
+      Engine Log:  log/editor.log
+      Crystal Log: log/editor-crystal.log
+    [r2] Process attached (PID 14820). Symbols loaded for game.dll, plugin.dll.
+    [Breakpoint] Hit sym.Player#_physics_process:Float64 at player.cr:42
+    [r2:0x7ffb321a41e0]> pdc 12
+      // Live decompiled pseudo-C from paused stack frame
+      int64_t Player::_physics_process(double delta) {
+          if (!this->check_alive()) raise_disposed_error();
+          Vector2 velocity = this->get_velocity() * delta;
+          return this->move_and_slide();
+      }
+    [PluginForensics] Boundary Triage Report:
+      Origin Module:    [LapisPlugin] (addons/crystal_integration/plugin.dll)
+      Boundary Check:   Plugin <-> C++ Bridge <-> GodotCore: 0 errors
+      Memory Watch:     RCX (this) valid ObjectDB ID: 0x24a1b9 (Node2D)
+      Faulting Target:  None (All invariants verified)
+right:
+  type: card
+  title: Triaging 3 Critical Failure Boundaries
+  color: amber
+  items:
+  - <strong>1. Debugging Your Game via <code>lapis run -d</code>:</strong> Run standalone game binaries directly under radare2. Set source breakpoints (<code>dbl player.cr:42</code>), trigger programmatic traps with <code>Godot.breakpoint</code>, and inspect machine registers without crashing the engine loop.
+  - <strong>2. Debugging In-Editor Tool Scripts via <code>lapis editor -d</code>:</strong> Editor plugins run live inside <code>godot.exe</code>. Lapis configures dual log redirection (<code>editor.log</code> vs <code>editor-crystal.log</code>) to catch tool script exceptions before they freeze the editor UI.
+  - <strong>3. Diagnosing Bridge & Integration Faults via <code>PluginForensics</code>:</strong> Classifies faulting pointers across 6 architectural boundaries (<code>GameCode</code>, <code>LapisPlugin</code>, <code>GDExtensionBridge</code>, <code>GodotCore</code>, <code>BoehmGC</code>, <code>SystemCRT</code>), verifies 64-bit ObjectDB IDs, and audits export tables via <code>lapis decompile --verify</code>.
+notes: |
+  Lapis includes a dedicated debug helper that solves the hardest problem in game development: knowing which layer failed when a crash occurs. Using `lapis editor -d` or `lapis run -d`, developers get instant radare2 process attachment with dual log isolation separating Godot engine messages from Crystal exceptions. When an issue occurs, `PluginForensics` automatically classifies whether the fault originated in user gameplay code, an editor tool plugin, the C++ loader bridge, or Godot's core ObjectDB. You can decompile methods to clean pseudo-C on the fly with `pdc`, set hardware memory watchpoints on suspect pointers, and verify bridge export health with `lapis decompile --verify`.

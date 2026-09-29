@@ -1,35 +1,39 @@
 ---
 id: 32_package_management
-title: 'Package Management: Addons & Crystal Shards'
-subtitle: Leveraging the Global Crystal Shards Ecosystem Inside Godot Projects
-badge: ECOSYSTEM • SHARDS & ADDONS
+title: 'Addon Management: GDExtension Isolation & Shard Negotiation'
+subtitle: Solving DLL Hell, ClassDB Collisions & Precompiled Binary Dependency Staging
+badge: ECOSYSTEM • ADDON LIFECYCLE
 badge_color: purple
 palette: spaces_2000
 layout: two-column-layout
-ratio: 3:2
+ratio: 1:1
 left:
   type: code
-  title: shard.yml — Game Dependencies
-  tag: YAML
-  lang: yaml
-  code: "name: cyber_rogue\r\nversion: 0.1.0\r\n\ndependencies:\r\n  libgodot:\r\n
-    \   path: ../libgodot # Core engine bindings\r\n  fast_noise:\r\n    github: sol-vin/fast_noise
-    # Procedural generation\r\n  perlin:\r\n    github: crystal-community/perlin_noise\r\n
-    \ msgpack:\r\n    github: crystal-community/msgpack-crystal"
+  title: Terminal — lapis addon install --release
+  tag: Terminal Session
+  lang: text
+  code: |
+    $ lapis addon install github:sol-vin/combat_system@v1.2 --release
+    [Install:Addon] Resolving GitHub release asset for windows-x86_64...
+      ✓ Downloaded combat_system-windows.zip (Precompiled Binary)
+    [Security:Audit] Inspecting GDExtension binary headers & symbols...
+      ✓ Entrypoint verified: combat_system_init (x86_64)
+      ✓ Hardening check: ASLR & DEP/NX verified
+    [Sync:Staging] Staging runtime dependencies to addons/combat_system/...
+      ✓ Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
+      ✓ Purged invalid host libgodot.dll (poison protection)
+    [Config] Auto-enabled in project.godot & .godot/extension_list.cfg
+    [Shards:AddonNegotiator] Deduplicated 2 shard requirements (0 conflicts)
+    ✓ Addon 'combat_system' installed successfully! Ready to use.
 right:
   type: card
-  title: The Shards Advantage
+  title: Why Godot Addons Require Deep Management
   color: purple
   items:
-  - '<strong>Full Crystal Ecosystem Access:</strong> Seamlessly install thousands
-    of community shards: math, physics, noise, networking, and serialization.'
-  - <strong>Zero Build Tooling Friction:</strong> <code>shards install</code> resolves
-    and compiles dependencies natively with zero C++ CMake headaches.
-  - <strong>Addon Isolation:</strong> Lapis addons encapsulate their dependencies
-    cleanly without polluting the root host project.
-  - <strong>Static Compilation:</strong> All shards compile directly into the final
-    game binary with dead-code stripping.
-notes: One of the greatest superpowers of Lapis is access to the broader Crystal package
-  ecosystem. Using standard shard.yml, you can pull in fast math libraries, procedural
-  noise generators, serialization engines, and AI algorithms from GitHub. They compile
-  directly into your game's binary with full link-time optimization.
+  - <strong>The GDExtension DLL Hazard:</strong> Standard Godot addons cannot self-resolve native C-runtime dependencies. Missing <code>gc.dll</code> or <code>crystal_bridge.dll</code> causes silent engine boot aborts.
+  - <strong>The Host <code>libgodot.dll</code> Poison Trap:</strong> An addon compiled against LibGodot must NEVER bundle its own <code>libgodot.dll</code>. If present, it creates dual ClassDB singletons and crashes Godot immediately on load.
+  - <strong>Automated Dependency Staging via <code>stage_addon_dependencies</code>:</strong> Lapis inspects manifests, stages required runtime DLLs from embedded <code>BakedFileSystem</code> assets, and purges illegal host references.
+  - <strong>Zero-Toolchain Precompiled Addons (<code>--release</code>):</strong> Designers install and execute compiled community addons instantly from GitHub/GitLab releases without requiring a Crystal compiler on their machine.
+  - <strong>Shard Negotiation via <code>AddonNegotiator</code>:</strong> When multiple addons depend on Crystal shards (<code>msgpack</code>, <code>perlin</code>), Lapis deduplicates versions across <code>shard.yml</code>, preventing symbol clashes.
+notes: |
+  Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage, and if an addon accidentally bundles libgodot.dll, it poisons the host engine's ClassDB and causes fatal memory crashes. Lapis provides complete end-to-end addon management. When you run `lapis addon install`, it audits binary headers, stages runtime dependencies from BakedFileSystem, purges conflicting host DLLs, registers the plugin in project.godot and extension_list.cfg, and negotiates Crystal shard dependencies across all installed addons. Users can even install precompiled binary addons via `--release` without needing the Crystal compiler installed.
