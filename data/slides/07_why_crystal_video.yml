@@ -12,8 +12,8 @@ media:
   title: Language Selection & Pragmatic Trade-Offs
   tag: Video (31s)
   caption:
-    speaker: 'Language Selection Rationale:'
-    quote: '"Beyond Ideology: Choosing Between Execution Throughput, Compilation Speed, and Cognitive Ergonomics."'
+    speaker: 'Yukihiro Matsumoto:'
+    quote: Computers are not very smart. They don't understand human language, so we have to tell them what to do in a language that both humans and computers can understand.
 card:
   title: 'Engineering Trade-Offs: Beyond the Hype'
   color: purple

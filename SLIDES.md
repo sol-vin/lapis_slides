@@ -197,7 +197,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `WHY CRYSTAL • THE ULTIMATE QUESTION`
 - **Title**: Why Crystal?
 - **Subtitle**: Addressing the #1 Question: Why Not Rust, C++, C#, or GDScript?
-- **Embedded Media**: `crystalmeme.mp4` (Language Selection & Pragmatic Trade-Offs — "Beyond Ideology: Choosing Between Execution Throughput, Compilation Speed, and Cognitive Ergonomics.")
+- **Embedded Media**: `crystalmeme.mp4` (Language Selection & Pragmatic Trade-Offs — Computers are not very smart. They don't understand human language, so we have to tell them what to do in a language that both humans and computers can understand.)
 - **Engineering Trade-Offs: Beyond the Hype**:
   - Why Not Rust? Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.
   - Why Not C++? Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded 0xC0000005 segfaults.
