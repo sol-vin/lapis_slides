@@ -4102,22 +4102,13 @@ end</code></pre>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="card amber col">
             <div class="card-title amber">
-              <span>ThreadSafety::Policy (Enforcement Modes)</span>
+              <span>ThreadSafety Invariants: Policy &amp; Scope</span>
             </div>
             <ul class="card-list">
-              <li><strong>Policy::Raise (Default):</strong> Immediately raises <code>Godot::ThreadAffinityError</code> with full calling context (thread ID, fiber name, target node). Fail-fast in development.</li>
-              <li><strong>Policy::Warn:</strong> Logs a colored warning to stderr but allows execution to continue for non-critical workflows.</li>
-              <li><strong>Policy::Defer:</strong> Automatically redirects supported SceneTree mutations to Godot's deferred queue.</li>
-              <li><strong>Policy::Disabled:</strong> Completely eliminates thread checks (0-cost) for micro-benchmarks or release builds.</li>
-            </ul>
-          </div>
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>ThreadSafety::Scope (Inspection Bounds)</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Scope::TreeOnly (Default):</strong> Only guards nodes inside the live SceneTree (<code>is_inside_tree? == true</code>). Enables parallel off-thread construction of orphan node trees!</li>
-              <li><strong>Scope::AllNodes:</strong> Strict mode blocking hierarchy mutations on <em>any</em> node off the main thread, regardless of tree attachment.</li>
+              <li><strong>Scope::TreeOnly (Default):</strong> Only guards nodes inside the live SceneTree. Enables parallel off-thread assembly of detached orphan node graphs with zero mutex overhead.</li>
+              <li><strong>Scope::AllNodes:</strong> Strict isolation mode blocking hierarchy mutations on <em>any</em> node off the main thread, regardless of tree attachment.</li>
+              <li><strong>Policy::Raise (Fail-Fast Debug):</strong> Intercepts illegal operations before native C++ executes, raising <code>ThreadAffinityError</code> with caller fiber and node name.</li>
+              <li><strong>Policy::Warn / Defer / Disabled:</strong> Configure non-fatal warnings, automatic <code>call_deferred</code> redirection, or 0-cost release build bypass.</li>
             </ul>
           </div>
           </div>
@@ -4191,22 +4182,13 @@ end
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="card cyan col">
             <div class="card-title cyan">
-              <span>Dispatch Queue Architecture</span>
+              <span>Deterministic Synchronization Invariants</span>
             </div>
             <ul class="card-list">
-              <li><strong>Zero Overhead on Main:</strong> If the caller is already executing on the Main Thread, the block executes immediately with zero queue allocation and zero latency.</li>
-              <li><strong>Thread-Safe Mutex Buffer:</strong> Off-thread invocations append closures to an internal buffer (<code>@@main_thread_queue</code>) protected by <code>::Thread::Mutex</code>.</li>
-              <li><strong>Deterministic Frame Flush:</strong> The queue is automatically flushed and drained by the engine main loop at the beginning of each frame tick.</li>
-            </ul>
-          </div>
-          <div class="card emerald col">
-            <div class="card-title emerald">
-              <span>Why It Beats Raw Mutexes &amp; Callbacks</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>No Deadlock Hazards:</strong> Background threads never wait on main-thread locks; workers push closures and resume processing immediately.</li>
-              <li><strong>Clean Closure Syntax:</strong> Passes natural Crystal blocks (<code>Godot.on_main_thread { ... }</code>) instead of string-based method names (<code>call_deferred("func")</code>).</li>
-              <li><strong>Segfault Elimination:</strong> Prevents <code>0xC0000005</code> memory corruption by guaranteeing all SceneTree modifications occur exclusively on the engine main thread.</li>
+              <li><strong>Zero Overhead on Main:</strong> If already on the Main Thread, the block executes immediately with zero queue allocation and zero latency.</li>
+              <li><strong>Thread-Safe Mutex Buffer:</strong> Off-thread invocations enqueue closures into <code>@@main_thread_queue</code>; workers resume without blocking.</li>
+              <li><strong>Deterministic Frame Flush:</strong> The engine main loop flushes and drains the queue at the start of each frame tick, safely mounting finished nodes.</li>
+              <li><strong>Segfault Elimination:</strong> Replaces fragile mutex locks and string-based <code>call_deferred</code> with type-safe closures, eliminating <code>0xC0000005</code> crashes.</li>
             </ul>
           </div>
           </div>

@@ -34,19 +34,13 @@ left:
     # - Zero mutex contention during rendering
     # - Guarantees 100% deterministic SceneTree updates
 right:
-  - type: card
-    title: Dispatch Queue Architecture
-    color: cyan
-    items:
-      - '<strong>Zero Overhead on Main:</strong> If the caller is already executing on the Main Thread, the block executes immediately with zero queue allocation and zero latency.'
-      - '<strong>Thread-Safe Mutex Buffer:</strong> Off-thread invocations append closures to an internal buffer (<code>@@main_thread_queue</code>) protected by <code>::Thread::Mutex</code>.'
-      - '<strong>Deterministic Frame Flush:</strong> The queue is automatically flushed and drained by the engine main loop at the beginning of each frame tick.'
-  - type: card
-    title: Why It Beats Raw Mutexes & Callbacks
-    color: emerald
-    items:
-      - '<strong>No Deadlock Hazards:</strong> Background threads never wait on main-thread locks; workers push closures and resume processing immediately.'
-      - '<strong>Clean Closure Syntax:</strong> Passes natural Crystal blocks (<code>Godot.on_main_thread { ... }</code>) instead of string-based method names (<code>call_deferred("func")</code>).'
-      - '<strong>Segfault Elimination:</strong> Prevents <code>0xC0000005</code> memory corruption by guaranteeing all SceneTree modifications occur exclusively on the engine main thread.'
+  type: card
+  title: Deterministic Synchronization Invariants
+  color: cyan
+  items:
+    - '<strong>Zero Overhead on Main:</strong> If already on the Main Thread, the block executes immediately with zero queue allocation and zero latency.'
+    - '<strong>Thread-Safe Mutex Buffer:</strong> Off-thread invocations enqueue closures into <code>@@main_thread_queue</code>; workers resume without blocking.'
+    - '<strong>Deterministic Frame Flush:</strong> The engine main loop flushes and drains the queue at the start of each frame tick, safely mounting finished nodes.'
+    - '<strong>Segfault Elimination:</strong> Replaces fragile mutex locks and string-based <code>call_deferred</code> with type-safe closures, eliminating <code>0xC0000005</code> crashes.'
 notes: |
   Once background workers finish crunching procedural geometry or pathfinding off-thread, how do we safely bring those nodes into the active game world? That's where Godot.on_main_thread comes in. When called from a background thread, it safely buffers the closure into a thread-safe mutex queue that gets drained deterministically at the next frame boundary by Godot's main loop. If you call it while already on the main thread, it executes immediately with zero overhead. There are no deadlocks, no manual lock management, and no fragile string-based callback names—just clean, type-safe closures executing safely on the rendering thread.

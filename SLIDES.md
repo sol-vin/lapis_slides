@@ -1357,14 +1357,11 @@ This document outlines each slide's exact theme palette, architectural category,
     # => Raises Godot::ThreadAffinityError with calling context!
   end
   ```
-- **ThreadSafety::Policy (Enforcement Modes)**:
-  - Policy::Raise (Default): Immediately raises Godot::ThreadAffinityError with full calling context (thread ID, fiber name, target node). Fail-fast in development.
-  - Policy::Warn: Logs a colored warning to stderr but allows execution to continue for non-critical workflows.
-  - Policy::Defer: Automatically redirects supported SceneTree mutations to Godot's deferred queue.
-  - Policy::Disabled: Completely eliminates thread checks (0-cost) for micro-benchmarks or release builds.
-- **ThreadSafety::Scope (Inspection Bounds)**:
-  - Scope::TreeOnly (Default): Only guards nodes inside the live SceneTree (is_inside_tree? == true). Enables parallel off-thread construction of orphan node trees!
-  - Scope::AllNodes: Strict mode blocking hierarchy mutations on any node off the main thread, regardless of tree attachment.
+- **ThreadSafety Invariants: Policy & Scope**:
+  - Scope::TreeOnly (Default): Only guards nodes inside the live SceneTree. Enables parallel off-thread assembly of detached orphan node graphs with zero mutex overhead.
+  - Scope::AllNodes: Strict isolation mode blocking hierarchy mutations on any node off the main thread, regardless of tree attachment.
+  - Policy::Raise (Fail-Fast Debug): Intercepts illegal operations before native C++ executes, raising ThreadAffinityError with caller fiber and node name.
+  - Policy::Warn / Defer / Disabled: Configure non-fatal warnings, automatic call_deferred redirection, or 0-cost release build bypass.
 - **Presenter Script**:
   > *"Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis provides a configurable ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled for zero-cost release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread—such as procedurally generated dungeon rooms or terrain meshes—while strictly guarding the live scene tree."*
 
@@ -1397,14 +1394,11 @@ This document outlines each slide's exact theme palette, architectural category,
   # - Zero mutex contention during rendering
   # - Guarantees 100% deterministic SceneTree updates
   ```
-- **Dispatch Queue Architecture**:
-  - Zero Overhead on Main: If the caller is already executing on the Main Thread, the block executes immediately with zero queue allocation and zero latency.
-  - Thread-Safe Mutex Buffer: Off-thread invocations append closures to an internal buffer (@@main_thread_queue) protected by ::Thread::Mutex.
-  - Deterministic Frame Flush: The queue is automatically flushed and drained by the engine main loop at the beginning of each frame tick.
-- **Why It Beats Raw Mutexes & Callbacks**:
-  - No Deadlock Hazards: Background threads never wait on main-thread locks; workers push closures and resume processing immediately.
-  - Clean Closure Syntax: Passes natural Crystal blocks (Godot.on_main_thread { ... }) instead of string-based method names (call_deferred("func")).
-  - Segfault Elimination: Prevents 0xC0000005 memory corruption by guaranteeing all SceneTree modifications occur exclusively on the engine main thread.
+- **Deterministic Synchronization Invariants**:
+  - Zero Overhead on Main: If already on the Main Thread, the block executes immediately with zero queue allocation and zero latency.
+  - Thread-Safe Mutex Buffer: Off-thread invocations enqueue closures into @@main_thread_queue; workers resume without blocking.
+  - Deterministic Frame Flush: The engine main loop flushes and drains the queue at the start of each frame tick, safely mounting finished nodes.
+  - Segfault Elimination: Replaces fragile mutex locks and string-based call_deferred with type-safe closures, eliminating 0xC0000005 crashes.
 - **Presenter Script**:
   > *"Once background workers finish crunching procedural geometry or pathfinding off-thread, how do we safely bring those nodes into the active game world? That's where Godot.on_main_thread comes in. When called from a background thread, it safely buffers the closure into a thread-safe mutex queue that gets drained deterministically at the next frame boundary by Godot's main loop. If you call it while already on the main thread, it executes immediately with zero overhead. There are no deadlocks, no manual lock management, and no fragile string-based callback names—just clean, type-safe closures executing safely on the rendering thread."*
 
