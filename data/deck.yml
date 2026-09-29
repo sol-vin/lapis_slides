@@ -24,7 +24,8 @@ slides:
 
 # --- ACT 3: The Antipattern Face-Off: GDScript vs Crystal ---
 - 11_antipattern_iterators
-- 11b_antipattern_anon_functions_symbols
+- 11b_antipattern_anon_functions
+- 11c_antipattern_symbols
 - 12_antipattern_nil_safety
 - 13_antipattern_pattern_matching
 - 15_antipattern_structs

@@ -1,0 +1,72 @@
+---
+id: 11c_antipattern_symbols
+title: 'Symbols: String Churn & Silent Typos vs. 32-Bit Zero-Cost Identifiers'
+subtitle: GDScript's Runtime String Lookups & Silent Typo Bugs vs. Crystal's Immediate 32-Bit Symbols & Compile-Time Typo Proofing
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: spaces_vista
+layout: code-comparison-layout
+gdscript:
+  title: '❌ GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    # PROBLEM 1: Silent Typo Bugs in State Machine
+    var state: StringName = &"patrol"
+    if state == &"petrol": # ⚠️ Typo compiles silently! Logic fails at runtime.
+        refuel_vehicle()
+
+    # PROBLEM 2: Dictionary Keys — Silent Null & Downstream Crashes
+    var blackboard: Dictionary = {}
+    blackboard["target_enemy"] = player_node
+    var target = blackboard.get("target_enmy") # ⚠️ Typo yields null, no error!
+    target.take_damage(10) # 💥 Runtime Crash: Invalid call on base Nil
+
+    # PROBLEM 3: String Hashing & Global Intern Table Locks
+    match current_action:
+        "idle": play_animation("idle")
+        "attack": deal_damage() # Hashed string lookup every frame
+
+    # PROBLEM 4: No Shorthand Method Selectors
+    # Must pass untyped StringName or allocate a lambda wrapper:
+    call(&"on_damage_taken", 15) # Untyped string dispatch
+  points:
+  - '<strong>Silent Typo Bugs:</strong> String and StringName comparisons never fail at compile time. Misspellings like <code>&"petrol"</code> silently evaluate to <code>false</code>, creating insidious bugs.'
+  - '<strong>Silent Null on Typoed Keys:</strong> Typoing a dictionary string key (<code>blackboard.get("target_enmy")</code>) returns <code>null</code> without any warning, causing crashes down the line.'
+  - '<strong>Hashing & Intern Mutex Churn:</strong> Strings require runtime byte comparisons. StringNames require global mutex locking and hash table queries inside Godot''s engine pool.'
+  - '<strong>Untyped State Variables:</strong> Any arbitrary string can be passed to state machines without compiler type checks or exhaustiveness guarantees.'
+crystal:
+  title: '✨ Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    # SOLUTION 1: Compile-Time Typo Proofing & Exhaustive State
+    alias State = :idle | :patrol | :alert
+    state : State = :patrol
+    # state = :petrol # 🚫 COMPILE ERROR: type must be State, not :petrol!
+
+    # SOLUTION 2: NamedTuple — Compile-Time Key Typo Proofing
+    blackboard = {target_enemy: player_node, alert_level: :high}
+    target = blackboard[:target_enemy] # Strongly typed as Player!
+    # blackboard[:target_enmy] # 🚫 COMPILE ERROR: unknown key :target_enmy!
+
+    # SOLUTION 3: 32-Bit Immediate Integer — 1 CPU Cycle (cmp), 0 Allocations
+    case state
+    when :idle   then play_animation("idle")
+    when :patrol then patrol_route
+    when :alert  then engage_combat
+    end # Exhaustive compiler jump-table, 0 heap bytes, 0 GC churn!
+
+    # SOLUTION 4: Symbol-to-Proc Shorthand
+    names = enemies.map(&.name)       # inlines .name on each item
+    active = enemies.select(&.alive?) # inlines .alive? on each item
+  points:
+  - '<strong>Immediate 32-Bit Integers:</strong> Symbols are NOT strings. They are immediate 32-bit integer IDs assigned by the compiler — zero heap allocations, zero GC tracking, zero pointer dereferences.'
+  - '<strong>Single-Cycle CPU Comparisons:</strong> Evaluating <code>state == :patrol</code> compiles to a single CPU machine instruction (<code>cmp</code>). No string hashing, no string length checks.'
+  - '<strong>Compile-Time Typo Proofing:</strong> When combined with symbol unions (<code>:idle | :patrol</code>) or <code>NamedTuple</code>, misspelled symbol keys trigger immediate compile-time errors.'
+  - '<strong>Symbol-to-Proc Ergonomics:</strong> Symbols double as first-class method callers: <code>&.name</code> and <code>&.alive?</code> eliminate verbose lambda wrappers while remaining fully inlined.'
+takeaway:
+  badge: 32-BIT IMMUTABLE IDENTITY • ZERO HEAP ALLOCATIONS
+  text: Symbols solve Godot's silent string typo bugs and runtime hash overhead by turning identifiers into immediate 32-bit compiler integers with single-cycle CPU comparisons.
+notes: |
+  Symbols are one of the most beloved features inherited from Ruby and elevated to bare-metal performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for state machines, blackboard dictionaries, and event tags. But strings introduce two massive problems: first, typos compile silently—`if state == &"petrol"` simply evaluates to false, leaving you with phantom bugs that take hours to track down. Second, strings involve runtime byte comparisons or global intern-table hash lookups. In Crystal, symbols like `:idle` and `:patrol` are not strings at all: they are immediate 32-bit integer IDs resolved at compile time. Comparing two symbols takes a single CPU clock cycle (`cmp`). When used in NamedTuples or symbol unions, typos are caught immediately by the compiler. And with symbol-to-proc (`&.name`), symbols make functional collection pipelines astonishingly clean.
