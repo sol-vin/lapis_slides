@@ -1,6 +1,6 @@
-# Lapis for Crystal — Complete 59-Slide Presentation Deck Reference
+# Lapis for Crystal — Complete 60-Slide Presentation Deck Reference
 
-Welcome to the definitive reference document for the 59-slide presentation deck: **Lapis for Crystal: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+**.
+Welcome to the definitive reference document for the 60-slide presentation deck: **Lapis for Crystal: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+**.
 
 This document outlines each slide's exact theme palette, architectural category, on-screen card structures, code examples, and full presenter speaking script.
 
@@ -1180,7 +1180,44 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Godot's MessageQueue is the bedrock of cross-thread safety. In Lapis, call_deferred allows any background worker thread to schedule method executions on the main thread safely. This prevents race conditions in Godot's internal node arrays and ensures that game state transitions happen deterministically at frame boundaries."*
 
 ---
-### Slide 37: Multiplayer: Authoritative RPCs & Lockstep Sync
+### Slide 37: Thread & Scope Policies: Concurrency Guard
+- **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
+- **Category Badge**: `CONCURRENCY SAFETY • THREAD AFFINITY`
+- **Title**: Thread & Scope Policies: Concurrency Guard
+- **Subtitle**: Configurable ThreadAffinity Protection and Deterministic Main-Thread Dispatch
+- **Code Example (`thread_safety.cr — Policies & on_main_thread`)**:
+  ```crystal
+  # Configure policy (:raise, :warn, :defer, :disabled)
+  Godot::ThreadSafety.policy = :raise
+  # Configure scope (:tree_only, :all_nodes)
+  Godot::ThreadSafety.scope  = :tree_only
+  
+  # Background worker thread generating procedural level
+  Thread.new do
+    # Scope::TreeOnly permits building orphan trees off-thread!
+    chunk = Node3D.new
+    chunk.add_child(generate_terrain_mesh)
+    chunk.add_child(generate_collision_shape)
+  
+    # Safely attach to the live SceneTree on Main Thread
+    Godot.on_main_thread do
+      get_tree.root.add_child(chunk)
+    end
+  end
+  ```
+- **ThreadPolicy & ScopePolicy Enums**:
+  - ThreadPolicy: :raise (default fail-fast), :warn, :defer, or :disabled (0-cost via -Dfast_dispatch).
+  - ScopePolicy::TreeOnly: (Default) Only blocks nodes inside the active SceneTree. Allows building detached graphs off-thread!
+  - ScopePolicy::AllNodes: Strict mode blocking hierarchy operations on all nodes across worker threads.
+- **Godot.on_main_thread Dispatch Queue**:
+  - Zero Overhead on Main: If already on Main Thread, executes immediately with 0-cost overhead.
+  - Thread-Safe Mutex Queue: Off-thread calls enqueue closures into a thread-safe buffer (@@main_thread_queue).
+  - Engine Frame Flush: Flushed automatically every frame during engine updates, eliminating 0xC0000005 crashes.
+- **Presenter Script**:
+  > *"Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis solves this with our ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled for zero-cost release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread, such as procedurally generated dungeon rooms or terrain meshes. Once the graph is assembled, developers call Godot.on_main_thread to safely attach the finished hierarchy to the live SceneTree at the next frame boundary."*
+
+---
+### Slide 38: Multiplayer: Authoritative RPCs & Lockstep Sync
 - **Sol.vin Theme Palette**: `playtoy` (PlayToy) [BG: `#8bac0f` | Window: `#9bbc0f` | Text: `#0f380f` | Accent: `#0f380f`]
 - **Category Badge**: `MULTIPLAYER ARCHITECTURE • NETWORKING`
 - **Title**: Multiplayer: Authoritative RPCs & Lockstep Sync
@@ -1222,7 +1259,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Building multiplayer games in Godot is notoriously tricky when dealing with dynamic RPC signatures and state desynchronization. In Lapis, multiplayer is a first-class citizen. You annotate methods with @[RPC]—declaring replication modes, peer permissions, and transfer modes (reliable, unreliable, or ordered) directly on native Crystal methods. The compiler validates method signatures at build time. For dedicated servers, you compile to Mode B (headless standalone LibGodot host), delivering blazing-fast physics simulation with zero editor or UI overhead. And with cradare2 integration, you can set hardware watchpoints on packet buffers to catch network desyncs in lockstep!"*
 
 ---
-### Slide 38: Crystal Concurrency Patterns in Games
+### Slide 39: Crystal Concurrency Patterns in Games
 - **Sol.vin Theme Palette**: `m64` (M64) [BG: `#232328` | Window: `#32323a` | Text: `#d0d0d8` | Accent: `#f0c018`]
 - **Category Badge**: `ADVANCED CONCURRENCY • GAME PATTERNS`
 - **Title**: Crystal Concurrency Patterns in Games
@@ -1262,7 +1299,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees. Heavy tasks like A* pathfinding, voxel generation, and AI simulations run on dedicated OS worker threads (Thread.new). They communicate with the game through buffered channels. On the main thread, _process non-blockingly drains completed results using receive? and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks! Meanwhile, cooperative gameplay fibers handle non-blocking asynchronous state machines using await without ever blocking the engine frame loop."*
 
 ---
-### Slide 39: Interoperability: GDScript Calling Crystal
+### Slide 40: Interoperability: GDScript Calling Crystal
 - **Sol.vin Theme Palette**: `spaces_7` (Spaces 7) [BG: `#dce8f5` | Window: `#ffffff` | Text: `#1a2b3c` | Accent: `#0066cc`]
 - **Category Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
 - **Title**: Interoperability: GDScript Calling Crystal
@@ -1301,7 +1338,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"You don't have to rewrite your entire game in Crystal to use Lapis. Lapis nodes register directly with Godot's ClassDB. That means GDScript developers on your team can instantiate Crystal nodes, call Crystal methods, inspect exported properties, and connect to Crystal signals with complete native editor autocomplete."*
 
 ---
-### Slide 40: Type Firewall: Crystal Enforces Strict Safety on GDScript (Code Comparison)
+### Slide 41: Type Firewall: Crystal Enforces Strict Safety on GDScript (Code Comparison)
 - **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CODE VIEW`
 - **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
@@ -1340,7 +1377,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 41: Type Firewall: Crystal Enforces Strict Safety on GDScript (Analysis & Critique)
+### Slide 42: Type Firewall: Crystal Enforces Strict Safety on GDScript (Analysis & Critique)
 - **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CRITIQUE`
 - **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
@@ -1358,7 +1395,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"What happens when dynamic GDScript tries to pass bad data into your Crystal code? If someone calls `player.heal("some bad string")`, in naive C++ bindings that might cause memory corruption or bizarre behavior. But Lapis automatically registers exact parameter types directly into Godot's ClassDB. The GDExtension layer validates the arguments before the method is ever called, rejecting malformed calls with an explicit engine error. Crystal acts as a strongly-typed firewall protecting your game's integrity."*
 
 ---
-### Slide 42: Crystal Calling GDScript: Dynamic Dispatch
+### Slide 43: Crystal Calling GDScript: Dynamic Dispatch
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
@@ -1389,7 +1426,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"What about calling GDScript from Crystal? Lapis provides both flexible dynamic dispatch via .call, .get, and .set, and an automated bindings generator. Lapis inspects Godot's extension_api.json and GDScript reflection to synthesize typed Crystal wrappers with zero manual C-API boilerplate. Arguments are marshalled transparently through Godot's Variant type, and every invocation is guarded by our monotonic 64-bit instance ID check."*
 
 ---
-### Slide 43: Crystal Calling GDScript: Strongly-Typed Bindings
+### Slide 44: Crystal Calling GDScript: Strongly-Typed Bindings
 - **Sol.vin Theme Palette**: `spaces_7` (Spaces 7) [BG: `#dce8f5` | Window: `#ffffff` | Text: `#1a2b3c` | Accent: `#0066cc`]
 - **Category Badge**: `INTEROPERABILITY • TYPED BINDINGS`
 - **Title**: Crystal Calling GDScript: Strongly-Typed Bindings
@@ -1422,7 +1459,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"When your team has established GDScript subsystems that you want to call frequently from Crystal, you don't have to settle for dynamic string dispatch. Using lapis bind, Lapis inspects the GDScript file and generates a strongly-typed Crystal wrapper class. You get full compile-time type verification and IDE autocompletion when calling GDScript."*
 
 ---
-### Slide 44: First-Class Godot Editor Integration
+### Slide 45: First-Class Godot Editor Integration
 - **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
 - **Title**: First-Class Godot Editor Integration
@@ -1441,7 +1478,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help."*
 
 ---
-### Slide 45: The Lapis CLI: Project Lifecycle & Bootstrapping
+### Slide 46: The Lapis CLI: Project Lifecycle & Bootstrapping
 - **Sol.vin Theme Palette**: `spaces_95` (Spaces 95) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: The Lapis CLI: Project Lifecycle & Bootstrapping
@@ -1469,7 +1506,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one."*
 
 ---
-### Slide 46: Addon Management: GDExtension Isolation & Shard Negotiation
+### Slide 47: Addon Management: GDExtension Isolation & Shard Negotiation
 - **Sol.vin Theme Palette**: `spaces_2000` (Spaces 2000) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#0a246a`]
 - **Category Badge**: `ECOSYSTEM • ADDON LIFECYCLE`
 - **Title**: Addon Management: GDExtension Isolation & Shard Negotiation
@@ -1499,7 +1536,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage, and if an addon accidentally bundles libgodot.dll, it poisons the host engine's ClassDB and causes fatal memory crashes. Lapis provides complete end-to-end addon management. When you run `lapis addon install`, it audits binary headers, stages runtime dependencies from BakedFileSystem, purges conflicting host DLLs, registers the plugin in project.godot and extension_list.cfg, and negotiates Crystal shard dependencies across all installed addons. Users can even install precompiled binary addons via `--release` without needing the Crystal compiler installed."*
 
 ---
-### Slide 47: The Lapis CLI: Codegen, Maintenance & Packaging
+### Slide 48: The Lapis CLI: Codegen, Maintenance & Packaging
 - **Sol.vin Theme Palette**: `amigo` (Amigo) [BG: `#0055aa` | Window: `#0055aa` | Text: `#ffffff` | Accent: `#ff9900`]
 - **Category Badge**: `TOOLCHAIN • AUTOMATION & CODEGEN`
 - **Title**: The Lapis CLI: Codegen, Maintenance & Packaging
@@ -1527,7 +1564,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons."*
 
 ---
-### Slide 48: Native Debugging: Why Lapis Replaced LLDB with radare2 (r2)
+### Slide 49: Native Debugging: Why Lapis Replaced LLDB with radare2 (r2)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `SYSTEMS DIAGNOSTICS • RADARE2`
 - **Title**: Native Debugging: Why Lapis Replaced LLDB with radare2 (r2)
@@ -1547,7 +1584,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"We completely removed LLDB from Lapis. LLDB was a 2GB+ bloat monster with fragile host Python dependencies and Windows PDB/DWARF symbol desyncs. In its place, Lapis standardizes on radare2 (r2) and our cradare2 bindings. Developers get seamless debugging both in and out of the editor: lapis editor -d embeds live pseudo-C decompilation and multiplayer lockstep debugging into Godot, while lapis run -d and lapis decompile let you debug standalone games, inspect compiled machine code, and set hardware memory watchpoints from the terminal."*
 
 ---
-### Slide 49: Lapis Debug Helper: Triage Games, Plugins & Bridge Issues
+### Slide 50: Lapis Debug Helper: Triage Games, Plugins & Bridge Issues
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `SYSTEMS DIAGNOSTICS • CLI & FORENSICS`
 - **Title**: Lapis Debug Helper: Triage Games, Plugins & Bridge Issues
@@ -1581,7 +1618,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Lapis includes a dedicated debug helper that solves the hardest problem in game development: knowing which layer failed when a crash occurs. Using `lapis editor -d` or `lapis run -d`, developers get instant radare2 process attachment with dual log isolation separating Godot engine messages from Crystal exceptions. When an issue occurs, `PluginForensics` automatically classifies whether the fault originated in user gameplay code, an editor tool plugin, the C++ loader bridge, or Godot's core ObjectDB. You can decompile methods to clean pseudo-C on the fly with `pdc`, set hardware memory watchpoints on suspect pointers, and verify bridge export health with `lapis decompile --verify`."*
 
 ---
-### Slide 50: Radare2 in the Test Suite: Automated Binary Forensics & CI
+### Slide 51: Radare2 in the Test Suite: Automated Binary Forensics & CI
 - **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `QUALITY GATES • R2 TEST SUITE`
 - **Title**: Radare2 in the Test Suite: Automated Binary Forensics & CI
@@ -1624,7 +1661,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"We don't just use radare2 for interactive debugging; we use it to test Lapis itself. In our automated test suite, RadareDriver audits compiled game binaries in CI to verify binary hardening like DEP and ASLR, mathematically validates that zero internal Boehm GC or C++ bridge symbols leak into the global namespace, and validates pointer alignment. It even drives headless multiplayer lockstep tests, ensuring that pausing a client cooperatively suspends all peer instances without triggering network heartbeat timeouts."*
 
 ---
-### Slide 51: Testing Framework: Writing Tests & Zero-Leak Proof
+### Slide 52: Testing Framework: Writing Tests & Zero-Leak Proof
 - **Sol.vin Theme Palette**: `spaces_2000` (Spaces 2000) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#0a246a`]
 - **Category Badge**: `QUALITY GATES • ZERO-LEAK TESTING`
 - **Title**: Testing Framework: Writing Tests & Zero-Leak Proof
@@ -1660,7 +1697,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Memory leaks are fatal in long-running games. Lapis includes a dedicated testing apparatus with mathematical zero-leak verification. Using Lapis::Test.assert_no_leak, our test runner queries Godot's Performance singletons and forces GC equilibrium before and after running iterations, mathematically proving that zero objects or memory leaked."*
 
 ---
-### Slide 52: In-Editor Tool Testing & Standalone TUI Runner
+### Slide 53: In-Editor Tool Testing & Standalone TUI Runner
 - **Sol.vin Theme Palette**: `spaces_31` (Spaces 3.1) [BG: `#ffffff` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
@@ -1690,7 +1727,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Running tests shouldn't be boring. When you run lapis test, it launches an interactive double-buffered ANSI TUI dashboard. You see live multi-phase progress, rolling logs with syntax coloring, and instant leak verification metrics. It makes continuous testing a genuinely satisfying part of the development loop."*
 
 ---
-### Slide 53: Quantitative Benchmarks: Crystal vs GDScript
+### Slide 54: Quantitative Benchmarks: Crystal vs GDScript
 - **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
@@ -1709,7 +1746,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++."*
 
 ---
-### Slide 54: Lapis Architecture: The Layered Bridge
+### Slide 55: Lapis Architecture: The Layered Bridge
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `CORE ARCHITECTURE • MODULAR TECHNOLOGY STACK`
 - **Title**: Lapis Architecture: The Layered Bridge
@@ -1737,7 +1774,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Here is the complete modular architecture of Lapis, inspired by clean systems engine diagrams like Raylib's architecture chart. At the top is Tier 4: your gameplay code, where you write custom nodes, exported properties, signals, and multiplayer RPCs. Tier 3 provides Lapis high-level extensions: our declarative AST macros, actor concurrency via buffered channels, memory safety with dead-pointer protection, zero-leak test harnesses, and our self-hosted editor plugin written in Crystal. Tier 2 connects Crystal to Godot via 800+ typed classes compiled with LLVM, alongside our C++ loader bridge that bootstraps the GC and manages shadow DLL hot reloading on Windows. And at the foundation is Tier 1: Godot 4.8's native C++ engine core, running seamlessly in both in-editor Mode A and standalone Mode B across desktop and handheld platforms."*
 
 ---
-### Slide 55: Dual Modes: Mode A vs. Mode B
+### Slide 56: Dual Modes: Mode A vs. Mode B
 - **Sol.vin Theme Palette**: `fos` (FOS) [BG: `#0000aa` | Window: `#0000aa` | Text: `#ffffff` | Accent: `#ffffff`]
 - **Category Badge**: `ARCHITECTURE • DUAL EXECUTION MODES`
 - **Title**: Dual Modes: Mode A vs. Mode B
@@ -1762,7 +1799,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Lapis supports two distinct execution paradigms tailored for developer joy and production performance. During development, you run in Mode A: Godot acts as the host, loading our self-hosted Crystal editor plugin and C++ bridge. Thanks to our Windows shadow DLL mechanism, pressing F5 hot-reloads game logic instantly without restarting the editor. When you are ready to ship, you switch to Mode B: a pure Crystal native executable that embeds LibGodot directly. It boots in milliseconds, has zero editor bloat, and provides the ultimate performance for players and dedicated servers."*
 
 ---
-### Slide 56: The Packaging System: Turnkey Distribution
+### Slide 57: The Packaging System: Turnkey Distribution
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
@@ -1790,7 +1827,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Shipping games and addons shouldn't require tedious manual zip packaging. Lapis features a turnkey packaging system. A single command packages official GDExtension addons, Windows Inno Setup installers, Debian packages, and standalone playable games with automatic DLL dependency bundling and cryptographic checksums."*
 
 ---
-### Slide 57: Live DEMO: End-to-End Workflow Roadmap
+### Slide 58: Live DEMO: End-to-End Workflow Roadmap
 - **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `LIVE DEMONSTRATION • ROADMAP`
 - **Title**: Live DEMO: End-to-End Workflow Roadmap
@@ -1851,7 +1888,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Now let's switch over to our live demonstration. In Step 1, we start from a clean terminal, running lapis init to scaffold our project and lapis doctor to verify all toolchain dependencies. In Step 2, we author a Player node in Crystal using our concise DSL, declaring an exported speed property, an engine signal, and 3D physics movement. In Step 3, we open Godot. Our self-hosted Crystal editor plugin hooks into F5. We press F5, and thanks to Windows shadow DLL loading, the game recompiles and hot reloads in milliseconds while we tweak the speed slider in the Inspector. Finally in Step 4, we run lapis test --tui to watch our automated specs and zero memory leak verification execute live, followed by launching radare2 to demonstrate native debugging and hardware watchpoints."*
 
 ---
-### Slide 58: The Future of Native Scripting in Godot
+### Slide 59: The Future of Native Scripting in Godot
 - **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `CONCLUSION • LOOKING AHEAD`
 - **Title**: The Future of Native Scripting in Godot
@@ -1870,7 +1907,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Thank you all for listening! We believe Lapis represents the future of native scripting in Godot: the raw machine speed and type safety of C++ combined with the joy, clarity, and ergonomics of Ruby. The project is open source and ready for you to try today. Check out our repository on GitHub, join our Discord, and start building high-performance Godot games in Crystal!"*
 
 ---
-### Slide 59: THANKS FOR WATCHING!
+### Slide 60: THANKS FOR WATCHING!
 - **Sol.vin Theme Palette**: `m64` (M64) [BG: `#232328` | Window: `#32323a` | Text: `#d0d0d8` | Accent: `#f0c018`]
 - **Category Badge**: `PROJECT WRAP-UP • THANK YOU`
 - **Title**: THANKS FOR WATCHING!
