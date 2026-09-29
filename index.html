@@ -4544,7 +4544,7 @@ $ lapis test --tui</code></pre>
   ✓ Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
   ✓ Purged invalid host libgodot.dll (poison protection)
 [Config] Auto-enabled in project.godot &amp; .godot/extension_list.cfg
-[Shards:AddonNegotiator] Deduplicated 2 shard requirements (0 conflicts)
+[Shards:AddonNegotiator] Negotiated &#39;crshader&#39; across 5 addons (1 canonical version, 0 conflicts)
 ✓ Addon &#39;combat_system&#39; installed successfully! Ready to use.</code></pre>
           </div>
           </div>
@@ -4558,7 +4558,7 @@ $ lapis test --tui</code></pre>
               <li><strong>The Host <code>libgodot.dll</code> Poison Trap:</strong> An addon compiled against LibGodot must NEVER bundle its own <code>libgodot.dll</code>. If present, it creates dual ClassDB singletons and crashes Godot immediately on load.</li>
               <li><strong>Automated Dependency Staging via <code>stage_addon_dependencies</code>:</strong> Lapis inspects manifests, stages required runtime DLLs from embedded <code>BakedFileSystem</code> assets, and purges illegal host references.</li>
               <li><strong>Zero-Toolchain Precompiled Addons (<code>--release</code>):</strong> Designers install and execute compiled community addons instantly from GitHub/GitLab releases without requiring a Crystal compiler on their machine.</li>
-              <li><strong>Shard Negotiation via <code>AddonNegotiator</code>:</strong> When multiple addons depend on Crystal shards (<code>msgpack</code>, <code>perlin</code>), Lapis deduplicates versions across <code>shard.yml</code>, preventing symbol clashes.</li>
+              <li><strong>Shared Plugin Negotiation (<code>AddonNegotiator</code>):</strong> If 5 different plugins all depend on the same Crystal plugin (e.g. <code>crshader</code>), Lapis resolves their semver constraints into a single canonical version in <code>shard.yml</code>, preventing symbol clashes, duplicate compilation, and fatal ClassDB collisions.</li>
             </ul>
           </div>
           </div>
@@ -4569,7 +4569,7 @@ $ lapis test --tui</code></pre>
           <span>Slide 47 / 60</span>
         </div>
         <aside class="notes">
-          Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage, and if an addon accidentally bundles libgodot.dll, it poisons the host engine's ClassDB and causes fatal memory crashes. Lapis provides complete end-to-end addon management. When you run `lapis addon install`, it audits binary headers, stages runtime dependencies from BakedFileSystem, purges conflicting host DLLs, registers the plugin in project.godot and extension_list.cfg, and negotiates Crystal shard dependencies across all installed addons. Users can even install precompiled binary addons via `--release` without needing the Crystal compiler installed.
+          Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage, and if an addon accidentally bundles libgodot.dll, it poisons the host engine's ClassDB and causes fatal memory crashes. Lapis provides complete end-to-end addon management. When you run lapis addon install, it audits binary headers, stages runtime dependencies from BakedFileSystem, purges conflicting host DLLs, and registers the plugin in project.godot and extension_list.cfg. Crucially, AddonNegotiator solves multi-plugin dependency hell: if 5 different plugins all depend on the same Crystal plugin like crshader, Lapis negotiates their semver constraints into a single canonical version in shard.yml, eliminating redundant compilation, duplicate symbols, and fatal ClassDB registration collisions.
         </aside>
       </section>
 
