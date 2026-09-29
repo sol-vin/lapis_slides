@@ -16,7 +16,7 @@ left:
     node PlayerController < CharacterBody2D do
       def _ready : Void
         # 1. Path traversal with / (left-associative):
-        camera = (self / :camera_rig)[Godot::Camera2D]
+        camera = (self / "camera_rig")[Godot::Camera2D]
 
         # 2. Scene Unique Node with % (mirrors GDScript %):
         health_bar = self % Godot::ProgressBar
@@ -36,9 +36,9 @@ right:
   title: Type-Safe Scene Graph Ergonomics
   color: cyan
   items:
-    - '<strong>Path Traversal with <code>/</code>:</strong> Intuitive left-associative syntax supporting nested string paths and snake-to-CamelCase symbol conversions (<code>self / :camera_rig</code>).'
+    - '<strong>Path Traversal with <code>/</code>:</strong> Intuitive left-associative syntax supporting nested string paths (<code>self / "camera_rig"</code>).'
     - '<strong>Scene Unique Nodes with <code>%</code>:</strong> Statically typed retrieval that mirrors GDScript <code>%Node</code> syntax without brittle dynamic casting.'
     - '<strong>Subscript Indexers (<code>self[Type]</code>):</strong> Type-inferred lookup matching class name, custom paths, and safe optional variants (<code>self[T]?</code>).'
     - '<strong>Bare Macros (<code>n!</code>, <code>u!</code>, <code>n?</code>):</strong> Clean shorthand for typed child nodes and unique nodes inside methods with zero boilerplate.'
 notes: |
-  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / :camera_rig / :camera_3d), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety.
+  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / "camera_rig" / "camera_3d"), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety.

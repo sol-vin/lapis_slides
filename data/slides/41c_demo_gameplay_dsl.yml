@@ -22,7 +22,7 @@ left:
 
       def _ready : Void
         # Ergonomic traversal using / and %:
-        cam = (self / :camera_boom / :camera_3d)[Godot::Camera3D]
+        cam = (self / "camera_boom" / "camera_3d")[Godot::Camera3D]
         hp_bar = self % Godot::ProgressBar
 
         # Type-safe signal connection:
@@ -37,7 +37,7 @@ right:
   color: purple
   items:
     - '<strong>Live Inspector Sliders:</strong> <code>@[Export]</code> properties immediately render native drag sliders and range constraints in Godot Inspector.'
-    - '<strong>Operator Path Traversal:</strong> <code>self / :camera_boom / :camera_3d</code> navigates scene graphs without fragile string lookups.'
+    - '<strong>Operator Path Traversal:</strong> <code>self / "camera_boom" / "camera_3d"</code> navigates scene graphs cleanly with left-associative syntax.'
     - '<strong>Type-Safe Signals:</strong> Declared signals synthesize compile-time checked connection helpers and auto-complete parameters.'
     - '<strong>Automatic Doc Harvesting:</strong> Comments above properties and signals are automatically extracted into Godot offline F1 Help tooltips.'
 notes: |
