@@ -3705,10 +3705,10 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Configure policy (:raise, :warn, :defer, :disabled)
-Godot::ThreadSafety.policy = :raise
-# Configure scope (:tree_only, :all_nodes)
-Godot::ThreadSafety.scope  = :tree_only
+            <pre><code class="language-crystal"># Configure policy (Raise, Warn, Defer, Disabled)
+Godot::ThreadSafety.policy = Godot::ThreadSafety::Policy::Raise
+# Configure scope (TreeOnly, AllNodes)
+Godot::ThreadSafety.scope  = Godot::ThreadSafety::Scope::TreeOnly
 
 # Background worker thread generating procedural level
 Thread.new do
@@ -3730,7 +3730,7 @@ end</code></pre>
               <span>ThreadPolicy &amp; ScopePolicy Enums</span>
             </div>
             <ul class="card-list">
-              <li><strong>ThreadPolicy:</strong> <code>:raise</code> (default fail-fast), <code>:warn</code>, <code>:defer</code>, or <code>:disabled</code> (0-cost via <code>-Dfast_dispatch</code>).</li>
+              <li><strong>ThreadPolicy Enum:</strong> <code>Policy::Raise</code> (default fail-fast), <code>Policy::Warn</code>, <code>Policy::Defer</code>, or <code>Policy::Disabled</code> (0-cost).</li>
               <li><strong>ScopePolicy::TreeOnly:</strong> (Default) Only blocks nodes inside the active SceneTree. Allows building detached graphs off-thread!</li>
               <li><strong>ScopePolicy::AllNodes:</strong> Strict mode blocking hierarchy operations on all nodes across worker threads.</li>
             </ul>

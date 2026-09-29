@@ -13,10 +13,10 @@ left:
   tag: Crystal
   lang: crystal
   code: |
-    # Configure policy (:raise, :warn, :defer, :disabled)
-    Godot::ThreadSafety.policy = :raise
-    # Configure scope (:tree_only, :all_nodes)
-    Godot::ThreadSafety.scope  = :tree_only
+    # Configure policy (Raise, Warn, Defer, Disabled)
+    Godot::ThreadSafety.policy = Godot::ThreadSafety::Policy::Raise
+    # Configure scope (TreeOnly, AllNodes)
+    Godot::ThreadSafety.scope  = Godot::ThreadSafety::Scope::TreeOnly
 
     # Background worker thread generating procedural level
     Thread.new do
@@ -35,7 +35,7 @@ right:
     title: ThreadPolicy & ScopePolicy Enums
     color: amber
     items:
-      - '<strong>ThreadPolicy:</strong> <code>:raise</code> (default fail-fast), <code>:warn</code>, <code>:defer</code>, or <code>:disabled</code> (0-cost via <code>-Dfast_dispatch</code>).'
+      - '<strong>ThreadPolicy Enum:</strong> <code>Policy::Raise</code> (default fail-fast), <code>Policy::Warn</code>, <code>Policy::Defer</code>, or <code>Policy::Disabled</code> (0-cost).'
       - '<strong>ScopePolicy::TreeOnly:</strong> (Default) Only blocks nodes inside the active SceneTree. Allows building detached graphs off-thread!'
       - '<strong>ScopePolicy::AllNodes:</strong> Strict mode blocking hierarchy operations on all nodes across worker threads.'
   - type: card

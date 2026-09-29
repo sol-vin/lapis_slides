@@ -1187,10 +1187,10 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Configurable ThreadAffinity Protection and Deterministic Main-Thread Dispatch
 - **Code Example (`thread_safety.cr — Policies & on_main_thread`)**:
   ```crystal
-  # Configure policy (:raise, :warn, :defer, :disabled)
-  Godot::ThreadSafety.policy = :raise
-  # Configure scope (:tree_only, :all_nodes)
-  Godot::ThreadSafety.scope  = :tree_only
+  # Configure policy (Raise, Warn, Defer, Disabled)
+  Godot::ThreadSafety.policy = Godot::ThreadSafety::Policy::Raise
+  # Configure scope (TreeOnly, AllNodes)
+  Godot::ThreadSafety.scope  = Godot::ThreadSafety::Scope::TreeOnly
   
   # Background worker thread generating procedural level
   Thread.new do
@@ -1206,7 +1206,7 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   ```
 - **ThreadPolicy & ScopePolicy Enums**:
-  - ThreadPolicy: :raise (default fail-fast), :warn, :defer, or :disabled (0-cost via -Dfast_dispatch).
+  - ThreadPolicy Enum: Policy::Raise (default fail-fast), Policy::Warn, Policy::Defer, or Policy::Disabled (0-cost).
   - ScopePolicy::TreeOnly: (Default) Only blocks nodes inside the active SceneTree. Allows building detached graphs off-thread!
   - ScopePolicy::AllNodes: Strict mode blocking hierarchy operations on all nodes across worker threads.
 - **Godot.on_main_thread Dispatch Queue**:
