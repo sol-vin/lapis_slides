@@ -908,7 +908,7 @@ This document outlines each slide's exact theme palette, architectural category,
   node PlayerController < CharacterBody2D do
     def _ready : Void
       # 1. Path traversal with / (left-associative):
-      camera = (self / "camera_rig")[Godot::Camera2D]
+      camera = (self / "CameraRig")[Godot::Camera2D]
   
       # 2. Scene Unique Node with % (mirrors GDScript %):
       health_bar = self % Godot::ProgressBar
@@ -925,12 +925,12 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   ```
 - **Type-Safe Scene Graph Ergonomics**:
-  - Path Traversal with /: Intuitive left-associative syntax supporting nested string paths (self / "camera_rig").
+  - Path Traversal with /: Intuitive left-associative syntax supporting nested string paths (self / "CameraRig").
   - Scene Unique Nodes with %: Statically typed retrieval that mirrors GDScript %Node syntax without brittle dynamic casting.
   - Subscript Indexers (self[Type]): Type-inferred lookup matching class name, custom paths, and safe optional variants (self[T]?).
   - Bare Macros (n!, u!, n?): Clean shorthand for typed child nodes and unique nodes inside methods with zero boilerplate.
 - **Presenter Script**:
-  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / "camera_rig" / "camera_3d"), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety."*
+  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / "CameraRig" / "Camera3D"), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety."*
 
 ---
 ### Slide 25: Effortless Access: Nodes, Scenes & Properties
@@ -2531,7 +2531,7 @@ This document outlines each slide's exact theme palette, architectural category,
   
     def _ready : Void
       # Ergonomic traversal using / and %:
-      cam = (self / "camera_boom" / "camera_3d")[Godot::Camera3D]
+      cam = (self / "CameraBoom" / "Camera3D")[Godot::Camera3D]
       hp_bar = self % Godot::ProgressBar
   
       # Type-safe signal connection:
@@ -2543,7 +2543,7 @@ This document outlines each slide's exact theme palette, architectural category,
   ```
 - **In-Editor Reactivity & DSL Power**:
   - Live Inspector Sliders: @[Export] properties immediately render native drag sliders and range constraints in Godot Inspector.
-  - Operator Path Traversal: self / "camera_boom" / "camera_3d" navigates scene graphs cleanly with left-associative syntax.
+  - Operator Path Traversal: self / "CameraBoom" / "Camera3D" navigates scene graphs cleanly with left-associative syntax.
   - Type-Safe Signals: Declared signals synthesize compile-time checked connection helpers and auto-complete parameters.
   - Automatic Doc Harvesting: Comments above properties and signals are automatically extracted into Godot offline F1 Help tooltips.
 - **Presenter Script**:

@@ -2269,7 +2269,7 @@ end</code></pre>
             <pre><code class="language-crystal">node PlayerController &lt; CharacterBody2D do
   def _ready : Void
     # 1. Path traversal with / (left-associative):
-    camera = (self / &quot;camera_rig&quot;)[Godot::Camera2D]
+    camera = (self / &quot;CameraRig&quot;)[Godot::Camera2D]
 
     # 2. Scene Unique Node with % (mirrors GDScript %):
     health_bar = self % Godot::ProgressBar
@@ -2292,7 +2292,7 @@ end</code></pre>
               <span>Type-Safe Scene Graph Ergonomics</span>
             </div>
             <ul class="card-list">
-              <li><strong>Path Traversal with <code>/</code>:</strong> Intuitive left-associative syntax supporting nested string paths (<code>self / "camera_rig"</code>).</li>
+              <li><strong>Path Traversal with <code>/</code>:</strong> Intuitive left-associative syntax supporting nested string paths (<code>self / "CameraRig"</code>).</li>
               <li><strong>Scene Unique Nodes with <code>%</code>:</strong> Statically typed retrieval that mirrors GDScript <code>%Node</code> syntax without brittle dynamic casting.</li>
               <li><strong>Subscript Indexers (<code>self[Type]</code>):</strong> Type-inferred lookup matching class name, custom paths, and safe optional variants (<code>self[T]?</code>).</li>
               <li><strong>Bare Macros (<code>n!</code>, <code>u!</code>, <code>n?</code>):</strong> Clean shorthand for typed child nodes and unique nodes inside methods with zero boilerplate.</li>
@@ -2306,7 +2306,7 @@ end</code></pre>
           <span>Slide 24 / 77</span>
         </div>
         <aside class="notes">
-          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / "camera_rig" / "camera_3d"), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety.
+          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / "CameraRig" / "Camera3D"), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety.
         </aside>
       </section>
 
@@ -6979,7 +6979,7 @@ node PlayerController &lt; CharacterBody3D do
 
   def _ready : Void
     # Ergonomic traversal using / and %:
-    cam = (self / &quot;camera_boom&quot; / &quot;camera_3d&quot;)[Godot::Camera3D]
+    cam = (self / &quot;CameraBoom&quot; / &quot;Camera3D&quot;)[Godot::Camera3D]
     hp_bar = self % Godot::ProgressBar
 
     # Type-safe signal connection:
@@ -6997,7 +6997,7 @@ end</code></pre>
             </div>
             <ul class="card-list">
               <li><strong>Live Inspector Sliders:</strong> <code>@[Export]</code> properties immediately render native drag sliders and range constraints in Godot Inspector.</li>
-              <li><strong>Operator Path Traversal:</strong> <code>self / "camera_boom" / "camera_3d"</code> navigates scene graphs cleanly with left-associative syntax.</li>
+              <li><strong>Operator Path Traversal:</strong> <code>self / "CameraBoom" / "Camera3D"</code> navigates scene graphs cleanly with left-associative syntax.</li>
               <li><strong>Type-Safe Signals:</strong> Declared signals synthesize compile-time checked connection helpers and auto-complete parameters.</li>
               <li><strong>Automatic Doc Harvesting:</strong> Comments above properties and signals are automatically extracted into Godot offline F1 Help tooltips.</li>
             </ul>
