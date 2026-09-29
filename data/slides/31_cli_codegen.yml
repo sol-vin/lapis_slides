@@ -1,7 +1,7 @@
 ---
 id: 31_cli_codegen
-title: 'The Lapis CLI: Codegen, Maintenance & Packaging'
-subtitle: Automated API Generation, Addon Packaging, and Standalone Distribution
+title: 'CLI: Codegen & Maintenance'
+subtitle: Offline Decompilation, Diagnostics & Packaging
 badge: TOOLCHAIN • AUTOMATION & CODEGEN
 badge_color: amber
 palette: amigo

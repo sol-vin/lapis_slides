@@ -1,7 +1,7 @@
 ---
 id: 30_cli_lifecycle
-title: 'The Lapis CLI: Project Lifecycle & Bootstrapping'
-subtitle: A Single Unified Developer Tool for Scaffolding, Building, and Testing
+title: 'CLI: Project Lifecycle'
+subtitle: Scaffolding, Fast Iteration & Native Debugging
 badge: TOOLCHAIN • THE LAPIS CLI
 badge_color: cyan
 palette: spaces_95

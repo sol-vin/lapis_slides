@@ -1793,11 +1793,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help."*
 
 ---
-### Slide 53: The Lapis CLI: Project Lifecycle & Bootstrapping
+### Slide 53: CLI: Project Lifecycle
 - **Sol.vin Theme Palette**: `spaces_95` (Spaces 95) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `TOOLCHAIN • THE LAPIS CLI`
-- **Title**: The Lapis CLI: Project Lifecycle & Bootstrapping
-- **Subtitle**: A Single Unified Developer Tool for Scaffolding, Building, and Testing
+- **Title**: CLI: Project Lifecycle
+- **Subtitle**: Scaffolding, Fast Iteration & Native Debugging
 - **Terminal Command (`Terminal — lapis CLI Workflow`)**:
   ```bash
   # Initialize a new game project with embedded templates
@@ -1821,11 +1821,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one."*
 
 ---
-### Slide 54: Addon Management: GDExtension Isolation & Shard Negotiation
+### Slide 54: Addon Management & Isolation
 - **Sol.vin Theme Palette**: `spaces_2000` (Spaces 2000) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#0a246a`]
 - **Category Badge**: `ECOSYSTEM • ADDON LIFECYCLE`
-- **Title**: Addon Management: GDExtension Isolation & Shard Negotiation
-- **Subtitle**: Solving DLL Hell, ClassDB Collisions & Precompiled Binary Dependency Staging
+- **Title**: Addon Management & Isolation
+- **Subtitle**: Precompiled GDExtensions, DLL Staging & Shard Negotiation
 - **Code Example (`Terminal — lapis addon install --release`)**:
   ```text
   $ lapis addon install github:sol-vin/combat_system@v1.2 --release
@@ -1841,21 +1841,20 @@ This document outlines each slide's exact theme palette, architectural category,
   [Shards:AddonNegotiator] Negotiated 'crshader' across 5 addons (1 canonical version, 0 conflicts)
   ✓ Addon 'combat_system' installed successfully! Ready to use.
   ```
-- **Why Godot Addons Require Deep Management**:
-  - The GDExtension DLL Hazard: Standard Godot addons cannot self-resolve native C-runtime dependencies. Missing gc.dll or crystal_bridge.dll causes silent engine boot aborts.
-  - The Host libgodot.dll Poison Trap: An addon compiled against LibGodot must NEVER bundle its own libgodot.dll. If present, it creates dual ClassDB singletons and crashes Godot immediately on load.
-  - Automated Dependency Staging via stage_addon_dependencies: Lapis inspects manifests, stages required runtime DLLs from embedded BakedFileSystem assets, and purges illegal host references.
-  - Zero-Toolchain Precompiled Addons (--release): Designers install and execute compiled community addons instantly from GitHub/GitLab releases without requiring a Crystal compiler on their machine.
-  - Shared Plugin Negotiation (AddonNegotiator): If 5 different plugins all depend on the same Crystal plugin (e.g. crshader), Lapis resolves their semver constraints into a single canonical version in shard.yml, preventing symbol clashes, duplicate compilation, and fatal ClassDB collisions.
+- **GDExtension Addon Lifecycle Invariants**:
+  - Runtime DLL Staging & Poison Trap: Automatically stages required C-runtime DLLs (gc.dll, bridge.dll) and purges illegal host libgodot.dll to prevent fatal ClassDB crashes.
+  - Zero-Toolchain Precompiled Addons: Designers install and execute compiled binary addons via --release directly from GitHub/GitLab without needing a local Crystal compiler.
+  - Security Auditing & Auto-Config: Verifies ASLR/DEP binary hardening, audits symbols, and registers extensions directly in project.godot and extension_list.cfg.
+  - Shared Addon Negotiation (AddonNegotiator): If 5 plugins all depend on the same Crystal plugin (e.g. crshader), Lapis resolves a single canonical version in shard.yml to eliminate duplicate symbol clashes.
 - **Presenter Script**:
   > *"Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage, and if an addon accidentally bundles libgodot.dll, it poisons the host engine's ClassDB and causes fatal memory crashes. Lapis provides complete end-to-end addon management. When you run lapis addon install, it audits binary headers, stages runtime dependencies from BakedFileSystem, purges conflicting host DLLs, and registers the plugin in project.godot and extension_list.cfg. Crucially, AddonNegotiator solves multi-plugin dependency hell: if 5 different plugins all depend on the same Crystal plugin like crshader, Lapis negotiates their semver constraints into a single canonical version in shard.yml, eliminating redundant compilation, duplicate symbols, and fatal ClassDB registration collisions."*
 
 ---
-### Slide 55: The Lapis CLI: Codegen, Maintenance & Packaging
+### Slide 55: CLI: Codegen & Maintenance
 - **Sol.vin Theme Palette**: `amigo` (Amigo) [BG: `#0055aa` | Window: `#0055aa` | Text: `#ffffff` | Accent: `#ff9900`]
 - **Category Badge**: `TOOLCHAIN • AUTOMATION & CODEGEN`
-- **Title**: The Lapis CLI: Codegen, Maintenance & Packaging
-- **Subtitle**: Automated API Generation, Addon Packaging, and Standalone Distribution
+- **Title**: CLI: Codegen & Maintenance
+- **Subtitle**: Offline Decompilation, Diagnostics & Packaging
 - **Terminal Command (`Terminal — Advanced CLI Tooling`)**:
   ```bash
   # Decompile Crystal method to pseudo-C & assembly via r2

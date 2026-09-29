@@ -5137,7 +5137,7 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 53: Spaces 95 (The Lapis CLI: Project Lifecycle & Bootstrapping)
+           SLIDE 53: Spaces 95 (CLI: Project Lifecycle)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 95"
@@ -5151,8 +5151,8 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill cyan">TOOLCHAIN • THE LAPIS CLI</span>
-            <h2 class="slide-title">The Lapis CLI: Project Lifecycle &amp; Bootstrapping</h2>
-            <p class="slide-subtitle">A Single Unified Developer Tool for Scaffolding, Building, and Testing</p>
+            <h2 class="slide-title">CLI: Project Lifecycle</h2>
+            <p class="slide-subtitle">Scaffolding, Fast Iteration &amp; Native Debugging</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
@@ -5202,7 +5202,7 @@ $ lapis test --tui</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 54: Spaces 2000 (Addon Management: GDExtension Isolation & Shard Negotiation)
+           SLIDE 54: Spaces 2000 (Addon Management & Isolation)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 2000"
@@ -5216,8 +5216,8 @@ $ lapis test --tui</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill purple">ECOSYSTEM • ADDON LIFECYCLE</span>
-            <h2 class="slide-title">Addon Management: GDExtension Isolation &amp; Shard Negotiation</h2>
-            <p class="slide-subtitle">Solving DLL Hell, ClassDB Collisions &amp; Precompiled Binary Dependency Staging</p>
+            <h2 class="slide-title">Addon Management &amp; Isolation</h2>
+            <p class="slide-subtitle">Precompiled GDExtensions, DLL Staging &amp; Shard Negotiation</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
@@ -5252,14 +5252,13 @@ $ lapis test --tui</code></pre>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="card purple col">
             <div class="card-title purple">
-              <span>Why Godot Addons Require Deep Management</span>
+              <span>GDExtension Addon Lifecycle Invariants</span>
             </div>
             <ul class="card-list">
-              <li><strong>The GDExtension DLL Hazard:</strong> Standard Godot addons cannot self-resolve native C-runtime dependencies. Missing <code>gc.dll</code> or <code>crystal_bridge.dll</code> causes silent engine boot aborts.</li>
-              <li><strong>The Host <code>libgodot.dll</code> Poison Trap:</strong> An addon compiled against LibGodot must NEVER bundle its own <code>libgodot.dll</code>. If present, it creates dual ClassDB singletons and crashes Godot immediately on load.</li>
-              <li><strong>Automated Dependency Staging via <code>stage_addon_dependencies</code>:</strong> Lapis inspects manifests, stages required runtime DLLs from embedded <code>BakedFileSystem</code> assets, and purges illegal host references.</li>
-              <li><strong>Zero-Toolchain Precompiled Addons (<code>--release</code>):</strong> Designers install and execute compiled community addons instantly from GitHub/GitLab releases without requiring a Crystal compiler on their machine.</li>
-              <li><strong>Shared Plugin Negotiation (<code>AddonNegotiator</code>):</strong> If 5 different plugins all depend on the same Crystal plugin (e.g. <code>crshader</code>), Lapis resolves their semver constraints into a single canonical version in <code>shard.yml</code>, preventing symbol clashes, duplicate compilation, and fatal ClassDB collisions.</li>
+              <li><strong>Runtime DLL Staging & Poison Trap:</strong> Automatically stages required C-runtime DLLs (<code>gc.dll</code>, <code>bridge.dll</code>) and purges illegal host <code>libgodot.dll</code> to prevent fatal ClassDB crashes.</li>
+              <li><strong>Zero-Toolchain Precompiled Addons:</strong> Designers install and execute compiled binary addons via <code>--release</code> directly from GitHub/GitLab without needing a local Crystal compiler.</li>
+              <li><strong>Security Auditing & Auto-Config:</strong> Verifies ASLR/DEP binary hardening, audits symbols, and registers extensions directly in <code>project.godot</code> and <code>extension_list.cfg</code>.</li>
+              <li><strong>Shared Addon Negotiation (<code>AddonNegotiator</code>):</strong> If 5 plugins all depend on the same Crystal plugin (e.g. <code>crshader</code>), Lapis resolves a single canonical version in <code>shard.yml</code> to eliminate duplicate symbol clashes.</li>
             </ul>
           </div>
           </div>
@@ -5275,7 +5274,7 @@ $ lapis test --tui</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 55: Amigo (The Lapis CLI: Codegen, Maintenance & Packaging)
+           SLIDE 55: Amigo (CLI: Codegen & Maintenance)
            =================================================================== -->
       <section data-background-color="#0055aa"
                data-palette-name="Amigo"
@@ -5289,8 +5288,8 @@ $ lapis test --tui</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill amber">TOOLCHAIN • AUTOMATION &amp; CODEGEN</span>
-            <h2 class="slide-title">The Lapis CLI: Codegen, Maintenance &amp; Packaging</h2>
-            <p class="slide-subtitle">Automated API Generation, Addon Packaging, and Standalone Distribution</p>
+            <h2 class="slide-title">CLI: Codegen &amp; Maintenance</h2>
+            <p class="slide-subtitle">Offline Decompilation, Diagnostics &amp; Packaging</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
