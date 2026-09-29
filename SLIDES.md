@@ -103,13 +103,13 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Timeline Milestones**:
   - **STAGE 1 • 1995-2012 • The Rise of Ruby**:
     - Yukihiro Matsumoto designs Ruby for human happiness, expressive blocks, and elegant syntax.
-    - Ruby on Rails explodes powers GitHub, Shopify, Airbnb, Twitter, Kickstarter, and Basecamp.
+    - Ruby on Rails explodes: powers GitHub, Shopify, Airbnb, Twitter, Kickstarter, and Basecamp.
     - Unrestricted dynamic duck typing fuels lightning-fast web MVP startup velocity.
     - The Latent Danger: Zero static checks; typos and bad calls lurk until runtime.
   - **STAGE 2 • 2013-2017 • The Scale Wall**:
     - Codebases grew to millions of lines; refactoring large projects became terrifying.
     - Tooling lacked true jump-to-definition, type hover, and reliable symbol rename.
-    - Frequent production outages caused by silent NoMethodError undefined method for nil.
+    - Frequent production outages caused by silent NoMethodError (undefined method for nil).
     - Massive test suites with tens of thousands of tests required just to catch basic type typos.
   - **STAGE 3 • 2017-2020 • The Bolted-On Tax (Sorbet / RBS)**:
     - Stripe builds Sorbet; Ruby Core ships RBS to bolt static type checking onto YARV runtime.

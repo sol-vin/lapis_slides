@@ -13,7 +13,7 @@ cards:
   color: blue
   items:
   - Yukihiro Matsumoto designs Ruby for human happiness, expressive blocks, and elegant syntax.
-  - Ruby on Rails explodes: powers GitHub, Shopify, Airbnb, Twitter, Kickstarter, and Basecamp.
+  - "Ruby on Rails explodes: powers GitHub, Shopify, Airbnb, Twitter, Kickstarter, and Basecamp."
   - Unrestricted dynamic duck typing fuels lightning-fast web MVP startup velocity.
   - <strong>The Latent Danger:</strong> Zero static checks; typos and bad calls lurk until runtime.
 - year: "2013-2017"
@@ -23,7 +23,7 @@ cards:
   items:
   - Codebases grew to millions of lines; refactoring large projects became terrifying.
   - Tooling lacked true jump-to-definition, type hover, and reliable symbol rename.
-  - Frequent production outages caused by silent <code>NoMethodError: undefined method for nil</code>.
+  - "Frequent production outages caused by silent <code>NoMethodError</code> (undefined method for nil)."
   - Massive test suites with tens of thousands of tests required just to catch basic type typos.
 - year: "2017-2020"
   phase: "STAGE 3"
@@ -31,7 +31,7 @@ cards:
   color: amber
   items:
   - Stripe builds Sorbet; Ruby Core ships RBS to bolt static type checking onto YARV runtime.
-  - Verbose <code>sig { params(...).returns(...) }</code> clutters every single method definition.
+  - "Verbose <code>sig { params(...).returns(...) }</code> clutters every single method definition."
   - Metaprogramming breaks static analyzers; teams must maintain 10,000+ brittle RBI shims.
   - <strong>The Catch:</strong> Still interpreted on YARV! Paid the full syntax tax of types with ZERO native speed gains.
 - year: "2020+"

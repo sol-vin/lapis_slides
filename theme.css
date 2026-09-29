@@ -2101,6 +2101,23 @@ ul.card-list li strong {
   gap: 0.22rem;
 }
 
+.timeline-card .card-list li {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.timeline-card .card-list code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  background: var(--bg-color);
+  color: var(--border-active);
+  padding: 0.03rem 0.28rem;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+
 /* ==========================================================================
    Emoji Color Matrix Filter (Strict Monochrome Accent Tint)
    ========================================================================== */
