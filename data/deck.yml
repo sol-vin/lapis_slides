@@ -43,6 +43,7 @@ slides:
 - 32_package_management
 - 33_editor_integration
 - 34_debugger_radare2
+- 34b_r2_test_suite
 - 35_benchmarks
 - 36_testing_zero_leak
 - 37_tool_testing_tui

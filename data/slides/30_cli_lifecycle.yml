@@ -10,25 +10,26 @@ ratio: 3:2
 left:
   type: terminal
   title: Terminal — lapis CLI Workflow
-  code: "# Initialize a brand new Godot + Crystal game project\r\n$ lapis init my_rpg_game
-    --template=3d-action\r\n\n# Compile GDExtension bridge and game DLL\r\n$ lapis
-    build --release\r\n\n# Launch Godot editor directly with Crystal integration\r\n$
-    lapis editor\r\n\n# Execute complete headless test suite with TUI dashboard\r\n$
-    lapis test --tui"
+  code: |
+    # Initialize a new game project with embedded templates
+    $ lapis init my_game --template=3d-action
+
+    # Open Godot Editor with hot-reloading (F5 recompiles)
+    $ lapis editor
+
+    # Launch standalone game under radare2 native debugger
+    $ lapis run -d
+
+    # Run multi-tier test suite with interactive ANSI TUI
+    $ lapis test --tui
 right:
   type: card
   title: Core CLI Capabilities
   color: cyan
   items:
-  - <strong>Zero-Config Scaffolding:</strong> <code>lapis init</code> scaffolds ready-to-run
-    Godot projects with configured <code>shard.yml</code> and <code>project.godot</code>.
-  - <strong>Baked Embedded Assets:</strong> CLI contains all starter templates and
-    GDExtension manifests embedded via <code>BakedFileSystem</code>.
-  - <strong>Unified Toolchain:</strong> Replaces fractured shell scripts with a single
-    standardized executable.
-  - <strong>Cross-Platform Parity:</strong> Identical command behavior across Windows,
-    Linux, and macOS.
-notes: Developer tooling is just as important as the language itself. We built the
-  lapis CLI to serve as the unified developer tool for the entire project lifecycle.
-  With commands like lapis init, lapis build, lapis editor, and lapis test, developers
-  get a seamless, zero-config onboarding experience from day one.
+  - <strong>Zero-Config Scaffolding:</strong> <code>lapis init</code> scaffolds ready-to-run Godot projects with configured <code>shard.yml</code> and <code>project.godot</code>.
+  - <strong>Embedded Baked Assets:</strong> CLI embeds starter templates, manifests, and bridge sources via <code>BakedFileSystem</code> for offline portability.
+  - <strong>Native Debug Launchers:</strong> <code>lapis editor -d</code> and <code>lapis run -d</code> launch instances directly under radare2.
+  - <strong>Unified Toolchain:</strong> Replaces fractured Makefiles and shell scripts with a single standardized executable across Windows, Linux, and macOS.
+notes: |
+  Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one.

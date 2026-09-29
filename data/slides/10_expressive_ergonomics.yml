@@ -9,36 +9,31 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: code
-  title: game_algorithms.cr — Higher-Order Primitives
+  title: gameplay_primitives.cr — Expressive Systems Syntax
   tag: Crystal
   lang: crystal
-  code: "# 1. Clean collection filtering and inlined closures\r\nenemies.select(&.alive?).each
-    do |enemy|\r\n  enemy.update_ai(delta)\r\nend\r\n\n# 2. In-place sorting with
-    zero heap allocations\r\nloot_items.sort_by! do |item|\r\n  diff = item.global_position
-    - hero.global_position\r\n  diff.length_squared\r\nend\r\n\n# 3. Pattern matching
-    on combat events\r\ncase event\r\nwhen AttackEvent\r\n  mult = event.critical?
-    ? 2.0 : 1.0\r\n  hero.take_damage(event.base_damage * mult)\r\nwhen BuffEvent\r\n
-    \ hero.apply_status(event.buff_type, duration: event.duration)\r\nwhen DeathEvent\r\n
-    \ trigger_game_over_sequence\r\nend"
+  code: |
+    # 1. Clean vector math & operator overloading (SIMD-accelerated)
+    velocity = direction.normalized * move_speed + gravity * delta
+    new_position = global_position + velocity
+
+    # 2. Strict numeric precision literals (zero ambiguous conversions)
+    base_friction = 0.85_f32     # Explicit 32-bit float
+    max_particles = 10_000_u32   # Explicit unsigned 32-bit int
+
+    # 3. Tuple destructuring with zero heap allocation
+    name, level, score = {"Shadow Knight", 85, 142_500_u64}
+
+    # 4. Expressive range slicing on contiguous buffers
+    active_particles = particle_pool[0...active_count]
 right:
   type: card
-  title: Ergonomic Language Design
+  title: Expressive Language Primitives
   color: cyan
   items:
-  - <strong>Inlined Closures:</strong> Crystal's compiler inlines block iterators
-    (<code>.each</code>, <code>.select</code>, <code>.map</code>) into raw flat loops
-    with zero allocation tax.
-  - <strong>Block Shorthand <code>&.method</code>:</strong> Write <code>enemies.select(&.alive?)</code>
-    instead of verbose anonymous functions.
-  - <strong>Exhaustive Pattern Matching:</strong> <code>case / when</code> inspects
-    types and states; compiler verifies all branches are handled.
-  - <strong>Zero-Cost Value Types:</strong> Structs, enums, and tuples live on the
-    stack without heap allocation or GC pressure.
-  - <strong>Local Type Inference:</strong> Write <code>speed = 10.0_f32</code> without
-    typing redundant declarations everywhere.
-notes: Crystal's expressive ergonomics make writing complex game logic an effortless
-  experience. Blocks and closures like .select and .sort_by! read cleanly like high-level
-  scripting languages, but Crystal's LLVM compiler inlines them into direct, flat
-  machine loops with zero heap allocations. Pattern matching with case / when lets
-  you model game state transitions cleanly and exhaustively. You get high-level algorithmic
-  expressiveness combined with bare-metal C execution efficiency.
+  - <strong>Operator Overloading:</strong> Natural mathematical expressions (<code>velocity = dir * speed + grav * delta</code>) with direct CPU SIMD vectorization.
+  - <strong>Explicit Numeric Precision:</strong> Literals like <code>1.0_f32</code>, <code>250_u32</code>, and <code>1_000_000_u64</code> eliminate ambiguous runtime type coercion bugs.
+  - <strong>Zero-Cost Tuples:</strong> Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.
+  - <strong>Clean Range Slicing:</strong> Expressive <code>[0...count]</code> slicing on contiguous arrays without pointer arithmetic errors.
+notes: |
+  Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed.

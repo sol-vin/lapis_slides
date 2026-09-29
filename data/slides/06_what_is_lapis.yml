@@ -44,5 +44,5 @@ columns:
 notes: So what exactly is Lapis? Lapis is not just a language binding; it is a complete,
   production-grade developer toolchain for Godot Engine 4.8+. It combines full GDExtension
   API coverage, an expressive declarative node DSL, first-class editor integration
-  with built-in LLDB debugging, and a unified CLI for testing, packaging, and profiling.
+  with built-in radare2 (r2) debugging, and a unified CLI for testing, packaging, and profiling.
   It brings the joy of Crystal directly to Godot game developers.

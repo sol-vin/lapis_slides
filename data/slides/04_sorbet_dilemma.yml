@@ -3,8 +3,8 @@ id: 04_sorbet_dilemma
 title: 'The Rise & Fall of Dynamic Ruby: Why Crystal Came About'
 subtitle: From Developer Joy to Enterprise Scale Walls, Bolted-On Type Tax, and the Native Solution
 badge: ARCHITECTURAL EVOLUTION • TIMELINE
-badge_color: purple
-palette: super_es
+badge_color: cyan
+palette: spaces_vista
 layout: timeline-layout
 cards:
 - year: "1995-2012"

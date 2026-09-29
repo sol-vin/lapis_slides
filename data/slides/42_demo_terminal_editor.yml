@@ -26,7 +26,7 @@ right:
     slider.
   - '<strong>Console Output:</strong> <code>Player initialized: Player3D</code> printed
     from Crystal.'
-  - <strong>Debugger Dock:</strong> LLDB session ready and listening for breakpoints.
+  - <strong>Debugger Dock:</strong> radare2 (r2) decompiler and breakpoint session ready.
 notes: On the left side of the screen is our terminal running the Lapis CLI; on the
   right is the Godot Editor. As we modify Crystal code in the editor or IDE, Lapis
   rebuilds the shadow DLL in milliseconds, Godot reloads it seamlessly, and the updated

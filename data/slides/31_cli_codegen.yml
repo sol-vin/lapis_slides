@@ -9,28 +9,27 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: terminal
-  title: Terminal — Advanced CLI Commands
-  code: "# Dump Godot extension API and regenerate typed bindings\r\n$ lapis api generate
-    --engine=bin/godot.exe\r\n\n# Package official redistributable GDExtension addon
-    archive\r\n$ lapis package addon --output=bin/crystal_addon.zip\r\n\n# Package
-    standalone production executable game distribution\r\n$ lapis package game --platform=windows-x64
-    --release\r\n\n# Scaffold a new redistributable addon\r\n$ lapis scaffold addon
-    dialogue_system"
+  title: Terminal — Advanced CLI Tooling
+  code: |
+    # Decompile Crystal method to pseudo-C & assembly via r2
+    $ lapis decompile bin/game.dll "Player#_process" --side-by-side
+
+    # Audit GDExtension ABI exports & memory boundary health
+    $ lapis decompile bin/crystal_bridge.dll --verify
+
+    # Verify developer environment: Crystal, radare2, Godot, Git
+    $ lapis doctor --verbose
+
+    # Package turnkey standalone game or redistributable addon
+    $ lapis package game --release
 right:
   type: card
   title: Automation & Maintenance
   color: amber
   items:
-  - <strong>API Generator:</strong> <code>lapis api generate</code> parses <code>extension_api.json</code>
-    and synthesizes 800+ typed Crystal classes.
-  - <strong>Packaging Pipelines:</strong> Automated bundling of dependencies, DLLs,
-    and stripped release binaries.
-  - '<strong>Diagnostic Doctor:</strong> <code>lapis doctor</code> checks environment
-    prerequisites: Crystal, LLDB, Godot, and Git.'
-  - <strong>Multi-Addon Scaffolding:</strong> Easily scaffold isolated plugins that
-    can be shared across the community.
-notes: Beyond daily development, the Lapis CLI automates maintenance tasks. lapis
-  api generate dumps Godot's GDExtension API JSON and regenerates all typed bindings
-  in seconds. lapis package bundles complete standalone games or redistributable zip
-  archives, and lapis doctor verifies that your compiler and debugger prerequisites
-  are properly configured.
+  - <strong>CLI Decompiler:</strong> <code>lapis decompile</code> decompiles methods to pseudo-C (<code>pdc</code>) and side-by-side assembly (<code>pdca</code>) with zero external servers.
+  - <strong>Diagnostic Doctor:</strong> <code>lapis doctor</code> checks environment prerequisites: Crystal, radare2 (r2), Godot, and Git.
+  - <strong>API Generator:</strong> <code>lapis api generate</code> parses <code>extension_api.json</code> and synthesizes 800+ typed Crystal classes in seconds.
+  - <strong>Packaging Pipelines:</strong> <code>lapis package</code> automates bundling of runtime DLLs, manifests, and stripped release binaries.
+notes: |
+  Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons.
