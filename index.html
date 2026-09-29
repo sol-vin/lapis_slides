@@ -4721,13 +4721,16 @@ end</code></pre>
             <p class="slide-subtitle">A 5-Layer Resilient Stack Connecting Boehm GC to Godot&#39;s ObjectDB &amp; C-API</p>
           </div>
         </div>
-        <div class="slide-body" style="gap: 0.80rem; align-items: stretch; max-height: 485px; overflow: hidden;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.08rem; justify-content: space-between;">
+        <div class="slide-body arch-layout-body">
+          <div class="arch-main-col">
             <div class="arch-layer-card l5 layer5">
               <div class="arch-layer-header">
-                <span class="arch-layer-num l5 layer5">LAYER 5 <span class="emoji-tint">★</span></span>
+                <span class="arch-layer-num l5 layer5">
+                  <span class="arch-num-text">LAYER 5</span>
+                  <span class="arch-shape-icon" aria-hidden="true">★</span>
+                </span>
                 <span class="arch-layer-title">Gameplay Application Tier</span>
-                <div class="arch-layer-pills" style="margin-left: auto;">
+                <div class="arch-layer-pills">
                   <span class="arch-pill l5 layer5">node DSL</span>
                   <span class="arch-pill l5 layer5">@[Export]</span>
                   <span class="arch-pill l5 layer5">signal</span>
@@ -4736,12 +4739,23 @@ end</code></pre>
               </div>
               <div class="arch-layer-desc">Declarative gameplay logic with Ruby-like ergonomics, blocks, and static nil safety.</div>
             </div>
-            <div class="arch-layer-flow">&#9650; DISPATCH: Typed Calls, Signals &nbsp;|&nbsp; &#9660; TICKS: Engine Frames, Physics Steps</div>
+            <div class="arch-connector">
+              <div class="arch-connector-line"></div>
+              <div class="arch-connector-badge">
+                <span class="arch-flow-part arch-flow-up">&#9650; DISPATCH: Typed Calls, Signals</span>
+                <span class="arch-flow-dot">&bull;</span>
+                <span class="arch-flow-part arch-flow-down">&#9660; TICKS: Engine Frames, Physics Steps</span>
+              </div>
+              <div class="arch-connector-line"></div>
+            </div>
             <div class="arch-layer-card l4 layer4">
               <div class="arch-layer-header">
-                <span class="arch-layer-num l4 layer4">LAYER 4 <span class="emoji-tint">■</span></span>
+                <span class="arch-layer-num l4 layer4">
+                  <span class="arch-num-text">LAYER 4</span>
+                  <span class="arch-shape-icon" aria-hidden="true">■</span>
+                </span>
                 <span class="arch-layer-title">Lapis Engine Extensions</span>
-                <div class="arch-layer-pills" style="margin-left: auto;">
+                <div class="arch-layer-pills">
                   <span class="arch-pill l4 layer4">#check_alive!</span>
                   <span class="arch-pill l4 layer4">Actor Channel(T)</span>
                   <span class="arch-pill l4 layer4">Lapis::Test</span>
@@ -4749,12 +4763,23 @@ end</code></pre>
               </div>
               <div class="arch-layer-desc">Intercepts calls via <code>#check_alive!</code> to prevent dead-pointer segfaults; provides lock-free Actor channels.</div>
             </div>
-            <div class="arch-layer-flow">&#9650; TYPE MARSHALING: Structs, Transforms &nbsp;|&nbsp; &#9660; LIFECYCLE: Monotonic 64-Bit IDs</div>
+            <div class="arch-connector">
+              <div class="arch-connector-line"></div>
+              <div class="arch-connector-badge">
+                <span class="arch-flow-part arch-flow-up">&#9650; TYPE MARSHALING: Structs, Transforms</span>
+                <span class="arch-flow-dot">&bull;</span>
+                <span class="arch-flow-part arch-flow-down">&#9660; LIFECYCLE: Monotonic 64-Bit IDs</span>
+              </div>
+              <div class="arch-connector-line"></div>
+            </div>
             <div class="arch-layer-card l3 layer3">
               <div class="arch-layer-header">
-                <span class="arch-layer-num l3 layer3">LAYER 3 <span class="emoji-tint">▲</span></span>
+                <span class="arch-layer-num l3 layer3">
+                  <span class="arch-num-text">LAYER 3</span>
+                  <span class="arch-shape-icon" aria-hidden="true">▲</span>
+                </span>
                 <span class="arch-layer-title">LibGodot Typed Bindings</span>
-                <div class="arch-layer-pills" style="margin-left: auto;">
+                <div class="arch-layer-pills">
                   <span class="arch-pill l3 layer3">800+ Classes</span>
                   <span class="arch-pill l3 layer3">Variant</span>
                   <span class="arch-pill l3 layer3">Vector2/3/4</span>
@@ -4763,25 +4788,47 @@ end</code></pre>
               </div>
               <div class="arch-layer-desc">800+ strongly-typed Crystal classes mirroring Godot's ClassDB with zero-allocation math and Variant conversions.</div>
             </div>
-            <div class="arch-layer-flow">&#9650; C-API DISPATCH: Function Pointers &nbsp;|&nbsp; &#9660; RUNTIME BOOT: GC Heap Init &amp; Callbacks</div>
+            <div class="arch-connector">
+              <div class="arch-connector-line"></div>
+              <div class="arch-connector-badge">
+                <span class="arch-flow-part arch-flow-up">&#9650; C-API DISPATCH: Function Pointers</span>
+                <span class="arch-flow-dot">&bull;</span>
+                <span class="arch-flow-part arch-flow-down">&#9660; RUNTIME BOOT: GC Heap Init &amp; Callbacks</span>
+              </div>
+              <div class="arch-connector-line"></div>
+            </div>
             <div class="arch-layer-card l2 layer2">
               <div class="arch-layer-header">
-                <span class="arch-layer-num l2 layer2">LAYER 2 <span class="emoji-tint">●</span></span>
+                <span class="arch-layer-num l2 layer2">
+                  <span class="arch-num-text">LAYER 2</span>
+                  <span class="arch-shape-icon" aria-hidden="true">●</span>
+                </span>
                 <span class="arch-layer-title">C++ GDExtension Loader Bridge</span>
-                <div class="arch-layer-pills" style="margin-left: auto;">
+                <div class="arch-layer-pills">
                   <span class="arch-pill l2 layer2">GC_init()</span>
                   <span class="arch-pill l2 layer2">Shadow DLLs</span>
                   <span class="arch-pill l2 layer2">crystal_bridge.dll</span>
                 </div>
               </div>
-              <div class="arch-layer-desc">Bootstraps Boehm GC (<code>GC_init()</code>), unlocks Windows DLLs via timestamped shadow loading, hooks GDExtension.</div>
+              <div class="arch-layer-desc">Bootstraps Boehm GC via <code>GC_init()</code>, unlocks Windows DLLs via timestamped shadow loading, hooks GDExtension.</div>
             </div>
-            <div class="arch-layer-flow">&#9650; SERVERS: Frame Rendering, Physics &nbsp;|&nbsp; &#9660; MAIN LOOP: SceneTree Loop, ObjectDB Registry</div>
+            <div class="arch-connector">
+              <div class="arch-connector-line"></div>
+              <div class="arch-connector-badge">
+                <span class="arch-flow-part arch-flow-up">&#9650; SERVERS: Frame Rendering, Physics</span>
+                <span class="arch-flow-dot">&bull;</span>
+                <span class="arch-flow-part arch-flow-down">&#9660; MAIN LOOP: SceneTree Loop, ObjectDB Registry</span>
+              </div>
+              <div class="arch-connector-line"></div>
+            </div>
             <div class="arch-layer-card l1 layer1">
               <div class="arch-layer-header">
-                <span class="arch-layer-num l1 layer1">LAYER 1 <span class="emoji-tint">✖</span></span>
+                <span class="arch-layer-num l1 layer1">
+                  <span class="arch-num-text">LAYER 1</span>
+                  <span class="arch-shape-icon" aria-hidden="true">✖</span>
+                </span>
                 <span class="arch-layer-title">Godot Engine Core (4.8+)</span>
-                <div class="arch-layer-pills" style="margin-left: auto;">
+                <div class="arch-layer-pills">
                   <span class="arch-pill l1 layer1">ObjectDB</span>
                   <span class="arch-pill l1 layer1">ClassDB</span>
                   <span class="arch-pill l1 layer1">MessageQueue</span>
@@ -4791,19 +4838,25 @@ end</code></pre>
               <div class="arch-layer-desc">Native C++ host engine managing ObjectDB (64-bit instance IDs), SceneTree, MessageQueue, and rendering pipelines.</div>
             </div>
           </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.35rem; justify-content: flex-start;">
-            <div class="arch-side-card purple">
-              <div class="card-title purple">The Lifeline: Dead-Pointer Protection</div>
-              <ul class="card-list">
+          <div class="arch-side-col">
+            <div class="arch-side-card cyan">
+              <div class="arch-side-card-header">
+                <span class="arch-side-badge cyan">MEMORY SAFETY</span>
+                <h3 class="arch-side-card-title cyan">The Lifeline: Dead-Pointer Protection</h3>
+              </div>
+              <ul class="arch-card-list">
                 <li><strong>The Segfault Hazard:</strong> <code>queue_free()</code> frees native C++ memory; standard bindings dereference dead pointers, crashing with unrecoverable <code>0xC0000005</code>.</li>
                 <li><strong>Monotonic ObjectDB IDs:</strong> <code>#check_alive!</code> verifies the 64-bit ID before every dispatch, raising <code>DisposedObjectError</code> instead of segfaulting.</li>
               </ul>
             </div>
-            <div class="arch-side-card cyan">
-              <div class="card-title cyan">Windows Shadow DLL Hot-Reload</div>
-              <ul class="card-list">
+            <div class="arch-side-card blue">
+              <div class="arch-side-card-header">
+                <span class="arch-side-badge blue">DEVELOPER EXPERIENCE</span>
+                <h3 class="arch-side-card-title blue">Windows Shadow DLL Hot-Reload</h3>
+              </div>
+              <ul class="arch-card-list">
                 <li><strong>File Locking Problem:</strong> Windows locks loaded DLLs on disk, preventing compiler writes.</li>
-                <li><strong>Shadow Copy Engine:</strong> Bridge creates timestamped copies (<code>game_loaded_&lt;PID&gt;.dll</code>) leaving <code>game.dll</code> unlocked for instant F5 rebuilds.</li>
+                <li><strong>Shadow Copy Engine:</strong> Bridge creates timestamped copies named <code>game_loaded_&lt;PID&gt;.dll</code>, leaving <code>game.dll</code> unlocked for instant F5 rebuilds.</li>
               </ul>
             </div>
           </div>

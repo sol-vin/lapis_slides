@@ -1594,7 +1594,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - **LAYER 3 ▲: LibGodot Typed Bindings**:
     - 800+ strongly-typed Crystal classes mirroring Godot's ClassDB with zero-allocation math and Variant conversions.
   - **LAYER 2 ●: C++ GDExtension Loader Bridge**:
-    - Bootstraps Boehm GC (GC_init()), unlocks Windows DLLs via timestamped shadow loading, hooks GDExtension.
+    - Bootstraps Boehm GC via GC_init(), unlocks Windows DLLs via timestamped shadow loading, hooks GDExtension.
   - **LAYER 1 ✖: Godot Engine Core (4.8+)**:
     - Native C++ host engine managing ObjectDB (64-bit instance IDs), SceneTree, MessageQueue, and rendering pipelines.
 - **Architectural Invariants & Bridges**:
@@ -1603,7 +1603,7 @@ This document outlines each slide's exact theme palette, architectural category,
     - Monotonic ObjectDB IDs: #check_alive! verifies the 64-bit ID before every dispatch, raising DisposedObjectError instead of segfaulting.
   - **Windows Shadow DLL Hot-Reload**:
     - File Locking Problem: Windows locks loaded DLLs on disk, preventing compiler writes.
-    - Shadow Copy Engine: Bridge creates timestamped copies (game_loaded_<PID>.dll) leaving game.dll unlocked for instant F5 rebuilds.
+    - Shadow Copy Engine: Bridge creates timestamped copies named game_loaded_<PID>.dll, leaving game.dll unlocked for instant F5 rebuilds.
 - **Presenter Script**:
   > *"Here is the complete architectural stack of Lapis. At the bottom is Godot's native C++ engine core. Above it sits our C++ loader bridge, which initializes the Boehm GC and manages shadow DLL loading on Windows. Layer 3 provides 800+ typed Crystal classes. Layer 4 adds Lapis engine extensions like dead-pointer protection and actor channels. And Layer 5 is where you write your gameplay code using our clean node DSL."*
 

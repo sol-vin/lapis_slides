@@ -7,7 +7,8 @@ badge_color: blue
 palette: game_station_2
 layout: architecture-layout
 layers:
-- num: LAYER 5 ★
+- num: LAYER 5
+  icon: "★"
   title: Gameplay Application Tier
   pills:
   - node DSL
@@ -16,7 +17,8 @@ layers:
   - await
   desc: Declarative gameplay logic with Ruby-like ergonomics, blocks, and static nil safety.
   flow: '&#9650; DISPATCH: Typed Calls, Signals &nbsp;|&nbsp; &#9660; TICKS: Engine Frames, Physics Steps'
-- num: LAYER 4 ■
+- num: LAYER 4
+  icon: "■"
   title: Lapis Engine Extensions
   pills:
   - '#check_alive!'
@@ -24,7 +26,8 @@ layers:
   - Lapis::Test
   desc: Intercepts calls via <code>#check_alive!</code> to prevent dead-pointer segfaults; provides lock-free Actor channels.
   flow: '&#9650; TYPE MARSHALING: Structs, Transforms &nbsp;|&nbsp; &#9660; LIFECYCLE: Monotonic 64-Bit IDs'
-- num: LAYER 3 ▲
+- num: LAYER 3
+  icon: "▲"
   title: LibGodot Typed Bindings
   pills:
   - 800+ Classes
@@ -33,15 +36,17 @@ layers:
   - Transform3D
   desc: 800+ strongly-typed Crystal classes mirroring Godot's ClassDB with zero-allocation math and Variant conversions.
   flow: '&#9650; C-API DISPATCH: Function Pointers &nbsp;|&nbsp; &#9660; RUNTIME BOOT: GC Heap Init &amp; Callbacks'
-- num: LAYER 2 ●
+- num: LAYER 2
+  icon: "●"
   title: C++ GDExtension Loader Bridge
   pills:
   - GC_init()
   - Shadow DLLs
   - crystal_bridge.dll
-  desc: Bootstraps Boehm GC (<code>GC_init()</code>), unlocks Windows DLLs via timestamped shadow loading, hooks GDExtension.
+  desc: Bootstraps Boehm GC via <code>GC_init()</code>, unlocks Windows DLLs via timestamped shadow loading, hooks GDExtension.
   flow: '&#9650; SERVERS: Frame Rendering, Physics &nbsp;|&nbsp; &#9660; MAIN LOOP: SceneTree Loop, ObjectDB Registry'
-- num: LAYER 1 ✖
+- num: LAYER 1
+  icon: "✖"
   title: Godot Engine Core (4.8+)
   pills:
   - ObjectDB
@@ -51,14 +56,16 @@ layers:
   desc: Native C++ host engine managing ObjectDB (64-bit instance IDs), SceneTree, MessageQueue, and rendering pipelines.
 side_cards:
 - title: 'The Lifeline: Dead-Pointer Protection'
-  color: purple
-  items:
-  - <strong>The Segfault Hazard:</strong> <code>queue_free()</code> frees native C++ memory; standard bindings dereference dead pointers, crashing with unrecoverable <code>0xC0000005</code>.
-  - <strong>Monotonic ObjectDB IDs:</strong> <code>#check_alive!</code> verifies the 64-bit ID before every dispatch, raising <code>DisposedObjectError</code> instead of segfaulting.
-- title: Windows Shadow DLL Hot-Reload
+  badge: MEMORY SAFETY
   color: cyan
   items:
-  - <strong>File Locking Problem:</strong> Windows locks loaded DLLs on disk, preventing compiler writes.
-  - <strong>Shadow Copy Engine:</strong> Bridge creates timestamped copies (<code>game_loaded_&lt;PID&gt;.dll</code>) leaving <code>game.dll</code> unlocked for instant F5 rebuilds.
+  - "<strong>The Segfault Hazard:</strong> <code>queue_free()</code> frees native C++ memory; standard bindings dereference dead pointers, crashing with unrecoverable <code>0xC0000005</code>."
+  - "<strong>Monotonic ObjectDB IDs:</strong> <code>#check_alive!</code> verifies the 64-bit ID before every dispatch, raising <code>DisposedObjectError</code> instead of segfaulting."
+- title: Windows Shadow DLL Hot-Reload
+  badge: DEVELOPER EXPERIENCE
+  color: blue
+  items:
+  - "<strong>File Locking Problem:</strong> Windows locks loaded DLLs on disk, preventing compiler writes."
+  - "<strong>Shadow Copy Engine:</strong> Bridge creates timestamped copies named <code>game_loaded_&lt;PID&gt;.dll</code>, leaving <code>game.dll</code> unlocked for instant F5 rebuilds."
 notes: |
   Here is the complete architectural stack of Lapis. At the bottom is Godot's native C++ engine core. Above it sits our C++ loader bridge, which initializes the Boehm GC and manages shadow DLL loading on Windows. Layer 3 provides 800+ typed Crystal classes. Layer 4 adds Lapis engine extensions like dead-pointer protection and actor channels. And Layer 5 is where you write your gameplay code using our clean node DSL.
