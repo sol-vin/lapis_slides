@@ -4,7 +4,7 @@ title: 'Behind the DSL: The FSM AST Macro'
 subtitle: How Crystal's Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums & Jump Tables
 badge: AST METAPROGRAMMING • UNDER THE HOOD
 badge_color: amber
-palette: aperture
+palette: super_es
 layout: two-column-layout
 ratio: 3:2
 left:

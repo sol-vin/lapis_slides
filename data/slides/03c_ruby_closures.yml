@@ -1,0 +1,48 @@
+---
+id: 03c_ruby_closures
+title: 'The Closure Hierarchy: Blocks, Procs & Lambdas'
+subtitle: Lightweight Yielding, Reified Callable Objects, Arity Enforcement, and the & Bridge
+badge: RUBY HERITAGE • CLOSURE ARCHITECTURE
+badge_color: purple
+palette: playbox
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: closures_spectrum.rb
+  tag: Ruby
+  lang: ruby
+  code: |
+    # 1. Blocks & Yield: Lightweight, zero-allocation closures
+    def benchmark
+      t0 = Time.now
+      yield # Passes control directly to caller's ephemeral block
+      puts "Elapsed: #{Time.now - t0}s"
+    end
+    benchmark { calculate_pathfinding }
+
+    # 2. Procs vs Lambdas: Reified first-class callable objects
+    p = Proc.new { |x, y| puts "Proc args: #{x.inspect}, #{y.inspect}" }
+    p.call(42) # Permissive arity: y defaults to nil, no error!
+
+    l = ->(x, y) { puts "Lambda sum: #{x + y}" }
+    # l.call(42) # Strict arity: raises ArgumentError!
+    l.call(10, 20)
+
+    # 3. The '&' Bridge: Converting between Blocks and Procs
+    def transform_all(list, &block) # & captures block as Proc
+      list.map(&block)              # & unpacks Proc back to block
+    end
+    double = ->(n) { n * 2 }
+    puts transform_all([1, 2, 3], &double) # => [2, 4, 6]
+right:
+  type: card
+  title: 'Closures & First-Class Function Mechanics'
+  color: purple
+  items:
+    - '<strong>Blocks & Yield (Ephemeral):</strong> Blocks (<code>do..end</code> or <code>{..}</code>) are passed implicitly to methods and invoked with <code>yield</code>, avoiding heap object allocation overhead.'
+    - '<strong>Procs (Permissive Objects):</strong> Created via <code>Proc.new</code>. Treats arguments permissively (missing become <code>nil</code>) and a <code>return</code> exits the enclosing method scope.'
+    - '<strong>Lambdas (Strict Anonymous Methods):</strong> Created via <code>-&gt;(x) { ... }</code>. Enforces exact argument counts (raises <code>ArgumentError</code>) and <code>return</code> exits only the lambda.'
+    - '<strong>The Ampersand Bridge (<code>&amp;</code>):</strong> Converts ephemeral blocks into reified Procs in method signatures (<code>&amp;blk</code>), and unpacks Procs back into blocks for method calls (<code>&amp;proc</code>).'
+notes: |
+  Closures are the beating heart of Ruby and Crystal. Ruby provides three distinct tiers of closures. At the lightest level are blocks—ephemeral code chunks passed implicitly and triggered with yield. They power iteration and resource-scoping patterns without allocating heap objects. When you need closures as first-class citizens that you can store in variables or pass around, you have Procs and Lambdas. Procs are lenient: they don't care if you pass too few or too many arguments, and returning from a Proc returns from the enclosing method. Lambdas, on the other hand, behave like true anonymous methods: they strictly enforce parameter counts and their return statements only exit the lambda itself. The ampersand operator acts as the bidirectional bridge between blocks and Procs. Crystal preserves this exact block-and-proc elegance, while adding compile-time static types and LLVM optimization.

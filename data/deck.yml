@@ -11,6 +11,9 @@ slides:
 - 01_hero
 - 02_whoami
 - 03_ruby_philosophy
+- 03b_ruby_syntax_sugar
+- 03c_ruby_closures
+- 03d_ruby_context_exec
 - 04_sorbet_dilemma
 - 05_birth_of_crystal
 - 06_what_is_lapis
