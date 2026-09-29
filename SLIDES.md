@@ -37,26 +37,27 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `ABOUT THE CREATOR`
 - **Title**: Who Am I? — sol.vin
 - **Subtitle**: Ian Rash • Systems Engineer, Security Researcher & Game Developer
-- **🛡️ Security & CVEs**:
-  - CompTIA Certified: A+ & Network+ certified.
-  - CVE-2019-11014: Author of VStarCam client remote hijacking vulnerability.
-  - CVE-2019-11878: Xiongmai size integer overflow.
-  - Reverse Engineering: Firmware extraction, exploitation toolkits (XET), and embedded protocol fuzzing.
-- **🎙️ Talks & Community**:
-  - Crystal 1.0 Conf (2021): Speaker on 'Artistic Crystal' & creative systems.
+- **Key Credentials & Stats**: 🛡️ 2 Published CVEs (VStarCam & Xiongmai Exploits) | 🎮 Steam Author (Solo Oasis: Unlimited Places) | 🏆 1st Place Winner (Trijam 363 & 1dayjam #3) | ⚡ Lapis Creator (10+ Years Crystal Ecosystem)
+- **⚡ Open Source & Lapis [TOOLCHAINS]**:
+  - Creator of Lapis: High-performance Crystal bindings & toolchain for Godot 4.8+.
+  - raylib-cr (118 ★): Idiomatic, zero-overhead Crystal bindings for the Raylib game engine.
+  - celestine (97 ★): Expressive SVG compiler, vector graphics library, and canvas DSL.
+  - libsunvox & wireland: SunVox modular synth bindings and circuit simulation.
+- **🛡️ Security & Systems Rigor [RESEARCH]**:
+  - CompTIA Certified: A+ & Network+ certified hardware and network technician.
+  - CVE-2019-11014: Author of VStarCam remote hijacking & RTSP exploitation advisory.
+  - CVE-2019-11878: Discovered Xiongmai DVR integer overflow leading to remote execution.
+  - Reverse Engineering: Firmware extraction, exploit toolkits (XET), and protocol fuzzing.
+- **🎮 Shipped Games & Jams [STEAM / ITCH]**:
+  - Solo Oasis: Unlimited Places: Atmospheric walking simulator shipped on Steam & itch.io.
+  - Trijam 363 Winner: 1st place overall with 'The Problem With Trolleys' (built in < 3 hours).
+  - 1dayjam #3 Winner: 1st place overall in 24-hour high-intensity game development sprint.
+  - Game Jam Velocity: Fast prototyping and iteration without sacrificing determinism.
+- **🎙️ Talks & Community [SPEAKER]**:
+  - Crystal 1.0 Conf (2021): Featured speaker on 'Artistic Crystal' & creative systems.
   - Raw Crystal (2020): Technical talk: 'Generative Art, SVG, & Celestine'.
-  - Crystal Code Camp (2017): Early contributor certificate.
-  - sol.vin Journal & Lab: Engineering blog documenting low-level systems & game architecture.
-- **🎮 Shipped Games & Jams**:
-  - Solo Oasis: Unlimited Places: Surreal walking simulator shipped on Steam & itch.io.
-  - Trijam 363 Winner: 1st place with 'The Problem With Trolleys' (< 3 hours).
-  - 1dayjam #3 Winner: 1st place in 24-hour game development sprint.
-  - Game Jam Velocity: Fast prototyping without sacrificing runtime determinism.
-- **⚡ Open Source & Lapis**:
-  - raylib-cr (118 ★): High-performance Crystal bindings for Raylib.
-  - celestine (97 ★): Expressive SVG compiler and generative graphics DSL.
-  - libsunvox & wireland: SunVox modular synth bindings & circuit simulation.
-  - Creator of Lapis: Bringing zero-overhead Crystal systems programming to Godot 4.8+.
+  - Crystal Code Camp (2017): Contributor certificate and language ecosystem advocate.
+  - sol.vin Journal & Lab: Engineering blog documenting low-level systems and game architecture.
 - **Presenter Script**:
   > *"A quick introduction to who I am. I'm Ian Rash, known online by my domain sol.vin. My engineering background spans systems architecture, reverse engineering, and low-level security research—having published CVE-2019-11014 and CVE-2019-11878, and holding CompTIA A+ and Network+ certifications. I've been an active speaker in the Crystal community, presenting at the Crystal 1.0 Conference in 2021 and Raw Crystal 2020. In game development, I've shipped 'Solo Oasis' on Steam, and won both Trijam 363 and 1dayjam #3 under intense sprint constraints. I've authored open source tools like raylib-cr and celestine. That blend of low-level systems rigor, rapid game jam iteration, and love for expressive language design is exactly why I built Lapis: to give Godot developers the speed and type safety of compiled systems code with the ergonomics of a joyful language."*
 

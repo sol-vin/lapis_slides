@@ -8,6 +8,7 @@ require "./matrix_layout"
 require "./timeline_layout"
 require "./media_layout"
 require "./architecture_layout"
+require "./profile_layout"
 
 module LapisSlides
   class LayoutRouter
@@ -22,6 +23,7 @@ module LapisSlides
       "timeline-layout"        => TimelineLayout.new.as(LayoutRenderer),
       "media-layout"           => MediaLayout.new.as(LayoutRenderer),
       "architecture-layout"    => ArchitectureLayout.new.as(LayoutRenderer),
+      "profile-layout"         => ProfileLayout.new.as(LayoutRenderer),
     }
 
     def self.renderer_for(layout_name : String) : LayoutRenderer

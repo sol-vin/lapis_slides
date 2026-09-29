@@ -5,44 +5,53 @@ subtitle: Ian Rash • Systems Engineer, Security Researcher & Game Developer
 badge: ABOUT THE CREATOR
 badge_color: amber
 palette: warm_paper
-layout: four-column-layout
-columns:
-  - type: card
-    title: 🛡️ Security & CVEs
-    color: blue
-    badge: RESEARCH
-    items:
-      - "<strong>CompTIA Certified:</strong> A+ &amp; Network+ certified."
-      - "<strong>CVE-2019-11014:</strong> Author of VStarCam client remote hijacking vulnerability."
-      - "<strong>CVE-2019-11878:</strong> Xiongmai size integer overflow."
-      - "<strong>Reverse Engineering:</strong> Firmware extraction, exploitation toolkits (XET), and embedded protocol fuzzing."
-  - type: card
-    title: 🎙️ Talks & Community
-    color: amber
-    badge: SPEAKER
-    items:
-      - "<strong>Crystal 1.0 Conf (2021):</strong> Speaker on 'Artistic Crystal' &amp; creative systems."
-      - "<strong>Raw Crystal (2020):</strong> Technical talk: 'Generative Art, SVG, &amp; Celestine'."
-      - "<strong>Crystal Code Camp (2017):</strong> Early contributor certificate."
-      - "<strong>sol.vin Journal &amp; Lab:</strong> Engineering blog documenting low-level systems &amp; game architecture."
-  - type: card
-    title: 🎮 Shipped Games & Jams
-    color: purple
-    badge: STEAM / ITCH
-    items:
-      - "<strong>Solo Oasis: Unlimited Places:</strong> Surreal walking simulator shipped on Steam &amp; itch.io."
-      - "<strong>Trijam 363 Winner:</strong> 1st place with 'The Problem With Trolleys' (&lt; 3 hours)."
-      - "<strong>1dayjam #3 Winner:</strong> 1st place in 24-hour game development sprint."
-      - "<strong>Game Jam Velocity:</strong> Fast prototyping without sacrificing runtime determinism."
-  - type: card
-    title: ⚡ Open Source & Lapis
+layout: profile-layout
+stats:
+  - icon: 🛡️
+    value: "2 Published CVEs"
+    label: "VStarCam & Xiongmai Exploits"
+  - icon: 🎮
+    value: "Steam Author"
+    label: "Solo Oasis: Unlimited Places"
+  - icon: 🏆
+    value: "1st Place Winner"
+    label: "Trijam 363 & 1dayjam #3"
+  - icon: ⚡
+    value: "Lapis Creator"
+    label: "10+ Years Crystal Ecosystem"
+cards:
+  - title: ⚡ Open Source & Lapis
     color: cyan
     badge: TOOLCHAINS
     items:
-      - "<strong>raylib-cr (118 ★):</strong> High-performance Crystal bindings for Raylib."
-      - "<strong>celestine (97 ★):</strong> Expressive SVG compiler and generative graphics DSL."
-      - "<strong>libsunvox &amp; wireland:</strong> SunVox modular synth bindings &amp; circuit simulation."
-      - "<strong>Creator of Lapis:</strong> Bringing zero-overhead Crystal systems programming to Godot 4.8+."
+      - "<strong>Creator of Lapis:</strong> High-performance Crystal bindings &amp; toolchain for Godot 4.8+."
+      - "<strong>raylib-cr (118 ★):</strong> Idiomatic, zero-overhead Crystal bindings for the Raylib game engine."
+      - "<strong>celestine (97 ★):</strong> Expressive SVG compiler, vector graphics library, and canvas DSL."
+      - "<strong>libsunvox &amp; wireland:</strong> SunVox modular synth bindings and circuit simulation."
+  - title: 🛡️ Security & Systems Rigor
+    color: blue
+    badge: RESEARCH
+    items:
+      - "<strong>CompTIA Certified:</strong> A+ &amp; Network+ certified hardware and network technician."
+      - "<strong>CVE-2019-11014:</strong> Author of VStarCam remote hijacking &amp; RTSP exploitation advisory."
+      - "<strong>CVE-2019-11878:</strong> Discovered Xiongmai DVR integer overflow leading to remote execution."
+      - "<strong>Reverse Engineering:</strong> Firmware extraction, exploit toolkits (XET), and protocol fuzzing."
+  - title: 🎮 Shipped Games & Jams
+    color: purple
+    badge: STEAM / ITCH
+    items:
+      - "<strong>Solo Oasis: Unlimited Places:</strong> Atmospheric walking simulator shipped on Steam &amp; itch.io."
+      - "<strong>Trijam 363 Winner:</strong> 1st place overall with 'The Problem With Trolleys' (built in &lt; 3 hours)."
+      - "<strong>1dayjam #3 Winner:</strong> 1st place overall in 24-hour high-intensity game development sprint."
+      - "<strong>Game Jam Velocity:</strong> Fast prototyping and iteration without sacrificing determinism."
+  - title: 🎙️ Talks & Community
+    color: amber
+    badge: SPEAKER
+    items:
+      - "<strong>Crystal 1.0 Conf (2021):</strong> Featured speaker on 'Artistic Crystal' &amp; creative systems."
+      - "<strong>Raw Crystal (2020):</strong> Technical talk: 'Generative Art, SVG, &amp; Celestine'."
+      - "<strong>Crystal Code Camp (2017):</strong> Contributor certificate and language ecosystem advocate."
+      - "<strong>sol.vin Journal &amp; Lab:</strong> Engineering blog documenting low-level systems and game architecture."
 notes: >
   A quick introduction to who I am. I'm Ian Rash, known online by my domain sol.vin. My engineering background spans systems architecture, reverse engineering, and low-level security research—having published CVE-2019-11014 and CVE-2019-11878, and holding CompTIA A+ and Network+ certifications.
   I've been an active speaker in the Crystal community, presenting at the Crystal 1.0 Conference in 2021 and Raw Crystal 2020. In game development, I've shipped 'Solo Oasis' on Steam, and won both Trijam 363 and 1dayjam #3 under intense sprint constraints.
