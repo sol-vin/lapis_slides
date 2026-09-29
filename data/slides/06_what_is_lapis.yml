@@ -5,44 +5,56 @@ subtitle: The High-Performance Native Gameplay Toolchain for Godot 4.8+
 badge: ENGINE ARCHITECTURE • CORE VISION
 badge_color: cyan
 palette: spaces_10
-layout: four-column-layout
-columns:
-- title: Language Bindings
-  color: cyan
-  items:
-  - <strong>Full GDExtension API:</strong> 800+ typed Crystal classes mirroring Godot's
-    ClassDB.
-  - <strong>Native LLVM Speed:</strong> Ahead-of-time compilation with zero VM interpreter
-    overhead.
-  - <strong>Static Nil Safety:</strong> Null pointer crashes eliminated at compile
-    time.
-- title: Developer Ergonomics
-  color: purple
-  items:
-  - <strong>Declarative DSL:</strong> <code>node Player < CharacterBody3D</code>.
-  - <strong>AST Macros:</strong> Automated <code>@[Export]</code>, signals, and inspector
-    metadata.
-  - <strong>Zen Clean Code:</strong> Idiomatic blocks, closures, and pattern matching.
-- title: First-Class Editor
-  color: cyan
-  items:
-  - <strong>Crystal Scripting:</strong> Attach <code>.cr</code> scripts natively in
-    Godot Editor.
-  - <strong>In-Editor r2:</strong> Gutter breakpoints, call stacks, and live radare2
-    diagnostics.
-  - <strong>Instant Hot-Reload:</strong> Shadow DLL reloading on F5 with zero editor
-    restarts.
-- title: Complete Toolchain
-  color: amber
-  items:
-  - <strong>Unified CLI:</strong> <code>lapis init</code>, <code>test</code>, <code>package</code>,
-    <code>benchmarks</code>.
-  - <strong>Zero Memory Leaks:</strong> Automated quantitative leak detection with
-    Godot Performance monitors.
-  - <strong>Dual Execution:</strong> In-editor GDExtension mode + Standalone embedded
-    LibGodot host.
-notes: So what exactly is Lapis? Lapis is not just a language binding; it is a complete,
-  production-grade developer toolchain for Godot Engine 4.8+. It combines full GDExtension
-  API coverage, an expressive declarative node DSL, first-class editor integration
-  with built-in radare2 (r2) debugging, and a unified CLI for testing, packaging, and profiling.
-  It brings the joy of Crystal directly to Godot game developers.
+layout: profile-layout
+stats:
+  - icon: ⚡
+    value: "LLVM Bare Metal"
+    label: "Up to 60x faster than GDScript"
+  - icon: 💎
+    value: "Ruby-Like Syntax"
+    label: "Zen blocks & static nil safety"
+  - icon: 🛠️
+    value: "Self-Hosted Plugin"
+    label: "Editor tools written in Crystal"
+  - icon: 📦
+    value: "Unified Toolchain"
+    label: "Build, test, package & debug"
+cards:
+  - title: ⚡ Native LLVM Engine Speed
+    color: cyan
+    badge: PERFORMANCE
+    items:
+      - "<strong>Ahead-of-Time Compiled:</strong> Zero bytecode interpreter or VM overhead."
+      - "<strong>Up to 60x Faster:</strong> Eliminates CPU bottlenecks in math, physics, and loops."
+      - "<strong>Predictable Frame Times:</strong> Low-latency Boehm GC with zero gameplay stutter."
+      - "<strong>Compile-Time Nil Safety:</strong> Null pointer crashes eliminated at build time."
+  - title: 💎 Zen Developer Ergonomics
+    color: purple
+    badge: METAPROGRAMMING
+    items:
+      - "<strong>Declarative Node DSL:</strong> <code>node Player &lt; CharacterBody3D</code>."
+      - "<strong>Automated AST Macros:</strong> Effortless <code>@[Export]</code> properties and signals."
+      - "<strong>Doc Comment Harvesting:</strong> Comments automatically populate Godot F1 Help."
+      - "<strong>Expressive Ruby-like Code:</strong> Clean blocks, closures, and pattern matching."
+  - title: 🎮 Self-Hosted Editor Integration
+    color: blue
+    badge: IN-EDITOR TOOLING
+    items:
+      - "<strong>Self-Hosted Like Crystal:</strong> Editor integration is written *in Crystal*."
+      - "<strong>Script Parity:</strong> Attach and create <code>.cr</code> scripts via Godot's UI."
+      - "<strong>Instant F5 Hot-Reload:</strong> Shadow DLL reloading with zero editor restarts."
+      - "<strong>CodeEdit Highlighting:</strong> Pure Crystal tokenizer embedded in the editor."
+  - title: 🛠️ Production Game Toolchain
+    color: amber
+    badge: WORKFLOW & CLI
+    items:
+      - "<strong>Unified Lapis CLI:</strong> <code>lapis init</code>, <code>test</code>, <code>package</code>, and <code>benchmarks</code>."
+      - "<strong>Quantitative Leak Testing:</strong> Verified zero memory leaks with Godot monitors."
+      - "<strong>radare2 Debugger:</strong> Gutter breakpoints, call stacks, and crash forensics."
+      - "<strong>Dual Execution Paradigms:</strong> In-editor GDExtension + standalone host."
+notes: |
+  What exactly is Lapis? Lapis is not merely a language binding; it is a complete, production-grade developer toolchain for Godot Engine 4.8+.
+  First, it gives you bare-metal LLVM machine speed—up to 60x faster than GDScript with zero interpreter overhead and compile-time nil safety.
+  Second, it brings Ruby's zen ergonomics to Godot through a declarative node DSL with automated exports and signal generation.
+  Third, just like the Crystal compiler is famously self-hosted in Crystal, our Godot editor integration plugin is also self-hosted in Crystal! You get native script attachment, syntax highlighting, and instant F5 shadow DLL hot reloading.
+  And fourth, Lapis provides a unified CLI for testing, zero-leak verification, packaging, and native radare2 debugging.

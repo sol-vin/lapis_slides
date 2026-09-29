@@ -1,0 +1,45 @@
+---
+id: 44_thanks_closing
+title: 'THANKS FOR WATCHING!'
+subtitle: Fast Native Machine Speed • Zen Ergonomics • Rock-Solid Stability
+badge: PROJECT WRAP-UP • THANK YOU
+badge_color: amber
+palette: m64
+layout: closing-layout
+cube_size: 420
+cards:
+  - title: 'Official Website'
+    badge: 'SOL.VIN'
+    icon: '🌐'
+    color: cyan
+    link: 'https://sol.vin'
+    desc: 'Interactive 3D showcases, engineering articles, API guides, and release notes.'
+
+  - title: 'GitHub Repository'
+    badge: 'OPEN SOURCE'
+    icon: '🐙'
+    color: amber
+    link: 'github.com/sol-vin/lapis'
+    desc: 'Star the repository, explore examples, report issues, and contribute to Lapis.'
+
+  - title: 'Steam Showcase'
+    badge: 'WISHLIST NOW'
+    icon: '🎮'
+    color: purple
+    link: 'store.steampowered.com/app/... (Solo Oasis)'
+    desc: 'Solo Oasis — an upcoming commercial title built entirely with Lapis and Godot.'
+
+  - title: 'Community & Chat'
+    badge: 'DISCORD & MATRIX'
+    icon: '💬'
+    color: green
+    link: 'discord.gg/crystal-godot'
+    desc: 'Join our welcoming community of Crystal and Godot gamedev enthusiasts.'
+
+quickstart: 'git clone https://github.com/sol-vin/lapis && cd lapis && make setup-dev && make all'
+signature: 'Engineered with 💎 by sol.vin for the Crystal & Godot Communities'
+notes: |
+  Thank you so much for your time and attention today!
+  Lapis brings together the absolute best of both worlds: the expressive joy and rapid iteration of Ruby, paired with the uncompromising bare-metal performance and type safety of compiled LLVM Crystal.
+  Please visit sol.vin for full documentation and interactive demos, star the repo on GitHub at sol-vin/lapis, wishlist Solo Oasis on Steam, and come join our developer community on Discord.
+  Let's build incredible games together.

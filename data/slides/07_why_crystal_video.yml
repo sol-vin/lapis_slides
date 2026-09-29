@@ -9,32 +9,21 @@ layout: media-layout
 media:
   type: video
   src: crystalmeme.mp4
-  title: crystalmeme.mp4 — The Community Rationale
+  title: Language Selection & Pragmatic Trade-Offs
   tag: Video (31s)
   caption:
-    speaker: 'Señor Chang:'
-    quote: '"Why Crystal? Why not Rust? Why not C++ or C#? Why not GDScript? ... BECAUSE
-      I WANT TO!"'
+    speaker: 'Language Selection Rationale:'
+    quote: '"Beyond Ideology: Choosing Between Execution Throughput, Compilation Speed, and Cognitive Ergonomics."'
 card:
-  title: 'Beyond the Meme: The Real Trade-Offs'
+  title: 'Engineering Trade-Offs: Beyond the Hype'
   color: purple
   items:
-  - <strong>Why Not Rust?</strong> Steep borrow checker friction in graph/scene tree
-    hierarchies; slow compile cycles; verbose FFI wrapper boilerplate.
-  - <strong>Why Not C++?</strong> Manual memory management, header-file sprawl, lack
-    of static nil safety, and dreaded <code>0xC0000005</code> access violation crashes.
-  - <strong>Why Not GDScript?</strong> Hits insurmountable CPU bottlenecks in math-heavy
-    loops, procedural generation, and N-body physics (Crystal is up to 60x faster).
-  - <strong>Why Not C#?</strong> Heavy .NET runtime overhead, GC pauses during gameplay
-    frames, and verbose enterprise boilerplate.
-  - <strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM compilation, type-inferred
-    static safety, Ruby-like expressive syntax, and <em>authentic developer satisfaction!</em>
-notes: 'Whenever you introduce a new language binding, the immediate question from
-  the community is: ''Why Crystal? Why not Rust? Why not C++ or C#? Why not just stick
-  with GDScript?'' This clip from Community captures the exact sentiment: sometimes
-  the answer is simply ''Because I want to!'' But beyond the humor, there is a profound
-  engineering reality. Rust''s borrow checker fights Godot''s scene tree; C++ suffers
-  from header sprawl and segmentation faults; GDScript hits severe throughput bottlenecks
-  in tight loops; and C# brings runtime overhead. Crystal provides the rare sweet
-  spot: raw LLVM machine speed paired with the expressive, human-first ergonomics
-  of Ruby.'
+  - <strong>Why Not Rust?</strong> Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.
+  - <strong>Why Not C++?</strong> Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded <code>0xC0000005</code> segfaults.
+  - <strong>Why Not GDScript?</strong> Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).
+  - <strong>Why Not C#?</strong> Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.
+  - <strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em>
+notes: |
+  When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?'
+  Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes.
+  Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby.

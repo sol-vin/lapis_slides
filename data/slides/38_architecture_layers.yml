@@ -1,71 +1,67 @@
 ---
 id: 38_architecture_layers
 title: 'Lapis Architecture: The Layered Bridge'
-subtitle: A 5-Layer Resilient Stack Connecting Boehm GC to Godot's ObjectDB & C-API
-badge: CORE ARCHITECTURE
+subtitle: Modular Architectural Technology Stack from Gameplay Code to Engine Core & OS
+badge: CORE ARCHITECTURE • MODULAR TECHNOLOGY STACK
 badge_color: blue
 palette: game_station_2
 layout: architecture-layout
-layers:
-- num: LAYER 5
-  icon: "★"
-  title: Gameplay Application Tier
-  pills:
-  - node DSL
-  - '@[Export]'
-  - signal
-  - await
-  desc: Declarative gameplay logic with Ruby-like ergonomics, blocks, and static nil safety.
-  flow: '&#9650; DISPATCH: Typed Calls, Signals &nbsp;|&nbsp; &#9660; TICKS: Engine Frames, Physics Steps'
-- num: LAYER 4
-  icon: "■"
-  title: Lapis Engine Extensions
-  pills:
-  - '#check_alive!'
-  - Actor Channel(T)
-  - Lapis::Test
-  desc: Intercepts calls via <code>#check_alive!</code> to prevent dead-pointer segfaults; provides lock-free Actor channels.
-  flow: '&#9650; TYPE MARSHALING: Structs, Transforms &nbsp;|&nbsp; &#9660; LIFECYCLE: Monotonic 64-Bit IDs'
-- num: LAYER 3
-  icon: "▲"
-  title: LibGodot Typed Bindings
-  pills:
-  - 800+ Classes
-  - Variant
-  - Vector2/3/4
-  - Transform3D
-  desc: 800+ strongly-typed Crystal classes mirroring Godot's ClassDB with zero-allocation math and Variant conversions.
-  flow: '&#9650; C-API DISPATCH: Function Pointers &nbsp;|&nbsp; &#9660; RUNTIME BOOT: GC Heap Init &amp; Callbacks'
-- num: LAYER 2
-  icon: "●"
-  title: C++ GDExtension Loader Bridge
-  pills:
-  - GC_init()
-  - Shadow DLLs
-  - crystal_bridge.dll
-  desc: Bootstraps Boehm GC via <code>GC_init()</code>, unlocks Windows DLLs via timestamped shadow loading, hooks GDExtension.
-  flow: '&#9650; SERVERS: Frame Rendering, Physics &nbsp;|&nbsp; &#9660; MAIN LOOP: SceneTree Loop, ObjectDB Registry'
-- num: LAYER 1
-  icon: "✖"
-  title: Godot Engine Core (4.8+)
-  pills:
-  - ObjectDB
-  - ClassDB
-  - MessageQueue
-  - Servers
-  desc: Native C++ host engine managing ObjectDB (64-bit instance IDs), SceneTree, MessageQueue, and rendering pipelines.
-side_cards:
-- title: 'The Lifeline: Dead-Pointer Protection'
-  badge: MEMORY SAFETY
-  color: cyan
-  items:
-  - "<strong>The Segfault Hazard:</strong> <code>queue_free()</code> frees native C++ memory; standard bindings dereference dead pointers, crashing with unrecoverable <code>0xC0000005</code>."
-  - "<strong>Monotonic ObjectDB IDs:</strong> <code>#check_alive!</code> verifies the 64-bit ID before every dispatch, raising <code>DisposedObjectError</code> instead of segfaulting."
-- title: Windows Shadow DLL Hot-Reload
-  badge: DEVELOPER EXPERIENCE
-  color: blue
-  items:
-  - "<strong>File Locking Problem:</strong> Windows locks loaded DLLs on disk, preventing compiler writes."
-  - "<strong>Shadow Copy Engine:</strong> Bridge creates timestamped copies named <code>game_loaded_&lt;PID&gt;.dll</code>, leaving <code>game.dll</code> unlocked for instant F5 rebuilds."
+tiers:
+  - id: tier_app
+    title: Tier 4 • Gameplay Application Layer
+    label: USER APPLICATIONS & GAMEPLAY SCENES
+    badge: HIGH-LEVEL SCRIPTING
+    color: cyan
+    blocks:
+      - title: "Custom Nodes"
+        desc: "<code>node Player &lt; CharacterBody3D</code>"
+      - title: "Inspector Exports"
+        desc: "<code>@[Export]</code> ranges, enums, &amp; flags"
+      - title: "Engine Signals"
+        desc: "<code>signal health_changed</code> &amp; emit"
+      - title: "In-Editor Tools"
+        desc: "<code>@[Tool]</code> live editor execution"
+      - title: "Multiplayer RPC"
+        desc: "<code>@[RPC]</code> state replication"
+  - id: tier_framework
+    title: Tier 3 • Lapis High-Level Framework
+    label: EXTENSIONS, CONCURRENCY & DEVELOPER TOOLING
+    badge: ZEN ERGONOMICS & SAFETY
+    color: purple
+    blocks:
+      - title: "Node DSL & AST Macros"
+        desc: "ClassDB dynamic registration, property synthesizers, doc harvesting"
+      - title: "Actor Concurrency"
+        desc: "Buffered <code>Channel(T)</code>, cooperative fibers, background workers"
+      - title: "Memory Safety Guard"
+        desc: "Monotonic 64-bit ObjectDB tracking, <code>#check_alive!</code>, nil safety"
+      - title: "Self-Hosted Plugin"
+        desc: "Editor integration &amp; syntax tokenizer written <em>in Crystal</em>"
+      - title: "Testing & Diagnostics"
+        desc: "<code>Lapis::Test</code> zero-leak monitors, radare2 gutter integration"
+  - id: tier_bindings
+    title: Tier 2 • Language Bindings & Extension Bridge
+    label: NATIVE C-API BINDINGS & DYNAMIC EXTENSION LOADER
+    badge: HIGH PERFORMANCE
+    color: blue
+    blocks:
+      - title: "LibGodot Typed Crystal Bindings (LLVM)"
+        desc: "800+ typed Crystal classes mirroring ClassDB • Zero-copy Vector &amp; Transform math • Variant type firewall • Boehm GC integration"
+      - title: "C++ GDExtension Loader Bridge (crystal_bridge.dll)"
+        desc: "Dynamic <code>GC_init()</code> bootstrapper • Windows timestamped shadow DLL hot-reloader • Native GDExtension C-API entry hooks"
+  - id: tier_foundation
+    title: Tier 1 • Godot Engine Core & Host Platform
+    label: ENGINE FOUNDATION & OPERATING SYSTEM TARGETS
+    badge: BARE-METAL HOST
+    color: amber
+    blocks:
+      - title: "Godot Engine Core (4.8+)"
+        desc: "SceneTree Main Loop • ObjectDB (64-bit monotonic IDs) • MessageQueue • Servers (Rendering, Physics, Audio)"
+      - title: "Execution Modes & Target Platforms"
+        desc: "Mode A: GDExtension In-Editor (<code>godot.exe</code>) • Mode B: Standalone Host (<code>game.exe</code>) • Windows, Linux, macOS, Steam Deck"
 notes: |
-  Here is the complete architectural stack of Lapis. At the bottom is Godot's native C++ engine core. Above it sits our C++ loader bridge, which initializes the Boehm GC and manages shadow DLL loading on Windows. Layer 3 provides 800+ typed Crystal classes. Layer 4 adds Lapis engine extensions like dead-pointer protection and actor channels. And Layer 5 is where you write your gameplay code using our clean node DSL.
+  Here is the complete modular architecture of Lapis, inspired by clean systems engine diagrams like Raylib's architecture chart.
+  At the top is Tier 4: your gameplay code, where you write custom nodes, exported properties, signals, and multiplayer RPCs.
+  Tier 3 provides Lapis high-level extensions: our declarative AST macros, actor concurrency via buffered channels, memory safety with dead-pointer protection, zero-leak test harnesses, and our self-hosted editor plugin written in Crystal.
+  Tier 2 connects Crystal to Godot via 800+ typed classes compiled with LLVM, alongside our C++ loader bridge that bootstraps the GC and manages shadow DLL hot reloading on Windows.
+  And at the foundation is Tier 1: Godot 4.8's native C++ engine core, running seamlessly in both in-editor Mode A and standalone Mode B across desktop and handheld platforms.

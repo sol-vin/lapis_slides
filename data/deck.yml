@@ -43,6 +43,8 @@ slides:
 - 24_concurrency_threads
 - 25_antipattern_channels
 - 26_concurrency_scenetree
+- 26b_multiplayer_rpc
+- 26c_concurrency_patterns
 
 # --- ACT 6: Frictionless Interoperability ---
 - 27_interop_gdscript_calls_crystal
@@ -67,5 +69,5 @@ slides:
 - 39_dual_modes
 - 40_packaging_dist
 - 41_live_demo_roadmap
-- 42_demo_terminal_editor
 - 43_future_roadmap
+- 44_thanks_closing

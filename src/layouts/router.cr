@@ -9,6 +9,9 @@ require "./timeline_layout"
 require "./media_layout"
 require "./architecture_layout"
 require "./profile_layout"
+require "./dual_mode_layout"
+require "./demo_roadmap_layout"
+require "./closing_layout"
 
 module LapisSlides
   class LayoutRouter
@@ -24,6 +27,9 @@ module LapisSlides
       "media-layout"           => MediaLayout.new.as(LayoutRenderer),
       "architecture-layout"    => ArchitectureLayout.new.as(LayoutRenderer),
       "profile-layout"         => ProfileLayout.new.as(LayoutRenderer),
+      "dual-mode-layout"       => DualModeLayout.new.as(LayoutRenderer),
+      "demo-roadmap-layout"    => DemoRoadmapLayout.new.as(LayoutRenderer),
+      "closing-layout"         => ClosingLayout.new.as(LayoutRenderer),
     }
 
     def self.renderer_for(layout_name : String) : LayoutRenderer

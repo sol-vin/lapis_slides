@@ -1,37 +1,78 @@
 ---
 id: 41_live_demo_roadmap
 title: 'Live DEMO: End-to-End Workflow Roadmap'
-subtitle: What We're About to Build and Demonstrate Live in Front of You
+subtitle: Step-by-Step Hands-On Demonstration of the Lapis CLI, In-Editor Tooling, Hot Reloading, and Test Automation
 badge: LIVE DEMONSTRATION • ROADMAP
 badge_color: cyan
 palette: spaces_10
-layout: timeline-layout
-cards:
-- phase: STEP 1 • TERMINAL
-  title: Scaffold Project
-  color: cyan
-  items:
-  - Run <code>lapis init live_demo</code>.
-  - Inspect generated project structure and <code>shard.yml</code>.
-- phase: STEP 2 • EDITOR
-  title: Author Player Node
-  color: purple
-  items:
-  - Attach <code>player.cr</code> in Godot.
-  - Add exported properties, signals, and movement code in Crystal.
-- phase: STEP 3 • HOT RELOAD
-  title: Instant F5 Iteration
-  color: cyan
-  items:
-  - Rebuild with F5 hot-reload.
-  - Tweak exported speeds in Inspector live.
-- phase: STEP 4 • QUALITY GATE
-  title: Run TUI Specs
-  color: amber
-  items:
-  - Run <code>lapis test --tui</code>.
-  - Verify zero memory leaks.
-notes: Now let's see it all in action. In this live demonstration, we will scaffold
-  a new game project from the terminal, author a Player node in Crystal, attach it
-  to a scene in Godot, edit exported properties in the Inspector, hit F5 for instant
-  hot-reload, and run our test suite in the TUI.
+layout: demo-roadmap-layout
+steps:
+  - phase: 'STEP 1 • 00:00'
+    title: 'Scaffold & Doctor'
+    color: cyan
+    cmd: |
+      $ lapis init live_game
+      $ cd live_game && lapis doctor
+    items:
+      - Scaffolds <code>shard.yml</code>, manifests, & scenes
+      - Verifies Crystal, Godot, & radare2 toolchain
+      - Scaffolds self-hosted Crystal editor plugin
+      - Compiles C++ GDExtension bridge DLL
+    highlight: '⚡ Turnkey Zero-Config Init'
+
+  - phase: 'STEP 2 • 02:00'
+    title: 'Author Player Node'
+    color: purple
+    code: |
+      node Player < CharacterBody3D do
+        @[Export] property speed = 8.0_f32
+        signal coin_collected(n : Int32)
+        def _physics_process(delta)
+          velocity = Vector3.new(0, 0, -speed)
+          move_and_slide
+        end
+      end
+    lang: crystal
+    items:
+      - Zen ergonomics with <code>node</code> DSL
+      - Automatic <code>ClassDB</code> registration
+      - <code>@[Export]</code> sliders in Godot Inspector
+      - Type-safe engine signals & async await
+    highlight: '💎 Pure Ruby-Like Elegance'
+
+  - phase: 'STEP 3 • 05:00'
+    title: 'F5 Shadow Hot-Reload'
+    color: green
+    cmd: |
+      $ lapis editor
+      # Press F5 in Godot:
+      # Compiles -> bin/game.dll
+      # Loads -> shadow DLL copy
+    items:
+      - Self-hosted plugin handles build hook
+      - Timestamped shadow copy avoids file locks
+      - Hot reloads code without restarting Godot
+      - Live Inspector value tweaking during play
+    highlight: '🔄 Sub-Second In-Editor Loop'
+
+  - phase: 'STEP 4 • 08:00'
+    title: 'Quality Gate & r2 Debug'
+    color: amber
+    cmd: |
+      $ lapis test --tui
+      # ✔ Zero Leaks: ΔObjects = 0
+      $ lapis debug
+      # radare2: dc, pdf, rw 0x7ffd...
+    items:
+      - Double-buffered ANSI TUI test dashboard
+      - Headless in-editor <code>@tool</code> tests
+      - Mathematical zero-leak verification
+      - Disassemble & inspect native registers
+    highlight: '🛡️ Mathematical Stability'
+summary: '🎯 <strong>Live Demo Mission:</strong> From an empty directory to a playable 3D Godot game with hot reloading, visual inspector controls, and zero-leak test suites in under 10 minutes.'
+notes: |
+  Now let's switch over to our live demonstration.
+  In Step 1, we start from a clean terminal, running lapis init to scaffold our project and lapis doctor to verify all toolchain dependencies.
+  In Step 2, we author a Player node in Crystal using our concise DSL, declaring an exported speed property, an engine signal, and 3D physics movement.
+  In Step 3, we open Godot. Our self-hosted Crystal editor plugin hooks into F5. We press F5, and thanks to Windows shadow DLL loading, the game recompiles and hot reloads in milliseconds while we tweak the speed slider in the Inspector.
+  Finally in Step 4, we run lapis test --tui to watch our automated specs and zero memory leak verification execute live, followed by launching radare2 to demonstrate native debugging and hardware watchpoints.
