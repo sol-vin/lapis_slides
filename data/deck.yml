@@ -21,9 +21,9 @@ slides:
 - 04_sorbet_dilemma
 
 # --- SECTION 3: Crystal — The Compiled Solution ---
+- 07_why_crystal_video
 - 05_birth_of_crystal
 - 05b_crystal_type_system
-- 07_why_crystal_video
 - 10_expressive_ergonomics
 - 14_antipattern_macros
 - 14b_crystal_macro_hooks

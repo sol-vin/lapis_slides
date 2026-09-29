@@ -956,7 +956,76 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 10: Spaces 98 (The Birth of Crystal)
+           SLIDE 10: Fruit OSX (Why Crystal?)
+           =================================================================== -->
+      <section data-background-color="#e8ecef"
+               data-palette-name="Fruit OSX"
+               data-palette-cube="#1d1d1f"
+               data-palette-cube-hover="#ff3b30"
+               class="solvin-slide fruit_osx"
+               style="--bg-color: #e8ecef; --bg-window: #ffffff; --text-color: #1d1d1f; --text-dim: #6e6e73; --link-color: #007aff; --border-color: #007aff; --border-active: #34c759; --accent-color: #007aff; --accent-secondary: #34c759; --accent-tertiary: #ff9500; --accent-quaternary: #ff3b30; --shadow-color: #c0c8d0; --cube: #1d1d1f; --cube-hover: #ff3b30; --emoji-filter: url(#emoji-filter-fruit_osx); ">
+        <div class="palette-corner-badge" title="Theme: Fruit OSX">
+          <span class="palette-corner-dot"></span> PALETTE: Fruit OSX
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill purple">WHY CRYSTAL • THE ULTIMATE QUESTION</span>
+            <h2 class="slide-title">Why Crystal?</h2>
+            <p class="slide-subtitle">Addressing the #1 Question: Why Not Rust, C++, C#, or GDScript?</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="code-container col-3" style="display: flex; flex-direction: column; overflow: hidden; border-color: var(--accent-color);">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">Language Selection &amp; Pragmatic Trade-Offs</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Video (31s)</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--bg-window); overflow: hidden; position: relative;">
+              <video controls preload="auto" playsinline style="width: 100%; max-height: 380px; object-fit: contain; outline: none; border: none; display: block;">
+                <source src="crystalmeme.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div style="padding: 0.55rem 0.9rem; background: var(--bg-window); border-top: 1px solid var(--border-color); font-size: 0.82rem; font-style: italic; color: var(--text-color); display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-style: normal; font-weight: 700; color: var(--accent-color);">Yukihiro Matsumoto:</span>
+              <span>Computers are not very smart. They don&#39;t understand human language, so we have to tell them what to do in a language that both humans and computers can understand.</span>
+            </div>
+          </div>
+          <div class="card purple col-2">
+            <div class="card-title purple">
+              <span>Engineering Trade-Offs: Beyond the Hype</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Why Not Rust?</strong> Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.</li>
+              <li><strong>Why Not C++?</strong> Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded <code>0xC0000005</code> segfaults.</li>
+              <li><strong>Why Not GDScript?</strong> Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).</li>
+              <li><strong>Why Not C#?</strong> Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.</li>
+              <li><strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em></li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Fruit OSX)</span>
+          <span>Slide 10 / 75</span>
+        </div>
+        <aside class="notes">
+          When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?'
+          Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes.
+          Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 11: Spaces 98 (The Birth of Crystal)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 98"
@@ -1027,7 +1096,7 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 98)</span>
-          <span>Slide 10 / 75</span>
+          <span>Slide 11 / 75</span>
         </div>
         <aside class="notes">
           In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility.
@@ -1035,7 +1104,7 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 11: Spaces XP (The Zero-Tax Type System)
+           SLIDE 12: Spaces XP (The Zero-Tax Type System)
            =================================================================== -->
       <section data-background-color="#e2ebf4"
                data-palette-name="Spaces XP"
@@ -1109,79 +1178,10 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP)</span>
-          <span>Slide 11 / 75</span>
-        </div>
-        <aside class="notes">
-          When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 12: Fruit OSX (Why Crystal?)
-           =================================================================== -->
-      <section data-background-color="#e8ecef"
-               data-palette-name="Fruit OSX"
-               data-palette-cube="#1d1d1f"
-               data-palette-cube-hover="#ff3b30"
-               class="solvin-slide fruit_osx"
-               style="--bg-color: #e8ecef; --bg-window: #ffffff; --text-color: #1d1d1f; --text-dim: #6e6e73; --link-color: #007aff; --border-color: #007aff; --border-active: #34c759; --accent-color: #007aff; --accent-secondary: #34c759; --accent-tertiary: #ff9500; --accent-quaternary: #ff3b30; --shadow-color: #c0c8d0; --cube: #1d1d1f; --cube-hover: #ff3b30; --emoji-filter: url(#emoji-filter-fruit_osx); ">
-        <div class="palette-corner-badge" title="Theme: Fruit OSX">
-          <span class="palette-corner-dot"></span> PALETTE: Fruit OSX
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill purple">WHY CRYSTAL • THE ULTIMATE QUESTION</span>
-            <h2 class="slide-title">Why Crystal?</h2>
-            <p class="slide-subtitle">Addressing the #1 Question: Why Not Rust, C++, C#, or GDScript?</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="code-container col-3" style="display: flex; flex-direction: column; overflow: hidden; border-color: var(--accent-color);">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">Language Selection &amp; Pragmatic Trade-Offs</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Video (31s)</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--bg-window); overflow: hidden; position: relative;">
-              <video controls preload="auto" playsinline style="width: 100%; max-height: 380px; object-fit: contain; outline: none; border: none; display: block;">
-                <source src="crystalmeme.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <div style="padding: 0.55rem 0.9rem; background: var(--bg-window); border-top: 1px solid var(--border-color); font-size: 0.82rem; font-style: italic; color: var(--text-color); display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-style: normal; font-weight: 700; color: var(--accent-color);">Yukihiro Matsumoto:</span>
-              <span>Computers are not very smart. They don&#39;t understand human language, so we have to tell them what to do in a language that both humans and computers can understand.</span>
-            </div>
-          </div>
-          <div class="card purple col-2">
-            <div class="card-title purple">
-              <span>Engineering Trade-Offs: Beyond the Hype</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Why Not Rust?</strong> Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.</li>
-              <li><strong>Why Not C++?</strong> Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded <code>0xC0000005</code> segfaults.</li>
-              <li><strong>Why Not GDScript?</strong> Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).</li>
-              <li><strong>Why Not C#?</strong> Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.</li>
-              <li><strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em></li>
-            </ul>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Fruit OSX)</span>
           <span>Slide 12 / 75</span>
         </div>
         <aside class="notes">
-          When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?'
-          Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes.
-          Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby.
+          When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
         </aside>
       </section>
 

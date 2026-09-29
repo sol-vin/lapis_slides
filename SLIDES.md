@@ -333,7 +333,23 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"This timeline explains the existential dilemma that led to Crystal and why Lapis exists today. In the 2000s, Ruby took the world by storm because developer happiness and expressive blocks made building software joyful. But as companies like Stripe, Shopify, and GitHub scaled into millions of lines of code, they hit a brutal wall: silent NoMethodErrors in production, terrifying refactors, and poor IDE autocomplete. To solve this, Stripe created Sorbet and Ruby introduced RBS. But bolting a type checker onto an inherently dynamic, eval-driven language creates immense friction: you're forced to wrap every single method in verbose sig blocks, battle your own metaprogramming, and babysit thousands of brittle RBI shims. And worst of all: Sorbet didn't make Ruby run any faster! You got all the syntax overhead of static types with none of the native compiler speed. This is exactly why Crystal was born: to give developers the poetic soul, ergonomic blocks, and joy of Ruby, but with a built-in static type system that eliminates signature clutter through type inference, compile-time nil safety, and native LLVM machine code performance. In Lapis, you get the expressive elegance of Ruby with native C++ execution speeds in Godot."*
 
 ---
-### Slide 10: The Birth of Crystal
+### Slide 10: Why Crystal?
+- **Sol.vin Theme Palette**: `fruit_osx` (Fruit OSX) [BG: `#e8ecef` | Window: `#ffffff` | Text: `#1d1d1f` | Accent: `#007aff`]
+- **Category Badge**: `WHY CRYSTAL • THE ULTIMATE QUESTION`
+- **Title**: Why Crystal?
+- **Subtitle**: Addressing the #1 Question: Why Not Rust, C++, C#, or GDScript?
+- **Embedded Media**: `crystalmeme.mp4` (Language Selection & Pragmatic Trade-Offs — Computers are not very smart. They don't understand human language, so we have to tell them what to do in a language that both humans and computers can understand.)
+- **Engineering Trade-Offs: Beyond the Hype**:
+  - Why Not Rust? Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.
+  - Why Not C++? Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded 0xC0000005 segfaults.
+  - Why Not GDScript? Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).
+  - Why Not C#? Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.
+  - The Crystal Sweet Spot: Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and pure developer joy!
+- **Presenter Script**:
+  > *"When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?' Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes. Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby."*
+
+---
+### Slide 11: The Birth of Crystal
 - **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `COMPILER REVOLUTION • CRYSTAL ORIGINS`
 - **Title**: The Birth of Crystal
@@ -369,7 +385,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility."*
 
 ---
-### Slide 11: The Zero-Tax Type System
+### Slide 12: The Zero-Tax Type System
 - **Sol.vin Theme Palette**: `spaces_xp` (Spaces XP) [BG: `#e2ebf4` | Window: `#ffffff` | Text: `#0f2545` | Accent: `#0055ea`]
 - **Category Badge**: `TYPE SYSTEM • COMPILE-TIME RIGOR`
 - **Title**: The Zero-Tax Type System
@@ -406,22 +422,6 @@ This document outlines each slide's exact theme palette, architectural category,
   - Native LLVM Speed: Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.
 - **Presenter Script**:
   > *"When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code."*
-
----
-### Slide 12: Why Crystal?
-- **Sol.vin Theme Palette**: `fruit_osx` (Fruit OSX) [BG: `#e8ecef` | Window: `#ffffff` | Text: `#1d1d1f` | Accent: `#007aff`]
-- **Category Badge**: `WHY CRYSTAL • THE ULTIMATE QUESTION`
-- **Title**: Why Crystal?
-- **Subtitle**: Addressing the #1 Question: Why Not Rust, C++, C#, or GDScript?
-- **Embedded Media**: `crystalmeme.mp4` (Language Selection & Pragmatic Trade-Offs — Computers are not very smart. They don't understand human language, so we have to tell them what to do in a language that both humans and computers can understand.)
-- **Engineering Trade-Offs: Beyond the Hype**:
-  - Why Not Rust? Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.
-  - Why Not C++? Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded 0xC0000005 segfaults.
-  - Why Not GDScript? Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).
-  - Why Not C#? Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.
-  - The Crystal Sweet Spot: Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and pure developer joy!
-- **Presenter Script**:
-  > *"When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?' Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes. Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby."*
 
 ---
 ### Slide 13: Expressive Ergonomics: High-Level Language Primitives
