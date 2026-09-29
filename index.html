@@ -234,7 +234,7 @@
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 1 / 77</span>
+          <span>Slide 1 / 80</span>
         </div>
         <aside class="notes">
           Welcome everyone! Today I'm thrilled to present Lapis: the high-performance Crystal language bindings and developer toolchain for Godot Engine 4.8+. In this presentation, we'll explore why Crystal is uniquely suited for game development, how Lapis eliminates the massive boilerplate associated with C++ and Rust, its first-class integration directly inside the Godot editor, and how it delivers bare-metal performance with zen metaprogramming and expressive DSL ergonomics.
@@ -345,7 +345,7 @@
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Warm Paper (Default))</span>
-          <span>Slide 2 / 77</span>
+          <span>Slide 2 / 80</span>
         </div>
         <aside class="notes">
           A quick introduction to who I am. I'm Ian Rash, known online by my domain sol.vin. My engineering background spans systems architecture, reverse engineering, and low-level security research—having published CVE-2019-11014 and CVE-2019-11878, and holding CompTIA A+ and Network+ certifications. I've been an active speaker in the Crystal community, presenting at the Crystal 1.0 Conference in 2021 and Raw Crystal 2020. In game development, I've shipped 'Solo Oasis' on Steam, and won both Trijam 363 and 1dayjam #3 under intense sprint constraints. I've authored open source tools like raylib-cr and celestine. That blend of low-level systems rigor, rapid game jam iteration, and love for expressive language design is exactly why I built Lapis: to give Godot developers the speed and type safety of compiled systems code with the ergonomics of a joyful language.
@@ -422,7 +422,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 3 / 77</span>
+          <span>Slide 3 / 80</span>
         </div>
         <aside class="notes">
           To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time rendering and physics engines.
@@ -512,7 +512,7 @@ puts v3[:x]        # Sugar for: v3.[](:x) =&gt; 15</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Monokai)</span>
-          <span>Slide 4 / 77</span>
+          <span>Slide 4 / 80</span>
         </div>
         <aside class="notes">
           One of Ruby's greatest gifts to programming ergonomics was the total elimination of syntax ceremony. In Ruby, method parentheses are optional: calling max_health looks identical to accessing a property, fulfilling Bertrand Meyer's Uniform Access Principle. Callers never need to know if a value is a cached field or a dynamic calculation. Combined with hash-argument sugar, method calls read like natural English sentences. Furthermore, Ruby treated operators not as hardcoded compiler keywords, but as regular method dispatches. Defining def +(other) or def [](axis) allows custom vector math, coordinate systems, and custom collections to feel like built-in language primitives. Crystal completely inherits this philosophy, making 3D math and scene manipulation feel completely natural in Godot.
@@ -594,7 +594,7 @@ puts transform_all([1, 2, 3], &amp;double) # =&gt; [2, 4, 6]</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Playbox)</span>
-          <span>Slide 5 / 77</span>
+          <span>Slide 5 / 80</span>
         </div>
         <aside class="notes">
           Closures are the beating heart of Ruby and Crystal. Ruby provides three distinct tiers of closures. At the lightest level are blocks—ephemeral code chunks passed implicitly and triggered with yield. They power iteration and resource-scoping patterns without allocating heap objects. When you need closures as first-class citizens that you can store in variables or pass around, you have Procs and Lambdas. Procs are lenient: they don't care if you pass too few or too many arguments, and returning from a Proc returns from the enclosing method. Lambdas, on the other hand, behave like true anonymous methods: they strictly enforce parameter counts and their return statements only exit the lambda itself. The ampersand operator acts as the bidirectional bridge between blocks and Procs. Crystal preserves this exact block-and-proc elegance, while adding compile-time static types and LLVM optimization.
@@ -675,7 +675,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 6 / 77</span>
+          <span>Slide 6 / 80</span>
         </div>
         <aside class="notes">
           Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This single feature became the secret weapon behind RSpec's describe/it syntax, Rails routes, and FactoryBot. In Crystal, Lapis achieves this same fluent context-shifting at compile time with 'with self yield' and macro DSLs—yielding all the ergonomic beauty of Ruby with zero runtime reflection overhead.
@@ -759,7 +759,7 @@ puts &quot;Forest Temple (Zone 1)&quot;.to_slug # =&gt; &quot;forest_temple__zon
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Creation)</span>
-          <span>Slide 7 / 77</span>
+          <span>Slide 7 / 80</span>
         </div>
         <aside class="notes">
           One of Ruby's most famous and audacious capabilities is Open Classes—the ability to re-open any existing class at runtime, including core library types like Numeric, String, or Array, and inject new methods directly into them. This gave rise to monkey patching, which powered libraries like Rails ActiveSupport where you could write 5.days.ago or 2.gigabytes. While this creates unparalleled domain expressiveness, in massive codebases monkey patching is a notorious double-edged sword: if two third-party gems patch the same method in slightly different ways, subtle bugs arise depending purely on which file was loaded first. Ruby later introduced Refinements to localize these mutations lexically. Crystal preserves this open-class capability for developer convenience, but validates method signatures statically at compile time.
@@ -844,7 +844,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Candy)</span>
-          <span>Slide 8 / 77</span>
+          <span>Slide 8 / 80</span>
         </div>
         <aside class="notes">
           Ruby's dynamic reflection model gave developers magical tools like method_missing and send. With method_missing, objects can intercept calls that don't exist at compile time—enabling ActiveRecord's famous dynamic finders like find_by_name or automatic network proxying. With send, any method can be dispatched dynamically using a runtime symbol or string. And mixin modules allowed developers to compose functionality horizontally via include, extend, and prepend without the brittle complexity of multiple inheritance. But this dynamic flexibility came at a steep cost: every method call in Ruby had to traverse ancestor lookup trees and check method caches at runtime, making it virtually impossible to achieve the sub-millisecond execution speeds needed for 60 FPS physics engines. Crystal observed these patterns and realized they could be achieved at compile-time using AST macros.
@@ -946,7 +946,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 9 / 77</span>
+          <span>Slide 9 / 80</span>
         </div>
         <aside class="notes">
           This timeline explains the existential dilemma that led to Crystal and why Lapis exists today. In the 2000s, Ruby took the world by storm because developer happiness and expressive blocks made building software joyful. But as companies like Stripe, Shopify, and GitHub scaled into millions of lines of code, they hit a brutal wall: silent NoMethodErrors in production, terrifying refactors, and poor IDE autocomplete.
@@ -1015,7 +1015,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Fruit OSX)</span>
-          <span>Slide 10 / 77</span>
+          <span>Slide 10 / 80</span>
         </div>
         <aside class="notes">
           When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?'
@@ -1096,7 +1096,7 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 98)</span>
-          <span>Slide 11 / 77</span>
+          <span>Slide 11 / 80</span>
         </div>
         <aside class="notes">
           In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility.
@@ -1178,7 +1178,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP)</span>
-          <span>Slide 12 / 77</span>
+          <span>Slide 12 / 80</span>
         </div>
         <aside class="notes">
           When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
@@ -1251,7 +1251,7 @@ active_particles = particle_pool[0...active_count]</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Playbox)</span>
-          <span>Slide 13 / 77</span>
+          <span>Slide 13 / 80</span>
         </div>
         <aside class="notes">
           Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed.
@@ -1259,16 +1259,16 @@ active_particles = particle_pool[0...active_count]</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 14: Warm Paper (Default) (Ruby Ergonomics at Compile Time)
+           SLIDE 14: DigitalGuy (Ruby Ergonomics at Compile Time)
            =================================================================== -->
-      <section data-background-color="#faf6ee"
-               data-palette-name="Warm Paper (Default)"
-               data-palette-cube="#1c1c1e"
-               data-palette-cube-hover="#303030"
-               class="solvin-slide warm_paper"
-               style="--bg-color: #faf6ee; --bg-window: #faf6ee; --text-color: #1c1c1e; --text-dim: #1c1c1e; --link-color: #303030; --border-color: #1c1c1e; --border-active: #1c1c1e; --accent-color: #1c1c1e; --accent-secondary: #3a3a3c; --accent-tertiary: #545458; --accent-quaternary: #303030; --shadow-color: #1c1c1e; --cube: #1c1c1e; --cube-hover: #303030; --emoji-filter: url(#emoji-filter-warm_paper); ">
-        <div class="palette-corner-badge" title="Theme: Warm Paper (Default)">
-          <span class="palette-corner-dot"></span> PALETTE: Warm Paper (Default)
+      <section data-background-color="#000000"
+               data-palette-name="DigitalGuy"
+               data-palette-cube="#ff0000"
+               data-palette-cube-hover="#ff5555"
+               class="solvin-slide digital_guy"
+               style="--bg-color: #000000; --bg-window: #110000; --text-color: #ff0000; --text-dim: #880000; --link-color: #ff3333; --border-color: #ff0000; --border-active: #ff5555; --accent-color: #ff0000; --accent-secondary: #ff3333; --accent-tertiary: #ff5555; --accent-quaternary: #880000; --shadow-color: #330000; --cube: #ff0000; --cube-hover: #ff5555; --emoji-filter: url(#emoji-filter-digital_guy); ">
+        <div class="palette-corner-badge" title="Theme: DigitalGuy">
+          <span class="palette-corner-dot"></span> PALETTE: DigitalGuy
         </div>
         <div class="slide-header" style="">
           <div>
@@ -1336,8 +1336,8 @@ end</code></pre>
         </div>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Warm Paper (Default))</span>
-          <span>Slide 14 / 77</span>
+          <span>sol.vin (DigitalGuy)</span>
+          <span>Slide 14 / 80</span>
         </div>
         <aside class="notes">
           Earlier we saw how Ruby's expressive syntax—bare words, open classes, blocks, and instance_exec—powers world-class DSLs like Rails and RSpec.
@@ -1348,7 +1348,263 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 15: Candy (Static Trade-Offs: No 'send' & Limits of 'exec')
+           SLIDE 15: Creation (Modules: Mixins, Traits & Namespaces)
+           =================================================================== -->
+      <section data-background-color="#141518"
+               data-palette-name="Creation"
+               data-palette-cube="#e8e8ed"
+               data-palette-cube-hover="#e6222b"
+               class="solvin-slide creation"
+               style="--bg-color: #141518; --bg-window: #1e2024; --text-color: #e8e8ed; --text-dim: #7a7e85; --link-color: #d81b24; --border-color: #c81018; --border-active: #e6222b; --accent-color: #d4af37; --accent-secondary: #d81b24; --accent-tertiary: #e6222b; --accent-quaternary: #c81018; --shadow-color: #0a0b0d; --cube: #e8e8ed; --cube-hover: #e6222b; --emoji-filter: url(#emoji-filter-creation); ">
+        <div class="palette-corner-badge" title="Theme: Creation">
+          <span class="palette-corner-dot"></span> PALETTE: Creation
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL ARCHITECTURE • COMPOSITION</span>
+            <h2 class="slide-title">Modules: Mixins, Traits &amp; Namespaces</h2>
+            <p class="slide-subtitle">Horizontal Behavior Composition via include/extend with Zero Virtual Overhead</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">gameplay_modules.cr — Horizontal Composition</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal"># 1. Composable Mixin Module with abstract contract:
+module Damageable
+  abstract def max_health : Int32
+  property health : Int32 = 100
+
+  def take_damage(amount : Int32) : Bool
+    @health = (@health - amount).clamp(0, max_health)
+    @health &gt; 0
+  end
+
+  # Reusable concrete gameplay behavior:
+  def apply_shield(amount : Int32) : Void
+    @health = (@health + amount).clamp(0, max_health)
+  end
+end
+
+# 2. Namespace &amp; Singleton utility module:
+module SpatialMath
+  extend self # Callable as SpatialMath.dist_sq or mixed in
+  def dist_sq(a : Godot::Vector2, b : Godot::Vector2) : Float32
+    (a.x - b.x) ** 2 + (a.y - b.y) ** 2
+  end
+end
+
+# 3. Horizontal composition into Godot nodes:
+class Enemy &lt; Godot::CharacterBody2D
+  include Damageable # Inlines health, take_damage &amp; apply_shield
+
+  def max_health : Int32; 150; end
+end</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>Zero-Cost Architectural Composition</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Horizontal Composition via <code>include</code>:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance hierarchies or multiple inheritance hazards.</li>
+              <li><strong>Zero Virtual Dispatch Overhead:</strong> Mixin methods resolve statically at compile time and inline directly into the receiver's machine code—no ancestor chain lookups.</li>
+              <li><strong>Abstract Method Contracts:</strong> <code>abstract def</code> in modules enforces compile-time interface conformance without runtime reflection or interface boxing.</li>
+              <li><strong>Namespace & Singleton Utilities:</strong> <code>extend self</code> enables modules to act simultaneously as standalone functional namespaces and mixable traits.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Creation)</span>
+          <span>Slide 15 / 80</span>
+        </div>
+        <aside class="notes">
+          In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy. In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains. Crystal gives us the best of both worlds: modules act as zero-cost horizontal mixins. You can define abstract contracts with abstract def and provide concrete shared methods. When included into a class, Crystal resolves all methods statically at compile time with zero virtual dispatch overhead and zero runtime method lookup. With extend self, modules seamlessly double as standalone utility namespaces.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 16: Monokai (Open Classes: Static Monkey Patching)
+           =================================================================== -->
+      <section data-background-color="#272822"
+               data-palette-name="Monokai"
+               data-palette-cube="#f8f8f2"
+               data-palette-cube-hover="#f92672"
+               class="solvin-slide monokai"
+               style="--bg-color: #272822; --bg-window: #1e1f1c; --text-color: #f8f8f2; --text-dim: #75715e; --link-color: #66d9ef; --border-color: #f92672; --border-active: #a6e22e; --accent-color: #fd971f; --accent-secondary: #a6e22e; --accent-tertiary: #66d9ef; --accent-quaternary: #f92672; --shadow-color: #141411; --cube: #f8f8f2; --cube-hover: #f92672; --emoji-filter: url(#emoji-filter-monokai); ">
+        <div class="palette-corner-badge" title="Theme: Monokai">
+          <span class="palette-corner-dot"></span> PALETTE: Monokai
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL METAPROGRAMMING • OPEN CLASSES</span>
+            <h2 class="slide-title">Open Classes: Static Monkey Patching</h2>
+            <p class="slide-subtitle">Re-opening Types &amp; Built-ins with LLVM Inlining &amp; Zero Load-Order Race Conditions</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">static_open_classes.cr — Domain Vocabulary</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal"># 1. Re-opening standard primitives with game units:
+class Int32
+  def tiles : Float32
+    self.to_f32 * 32.0_f32
+  end
+  def meters : Float32
+    self.to_f32 * 1.0_f32
+  end
+end
+
+# 2. Extending native Godot engine types directly:
+struct Godot::Vector2
+  def to_iso : Godot::Vector2
+    Godot::Vector2.new(x - y, (x + y) * 0.5_f32)
+  end
+  def tile_snap(size : Float32 = 32.0_f32) : Godot::Vector2
+    Godot::Vector2.new((x / size).round * size, (y / size).round * size)
+  end
+end
+
+# 3. Fluent gameplay domain vocabulary in action:
+jump_distance = 5.meters
+map_offset = 4.tiles
+grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>The Power of Open Classes Without the Peril</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Compile-Time Open Classes:</strong> Any class, struct, or primitive (<code>Int32</code>, <code>String</code>, <code>Vector2</code>) can be re-opened across files to add domain-specific verbs.</li>
+              <li><strong>Eliminating Ruby's Load-Order Hell:</strong> Because Crystal builds a unified whole-program AST before codegen, there are no runtime race conditions based on which <code>require</code> ran first.</li>
+              <li><strong>Zero Runtime Memory Overhead:</strong> Injected methods compile directly into native machine code and direct call sites—no dynamic method tables or cache invalidations.</li>
+              <li><strong>Extending Native Engine Types:</strong> Enrich native Godot structs and classes with project-specific mathematics without clunky wrappers or verbose helper classes.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Monokai)</span>
+          <span>Slide 16 / 80</span>
+        </div>
+        <aside class="notes">
+          One of Ruby's most powerful yet polarizing features is open classes—the ability to monkey patch any class, including built-ins like Numeric or String. In dynamic Ruby, monkey patching is dangerous: if two gems patch the same method, whichever file is required last overwrites the other, creating terrifying load-order bugs. In Crystal, open classes are fully embraced, but with static safety. Because Crystal parses the entire project into a single unified AST before type checking and compilation, method additions are resolved deterministically. You can re-open Int32 to add game unit converters like 5.meters, or re-open Godot's Vector2 to add isometric conversions or tile snapping. LLVM inlines these methods directly, giving you pure Ruby ergonomics with zero runtime performance cost.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 17: Aperture (Blocks, Procs & Lambdas: Inlined Closures)
+           =================================================================== -->
+      <section data-background-color="#1f232a"
+               data-palette-name="Aperture"
+               data-palette-cube="#ffee55"
+               data-palette-cube-hover="#ff9900"
+               class="solvin-slide aperture"
+               style="--bg-color: #1f232a; --bg-window: #262a33; --text-color: #ffee55; --text-dim: #c4a63a; --link-color: #ff9900; --border-color: #ffcc00; --border-active: #ff9100; --accent-color: #ffcc00; --accent-secondary: #ff9900; --accent-tertiary: #ffee55; --accent-quaternary: #ff6600; --shadow-color: #101216; --cube: #ffee55; --cube-hover: #ff9900; --emoji-filter: url(#emoji-filter-aperture); ">
+        <div class="palette-corner-badge" title="Theme: Aperture">
+          <span class="palette-corner-dot"></span> PALETTE: Aperture
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS</span>
+            <h2 class="slide-title">Blocks, Procs &amp; Lambdas: Inlined Closures</h2>
+            <p class="slide-subtitle">Ephemeral Inlined Blocks, Typed Reified Procs &amp; C-Function Pointer Interop</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">closures_and_procs.cr — Zero-Cost First-Class Functions</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal"># 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
+def measure(label : String)
+  t0 = Time.monotonic
+  yield # Passes control directly to block with 0 allocation
+  elapsed = (Time.monotonic - t0).total_milliseconds
+  puts &quot;#{label}: #{elapsed}ms&quot;
+end
+measure(&quot;Physics Tick&quot;) { run_simulation }
+
+# 2. First-Class Procs: Reified objects with strict types
+scale = 1.5_f32
+damage_calc = -&gt;(base : Int32) { (base * scale).to_i }
+# Statically typed as Proc(Int32, Int32) with captured &#39;scale&#39;
+
+# 3. Non-Capturing Procs = Bare C Function Pointers!
+# Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
+bridge_cb = -&gt;(target_id : UInt64, event : Int32) do
+  Godot::Bridge.dispatch_event(target_id, event)
+end
+
+# 4. Symbol-to-Proc shorthand for iterator pipelines:
+enemies.select(&amp;.alive?).map(&amp;.health)</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>The Spectrum of Zero-Cost Closures</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Ephemeral Blocks (<code>yield</code>):</strong> Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.</li>
+              <li><strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code>. Explicit parameter and return types (e.g. <code>Proc(Int32, Int32)</code>) with strict compile-time arity.</li>
+              <li><strong>Non-Capturing Procs = C Pointers:</strong> When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.</li>
+              <li><strong>Symbol-to-Proc Shorthand:</strong> <code>&amp;.alive?</code> and <code>&amp;.health</code> transform symbols into inlined block invocations with zero lambda boilerplate.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Aperture)</span>
+          <span>Slide 17 / 80</span>
+        </div>
+        <aside class="notes">
+          Closures are one of the most expressive parts of modern languages, but in interpreted engines like Ruby or Python they incur significant heap allocations and call frame overhead. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 18: Candy (Static Trade-Offs: No 'send' & Limits of 'exec')
            =================================================================== -->
       <section data-background-color="#fdf0f8"
                data-palette-name="Candy"
@@ -1425,7 +1681,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Candy)</span>
-          <span>Slide 15 / 77</span>
+          <span>Slide 18 / 80</span>
         </div>
         <aside class="notes">
           We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop.
@@ -1437,7 +1693,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 16: Aperture (Macro Hooks: Zero-Cost Reflection)
+           SLIDE 19: Aperture (Macro Hooks: Zero-Cost Reflection)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -1514,7 +1770,7 @@ end
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 16 / 77</span>
+          <span>Slide 19 / 80</span>
         </div>
         <aside class="notes">
           How does Crystal provide the rich metaprogramming of Ruby without suffering the runtime performance penalty? The secret is Macro Hooks. While C macros are dumb text replacements, and Ruby metaprogramming relies on runtime eval and reflection, Crystal's macros are AST transformations that plug into compiler lifecycle hooks. Hooks like inherited, included, and method_added execute as classes are compiled. Even more powerful is macro finished, which waits until a class has been completely declared and uses compile-time introspection—like @type.instance_vars and @type.methods—to synthesize serializers, network replication tables, or Godot ClassDB bindings. The result is pure, native LLVM machine code with zero runtime reflection overhead.
@@ -1522,7 +1778,7 @@ end
       </section>
 
       <!-- ===================================================================
-           SLIDE 17: Super ES (Where Macros Shine: Declarative State Machines)
+           SLIDE 20: Super ES (Where Macros Shine: Declarative State Machines)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -1594,7 +1850,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 17 / 77</span>
+          <span>Slide 20 / 80</span>
         </div>
         <aside class="notes">
           State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead.
@@ -1602,7 +1858,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 18: Super ES (Behind the DSL: The FSM AST Macro)
+           SLIDE 21: Super ES (Behind the DSL: The FSM AST Macro)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -1695,7 +1951,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 18 / 77</span>
+          <span>Slide 21 / 80</span>
         </div>
         <aside class="notes">
           This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice what's happening: this is not string interpolation or runtime reflection. Crystal passes the code inside the block directly to the macro as an Abstract Syntax Tree (AST). The macro loops over the expressions during compilation, extracts each `state` call, and synthesizes a genuine, strongly-typed `enum`. Then it writes the state machine class and an event dispatcher that unfolds into a flat, O(1) CPU jump table. If a developer makes a typo in a state transition, the compiler fails immediately because the enum variant doesn't exist. You get the beauty of a high-level DSL with the raw execution speed and safety of hand-written C.
@@ -1703,7 +1959,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 19: Spaces 97 (Where Macros Shine: Zero-Reflection Serialization & Save Systems)
+           SLIDE 22: Spaces 97 (Where Macros Shine: Zero-Reflection Serialization & Save Systems)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 97"
@@ -1774,7 +2030,7 @@ loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 97)</span>
-          <span>Slide 19 / 77</span>
+          <span>Slide 22 / 80</span>
         </div>
         <aside class="notes">
           Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping.
@@ -1782,7 +2038,7 @@ loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 20: Spaces 98 (Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++)
+           SLIDE 23: Spaces 98 (Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 98"
@@ -1938,7 +2194,7 @@ public:
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 98)</span>
-          <span>Slide 20 / 77</span>
+          <span>Slide 23 / 80</span>
         </div>
         <aside class="notes">
           Let's put the four major GDExtension languages side by side. Here is the exact same Player node implemented in Lapis, C#, Rust, and C++. Look at the contrast: Lapis requires just 11 lines of clean, expressive code. C# requires 16 lines with delegate declarations. Rust requires 26 lines with Base<T> wrapping and separate impl blocks. And C++ requires over 32 lines with manual _bind_methods boilerplate. Lapis delivers native machine speed without the syntactic punishment.
@@ -1946,7 +2202,7 @@ public:
       </section>
 
       <!-- ===================================================================
-           SLIDE 21: Spaces 95 (Language & GDExtension Ecosystem Feature Matrix)
+           SLIDE 24: Spaces 95 (Language & GDExtension Ecosystem Feature Matrix)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 95"
@@ -2026,7 +2282,7 @@ public:
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 95)</span>
-          <span>Slide 21 / 77</span>
+          <span>Slide 24 / 80</span>
         </div>
         <aside class="notes">
           When evaluating language bindings for Godot, developers face distinct trade-offs across execution speed, compiler friction, type safety, and ergonomics. GDScript is quick for scripting but hits performance walls; C# brings garbage collection pauses; Rust fights the scene graph; C++ is plagued by boilerplate. Lapis occupies the sweet spot: LLVM performance, static nil safety, and Ruby-like ergonomics.
@@ -2034,7 +2290,7 @@ public:
       </section>
 
       <!-- ===================================================================
-           SLIDE 22: Spaces 10 (What is Lapis?)
+           SLIDE 25: Spaces 10 (What is Lapis?)
            =================================================================== -->
       <section data-background-color="#1f1f1f"
                data-palette-name="Spaces 10"
@@ -2137,7 +2393,7 @@ public:
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 10)</span>
-          <span>Slide 22 / 77</span>
+          <span>Slide 25 / 80</span>
         </div>
         <aside class="notes">
           What exactly is Lapis? Lapis is not merely a language binding; it is a complete, production-grade developer toolchain for Godot Engine 4.8+.
@@ -2149,7 +2405,7 @@ public:
       </section>
 
       <!-- ===================================================================
-           SLIDE 23: Bluebie (The Lapis DSL: Clean, Declarative Node Authoring)
+           SLIDE 26: Bluebie (The Lapis DSL: Clean, Declarative Node Authoring)
            =================================================================== -->
       <section data-background-color="#002b55"
                data-palette-name="Bluebie"
@@ -2225,7 +2481,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Bluebie)</span>
-          <span>Slide 23 / 77</span>
+          <span>Slide 26 / 80</span>
         </div>
         <aside class="notes">
           Here is what authoring a Godot node actually looks like in Lapis. Notice how clean, concise, and declarative it is. You write node Player < CharacterBody3D, declare exported properties with ranges, define typed signals, and write your lifecycle methods. Regular comments above properties are harvested at compile time into Godot's in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or Rust.
@@ -2233,7 +2489,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 24: Monokai (Node Ergonomics: % & /)
+           SLIDE 27: Monokai (Node Ergonomics: % & /)
            =================================================================== -->
       <section data-background-color="#272822"
                data-palette-name="Monokai"
@@ -2303,7 +2559,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Monokai)</span>
-          <span>Slide 24 / 77</span>
+          <span>Slide 27 / 80</span>
         </div>
         <aside class="notes">
           One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / "CameraRig" / "Camera3D"), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety.
@@ -2311,7 +2567,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 25: Spaces 7 (Effortless Access: Nodes, Scenes & Properties)
+           SLIDE 28: Spaces 7 (Effortless Access: Nodes, Scenes & Properties)
            =================================================================== -->
       <section data-background-color="#dce8f5"
                data-palette-name="Spaces 7"
@@ -2384,7 +2640,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 7)</span>
-          <span>Slide 25 / 77</span>
+          <span>Slide 28 / 80</span>
         </div>
         <aside class="notes">
           In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. With our onready macro and get_node_as, child nodes are resolved safely when the node enters the tree during _ready, returning the concrete typed class directly without casting. With get_node_as?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.
@@ -2392,7 +2648,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 26: Spaces Vista (Signals & Events: Reactive Zen Ergonomics)
+           SLIDE 29: Spaces Vista (Signals & Events: Reactive Zen Ergonomics)
            =================================================================== -->
       <section data-background-color="#141c24"
                data-palette-name="Spaces Vista"
@@ -2464,7 +2720,7 @@ emit_health_changed(current: 75, max_health: 100)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 26 / 77</span>
+          <span>Slide 29 / 80</span>
         </div>
         <aside class="notes">
           Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. You can connect signals with idiomatic closures, eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers like on_health_changed and on_player_died_once. Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly.
@@ -2472,7 +2728,7 @@ emit_health_changed(current: 75, max_health: 100)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 27: Spaces XP Royale (Iterators: Imperative Loops vs. Functional Zen)
+           SLIDE 30: Spaces XP Royale (Iterators: Imperative Loops vs. Functional Zen)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -2553,7 +2809,7 @@ enemy_types : Hash(String, Int32) =
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 27 / 77</span>
+          <span>Slide 30 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -2561,7 +2817,7 @@ enemy_types : Hash(String, Int32) =
       </section>
 
       <!-- ===================================================================
-           SLIDE 28: Spaces XP Royale (Iterators: Imperative Loops vs. Functional Zen)
+           SLIDE 31: Spaces XP Royale (Iterators: Imperative Loops vs. Functional Zen)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -2676,7 +2932,7 @@ enemy_types : Hash(String, Int32) =
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 28 / 77</span>
+          <span>Slide 31 / 80</span>
         </div>
         <aside class="notes">
           One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators and type-safe transformations. In GDScript, transforming an array of nodes requires allocating an untyped array, writing manual for-loops, checking types with 'is Enemy' at runtime, and managing boolean flags for simple queries like 'any?'.
@@ -2685,7 +2941,7 @@ enemy_types : Hash(String, Int32) =
       </section>
 
       <!-- ===================================================================
-           SLIDE 29: Super ES (Anonymous Functions: Callable Churn vs. Inlining)
+           SLIDE 32: Super ES (Anonymous Functions: Callable Churn vs. Inlining)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -2776,7 +3032,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 29 / 77</span>
+          <span>Slide 32 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -2784,7 +3040,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 30: Super ES (Anonymous Functions: Callable Churn vs. Inlining)
+           SLIDE 33: Super ES (Anonymous Functions: Callable Churn vs. Inlining)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -2908,7 +3164,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 30 / 77</span>
+          <span>Slide 33 / 80</span>
         </div>
         <aside class="notes">
           In GDScript, lambdas and callbacks are first-class Callable objects allocated on the engine heap. Whenever you pass `func(a, b): return a.weight < b.weight` or filter an array, Godot allocates and refcounts a Callable instance, and chaining filters creates intermediate arrays. In Crystal, blocks are not heap-allocated objects: the Crystal compiler and LLVM inline block bodies directly into the caller's machine code loop. Writing `inventory.sort_by!(&.weight)` or `inventory.select { |i| i.durability > 0 }` compiles down to raw C-like tight loops with zero allocations and zero closure overhead.
@@ -2916,7 +3172,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 31: Spaces Vista (Symbols: String Churn vs. 32-Bit IDs)
+           SLIDE 34: Spaces Vista (Symbols: String Churn vs. 32-Bit IDs)
            =================================================================== -->
       <section data-background-color="#141c24"
                data-palette-name="Spaces Vista"
@@ -3015,7 +3271,7 @@ active = enemies.select(&amp;.alive?) # inlines .alive? on each item</code></pre
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 31 / 77</span>
+          <span>Slide 34 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -3023,7 +3279,7 @@ active = enemies.select(&amp;.alive?) # inlines .alive? on each item</code></pre
       </section>
 
       <!-- ===================================================================
-           SLIDE 32: Spaces Vista (Symbols: String Churn vs. 32-Bit IDs)
+           SLIDE 35: Spaces Vista (Symbols: String Churn vs. 32-Bit IDs)
            =================================================================== -->
       <section data-background-color="#141c24"
                data-palette-name="Spaces Vista"
@@ -3157,7 +3413,7 @@ active = enemies.select(&amp;.alive?) # inlines .alive? on each item</code></pre
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 32 / 77</span>
+          <span>Slide 35 / 80</span>
         </div>
         <aside class="notes">
           Symbols are one of the most beloved features inherited from Ruby and elevated to bare-metal performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two massive problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, strings involve runtime byte comparisons or global intern-table hash lookups. In Crystal, symbols like `:target_enemy` and `:patrol` are not strings at all: they are immediate 32-bit integer IDs resolved at compile time. When used in NamedTuples, accessing a misspelled key is a compile-time error. Comparing two symbols takes a single CPU clock cycle (`cmp`). And with symbol-to-proc (`&.name`), symbols make functional collection pipelines extraordinarily clean.
@@ -3165,7 +3421,7 @@ active = enemies.select(&amp;.alive?) # inlines .alive? on each item</code></pre
       </section>
 
       <!-- ===================================================================
-           SLIDE 33: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
+           SLIDE 36: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -3242,7 +3498,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 33 / 77</span>
+          <span>Slide 36 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -3250,7 +3506,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 34: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
+           SLIDE 37: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -3360,7 +3616,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 34 / 77</span>
+          <span>Slide 37 / 80</span>
         </div>
         <aside class="notes">
           In GDScript, every developer has experienced the dreaded 'Invalid call to function on base Nil' crash, or worse, a hard engine crash when dereferencing an object that was freed in C++. In Crystal, Nil is a distinct type, and types are non-nil by default. If a node lookup might return nil, its type is Weapon | Nil. The Crystal compiler will literally refuse to compile your game until you prove to the type checker that you've handled the nil case.
@@ -3368,7 +3624,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 35: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
+           SLIDE 38: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
            =================================================================== -->
       <section data-background-color="#1f1f1f"
                data-palette-name="Spaces 10"
@@ -3456,7 +3712,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 10)</span>
-          <span>Slide 35 / 77</span>
+          <span>Slide 38 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -3464,7 +3720,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 36: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
+           SLIDE 39: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
            =================================================================== -->
       <section data-background-color="#1f1f1f"
                data-palette-name="Spaces 10"
@@ -3585,7 +3841,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 10)</span>
-          <span>Slide 36 / 77</span>
+          <span>Slide 39 / 80</span>
         </div>
         <aside class="notes">
           State machines are fundamental to gameplay. In GDScript, enums are essentially integers under the hood, and the match statement does not check for exhaustiveness. If you add a new state like 'STUNNED' to your enum, your existing code will silently ignore it without warning. In Crystal, enums are strongly typed, and the compiler strictly enforces exhaustive case statements. If you forget to handle a state, the compiler immediately halts with a helpful error. Plus, tuple pattern matching allows evaluating multi-variable state transitions cleanly in a single expression.
@@ -3593,7 +3849,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 37: Spaces XP Royale (Metaprogramming: Strings vs. AST Macros)
+           SLIDE 40: Spaces XP Royale (Metaprogramming: Strings vs. AST Macros)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -3674,7 +3930,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 37 / 77</span>
+          <span>Slide 40 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -3682,7 +3938,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 38: Spaces XP Royale (Metaprogramming: Strings vs. AST Macros)
+           SLIDE 41: Spaces XP Royale (Metaprogramming: Strings vs. AST Macros)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -3796,7 +4052,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 38 / 77</span>
+          <span>Slide 41 / 80</span>
         </div>
         <aside class="notes">
           Metaprogramming in GDScript often means writing string dictionaries in _get_property_list, maintaining loose string names for signals, and relying on runtime reflection. In Lapis, we use Crystal's compile-time AST macros. When you declare an export or a signal, the macro generates concrete, strongly-typed methods: emit_player_hit, on_player_hit, and full ClassDB property registrations. Any typos or argument type mismatches are caught immediately by the compiler.
@@ -3804,7 +4060,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 39: Spaces 11 (Value Types: GC Thrashing vs. Stack Structs)
+           SLIDE 42: Spaces 11 (Value Types: GC Thrashing vs. Stack Structs)
            =================================================================== -->
       <section data-background-color="#18191c"
                data-palette-name="Spaces 11"
@@ -3884,7 +4140,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 11)</span>
-          <span>Slide 39 / 77</span>
+          <span>Slide 42 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -3892,7 +4148,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 40: Spaces 11 (Value Types: GC Thrashing vs. Stack Structs)
+           SLIDE 43: Spaces 11 (Value Types: GC Thrashing vs. Stack Structs)
            =================================================================== -->
       <section data-background-color="#18191c"
                data-palette-name="Spaces 11"
@@ -4005,7 +4261,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 11)</span>
-          <span>Slide 40 / 77</span>
+          <span>Slide 43 / 80</span>
         </div>
         <aside class="notes">
           In fast-paced games—bullet hells, ARPGs, particle systems—allocating tiny objects on the heap is a death sentence for performance. In GDScript, custom data structures must extend RefCounted or use untyped dictionaries. Both create heap pressure and GC churn. In Crystal, you can declare value structs: stack-allocated, contiguous in memory, and passed by value. You get zero heap allocations, zero GC pauses, and complete compile-time type safety.
@@ -4013,7 +4269,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 41: GameStation2 (Memory Safety: Dangling Pointers vs. Protection)
+           SLIDE 44: GameStation2 (Memory Safety: Dangling Pointers vs. Protection)
            =================================================================== -->
       <section data-background-color="#090a10"
                data-palette-name="GameStation2"
@@ -4095,7 +4351,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 41 / 77</span>
+          <span>Slide 44 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -4103,7 +4359,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 42: GameStation2 (Memory Safety: Dangling Pointers vs. Protection)
+           SLIDE 45: GameStation2 (Memory Safety: Dangling Pointers vs. Protection)
            =================================================================== -->
       <section data-background-color="#090a10"
                data-palette-name="GameStation2"
@@ -4218,7 +4474,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 42 / 77</span>
+          <span>Slide 45 / 80</span>
         </div>
         <aside class="notes">
           The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If your code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully.
@@ -4226,7 +4482,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 43: Aperture (Signals & Async: String Awaits vs. Typed Handles)
+           SLIDE 46: Aperture (Signals & Async: String Awaits vs. Typed Handles)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -4308,7 +4564,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 43 / 77</span>
+          <span>Slide 46 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -4316,7 +4572,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 44: Aperture (Signals & Async: String Awaits vs. Typed Handles)
+           SLIDE 47: Aperture (Signals & Async: String Awaits vs. Typed Handles)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -4431,7 +4687,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 44 / 77</span>
+          <span>Slide 47 / 80</span>
         </div>
         <aside class="notes">
           Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports built-in timeouts: await(boss.died, timeout_sec: 10.0). Furthermore, because Lapis fibers check instance liveness on every frame tick, if the target object is destroyed, the fiber safely aborts with DisposedObjectError rather than hanging silently.
@@ -4439,7 +4695,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 45: Pastel (Concurrency: Lightweight Fibers & Signal Awaiting)
+           SLIDE 48: Pastel (Concurrency: Lightweight Fibers & Signal Awaiting)
            =================================================================== -->
       <section data-background-color="#f7f5ff"
                data-palette-name="Pastel"
@@ -4508,7 +4764,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Pastel)</span>
-          <span>Slide 45 / 77</span>
+          <span>Slide 48 / 80</span>
         </div>
         <aside class="notes">
           Godot's scene tree is fundamentally single-threaded. Lapis provides lightweight, cooperative fibers for orchestrating asynchronous gameplay sequences—dialogue, cutscenes, scripted events—directly on the main thread. Because fibers run cooperatively, you can modify nodes, add children, and change transforms with zero mutex overhead.
@@ -4516,7 +4772,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 46: Entertainment System (Concurrency: Parallel OS Threads & Workload Offloading)
+           SLIDE 49: Entertainment System (Concurrency: Parallel OS Threads & Workload Offloading)
            =================================================================== -->
       <section data-background-color="#e8e8ec"
                data-palette-name="Entertainment System"
@@ -4582,7 +4838,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Entertainment System)</span>
-          <span>Slide 46 / 77</span>
+          <span>Slide 49 / 80</span>
         </div>
         <aside class="notes">
           When your game requires heavy procedural generation, pathfinding, or physics computation, cooperative fibers aren't enough—you need true hardware parallelism. In Lapis, you can spawn OS background threads using Thread.new. Background threads crunch data across all available CPU cores without ever dropping a frame, and send results back via call_deferred.
@@ -4590,7 +4846,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 47: Spaces 97 (Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels)
+           SLIDE 50: Spaces 97 (Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 97"
@@ -4677,7 +4933,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 97)</span>
-          <span>Slide 47 / 77</span>
+          <span>Slide 50 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -4685,7 +4941,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 48: Spaces 97 (Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels)
+           SLIDE 51: Spaces 97 (Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 97"
@@ -4805,7 +5061,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 97)</span>
-          <span>Slide 48 / 77</span>
+          <span>Slide 51 / 80</span>
         </div>
         <aside class="notes">
           In GDScript, concurrent programming is fraught with peril. Developers use Mutex objects, and if a background thread accidentally touches a node in the SceneTree, Godot's internal child arrays corrupt, causing an immediate engine crash. In Crystal, we leverage the Actor pattern using Channel(T). Background worker threads crunch heavy procedural calculations and send immutable data structures through a buffered channel. On the main thread, _process non-blockingly drains the channel using a select block and safely mounts nodes to the scene tree. Zero mutexes, zero deadlocks, zero crashes.
@@ -4813,7 +5069,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 49: Samuel (Concurrency: SceneTree Thread Safety & Auto-Deferral)
+           SLIDE 52: Samuel (Concurrency: SceneTree Thread Safety & Auto-Deferral)
            =================================================================== -->
       <section data-background-color="#16120e"
                data-palette-name="Samuel"
@@ -4879,7 +5135,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Samuel)</span>
-          <span>Slide 49 / 77</span>
+          <span>Slide 52 / 80</span>
         </div>
         <aside class="notes">
           Godot's MessageQueue is the bedrock of cross-thread safety. In Lapis, call_deferred allows any background worker thread to schedule method executions on the main thread safely. This prevents race conditions in Godot's internal node arrays and ensures that game state transitions happen deterministically at frame boundaries.
@@ -4887,7 +5143,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 50: Aperture (Thread & Scope Policies)
+           SLIDE 53: Aperture (Thread & Scope Policies)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -4961,7 +5217,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 50 / 77</span>
+          <span>Slide 53 / 80</span>
         </div>
         <aside class="notes">
           Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis provides a configurable ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled for zero-cost release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread—such as procedurally generated dungeon rooms or terrain meshes—while strictly guarding the live scene tree.
@@ -4969,7 +5225,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 51: Spaces Vista (Main-Thread Dispatch)
+           SLIDE 54: Spaces Vista (Main-Thread Dispatch)
            =================================================================== -->
       <section data-background-color="#141c24"
                data-palette-name="Spaces Vista"
@@ -5041,7 +5297,7 @@ end
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 51 / 77</span>
+          <span>Slide 54 / 80</span>
         </div>
         <aside class="notes">
           Once background workers finish crunching procedural geometry or pathfinding off-thread, how do we safely bring those nodes into the active game world? That's where Godot.on_main_thread comes in. When called from a background thread, it safely buffers the closure into a thread-safe mutex queue that gets drained deterministically at the next frame boundary by Godot's main loop. If you call it while already on the main thread, it executes immediately with zero overhead. There are no deadlocks, no manual lock management, and no fragile string-based callback names—just clean, type-safe closures executing safely on the rendering thread.
@@ -5049,7 +5305,7 @@ end
       </section>
 
       <!-- ===================================================================
-           SLIDE 52: PlayToy (Multiplayer: Authoritative RPCs & Lockstep Sync)
+           SLIDE 55: PlayToy (Multiplayer: Authoritative RPCs & Lockstep Sync)
            =================================================================== -->
       <section data-background-color="#8bac0f"
                data-palette-name="PlayToy"
@@ -5126,7 +5382,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (PlayToy)</span>
-          <span>Slide 52 / 77</span>
+          <span>Slide 55 / 80</span>
         </div>
         <aside class="notes">
           Building multiplayer games in Godot is notoriously tricky when dealing with dynamic RPC signatures and state desynchronization.
@@ -5137,7 +5393,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 53: M64 (Crystal Concurrency Patterns in Games)
+           SLIDE 56: M64 (Crystal Concurrency Patterns in Games)
            =================================================================== -->
       <section data-background-color="#232328"
                data-palette-name="M64"
@@ -5217,7 +5473,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (M64)</span>
-          <span>Slide 53 / 77</span>
+          <span>Slide 56 / 80</span>
         </div>
         <aside class="notes">
           Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees.
@@ -5228,7 +5484,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 54: Spaces 7 (Interoperability: GDScript Calling Crystal)
+           SLIDE 57: Spaces 7 (Interoperability: GDScript Calling Crystal)
            =================================================================== -->
       <section data-background-color="#dce8f5"
                data-palette-name="Spaces 7"
@@ -5307,7 +5563,7 @@ func _ready() -&gt; void:
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 7)</span>
-          <span>Slide 54 / 77</span>
+          <span>Slide 57 / 80</span>
         </div>
         <aside class="notes">
           You don't have to rewrite your entire game in Crystal to use Lapis. Lapis nodes register directly with Godot's ClassDB. That means GDScript developers on your team can instantiate Crystal nodes, call Crystal methods, inspect exported properties, and connect to Crystal signals with complete native editor autocomplete.
@@ -5315,7 +5571,7 @@ func _ready() -&gt; void:
       </section>
 
       <!-- ===================================================================
-           SLIDE 55: The Former Rain (Type Firewall: Crystal Enforces Strict Safety on GDScript)
+           SLIDE 58: The Former Rain (Type Firewall: Crystal Enforces Strict Safety on GDScript)
            =================================================================== -->
       <section data-background-color="#1b1726"
                data-palette-name="The Former Rain"
@@ -5394,7 +5650,7 @@ end
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (The Former Rain)</span>
-          <span>Slide 55 / 77</span>
+          <span>Slide 58 / 80</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -5402,7 +5658,7 @@ end
       </section>
 
       <!-- ===================================================================
-           SLIDE 56: The Former Rain (Type Firewall: Crystal Enforces Strict Safety on GDScript)
+           SLIDE 59: The Former Rain (Type Firewall: Crystal Enforces Strict Safety on GDScript)
            =================================================================== -->
       <section data-background-color="#1b1726"
                data-palette-name="The Former Rain"
@@ -5514,7 +5770,7 @@ end
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (The Former Rain)</span>
-          <span>Slide 56 / 77</span>
+          <span>Slide 59 / 80</span>
         </div>
         <aside class="notes">
           What happens when dynamic GDScript tries to pass bad data into your Crystal code? If someone calls `player.heal("some bad string")`, in naive C++ bindings that might cause memory corruption or bizarre behavior. But Lapis automatically registers exact parameter types directly into Godot's ClassDB. The GDExtension layer validates the arguments before the method is ever called, rejecting malformed calls with an explicit engine error. Crystal acts as a strongly-typed firewall protecting your game's integrity.
@@ -5522,7 +5778,7 @@ end
       </section>
 
       <!-- ===================================================================
-           SLIDE 57: Spaces Vista (Crystal Calling GDScript: Dynamic Dispatch)
+           SLIDE 60: Spaces Vista (Crystal Calling GDScript: Dynamic Dispatch)
            =================================================================== -->
       <section data-background-color="#141c24"
                data-palette-name="Spaces Vista"
@@ -5588,7 +5844,7 @@ gd_dialogue.set(&quot;dialogue_speed&quot;, 1.5)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 57 / 77</span>
+          <span>Slide 60 / 80</span>
         </div>
         <aside class="notes">
           What about calling GDScript from Crystal? Lapis provides both flexible dynamic dispatch via .call, .get, and .set, and an automated bindings generator. Lapis inspects Godot's extension_api.json and GDScript reflection to synthesize typed Crystal wrappers with zero manual C-API boilerplate. Arguments are marshalled transparently through Godot's Variant type, and every invocation is guarded by our monotonic 64-bit instance ID check.
@@ -5596,7 +5852,7 @@ gd_dialogue.set(&quot;dialogue_speed&quot;, 1.5)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 58: Spaces 7 (Crystal Calling GDScript: Strongly-Typed Bindings)
+           SLIDE 61: Spaces 7 (Crystal Calling GDScript: Strongly-Typed Bindings)
            =================================================================== -->
       <section data-background-color="#dce8f5"
                data-palette-name="Spaces 7"
@@ -5664,7 +5920,7 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 7)</span>
-          <span>Slide 58 / 77</span>
+          <span>Slide 61 / 80</span>
         </div>
         <aside class="notes">
           When your team has established GDScript subsystems that you want to call frequently from Crystal, you don't have to settle for dynamic string dispatch. Using lapis bind, Lapis inspects the GDScript file and generates a strongly-typed Crystal wrapper class. You get full compile-time type verification and IDE autocompletion when calling GDScript.
@@ -5672,7 +5928,7 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 59: Spaces 11 (First-Class Godot Editor Integration)
+           SLIDE 62: Spaces 11 (First-Class Godot Editor Integration)
            =================================================================== -->
       <section data-background-color="#18191c"
                data-palette-name="Spaces 11"
@@ -5721,7 +5977,7 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 11)</span>
-          <span>Slide 59 / 77</span>
+          <span>Slide 62 / 80</span>
         </div>
         <aside class="notes">
           A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help.
@@ -5729,7 +5985,7 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 60: Spaces 95 (CLI: Project Lifecycle)
+           SLIDE 63: Spaces 95 (CLI: Project Lifecycle)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 95"
@@ -5786,7 +6042,7 @@ $ lapis test --tui</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 95)</span>
-          <span>Slide 60 / 77</span>
+          <span>Slide 63 / 80</span>
         </div>
         <aside class="notes">
           Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one.
@@ -5794,7 +6050,7 @@ $ lapis test --tui</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 61: Spaces 2000 (Addon Management & Isolation)
+           SLIDE 64: Spaces 2000 (Addon Management & Isolation)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 2000"
@@ -5858,7 +6114,7 @@ $ lapis test --tui</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 2000)</span>
-          <span>Slide 61 / 77</span>
+          <span>Slide 64 / 80</span>
         </div>
         <aside class="notes">
           Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage, and if an addon accidentally bundles libgodot.dll, it poisons the host engine's ClassDB and causes fatal memory crashes. Lapis provides complete end-to-end addon management. When you run lapis addon install, it audits binary headers, stages runtime dependencies from BakedFileSystem, purges conflicting host DLLs, and registers the plugin in project.godot and extension_list.cfg. Crucially, AddonNegotiator solves multi-plugin dependency hell: if 5 different plugins all depend on the same Crystal plugin like crshader, Lapis negotiates their semver constraints into a single canonical version in shard.yml, eliminating redundant compilation, duplicate symbols, and fatal ClassDB registration collisions.
@@ -5866,7 +6122,7 @@ $ lapis test --tui</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 62: Amigo (CLI: Codegen & Maintenance)
+           SLIDE 65: Amigo (CLI: Codegen & Maintenance)
            =================================================================== -->
       <section data-background-color="#0055aa"
                data-palette-name="Amigo"
@@ -5923,7 +6179,7 @@ $ lapis package game --release</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Amigo)</span>
-          <span>Slide 62 / 77</span>
+          <span>Slide 65 / 80</span>
         </div>
         <aside class="notes">
           Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons.
@@ -5931,7 +6187,7 @@ $ lapis package game --release</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 63: GameStation2 (Native Debugging: radare2 vs. LLDB)
+           SLIDE 66: GameStation2 (Native Debugging: radare2 vs. LLDB)
            =================================================================== -->
       <section data-background-color="#090a10"
                data-palette-name="GameStation2"
@@ -5981,7 +6237,7 @@ $ lapis package game --release</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 63 / 77</span>
+          <span>Slide 66 / 80</span>
         </div>
         <aside class="notes">
           We completely removed LLDB from Lapis. LLDB was a 2GB+ bloat monster with fragile host Python dependencies and Windows PDB/DWARF symbol desyncs. In its place, Lapis standardizes on radare2 (r2) and our cradare2 bindings. Developers get seamless debugging both in and out of the editor: lapis editor -d embeds live pseudo-C decompilation and multiplayer lockstep debugging into Godot, while lapis run -d and lapis decompile let you debug standalone games, inspect compiled machine code, and set hardware memory watchpoints from the terminal.
@@ -5989,7 +6245,7 @@ $ lapis package game --release</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 64: Aperture (Lapis Debug Helper: Triage Games, Plugins & Bridge Issues)
+           SLIDE 67: Aperture (Lapis Debug Helper: Triage Games, Plugins & Bridge Issues)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -6058,7 +6314,7 @@ $ lapis package game --release</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 64 / 77</span>
+          <span>Slide 67 / 80</span>
         </div>
         <aside class="notes">
           Lapis includes a dedicated debug helper that solves the hardest problem in game development: knowing which layer failed when a crash occurs. Using `lapis editor -d` or `lapis run -d`, developers get instant radare2 process attachment with dual log isolation separating Godot engine messages from Crystal exceptions. When an issue occurs, `PluginForensics` automatically classifies whether the fault originated in user gameplay code, an editor tool plugin, the C++ loader bridge, or Godot's core ObjectDB. You can decompile methods to clean pseudo-C on the fly with `pdc`, set hardware memory watchpoints on suspect pointers, and verify bridge export health with `lapis decompile --verify`.
@@ -6066,7 +6322,7 @@ $ lapis package game --release</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 65: Spaces 10 (Radare2 in the Test Suite: Automated Binary Forensics & CI)
+           SLIDE 68: Spaces 10 (Radare2 in the Test Suite: Automated Binary Forensics & CI)
            =================================================================== -->
       <section data-background-color="#1f1f1f"
                data-palette-name="Spaces 10"
@@ -6144,7 +6400,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 10)</span>
-          <span>Slide 65 / 77</span>
+          <span>Slide 68 / 80</span>
         </div>
         <aside class="notes">
           We don't just use radare2 for interactive debugging; we use it to test Lapis itself. In our automated test suite, RadareDriver audits compiled game binaries in CI to verify binary hardening like DEP and ASLR, mathematically validates that zero internal Boehm GC or C++ bridge symbols leak into the global namespace, and validates pointer alignment. It even drives headless multiplayer lockstep tests, ensuring that pausing a client cooperatively suspends all peer instances without triggering network heartbeat timeouts.
@@ -6152,7 +6408,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 66: Spaces 2000 (Testing Framework: Writing Tests & Zero-Leak Proof)
+           SLIDE 69: Spaces 2000 (Testing Framework: Writing Tests & Zero-Leak Proof)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 2000"
@@ -6223,7 +6479,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 2000)</span>
-          <span>Slide 66 / 77</span>
+          <span>Slide 69 / 80</span>
         </div>
         <aside class="notes">
           Memory leaks are fatal in long-running games. Lapis includes a dedicated testing apparatus with mathematical zero-leak verification. Using Lapis::Test.assert_no_leak, our test runner queries Godot's Performance singletons and forces GC equilibrium before and after running iterations, mathematically proving that zero objects or memory leaked.
@@ -6231,7 +6487,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 67: Spaces 3.1 (In-Editor Tool Testing & Standalone TUI Runner)
+           SLIDE 70: Spaces 3.1 (In-Editor Tool Testing & Standalone TUI Runner)
            =================================================================== -->
       <section data-background-color="#ffffff"
                data-palette-name="Spaces 3.1"
@@ -6290,7 +6546,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 3.1)</span>
-          <span>Slide 67 / 77</span>
+          <span>Slide 70 / 80</span>
         </div>
         <aside class="notes">
           Running tests shouldn't be boring. When you run lapis test, it launches an interactive double-buffered ANSI TUI dashboard. You see live multi-phase progress, rolling logs with syntax coloring, and instant leak verification metrics. It makes continuous testing a genuinely satisfying part of the development loop.
@@ -6298,7 +6554,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 68: Spaces 11 (Quantitative Benchmarks: Crystal vs GDScript)
+           SLIDE 71: Spaces 11 (Quantitative Benchmarks: Crystal vs GDScript)
            =================================================================== -->
       <section data-background-color="#18191c"
                data-palette-name="Spaces 11"
@@ -6416,7 +6672,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 11)</span>
-          <span>Slide 68 / 77</span>
+          <span>Slide 71 / 80</span>
         </div>
         <aside class="notes">
           Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++.
@@ -6424,7 +6680,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 69: GameStation2 (Lapis Architecture: The Layered Bridge)
+           SLIDE 72: GameStation2 (Lapis Architecture: The Layered Bridge)
            =================================================================== -->
       <section data-background-color="#090a10"
                data-palette-name="GameStation2"
@@ -6548,7 +6804,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 69 / 77</span>
+          <span>Slide 72 / 80</span>
         </div>
         <aside class="notes">
           Here is the complete modular architecture of Lapis, inspired by clean systems engine diagrams like Raylib's architecture chart.
@@ -6560,7 +6816,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 70: FOS (Dual Modes: Mode A vs. Mode B)
+           SLIDE 73: FOS (Dual Modes: Mode A vs. Mode B)
            =================================================================== -->
       <section data-background-color="#0000aa"
                data-palette-name="FOS"
@@ -6664,7 +6920,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (FOS)</span>
-          <span>Slide 70 / 77</span>
+          <span>Slide 73 / 80</span>
         </div>
         <aside class="notes">
           Lapis supports two distinct execution paradigms tailored for developer joy and production performance.
@@ -6674,7 +6930,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 71: Spaces XP Royale (The Packaging System: Turnkey Distribution)
+           SLIDE 74: Spaces XP Royale (The Packaging System: Turnkey Distribution)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -6731,7 +6987,7 @@ bin/release_dist/
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 71 / 77</span>
+          <span>Slide 74 / 80</span>
         </div>
         <aside class="notes">
           Shipping games and addons shouldn't require tedious manual zip packaging. Lapis features a turnkey packaging system. A single command packages official GDExtension addons, Windows Inno Setup installers, Debian packages, and standalone playable games with automatic DLL dependency bundling and cryptographic checksums.
@@ -6739,7 +6995,7 @@ bin/release_dist/
       </section>
 
       <!-- ===================================================================
-           SLIDE 72: Spaces 10 (Live DEMO: End-to-End Workflow Roadmap)
+           SLIDE 75: Spaces 10 (Live DEMO: End-to-End Workflow Roadmap)
            =================================================================== -->
       <section data-background-color="#1f1f1f"
                data-palette-name="Spaces 10"
@@ -6853,7 +7109,7 @@ $ lapis debug
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 10)</span>
-          <span>Slide 72 / 77</span>
+          <span>Slide 75 / 80</span>
         </div>
         <aside class="notes">
           Now let's switch over to our live demonstration.
@@ -6865,7 +7121,7 @@ $ lapis debug
       </section>
 
       <!-- ===================================================================
-           SLIDE 73: Spaces Vista (Demo 1: Scaffolding & Hot Reload)
+           SLIDE 76: Spaces Vista (Demo 1: Scaffolding & Hot Reload)
            =================================================================== -->
       <section data-background-color="#141c24"
                data-palette-name="Spaces Vista"
@@ -6929,7 +7185,7 @@ $ lapis editor
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 73 / 77</span>
+          <span>Slide 76 / 80</span>
         </div>
         <aside class="notes">
           Let's jump into our live demo! In Part 1, we start from a clean terminal. Running lapis init scaffolds a complete, compilable Godot 4.8 project with ready-to-run scenes and shard manifests. When we run lapis editor, Godot opens up with our GDExtension bridge active. In standard C++ or Rust development on Windows, LoadLibrary locks your DLL, forcing you to close Godot every single time you want to recompile. Lapis completely solves this: our C++ bridge creates a timestamped shadow DLL copy and loads the shadow copy. When you edit Crystal code and press F5 in Godot, the editor recompiles game.dll freely and reloads in under half a second—giving you true script-like iteration speed with native compiled code.
@@ -6937,7 +7193,7 @@ $ lapis editor
       </section>
 
       <!-- ===================================================================
-           SLIDE 74: Playbox (Demo 2: Live Node Authoring)
+           SLIDE 77: Playbox (Demo 2: Live Node Authoring)
            =================================================================== -->
       <section data-background-color="#2d224b"
                data-palette-name="Playbox"
@@ -7007,7 +7263,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Playbox)</span>
-          <span>Slide 74 / 77</span>
+          <span>Slide 77 / 80</span>
         </div>
         <aside class="notes">
           In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. In our _ready method, we retrieve child nodes using our new operator syntax—traversing the camera boom with the slash operator and looking up our UI progress bar with the percent operator. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database.
@@ -7015,7 +7271,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 75: GameStation2 (Demo 3: Concurrency & Debugging)
+           SLIDE 78: GameStation2 (Demo 3: Concurrency & Debugging)
            =================================================================== -->
       <section data-background-color="#090a10"
                data-palette-name="GameStation2"
@@ -7085,7 +7341,7 @@ end
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 75 / 77</span>
+          <span>Slide 78 / 80</span>
         </div>
         <aside class="notes">
           In Part 3 of our demo, we demonstrate production systems rigor. First, we launch a background OS thread that generates complex procedural geometry off-thread. Because of Scope::TreeOnly, this worker can assemble large detached orphan trees across CPU cores with zero mutex contention. When ready, Godot.on_main_thread queues the block to be drained deterministically at the next frame boundary, mounting the room with zero stutter. Next, we run our test suite: Lapis::Test.assert_no_leak exercises 100 spawn cycles, queries Godot's native Performance monitors and Crystal GC, and proves zero object leaks mathematically. Finally, if any crash or bug ever occurs, lapis run -d drops us directly into radare2 for native machine code disassembly and register forensics.
@@ -7093,7 +7349,7 @@ end
       </section>
 
       <!-- ===================================================================
-           SLIDE 76: The Former Rain (The Future of Native Scripting in Godot)
+           SLIDE 79: The Former Rain (The Future of Native Scripting in Godot)
            =================================================================== -->
       <section data-background-color="#1b1726"
                data-palette-name="The Former Rain"
@@ -7142,7 +7398,7 @@ end
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (The Former Rain)</span>
-          <span>Slide 76 / 77</span>
+          <span>Slide 79 / 80</span>
         </div>
         <aside class="notes">
           Thank you all for listening! We believe Lapis represents the future of native scripting in Godot: the raw machine speed and type safety of C++ combined with the joy, clarity, and ergonomics of Ruby. The project is open source and ready for you to try today. Check out our repository on GitHub, join our Discord, and start building high-performance Godot games in Crystal!
@@ -7150,7 +7406,7 @@ end
       </section>
 
       <!-- ===================================================================
-           SLIDE 77: M64 (THANKS FOR WATCHING!)
+           SLIDE 80: M64 (THANKS FOR WATCHING!)
            =================================================================== -->
       <section data-background-color="#232328"
                data-palette-name="M64"
@@ -7243,7 +7499,7 @@ end
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (M64)</span>
-          <span>Slide 77 / 77</span>
+          <span>Slide 80 / 80</span>
         </div>
         <aside class="notes">
           Thank you so much for your time and attention today!

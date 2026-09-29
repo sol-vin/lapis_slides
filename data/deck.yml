@@ -26,6 +26,9 @@ slides:
 - 05b_crystal_type_system
 - 10_expressive_ergonomics
 - 10b_ruby_parity_in_crystal
+- 10d_crystal_modules
+- 10e_crystal_monkey_patching
+- 10f_crystal_closures
 - 10c_static_metaprogramming_tradeoffs
 - 14b_crystal_macro_hooks
 - 18_macro_state_machines

@@ -1,0 +1,56 @@
+---
+id: 10d_crystal_modules
+title: 'Modules: Mixins, Traits & Namespaces'
+subtitle: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
+badge: CRYSTAL ARCHITECTURE • COMPOSITION
+badge_color: cyan
+palette: creation
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: gameplay_modules.cr — Horizontal Composition
+  tag: Crystal
+  lang: crystal
+  code: |
+    # 1. Composable Mixin Module with abstract contract:
+    module Damageable
+      abstract def max_health : Int32
+      property health : Int32 = 100
+
+      def take_damage(amount : Int32) : Bool
+        @health = (@health - amount).clamp(0, max_health)
+        @health > 0
+      end
+
+      # Reusable concrete gameplay behavior:
+      def apply_shield(amount : Int32) : Void
+        @health = (@health + amount).clamp(0, max_health)
+      end
+    end
+
+    # 2. Namespace & Singleton utility module:
+    module SpatialMath
+      extend self # Callable as SpatialMath.dist_sq or mixed in
+      def dist_sq(a : Godot::Vector2, b : Godot::Vector2) : Float32
+        (a.x - b.x) ** 2 + (a.y - b.y) ** 2
+      end
+    end
+
+    # 3. Horizontal composition into Godot nodes:
+    class Enemy < Godot::CharacterBody2D
+      include Damageable # Inlines health, take_damage & apply_shield
+
+      def max_health : Int32; 150; end
+    end
+right:
+  type: card
+  title: Zero-Cost Architectural Composition
+  color: cyan
+  items:
+    - '<strong>Horizontal Composition via <code>include</code>:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance hierarchies or multiple inheritance hazards.'
+    - '<strong>Zero Virtual Dispatch Overhead:</strong> Mixin methods resolve statically at compile time and inline directly into the receiver''s machine code—no ancestor chain lookups.'
+    - '<strong>Abstract Method Contracts:</strong> <code>abstract def</code> in modules enforces compile-time interface conformance without runtime reflection or interface boxing.'
+    - '<strong>Namespace & Singleton Utilities:</strong> <code>extend self</code> enables modules to act simultaneously as standalone functional namespaces and mixable traits.'
+notes: |
+  In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy. In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains. Crystal gives us the best of both worlds: modules act as zero-cost horizontal mixins. You can define abstract contracts with abstract def and provide concrete shared methods. When included into a class, Crystal resolves all methods statically at compile time with zero virtual dispatch overhead and zero runtime method lookup. With extend self, modules seamlessly double as standalone utility namespaces.

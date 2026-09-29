@@ -4,7 +4,7 @@ title: 'Ruby Ergonomics at Compile Time'
 subtitle: 'Open Classes, Zero-Cost Blocks & with self yield Context Shifting'
 badge: CRYSTAL ERGONOMICS • RUBY PARITY
 badge_color: cyan
-palette: neon_cyber
+palette: digital_guy
 layout: two-column-layout
 ratio: 3:2
 left:
