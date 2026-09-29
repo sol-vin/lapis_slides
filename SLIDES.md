@@ -1876,13 +1876,13 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Title**: THANKS FOR WATCHING!
 - **Subtitle**: Fast Native Machine Speed • Zen Ergonomics • Rock-Solid Stability
 - **Connect & Explore**:
-  - **Official Website** (`https://sol.vin`): Interactive 3D showcases, engineering articles, API guides, and release notes.
-  - **GitHub Repository** (`github.com/sol-vin/lapis`): Star the repository, explore examples, report issues, and contribute to Lapis.
-  - **Steam Showcase** (`store.steampowered.com/app/... (Solo Oasis)`): Solo Oasis — an upcoming commercial title built entirely with Lapis and Godot.
-  - **Community & Chat** (`discord.gg/crystal-godot`): Join our welcoming community of Crystal and Godot gamedev enthusiasts.
+  - **Lapis & sol.vin** (`sol.vin • github.com/sol-vin/lapis`): Interactive 3D showcases, architecture guides, and open source repository.
+  - **Crystal Language** (`crystal-lang.org`): Official Crystal website, language reference, standard library docs, and blog.
+  - **Play Solo Oasis (SO:UP)** (`soup.sol.vin`): Play Solo Oasis: Unlimited Places live in your browser (not made with Lapis).
+  - **Crystal Community** (`discord.gg/YS7YvQy`): Join the official Crystal language Discord community for help, gamedev, and chat.
 - **Quickstart**: `git clone https://github.com/sol-vin/lapis && cd lapis && make setup-dev && make all`
 - **Closing**: Engineered with 💎 by sol.vin for the Crystal & Godot Communities
 - **Presenter Script**:
-  > *"Thank you so much for your time and attention today! Lapis brings together the absolute best of both worlds: the expressive joy and rapid iteration of Ruby, paired with the uncompromising bare-metal performance and type safety of compiled LLVM Crystal. Please visit sol.vin for full documentation and interactive demos, star the repo on GitHub at sol-vin/lapis, wishlist Solo Oasis on Steam, and come join our developer community on Discord. Let's build incredible games together."*
+  > *"Thank you so much for your time and attention today! Lapis brings together the absolute best of both worlds: the expressive joy and rapid iteration of Ruby, paired with the uncompromising bare-metal performance and type safety of compiled LLVM Crystal. Learn more about Crystal at crystal-lang.org, join the official Crystal Discord at discord.gg/YS7YvQy, play Solo Oasis: Unlimited Places at soup.sol.vin, and explore Lapis on GitHub at sol-vin/lapis. Let's build incredible games together."*
 
 ---
