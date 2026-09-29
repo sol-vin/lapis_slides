@@ -1,7 +1,7 @@
 ---
 id: 26d_thread_safety_policies
-title: 'Thread & Scope Policies: Concurrency Guard'
-subtitle: Configurable ThreadAffinity Enforcement and Detached Orphan Hierarchy Assembly
+title: 'Thread & Scope Policies'
+subtitle: ThreadAffinity Enforcement & Detached Graph Assembly
 badge: CONCURRENCY SAFETY • THREAD AFFINITY
 badge_color: amber
 palette: aperture

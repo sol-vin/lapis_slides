@@ -1,7 +1,7 @@
 ---
 id: 03b_ruby_syntax_sugar
-title: 'Ruby Syntax Sugar: Bare Words & Operator Overload'
-subtitle: Optional Parentheses, Uniform Access Principle, and Operators as Pure Method Calls
+title: 'Bare Words & Operators'
+subtitle: Optional Parentheses, Uniform Access & Operator Methods
 badge: RUBY HERITAGE • SYNTACTIC ERGONOMICS
 badge_color: emerald
 palette: monokai

@@ -1,7 +1,7 @@
 ---
 id: 11_antipattern_iterators
-title: 'Iterators & Collections: Imperative Loops vs. Functional Zen'
-subtitle: Manual Array Allocations & Verbose Loops vs. Composable Zero-Alloc Enumerable Pipelines
+title: 'Iterators: Imperative Loops vs. Functional Zen'
+subtitle: Manual Loops & Allocations vs. Composable Zero-Alloc Pipelines
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
 palette: spaces_xp_royale

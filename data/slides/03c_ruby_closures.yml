@@ -1,7 +1,7 @@
 ---
 id: 03c_ruby_closures
-title: 'The Closure Hierarchy: Blocks, Procs & Lambdas'
-subtitle: Lightweight Yielding, Reified Callable Objects, Arity Enforcement, and the & Bridge
+title: 'Blocks, Procs & Lambdas'
+subtitle: Ephemeral Yielding, Reified Objects & Strict Arity
 badge: RUBY HERITAGE • CLOSURE ARCHITECTURE
 badge_color: purple
 palette: playbox

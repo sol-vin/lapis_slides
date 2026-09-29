@@ -62,11 +62,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"A quick introduction to who I am. I'm Ian Rash, known online by my domain sol.vin. My engineering background spans systems architecture, reverse engineering, and low-level security research—having published CVE-2019-11014 and CVE-2019-11878, and holding CompTIA A+ and Network+ certifications. I've been an active speaker in the Crystal community, presenting at the Crystal 1.0 Conference in 2021 and Raw Crystal 2020. In game development, I've shipped 'Solo Oasis' on Steam, and won both Trijam 363 and 1dayjam #3 under intense sprint constraints. I've authored open source tools like raylib-cr and celestine. That blend of low-level systems rigor, rapid game jam iteration, and love for expressive language design is exactly why I built Lapis: to give Godot developers the speed and type safety of compiled systems code with the ergonomics of a joyful language."*
 
 ---
-### Slide 3: The Philosophy of Ergonomics: The Ruby Era
+### Slide 3: The Ruby Heritage
 - **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `HISTORICAL CONTEXT • THE RUBY HERITAGE`
-- **Title**: The Philosophy of Ergonomics: The Ruby Era
-- **Subtitle**: Optimizing for Developer Happiness, Human Syntax & Expressive Blocks
+- **Title**: The Ruby Heritage
+- **Subtitle**: Developer Happiness & Expressive Human Syntax
 - **Code Example (`ruby_gameplay.rb — The Joy of Expressive Syntax`)**:
   ```ruby
   # Ruby's human-centric syntax: blocks, closures, and clean reads
@@ -96,11 +96,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time rendering and physics engines."*
 
 ---
-### Slide 4: Ruby Syntax Sugar: Bare Words & Operator Overload
+### Slide 4: Bare Words & Operators
 - **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
 - **Category Badge**: `RUBY HERITAGE • SYNTACTIC ERGONOMICS`
-- **Title**: Ruby Syntax Sugar: Bare Words & Operator Overload
-- **Subtitle**: Optional Parentheses, Uniform Access Principle, and Operators as Pure Method Calls
+- **Title**: Bare Words & Operators
+- **Subtitle**: Optional Parentheses, Uniform Access & Operator Methods
 - **Code Example (`bare_words_and_operators.rb`)**:
   ```ruby
   # 1. Bare Words & Uniform Access: my_func vs my_func()
@@ -143,11 +143,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"One of Ruby's greatest gifts to programming ergonomics was the total elimination of syntax ceremony. In Ruby, method parentheses are optional: calling max_health looks identical to accessing a property, fulfilling Bertrand Meyer's Uniform Access Principle. Callers never need to know if a value is a cached field or a dynamic calculation. Combined with hash-argument sugar, method calls read like natural English sentences. Furthermore, Ruby treated operators not as hardcoded compiler keywords, but as regular method dispatches. Defining def +(other) or def [](axis) allows custom vector math, coordinate systems, and custom collections to feel like built-in language primitives. Crystal completely inherits this philosophy, making 3D math and scene manipulation feel completely natural in Godot."*
 
 ---
-### Slide 5: The Closure Hierarchy: Blocks, Procs & Lambdas
+### Slide 5: Blocks, Procs & Lambdas
 - **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
 - **Category Badge**: `RUBY HERITAGE • CLOSURE ARCHITECTURE`
-- **Title**: The Closure Hierarchy: Blocks, Procs & Lambdas
-- **Subtitle**: Lightweight Yielding, Reified Callable Objects, Arity Enforcement, and the & Bridge
+- **Title**: Blocks, Procs & Lambdas
+- **Subtitle**: Ephemeral Yielding, Reified Objects & Strict Arity
 - **Code Example (`closures_spectrum.rb`)**:
   ```ruby
   # 1. Blocks & Yield: Lightweight, zero-allocation closures
@@ -182,11 +182,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Closures are the beating heart of Ruby and Crystal. Ruby provides three distinct tiers of closures. At the lightest level are blocks—ephemeral code chunks passed implicitly and triggered with yield. They power iteration and resource-scoping patterns without allocating heap objects. When you need closures as first-class citizens that you can store in variables or pass around, you have Procs and Lambdas. Procs are lenient: they don't care if you pass too few or too many arguments, and returning from a Proc returns from the enclosing method. Lambdas, on the other hand, behave like true anonymous methods: they strictly enforce parameter counts and their return statements only exit the lambda itself. The ampersand operator acts as the bidirectional bridge between blocks and Procs. Crystal preserves this exact block-and-proc elegance, while adding compile-time static types and LLVM optimization."*
 
 ---
-### Slide 6: Dynamic Scope & "The Better Eval": instance_exec
+### Slide 6: instance_exec: The Better Eval
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `METAPROGRAMMING • DYNAMIC SCOPE`
-- **Title**: Dynamic Scope & "The Better Eval": instance_exec
-- **Subtitle**: Rebinding self, Fluent DSL Construction, and Safe Block Evaluation Over String eval
+- **Title**: instance_exec: The Better Eval
+- **Subtitle**: Rebinding self for Clean DSLs Over String eval
 - **Code Example (`context_exec_builder.rb`)**:
   ```ruby
   # ❌ Anti-Pattern: String eval is unsafe, unhygienic & slow
@@ -220,11 +220,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This single feature became the secret weapon behind RSpec's describe/it syntax, Rails routes, and FactoryBot. In Crystal, Lapis achieves this same fluent context-shifting at compile time with 'with self yield' and macro DSLs—yielding all the ergonomic beauty of Ruby with zero runtime reflection overhead."*
 
 ---
-### Slide 7: The Rise & Fall of Dynamic Ruby: Why Crystal Came About
+### Slide 7: The Rise & Fall of Dynamic Ruby
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `ARCHITECTURAL EVOLUTION • TIMELINE`
-- **Title**: The Rise & Fall of Dynamic Ruby: Why Crystal Came About
-- **Subtitle**: From Developer Joy to Enterprise Scale Walls, Bolted-On Type Tax, and the Native Solution
+- **Title**: The Rise & Fall of Dynamic Ruby
+- **Subtitle**: From Developer Joy to the Enterprise Scale Wall
 - **Timeline Milestones**:
   - **STAGE 1 • 1995-2012 • The Rise of Ruby**:
     - Yukihiro Matsumoto designs Ruby for human happiness, expressive blocks, and elegant syntax.
@@ -250,11 +250,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"This timeline explains the existential dilemma that led to Crystal and why Lapis exists today. In the 2000s, Ruby took the world by storm because developer happiness and expressive blocks made building software joyful. But as companies like Stripe, Shopify, and GitHub scaled into millions of lines of code, they hit a brutal wall: silent NoMethodErrors in production, terrifying refactors, and poor IDE autocomplete. To solve this, Stripe created Sorbet and Ruby introduced RBS. But bolting a type checker onto an inherently dynamic, eval-driven language creates immense friction: you're forced to wrap every single method in verbose sig blocks, battle your own metaprogramming, and babysit thousands of brittle RBI shims. And worst of all: Sorbet didn't make Ruby run any faster! You got all the syntax overhead of static types with none of the native compiler speed. This is exactly why Crystal was born: to give developers the poetic soul, ergonomic blocks, and joy of Ruby, but with a built-in static type system that eliminates signature clutter through type inference, compile-time nil safety, and native LLVM machine code performance. In Lapis, you get the expressive elegance of Ruby with native C++ execution speeds in Godot."*
 
 ---
-### Slide 8: The Birth of Crystal: Interpreted VM to Native LLVM
+### Slide 8: The Birth of Crystal
 - **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `COMPILER REVOLUTION • CRYSTAL ORIGINS`
-- **Title**: The Birth of Crystal: Interpreted VM to Native LLVM
-- **Subtitle**: Fast as C, Slick as Ruby: The Holy Grail of Systems Game Programming
+- **Title**: The Birth of Crystal
+- **Subtitle**: Fast as C, Slick as Ruby Native LLVM Speed
 - **Code Example (`crystal_origins.cr — Clean Syntax, Native Machine Code`)**:
   ```crystal
   # 1. Elegant Ruby-like syntax with zero typing clutter
@@ -478,11 +478,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed."*
 
 ---
-### Slide 15: Iterators & Collections: Imperative Loops vs. Functional Zen (Code Comparison)
+### Slide 15: Iterators: Imperative Loops vs. Functional Zen (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Iterators & Collections: Imperative Loops vs. Functional Zen
-- **Subtitle**: Manual Array Allocations & Verbose Loops vs. Composable Zero-Alloc Enumerable Pipelines
+- **Title**: Iterators: Imperative Loops vs. Functional Zen
+- **Subtitle**: Manual Loops & Allocations vs. Composable Zero-Alloc Pipelines
 - **GDScript Code Example (`❌ GDScript: Imperative Loops & Array Mutation`)**:
   ```gdscript
   # Manual loop, intermediate array allocations, verbose checks
@@ -519,11 +519,11 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 16: Iterators & Collections: Imperative Loops vs. Functional Zen (Analysis & Critique)
+### Slide 16: Iterators: Imperative Loops vs. Functional Zen (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Iterators & Collections: Imperative Loops vs. Functional Zen
-- **Subtitle**: Manual Array Allocations & Verbose Loops vs. Composable Zero-Alloc Enumerable Pipelines
+- **Title**: Iterators: Imperative Loops vs. Functional Zen
+- **Subtitle**: Manual Loops & Allocations vs. Composable Zero-Alloc Pipelines
 - **⚠️ GDScript Friction & Pitfalls**:
   - Manual Accumulation: Allocates intermediate heap arrays and manually appends elements one-by-one.
   - Missing Functional Primitives: Lacks standard pipeline operations (map, select, reject, tally, chunk).
@@ -538,11 +538,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators and type-safe transformations. In GDScript, transforming an array of nodes requires allocating an untyped array, writing manual for-loops, checking types with 'is Enemy' at runtime, and managing boolean flags for simple queries like 'any?'. In Crystal, collections are powered by the Enumerable module with complete static type inference: we can downcast Godot nodes using 'map as' (.map(&.as(Enemy))), filter by predicates (.select(&.alive?)), and transform output types (.map(&.unit_name.upcase)) from Array(Node) to Array(Enemy) to Array(String). Downstream calls like .any? and .tally are statically typed with zero runtime reflection. Best of all, LLVM inlines these closures into tight, vectorized loops with zero intermediate heap allocations."*
 
 ---
-### Slide 17: Anonymous Functions & Blocks: Callable Churn vs. Zero-Alloc Inlining (Code Comparison)
+### Slide 17: Anonymous Functions: Callable Churn vs. Inlining (Code Comparison)
 - **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Anonymous Functions & Blocks: Callable Churn vs. Zero-Alloc Inlining
-- **Subtitle**: GDScript's Heap-Allocated Lambdas & Callables vs. Crystal's Inlined Blocks & Zero-Cost Closures
+- **Title**: Anonymous Functions: Callable Churn vs. Inlining
+- **Subtitle**: GDScript Heap Lambdas vs. Crystal Zero-Cost Inlined Blocks
 - **GDScript Code Example (`❌ GDScript: Verbose Lambdas, Callable Allocations & Churn`)**:
   ```gdscript
   # 1. Custom sort allocates heap Callable object
@@ -589,11 +589,11 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 18: Anonymous Functions & Blocks: Callable Churn vs. Zero-Alloc Inlining (Analysis & Critique)
+### Slide 18: Anonymous Functions: Callable Churn vs. Inlining (Analysis & Critique)
 - **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Anonymous Functions & Blocks: Callable Churn vs. Zero-Alloc Inlining
-- **Subtitle**: GDScript's Heap-Allocated Lambdas & Callables vs. Crystal's Inlined Blocks & Zero-Cost Closures
+- **Title**: Anonymous Functions: Callable Churn vs. Inlining
+- **Subtitle**: GDScript Heap Lambdas vs. Crystal Zero-Cost Inlined Blocks
 - **⚠️ GDScript Friction & Pitfalls**:
   - Heap-Allocated Callables: Every anonymous func(...) lambda instantiates a native Godot Callable heap object with refcount tracking.
   - Clunky Lambda Syntax: No compact block syntax or symbol-to-proc; even simple 1-line predicates require full function signature boilerplate.
@@ -607,11 +607,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In GDScript, lambdas and callbacks are first-class Callable objects allocated on the engine heap. Whenever you pass `func(a, b): return a.weight < b.weight` or filter an array, Godot allocates and refcounts a Callable instance, and chaining filters creates intermediate arrays. In Crystal, blocks are not heap-allocated objects: the Crystal compiler and LLVM inline block bodies directly into the caller's machine code loop. Writing `inventory.sort_by!(&.weight)` or `inventory.select { |i| i.durability > 0 }` compiles down to raw C-like tight loops with zero allocations and zero closure overhead."*
 
 ---
-### Slide 19: Symbols: String Churn & Silent Typos vs. 32-Bit Zero-Cost Identifiers (Code Comparison)
+### Slide 19: Symbols: String Churn vs. 32-Bit IDs (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Symbols: String Churn & Silent Typos vs. 32-Bit Zero-Cost Identifiers
-- **Subtitle**: GDScript's Runtime String Lookups & Silent Typo Bugs vs. Crystal's Immediate 32-Bit Symbols & Compile-Time Typo Proofing
+- **Title**: Symbols: String Churn vs. 32-Bit IDs
+- **Subtitle**: Runtime String Lookups vs. Compile-Time 32-Bit Enums
 - **GDScript Code Example (`❌ GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs`)**:
   ```gdscript
   # PROBLEM 1: Dictionary String Keys — Silent Null on Typos
@@ -666,11 +666,11 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 20: Symbols: String Churn & Silent Typos vs. 32-Bit Zero-Cost Identifiers (Analysis & Critique)
+### Slide 20: Symbols: String Churn vs. 32-Bit IDs (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Symbols: String Churn & Silent Typos vs. 32-Bit Zero-Cost Identifiers
-- **Subtitle**: GDScript's Runtime String Lookups & Silent Typo Bugs vs. Crystal's Immediate 32-Bit Symbols & Compile-Time Typo Proofing
+- **Title**: Symbols: String Churn vs. 32-Bit IDs
+- **Subtitle**: Runtime String Lookups vs. Compile-Time 32-Bit Enums
 - **⚠️ GDScript Friction & Pitfalls**:
   - Silent Null on Typoed Keys: Typoing a dictionary string key (blackboard.get("target_enmy")) returns null without any warning, causing crashes down the line.
   - Silent Typo Bugs in States: String and StringName comparisons never fail at compile time. Misspellings like &"petrol" silently evaluate to false, creating insidious bugs.
@@ -807,11 +807,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"State machines are fundamental to gameplay. In GDScript, enums are essentially integers under the hood, and the match statement does not check for exhaustiveness. If you add a new state like 'STUNNED' to your enum, your existing code will silently ignore it without warning. In Crystal, enums are strongly typed, and the compiler strictly enforces exhaustive case statements. If you forget to handle a state, the compiler immediately halts with a helpful error. Plus, tuple pattern matching allows evaluating multi-variable state transitions cleanly in a single expression."*
 
 ---
-### Slide 25: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Code Comparison)
+### Slide 25: Value Types: GC Thrashing vs. Stack Structs (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs
-- **Subtitle**: RefCounted & Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs
+- **Title**: Value Types: GC Thrashing vs. Stack Structs
+- **Subtitle**: RefCounted Objects vs. Cache-Friendly Stack Structs
 - **GDScript Code Example (`❌ GDScript: Heap RefCounted & Untyped Dictionaries`)**:
   ```gdscript
   # Lightweight gameplay data requires heap allocation via RefCounted
@@ -847,11 +847,11 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 26: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Analysis & Critique)
+### Slide 26: Value Types: GC Thrashing vs. Stack Structs (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs
-- **Subtitle**: RefCounted & Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs
+- **Title**: Value Types: GC Thrashing vs. Stack Structs
+- **Subtitle**: RefCounted Objects vs. Cache-Friendly Stack Structs
 - **⚠️ GDScript Friction & Pitfalls**:
   - Heap Allocations for Tiny Data: Every data packet extends RefCounted, triggering individual heap allocations.
   - Untyped Dictionaries: High memory overhead, zero editor autocomplete, and silent failure on key typos.
@@ -865,11 +865,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In fast-paced games—bullet hells, ARPGs, particle systems—allocating tiny objects on the heap is a death sentence for performance. In GDScript, custom data structures must extend RefCounted or use untyped dictionaries. Both create heap pressure and GC churn. In Crystal, you can declare value structs: stack-allocated, contiguous in memory, and passed by value. You get zero heap allocations, zero GC pauses, and complete compile-time type safety."*
 
 ---
-### Slide 27: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection (Code Comparison)
+### Slide 27: Memory Safety: Dangling Pointers vs. Protection (Code Comparison)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection
-- **Subtitle**: Lapis Monotonic 64-Bit Instance Tracking Eliminates ACCESS_VIOLATION (0xC0000005)
+- **Title**: Memory Safety: Dangling Pointers vs. Protection
+- **Subtitle**: Monotonic 64-Bit ID Tracking Eliminates 0xC0000005 Crashes
 - **GDScript Code Example (`❌ GDScript / Native C++: Dangling Pointers & Crashes`)**:
   ```gdscript
   # Combat target acquired in an earlier frame
@@ -907,11 +907,11 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 28: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection (Analysis & Critique)
+### Slide 28: Memory Safety: Dangling Pointers vs. Protection (Analysis & Critique)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection
-- **Subtitle**: Lapis Monotonic 64-Bit Instance Tracking Eliminates ACCESS_VIOLATION (0xC0000005)
+- **Title**: Memory Safety: Dangling Pointers vs. Protection
+- **Subtitle**: Monotonic 64-Bit ID Tracking Eliminates 0xC0000005 Crashes
 - **⚠️ GDScript Friction & Pitfalls**:
   - Deallocated Native Memory: queue_free() frees native C++ memory; existing references retain dead pointers.
   - Fatal Engine Segfault: Dereferencing dead pointers crashes immediately with 0xC0000005 ACCESS_VIOLATION.
@@ -925,11 +925,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If your code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully."*
 
 ---
-### Slide 29: Signals & Async: Brittle String Awaits vs. Typed Signal Handles (Code Comparison)
+### Slide 29: Signals & Async: String Awaits vs. Typed Handles (Code Comparison)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Signals & Async: Brittle String Awaits vs. Typed Signal Handles
-- **Subtitle**: Non-Blocking Coroutines, Timeout Guards, and Dead-Pointer Aware Awaiting
+- **Title**: Signals & Async: String Awaits vs. Typed Handles
+- **Subtitle**: Non-Blocking Coroutines, Timeout Guards & Dead-Pointer Checks
 - **GDScript Code Example (`❌ GDScript: Unsafe Await & Leaked Coroutines`)**:
   ```gdscript
   func start_boss_cinematic() -> void:
@@ -967,11 +967,11 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 30: Signals & Async: Brittle String Awaits vs. Typed Signal Handles (Analysis & Critique)
+### Slide 30: Signals & Async: String Awaits vs. Typed Handles (Analysis & Critique)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Signals & Async: Brittle String Awaits vs. Typed Signal Handles
-- **Subtitle**: Non-Blocking Coroutines, Timeout Guards, and Dead-Pointer Aware Awaiting
+- **Title**: Signals & Async: String Awaits vs. Typed Handles
+- **Subtitle**: Non-Blocking Coroutines, Timeout Guards & Dead-Pointer Checks
 - **⚠️ GDScript Friction & Pitfalls**:
   - Infinite Hang Risk: await boss.died hangs indefinitely if the target node is freed before emitting.
   - No Built-In Timeouts: Adding timeouts requires manual timer nodes and complex cleanup logic.
@@ -985,11 +985,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports built-in timeouts: await(boss.died, timeout_sec: 10.0). Furthermore, because Lapis fibers check instance liveness on every frame tick, if the target object is destroyed, the fiber safely aborts with DisposedObjectError rather than hanging silently."*
 
 ---
-### Slide 31: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros (Code Comparison)
+### Slide 31: Metaprogramming: Strings vs. AST Macros (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros
-- **Subtitle**: String Dictionaries & Manual Signal Registration vs. Typed Crystal Macros
+- **Title**: Metaprogramming: Strings vs. AST Macros
+- **Subtitle**: String Dictionaries & Manual Wiring vs. Typed AST Macros
 - **GDScript Code Example (`❌ GDScript: Dictionary Sprawl & String Signals`)**:
   ```gdscript
   # Manual dictionary definitions for editor export hints
@@ -1026,11 +1026,11 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 32: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros (Analysis & Critique)
+### Slide 32: Metaprogramming: Strings vs. AST Macros (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros
-- **Subtitle**: String Dictionaries & Manual Signal Registration vs. Typed Crystal Macros
+- **Title**: Metaprogramming: Strings vs. AST Macros
+- **Subtitle**: String Dictionaries & Manual Wiring vs. Typed AST Macros
 - **⚠️ GDScript Friction & Pitfalls**:
   - Stringly-Typed Dictionaries: Requires constructing complex property dictionaries in _get_property_list().
   - Brittle String Signals: Typo in signal name string fails silently or crashes at runtime.
@@ -1451,11 +1451,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Godot's MessageQueue is the bedrock of cross-thread safety. In Lapis, call_deferred allows any background worker thread to schedule method executions on the main thread safely. This prevents race conditions in Godot's internal node arrays and ensures that game state transitions happen deterministically at frame boundaries."*
 
 ---
-### Slide 43: Thread & Scope Policies: Concurrency Guard
+### Slide 43: Thread & Scope Policies
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `CONCURRENCY SAFETY • THREAD AFFINITY`
-- **Title**: Thread & Scope Policies: Concurrency Guard
-- **Subtitle**: Configurable ThreadAffinity Enforcement and Detached Orphan Hierarchy Assembly
+- **Title**: Thread & Scope Policies
+- **Subtitle**: ThreadAffinity Enforcement & Detached Graph Assembly
 - **Code Example (`thread_policies.cr — Configuration & Orphan Graphs`)**:
   ```crystal
   # 1. Configure enforcement policy across environments
@@ -1490,11 +1490,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis provides a configurable ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled for zero-cost release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread—such as procedurally generated dungeon rooms or terrain meshes—while strictly guarding the live scene tree."*
 
 ---
-### Slide 44: Main-Thread Dispatch: Godot.on_main_thread
+### Slide 44: Main-Thread Dispatch
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `THREAD SYNCHRONIZATION • ENGINE QUEUE`
-- **Title**: Main-Thread Dispatch: Godot.on_main_thread
-- **Subtitle**: Thread-Safe Mutex Queues, Zero-Allocation Fast Paths, and Seamless Frame Boundary Flush
+- **Title**: Main-Thread Dispatch
+- **Subtitle**: Thread-Safe Queues & Frame Boundary Flush
 - **Code Example (`room_streamer.cr — Safe Frame Synchronization`)**:
   ```crystal
   # Background worker streams procedural geometry
@@ -1879,11 +1879,11 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons."*
 
 ---
-### Slide 56: Native Debugging: Why Lapis Replaced LLDB with radare2 (r2)
+### Slide 56: Native Debugging: radare2 vs. LLDB
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `SYSTEMS DIAGNOSTICS • RADARE2`
-- **Title**: Native Debugging: Why Lapis Replaced LLDB with radare2 (r2)
-- **Subtitle**: Eliminating Multi-Gigabyte Toolchain Bloat, Python Brittleness & Symbol Desyncs
+- **Title**: Native Debugging: radare2 vs. LLDB
+- **Subtitle**: Eliminating Toolchain Bloat & Symbol Desyncs
 - **Why LLDB Was Removed — The Fat Debugger Trap**:
   - Gigabyte Toolchain Bloat: Bundled 2GB+ of Clang/LLVM runtime binaries and Python dependencies, destroying lean developer onboarding.
   - Windows DWARF vs. PDB Desyncs: Struggled with MinGW DWARF and MSVC symbol table format differences, causing lost breakpoints and blank backtraces.

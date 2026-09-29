@@ -77,22 +77,22 @@
 
 /* Slide Header */
 .slide-header {
-  margin-bottom: 0.9rem;
-  padding-bottom: 0.65rem;
+  margin-bottom: 0.7rem;
+  padding-bottom: 0.45rem;
   border-bottom: 1.5px solid var(--card-border);
   flex-shrink: 0;
 }
 
 .badge-pill {
   display: inline-block;
-  padding: 0.25rem 0.85rem;
+  padding: 0.22rem 0.8rem;
   background-color: var(--card-bg);
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
   border: 1.5px solid var(--godot-blue);
   color: var(--godot-blue);
 }
@@ -128,7 +128,7 @@
 }
 
 .slide-title {
-  font-size: 2.1rem;
+  font-size: 1.85rem;
   font-weight: 800;
   color: var(--text-white);
   line-height: 1.15;
@@ -137,10 +137,10 @@
 }
 
 .slide-subtitle {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
-  margin-top: 0.25rem;
-  line-height: 1.3;
+  margin-top: 0.2rem;
+  line-height: 1.25;
 }
 
 /* Slide Content Layout */

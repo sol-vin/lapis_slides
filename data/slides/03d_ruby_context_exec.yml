@@ -1,7 +1,7 @@
 ---
 id: 03d_ruby_context_exec
-title: 'Dynamic Scope & "The Better Eval": instance_exec'
-subtitle: Rebinding self, Fluent DSL Construction, and Safe Block Evaluation Over String eval
+title: 'instance_exec: The Better Eval'
+subtitle: Rebinding self for Clean DSLs Over String eval
 badge: METAPROGRAMMING • DYNAMIC SCOPE
 badge_color: amber
 palette: game_station_2

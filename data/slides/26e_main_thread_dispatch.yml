@@ -1,7 +1,7 @@
 ---
 id: 26e_main_thread_dispatch
-title: 'Main-Thread Dispatch: Godot.on_main_thread'
-subtitle: Thread-Safe Mutex Queues, Zero-Allocation Fast Paths, and Seamless Frame Boundary Flush
+title: 'Main-Thread Dispatch'
+subtitle: Thread-Safe Queues & Frame Boundary Flush
 badge: THREAD SYNCHRONIZATION • ENGINE QUEUE
 badge_color: cyan
 palette: spaces_vista

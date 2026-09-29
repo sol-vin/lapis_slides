@@ -1,7 +1,7 @@
 ---
 id: 11c_antipattern_symbols
-title: 'Symbols: String Churn & Silent Typos vs. 32-Bit Zero-Cost Identifiers'
-subtitle: GDScript's Runtime String Lookups & Silent Typo Bugs vs. Crystal's Immediate 32-Bit Symbols & Compile-Time Typo Proofing
+title: 'Symbols: String Churn vs. 32-Bit IDs'
+subtitle: Runtime String Lookups vs. Compile-Time 32-Bit Enums
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
 palette: spaces_vista

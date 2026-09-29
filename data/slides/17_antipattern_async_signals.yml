@@ -1,7 +1,7 @@
 ---
 id: 17_antipattern_async_signals
-title: 'Signals & Async: Brittle String Awaits vs. Typed Signal Handles'
-subtitle: Non-Blocking Coroutines, Timeout Guards, and Dead-Pointer Aware Awaiting
+title: 'Signals & Async: String Awaits vs. Typed Handles'
+subtitle: Non-Blocking Coroutines, Timeout Guards & Dead-Pointer Checks
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: amber
 palette: aperture

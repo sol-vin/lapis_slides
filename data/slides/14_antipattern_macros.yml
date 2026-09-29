@@ -1,7 +1,7 @@
 ---
 id: 14_antipattern_macros
-title: 'Metaprogramming: String Boilerplate vs. Compile-Time AST Macros'
-subtitle: String Dictionaries & Manual Signal Registration vs. Typed Crystal Macros
+title: 'Metaprogramming: Strings vs. AST Macros'
+subtitle: String Dictionaries & Manual Wiring vs. Typed AST Macros
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: amber
 palette: spaces_xp_royale

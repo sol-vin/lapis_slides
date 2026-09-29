@@ -1,7 +1,7 @@
 ---
 id: 34_debugger_radare2
-title: 'Native Debugging: Why Lapis Replaced LLDB with radare2 (r2)'
-subtitle: Eliminating Multi-Gigabyte Toolchain Bloat, Python Brittleness & Symbol Desyncs
+title: 'Native Debugging: radare2 vs. LLDB'
+subtitle: Eliminating Toolchain Bloat & Symbol Desyncs
 badge: SYSTEMS DIAGNOSTICS • RADARE2
 badge_color: blue
 palette: game_station_2

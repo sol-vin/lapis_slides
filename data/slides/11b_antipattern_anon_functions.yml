@@ -1,7 +1,7 @@
 ---
 id: 11b_antipattern_anon_functions
-title: 'Anonymous Functions & Blocks: Callable Churn vs. Zero-Alloc Inlining'
-subtitle: GDScript's Heap-Allocated Lambdas & Callables vs. Crystal's Inlined Blocks & Zero-Cost Closures
+title: 'Anonymous Functions: Callable Churn vs. Inlining'
+subtitle: GDScript Heap Lambdas vs. Crystal Zero-Cost Inlined Blocks
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: purple
 palette: super_es

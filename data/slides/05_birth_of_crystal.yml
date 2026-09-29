@@ -1,7 +1,7 @@
 ---
 id: 05_birth_of_crystal
-title: 'The Birth of Crystal: Interpreted VM to Native LLVM'
-subtitle: 'Fast as C, Slick as Ruby: The Holy Grail of Systems Game Programming'
+title: 'The Birth of Crystal'
+subtitle: Fast as C, Slick as Ruby Native LLVM Speed
 badge: COMPILER REVOLUTION • CRYSTAL ORIGINS
 badge_color: cyan
 palette: spaces_98
