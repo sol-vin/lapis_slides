@@ -35,6 +35,7 @@ slides:
 # --- ACT 4: Metaprogramming & Boilerplate Elimination ---
 - 14_antipattern_macros
 - 18_macro_state_machines
+- 18b_macro_fsm_implementation
 - 19_macro_serialization
 - 21_boilerplate_elimination
 - 22_feature_matrix

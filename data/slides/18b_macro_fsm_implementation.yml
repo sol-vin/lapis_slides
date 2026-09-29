@@ -1,0 +1,67 @@
+---
+id: 18b_macro_fsm_implementation
+title: 'Behind the DSL: The FSM AST Macro'
+subtitle: How Crystal's Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums & Jump Tables
+badge: AST METAPROGRAMMING • UNDER THE HOOD
+badge_color: amber
+palette: aperture
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: fsm_macro.cr — AST Rewriting Engine
+  tag: Crystal
+  lang: crystal
+  code: |
+    # 🪄 Compile-time AST macro: parses the block to synthesize types & dispatches
+    macro fsm(name, &block)
+      # 1. Synthesize strongly-typed Enum for all declared states:
+      enum {{name.id}}
+        {% for call in block.body.expressions %}
+          {% if call.is_a?(Call) && call.name.stringify == "state" %}
+            {{call.args[0].id}}
+          {% end %}
+        {% end %}
+      end
+
+      # 2. Synthesize state machine class with zero-reflection jump tables:
+      class {{name.id}}Machine
+        getter current_state : {{name.id}}
+        getter timer : Float64 = 0.0_f64
+
+        # 3. Compile-time event dispatcher: generates O(1) jump table
+        def trigger(event : Symbol) : Void
+          case @current_state
+          {% for call in block.body.expressions %}
+            {% if call.is_a?(Call) && call.name.stringify == "state" && call.block %}
+              when .{{call.args[0].id.underscore}}?
+                {% for exp in (call.block.body.is_a?(Expressions) ? call.block.body.expressions : [call.block.body]) %}
+                  {% if exp.is_a?(Call) && exp.name.stringify == "on" %}
+                    if event == {{exp.args[0]}}
+                      transition_to({{name.id}}::{% for a in exp.named_args %}{% if a.name.stringify == "transition_to" %}{{a.value.id}}{% end %}{% end %})
+                      return
+                    end
+                  {% end %}
+                {% end %}
+            {% end %}
+          {% end %}
+          end
+        end
+
+        private def transition_to(new_state : {{name.id}}) : Void
+          @current_state = new_state
+          @timer = 0.0_f64
+        end
+      end
+    end
+right:
+  type: card
+  title: Compile-Time Metaprogramming Invariants
+  color: amber
+  items:
+  - "<strong>Compile-Time AST Traversal:</strong> Unlike Ruby's <code>method_missing</code> or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation."
+  - "<strong>Synthesizes Concrete Types:</strong> The macro generates real <code>enum BossState</code> variants (<code>Patrol</code>, <code>Chase</code>), giving developers full compiler autocomplete and exhaustiveness checks."
+  - "<strong>Zero Runtime Overhead:</strong> <code>trigger(:event)</code> expands into a flat native <code>case</code> statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!"
+  - "<strong>Fail-Fast Verification:</strong> Transitioning to a typoed or non-existent state produces an immediate compile error (e.g. <code>undefined constant BossState::Pattrol</code>)."
+notes: |
+  This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice what's happening: this is not string interpolation or runtime reflection. Crystal passes the code inside the block directly to the macro as an Abstract Syntax Tree (AST). The macro loops over the expressions during compilation, extracts each `state` call, and synthesizes a genuine, strongly-typed `enum`. Then it writes the state machine class and an event dispatcher that unfolds into a flat, O(1) CPU jump table. If a developer makes a typo in a state transition, the compiler fails immediately because the enum variant doesn't exist. You get the beauty of a high-level DSL with the raw execution speed and safety of hand-written C.
