@@ -7,6 +7,7 @@ resolution:
   width: 1280
   height: 720
 slides:
+# --- ACT 1: The Hook & The Problem ---
 - 01_hero
 - 02_whoami
 - 03_ruby_philosophy
@@ -14,39 +15,53 @@ slides:
 - 05_birth_of_crystal
 - 06_what_is_lapis
 - 07_why_crystal_video
+
+# --- ACT 2: Core DSL & Scene Architecture ---
+- 20_node_dsl
 - 08_effortless_access
 - 09_signals_async
 - 10_expressive_ergonomics
+
+# --- ACT 3: The Antipattern Face-Off: GDScript vs Crystal ---
 - 11_antipattern_iterators
 - 11b_antipattern_anon_functions_symbols
 - 12_antipattern_nil_safety
 - 13_antipattern_pattern_matching
-- 14_antipattern_macros
 - 15_antipattern_structs
 - 16_antipattern_dead_pointers
 - 17_antipattern_async_signals
+
+# --- ACT 4: Metaprogramming & Boilerplate Elimination ---
+- 14_antipattern_macros
 - 18_macro_state_machines
 - 19_macro_serialization
-- 20_node_dsl
 - 21_boilerplate_elimination
 - 22_feature_matrix
+
+# --- ACT 5: Concurrency Without Chaos ---
 - 23_concurrency_fibers
 - 24_concurrency_threads
 - 25_antipattern_channels
 - 26_concurrency_scenetree
+
+# --- ACT 6: Frictionless Interoperability ---
 - 27_interop_gdscript_calls_crystal
 - 27b_interop_type_firewall
 - 28_interop_crystal_calls_gdscript_dynamic
 - 29_interop_crystal_calls_gdscript_typed
-- 30_cli_lifecycle
-- 31_cli_codegen
-- 32_package_management
+
+# --- ACT 7: Toolchain, Diagnostics & Benchmarks ---
 - 33_editor_integration
+- 30_cli_lifecycle
+- 32_package_management
+- 31_cli_codegen
 - 34_debugger_radare2
 - 34b_r2_test_suite
-- 35_benchmarks
 - 36_testing_zero_leak
 - 37_tool_testing_tui
+- 35_benchmarks
+
+# --- ACT 8: Architecture, Production & Live Demo ---
 - 38_architecture_layers
 - 39_dual_modes
 - 40_packaging_dist

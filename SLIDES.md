@@ -202,7 +202,48 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Whenever you introduce a new language binding, the immediate question from the community is: 'Why Crystal? Why not Rust? Why not C++ or C#? Why not just stick with GDScript?' This clip from Community captures the exact sentiment: sometimes the answer is simply 'Because I want to!' But beyond the humor, there is a profound engineering reality. Rust's borrow checker fights Godot's scene tree; C++ suffers from header sprawl and segmentation faults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead. Crystal provides the rare sweet spot: raw LLVM machine speed paired with the expressive, human-first ergonomics of Ruby."*
 
 ---
-### Slide 8: Effortless Access: Nodes, Scenes & Properties
+### Slide 8: The Lapis DSL: Clean, Declarative Node Authoring
+- **Sol.vin Theme Palette**: `bring_me_hope` (Bluebie) [BG: `#002b55` | Window: `#003a70` | Text: `#00c8ff` | Accent: `#00e5ff`]
+- **Category Badge**: `THE LAPIS DSL • NODE AUTHORING`
+- **Title**: The Lapis DSL: Clean, Declarative Node Authoring
+- **Subtitle**: Authoring First-Class Godot Nodes with Crystal ClassDB Integration
+- **Code Example (`player_character.cr — Declarative Node Definition`)**:
+  ```crystal
+  require "libgodot"
+  
+  # Declares Godot class registered in ClassDB
+  node Player < CharacterBody3D do
+    # Movement speed in meters per second
+    @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
+    property speed : Float32 = 7.0_f32
+  
+    # Maximum hit points
+    @[Export(range: 10..500, step: 10)]
+    property max_health : Int32 = 100
+  
+    signal health_changed(current : Int32, max_health : Int32)
+    signal died
+  
+    def _ready : Void
+      Godot.print("Player initialized: #{name}")
+    end
+  
+    def _physics_process(delta : Float64) : Void
+      # Fixed-rate physics step
+    end
+  end
+  ```
+- **Clean Node DSL Invariants**:
+  - Declarative node Macro: node ClassName  registers the class in Godot's ClassDB with zero boilerplate.
+  - Property Annotations: @[Export] supports ranges, enums, file pickers, and tool buttons.
+  - Automated Doc Harvesting: Regular Crystal comments above classes and methods are harvested into Godot's offline EditorHelp database.
+  - Native Lifecycle Hooks: Direct bindings to _ready, _process, and _physics_process.
+  - Multiplayer RPC: @[RPC] configures network replication mode and transfer channels.
+- **Presenter Script**:
+  > *"Here is what authoring a Godot node actually looks like in Lapis. Notice how clean, concise, and declarative it is. You write node Player < CharacterBody3D, declare exported properties with ranges, define typed signals, and write your lifecycle methods. Regular comments above properties are harvested at compile time into Godot's in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or Rust."*
+
+---
+### Slide 9: Effortless Access: Nodes, Scenes & Properties
 - **Sol.vin Theme Palette**: `bring_me_hope` (Bluebie) [BG: `#002b55` | Window: `#003a70` | Text: `#00c8ff` | Accent: `#00e5ff`]
 - **Category Badge**: `CRYSTAL ERGONOMICS • GAMEPLAY SCRIPTING`
 - **Title**: Effortless Access: Nodes, Scenes & Properties
@@ -240,49 +281,44 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. With our onready macro and get_node_as, child nodes are resolved safely when the node enters the tree during _ready, returning the concrete typed class directly without casting. With get_node_as?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible."*
 
 ---
-### Slide 9: Signals, Events & Async Awaiting: Zen Ergonomics
+### Slide 10: Signals & Events: Reactive Zen Ergonomics
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `CRYSTAL ERGONOMICS • SIGNALS & EVENTS`
-- **Title**: Signals, Events & Async Awaiting: Zen Ergonomics
-- **Subtitle**: Declarative Signal Connections and Non-Blocking Gameplay Coroutines
-- **Code Example (`reactive_gameplay.cr — Signals & Async Coroutines`)**:
+- **Title**: Signals & Events: Reactive Zen Ergonomics
+- **Subtitle**: Declarative Signal Connections, Auto-Synthesized Listeners, and Decoupled Systems
+- **Code Example (`reactive_events.cr — Type-Safe Signal Subscriptions`)**:
   ```crystal
-  # 1. Connecting signals with idiomatic blocks/closures
+  # 1. Connecting engine signals with clean Crystal blocks
   start_btn = get_node(Button, "UI/StartButton")
   start_btn.signal("pressed").connect do
     start_game_sequence
   end
   
-  # 2. Type-safe custom signals & listener helpers
+  # 2. Declaring custom typed signals with parameters
   signal health_changed(current : Int32, max_health : Int32)
-  signal died
+  signal player_died
   
-  # First-class listener helpers & one-shot subscriptions
-  on_health_changed { |curr, max| update_ui(curr, max) }
-  on_died_once { trigger_game_over }
-  
-  emit(health_changed, 75, 100) # or emit_health_changed(75, 100)
-  
-  # 3. Non-blocking async awaiting with dead-pointer protection
-  def cutscene_sequence : Void
-    Godot.print("Spawning boss encounter...")
-    await(2.5.seconds)                 # Non-blocking timer delay
-    boss = spawn_boss
-    await(boss.died)                   # Typed signal handle await!
-    Godot.print("Victory achieved!")
+  # 3. Auto-synthesized listener helpers & one-shot subscriptions
+  on_health_changed do |curr, max|
+    hud.update_health_bar(curr, max)
   end
+  on_player_died_once do
+    game_over_director.trigger_defeat
+  end
+  
+  # 4. Compile-time validated signal emission
+  emit_health_changed(current: 75, max_health: 100)
   ```
 - **Reactive Gameplay Features**:
-  - Closure Connections: Connect signals with clean Crystal blocks—no string method names or delegate boilerplate.
+  - Closure Connections: Connect any Godot signal with clean Crystal blocks—no string method names or delegate boilerplate.
   - Synthesized Signal Helpers: Declaring signal died auto-generates emit_died, on_died, and on_died_once with compile-time type verification.
-  - First-Class await: Await timers (await(2.5.seconds)) or typed signals (await(boss.died)).
-  - Dead-Pointer Guard: If an awaited node is freed during waiting, the fiber safely aborts with DisposedObjectError instead of segfaulting.
-  - Cross-Language Interop: Connect GDScript signals and call dynamic methods with node.call("method", args).
+  - One-Shot Subscriptions: on_event_once automatically disconnects the callback after the first invocation, preventing stale event leaks.
+  - Decoupled Architecture: Game systems communicate through strongly-typed events rather than tightly-coupled node references.
 - **Presenter Script**:
-  > *"Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. You can connect signals with idiomatic Crystal closures, eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers. And our first-class await mechanism lets you write procedural cutscenes and asynchronous timers cleanly using fibers, with automatic dead-pointer protection guarding against deallocated nodes."*
+  > *"Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. You can connect signals with idiomatic closures, eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers like on_health_changed and on_player_died_once. Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly."*
 
 ---
-### Slide 10: Expressive Ergonomics: High-Level Language Primitives
+### Slide 11: Expressive Ergonomics: High-Level Language Primitives
 - **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
 - **Category Badge**: `CRYSTAL ERGONOMICS • EXPRESSION`
 - **Title**: Expressive Ergonomics: High-Level Language Primitives
@@ -312,7 +348,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed."*
 
 ---
-### Slide 11: Iterators & Collections: Imperative Loops vs. Functional Zen (Code Comparison)
+### Slide 12: Iterators & Collections: Imperative Loops vs. Functional Zen (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Iterators & Collections: Imperative Loops vs. Functional Zen
@@ -349,7 +385,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 12: Iterators & Collections: Imperative Loops vs. Functional Zen (Analysis & Critique)
+### Slide 13: Iterators & Collections: Imperative Loops vs. Functional Zen (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Iterators & Collections: Imperative Loops vs. Functional Zen
@@ -367,7 +403,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators. In GDScript, transforming a collection requires creating an empty array, manually writing a for-loop, appending items one by one, and managing boolean flags for simple queries like 'any?'. In Crystal, we inherit Ruby's legendary Enumerable module: select, map, any?, and even tally for building frequency distributions. Because Crystal compiles to native LLVM code, these functional closures compile down to tight, vectorized loops with zero GC overhead."*
 
 ---
-### Slide 13: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen (Code Comparison)
+### Slide 14: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen (Code Comparison)
 - **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen
@@ -413,7 +449,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 14: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen (Analysis & Critique)
+### Slide 15: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen (Analysis & Critique)
 - **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen
@@ -431,7 +467,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Anonymous functions in GDScript are cumbersome: you have to write `func(a, b): return ...` every time, and each lambda allocates a native Callable object on the engine heap. On top of that, GDScript relies on strings or StringNames for lightweight state identifiers, requiring runtime hash-table lookups. In Crystal, blocks are pure zen: `inventory.sort_by!(&.weight)` inlines directly into native machine code with zero heap allocations. Symbols like `:ready` are 32-bit immediate integers checked at compile time. And with over 50 composable Enumerable methods like `tally`, `reject`, and `chunk`, Crystal turns cumbersome loops into elegant, vectorized pipelines."*
 
 ---
-### Slide 15: Nil Safety: Runtime Crashes vs. Compile-Time Proof (Code Comparison)
+### Slide 16: Nil Safety: Runtime Crashes vs. Compile-Time Proof (Code Comparison)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Nil Safety: Runtime Crashes vs. Compile-Time Proof
@@ -468,7 +504,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 16: Nil Safety: Runtime Crashes vs. Compile-Time Proof (Analysis & Critique)
+### Slide 17: Nil Safety: Runtime Crashes vs. Compile-Time Proof (Analysis & Critique)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Nil Safety: Runtime Crashes vs. Compile-Time Proof
@@ -486,7 +522,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In GDScript, every developer has experienced the dreaded 'Invalid call to function on base Nil' crash, or worse, a hard engine crash when dereferencing an object that was freed in C++. In Crystal, Nil is a distinct type, and types are non-nil by default. If a node lookup might return nil, its type is Weapon | Nil. The Crystal compiler will literally refuse to compile your game until you prove to the type checker that you've handled the nil case."*
 
 ---
-### Slide 17: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking (Code Comparison)
+### Slide 18: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking
@@ -533,7 +569,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 18: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking (Analysis & Critique)
+### Slide 19: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking
@@ -551,66 +587,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"State machines are fundamental to gameplay. In GDScript, enums are essentially integers under the hood, and the match statement does not check for exhaustiveness. If you add a new state like 'STUNNED' to your enum, your existing code will silently ignore it without warning. In Crystal, enums are strongly typed, and the compiler strictly enforces exhaustive case statements. If you forget to handle a state, the compiler immediately halts with a helpful error. Plus, tuple pattern matching allows evaluating multi-variable state transitions cleanly in a single expression."*
 
 ---
-### Slide 19: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros (Code Comparison)
-- **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
-- **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
-- **Title**: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros
-- **Subtitle**: String Dictionaries & Manual Signal Registration vs. Typed Crystal Macros
-- **GDScript Code Example (`❌ GDScript: Dictionary Sprawl & String Signals`)**:
-  ```gdscript
-  # Manual dictionary definitions for editor export hints
-  func _get_property_list() -> Array[Dictionary]:
-      return [{
-          "name": "move_speed",
-          "type": TYPE_FLOAT,
-          "hint": PROPERTY_HINT_RANGE,
-          "hint_string": "10.0,500.0,5.0"
-      }]
-  
-  # Manual signal emissions with loose string names and untyped arguments
-  signal player_hit(damage, source)
-  func take_damage(dmg: int) -> void:
-      emit_signal("player_hit", dmg, self) # Typo in "player_hit" fails at runtime!
-  ```
-- **Crystal Code Example (`✨ Crystal: Compile-Time AST Macro Synthesis`)**:
-  ```crystal
-  # Declarative compile-time annotations publish directly to Godot ClassDB
-  @[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
-  property move_speed : Float32 = 150.0_f32
-  
-  # Type-safe signal definition synthesizes emit and listener helpers:
-  signal player_hit(damage : Int32, source : Player)
-  
-  def take_damage(dmg : Int32) : Void
-    # Compile-time checked: typos or wrong arg types fail during compilation!
-    emit_player_hit(dmg, self)
-    # Also auto-generates: on_player_hit { |dmg, src| ... }
-  end
-  ```
-- **Presenter Script**:
-  > *"Examining the code side-by-side: Notice the contrast in structure, verbosity, and safety between the GDScript implementation on the left and the Crystal implementation on the right before we review the specific friction points."*
-
----
-
-### Slide 20: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros (Analysis & Critique)
-- **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
-- **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
-- **Title**: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros
-- **Subtitle**: String Dictionaries & Manual Signal Registration vs. Typed Crystal Macros
-- **⚠️ GDScript Friction & Pitfalls**:
-  - Stringly-Typed Dictionaries: Requires constructing complex property dictionaries in _get_property_list().
-  - Brittle String Signals: Typo in signal name string fails silently or crashes at runtime.
-  - No Parameter Validation: Emit calls cannot verify argument counts or types at compile time.
-- **✨ Crystal Zen Advantages**:
-  - Declarative Annotations: @[Export] extracts doc comments and ranges directly into Godot Inspector.
-  - Synthesized Methods: signal died generates typed emit_died, on_died, and on_died_once.
-  - Zero Runtime Reflection: Metaprogramming executes at compile time; runtime cost is exactly zero.
-- **Key Takeaway**: Crystal AST macros execute at compile time, eliminating runtime reflection and catching API mismatches instantly.
-- **Presenter Script**:
-  > *"Metaprogramming in GDScript often means writing string dictionaries in _get_property_list, maintaining loose string names for signals, and relying on runtime reflection. In Lapis, we use Crystal's compile-time AST macros. When you declare an export or a signal, the macro generates concrete, strongly-typed methods: emit_player_hit, on_player_hit, and full ClassDB property registrations. Any typos or argument type mismatches are caught immediately by the compiler."*
-
----
-### Slide 21: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Code Comparison)
+### Slide 20: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs
@@ -650,7 +627,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 22: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Analysis & Critique)
+### Slide 21: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs
@@ -668,7 +645,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In fast-paced games—bullet hells, ARPGs, particle systems—allocating tiny objects on the heap is a death sentence for performance. In GDScript, custom data structures must extend RefCounted or use untyped dictionaries. Both create heap pressure and GC churn. In Crystal, you can declare value structs: stack-allocated, contiguous in memory, and passed by value. You get zero heap allocations, zero GC pauses, and complete compile-time type safety."*
 
 ---
-### Slide 23: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection (Code Comparison)
+### Slide 22: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection (Code Comparison)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection
@@ -710,7 +687,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 24: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection (Analysis & Critique)
+### Slide 23: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection (Analysis & Critique)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection
@@ -728,7 +705,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If your code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully."*
 
 ---
-### Slide 25: Signals & Async: Brittle String Awaits vs. Typed Signal Handles (Code Comparison)
+### Slide 24: Signals & Async: Brittle String Awaits vs. Typed Signal Handles (Code Comparison)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Signals & Async: Brittle String Awaits vs. Typed Signal Handles
@@ -770,7 +747,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 26: Signals & Async: Brittle String Awaits vs. Typed Signal Handles (Analysis & Critique)
+### Slide 25: Signals & Async: Brittle String Awaits vs. Typed Signal Handles (Analysis & Critique)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Signals & Async: Brittle String Awaits vs. Typed Signal Handles
@@ -788,7 +765,66 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports built-in timeouts: await(boss.died, timeout_sec: 10.0). Furthermore, because Lapis fibers check instance liveness on every frame tick, if the target object is destroyed, the fiber safely aborts with DisposedObjectError rather than hanging silently."*
 
 ---
-### Slide 27: Where Macros Shine: Declarative State Machines
+### Slide 26: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros (Code Comparison)
+- **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
+- **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
+- **Title**: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros
+- **Subtitle**: String Dictionaries & Manual Signal Registration vs. Typed Crystal Macros
+- **GDScript Code Example (`❌ GDScript: Dictionary Sprawl & String Signals`)**:
+  ```gdscript
+  # Manual dictionary definitions for editor export hints
+  func _get_property_list() -> Array[Dictionary]:
+      return [{
+          "name": "move_speed",
+          "type": TYPE_FLOAT,
+          "hint": PROPERTY_HINT_RANGE,
+          "hint_string": "10.0,500.0,5.0"
+      }]
+  
+  # Manual signal emissions with loose string names and untyped arguments
+  signal player_hit(damage, source)
+  func take_damage(dmg: int) -> void:
+      emit_signal("player_hit", dmg, self) # Typo in "player_hit" fails at runtime!
+  ```
+- **Crystal Code Example (`✨ Crystal: Compile-Time AST Macro Synthesis`)**:
+  ```crystal
+  # Declarative compile-time annotations publish directly to Godot ClassDB
+  @[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
+  property move_speed : Float32 = 150.0_f32
+  
+  # Type-safe signal definition synthesizes emit and listener helpers:
+  signal player_hit(damage : Int32, source : Player)
+  
+  def take_damage(dmg : Int32) : Void
+    # Compile-time checked: typos or wrong arg types fail during compilation!
+    emit_player_hit(dmg, self)
+    # Also auto-generates: on_player_hit { |dmg, src| ... }
+  end
+  ```
+- **Presenter Script**:
+  > *"Examining the code side-by-side: Notice the contrast in structure, verbosity, and safety between the GDScript implementation on the left and the Crystal implementation on the right before we review the specific friction points."*
+
+---
+
+### Slide 27: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros (Analysis & Critique)
+- **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
+- **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
+- **Title**: Metaprogramming: String Boilerplate vs. Compile-Time AST Macros
+- **Subtitle**: String Dictionaries & Manual Signal Registration vs. Typed Crystal Macros
+- **⚠️ GDScript Friction & Pitfalls**:
+  - Stringly-Typed Dictionaries: Requires constructing complex property dictionaries in _get_property_list().
+  - Brittle String Signals: Typo in signal name string fails silently or crashes at runtime.
+  - No Parameter Validation: Emit calls cannot verify argument counts or types at compile time.
+- **✨ Crystal Zen Advantages**:
+  - Declarative Annotations: @[Export] extracts doc comments and ranges directly into Godot Inspector.
+  - Synthesized Methods: signal died generates typed emit_died, on_died, and on_died_once.
+  - Zero Runtime Reflection: Metaprogramming executes at compile time; runtime cost is exactly zero.
+- **Key Takeaway**: Crystal AST macros execute at compile time, eliminating runtime reflection and catching API mismatches instantly.
+- **Presenter Script**:
+  > *"Metaprogramming in GDScript often means writing string dictionaries in _get_property_list, maintaining loose string names for signals, and relying on runtime reflection. In Lapis, we use Crystal's compile-time AST macros. When you declare an export or a signal, the macro generates concrete, strongly-typed methods: emit_player_hit, on_player_hit, and full ClassDB property registrations. Any typos or argument type mismatches are caught immediately by the compiler."*
+
+---
+### Slide 28: Where Macros Shine: Declarative State Machines
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
 - **Title**: Where Macros Shine: Declarative State Machines
@@ -825,7 +861,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead."*
 
 ---
-### Slide 28: Where Macros Shine: Zero-Reflection Serialization & Save Systems
+### Slide 29: Where Macros Shine: Zero-Reflection Serialization & Save Systems
 - **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
 - **Title**: Where Macros Shine: Zero-Reflection Serialization & Save Systems
@@ -859,47 +895,6 @@ This document outlines each slide's exact theme palette, architectural category,
   - Engine Agnostic Data Structures: Save models exist as pure Crystal data structures independent of Godot node hierarchies.
 - **Presenter Script**:
   > *"Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping."*
-
----
-### Slide 29: The Lapis DSL: Clean, Declarative Node Authoring
-- **Sol.vin Theme Palette**: `bring_me_hope` (Bluebie) [BG: `#002b55` | Window: `#003a70` | Text: `#00c8ff` | Accent: `#00e5ff`]
-- **Category Badge**: `THE LAPIS DSL • NODE AUTHORING`
-- **Title**: The Lapis DSL: Clean, Declarative Node Authoring
-- **Subtitle**: Authoring First-Class Godot Nodes with Crystal ClassDB Integration
-- **Code Example (`player_character.cr — Declarative Node Definition`)**:
-  ```crystal
-  require "libgodot"
-  
-  # Declares Godot class registered in ClassDB
-  node Player < CharacterBody3D do
-    # Movement speed in meters per second
-    @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
-    property speed : Float32 = 7.0_f32
-  
-    # Maximum hit points
-    @[Export(range: 10..500, step: 10)]
-    property max_health : Int32 = 100
-  
-    signal health_changed(current : Int32, max_health : Int32)
-    signal died
-  
-    def _ready : Void
-      Godot.print("Player initialized: #{name}")
-    end
-  
-    def _physics_process(delta : Float64) : Void
-      # Fixed-rate physics step
-    end
-  end
-  ```
-- **Clean Node DSL Invariants**:
-  - Declarative node Macro: node ClassName  registers the class in Godot's ClassDB with zero boilerplate.
-  - Property Annotations: @[Export] supports ranges, enums, file pickers, and tool buttons.
-  - Automated Doc Harvesting: Regular Crystal comments above classes and methods are harvested into Godot's offline EditorHelp database.
-  - Native Lifecycle Hooks: Direct bindings to _ready, _process, and _physics_process.
-  - Multiplayer RPC: @[RPC] configures network replication mode and transfer channels.
-- **Presenter Script**:
-  > *"Here is what authoring a Godot node actually looks like in Lapis. Notice how clean, concise, and declarative it is. You write node Player < CharacterBody3D, declare exported properties with ranges, define typed signals, and write your lifecycle methods. Regular comments above properties are harvested at compile time into Godot's in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or Rust."*
 
 ---
 ### Slide 30: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
@@ -1334,7 +1329,26 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"When your team has established GDScript subsystems that you want to call frequently from Crystal, you don't have to settle for dynamic string dispatch. Using lapis bind, Lapis inspects the GDScript file and generates a strongly-typed Crystal wrapper class. You get full compile-time type verification and IDE autocompletion when calling GDScript."*
 
 ---
-### Slide 42: The Lapis CLI: Project Lifecycle & Bootstrapping
+### Slide 42: First-Class Godot Editor Integration
+- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
+- **Category Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
+- **Title**: First-Class Godot Editor Integration
+- **Subtitle**: Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync
+- **In-Editor Feature Highlights**:
+  - Native Script Creation Dialog: Select 'Crystal (*.cr)' directly from Godot's Attach Node Script dialog.
+  - Pure Crystal Tokenizer: Embedded syntax highlighter in Godot's CodeEdit with keywords, strings, comments, and symbols.
+  - Instant Hot-Reloading: Pressing F5 triggers automatic recompilation and shadow DLL reload.
+  - Live In-Editor @tool Execution: Custom nodes execute inside the editor viewport in real time.
+  - Harvested XML Documentation: Regular Crystal doc comments appear automatically in Godot's F1 Help viewer.
+- **Why It Changes the Game**:
+  - No External IDE Required: You can write and edit Crystal code directly inside Godot's built-in code editor.
+  - Seamless Level Design: Level designers adjust exported Crystal properties in the Inspector and see real-time updates.
+  - Zero GDExtension Friction: Feels just as integrated as GDScript and C#, not like an unwieldy foreign extension.
+- **Presenter Script**:
+  > *"A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help."*
+
+---
+### Slide 43: The Lapis CLI: Project Lifecycle & Bootstrapping
 - **Sol.vin Theme Palette**: `spaces_95` (Spaces 95) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: The Lapis CLI: Project Lifecycle & Bootstrapping
@@ -1360,34 +1374,6 @@ This document outlines each slide's exact theme palette, architectural category,
   - Unified Toolchain: Replaces fractured Makefiles and shell scripts with a single standardized executable across Windows, Linux, and macOS.
 - **Presenter Script**:
   > *"Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one."*
-
----
-### Slide 43: The Lapis CLI: Codegen, Maintenance & Packaging
-- **Sol.vin Theme Palette**: `amigo` (Amigo) [BG: `#0055aa` | Window: `#0055aa` | Text: `#ffffff` | Accent: `#ff9900`]
-- **Category Badge**: `TOOLCHAIN • AUTOMATION & CODEGEN`
-- **Title**: The Lapis CLI: Codegen, Maintenance & Packaging
-- **Subtitle**: Automated API Generation, Addon Packaging, and Standalone Distribution
-- **Terminal Command (`Terminal — Advanced CLI Tooling`)**:
-  ```bash
-  # Decompile Crystal method to pseudo-C & assembly via r2
-  $ lapis decompile bin/game.dll "Player#_process" --side-by-side
-  
-  # Audit GDExtension ABI exports & memory boundary health
-  $ lapis decompile bin/crystal_bridge.dll --verify
-  
-  # Verify developer environment: Crystal, radare2, Godot, Git
-  $ lapis doctor --verbose
-  
-  # Package turnkey standalone game or redistributable addon
-  $ lapis package game --release
-  ```
-- **Automation & Maintenance**:
-  - CLI Decompiler: lapis decompile decompiles methods to pseudo-C (pdc) and side-by-side assembly (pdca) with zero external servers.
-  - Diagnostic Doctor: lapis doctor checks environment prerequisites Crystal, radare2 (r2), Godot, and Git.
-  - API Generator: lapis api generate parses extension_api.json and synthesizes 800+ typed Crystal classes in seconds.
-  - Packaging Pipelines: lapis package automates bundling of runtime DLLs, manifests, and stripped release binaries.
-- **Presenter Script**:
-  > *"Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons."*
 
 ---
 ### Slide 44: Package Management: Addons & Crystal Shards
@@ -1419,23 +1405,32 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"One of the greatest superpowers of Lapis is access to the broader Crystal package ecosystem. Using standard shard.yml, you can pull in fast math libraries, procedural noise generators, serialization engines, and AI algorithms from GitHub. They compile directly into your game's binary with full link-time optimization."*
 
 ---
-### Slide 45: First-Class Godot Editor Integration
-- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
-- **Category Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
-- **Title**: First-Class Godot Editor Integration
-- **Subtitle**: Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync
-- **In-Editor Feature Highlights**:
-  - Native Script Creation Dialog: Select 'Crystal (*.cr)' directly from Godot's Attach Node Script dialog.
-  - Pure Crystal Tokenizer: Embedded syntax highlighter in Godot's CodeEdit with keywords, strings, comments, and symbols.
-  - Instant Hot-Reloading: Pressing F5 triggers automatic recompilation and shadow DLL reload.
-  - Live In-Editor @tool Execution: Custom nodes execute inside the editor viewport in real time.
-  - Harvested XML Documentation: Regular Crystal doc comments appear automatically in Godot's F1 Help viewer.
-- **Why It Changes the Game**:
-  - No External IDE Required: You can write and edit Crystal code directly inside Godot's built-in code editor.
-  - Seamless Level Design: Level designers adjust exported Crystal properties in the Inspector and see real-time updates.
-  - Zero GDExtension Friction: Feels just as integrated as GDScript and C#, not like an unwieldy foreign extension.
+### Slide 45: The Lapis CLI: Codegen, Maintenance & Packaging
+- **Sol.vin Theme Palette**: `amigo` (Amigo) [BG: `#0055aa` | Window: `#0055aa` | Text: `#ffffff` | Accent: `#ff9900`]
+- **Category Badge**: `TOOLCHAIN • AUTOMATION & CODEGEN`
+- **Title**: The Lapis CLI: Codegen, Maintenance & Packaging
+- **Subtitle**: Automated API Generation, Addon Packaging, and Standalone Distribution
+- **Terminal Command (`Terminal — Advanced CLI Tooling`)**:
+  ```bash
+  # Decompile Crystal method to pseudo-C & assembly via r2
+  $ lapis decompile bin/game.dll "Player#_process" --side-by-side
+  
+  # Audit GDExtension ABI exports & memory boundary health
+  $ lapis decompile bin/crystal_bridge.dll --verify
+  
+  # Verify developer environment: Crystal, radare2, Godot, Git
+  $ lapis doctor --verbose
+  
+  # Package turnkey standalone game or redistributable addon
+  $ lapis package game --release
+  ```
+- **Automation & Maintenance**:
+  - CLI Decompiler: lapis decompile decompiles methods to pseudo-C (pdc) and side-by-side assembly (pdca) with zero external servers.
+  - Diagnostic Doctor: lapis doctor checks environment prerequisites Crystal, radare2 (r2), Godot, and Git.
+  - API Generator: lapis api generate parses extension_api.json and synthesizes 800+ typed Crystal classes in seconds.
+  - Packaging Pipelines: lapis package automates bundling of runtime DLLs, manifests, and stripped release binaries.
 - **Presenter Script**:
-  > *"A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help."*
+  > *"Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons."*
 
 ---
 ### Slide 46: Native Debugging: Why Lapis Replaced LLDB with radare2 (r2)
@@ -1501,26 +1496,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"We don't just use radare2 for interactive debugging; we use it to test Lapis itself. In our automated test suite, RadareDriver audits compiled game binaries in CI to verify binary hardening like DEP and ASLR, mathematically validates that zero internal Boehm GC or C++ bridge symbols leak into the global namespace, and validates pointer alignment. It even drives headless multiplayer lockstep tests, ensuring that pausing a client cooperatively suspends all peer instances without triggering network heartbeat timeouts."*
 
 ---
-### Slide 48: Quantitative Benchmarks: Crystal vs GDScript
-- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
-- **Category Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
-- **Title**: Quantitative Benchmarks: Crystal vs GDScript
-- **Subtitle**: Real-World Performance Comparison on Common Gameplay Workloads
-- **Benchmark Results (Execution Time)**:
-  - **N-Body Gravitational Physics (10k bodies)**: GDScript `184.2 ms` vs Crystal `3.1 ms` (**59.4x faster**)
-  - **Procedural Perlin Terrain Generation (256x256)**: GDScript `92.4 ms` vs Crystal `2.8 ms` (**33.0x faster**)
-  - **A* Pathfinding Grid Traversal (1,000 agents)**: GDScript `64.8 ms` vs Crystal `4.2 ms` (**15.4x faster**)
-  - **Raycast Query & Entity Filtering (50,000 hits)**: GDScript `45.6 ms` vs Crystal `5.1 ms` (**8.9x faster**)
-- **Why Crystal Dominates**:
-  - LLVM Ahead-of-Time Compilation: Compiles down to optimized machine instructions; zero bytecode interpreter overhead.
-  - Autovectorization & SIMD: Vector math operations benefit from LLVM's automatic AVX2/NEON vectorization.
-  - Flat Memory Layout: Value types and structs live contiguously on the stack or in flat arrays without pointer indirection.
-  - Zero GC Hitching: Predictable, low-latency execution during tight 60/120 FPS frame cycles.
-- **Presenter Script**:
-  > *"Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++."*
-
----
-### Slide 49: Testing Framework: Writing Tests & Zero-Leak Proof
+### Slide 48: Testing Framework: Writing Tests & Zero-Leak Proof
 - **Sol.vin Theme Palette**: `spaces_2000` (Spaces 2000) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#0a246a`]
 - **Category Badge**: `QUALITY GATES • ZERO-LEAK TESTING`
 - **Title**: Testing Framework: Writing Tests & Zero-Leak Proof
@@ -1556,7 +1532,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Memory leaks are fatal in long-running games. Lapis includes a dedicated testing apparatus with mathematical zero-leak verification. Using Lapis::Test.assert_no_leak, our test runner queries Godot's Performance singletons and forces GC equilibrium before and after running iterations, mathematically proving that zero objects or memory leaked."*
 
 ---
-### Slide 50: In-Editor Tool Testing & Standalone TUI Runner
+### Slide 49: In-Editor Tool Testing & Standalone TUI Runner
 - **Sol.vin Theme Palette**: `spaces_31` (Spaces 3.1) [BG: `#ffffff` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
@@ -1584,6 +1560,25 @@ This document outlines each slide's exact theme palette, architectural category,
   - Editor Driver Integration: Launches headless Godot to test tool scripts and editor docks without opening a GUI.
 - **Presenter Script**:
   > *"Running tests shouldn't be boring. When you run lapis test, it launches an interactive double-buffered ANSI TUI dashboard. You see live multi-phase progress, rolling logs with syntax coloring, and instant leak verification metrics. It makes continuous testing a genuinely satisfying part of the development loop."*
+
+---
+### Slide 50: Quantitative Benchmarks: Crystal vs GDScript
+- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
+- **Category Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
+- **Title**: Quantitative Benchmarks: Crystal vs GDScript
+- **Subtitle**: Real-World Performance Comparison on Common Gameplay Workloads
+- **Benchmark Results (Execution Time)**:
+  - **N-Body Gravitational Physics (10k bodies)**: GDScript `184.2 ms` vs Crystal `3.1 ms` (**59.4x faster**)
+  - **Procedural Perlin Terrain Generation (256x256)**: GDScript `92.4 ms` vs Crystal `2.8 ms` (**33.0x faster**)
+  - **A* Pathfinding Grid Traversal (1,000 agents)**: GDScript `64.8 ms` vs Crystal `4.2 ms` (**15.4x faster**)
+  - **Raycast Query & Entity Filtering (50,000 hits)**: GDScript `45.6 ms` vs Crystal `5.1 ms` (**8.9x faster**)
+- **Why Crystal Dominates**:
+  - LLVM Ahead-of-Time Compilation: Compiles down to optimized machine instructions; zero bytecode interpreter overhead.
+  - Autovectorization & SIMD: Vector math operations benefit from LLVM's automatic AVX2/NEON vectorization.
+  - Flat Memory Layout: Value types and structs live contiguously on the stack or in flat arrays without pointer indirection.
+  - Zero GC Hitching: Predictable, low-latency execution during tight 60/120 FPS frame cycles.
+- **Presenter Script**:
+  > *"Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++."*
 
 ---
 ### Slide 51: Lapis Architecture: The Layered Bridge

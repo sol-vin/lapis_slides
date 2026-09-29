@@ -1,7 +1,7 @@
 ---
 id: 09_signals_async
-title: 'Signals, Events & Async Awaiting: Zen Ergonomics'
-subtitle: Declarative Signal Connections and Non-Blocking Gameplay Coroutines
+title: 'Signals & Events: Reactive Zen Ergonomics'
+subtitle: Declarative Signal Connections, Auto-Synthesized Listeners, and Decoupled Systems
 badge: CRYSTAL ERGONOMICS • SIGNALS & EVENTS
 badge_color: cyan
 palette: spaces_vista
@@ -9,39 +9,38 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: code
-  title: reactive_gameplay.cr — Signals & Async Coroutines
+  title: reactive_events.cr — Type-Safe Signal Subscriptions
   tag: Crystal
   lang: crystal
-  code: "# 1. Connecting signals with idiomatic blocks/closures\r\nstart_btn = get_node(Button,
-    \"UI/StartButton\")\r\nstart_btn.signal(\"pressed\").connect do\r\n  start_game_sequence\r\nend\r\n\n#
-    2. Type-safe custom signals & listener helpers\r\nsignal health_changed(current
-    : Int32, max_health : Int32)\r\nsignal died\r\n\n# First-class listener helpers
-    & one-shot subscriptions\r\non_health_changed { |curr, max| update_ui(curr, max)
-    }\r\non_died_once { trigger_game_over }\r\n\nemit(health_changed, 75, 100) # or
-    emit_health_changed(75, 100)\r\n\n# 3. Non-blocking async awaiting with dead-pointer
-    protection\r\ndef cutscene_sequence : Void\r\n  Godot.print(\"Spawning boss encounter...\")\r\n
-    \ await(2.5.seconds)                 # Non-blocking timer delay\r\n  boss = spawn_boss\r\n
-    \ await(boss.died)                   # Typed signal handle await!\r\n  Godot.print(\"Victory
-    achieved!\")\r\nend"
+  code: |
+    # 1. Connecting engine signals with clean Crystal blocks
+    start_btn = get_node(Button, "UI/StartButton")
+    start_btn.signal("pressed").connect do
+      start_game_sequence
+    end
+
+    # 2. Declaring custom typed signals with parameters
+    signal health_changed(current : Int32, max_health : Int32)
+    signal player_died
+
+    # 3. Auto-synthesized listener helpers & one-shot subscriptions
+    on_health_changed do |curr, max|
+      hud.update_health_bar(curr, max)
+    end
+    on_player_died_once do
+      game_over_director.trigger_defeat
+    end
+
+    # 4. Compile-time validated signal emission
+    emit_health_changed(current: 75, max_health: 100)
 right:
   type: card
   title: Reactive Gameplay Features
   color: cyan
   items:
-  - <strong>Closure Connections:</strong> Connect signals with clean Crystal blocks—no
-    string method names or delegate boilerplate.
-  - <strong>Synthesized Signal Helpers:</strong> Declaring <code>signal died</code>
-    auto-generates <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code>
-    with compile-time type verification.
-  - <strong>First-Class await:</strong> Await timers (<code>await(2.5.seconds)</code>)
-    or typed signals (<code>await(boss.died)</code>).
-  - <strong>Dead-Pointer Guard:</strong> If an awaited node is freed during waiting,
-    the fiber safely aborts with <code>DisposedObjectError</code> instead of segfaulting.
-  - <strong>Cross-Language Interop:</strong> Connect GDScript signals and call dynamic
-    methods with <code>node.call("method", args)</code>.
-notes: Signals are the heartbeat of Godot game architecture. In Lapis, signals feel
-  completely native to Crystal. You can connect signals with idiomatic Crystal closures,
-  eliminating single-use handler functions. Declaring a signal with our macro auto-generates
-  type-safe emitter and listener helpers. And our first-class await mechanism lets
-  you write procedural cutscenes and asynchronous timers cleanly using fibers, with
-  automatic dead-pointer protection guarding against deallocated nodes.
+  - <strong>Closure Connections:</strong> Connect any Godot signal with clean Crystal blocks—no string method names or delegate boilerplate.
+  - <strong>Synthesized Signal Helpers:</strong> Declaring <code>signal died</code> auto-generates <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code> with compile-time type verification.
+  - <strong>One-Shot Subscriptions:</strong> <code>on_event_once</code> automatically disconnects the callback after the first invocation, preventing stale event leaks.
+  - <strong>Decoupled Architecture:</strong> Game systems communicate through strongly-typed events rather than tightly-coupled node references.
+notes: |
+  Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. You can connect signals with idiomatic closures, eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers like on_health_changed and on_player_died_once. Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly.

@@ -719,7 +719,91 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 8: Bluebie (Effortless Access: Nodes, Scenes & Properties)
+           SLIDE 8: Bluebie (The Lapis DSL: Clean, Declarative Node Authoring)
+           =================================================================== -->
+      <section data-background-color="#002b55"
+               data-palette-name="Bluebie"
+               data-palette-cube="#00c8ff"
+               data-palette-cube-hover="#00e5ff"
+               class="solvin-slide bring_me_hope"
+               style="--bg-color: #002b55; --bg-window: #003a70; --text-color: #00c8ff; --text-dim: #3a7ca5; --link-color: #66e0ff; --border-color: #00a8e8; --border-active: #00e5ff; --accent-color: #00e5ff; --accent-secondary: #66e0ff; --accent-tertiary: #00e5ff; --accent-quaternary: #00a8e8; --shadow-color: #00152b; --cube: #00c8ff; --cube-hover: #00e5ff; --emoji-filter: url(#emoji-filter-bring_me_hope); ">
+        <div class="palette-corner-badge" title="Theme: Bluebie">
+          <span class="palette-corner-dot"></span> PALETTE: Bluebie
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">THE LAPIS DSL • NODE AUTHORING</span>
+            <h2 class="slide-title">The Lapis DSL: Clean, Declarative Node Authoring</h2>
+            <p class="slide-subtitle">Authoring First-Class Godot Nodes with Crystal ClassDB Integration</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">player_character.cr — Declarative Node Definition</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal">require &quot;libgodot&quot;
+
+# Declares Godot class registered in ClassDB
+node Player &lt; CharacterBody3D do
+  # Movement speed in meters per second
+  @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
+  property speed : Float32 = 7.0_f32
+
+  # Maximum hit points
+  @[Export(range: 10..500, step: 10)]
+  property max_health : Int32 = 100
+
+  signal health_changed(current : Int32, max_health : Int32)
+  signal died
+
+  def _ready : Void
+    Godot.print(&quot;Player initialized: #{name}&quot;)
+  end
+
+  def _physics_process(delta : Float64) : Void
+    # Fixed-rate physics step
+  end
+end</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>Clean Node DSL Invariants</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Declarative node Macro:</strong> <code>node ClassName < ParentNode</code> registers the class in Godot's ClassDB with zero boilerplate.</li>
+              <li><strong>Property Annotations:</strong> <code>@[Export]</code> supports ranges, enums, file pickers, and tool buttons.</li>
+              <li><strong>Automated Doc Harvesting:</strong> Regular Crystal comments above classes and methods are harvested into Godot's offline EditorHelp database.</li>
+              <li><strong>Native Lifecycle Hooks:</strong> Direct bindings to <code>_ready</code>, <code>_process</code>, and <code>_physics_process</code>.</li>
+              <li><strong>Multiplayer RPC:</strong> <code>@[RPC]</code> configures network replication mode and transfer channels.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Bluebie)</span>
+          <span>Slide 8 / 56</span>
+        </div>
+        <aside class="notes">
+          Here is what authoring a Godot node actually looks like in Lapis. Notice how clean, concise, and declarative it is. You write node Player < CharacterBody3D, declare exported properties with ranges, define typed signals, and write your lifecycle methods. Regular comments above properties are harvested at compile time into Godot's in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or Rust.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 9: Bluebie (Effortless Access: Nodes, Scenes & Properties)
            =================================================================== -->
       <section data-background-color="#002b55"
                data-palette-name="Bluebie"
@@ -792,7 +876,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Bluebie)</span>
-          <span>Slide 8 / 56</span>
+          <span>Slide 9 / 56</span>
         </div>
         <aside class="notes">
           In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. With our onready macro and get_node_as, child nodes are resolved safely when the node enters the tree during _ready, returning the concrete typed class directly without casting. With get_node_as?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.
@@ -800,7 +884,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 9: Spaces Vista (Signals, Events & Async Awaiting: Zen Ergonomics)
+           SLIDE 10: Spaces Vista (Signals & Events: Reactive Zen Ergonomics)
            =================================================================== -->
       <section data-background-color="#141c24"
                data-palette-name="Spaces Vista"
@@ -814,8 +898,8 @@ property move_speed : Float32 = 250.0_f32</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill cyan">CRYSTAL ERGONOMICS • SIGNALS &amp; EVENTS</span>
-            <h2 class="slide-title">Signals, Events &amp; Async Awaiting: Zen Ergonomics</h2>
-            <p class="slide-subtitle">Declarative Signal Connections and Non-Blocking Gameplay Coroutines</p>
+            <h2 class="slide-title">Signals &amp; Events: Reactive Zen Ergonomics</h2>
+            <p class="slide-subtitle">Declarative Signal Connections, Auto-Synthesized Listeners, and Decoupled Systems</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
@@ -827,36 +911,32 @@ property move_speed : Float32 = 250.0_f32</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title">reactive_gameplay.cr — Signals &amp; Async Coroutines</span>
+              <span class="code-title">reactive_events.cr — Type-Safe Signal Subscriptions</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal</span>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Connecting signals with idiomatic blocks/closures
+            <pre><code class="language-crystal"># 1. Connecting engine signals with clean Crystal blocks
 start_btn = get_node(Button, &quot;UI/StartButton&quot;)
 start_btn.signal(&quot;pressed&quot;).connect do
   start_game_sequence
 end
 
-# 2. Type-safe custom signals &amp; listener helpers
+# 2. Declaring custom typed signals with parameters
 signal health_changed(current : Int32, max_health : Int32)
-signal died
+signal player_died
 
-# First-class listener helpers &amp; one-shot subscriptions
-on_health_changed { |curr, max| update_ui(curr, max) }
-on_died_once { trigger_game_over }
+# 3. Auto-synthesized listener helpers &amp; one-shot subscriptions
+on_health_changed do |curr, max|
+  hud.update_health_bar(curr, max)
+end
+on_player_died_once do
+  game_over_director.trigger_defeat
+end
 
-emit(health_changed, 75, 100) # or emit_health_changed(75, 100)
-
-# 3. Non-blocking async awaiting with dead-pointer protection
-def cutscene_sequence : Void
-  Godot.print(&quot;Spawning boss encounter...&quot;)
-  await(2.5.seconds)                 # Non-blocking timer delay
-  boss = spawn_boss
-  await(boss.died)                   # Typed signal handle await!
-  Godot.print(&quot;Victory achieved!&quot;)
-end</code></pre>
+# 4. Compile-time validated signal emission
+emit_health_changed(current: 75, max_health: 100)</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
@@ -865,11 +945,10 @@ end</code></pre>
               <span>Reactive Gameplay Features</span>
             </div>
             <ul class="card-list">
-              <li><strong>Closure Connections:</strong> Connect signals with clean Crystal blocks—no string method names or delegate boilerplate.</li>
+              <li><strong>Closure Connections:</strong> Connect any Godot signal with clean Crystal blocks—no string method names or delegate boilerplate.</li>
               <li><strong>Synthesized Signal Helpers:</strong> Declaring <code>signal died</code> auto-generates <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code> with compile-time type verification.</li>
-              <li><strong>First-Class await:</strong> Await timers (<code>await(2.5.seconds)</code>) or typed signals (<code>await(boss.died)</code>).</li>
-              <li><strong>Dead-Pointer Guard:</strong> If an awaited node is freed during waiting, the fiber safely aborts with <code>DisposedObjectError</code> instead of segfaulting.</li>
-              <li><strong>Cross-Language Interop:</strong> Connect GDScript signals and call dynamic methods with <code>node.call("method", args)</code>.</li>
+              <li><strong>One-Shot Subscriptions:</strong> <code>on_event_once</code> automatically disconnects the callback after the first invocation, preventing stale event leaks.</li>
+              <li><strong>Decoupled Architecture:</strong> Game systems communicate through strongly-typed events rather than tightly-coupled node references.</li>
             </ul>
           </div>
           </div>
@@ -877,15 +956,15 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces Vista)</span>
-          <span>Slide 9 / 56</span>
+          <span>Slide 10 / 56</span>
         </div>
         <aside class="notes">
-          Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. You can connect signals with idiomatic Crystal closures, eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers. And our first-class await mechanism lets you write procedural cutscenes and asynchronous timers cleanly using fibers, with automatic dead-pointer protection guarding against deallocated nodes.
+          Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. You can connect signals with idiomatic closures, eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers like on_health_changed and on_player_died_once. Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly.
         </aside>
       </section>
 
       <!-- ===================================================================
-           SLIDE 10: Playbox (Expressive Ergonomics: High-Level Language Primitives)
+           SLIDE 11: Playbox (Expressive Ergonomics: High-Level Language Primitives)
            =================================================================== -->
       <section data-background-color="#2d224b"
                data-palette-name="Playbox"
@@ -950,7 +1029,7 @@ active_particles = particle_pool[0...active_count]</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Playbox)</span>
-          <span>Slide 10 / 56</span>
+          <span>Slide 11 / 56</span>
         </div>
         <aside class="notes">
           Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed.
@@ -958,7 +1037,7 @@ active_particles = particle_pool[0...active_count]</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 11: Spaces XP Royale (Iterators & Collections: Imperative Loops vs. Functional Zen)
+           SLIDE 12: Spaces XP Royale (Iterators & Collections: Imperative Loops vs. Functional Zen)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -1035,7 +1114,7 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 11 / 56</span>
+          <span>Slide 12 / 56</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -1043,7 +1122,7 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 12: Spaces XP Royale (Iterators & Collections: Imperative Loops vs. Functional Zen)
+           SLIDE 13: Spaces XP Royale (Iterators & Collections: Imperative Loops vs. Functional Zen)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -1153,7 +1232,7 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 12 / 56</span>
+          <span>Slide 13 / 56</span>
         </div>
         <aside class="notes">
           One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators. In GDScript, transforming a collection requires creating an empty array, manually writing a for-loop, appending items one by one, and managing boolean flags for simple queries like 'any?'. In Crystal, we inherit Ruby's legendary Enumerable module: select, map, any?, and even tally for building frequency distributions. Because Crystal compiles to native LLVM code, these functional closures compile down to tight, vectorized loops with zero GC overhead.
@@ -1161,7 +1240,7 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 13: Super ES (Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen)
+           SLIDE 14: Super ES (Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -1247,7 +1326,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 13 / 56</span>
+          <span>Slide 14 / 56</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -1255,7 +1334,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 14: Super ES (Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen)
+           SLIDE 15: Super ES (Anonymous Functions & Symbols: Callable Hell vs. Zero-Alloc Zen)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -1374,7 +1453,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 14 / 56</span>
+          <span>Slide 15 / 56</span>
         </div>
         <aside class="notes">
           Anonymous functions in GDScript are cumbersome: you have to write `func(a, b): return ...` every time, and each lambda allocates a native Callable object on the engine heap. On top of that, GDScript relies on strings or StringNames for lightweight state identifiers, requiring runtime hash-table lookups. In Crystal, blocks are pure zen: `inventory.sort_by!(&.weight)` inlines directly into native machine code with zero heap allocations. Symbols like `:ready` are 32-bit immediate integers checked at compile time. And with over 50 composable Enumerable methods like `tally`, `reject`, and `chunk`, Crystal turns cumbersome loops into elegant, vectorized pipelines.
@@ -1382,7 +1461,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 15: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
+           SLIDE 16: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -1459,7 +1538,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 15 / 56</span>
+          <span>Slide 16 / 56</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -1467,7 +1546,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 16: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
+           SLIDE 17: Aperture (Nil Safety: Runtime Crashes vs. Compile-Time Proof)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -1577,7 +1656,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 16 / 56</span>
+          <span>Slide 17 / 56</span>
         </div>
         <aside class="notes">
           In GDScript, every developer has experienced the dreaded 'Invalid call to function on base Nil' crash, or worse, a hard engine crash when dereferencing an object that was freed in C++. In Crystal, Nil is a distinct type, and types are non-nil by default. If a node lookup might return nil, its type is Weapon | Nil. The Crystal compiler will literally refuse to compile your game until you prove to the type checker that you've handled the nil case.
@@ -1585,7 +1664,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 17: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
+           SLIDE 18: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
            =================================================================== -->
       <section data-background-color="#1f1f1f"
                data-palette-name="Spaces 10"
@@ -1672,7 +1751,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 10)</span>
-          <span>Slide 17 / 56</span>
+          <span>Slide 18 / 56</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -1680,7 +1759,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 18: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
+           SLIDE 19: Spaces 10 (Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking)
            =================================================================== -->
       <section data-background-color="#1f1f1f"
                data-palette-name="Spaces 10"
@@ -1800,7 +1879,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 10)</span>
-          <span>Slide 18 / 56</span>
+          <span>Slide 19 / 56</span>
         </div>
         <aside class="notes">
           State machines are fundamental to gameplay. In GDScript, enums are essentially integers under the hood, and the match statement does not check for exhaustiveness. If you add a new state like 'STUNNED' to your enum, your existing code will silently ignore it without warning. In Crystal, enums are strongly typed, and the compiler strictly enforces exhaustive case statements. If you forget to handle a state, the compiler immediately halts with a helpful error. Plus, tuple pattern matching allows evaluating multi-variable state transitions cleanly in a single expression.
@@ -1808,218 +1887,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 19: Spaces XP Royale (Metaprogramming: String Boilerplate vs. Compile-Time AST Macros)
-           =================================================================== -->
-      <section data-background-color="#141820"
-               data-palette-name="Spaces XP Royale"
-               data-palette-cube="#f0f4f9"
-               data-palette-cube-hover="#4090ff"
-               class="solvin-slide spaces_xp_royale"
-               style="--bg-color: #141820; --bg-window: #1f2430; --text-color: #f0f4f9; --text-dim: #7b8c9e; --link-color: #4090ff; --border-color: #1f5ac8; --border-active: #4090ff; --accent-color: #4090ff; --accent-secondary: #10b981; --accent-tertiary: #4090ff; --accent-quaternary: #1f5ac8; --shadow-color: #0a0d12; --cube: #f0f4f9; --cube-hover: #4090ff; --emoji-filter: url(#emoji-filter-spaces_xp_royale); ">
-        <div class="palette-corner-badge" title="Theme: Spaces XP Royale">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces XP Royale
-        </div>
-        <div class="slide-header" style="border: none; padding-bottom: 0; display: flex; align-items: center; justify-content: space-between;">
-          <div>
-            <span class="badge-pill amber">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
-            <h2 class="slide-title">Metaprogramming: String Boilerplate vs. Compile-Time AST Macros</h2>
-            <p class="slide-subtitle">String Dictionaries &amp; Manual Signal Registration vs. Typed Crystal Macros</p>
-          </div>
-          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
-        </div>
-        <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
-          <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title"><span class="emoji-tint">❌</span> GDScript: Dictionary Sprawl &amp; String Signals</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">GDScript</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-gdscript"># Manual dictionary definitions for editor export hints
-func _get_property_list() -&gt; Array[Dictionary]:
-    return [{
-        &quot;name&quot;: &quot;move_speed&quot;,
-        &quot;type&quot;: TYPE_FLOAT,
-        &quot;hint&quot;: PROPERTY_HINT_RANGE,
-        &quot;hint_string&quot;: &quot;10.0,500.0,5.0&quot;
-    }]
-
-# Manual signal emissions with loose string names and untyped arguments
-signal player_hit(damage, source)
-func take_damage(dmg: int) -&gt; void:
-    emit_signal(&quot;player_hit&quot;, dmg, self) # Typo in &quot;player_hit&quot; fails at runtime!</code></pre>
-          </div>
-          </div>
-          <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title"><span class="emoji-tint">✨</span> Crystal: Compile-Time AST Macro Synthesis</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal (Lapis)</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal"># Declarative compile-time annotations publish directly to Godot ClassDB
-@[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
-property move_speed : Float32 = 150.0_f32
-
-# Type-safe signal definition synthesizes emit and listener helpers:
-signal player_hit(damage : Int32, source : Player)
-
-def take_damage(dmg : Int32) : Void
-  # Compile-time checked: typos or wrong arg types fail during compilation!
-  emit_player_hit(dmg, self)
-  # Also auto-generates: on_player_hit { |dmg, src| ... }
-end</code></pre>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 19 / 56</span>
-        </div>
-        <aside class="notes">
-          Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 20: Spaces XP Royale (Metaprogramming: String Boilerplate vs. Compile-Time AST Macros)
-           =================================================================== -->
-      <section data-background-color="#141820"
-               data-palette-name="Spaces XP Royale"
-               data-palette-cube="#f0f4f9"
-               data-palette-cube-hover="#4090ff"
-               class="solvin-slide spaces_xp_royale"
-               style="--bg-color: #141820; --bg-window: #1f2430; --text-color: #f0f4f9; --text-dim: #7b8c9e; --link-color: #4090ff; --border-color: #1f5ac8; --border-active: #4090ff; --accent-color: #4090ff; --accent-secondary: #10b981; --accent-tertiary: #4090ff; --accent-quaternary: #1f5ac8; --shadow-color: #0a0d12; --cube: #f0f4f9; --cube-hover: #4090ff; --emoji-filter: url(#emoji-filter-spaces_xp_royale); ">
-        <div class="palette-corner-badge" title="Theme: Spaces XP Royale">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces XP Royale
-        </div>
-        <div class="slide-header" style="border: none; padding-bottom: 0; display: flex; align-items: center; justify-content: space-between;">
-          <div>
-            <span class="badge-pill amber">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
-            <h2 class="slide-title">Metaprogramming: String Boilerplate vs. Compile-Time AST Macros</h2>
-            <p class="slide-subtitle">String Dictionaries &amp; Manual Signal Registration vs. Typed Crystal Macros</p>
-          </div>
-          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
-        </div>
-        <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
-          <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title"><span class="emoji-tint">❌</span> GDScript: Dictionary Sprawl &amp; String Signals</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">GDScript</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-gdscript"># Manual dictionary definitions for editor export hints
-func _get_property_list() -&gt; Array[Dictionary]:
-    return [{
-        &quot;name&quot;: &quot;move_speed&quot;,
-        &quot;type&quot;: TYPE_FLOAT,
-        &quot;hint&quot;: PROPERTY_HINT_RANGE,
-        &quot;hint_string&quot;: &quot;10.0,500.0,5.0&quot;
-    }]
-
-# Manual signal emissions with loose string names and untyped arguments
-signal player_hit(damage, source)
-func take_damage(dmg: int) -&gt; void:
-    emit_signal(&quot;player_hit&quot;, dmg, self) # Typo in &quot;player_hit&quot; fails at runtime!</code></pre>
-          </div>
-          </div>
-          <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title"><span class="emoji-tint">✨</span> Crystal: Compile-Time AST Macro Synthesis</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal (Lapis)</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal"># Declarative compile-time annotations publish directly to Godot ClassDB
-@[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
-property move_speed : Float32 = 150.0_f32
-
-# Type-safe signal definition synthesizes emit and listener helpers:
-signal player_hit(damage : Int32, source : Player)
-
-def take_damage(dmg : Int32) : Void
-  # Compile-time checked: typos or wrong arg types fail during compilation!
-  emit_player_hit(dmg, self)
-  # Also auto-generates: on_player_hit { |dmg, src| ... }
-end</code></pre>
-          </div>
-          </div>
-          <div class="ide-notes-overlay">
-            <div class="overlay-card antipattern">
-              <div class="overlay-card-header">
-                <div class="card-title antipattern">
-                  <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
-                </div>
-                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
-              </div>
-              <ul class="card-list">
-                <li><strong>Stringly-Typed Dictionaries:</strong> Requires constructing complex property dictionaries in <code>_get_property_list()</code>.</li>
-                <li><strong>Brittle String Signals:</strong> Typo in signal name string fails silently or crashes at runtime.</li>
-                <li><strong>No Parameter Validation:</strong> Emit calls cannot verify argument counts or types at compile time.</li>
-              </ul>
-            </div>
-            <div class="overlay-card solution">
-              <div class="overlay-card-header">
-                <div class="card-title solution">
-                  <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
-                </div>
-                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
-              </div>
-              <ul class="card-list">
-                <li><strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc comments and ranges directly into Godot Inspector.</li>
-                <li><strong>Synthesized Methods:</strong> <code>signal died</code> generates typed <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code>.</li>
-                <li><strong>Zero Runtime Reflection:</strong> Metaprogramming executes at compile time; runtime cost is exactly zero.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="takeaway-banner" style="margin-top: 0.6rem; padding: 0.45rem 0.9rem; background: var(--bg-window); border: 1.5px solid var(--accent-color); border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem;">
-          <span class="badge-pill" style="margin-bottom: 0; padding: 0.15rem 0.55rem; font-size: 0.72rem; border-color: var(--accent-color); color: var(--accent-color);">ZERO-REFLECTION METAPROGRAMMING</span>
-          <span>Crystal AST macros execute at compile time, eliminating runtime reflection and catching API mismatches instantly.</span>
-        </div>
-
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 20 / 56</span>
-        </div>
-        <aside class="notes">
-          Metaprogramming in GDScript often means writing string dictionaries in _get_property_list, maintaining loose string names for signals, and relying on runtime reflection. In Lapis, we use Crystal's compile-time AST macros. When you declare an export or a signal, the macro generates concrete, strongly-typed methods: emit_player_hit, on_player_hit, and full ClassDB property registrations. Any typos or argument type mismatches are caught immediately by the compiler.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 21: Spaces 11 (Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs)
+           SLIDE 20: Spaces 11 (Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs)
            =================================================================== -->
       <section data-background-color="#18191c"
                data-palette-name="Spaces 11"
@@ -2099,7 +1967,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 11)</span>
-          <span>Slide 21 / 56</span>
+          <span>Slide 20 / 56</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -2107,7 +1975,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 22: Spaces 11 (Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs)
+           SLIDE 21: Spaces 11 (Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs)
            =================================================================== -->
       <section data-background-color="#18191c"
                data-palette-name="Spaces 11"
@@ -2220,7 +2088,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 11)</span>
-          <span>Slide 22 / 56</span>
+          <span>Slide 21 / 56</span>
         </div>
         <aside class="notes">
           In fast-paced games—bullet hells, ARPGs, particle systems—allocating tiny objects on the heap is a death sentence for performance. In GDScript, custom data structures must extend RefCounted or use untyped dictionaries. Both create heap pressure and GC churn. In Crystal, you can declare value structs: stack-allocated, contiguous in memory, and passed by value. You get zero heap allocations, zero GC pauses, and complete compile-time type safety.
@@ -2228,7 +2096,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 23: GameStation2 (Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection)
+           SLIDE 22: GameStation2 (Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection)
            =================================================================== -->
       <section data-background-color="#090a10"
                data-palette-name="GameStation2"
@@ -2310,7 +2178,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 23 / 56</span>
+          <span>Slide 22 / 56</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -2318,7 +2186,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 24: GameStation2 (Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection)
+           SLIDE 23: GameStation2 (Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection)
            =================================================================== -->
       <section data-background-color="#090a10"
                data-palette-name="GameStation2"
@@ -2433,7 +2301,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (GameStation2)</span>
-          <span>Slide 24 / 56</span>
+          <span>Slide 23 / 56</span>
         </div>
         <aside class="notes">
           The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If your code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully.
@@ -2441,7 +2309,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 25: Aperture (Signals & Async: Brittle String Awaits vs. Typed Signal Handles)
+           SLIDE 24: Aperture (Signals & Async: Brittle String Awaits vs. Typed Signal Handles)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -2523,7 +2391,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 25 / 56</span>
+          <span>Slide 24 / 56</span>
         </div>
         <aside class="notes">
           Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
@@ -2531,7 +2399,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 26: Aperture (Signals & Async: Brittle String Awaits vs. Typed Signal Handles)
+           SLIDE 25: Aperture (Signals & Async: Brittle String Awaits vs. Typed Signal Handles)
            =================================================================== -->
       <section data-background-color="#1f232a"
                data-palette-name="Aperture"
@@ -2646,7 +2514,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Aperture)</span>
-          <span>Slide 26 / 56</span>
+          <span>Slide 25 / 56</span>
         </div>
         <aside class="notes">
           Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports built-in timeouts: await(boss.died, timeout_sec: 10.0). Furthermore, because Lapis fibers check instance liveness on every frame tick, if the target object is destroyed, the fiber safely aborts with DisposedObjectError rather than hanging silently.
@@ -2654,7 +2522,218 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 27: Spaces XP Royale (Where Macros Shine: Declarative State Machines)
+           SLIDE 26: Spaces XP Royale (Metaprogramming: String Boilerplate vs. Compile-Time AST Macros)
+           =================================================================== -->
+      <section data-background-color="#141820"
+               data-palette-name="Spaces XP Royale"
+               data-palette-cube="#f0f4f9"
+               data-palette-cube-hover="#4090ff"
+               class="solvin-slide spaces_xp_royale"
+               style="--bg-color: #141820; --bg-window: #1f2430; --text-color: #f0f4f9; --text-dim: #7b8c9e; --link-color: #4090ff; --border-color: #1f5ac8; --border-active: #4090ff; --accent-color: #4090ff; --accent-secondary: #10b981; --accent-tertiary: #4090ff; --accent-quaternary: #1f5ac8; --shadow-color: #0a0d12; --cube: #f0f4f9; --cube-hover: #4090ff; --emoji-filter: url(#emoji-filter-spaces_xp_royale); ">
+        <div class="palette-corner-badge" title="Theme: Spaces XP Royale">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces XP Royale
+        </div>
+        <div class="slide-header" style="border: none; padding-bottom: 0; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <span class="badge-pill amber">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
+            <h2 class="slide-title">Metaprogramming: String Boilerplate vs. Compile-Time AST Macros</h2>
+            <p class="slide-subtitle">String Dictionaries &amp; Manual Signal Registration vs. Typed Crystal Macros</p>
+          </div>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+        </div>
+        <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
+          <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title"><span class="emoji-tint">❌</span> GDScript: Dictionary Sprawl &amp; String Signals</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">GDScript</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-gdscript"># Manual dictionary definitions for editor export hints
+func _get_property_list() -&gt; Array[Dictionary]:
+    return [{
+        &quot;name&quot;: &quot;move_speed&quot;,
+        &quot;type&quot;: TYPE_FLOAT,
+        &quot;hint&quot;: PROPERTY_HINT_RANGE,
+        &quot;hint_string&quot;: &quot;10.0,500.0,5.0&quot;
+    }]
+
+# Manual signal emissions with loose string names and untyped arguments
+signal player_hit(damage, source)
+func take_damage(dmg: int) -&gt; void:
+    emit_signal(&quot;player_hit&quot;, dmg, self) # Typo in &quot;player_hit&quot; fails at runtime!</code></pre>
+          </div>
+          </div>
+          <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
+          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title"><span class="emoji-tint">✨</span> Crystal: Compile-Time AST Macro Synthesis</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal (Lapis)</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal"># Declarative compile-time annotations publish directly to Godot ClassDB
+@[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
+property move_speed : Float32 = 150.0_f32
+
+# Type-safe signal definition synthesizes emit and listener helpers:
+signal player_hit(damage : Int32, source : Player)
+
+def take_damage(dmg : Int32) : Void
+  # Compile-time checked: typos or wrong arg types fail during compilation!
+  emit_player_hit(dmg, self)
+  # Also auto-generates: on_player_hit { |dmg, src| ... }
+end</code></pre>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces XP Royale)</span>
+          <span>Slide 26 / 56</span>
+        </div>
+        <aside class="notes">
+          Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 27: Spaces XP Royale (Metaprogramming: String Boilerplate vs. Compile-Time AST Macros)
+           =================================================================== -->
+      <section data-background-color="#141820"
+               data-palette-name="Spaces XP Royale"
+               data-palette-cube="#f0f4f9"
+               data-palette-cube-hover="#4090ff"
+               class="solvin-slide spaces_xp_royale"
+               style="--bg-color: #141820; --bg-window: #1f2430; --text-color: #f0f4f9; --text-dim: #7b8c9e; --link-color: #4090ff; --border-color: #1f5ac8; --border-active: #4090ff; --accent-color: #4090ff; --accent-secondary: #10b981; --accent-tertiary: #4090ff; --accent-quaternary: #1f5ac8; --shadow-color: #0a0d12; --cube: #f0f4f9; --cube-hover: #4090ff; --emoji-filter: url(#emoji-filter-spaces_xp_royale); ">
+        <div class="palette-corner-badge" title="Theme: Spaces XP Royale">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces XP Royale
+        </div>
+        <div class="slide-header" style="border: none; padding-bottom: 0; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <span class="badge-pill amber">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
+            <h2 class="slide-title">Metaprogramming: String Boilerplate vs. Compile-Time AST Macros</h2>
+            <p class="slide-subtitle">String Dictionaries &amp; Manual Signal Registration vs. Typed Crystal Macros</p>
+          </div>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+        </div>
+        <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
+          <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title"><span class="emoji-tint">❌</span> GDScript: Dictionary Sprawl &amp; String Signals</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">GDScript</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-gdscript"># Manual dictionary definitions for editor export hints
+func _get_property_list() -&gt; Array[Dictionary]:
+    return [{
+        &quot;name&quot;: &quot;move_speed&quot;,
+        &quot;type&quot;: TYPE_FLOAT,
+        &quot;hint&quot;: PROPERTY_HINT_RANGE,
+        &quot;hint_string&quot;: &quot;10.0,500.0,5.0&quot;
+    }]
+
+# Manual signal emissions with loose string names and untyped arguments
+signal player_hit(damage, source)
+func take_damage(dmg: int) -&gt; void:
+    emit_signal(&quot;player_hit&quot;, dmg, self) # Typo in &quot;player_hit&quot; fails at runtime!</code></pre>
+          </div>
+          </div>
+          <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
+          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title"><span class="emoji-tint">✨</span> Crystal: Compile-Time AST Macro Synthesis</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal (Lapis)</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal"># Declarative compile-time annotations publish directly to Godot ClassDB
+@[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
+property move_speed : Float32 = 150.0_f32
+
+# Type-safe signal definition synthesizes emit and listener helpers:
+signal player_hit(damage : Int32, source : Player)
+
+def take_damage(dmg : Int32) : Void
+  # Compile-time checked: typos or wrong arg types fail during compilation!
+  emit_player_hit(dmg, self)
+  # Also auto-generates: on_player_hit { |dmg, src| ... }
+end</code></pre>
+          </div>
+          </div>
+          <div class="ide-notes-overlay">
+            <div class="overlay-card antipattern">
+              <div class="overlay-card-header">
+                <div class="card-title antipattern">
+                  <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
+                </div>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Stringly-Typed Dictionaries:</strong> Requires constructing complex property dictionaries in <code>_get_property_list()</code>.</li>
+                <li><strong>Brittle String Signals:</strong> Typo in signal name string fails silently or crashes at runtime.</li>
+                <li><strong>No Parameter Validation:</strong> Emit calls cannot verify argument counts or types at compile time.</li>
+              </ul>
+            </div>
+            <div class="overlay-card solution">
+              <div class="overlay-card-header">
+                <div class="card-title solution">
+                  <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
+                </div>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc comments and ranges directly into Godot Inspector.</li>
+                <li><strong>Synthesized Methods:</strong> <code>signal died</code> generates typed <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code>.</li>
+                <li><strong>Zero Runtime Reflection:</strong> Metaprogramming executes at compile time; runtime cost is exactly zero.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="takeaway-banner" style="margin-top: 0.6rem; padding: 0.45rem 0.9rem; background: var(--bg-window); border: 1.5px solid var(--accent-color); border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem;">
+          <span class="badge-pill" style="margin-bottom: 0; padding: 0.15rem 0.55rem; font-size: 0.72rem; border-color: var(--accent-color); color: var(--accent-color);">ZERO-REFLECTION METAPROGRAMMING</span>
+          <span>Crystal AST macros execute at compile time, eliminating runtime reflection and catching API mismatches instantly.</span>
+        </div>
+
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces XP Royale)</span>
+          <span>Slide 27 / 56</span>
+        </div>
+        <aside class="notes">
+          Metaprogramming in GDScript often means writing string dictionaries in _get_property_list, maintaining loose string names for signals, and relying on runtime reflection. In Lapis, we use Crystal's compile-time AST macros. When you declare an export or a signal, the macro generates concrete, strongly-typed methods: emit_player_hit, on_player_hit, and full ClassDB property registrations. Any typos or argument type mismatches are caught immediately by the compiler.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 28: Spaces XP Royale (Where Macros Shine: Declarative State Machines)
            =================================================================== -->
       <section data-background-color="#141820"
                data-palette-name="Spaces XP Royale"
@@ -2726,7 +2805,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces XP Royale)</span>
-          <span>Slide 27 / 56</span>
+          <span>Slide 28 / 56</span>
         </div>
         <aside class="notes">
           State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead.
@@ -2734,7 +2813,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 28: Spaces 97 (Where Macros Shine: Zero-Reflection Serialization & Save Systems)
+           SLIDE 29: Spaces 97 (Where Macros Shine: Zero-Reflection Serialization & Save Systems)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 97"
@@ -2805,94 +2884,10 @@ loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 97)</span>
-          <span>Slide 28 / 56</span>
-        </div>
-        <aside class="notes">
-          Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 29: Bluebie (The Lapis DSL: Clean, Declarative Node Authoring)
-           =================================================================== -->
-      <section data-background-color="#002b55"
-               data-palette-name="Bluebie"
-               data-palette-cube="#00c8ff"
-               data-palette-cube-hover="#00e5ff"
-               class="solvin-slide bring_me_hope"
-               style="--bg-color: #002b55; --bg-window: #003a70; --text-color: #00c8ff; --text-dim: #3a7ca5; --link-color: #66e0ff; --border-color: #00a8e8; --border-active: #00e5ff; --accent-color: #00e5ff; --accent-secondary: #66e0ff; --accent-tertiary: #00e5ff; --accent-quaternary: #00a8e8; --shadow-color: #00152b; --cube: #00c8ff; --cube-hover: #00e5ff; --emoji-filter: url(#emoji-filter-bring_me_hope); ">
-        <div class="palette-corner-badge" title="Theme: Bluebie">
-          <span class="palette-corner-dot"></span> PALETTE: Bluebie
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">THE LAPIS DSL • NODE AUTHORING</span>
-            <h2 class="slide-title">The Lapis DSL: Clean, Declarative Node Authoring</h2>
-            <p class="slide-subtitle">Authoring First-Class Godot Nodes with Crystal ClassDB Integration</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">player_character.cr — Declarative Node Definition</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal">require &quot;libgodot&quot;
-
-# Declares Godot class registered in ClassDB
-node Player &lt; CharacterBody3D do
-  # Movement speed in meters per second
-  @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
-  property speed : Float32 = 7.0_f32
-
-  # Maximum hit points
-  @[Export(range: 10..500, step: 10)]
-  property max_health : Int32 = 100
-
-  signal health_changed(current : Int32, max_health : Int32)
-  signal died
-
-  def _ready : Void
-    Godot.print(&quot;Player initialized: #{name}&quot;)
-  end
-
-  def _physics_process(delta : Float64) : Void
-    # Fixed-rate physics step
-  end
-end</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>Clean Node DSL Invariants</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Declarative node Macro:</strong> <code>node ClassName < ParentNode</code> registers the class in Godot's ClassDB with zero boilerplate.</li>
-              <li><strong>Property Annotations:</strong> <code>@[Export]</code> supports ranges, enums, file pickers, and tool buttons.</li>
-              <li><strong>Automated Doc Harvesting:</strong> Regular Crystal comments above classes and methods are harvested into Godot's offline EditorHelp database.</li>
-              <li><strong>Native Lifecycle Hooks:</strong> Direct bindings to <code>_ready</code>, <code>_process</code>, and <code>_physics_process</code>.</li>
-              <li><strong>Multiplayer RPC:</strong> <code>@[RPC]</code> configures network replication mode and transfer channels.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Bluebie)</span>
           <span>Slide 29 / 56</span>
         </div>
         <aside class="notes">
-          Here is what authoring a Godot node actually looks like in Lapis. Notice how clean, concise, and declarative it is. You write node Player < CharacterBody3D, declare exported properties with ranges, define typed signals, and write your lifecycle methods. Regular comments above properties are harvested at compile time into Godot's in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or Rust.
+          Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping.
         </aside>
       </section>
 
@@ -4033,7 +4028,64 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 42: Spaces 95 (The Lapis CLI: Project Lifecycle & Bootstrapping)
+           SLIDE 42: Spaces 11 (First-Class Godot Editor Integration)
+           =================================================================== -->
+      <section data-background-color="#18191c"
+               data-palette-name="Spaces 11"
+               data-palette-cube="#f8f9fa"
+               data-palette-cube-hover="#60cdff"
+               class="solvin-slide spaces_11"
+               style="--bg-color: #18191c; --bg-window: #24272c; --text-color: #f8f9fa; --text-dim: #8e96a0; --link-color: #4cc2ff; --border-color: #383d44; --border-active: #60cdff; --accent-color: #4cc2ff; --accent-secondary: #60cdff; --accent-tertiary: #4cc2ff; --accent-quaternary: #383d44; --shadow-color: #0d0e10; --cube: #f8f9fa; --cube-hover: #60cdff; --emoji-filter: url(#emoji-filter-spaces_11); ">
+        <div class="palette-corner-badge" title="Theme: Spaces 11">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces 11
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">GODOT EDITOR • FIRST-CLASS CITIZEN</span>
+            <h2 class="slide-title">First-Class Godot Editor Integration</h2>
+            <p class="slide-subtitle">Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>In-Editor Feature Highlights</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Native Script Creation Dialog:</strong> Select 'Crystal (*.cr)' directly from Godot's Attach Node Script dialog.</li>
+              <li><strong>Pure Crystal Tokenizer:</strong> Embedded syntax highlighter in Godot's <code>CodeEdit</code> with keywords, strings, comments, and symbols.</li>
+              <li><strong>Instant Hot-Reloading:</strong> Pressing <code>F5</code> triggers automatic recompilation and shadow DLL reload.</li>
+              <li><strong>Live In-Editor @tool Execution:</strong> Custom nodes execute inside the editor viewport in real time.</li>
+              <li><strong>Harvested XML Documentation:</strong> Regular Crystal doc comments appear automatically in Godot's F1 Help viewer.</li>
+            </ul>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>Why It Changes the Game</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>No External IDE Required:</strong> You can write and edit Crystal code directly inside Godot's built-in code editor.</li>
+              <li><strong>Seamless Level Design:</strong> Level designers adjust exported Crystal properties in the Inspector and see real-time updates.</li>
+              <li><strong>Zero GDExtension Friction:</strong> Feels just as integrated as GDScript and C#, not like an unwieldy foreign extension.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces 11)</span>
+          <span>Slide 42 / 56</span>
+        </div>
+        <aside class="notes">
+          A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 43: Spaces 95 (The Lapis CLI: Project Lifecycle & Bootstrapping)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 95"
@@ -4090,75 +4142,10 @@ $ lapis test --tui</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 95)</span>
-          <span>Slide 42 / 56</span>
-        </div>
-        <aside class="notes">
-          Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 43: Amigo (The Lapis CLI: Codegen, Maintenance & Packaging)
-           =================================================================== -->
-      <section data-background-color="#0055aa"
-               data-palette-name="Amigo"
-               data-palette-cube="#ffffff"
-               data-palette-cube-hover="#ff5500"
-               class="solvin-slide amigo"
-               style="--bg-color: #0055aa; --bg-window: #0055aa; --text-color: #ffffff; --text-dim: #aaaaaa; --link-color: #ff5500; --border-color: #ffffff; --border-active: #ff5500; --accent-color: #ff9900; --accent-secondary: #ff9900; --accent-tertiary: #ff5500; --accent-quaternary: #aaaaaa; --shadow-color: #000000; --cube: #ffffff; --cube-hover: #ff5500; --emoji-filter: url(#emoji-filter-amigo); ">
-        <div class="palette-corner-badge" title="Theme: Amigo">
-          <span class="palette-corner-dot"></span> PALETTE: Amigo
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill amber">TOOLCHAIN • AUTOMATION &amp; CODEGEN</span>
-            <h2 class="slide-title">The Lapis CLI: Codegen, Maintenance &amp; Packaging</h2>
-            <p class="slide-subtitle">Automated API Generation, Addon Packaging, and Standalone Distribution</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-            <div class="terminal-window col" style="margin: 0;">
-              <div class="terminal-header">
-                <div class="terminal-dots"><span class="terminal-dot dot-1"></span><span class="terminal-dot dot-2"></span><span class="terminal-dot dot-3"></span></div>
-                <span class="terminal-title">Terminal — Advanced CLI Tooling</span>
-              </div>
-              <div class="terminal-body">
-                <pre><code class="language-bash"># Decompile Crystal method to pseudo-C &amp; assembly via r2
-$ lapis decompile bin/game.dll &quot;Player#_process&quot; --side-by-side
-
-# Audit GDExtension ABI exports &amp; memory boundary health
-$ lapis decompile bin/crystal_bridge.dll --verify
-
-# Verify developer environment: Crystal, radare2, Godot, Git
-$ lapis doctor --verbose
-
-# Package turnkey standalone game or redistributable addon
-$ lapis package game --release</code></pre>
-              </div>
-            </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
-            <div class="card-title amber">
-              <span>Automation &amp; Maintenance</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>CLI Decompiler:</strong> <code>lapis decompile</code> decompiles methods to pseudo-C (<code>pdc</code>) and side-by-side assembly (<code>pdca</code>) with zero external servers.</li>
-              <li><strong>Diagnostic Doctor:</strong> <code>lapis doctor</code> checks environment prerequisites Crystal, radare2 (r2), Godot, and Git.</li>
-              <li><strong>API Generator:</strong> <code>lapis api generate</code> parses <code>extension_api.json</code> and synthesizes 800+ typed Crystal classes in seconds.</li>
-              <li><strong>Packaging Pipelines:</strong> <code>lapis package</code> automates bundling of runtime DLLs, manifests, and stripped release binaries.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Amigo)</span>
           <span>Slide 43 / 56</span>
         </div>
         <aside class="notes">
-          Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons.
+          Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one.
         </aside>
       </section>
 
@@ -4235,59 +4222,67 @@ dependencies:
       </section>
 
       <!-- ===================================================================
-           SLIDE 45: Spaces 11 (First-Class Godot Editor Integration)
+           SLIDE 45: Amigo (The Lapis CLI: Codegen, Maintenance & Packaging)
            =================================================================== -->
-      <section data-background-color="#18191c"
-               data-palette-name="Spaces 11"
-               data-palette-cube="#f8f9fa"
-               data-palette-cube-hover="#60cdff"
-               class="solvin-slide spaces_11"
-               style="--bg-color: #18191c; --bg-window: #24272c; --text-color: #f8f9fa; --text-dim: #8e96a0; --link-color: #4cc2ff; --border-color: #383d44; --border-active: #60cdff; --accent-color: #4cc2ff; --accent-secondary: #60cdff; --accent-tertiary: #4cc2ff; --accent-quaternary: #383d44; --shadow-color: #0d0e10; --cube: #f8f9fa; --cube-hover: #60cdff; --emoji-filter: url(#emoji-filter-spaces_11); ">
-        <div class="palette-corner-badge" title="Theme: Spaces 11">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces 11
+      <section data-background-color="#0055aa"
+               data-palette-name="Amigo"
+               data-palette-cube="#ffffff"
+               data-palette-cube-hover="#ff5500"
+               class="solvin-slide amigo"
+               style="--bg-color: #0055aa; --bg-window: #0055aa; --text-color: #ffffff; --text-dim: #aaaaaa; --link-color: #ff5500; --border-color: #ffffff; --border-active: #ff5500; --accent-color: #ff9900; --accent-secondary: #ff9900; --accent-tertiary: #ff5500; --accent-quaternary: #aaaaaa; --shadow-color: #000000; --cube: #ffffff; --cube-hover: #ff5500; --emoji-filter: url(#emoji-filter-amigo); ">
+        <div class="palette-corner-badge" title="Theme: Amigo">
+          <span class="palette-corner-dot"></span> PALETTE: Amigo
         </div>
         <div class="slide-header" style="">
           <div>
-            <span class="badge-pill cyan">GODOT EDITOR • FIRST-CLASS CITIZEN</span>
-            <h2 class="slide-title">First-Class Godot Editor Integration</h2>
-            <p class="slide-subtitle">Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync</p>
+            <span class="badge-pill amber">TOOLCHAIN • AUTOMATION &amp; CODEGEN</span>
+            <h2 class="slide-title">The Lapis CLI: Codegen, Maintenance &amp; Packaging</h2>
+            <p class="slide-subtitle">Automated API Generation, Addon Packaging, and Standalone Distribution</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>In-Editor Feature Highlights</span>
+            <div class="terminal-window col" style="margin: 0;">
+              <div class="terminal-header">
+                <div class="terminal-dots"><span class="terminal-dot dot-1"></span><span class="terminal-dot dot-2"></span><span class="terminal-dot dot-3"></span></div>
+                <span class="terminal-title">Terminal — Advanced CLI Tooling</span>
+              </div>
+              <div class="terminal-body">
+                <pre><code class="language-bash"># Decompile Crystal method to pseudo-C &amp; assembly via r2
+$ lapis decompile bin/game.dll &quot;Player#_process&quot; --side-by-side
+
+# Audit GDExtension ABI exports &amp; memory boundary health
+$ lapis decompile bin/crystal_bridge.dll --verify
+
+# Verify developer environment: Crystal, radare2, Godot, Git
+$ lapis doctor --verbose
+
+# Package turnkey standalone game or redistributable addon
+$ lapis package game --release</code></pre>
+              </div>
             </div>
-            <ul class="card-list">
-              <li><strong>Native Script Creation Dialog:</strong> Select 'Crystal (*.cr)' directly from Godot's Attach Node Script dialog.</li>
-              <li><strong>Pure Crystal Tokenizer:</strong> Embedded syntax highlighter in Godot's <code>CodeEdit</code> with keywords, strings, comments, and symbols.</li>
-              <li><strong>Instant Hot-Reloading:</strong> Pressing <code>F5</code> triggers automatic recompilation and shadow DLL reload.</li>
-              <li><strong>Live In-Editor @tool Execution:</strong> Custom nodes execute inside the editor viewport in real time.</li>
-              <li><strong>Harvested XML Documentation:</strong> Regular Crystal doc comments appear automatically in Godot's F1 Help viewer.</li>
-            </ul>
-          </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>Why It Changes the Game</span>
+          <div class="card amber col">
+            <div class="card-title amber">
+              <span>Automation &amp; Maintenance</span>
             </div>
             <ul class="card-list">
-              <li><strong>No External IDE Required:</strong> You can write and edit Crystal code directly inside Godot's built-in code editor.</li>
-              <li><strong>Seamless Level Design:</strong> Level designers adjust exported Crystal properties in the Inspector and see real-time updates.</li>
-              <li><strong>Zero GDExtension Friction:</strong> Feels just as integrated as GDScript and C#, not like an unwieldy foreign extension.</li>
+              <li><strong>CLI Decompiler:</strong> <code>lapis decompile</code> decompiles methods to pseudo-C (<code>pdc</code>) and side-by-side assembly (<code>pdca</code>) with zero external servers.</li>
+              <li><strong>Diagnostic Doctor:</strong> <code>lapis doctor</code> checks environment prerequisites Crystal, radare2 (r2), Godot, and Git.</li>
+              <li><strong>API Generator:</strong> <code>lapis api generate</code> parses <code>extension_api.json</code> and synthesizes 800+ typed Crystal classes in seconds.</li>
+              <li><strong>Packaging Pipelines:</strong> <code>lapis package</code> automates bundling of runtime DLLs, manifests, and stripped release binaries.</li>
             </ul>
           </div>
           </div>
         </div>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces 11)</span>
+          <span>sol.vin (Amigo)</span>
           <span>Slide 45 / 56</span>
         </div>
         <aside class="notes">
-          A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help.
+          Beyond daily development, the Lapis CLI automates systems maintenance and diagnostics. lapis decompile gives developers instant, offline pseudo-C decompilation directly in the terminal using radare2. lapis doctor audits your local toolchain—verifying Crystal, radare2, Godot, and Git configurations. And lapis package automates turnkey distribution of standalone production games and redistributable GDExtension addons.
         </aside>
       </section>
 
@@ -4436,7 +4431,153 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 48: Spaces 11 (Quantitative Benchmarks: Crystal vs GDScript)
+           SLIDE 48: Spaces 2000 (Testing Framework: Writing Tests & Zero-Leak Proof)
+           =================================================================== -->
+      <section data-background-color="#f0f4f8"
+               data-palette-name="Spaces 2000"
+               data-palette-cube="#000000"
+               data-palette-cube-hover="#18429c"
+               class="solvin-slide spaces_2000"
+               style="--bg-color: #f0f4f8; --bg-window: #d4d0c8; --text-color: #000000; --text-dim: #404040; --link-color: #0a246a; --border-color: #2c5aa0; --border-active: #18429c; --accent-color: #0a246a; --accent-secondary: #18429c; --accent-tertiary: #5b7b9a; --accent-quaternary: #0a246a; --shadow-color: #203858; --cube: #000000; --cube-hover: #18429c; --emoji-filter: url(#emoji-filter-spaces_2000); ">
+        <div class="palette-corner-badge" title="Theme: Spaces 2000">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces 2000
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">QUALITY GATES • ZERO-LEAK TESTING</span>
+            <h2 class="slide-title">Testing Framework: Writing Tests &amp; Zero-Leak Proof</h2>
+            <p class="slide-subtitle">Comprehensive Spec Testing and Mathematical Zero-Memory-Leak Verification</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">gameplay_spec.cr — Lapis::Test Suite</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal">require &quot;lapis/test&quot;
+
+Lapis::Test.test_suite &quot;Player Combat System&quot; do
+  test &quot;spawning and taking damage&quot; do
+    player = Godot.create(Player)
+    player.take_damage(25)
+    assert_equal 75, player.health
+    player.destroy # Clean deallocation
+  end
+
+  test &quot;mathematical zero memory leak verification&quot; do
+    Lapis::Test.assert_no_leak do
+      100.times do
+        bullet = Godot.create(Bullet)
+        bullet.destroy
+      end
+    end
+  end
+end</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>Zero-Leak Mathematical Proof</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Godot Performance Monitors:</strong> Queries engine singletons (<code>OBJECT_COUNT</code>, <code>OBJECT_NODE_COUNT</code>, <code>MEMORY_STATIC</code>).</li>
+              <li><strong>GC Equilibrium Enforcement:</strong> Calls <code>GC.collect</code> before and after iterations to settle heap state.</li>
+              <li><strong>Strict Delta Verification:</strong> Mathematically proves that delta object count is strictly zero: <code>ΔObjects == 0</code>.</li>
+              <li><strong>Prevents Release Regressions:</strong> CI quality gates automatically fail if any PR introduces a memory leak.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces 2000)</span>
+          <span>Slide 48 / 56</span>
+        </div>
+        <aside class="notes">
+          Memory leaks are fatal in long-running games. Lapis includes a dedicated testing apparatus with mathematical zero-leak verification. Using Lapis::Test.assert_no_leak, our test runner queries Godot's Performance singletons and forces GC equilibrium before and after running iterations, mathematically proving that zero objects or memory leaked.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 49: Spaces 3.1 (In-Editor Tool Testing & Standalone TUI Runner)
+           =================================================================== -->
+      <section data-background-color="#ffffff"
+               data-palette-name="Spaces 3.1"
+               data-palette-cube="#000000"
+               data-palette-cube-hover="#004080"
+               class="solvin-slide spaces_31"
+               style="--bg-color: #ffffff; --bg-window: #c0c0c0; --text-color: #000000; --text-dim: #404040; --link-color: #000080; --border-color: #000080; --border-active: #008080; --accent-color: #000080; --accent-secondary: #008080; --accent-tertiary: #004080; --accent-quaternary: #000080; --shadow-color: #004040; --cube: #000000; --cube-hover: #004080; --emoji-filter: url(#emoji-filter-spaces_31); ">
+        <div class="palette-corner-badge" title="Theme: Spaces 3.1">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces 3.1
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">QUALITY GATES • TESTING APPARATUS</span>
+            <h2 class="slide-title">In-Editor Tool Testing &amp; Standalone TUI Runner</h2>
+            <p class="slide-subtitle">Real-Time Terminal User Interface for Headless and In-Editor Test Suites</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+            <div class="terminal-window col" style="margin: 0;">
+              <div class="terminal-header">
+                <div class="terminal-dots"><span class="terminal-dot dot-1"></span><span class="terminal-dot dot-2"></span><span class="terminal-dot dot-3"></span></div>
+                <span class="terminal-title">Terminal — lapis test --tui Dashboard</span>
+              </div>
+              <div class="terminal-body">
+                <pre><code class="language-bash">┌─ Lapis Unified Test Suite Dashboard ────────────────────────┐
+│ [✔] 1. Engine &amp; Core Bindings Specs (42/42 passed)           │
+│ [✔] 2. Headless In-Editor @tool Tests (18/18 passed)         │
+│ [✔] 3. Standalone Runtime Host Suites (35/35 passed)         │
+│ [✔] 4. Quantitative Zero Leak Verification (0 leaks)         │
+├─────────────────────────────────────────────────────────────┤
+│ LIVE LOG STREAM (Phase 3: Runtime Suites):                  │
+│ [10:24:12] SUITE: Combat System ... OK (12ms)                │
+│ [10:24:13] SUITE: Physics N-Body ... OK (8ms)                │
+│ [10:24:14] SUITE: Memory Monotonic Guard ... OK (4ms)        │
+│                                                             │
+│ STATUS: ALL 95 TESTS PASSED (0 failures, 0 leaks)            │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>TUI Dashboard Features</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Double-Buffered ANSI Interface:</strong> Real-time rolling metrics, execution phase tracking, and split-pane logs.</li>
+              <li><strong>Interactive Inspection:</strong> Navigate phases with arrow keys; drill down into detailed logs with Enter.</li>
+              <li><strong>Automated CI Fallback:</strong> Gracefully falls back to clean streaming text in automated CI pipelines (<code>NO_TUI=1</code>).</li>
+              <li><strong>Editor Driver Integration:</strong> Launches headless Godot to test tool scripts and editor docks without opening a GUI.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces 3.1)</span>
+          <span>Slide 49 / 56</span>
+        </div>
+        <aside class="notes">
+          Running tests shouldn't be boring. When you run lapis test, it launches an interactive double-buffered ANSI TUI dashboard. You see live multi-phase progress, rolling logs with syntax coloring, and instant leak verification metrics. It makes continuous testing a genuinely satisfying part of the development loop.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 50: Spaces 11 (Quantitative Benchmarks: Crystal vs GDScript)
            =================================================================== -->
       <section data-background-color="#18191c"
                data-palette-name="Spaces 11"
@@ -4554,156 +4695,10 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 11)</span>
-          <span>Slide 48 / 56</span>
-        </div>
-        <aside class="notes">
-          Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 49: Spaces 2000 (Testing Framework: Writing Tests & Zero-Leak Proof)
-           =================================================================== -->
-      <section data-background-color="#f0f4f8"
-               data-palette-name="Spaces 2000"
-               data-palette-cube="#000000"
-               data-palette-cube-hover="#18429c"
-               class="solvin-slide spaces_2000"
-               style="--bg-color: #f0f4f8; --bg-window: #d4d0c8; --text-color: #000000; --text-dim: #404040; --link-color: #0a246a; --border-color: #2c5aa0; --border-active: #18429c; --accent-color: #0a246a; --accent-secondary: #18429c; --accent-tertiary: #5b7b9a; --accent-quaternary: #0a246a; --shadow-color: #203858; --cube: #000000; --cube-hover: #18429c; --emoji-filter: url(#emoji-filter-spaces_2000); ">
-        <div class="palette-corner-badge" title="Theme: Spaces 2000">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces 2000
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">QUALITY GATES • ZERO-LEAK TESTING</span>
-            <h2 class="slide-title">Testing Framework: Writing Tests &amp; Zero-Leak Proof</h2>
-            <p class="slide-subtitle">Comprehensive Spec Testing and Mathematical Zero-Memory-Leak Verification</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">gameplay_spec.cr — Lapis::Test Suite</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal">require &quot;lapis/test&quot;
-
-Lapis::Test.test_suite &quot;Player Combat System&quot; do
-  test &quot;spawning and taking damage&quot; do
-    player = Godot.create(Player)
-    player.take_damage(25)
-    assert_equal 75, player.health
-    player.destroy # Clean deallocation
-  end
-
-  test &quot;mathematical zero memory leak verification&quot; do
-    Lapis::Test.assert_no_leak do
-      100.times do
-        bullet = Godot.create(Bullet)
-        bullet.destroy
-      end
-    end
-  end
-end</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>Zero-Leak Mathematical Proof</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Godot Performance Monitors:</strong> Queries engine singletons (<code>OBJECT_COUNT</code>, <code>OBJECT_NODE_COUNT</code>, <code>MEMORY_STATIC</code>).</li>
-              <li><strong>GC Equilibrium Enforcement:</strong> Calls <code>GC.collect</code> before and after iterations to settle heap state.</li>
-              <li><strong>Strict Delta Verification:</strong> Mathematically proves that delta object count is strictly zero: <code>ΔObjects == 0</code>.</li>
-              <li><strong>Prevents Release Regressions:</strong> CI quality gates automatically fail if any PR introduces a memory leak.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces 2000)</span>
-          <span>Slide 49 / 56</span>
-        </div>
-        <aside class="notes">
-          Memory leaks are fatal in long-running games. Lapis includes a dedicated testing apparatus with mathematical zero-leak verification. Using Lapis::Test.assert_no_leak, our test runner queries Godot's Performance singletons and forces GC equilibrium before and after running iterations, mathematically proving that zero objects or memory leaked.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 50: Spaces 3.1 (In-Editor Tool Testing & Standalone TUI Runner)
-           =================================================================== -->
-      <section data-background-color="#ffffff"
-               data-palette-name="Spaces 3.1"
-               data-palette-cube="#000000"
-               data-palette-cube-hover="#004080"
-               class="solvin-slide spaces_31"
-               style="--bg-color: #ffffff; --bg-window: #c0c0c0; --text-color: #000000; --text-dim: #404040; --link-color: #000080; --border-color: #000080; --border-active: #008080; --accent-color: #000080; --accent-secondary: #008080; --accent-tertiary: #004080; --accent-quaternary: #000080; --shadow-color: #004040; --cube: #000000; --cube-hover: #004080; --emoji-filter: url(#emoji-filter-spaces_31); ">
-        <div class="palette-corner-badge" title="Theme: Spaces 3.1">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces 3.1
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">QUALITY GATES • TESTING APPARATUS</span>
-            <h2 class="slide-title">In-Editor Tool Testing &amp; Standalone TUI Runner</h2>
-            <p class="slide-subtitle">Real-Time Terminal User Interface for Headless and In-Editor Test Suites</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-            <div class="terminal-window col" style="margin: 0;">
-              <div class="terminal-header">
-                <div class="terminal-dots"><span class="terminal-dot dot-1"></span><span class="terminal-dot dot-2"></span><span class="terminal-dot dot-3"></span></div>
-                <span class="terminal-title">Terminal — lapis test --tui Dashboard</span>
-              </div>
-              <div class="terminal-body">
-                <pre><code class="language-bash">┌─ Lapis Unified Test Suite Dashboard ────────────────────────┐
-│ [✔] 1. Engine &amp; Core Bindings Specs (42/42 passed)           │
-│ [✔] 2. Headless In-Editor @tool Tests (18/18 passed)         │
-│ [✔] 3. Standalone Runtime Host Suites (35/35 passed)         │
-│ [✔] 4. Quantitative Zero Leak Verification (0 leaks)         │
-├─────────────────────────────────────────────────────────────┤
-│ LIVE LOG STREAM (Phase 3: Runtime Suites):                  │
-│ [10:24:12] SUITE: Combat System ... OK (12ms)                │
-│ [10:24:13] SUITE: Physics N-Body ... OK (8ms)                │
-│ [10:24:14] SUITE: Memory Monotonic Guard ... OK (4ms)        │
-│                                                             │
-│ STATUS: ALL 95 TESTS PASSED (0 failures, 0 leaks)            │
-└─────────────────────────────────────────────────────────────┘</code></pre>
-              </div>
-            </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>TUI Dashboard Features</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Double-Buffered ANSI Interface:</strong> Real-time rolling metrics, execution phase tracking, and split-pane logs.</li>
-              <li><strong>Interactive Inspection:</strong> Navigate phases with arrow keys; drill down into detailed logs with Enter.</li>
-              <li><strong>Automated CI Fallback:</strong> Gracefully falls back to clean streaming text in automated CI pipelines (<code>NO_TUI=1</code>).</li>
-              <li><strong>Editor Driver Integration:</strong> Launches headless Godot to test tool scripts and editor docks without opening a GUI.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces 3.1)</span>
           <span>Slide 50 / 56</span>
         </div>
         <aside class="notes">
-          Running tests shouldn't be boring. When you run lapis test, it launches an interactive double-buffered ANSI TUI dashboard. You see live multi-phase progress, rolling logs with syntax coloring, and instant leak verification metrics. It makes continuous testing a genuinely satisfying part of the development loop.
+          Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++.
         </aside>
       </section>
 
