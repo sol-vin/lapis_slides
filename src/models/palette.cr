@@ -58,15 +58,15 @@ module LapisSlides
     end
 
     def accent_secondary : String
-      @colors["accent_secondary"]? || "#10b981"
+      @colors["accent_secondary"]? || border_active
     end
 
     def accent_tertiary : String
-      @colors["accent_tertiary"]? || "#f59e0b"
+      @colors["accent_tertiary"]? || accent_color
     end
 
     def accent_quaternary : String
-      @colors["accent_quaternary"]? || "#f43f5e"
+      @colors["accent_quaternary"]? || border_color
     end
 
     def shadow_color : String

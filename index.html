@@ -671,9 +671,20 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="code-container purple col-3" style="display: flex; flex-direction: column; overflow: hidden;">
-            <div class="code-header"><span>crystalmeme.mp4 — The Community Rationale</span><span>Video (31s)</span></div>
-            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #000; overflow: hidden; position: relative;">
+          <div class="code-container col-3" style="display: flex; flex-direction: column; overflow: hidden; border-color: var(--accent-color);">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot red" title="Close"></span>
+                <span class="terminal-dot yellow" title="Minimize"></span>
+                <span class="terminal-dot green" title="Maximize"></span>
+              </div>
+              <span class="code-title">crystalmeme.mp4 — The Community Rationale</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Video (31s)</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--bg-window); overflow: hidden; position: relative;">
               <video controls preload="auto" playsinline style="width: 100%; max-height: 380px; object-fit: contain; outline: none; border: none; display: block;">
                 <source src="crystalmeme.mp4" type="video/mp4">
                 Your browser does not support the video tag.
@@ -973,11 +984,11 @@ end</code></pre>
             <h2 class="slide-title">Iterators &amp; Collections: Imperative Loops vs. Functional Zen</h2>
             <p class="slide-subtitle">Manual Array Allocations &amp; Verbose Loops vs. Composable Zero-Alloc Enumerable Pipelines</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1005,7 +1016,7 @@ for name in active_targets:
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1058,11 +1069,11 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
             <h2 class="slide-title">Iterators &amp; Collections: Imperative Loops vs. Functional Zen</h2>
             <p class="slide-subtitle">Manual Array Allocations &amp; Verbose Loops vs. Composable Zero-Alloc Enumerable Pipelines</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1090,7 +1101,7 @@ for name in active_targets:
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1115,12 +1126,12 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Manual Accumulation:</strong> Allocates intermediate heap arrays and manually appends elements one-by-one.</li>
@@ -1128,12 +1139,12 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
                 <li><strong>Boilerplate Flags:</strong> Requires manual <code>for</code> loops and break statements for simple boolean queries like <code>any?</code>.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>50+ Enumerable Methods:</strong> Clean, chained methods like <code>select</code>, <code>map</code>, <code>reject</code>, <code>tally</code>, and <code>chunk</code>.</li>
@@ -1176,11 +1187,11 @@ enemy_types = active_targets.tally # Instant frequency Hash!</code></pre>
             <h2 class="slide-title">Anonymous Functions &amp; Symbols: Callable Hell vs. Zero-Alloc Zen</h2>
             <p class="slide-subtitle">GDScript&#39;s Clunky Lambdas &amp; String Lookups vs. Crystal&#39;s Inlined Blocks, Chained Enumerators &amp; 32-Bit Symbols</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1212,7 +1223,7 @@ timer.timeout.connect(func(): on_tick(1))</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1270,11 +1281,11 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
             <h2 class="slide-title">Anonymous Functions &amp; Symbols: Callable Hell vs. Zero-Alloc Zen</h2>
             <p class="slide-subtitle">GDScript&#39;s Clunky Lambdas &amp; String Lookups vs. Crystal&#39;s Inlined Blocks, Chained Enumerators &amp; 32-Bit Symbols</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1306,7 +1317,7 @@ timer.timeout.connect(func(): on_tick(1))</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1336,12 +1347,12 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Heap-Allocated Callables:</strong> Every anonymous <code>func(...)</code> instantiates a native <code>Callable</code> heap object with GC tracking.</li>
@@ -1349,12 +1360,12 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
                 <li><strong>String & StringName Overhead:</strong> States and categories rely on strings or interned strings with hash lookups instead of zero-cost symbols.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Zero-Alloc Block Inlining:</strong> Crystal blocks are inlined directly into machine code by LLVM — zero heap allocations, zero closure overhead!</li>
@@ -1397,11 +1408,11 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
             <h2 class="slide-title">Nil Safety: Runtime Crashes vs. Compile-Time Proof</h2>
             <p class="slide-subtitle">Eliminating Godot&#39;s #1 Runtime Exception: &#39;Invalid call on base Nil&#39;</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1427,7 +1438,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1482,11 +1493,11 @@ end</code></pre>
             <h2 class="slide-title">Nil Safety: Runtime Crashes vs. Compile-Time Proof</h2>
             <p class="slide-subtitle">Eliminating Godot&#39;s #1 Runtime Exception: &#39;Invalid call on base Nil&#39;</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1512,7 +1523,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1539,12 +1550,12 @@ end</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Nullable by Default:</strong> Variables are nullable without compiler enforcement or warnings.</li>
@@ -1552,12 +1563,12 @@ end</code></pre>
                 <li><strong>Dead Pointer Segfaults:</strong> Freed C++ nodes leave dangling pointers, risking fatal engine crashes.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Non-Nil by Default:</strong> <code>Weapon</code> cannot be nil; only <code>Weapon?</code> explicitly allows nil.</li>
@@ -1600,11 +1611,11 @@ end</code></pre>
             <h2 class="slide-title">Enums &amp; Pattern Matching: Silent Bugs vs. Exhaustive Checking</h2>
             <p class="slide-subtitle">Untyped Enums &amp; Brittle Matches vs. Strongly-Typed Enums &amp; Tuple Patterns</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1634,7 +1645,7 @@ func handle_state(state: State, health: int) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1695,11 +1706,11 @@ end</code></pre>
             <h2 class="slide-title">Enums &amp; Pattern Matching: Silent Bugs vs. Exhaustive Checking</h2>
             <p class="slide-subtitle">Untyped Enums &amp; Brittle Matches vs. Strongly-Typed Enums &amp; Tuple Patterns</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1729,7 +1740,7 @@ func handle_state(state: State, health: int) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1762,12 +1773,12 @@ end</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Raw Integer Decay:</strong> Enums decay to raw integers; no type safety when passing invalid integers.</li>
@@ -1775,12 +1786,12 @@ end</code></pre>
                 <li><strong>Nested If Ladders:</strong> Evaluating multiple state variables requires brittle, nested condition trees.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Strongly-Typed Enums:</strong> Auto-synthesized query methods like <code>.idle?</code>, <code>.run?</code>, and <code>.dead?</code>.</li>
@@ -1823,11 +1834,11 @@ end</code></pre>
             <h2 class="slide-title">Metaprogramming: String Boilerplate vs. Compile-Time AST Macros</h2>
             <p class="slide-subtitle">String Dictionaries &amp; Manual Signal Registration vs. Typed Crystal Macros</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1856,7 +1867,7 @@ func take_damage(dmg: int) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1912,11 +1923,11 @@ end</code></pre>
             <h2 class="slide-title">Metaprogramming: String Boilerplate vs. Compile-Time AST Macros</h2>
             <p class="slide-subtitle">String Dictionaries &amp; Manual Signal Registration vs. Typed Crystal Macros</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1945,7 +1956,7 @@ func take_damage(dmg: int) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -1973,12 +1984,12 @@ end</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Stringly-Typed Dictionaries:</strong> Requires constructing complex property dictionaries in <code>_get_property_list()</code>.</li>
@@ -1986,12 +1997,12 @@ end</code></pre>
                 <li><strong>No Parameter Validation:</strong> Emit calls cannot verify argument counts or types at compile time.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc comments and ranges directly into Godot Inspector.</li>
@@ -2034,11 +2045,11 @@ end</code></pre>
             <h2 class="slide-title">Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs</h2>
             <p class="slide-subtitle">RefCounted &amp; Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2065,7 +2076,7 @@ apply_damage(hit_info[&quot;ammount&quot;]) # TYPO: returns null silently!</code
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2122,11 +2133,11 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
             <h2 class="slide-title">Value Types: Heap GC Thrashing vs. Zero-Allocation Stack Structs</h2>
             <p class="slide-subtitle">RefCounted &amp; Dictionaries vs. Stack-Allocated, Cache-Friendly Crystal Structs</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2153,7 +2164,7 @@ apply_damage(hit_info[&quot;ammount&quot;]) # TYPO: returns null silently!</code
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2182,12 +2193,12 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Heap Allocations for Tiny Data:</strong> Every data packet extends <code>RefCounted</code>, triggering individual heap allocations.</li>
@@ -2195,12 +2206,12 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
                 <li><strong>Heavy GC Churn:</strong> Thousands of combat packets in action games cause noticeable garbage collection hitches.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Zero Heap Allocations:</strong> Stack-allocated <code>struct</code> has zero allocation cost and zero GC overhead.</li>
@@ -2243,11 +2254,11 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
             <h2 class="slide-title">Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection</h2>
             <p class="slide-subtitle">Lapis Monotonic 64-Bit Instance Tracking Eliminates ACCESS_VIOLATION (0xC0000005)</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2276,7 +2287,7 @@ func cast_spell(spell: Spell) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2333,11 +2344,11 @@ end</code></pre>
             <h2 class="slide-title">Memory Safety: Dangling C++ Pointers vs. Automatic Dead-Pointer Protection</h2>
             <p class="slide-subtitle">Lapis Monotonic 64-Bit Instance Tracking Eliminates ACCESS_VIOLATION (0xC0000005)</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2366,7 +2377,7 @@ func cast_spell(spell: Spell) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2395,12 +2406,12 @@ end</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Deallocated Native Memory:</strong> <code>queue_free()</code> frees native C++ memory; existing references retain dead pointers.</li>
@@ -2408,12 +2419,12 @@ end</code></pre>
                 <li><strong>Defensive Clutter:</strong> Developers must litter code with <code>is_instance_valid</code> guards across every single scene access.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Monotonic 64-Bit Instance IDs:</strong> ObjectDB IDs never collide with recycled heap addresses.</li>
@@ -2456,11 +2467,11 @@ end</code></pre>
             <h2 class="slide-title">Signals &amp; Async: Brittle String Awaits vs. Typed Signal Handles</h2>
             <p class="slide-subtitle">Non-Blocking Coroutines, Timeout Guards, and Dead-Pointer Aware Awaiting</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2488,7 +2499,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2546,11 +2557,11 @@ end</code></pre>
             <h2 class="slide-title">Signals &amp; Async: Brittle String Awaits vs. Typed Signal Handles</h2>
             <p class="slide-subtitle">Non-Blocking Coroutines, Timeout Guards, and Dead-Pointer Aware Awaiting</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2578,7 +2589,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -2608,12 +2619,12 @@ end</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Infinite Hang Risk:</strong> <code>await boss.died</code> hangs indefinitely if the target node is freed before emitting.</li>
@@ -2621,12 +2632,12 @@ end</code></pre>
                 <li><strong>Boilerplate Handlers:</strong> Connecting signals requires authoring separate named handler functions.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>First-Class Signal Handles:</strong> <code>await(boss.died)</code> provides compile-time signal validation.</li>
@@ -3315,11 +3326,11 @@ end</code></pre>
             <h2 class="slide-title">Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels</h2>
             <p class="slide-subtitle">Manual Locking &amp; SceneTree Crashes vs. Safe Background Workers &amp; Channel Drain</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3347,7 +3358,7 @@ func _worker_task():
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3406,11 +3417,11 @@ end</code></pre>
             <h2 class="slide-title">Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels</h2>
             <p class="slide-subtitle">Manual Locking &amp; SceneTree Crashes vs. Safe Background Workers &amp; Channel Drain</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3438,7 +3449,7 @@ func _worker_task():
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3469,12 +3480,12 @@ end</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Manual Mutex Locking:</strong> Prone to race conditions, priority inversions, and hard deadlocks.</li>
@@ -3482,12 +3493,12 @@ end</code></pre>
                 <li><strong>No Typed Communication Queue:</strong> Lacks clean cross-thread actor queues.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Lock-Free Actor Model:</strong> Typed <code>Channel(T)</code> eliminates manual mutexes and lock contention.</li>
@@ -3691,11 +3702,11 @@ func _ready() -&gt; void:
             <h2 class="slide-title">Type Firewall: Crystal Enforces Strict Safety on GDScript</h2>
             <p class="slide-subtitle">Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution</p>
           </div>
-          <span class="badge-pill cyan" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3721,7 +3732,7 @@ func _on_potion_consumed(data: Variant) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3778,11 +3789,11 @@ end
             <h2 class="slide-title">Type Firewall: Crystal Enforces Strict Safety on GDScript</h2>
             <p class="slide-subtitle">Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution</p>
           </div>
-          <span class="badge-pill coral" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
+          <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--coral-red);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3808,7 +3819,7 @@ func _on_potion_consumed(data: Variant) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col" style=" border-color: var(--emerald-green);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-active);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot red" title="Close"></span>
@@ -3837,12 +3848,12 @@ end
           </div>
           </div>
           <div class="ide-notes-overlay">
-            <div class="overlay-card coral">
+            <div class="overlay-card antipattern">
               <div class="overlay-card-header">
-                <div class="card-title coral">
+                <div class="card-title antipattern">
                   <span><span class="emoji-tint">⚠️</span> GDScript Friction &amp; Pitfalls</span>
                 </div>
-                <span class="badge-pill coral" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
+                <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
                 <li><strong>Duck-Typing Pitfall:</strong> Dynamic dictionaries and RPC packets can easily pass strings where numbers are expected.</li>
@@ -3850,12 +3861,12 @@ end
                 <li><strong>Perimeter Interception:</strong> Lapis ensures the Godot engine catches malformed calls at the boundary before execution.</li>
               </ul>
             </div>
-            <div class="overlay-card emerald">
+            <div class="overlay-card solution">
               <div class="overlay-card-header">
-                <div class="card-title emerald">
+                <div class="card-title solution">
                   <span><span class="emoji-tint">✨</span> Crystal Zen Solution</span>
                 </div>
-                <span class="badge-pill emerald" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
+                <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>ClassDB Type Metadata:</strong> Method signatures register with exact GDExtension Variant types (<code>INT</code>, <code>FLOAT</code>).</li>

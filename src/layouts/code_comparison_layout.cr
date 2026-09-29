@@ -44,7 +44,7 @@ module LapisSlides
       cr_data = slide.raw["crystal"]?
 
       body = String.build do |str|
-        badge_header = "<span class=\"badge-pill cyan\" style=\"font-size: 0.72rem; margin: 0;\">CODE VIEW</span>"
+        badge_header = "<span class=\"badge-pill\" style=\"font-size: 0.72rem; margin: 0;\">CODE VIEW</span>"
         str << render_slide_header(slide, badge_header) << "\n"
         str << "        <div class=\"slide-body code-comparison-body code-only-mode\" style=\"display: flex; gap: 1rem; align-items: stretch; flex: 1;\">\n"
 
@@ -54,7 +54,7 @@ module LapisSlides
           gd_code = gd_data["code"]?.try(&.as_s) || ""
           gd_tag = gd_data["tag"]?.try(&.as_s) || "GDScript"
           str << "          <div class=\"col comparison-pane antipattern-pane\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col", "var(--coral-red)") << "\n"
+          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col antipattern-code", "var(--border-color)") << "\n"
           str << "          </div>\n"
         end
 
@@ -64,7 +64,7 @@ module LapisSlides
           cr_code = cr_data["code"]?.try(&.as_s) || ""
           cr_tag = cr_data["tag"]?.try(&.as_s) || "Crystal (Lapis)"
           str << "          <div class=\"col comparison-pane solution-pane\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col", "var(--emerald-green)") << "\n"
+          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-active)") << "\n"
           str << "          </div>\n"
         end
 
@@ -82,7 +82,7 @@ module LapisSlides
       takeaway = slide.raw["takeaway"]?
 
       body = String.build do |str|
-        badge_header = "<span class=\"badge-pill coral\" style=\"font-size: 0.72rem; margin: 0;\">ANALYSIS &amp; CRITIQUE</span>"
+        badge_header = "<span class=\"badge-pill\" style=\"font-size: 0.72rem; margin: 0;\">ANALYSIS &amp; CRITIQUE</span>"
         str << render_slide_header(slide, badge_header) << "\n"
         str << "        <div class=\"slide-body code-comparison-body with-overlay-mode\" style=\"position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;\">\n"
 
@@ -93,7 +93,7 @@ module LapisSlides
           gd_code = gd_data["code"]?.try(&.as_s) || ""
           gd_tag = gd_data["tag"]?.try(&.as_s) || "GDScript"
           str << "          <div class=\"col comparison-pane antipattern-pane dimmed-code\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col", "var(--coral-red)") << "\n"
+          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col antipattern-code", "var(--border-color)") << "\n"
           str << "          </div>\n"
         end
 
@@ -103,7 +103,7 @@ module LapisSlides
           cr_code = cr_data["code"]?.try(&.as_s) || ""
           cr_tag = cr_data["tag"]?.try(&.as_s) || "Crystal (Lapis)"
           str << "          <div class=\"col comparison-pane solution-pane dimmed-code\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col", "var(--emerald-green)") << "\n"
+          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-active)") << "\n"
           str << "          </div>\n"
         end
 
@@ -112,12 +112,12 @@ module LapisSlides
 
         # Left overlay over GDScript IDE
         if gd_data && (points = gd_data["points"]?.try(&.as_a))
-          str << "            <div class=\"overlay-card coral\">\n"
+          str << "            <div class=\"overlay-card antipattern\">\n"
           str << "              <div class=\"overlay-card-header\">\n"
-          str << "                <div class=\"card-title coral\">\n"
+          str << "                <div class=\"card-title antipattern\">\n"
           str << "                  <span>" << LayoutRenderer.tint_emojis("⚠️ GDScript Friction &amp; Pitfalls") << "</span>\n"
           str << "                </div>\n"
-          str << "                <span class=\"badge-pill coral\" style=\"font-size: 0.68rem; margin: 0;\">ANTIPATTERN</span>\n"
+          str << "                <span class=\"badge-pill antipattern\" style=\"font-size: 0.68rem; margin: 0;\">ANTIPATTERN</span>\n"
           str << "              </div>\n"
           str << "              <ul class=\"card-list\">\n"
           points.each do |p|
@@ -129,12 +129,12 @@ module LapisSlides
 
         # Right overlay over Crystal IDE
         if cr_data && (points = cr_data["points"]?.try(&.as_a))
-          str << "            <div class=\"overlay-card emerald\">\n"
+          str << "            <div class=\"overlay-card solution\">\n"
           str << "              <div class=\"overlay-card-header\">\n"
-          str << "                <div class=\"card-title emerald\">\n"
+          str << "                <div class=\"card-title solution\">\n"
           str << "                  <span>" << LayoutRenderer.tint_emojis("✨ Crystal Zen Solution") << "</span>\n"
           str << "                </div>\n"
-          str << "                <span class=\"badge-pill emerald\" style=\"font-size: 0.68rem; margin: 0;\">SOLUTION</span>\n"
+          str << "                <span class=\"badge-pill solution\" style=\"font-size: 0.68rem; margin: 0;\">SOLUTION</span>\n"
           str << "              </div>\n"
           str << "              <ul class=\"card-list\">\n"
           points.each do |p|

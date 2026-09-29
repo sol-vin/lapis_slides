@@ -13,7 +13,7 @@ module LapisSlides
         if cards = slide.raw["cards"]?.try(&.as_a)
           cards.each do |c|
             title = c["title"]?.try(&.as_s) || ""
-            color = c["color"]?.try(&.as_s) || "cyan"
+            color = c["color"]?.try(&.as_s) || ""
             badge = c["badge"]?.try(&.as_s)
             items = Array(String).new
             if raw_items = c["items"]?.try(&.as_a)

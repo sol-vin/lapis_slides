@@ -16,9 +16,20 @@ module LapisSlides
           m_tag = media["tag"]?.try(&.as_s) || "Video"
           m_type = media["type"]?.try(&.as_s) || "video"
 
-          str << "          <div class=\"code-container purple col-3\" style=\"display: flex; flex-direction: column; overflow: hidden;\">\n"
-          str << "            <div class=\"code-header\"><span>" << HTML.escape(m_title) << "</span><span>" << HTML.escape(m_tag) << "</span></div>\n"
-          str << "            <div style=\"flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #000; overflow: hidden; position: relative;\">\n"
+          str << "          <div class=\"code-container col-3\" style=\"display: flex; flex-direction: column; overflow: hidden; border-color: var(--accent-color);\">\n"
+          str << "            <div class=\"code-header\">\n"
+          str << "              <div class=\"terminal-dots\">\n"
+          str << "                <span class=\"terminal-dot red\" title=\"Close\"></span>\n"
+          str << "                <span class=\"terminal-dot yellow\" title=\"Minimize\"></span>\n"
+          str << "                <span class=\"terminal-dot green\" title=\"Maximize\"></span>\n"
+          str << "              </div>\n"
+          str << "              <span class=\"code-title\">" << LayoutRenderer.tint_emojis(HTML.escape(m_title)) << "</span>\n"
+          str << "              <div class=\"window-controls\">\n"
+          str << "                <span class=\"code-lang-tag\">" << HTML.escape(m_tag) << "</span>\n"
+          str << "                <span class=\"window-btn close\" title=\"Close\">✕</span>\n"
+          str << "              </div>\n"
+          str << "            </div>\n"
+          str << "            <div style=\"flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--bg-window); overflow: hidden; position: relative;\">\n"
 
           if m_type == "video"
             str << "              <video controls preload=\"auto\" playsinline style=\"width: 100%; max-height: 380px; object-fit: contain; outline: none; border: none; display: block;\">\n"
@@ -38,7 +49,7 @@ module LapisSlides
             if !speaker.empty?
               str << "              <span style=\"font-style: normal; font-weight: 700; color: var(--accent-color);\">" << HTML.escape(speaker) << "</span>\n"
             end
-            str << "              <span>" << HTML.escape(quote) << "</span>\n"
+            str << "              <span>" << LayoutRenderer.tint_emojis(HTML.escape(quote)) << "</span>\n"
             str << "            </div>\n"
           end
 

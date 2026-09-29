@@ -1,4 +1,5 @@
 bin/
 *.exe
 *.pdb
+*.uid
 __pycache__/

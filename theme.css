@@ -22,14 +22,10 @@
   /* Godot Engine Blue */
   --crystal-purp: #a855f7;
   /* Crystal Vibrant Purple */
-  --cyan-accent: #06b6d4;
-  /* Neon Cyan */
-  --emerald-green: #10b981;
-  /* Emerald */
-  --coral-red: #f43f5e;
-  /* Ruby / Coral */
-  --amber-gold: #f59e0b;
-  /* Amber */
+  --cyan-accent: var(--border-active, #06b6d4);
+  --emerald-green: var(--border-active, #38bdf8);
+  --coral-red: var(--border-color, #475569);
+  --amber-gold: var(--accent-tertiary, #f59e0b);
 
   --text-white: #f8fafc;
   /* Slate 50 */
@@ -112,23 +108,23 @@
 }
 
 .badge-pill.cyan {
-  border-color: var(--cyan-accent);
-  color: var(--cyan-accent);
+  border-color: var(--border-active, #06b6d4);
+  color: var(--border-active, #06b6d4);
 }
 
 .badge-pill.emerald {
-  border-color: var(--emerald-green);
-  color: var(--emerald-green);
+  border-color: var(--border-active, #38bdf8);
+  color: var(--accent-color, #38bdf8);
 }
 
 .badge-pill.coral {
-  border-color: var(--coral-red);
-  color: var(--coral-red);
+  border-color: var(--border-color, #475569);
+  color: var(--text-dim, #94a3b8);
 }
 
 .badge-pill.amber {
-  border-color: var(--amber-gold);
-  color: var(--amber-gold);
+  border-color: var(--accent-tertiary, #f59e0b);
+  color: var(--accent-tertiary, #f59e0b);
 }
 
 .slide-title {
@@ -209,15 +205,15 @@
 }
 
 .card.emerald {
-  border-color: var(--emerald-green);
+  border-color: var(--border-active, #38bdf8);
 }
 
 .card.coral {
-  border-color: var(--coral-red);
+  border-color: var(--border-color, #475569);
 }
 
 .card.amber {
-  border-color: var(--amber-gold);
+  border-color: var(--accent-tertiary, #f59e0b);
 }
 
 .card-title {
@@ -240,19 +236,19 @@
 }
 
 .card-title.cyan {
-  color: var(--cyan-accent);
+  color: var(--border-active, #06b6d4);
 }
 
 .card-title.emerald {
-  color: var(--emerald-green);
+  color: var(--accent-color, #38bdf8);
 }
 
 .card-title.coral {
-  color: var(--coral-red);
+  color: var(--text-color, #f8fafc);
 }
 
 .card-title.amber {
-  color: var(--amber-gold);
+  color: var(--accent-tertiary, #f59e0b);
 }
 
 ul.card-list {
@@ -329,15 +325,15 @@ ul.card-list li strong {
 }
 
 .code-container.emerald {
-  border-color: var(--emerald-green);
+  border-color: var(--border-active, #38bdf8);
 }
 
 .code-container.amber {
-  border-color: var(--amber-gold);
+  border-color: var(--accent-tertiary, #f59e0b);
 }
 
 .code-container.coral {
-  border-color: var(--coral-red);
+  border-color: var(--border-color, #475569);
 }
 
 .code-container.blue {
@@ -377,15 +373,15 @@ ul.card-list li strong {
 }
 
 .terminal-window.cyan {
-  border-color: var(--cyan-accent);
+  border-color: var(--border-active, #06b6d4);
 }
 
 .terminal-window.emerald {
-  border-color: var(--emerald-green);
+  border-color: var(--border-active, #38bdf8);
 }
 
 .terminal-window.amber {
-  border-color: var(--amber-gold);
+  border-color: var(--accent-tertiary, #f59e0b);
 }
 
 .terminal-header {
@@ -659,9 +655,9 @@ ul.card-list li strong {
 }
 
 .layer-tier.emerald {
-  border-left: 5px solid var(--emerald-green);
-  border-color: rgba(16, 185, 129, 0.4);
-  border-left-color: var(--emerald-green);
+  border-left: 5px solid var(--border-active);
+  border-color: var(--border-color);
+  border-left-color: var(--border-active);
 }
 
 .layer-tier.purple {
@@ -701,9 +697,9 @@ ul.card-list li strong {
 }
 
 .layer-badge.emerald {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: var(--bg-window);
+  color: var(--accent-color);
+  border: 1px solid var(--border-active);
 }
 
 .layer-badge.purple {
@@ -1030,6 +1026,72 @@ ul.card-list li strong {
   color: var(--border-active) !important;
 }
 
+/* Palette-Scoped Badge Variants */
+.solvin-slide .badge-pill.coral,
+.solvin-slide .badge-pill.antipattern {
+  border-color: var(--border-color) !important;
+  color: var(--text-dim, var(--text-color)) !important;
+  background-color: var(--bg-window) !important;
+}
+
+.solvin-slide .badge-pill.emerald,
+.solvin-slide .badge-pill.solution {
+  border-color: var(--border-active) !important;
+  color: var(--accent-color) !important;
+  background-color: var(--bg-window) !important;
+}
+
+.solvin-slide .badge-pill.cyan {
+  border-color: var(--border-active) !important;
+  color: var(--border-active) !important;
+  background-color: var(--bg-window) !important;
+}
+
+.solvin-slide .badge-pill.purple {
+  border-color: var(--accent-color) !important;
+  color: var(--accent-color) !important;
+  background-color: var(--bg-window) !important;
+}
+
+.solvin-slide .badge-pill.amber {
+  border-color: var(--accent-tertiary, var(--accent-color)) !important;
+  color: var(--accent-tertiary, var(--accent-color)) !important;
+  background-color: var(--bg-window) !important;
+}
+
+.solvin-slide .badge-pill.blue {
+  border-color: var(--link-color, var(--border-active)) !important;
+  color: var(--link-color, var(--border-active)) !important;
+  background-color: var(--bg-window) !important;
+}
+
+/* Palette-Scoped Card Variants */
+.solvin-slide .card.coral,
+.solvin-slide .card.antipattern {
+  border-color: var(--border-color) !important;
+}
+
+.solvin-slide .card.emerald,
+.solvin-slide .card.solution {
+  border-color: var(--border-active) !important;
+}
+
+.solvin-slide .card.cyan {
+  border-color: var(--border-active) !important;
+}
+
+.solvin-slide .card.purple {
+  border-color: var(--accent-color) !important;
+}
+
+.solvin-slide .card.amber {
+  border-color: var(--accent-tertiary, var(--accent-color)) !important;
+}
+
+.solvin-slide .card.blue {
+  border-color: var(--link-color, var(--border-active)) !important;
+}
+
 /* ==========================================================================
    CODE EXAMPLE WINDOWS & TERMINAL WINDOWS (SOL.VIN PALETTE SYSTEM)
    ========================================================================== */
@@ -1045,6 +1107,32 @@ ul.card-list li strong {
 .solvin-slide .code-container:hover {
   border-color: var(--border-active) !important;
   box-shadow: 4px 4px 0px var(--border-active) !important;
+}
+
+.solvin-slide .code-container.antipattern-code,
+.solvin-slide .code-container.coral {
+  border-color: var(--border-color) !important;
+}
+
+.solvin-slide .code-container.solution-code,
+.solvin-slide .code-container.emerald {
+  border-color: var(--border-active) !important;
+}
+
+.solvin-slide .code-container.cyan {
+  border-color: var(--border-active) !important;
+}
+
+.solvin-slide .code-container.purple {
+  border-color: var(--accent-color) !important;
+}
+
+.solvin-slide .code-container.amber {
+  border-color: var(--accent-tertiary, var(--accent-color)) !important;
+}
+
+.solvin-slide .code-container.blue {
+  border-color: var(--link-color, var(--border-active)) !important;
 }
 
 /* Terminal Window strictly styled with Slide Palette */
@@ -1347,6 +1435,11 @@ ul.card-list li strong {
 
 .solvin-slide .matrix-table tr:nth-child(even) td {
   background-color: rgba(128, 128, 128, 0.08) !important;
+}
+
+.solvin-slide .matrix-table td.lapis-col {
+  color: var(--accent-color) !important;
+  font-weight: 700 !important;
 }
 
 /* ==========================================================================
@@ -1896,32 +1989,32 @@ ul.card-list li strong {
 
 .overlay-card {
   flex: 1 !important;
-  background-color: rgba(14, 18, 28, 0.94) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 2px solid var(--card-border) !important;
-  border-radius: 10px !important;
+  background-color: var(--bg-window) !important;
+  border: 2px solid var(--border-color) !important;
+  border-radius: 8px !important;
   padding: 1.15rem 1.35rem !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 0.65rem !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65) !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
   box-sizing: border-box !important;
   pointer-events: auto !important;
   min-width: 0 !important;
   animation: overlayCardIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
+.overlay-card.antipattern,
 .overlay-card.coral {
-  border-color: var(--coral-red) !important;
-  background-color: rgba(28, 14, 20, 0.95) !important;
-  box-shadow: 0 10px 32px rgba(244, 63, 94, 0.25) !important;
+  border-color: var(--border-color) !important;
+  background-color: var(--bg-window) !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
 }
 
+.overlay-card.solution,
 .overlay-card.emerald {
-  border-color: var(--emerald-green) !important;
-  background-color: rgba(10, 26, 18, 0.95) !important;
-  box-shadow: 0 10px 32px rgba(16, 185, 129, 0.25) !important;
+  border-color: var(--border-active) !important;
+  background-color: var(--bg-window) !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
 }
 
 .overlay-card-header {
@@ -1929,7 +2022,7 @@ ul.card-list li strong {
   align-items: center !important;
   justify-content: space-between !important;
   margin-bottom: 0.15rem !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1.5px solid var(--border-color) !important;
   padding-bottom: 0.45rem !important;
 }
 
@@ -1940,12 +2033,31 @@ ul.card-list li strong {
   color: var(--text-color) !important;
 }
 
+.overlay-card.antipattern .card-title,
 .overlay-card.coral .card-title {
-  color: var(--accent-quaternary, var(--accent-color)) !important;
+  color: var(--text-color) !important;
 }
 
+.overlay-card.solution .card-title,
 .overlay-card.emerald .card-title {
-  color: var(--accent-secondary, var(--border-active)) !important;
+  color: var(--accent-color) !important;
+}
+
+.overlay-card .badge-pill {
+  background-color: var(--bg-window) !important;
+  box-shadow: 2px 2px 0px var(--shadow-color) !important;
+}
+
+.overlay-card.antipattern .badge-pill,
+.overlay-card.coral .badge-pill {
+  border-color: var(--border-color) !important;
+  color: var(--text-dim, var(--text-color)) !important;
+}
+
+.overlay-card.solution .badge-pill,
+.overlay-card.emerald .badge-pill {
+  border-color: var(--border-active) !important;
+  color: var(--accent-color) !important;
 }
 
 .overlay-card ul.card-list {
@@ -1967,7 +2079,7 @@ ul.card-list li strong {
 }
 
 .overlay-card ul.card-list li strong {
-  color: var(--text-color) !important;
+  color: var(--accent-color, var(--text-color)) !important;
   font-weight: 700 !important;
 }
 
@@ -1983,17 +2095,19 @@ ul.card-list li strong {
   content: "•";
   position: absolute;
   left: 0;
-  color: var(--accent-color) !important;
+  color: var(--border-color) !important;
   font-weight: bold;
   font-size: 1.1rem;
 }
 
+.overlay-card.antipattern ul.card-list li::before,
 .overlay-card.coral ul.card-list li::before {
-  color: var(--accent-quaternary, var(--accent-color)) !important;
+  color: var(--border-color) !important;
 }
 
+.overlay-card.solution ul.card-list li::before,
 .overlay-card.emerald ul.card-list li::before {
-  color: var(--accent-secondary, var(--border-active)) !important;
+  color: var(--border-active) !important;
 }
 
 @keyframes overlayCardIn {
