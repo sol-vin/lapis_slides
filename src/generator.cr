@@ -211,7 +211,7 @@ module LapisSlides
                   autoPlay: autoplay,
                   theme: theme,
                   terminalFontSize: fontSize,
-                  terminalFontFamily: "Consolas, Menlo, monospace",
+                  terminalFontFamily: "'Cascadia Code', 'JetBrains Mono', Consolas, monospace",
                   fit: 'both',
                   controls: controls
                 });
@@ -237,6 +237,9 @@ module LapisSlides
                   try { player.play(); } catch(e) {}
                 }
               });
+              setTimeout(() => {
+                try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+              }, 50);
             }
 
             function deactivateSlide(slideEl) {

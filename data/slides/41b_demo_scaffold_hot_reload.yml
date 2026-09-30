@@ -12,7 +12,7 @@ left:
   title: Terminal — Scaffold & Hot Reload Session
   cast: casts/lapis_demo_scaffold.cast
   font_size: '0.60rem'
-  speed: 1.25
+  speed: 1.0
   loop: true
   autoplay: true
   controls: auto

@@ -2377,12 +2377,10 @@ This document outlines each slide's exact theme palette, architectural category,
     end
   end
   ```
-- **Deterministic Simulation Invariants**:
-  - In-Memory Peer Mesh: multiplayer_test instantiates a full server + N client topology in a single fast, isolated process.
-  - Lockstep Frame Stepping: harness.step_frames(n) pumps network queues, RPC dispatches, and physics synchronously.
-  - Virtual Input Injection: client.send_action(:attack) pumps simulated hardware actions without OS window focus.
-  - Wireshark-Style Spy: harness.spy audits every transmitted packet, verifying reliability, channel, sender, and bandwidth.
-  - Zero Network Flakiness: Runs deterministically in-memory with zero port binding conflicts, socket timeouts, or race conditions.
+- **Terminal Replay (`lapis test spec/suites/test_multiplayer.cr — Simulation Harness`)**:
+  ```bash
+  Terminal recording: casts/lapis_multiplayer_test.cast
+  ```
 - **Presenter Script**:
   > *"Testing multiplayer networking in game engines is notoriously painful. Running multiple editor instances or launching background processes leads to port collisions, timing jitter, and flaky CI tests. Lapis completely solves this with Lapis::Multiplayer::Harness. The multiplayer_test macro spins up a full multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers. Using harness.step_frames(n), you step network packets, physics ticks, and SceneTree lifecycles synchronously and deterministically. You can pump virtual input actions like send_action(:attack) and dispatch RPCs. Furthermore, harness.spy acts as an embedded Wireshark packet inspector. You can assert that specific RPCs were delivered (spy.assert_rpc_sent), verify reliable vs unreliable delivery, enforce strict bandwidth caps (spy.assert_max_bandwidth), and even trigger native crash forensics if an anomaly occurs!"*
 
@@ -3145,12 +3143,10 @@ This document outlines each slide's exact theme palette, architectural category,
     end
   end
   ```
-- **Headless Automation & Stability Invariants**:
-  - Headless Engine Automation: Spawns Godot with --headless --editor --audio-driver Dummy for fast CI runs.
-  - @tool Lifecycle Verification: Verifies in-editor node instantiation, viewport gizmos, and @[ExportToolButton] actions.
-  - Live Reload Stress-Testing: run_editor_reload_tests triggers continuous recompilations under active editor sessions.
-  - Windows Shadow-Lock Auditing: Proves the DLL shadow mechanism eliminates Windows file locks completely.
-  - Zero-Leak / Zero-Crash Guarantee: Asserts exit code 0 and verifies zero dead pointers or orphaned C++ engine instances.
+- **Terminal Replay (`lapis test spec/editor_driver_spec.cr — Headless Driver & Reload Cycles`)**:
+  ```bash
+  Terminal recording: casts/lapis_editor_driver.cast
+  ```
 - **Presenter Script**:
   > *"Building editor plugins, custom gizmos, and @tool scripts usually requires tedious manual testing inside the Godot GUI. Lapis changes this with Lapis::Test::EditorDriver, an automated testing harness for the Godot editor itself. EditorDriver launches Godot headlessly with '--headless --editor --audio-driver Dummy --rendering-driver opengl3', mounts your project's custom tools, and executes real in-editor logic. It verifies that @tool nodes initialize correctly in the editor, and even simulates clicking @[ExportToolButton] actions programmatically. Furthermore, EditorDriver provides 'run_editor_reload_tests', which compiles and reloads the GDExtension multiple times while the editor is running. This automated stress test guarantees our Windows shadow DLL mechanism prevents file locks, and verifies that zero dead pointers or memory leaks occur during live reloads."*
 

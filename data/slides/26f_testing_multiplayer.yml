@@ -42,16 +42,15 @@ left:
       end
     end
 right:
-  type: card
-  title: Deterministic Simulation Invariants
-  color: purple
-  compact: true
-  items:
-    - '<strong>In-Memory Peer Mesh:</strong> <code>multiplayer_test</code> instantiates a full server + N client topology in a single fast, isolated process.'
-    - '<strong>Lockstep Frame Stepping:</strong> <code>harness.step_frames(n)</code> pumps network queues, RPC dispatches, and physics synchronously.'
-    - '<strong>Virtual Input Injection:</strong> <code>client.send_action(:attack)</code> pumps simulated hardware actions without OS window focus.'
-    - '<strong>Wireshark-Style Spy:</strong> <code>harness.spy</code> audits every transmitted packet, verifying reliability, channel, sender, and bandwidth.'
-    - '<strong>Zero Network Flakiness:</strong> Runs deterministically in-memory with zero port binding conflicts, socket timeouts, or race conditions.'
+  type: asciinema
+  title: lapis test spec/suites/test_multiplayer.cr — Simulation Harness
+  cast: casts/lapis_multiplayer_test.cast
+  font_size: '0.60rem'
+  cols: 86
+  rows: 19
+  speed: 1.0
+  loop: true
+  autoplay: true
 notes: |
   Testing multiplayer networking in game engines is notoriously painful. Running multiple editor instances or launching background processes leads to port collisions, timing jitter, and flaky CI tests.
   Lapis completely solves this with Lapis::Multiplayer::Harness. The multiplayer_test macro spins up a full multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.

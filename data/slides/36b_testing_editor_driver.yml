@@ -40,16 +40,15 @@ left:
       end
     end
 right:
-  type: card
-  title: Headless Automation & Stability Invariants
-  color: cyan
-  compact: true
-  items:
-    - '<strong>Headless Engine Automation:</strong> Spawns Godot with <code>--headless --editor --audio-driver Dummy</code> for fast CI runs.'
-    - '<strong><code>@tool</code> Lifecycle Verification:</strong> Verifies in-editor node instantiation, viewport gizmos, and <code>@[ExportToolButton]</code> actions.'
-    - '<strong>Live Reload Stress-Testing:</strong> <code>run_editor_reload_tests</code> triggers continuous recompilations under active editor sessions.'
-    - '<strong>Windows Shadow-Lock Auditing:</strong> Proves the DLL shadow mechanism eliminates Windows file locks completely.'
-    - '<strong>Zero-Leak / Zero-Crash Guarantee:</strong> Asserts exit code 0 and verifies zero dead pointers or orphaned C++ engine instances.'
+  type: asciinema
+  title: lapis test spec/editor_driver_spec.cr — Headless Driver & Reload Cycles
+  cast: casts/lapis_editor_driver.cast
+  font_size: '0.60rem'
+  cols: 86
+  rows: 19
+  speed: 1.0
+  loop: true
+  autoplay: true
 notes: |
   Building editor plugins, custom gizmos, and @tool scripts usually requires tedious manual testing inside the Godot GUI. Lapis changes this with Lapis::Test::EditorDriver, an automated testing harness for the Godot editor itself.
   EditorDriver launches Godot headlessly with '--headless --editor --audio-driver Dummy --rendering-driver opengl3', mounts your project's custom tools, and executes real in-editor logic. It verifies that @tool nodes initialize correctly in the editor, and even simulates clicking @[ExportToolButton] actions programmatically.

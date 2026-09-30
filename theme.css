@@ -4,10 +4,10 @@
  * Optimized for 1280x720 (16:9) base resolution with large, readable typography
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --code-font: 'Fira Code', monospace;
+  --code-font: 'Cascadia Code', 'JetBrains Mono', Consolas, monospace !important;
   --bg-dark: #0f172a;
   /* Slate 900 */
   --card-bg: #1e293b;
@@ -3623,10 +3623,13 @@ ul.card-list li strong {
 
 /* Asciinema Terminal font scaling and typography */
 .solvin-slide .asciinema-player-mount pre.ap-terminal,
-.asciinema-player-mount pre.ap-terminal {
+.asciinema-player-mount pre.ap-terminal,
+.asciinema-player-mount .ap-line,
+.asciinema-player-mount pre {
   background-color: var(--bg-window) !important;
   border-color: var(--bg-window) !important;
-  font-family: Consolas, Menlo, monospace !important;
+  font-family: 'Cascadia Code', 'JetBrains Mono', Consolas, monospace !important;
+  font-feature-settings: "liga" 0, "calt" 0 !important;
   box-shadow: none !important;
   margin: 0 !important;
 }
