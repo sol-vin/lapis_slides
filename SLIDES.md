@@ -446,24 +446,45 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Fast as C, Slick as Ruby • Native LLVM Speed
 - **Code Example (`crystal_origins.cr — Clean Syntax, Native Machine Code`)**:
   ```crystal
-  # 1. Elegant Ruby-like syntax with zero typing clutter:
-  class Enemy
-    property health : Int32
+  # Clean Ruby ergonomics — Ahead-of-Time LLVM Compiled
+  class Player
     property name : String
+    property health : Int32
+    property inventory : Array(String)
   
+    # Shorthand constructor with default parameters:
     def initialize(@name : String, @health : Int32 = 100)
+      @inventory = [] of String
     end
   
-    # 2. Ahead-of-time compiled to native LLVM machine code:
-    def take_damage(amount : Int32) : Bool
-      @health -= amount
-      @health <= 0 # Returns true if defeated
+    # Concise predicate method:
+    def alive? : Bool
+      @health > 0
+    end
+  
+    # Zero-cost block inlining: Enumerable pipelines compile to tight loops
+    def heal_party(companions : Enumerable(Player), amount : Int32) : Void
+      companions.select(&.alive?).each do |companion|
+        companion.health = (companion.health + amount).clamp(0, 100)
+        puts "✨ Healed #{companion.name} to #{companion.health} HP"
+      end
+    end
+  
+    # Flow-sensitive nil safety: String? requires explicit compiler checks
+    def inspect_equipped : String?
+      @inventory.first?
     end
   end
   
-  # 3. Global type inference: compiler proves safety at compile time!
-  enemy = Enemy.new("Goblin", 50)
-  enemy.take_damage(25) # Direct C-speed CPU instruction!
+  # 1. Global type inference: zero redundant type declarations
+  hero  = Player.new("Arthur", 85)
+  party = [hero, Player.new("Gwen", 40)]
+  hero.heal_party(party, 25)
+  
+  # 2. Flow typing proves non-nil without runtime null dereferences
+  if item = hero.inspect_equipped
+    puts "Equipped: #{item.upcase}" # Compiler knows item is String!
+  end
   ```
 - **The Compiler Synthesis**:
   - Designed from Day One for Types: Crystal wasn't a dynamic language patched with types; it was built from scratch as a statically typed language.
@@ -472,7 +493,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Static Nil Safety: Null pointer dereferences are caught at compile time. T cannot be nil; only T? can, forcing explicit compiler-checked handling.
   - Direct C ABI Interop: Seamless bindings to native C libraries without JNI or FFI marshalling penalties.
 - **Presenter Script**:
-  > *"In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility."*
+  > *"In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Notice how closely this mirrors the Ruby heritage we saw earlier: shorthand property declarations, predicates, statement modifiers, and block iterators. But every single operation is resolved statically at compile time—the Enumerable pipelines inline into tight machine loops, types are proven with global inference, and nil dereferences are mathematically impossible at runtime."*
 
 ---
 ### Slide 14: The Zero-Tax Type System
@@ -525,23 +546,33 @@ This document outlines each slide's exact theme palette, architectural category,
   velocity = direction.normalized * move_speed + gravity * delta
   new_position = global_position + velocity
   
-  # 2. Strict numeric precision literals (zero ambiguous conversions)
+  # 2. Strict numeric literals & zero-cost tuple destructuring
   base_friction = 0.85_f32     # Explicit 32-bit float
-  max_particles = 10_000_u32   # Explicit unsigned 32-bit int
-  
-  # 3. Tuple destructuring with zero heap allocation
   name, level, score = {"Shadow Knight", 85, 142_500_u64}
   
-  # 4. Expressive range slicing on contiguous buffers
-  active_particles = particle_pool[0...active_count]
+  # 3. Infinite range slicing (endless & beginningless ranges)
+  inventory = ["Potion", "Shield", "Sword", "Helm", "Boots"]
+  
+  # Endless range [2..]: slices from index 2 all the way to the end
+  tail_gear = inventory[2..]
+  # => ["Sword", "Helm", "Boots"]
+  
+  # Beginningless range [..1]: slices from the beginning up to index 1
+  quick_bar = inventory[..1]
+  # => ["Potion", "Shield"]
+  
+  # Negative offset with endless range [-3..]: slices last 3 items
+  recent_events = ["Spawn", "Aggro", "Hit: 12", "Crit: 45", "Died"]
+  combat_tail   = recent_events[-3..]
+  # => ["Hit: 12", "Crit: 45", "Died"]
   ```
 - **Expressive Language Primitives**:
   - Operator Overloading: Natural mathematical expressions (velocity = dir * speed + grav * delta) with direct CPU SIMD vectorization.
   - Explicit Numeric Precision: Literals like 1.0_f32, 250_u32, and 1_000_000_u64 eliminate ambiguous runtime type coercion bugs.
   - Zero-Cost Tuples: Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.
-  - Clean Range Slicing: Expressive [0...count] slicing on contiguous arrays without pointer arithmetic errors.
+  - Infinite & Endless Range Slicing: Expressive endless ([2..]), beginningless ([..1]), and negative-offset ([-3..]) slices on contiguous arrays with zero manual length math.
 - **Presenter Script**:
-  > *"Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed."*
+  > *"Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice."*
 
 ---
 ### Slide 16: The DSL Engine: with self yield & Macros

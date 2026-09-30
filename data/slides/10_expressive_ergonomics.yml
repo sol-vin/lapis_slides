@@ -12,20 +12,31 @@ left:
   title: gameplay_primitives.cr — Expressive Systems Syntax
   tag: Crystal
   lang: crystal
+  font_size: '0.78rem'
   code: |
     # 1. Clean vector math & operator overloading (SIMD-accelerated)
     velocity = direction.normalized * move_speed + gravity * delta
     new_position = global_position + velocity
 
-    # 2. Strict numeric precision literals (zero ambiguous conversions)
+    # 2. Strict numeric literals & zero-cost tuple destructuring
     base_friction = 0.85_f32     # Explicit 32-bit float
-    max_particles = 10_000_u32   # Explicit unsigned 32-bit int
-
-    # 3. Tuple destructuring with zero heap allocation
     name, level, score = {"Shadow Knight", 85, 142_500_u64}
 
-    # 4. Expressive range slicing on contiguous buffers
-    active_particles = particle_pool[0...active_count]
+    # 3. Infinite range slicing (endless & beginningless ranges)
+    inventory = ["Potion", "Shield", "Sword", "Helm", "Boots"]
+
+    # Endless range [2..]: slices from index 2 all the way to the end
+    tail_gear = inventory[2..]
+    # => ["Sword", "Helm", "Boots"]
+
+    # Beginningless range [..1]: slices from the beginning up to index 1
+    quick_bar = inventory[..1]
+    # => ["Potion", "Shield"]
+
+    # Negative offset with endless range [-3..]: slices last 3 items
+    recent_events = ["Spawn", "Aggro", "Hit: 12", "Crit: 45", "Died"]
+    combat_tail   = recent_events[-3..]
+    # => ["Hit: 12", "Crit: 45", "Died"]
 right:
   type: card
   title: Expressive Language Primitives
@@ -34,6 +45,7 @@ right:
   - <strong>Operator Overloading:</strong> Natural mathematical expressions (<code>velocity = dir * speed + grav * delta</code>) with direct CPU SIMD vectorization.
   - <strong>Explicit Numeric Precision:</strong> Literals like <code>1.0_f32</code>, <code>250_u32</code>, and <code>1_000_000_u64</code> eliminate ambiguous runtime type coercion bugs.
   - <strong>Zero-Cost Tuples:</strong> Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.
-  - <strong>Clean Range Slicing:</strong> Expressive <code>[0...count]</code> slicing on contiguous arrays without pointer arithmetic errors.
+  - '<strong>Infinite &amp; Endless Range Slicing:</strong> Expressive endless (<code>[2..]</code>), beginningless (<code>[..1]</code>), and negative-offset (<code>[-3..]</code>) slices on contiguous arrays with zero manual length math.'
 notes: |
-  Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed.
+  Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
+  Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice.

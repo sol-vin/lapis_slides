@@ -1225,7 +1225,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1238,24 +1238,45 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense"># 1. Elegant Ruby-like syntax with zero typing clutter:
-class Enemy
-  property health : Int32
+            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># Clean Ruby ergonomics — Ahead-of-Time LLVM Compiled
+class Player
   property name : String
+  property health : Int32
+  property inventory : Array(String)
 
+  # Shorthand constructor with default parameters:
   def initialize(@name : String, @health : Int32 = 100)
+    @inventory = [] of String
   end
 
-  # 2. Ahead-of-time compiled to native LLVM machine code:
-  def take_damage(amount : Int32) : Bool
-    @health -= amount
-    @health &lt;= 0 # Returns true if defeated
+  # Concise predicate method:
+  def alive? : Bool
+    @health &gt; 0
+  end
+
+  # Zero-cost block inlining: Enumerable pipelines compile to tight loops
+  def heal_party(companions : Enumerable(Player), amount : Int32) : Void
+    companions.select(&amp;.alive?).each do |companion|
+      companion.health = (companion.health + amount).clamp(0, 100)
+      puts &quot;✨ Healed #{companion.name} to #{companion.health} HP&quot;
+    end
+  end
+
+  # Flow-sensitive nil safety: String? requires explicit compiler checks
+  def inspect_equipped : String?
+    @inventory.first?
   end
 end
 
-# 3. Global type inference: compiler proves safety at compile time!
-enemy = Enemy.new(&quot;Goblin&quot;, 50)
-enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
+# 1. Global type inference: zero redundant type declarations
+hero  = Player.new(&quot;Arthur&quot;, 85)
+party = [hero, Player.new(&quot;Gwen&quot;, 40)]
+hero.heal_party(party, 25)
+
+# 2. Flow typing proves non-nil without runtime null dereferences
+if item = hero.inspect_equipped
+  puts &quot;Equipped: #{item.upcase}&quot; # Compiler knows item is String!
+end</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
@@ -1279,7 +1300,8 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
           <span>Slide 13 / 88</span>
         </div>
         <aside class="notes">
-          In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility.
+          In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend.
+          Notice how closely this mirrors the Ruby heritage we saw earlier: shorthand property declarations, predicates, statement modifiers, and block iterators. But every single operation is resolved statically at compile time—the Enumerable pipelines inline into tight machine loops, types are proven with global inference, and nil dereferences are mathematically impossible at runtime.
         </aside>
       </section>
 
@@ -1401,19 +1423,29 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Clean vector math &amp; operator overloading (SIMD-accelerated)
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;"># 1. Clean vector math &amp; operator overloading (SIMD-accelerated)
 velocity = direction.normalized * move_speed + gravity * delta
 new_position = global_position + velocity
 
-# 2. Strict numeric precision literals (zero ambiguous conversions)
+# 2. Strict numeric literals &amp; zero-cost tuple destructuring
 base_friction = 0.85_f32     # Explicit 32-bit float
-max_particles = 10_000_u32   # Explicit unsigned 32-bit int
-
-# 3. Tuple destructuring with zero heap allocation
 name, level, score = {&quot;Shadow Knight&quot;, 85, 142_500_u64}
 
-# 4. Expressive range slicing on contiguous buffers
-active_particles = particle_pool[0...active_count]</code></pre>
+# 3. Infinite range slicing (endless &amp; beginningless ranges)
+inventory = [&quot;Potion&quot;, &quot;Shield&quot;, &quot;Sword&quot;, &quot;Helm&quot;, &quot;Boots&quot;]
+
+# Endless range [2..]: slices from index 2 all the way to the end
+tail_gear = inventory[2..]
+# =&gt; [&quot;Sword&quot;, &quot;Helm&quot;, &quot;Boots&quot;]
+
+# Beginningless range [..1]: slices from the beginning up to index 1
+quick_bar = inventory[..1]
+# =&gt; [&quot;Potion&quot;, &quot;Shield&quot;]
+
+# Negative offset with endless range [-3..]: slices last 3 items
+recent_events = [&quot;Spawn&quot;, &quot;Aggro&quot;, &quot;Hit: 12&quot;, &quot;Crit: 45&quot;, &quot;Died&quot;]
+combat_tail   = recent_events[-3..]
+# =&gt; [&quot;Hit: 12&quot;, &quot;Crit: 45&quot;, &quot;Died&quot;]</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
@@ -1425,7 +1457,7 @@ active_particles = particle_pool[0...active_count]</code></pre>
               <li><strong>Operator Overloading:</strong> Natural mathematical expressions (<code>velocity = dir * speed + grav * delta</code>) with direct CPU SIMD vectorization.</li>
               <li><strong>Explicit Numeric Precision:</strong> Literals like <code>1.0_f32</code>, <code>250_u32</code>, and <code>1_000_000_u64</code> eliminate ambiguous runtime type coercion bugs.</li>
               <li><strong>Zero-Cost Tuples:</strong> Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.</li>
-              <li><strong>Clean Range Slicing:</strong> Expressive <code>[0...count]</code> slicing on contiguous arrays without pointer arithmetic errors.</li>
+              <li><strong>Infinite &amp; Endless Range Slicing:</strong> Expressive endless (<code>[2..]</code>), beginningless (<code>[..1]</code>), and negative-offset (<code>[-3..]</code>) slices on contiguous arrays with zero manual length math.</li>
             </ul>
           </div>
           </div>
@@ -1436,7 +1468,8 @@ active_particles = particle_pool[0...active_count]</code></pre>
           <span>Slide 15 / 88</span>
         </div>
         <aside class="notes">
-          Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. It feels like high-level scripting, but runs at bare-metal C speed.
+          Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
+          Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice.
         </aside>
       </section>
 
