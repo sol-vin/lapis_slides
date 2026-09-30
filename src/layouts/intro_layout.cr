@@ -3,80 +3,67 @@ require "./layout_renderer"
 module LapisSlides
   class IntroLayout < LayoutRenderer
     def render_html(slide : Slide, palette : Palette, slide_num : Int32, total_slides : Int32, author : String) : String
-      cube_size = slide.raw["cube_size"]?.try(&.as_i) || 420
-      cards = slide.raw["cards"]?.try(&.as_a)
-      quickstart = slide.raw["quickstart"]?.try(&.as_s)
-      signature = slide.raw["signature"]?.try(&.as_s) || slide.raw["presenter"]?.try(&.as_s)
+      cube_size = slide.raw["cube_size"]?.try(&.as_i) || 310
+      author_name = slide.raw["author"]?.try(&.as_s) || "Ian Rash"
+      author_alias = slide.raw["author_alias"]?.try(&.as_s) || "sol.vin"
+      author_role = slide.raw["author_role"]?.try(&.as_s) || "Creator of Lapis • Systems Engineer & Game Developer"
+      repo_link = slide.raw["repo"]?.try(&.as_s) || "github.com/sol-vin/lapis"
+      pills = slide.raw["pills"]?.try(&.as_a)
 
       hero_cube = "<div class=\"hero-cube intro-cube\" data-size=\"#{cube_size}\" title=\"Spinning 3D Isometric Cube • Click or Drag to Spin!\"></div>"
 
       body = String.build do |str|
-        # Big wireframe cube in the background
+        # Big wireframe cube perfectly centered in the screen
         str << "        " << hero_cube << "\n"
 
-        # Foreground content overlay
-        str << "        <div class=\"intro-content\" style=\"position: relative; z-index: 5; display: flex; flex-direction: column; gap: 0.75rem; flex: 1;\">\n"
-        str << render_slide_header(slide) << "\n"
+        # Foreground content container
+        str << "        <div class=\"intro-content\">\n"
 
-        if cards
-          str << "          <div class=\"intro-cards-grid\">\n"
-          cards.each do |c|
-            title = c["title"]?.try(&.as_s) || ""
-            badge = c["badge"]?.try(&.as_s) || ""
-            icon = c["icon"]?.try(&.as_s) || "★"
-            color = c["color"]?.try(&.as_s) || "cyan"
-            tagline = c["tagline"]?.try(&.as_s) || c["link"]?.try(&.as_s) || ""
-            desc = c["desc"]?.try(&.as_s) || ""
+        # Top Block: Talk Topic Badge, Title, Subtitle
+        str << "          <div class=\"intro-top-block\">\n"
+        if !slide.badge.empty?
+          str << "            <div class=\"intro-topic-wrap\">\n"
+          str << "              <span class=\"badge-pill " << slide.badge_color << " intro-topic-badge\">" << LayoutRenderer.tint_emojis(HTML.escape(slide.badge)) << "</span>\n"
+          str << "            </div>\n"
+        end
+        str << "            <h1 class=\"intro-title\">" << LayoutRenderer.tint_emojis(HTML.escape(slide.title)) << "</h1>\n"
+        if !slide.subtitle.empty?
+          str << "            <p class=\"intro-subtitle\">" << LayoutRenderer.tint_emojis(HTML.escape(slide.subtitle)) << "</p>\n"
+        end
+        str << "          </div>\n"
 
-            str << "            <div class=\"intro-card " << color << "\">\n"
-            str << "              <div class=\"intro-card-header\">\n"
-            str << "                <div class=\"intro-card-title-wrap\">\n"
-            str << "                  <span class=\"intro-icon\">" << LayoutRenderer.tint_emojis(icon) << "</span>\n"
-            str << "                  <span class=\"intro-title\">" << LayoutRenderer.tint_emojis(HTML.escape(title)) << "</span>\n"
-            str << "                </div>\n"
-            if !badge.empty?
-              str << "                <span class=\"badge-pill " << color << "\" style=\"font-size: 0.58rem; margin: 0;\">" << HTML.escape(badge) << "</span>\n"
-            end
-            str << "              </div>\n"
+        # Center spacer so the interactive 3D cube remains unobstructed
+        str << "          <div class=\"intro-cube-spacer\" style=\"height: #{cube_size}px;\"></div>\n"
 
-            if !tagline.empty?
-              str << "              <div class=\"intro-tagline\">\n"
-              str << "                <code>" << HTML.escape(tagline) << "</code>\n"
-              str << "              </div>\n"
-            end
+        # Bottom Block: Author, Role, Highlight Pills
+        str << "          <div class=\"intro-bottom-block\">\n"
+        str << "            <div class=\"intro-author-wrap\">\n"
+        str << "              <div class=\"intro-author-name\">" << HTML.escape(author_name)
+        if !author_alias.empty?
+          str << " <span class=\"intro-author-alias\">(" << HTML.escape(author_alias) << ")</span>"
+        end
+        str << "</div>\n"
+        if !author_role.empty?
+          str << "              <div class=\"intro-author-role\">" << LayoutRenderer.tint_emojis(HTML.escape(author_role)) << "</div>\n"
+        end
+        str << "            </div>\n"
 
-            if !desc.empty?
-              str << "              <div class=\"intro-desc\">\n"
-              str << "                " << LayoutRenderer.tint_emojis(desc) << "\n"
-              str << "              </div>\n"
-            end
-
-            if raw_items = c["items"]?.try(&.as_a)
-              str << "              <ul class=\"card-list intro-card-list\">\n"
-              raw_items.each do |it|
-                str << "                <li>" << LayoutRenderer.tint_emojis(it.as_s) << "</li>\n"
-              end
-              str << "              </ul>\n"
-            end
-
-            str << "            </div>\n"
+        if pills && !pills.empty?
+          str << "            <div class=\"intro-pills-row\">\n"
+          pills.each do |p|
+            str << "              <span class=\"intro-pill\">" << LayoutRenderer.tint_emojis(p.as_s) << "</span>\n"
           end
-          str << "          </div>\n"
+          str << "            </div>\n"
+        elsif !repo_link.empty?
+          str << "            <div class=\"intro-pills-row\">\n"
+          str << "              <span class=\"intro-pill\">⚡ LLVM Native C-Speed</span>\n"
+          str << "              <span class=\"intro-pill\">💎 Ruby-Like Zen DSL</span>\n"
+          str << "              <span class=\"intro-pill\">🎮 First-Class Godot 4.8+</span>\n"
+          str << "              <span class=\"intro-pill\"><code>" << HTML.escape(repo_link) << "</code></span>\n"
+          str << "            </div>\n"
         end
 
-        if quickstart
-          str << "          <div class=\"intro-quickstart-bar\">\n"
-          str << "            <span class=\"intro-quickstart-label\">🚀 Quickstart:</span>\n"
-          str << "            <code class=\"intro-quickstart-code\">" << HTML.escape(quickstart) << "</code>\n"
-          str << "          </div>\n"
-        end
-
-        if signature
-          str << "          <div class=\"intro-signature\">\n"
-          str << "            " << LayoutRenderer.tint_emojis(signature) << "\n"
-          str << "          </div>\n"
-        end
-
+        str << "          </div>\n"
         str << "        </div>"
       end
 
@@ -92,24 +79,17 @@ module LapisSlides
         str << "- **Title**: " << slide.title << "\n"
         str << "- **Subtitle**: " << slide.subtitle << "\n"
 
-        if cards = slide.raw["cards"]?.try(&.as_a)
-          str << "- **Key Pillars**:\n"
-          cards.each do |c|
-            title = c["title"]?.try(&.as_s) || ""
-            tagline = c["tagline"]?.try(&.as_s) || c["link"]?.try(&.as_s) || ""
-            desc = c["desc"]?.try(&.as_s) || ""
-            str << "  - **" << title << "**"
-            str << " (`" << tagline << "`)" unless tagline.empty?
-            str << ": " << LayoutRenderer.clean_text(desc) << "\n"
-          end
-        end
+        author_name = slide.raw["author"]?.try(&.as_s) || "Ian Rash"
+        author_alias = slide.raw["author_alias"]?.try(&.as_s) || "sol.vin"
+        author_role = slide.raw["author_role"]?.try(&.as_s) || "Creator of Lapis • Systems Engineer & Game Developer"
+        repo_link = slide.raw["repo"]?.try(&.as_s) || "github.com/sol-vin/lapis"
 
-        if quickstart = slide.raw["quickstart"]?.try(&.as_s)
-          str << "- **Quickstart**: `" << quickstart << "`\n"
-        end
+        str << "- **Presenter & Author**: " << author_name << " (" << author_alias << ") — " << author_role << "\n"
+        str << "- **Repository**: `" << repo_link << "`\n"
 
-        if signature = slide.raw["signature"]?.try(&.as_s) || slide.raw["presenter"]?.try(&.as_s)
-          str << "- **Presenter**: " << LayoutRenderer.clean_text(signature) << "\n"
+        if pills = slide.raw["pills"]?.try(&.as_a)
+          str << "- **Key Highlights**: "
+          str << pills.map { |p| LayoutRenderer.clean_text(p.as_s) }.join(" • ") << "\n"
         end
 
         if !slide.notes.empty?
