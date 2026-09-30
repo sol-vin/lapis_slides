@@ -12,6 +12,7 @@ left:
   title: deferred_introspection.cr — Complete Type Reflection
   tag: Crystal
   lang: crystal
+  font_size: '0.85rem'
   code: |
     # macro finished: Defers execution until the type is fully parsed
     abstract class NetworkSync

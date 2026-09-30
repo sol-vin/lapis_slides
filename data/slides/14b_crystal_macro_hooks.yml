@@ -12,6 +12,7 @@ left:
   title: macro_lifecycle_hooks.cr — Compile-Time Composition
   tag: Crystal
   lang: crystal
+  font_size: '0.85rem'
   code: |
     # 1. macro included: Composable mixin behavior at compile time
     module Damageable
