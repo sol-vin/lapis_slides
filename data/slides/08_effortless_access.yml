@@ -14,7 +14,7 @@ left:
   lang: crystal
   code: |
     # 1. Operators /, %, and bare ~ for node resolution:
-    camera = self / :camera_rig / Camera3D
+    camera = self / "CameraRig" / Camera3D
     health_bar = self % ProgressBar
     sprite = ~Sprite2D
 
@@ -39,7 +39,7 @@ right:
   title: Why It's Effortless
   color: cyan
   items:
-  - '<strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / :rig / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and bare context resolution (<code>~Sprite2D</code>) eliminate verbose casting.'
+  - '<strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "CameraRig" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and bare context resolution (<code>~Sprite2D</code>) eliminate verbose casting.'
   - '<strong>Declarative onready Macro:</strong> <code>onready weapon : Weapon = get_node_as(...)</code> binds nodes safely during <code>_ready</code>.'
   - '<strong>Compile-Time Nil Safety:</strong> <code>self[HUD, path]?</code> returns <code>HUD?</code>; Crystal''s compiler forces flow-sensitive nil checks before method dispatch.'
   - '<strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> combined with <code>scene.instantiate_as(T)</code> constructs typed scenes with zero reflection.'

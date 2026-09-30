@@ -1,7 +1,7 @@
 ---
 id: 20b_ergonomic_node_access
 title: 'Node Ergonomics: Operators / & %'
-subtitle: Multi-Type Path Traversal (/), Scene Unique Nodes (%), and Typed Indexers ([])
+subtitle: Path Traversal (/), Scene Unique Nodes (%), and Typed Indexers ([])
 badge: LAPIS DSL • OPERATOR ERGONOMICS
 badge_color: cyan
 palette: monokai
@@ -15,9 +15,9 @@ left:
   code: |
     node PlayerController < CharacterBody2D do
       def _ready : Void
-        # 1. Path traversal / (String, Symbol, or Typed Class):
+        # 1. Path traversal / (String or Typed Class):
         camera = self / "CameraRig" / Camera2D   # Typed child!
-        mount  = self / :visuals / :weapon_mount # Auto-camelcased
+        mount  = self / "Visuals/WeaponMount"    # Nested string path
         cam_up = camera / ".."                   # Upward parent
 
         # 2. Scene Unique Nodes % (mirrors GDScript %):
@@ -35,9 +35,9 @@ right:
   title: Type-Safe Operators & Indexers
   color: cyan
   items:
-    - '<strong>Multi-Type <code>/</code> Traversal:</strong> Pass strings (<code>"Rig/Cam"</code>), symbols (<code>:camera_rig</code> auto-camelcased), or class types (<code>Camera2D</code> returning typed <code>Camera2D</code> directly with zero casting).'
+    - '<strong>Path Traversal with <code>/</code>:</strong> Pass strings (<code>"Rig/Cam"</code>) or concrete class types (<code>Camera2D</code> returning typed <code>Camera2D</code> directly with zero casting).'
     - '<strong>Scene Unique Nodes with <code>%</code>:</strong> GDScript <code>%Node</code> parity! Pass strings (<code>"HealthBar"</code>), symbols (<code>:health_bar</code>), or class types (<code>ProgressBar</code> returning typed <code>ProgressBar</code>).'
     - '<strong>Typed Indexers & Safe Queries (<code>[]</code>, <code>[]?</code>):</strong> <code>self[Sprite2D]</code> for quick class lookups, and <code>self[T, path]?</code> returning <code>T?</code> for safe optional navigation without exceptions.'
     - '<strong>Upward Navigation (<code>..</code>):</strong> Traverse parent hierarchies with <code>node / ".."</code> without breaking out of chained operator expressions.'
 notes: |
-  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) now accepts Strings, Symbols, and Class types: self / "CameraRig" / Camera2D resolves the nested node and returns a typed Camera2D instance directly! Symbols like :weapon_mount are automatically converted from snake_case to CamelCase. The percent operator (%) provides 100% parity with GDScript's scene-unique nodes, supporting strings, symbols, and typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster and safer than GDScript.
+  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types: self / "CameraRig" / Camera2D resolves the nested node and returns a typed Camera2D instance directly! The percent operator (%) provides 100% parity with GDScript's scene-unique nodes, supporting strings, symbols, and typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster and safer than GDScript.
