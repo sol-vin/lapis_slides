@@ -1,6 +1,6 @@
-# Lapis for Crystal — Complete 84-Slide Presentation Deck Reference
+# Lapis for Crystal — Complete 85-Slide Presentation Deck Reference
 
-Welcome to the definitive reference document for the 84-slide presentation deck: **Lapis for Crystal: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+**.
+Welcome to the definitive reference document for the 85-slide presentation deck: **Lapis for Crystal: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+**.
 
 This document outlines each slide's exact theme palette, architectural category, on-screen card structures, code examples, and full presenter speaking script.
 
@@ -2682,7 +2682,49 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++."*
 
 ---
-### Slide 76: Lapis Architecture: The Layered Bridge
+### Slide 76: Authoring Custom Benchmarks: Lapis::Benchmark
+- **Sol.vin Theme Palette**: `spaces_11` (Spaces 11) [BG: `#18191c` | Window: `#24272c` | Text: `#f8f9fa` | Accent: `#4cc2ff`]
+- **Category Badge**: `PERFORMANCE • CUSTOM BENCHMARKING`
+- **Title**: Authoring Custom Benchmarks: Lapis::Benchmark
+- **Subtitle**: In-Engine Microbenchmarking DSL, Multi-Target Comparisons & Automated HTML Reports
+- **Code Example (`custom_benchmark.cr — Lapis::Benchmark DSL`)**:
+  ```crystal
+  require "lapis/benchmark"
+  
+  # 1. Register standalone gameplay benchmark with metrics
+  Lapis::Benchmark.register("ProceduralDungeon", category: :compute) do |iter|
+    dungeon = DungeonGenerator.new(rooms: 50, corridors: 120)
+    dungeon.generate!
+    # Record custom throughput metric alongside wall-clock time
+    Lapis::Benchmark.report_metric("rooms_per_sec", 50.0 / dungeon.elapsed_sec)
+  end
+  
+  # 2. Side-by-side comparison group against GDScript baseline
+  Lapis::Benchmark.group "PathfindingCrowd" do |g|
+    g.description "A* routing throughput across 5,000 active agents"
+    g.category :engine
+  
+    # High-performance Crystal implementation
+    g.benchmark("Crystal") do
+      crowd = CrowdSim.new(agent_count: 5_000)
+      crowd.step_navigation(delta: 0.016)
+    end
+  
+    # Compare directly against GDScript script equivalent
+    g.target "GDScript", "scripts/crowd_sim.gd", :gdscript
+    g.baseline "Crystal"
+  end
+  ```
+- **Benchmarking Invariants & Tooling**:
+  - Declarative Group DSL: Lapis::Benchmark.group pairs native Crystal routines side-by-side with GDScript or C++ to mathematically measure speedup ratios.
+  - Secondary Metrics Tracking: Use report_metric to record domain throughput metrics (e.g. rooms/sec, agents/frame) alongside median latency.
+  - Zero Production Overhead: When building release games (--release), -Dno_benchmarks compiles all benchmark definitions into zero-cost nops.
+  - Automated Visual Reporting: lapis benchmarks run html outputs comparison bar charts (SVG), interactive HTML reports, and CI-ready JSON/XML.
+- **Presenter Script**:
+  > *"Benchmarking shouldn't just be an internal engine tool—it's built right into Lapis for your own game projects. Using Lapis::Benchmark, you can profile intensive gameplay algorithms like procedural dungeon generation or crowd pathfinding with microsecond precision. You can define comparison groups to test your Crystal implementation directly against an existing GDScript prototype and export visual SVG charts and HTML reports via 'lapis benchmarks'. Best of all, when you compile your production game with 'lapis package game --release', the entire benchmarking apparatus is erased at compile-time via -Dno_benchmarks with zero runtime overhead."*
+
+---
+### Slide 77: Lapis Architecture: The Layered Bridge
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `CORE ARCHITECTURE • MODULAR TECHNOLOGY STACK`
 - **Title**: Lapis Architecture: The Layered Bridge
@@ -2710,7 +2752,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Here is the complete modular architecture of Lapis, inspired by clean systems engine diagrams like Raylib's architecture chart. At the top is Tier 4: your gameplay code, where you write custom nodes, exported properties, signals, and multiplayer RPCs. Tier 3 provides Lapis high-level extensions: our declarative AST macros, actor concurrency via buffered channels, memory safety with dead-pointer protection, zero-leak test harnesses, and our self-hosted editor plugin written in Crystal. Tier 2 connects Crystal to Godot via 800+ typed classes compiled with LLVM, alongside our C++ loader bridge that bootstraps the GC and manages shadow DLL hot reloading on Windows. And at the foundation is Tier 1: Godot 4.8's native C++ engine core, running seamlessly in both in-editor Mode A and standalone Mode B across desktop and handheld platforms."*
 
 ---
-### Slide 77: Dual Modes: Mode A vs. Mode B
+### Slide 78: Dual Modes: Mode A vs. Mode B
 - **Sol.vin Theme Palette**: `fos` (FOS) [BG: `#0000aa` | Window: `#0000aa` | Text: `#ffffff` | Accent: `#ffffff`]
 - **Category Badge**: `ARCHITECTURE • DUAL EXECUTION MODES`
 - **Title**: Dual Modes: Mode A vs. Mode B
@@ -2735,7 +2777,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Lapis supports two distinct execution paradigms tailored for developer joy and production performance. During development, you run in Mode A: Godot acts as the host, loading our self-hosted Crystal editor plugin and C++ bridge. Thanks to our Windows shadow DLL mechanism, pressing F5 hot-reloads game logic instantly without restarting the editor. When you are ready to ship, you switch to Mode B: a pure Crystal native executable that embeds LibGodot directly. It boots in milliseconds, has zero editor bloat, and provides the ultimate performance for players and dedicated servers."*
 
 ---
-### Slide 78: The Packaging System: Turnkey Distribution
+### Slide 79: The Packaging System: Turnkey Distribution
 - **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
 - **Category Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
@@ -2763,7 +2805,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Shipping games and addons shouldn't require tedious manual zip packaging. Lapis features a turnkey packaging system. A single command packages official GDExtension addons, Windows Inno Setup installers, Debian packages, and standalone playable games with automatic DLL dependency bundling and cryptographic checksums."*
 
 ---
-### Slide 79: Live DEMO: End-to-End Workflow Roadmap
+### Slide 80: Live DEMO: End-to-End Workflow Roadmap
 - **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `LIVE DEMONSTRATION • ROADMAP`
 - **Title**: Live DEMO: End-to-End Workflow Roadmap
@@ -2827,7 +2869,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Now let's switch over to our live demonstration. In Step 1, we start from a clean terminal, running lapis init to scaffold our project and lapis doctor to verify all toolchain dependencies. In Step 2, we author a Player node in Crystal using our concise DSL, declaring an exported speed property, an engine signal, and 3D physics movement. In Step 3, we open Godot. Our self-hosted Crystal editor plugin hooks into F5. We press F5, and thanks to Windows shadow DLL loading, the game recompiles and hot reloads in milliseconds while we tweak the speed slider in the Inspector. Finally in Step 4, we run lapis test --tui to watch our automated specs and zero memory leak verification execute live, followed by launching radare2 to demonstrate native debugging and hardware watchpoints."*
 
 ---
-### Slide 80: Demo 1: Scaffolding & Hot Reload
+### Slide 81: Demo 1: Scaffolding & Hot Reload
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `LIVE DEMO • PART 1: WORKFLOW`
 - **Title**: Demo 1: Scaffolding & Hot Reload
@@ -2856,7 +2898,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Let's jump into our live demo! In Part 1, we start from a clean terminal. Running lapis init scaffolds a complete, compilable Godot 4.8 project with ready-to-run scenes and shard manifests. When we run lapis editor, Godot opens up with our GDExtension bridge active. In standard C++ or Rust development on Windows, LoadLibrary locks your DLL, forcing you to close Godot every single time you want to recompile. Lapis completely solves this: our C++ bridge creates a timestamped shadow DLL copy and loads the shadow copy. When you edit Crystal code and press F5 in Godot, the editor recompiles game.dll freely and reloads in under half a second—giving you true script-like iteration speed with native compiled code."*
 
 ---
-### Slide 81: Demo 2: Live Node Authoring
+### Slide 82: Demo 2: Live Node Authoring
 - **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
 - **Category Badge**: `LIVE DEMO • PART 2: GAMEPLAY DSL`
 - **Title**: Demo 2: Live Node Authoring
@@ -2891,7 +2933,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. In our _ready method, we retrieve child nodes using our new operator syntax—traversing the camera boom with the slash operator and looking up our UI progress bar with the percent operator. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database."*
 
 ---
-### Slide 82: Demo 3: Concurrency & Debugging
+### Slide 83: Demo 3: Concurrency & Debugging
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `LIVE DEMO • PART 3: SYSTEMS RIGOR`
 - **Title**: Demo 3: Concurrency & Debugging
@@ -2926,7 +2968,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In Part 3 of our demo, we demonstrate production systems rigor. First, we launch a background OS thread that generates complex procedural geometry off-thread. Because of Scope::TreeOnly, this worker can assemble large detached orphan trees across CPU cores with zero mutex contention. When ready, Godot.on_main_thread queues the block to be drained deterministically at the next frame boundary, mounting the room with zero stutter. Next, we run our test suite: Lapis::Test.assert_no_leak exercises 100 spawn cycles, queries Godot's native Performance monitors and Crystal GC, and proves zero object leaks mathematically. Finally, if any crash or bug ever occurs, lapis run -d drops us directly into radare2 for native machine code disassembly and register forensics."*
 
 ---
-### Slide 83: The Future of Native Scripting in Godot
+### Slide 84: The Future of Native Scripting in Godot
 - **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `CONCLUSION • LOOKING AHEAD`
 - **Title**: The Future of Native Scripting in Godot
@@ -2945,7 +2987,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Thank you all for listening! We believe Lapis represents the future of native scripting in Godot: the raw machine speed and type safety of C++ combined with the joy, clarity, and ergonomics of Ruby. The project is open source and ready for you to try today. Check out our repository on GitHub, join our Discord, and start building high-performance Godot games in Crystal!"*
 
 ---
-### Slide 84: THANKS FOR WATCHING!
+### Slide 85: THANKS FOR WATCHING!
 - **Sol.vin Theme Palette**: `m64` (M64) [BG: `#232328` | Window: `#32323a` | Text: `#d0d0d8` | Accent: `#f0c018`]
 - **Category Badge**: `PROJECT WRAP-UP • THANK YOU`
 - **Title**: THANKS FOR WATCHING!

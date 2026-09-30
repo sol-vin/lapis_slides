@@ -78,6 +78,7 @@ slides:
 - 36_testing_zero_leak
 - 37_tool_testing_tui
 - 35_benchmarks
+- 35b_custom_benchmarks
 - 38_architecture_layers
 - 39_dual_modes
 - 40_packaging_dist

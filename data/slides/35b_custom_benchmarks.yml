@@ -1,0 +1,52 @@
+---
+id: 35b_custom_benchmarks
+title: 'Authoring Custom Benchmarks: Lapis::Benchmark'
+subtitle: In-Engine Microbenchmarking DSL, Multi-Target Comparisons & Automated HTML Reports
+badge: PERFORMANCE • CUSTOM BENCHMARKING
+badge_color: cyan
+palette: spaces_11
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: custom_benchmark.cr — Lapis::Benchmark DSL
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    require "lapis/benchmark"
+
+    # 1. Register standalone gameplay benchmark with metrics
+    Lapis::Benchmark.register("ProceduralDungeon", category: :compute) do |iter|
+      dungeon = DungeonGenerator.new(rooms: 50, corridors: 120)
+      dungeon.generate!
+      # Record custom throughput metric alongside wall-clock time
+      Lapis::Benchmark.report_metric("rooms_per_sec", 50.0 / dungeon.elapsed_sec)
+    end
+
+    # 2. Side-by-side comparison group against GDScript baseline
+    Lapis::Benchmark.group "PathfindingCrowd" do |g|
+      g.description "A* routing throughput across 5,000 active agents"
+      g.category :engine
+
+      # High-performance Crystal implementation
+      g.benchmark("Crystal") do
+        crowd = CrowdSim.new(agent_count: 5_000)
+        crowd.step_navigation(delta: 0.016)
+      end
+
+      # Compare directly against GDScript script equivalent
+      g.target "GDScript", "scripts/crowd_sim.gd", :gdscript
+      g.baseline "Crystal"
+    end
+right:
+  type: card
+  title: Benchmarking Invariants & Tooling
+  color: cyan
+  items:
+  - <strong>Declarative Group DSL:</strong> <code>Lapis::Benchmark.group</code> pairs native Crystal routines side-by-side with GDScript or C++ to mathematically measure speedup ratios.
+  - <strong>Secondary Metrics Tracking:</strong> Use <code>report_metric</code> to record domain throughput metrics (e.g. <code>rooms/sec</code>, <code>agents/frame</code>) alongside median latency.
+  - <strong>Zero Production Overhead:</strong> When building release games (<code>--release</code>), <code>-Dno_benchmarks</code> compiles all benchmark definitions into zero-cost nops.
+  - <strong>Automated Visual Reporting:</strong> <code>lapis benchmarks run html</code> outputs comparison bar charts (SVG), interactive HTML reports, and CI-ready JSON/XML.
+notes: |
+  Benchmarking shouldn't just be an internal engine tool—it's built right into Lapis for your own game projects. Using Lapis::Benchmark, you can profile intensive gameplay algorithms like procedural dungeon generation or crowd pathfinding with microsecond precision. You can define comparison groups to test your Crystal implementation directly against an existing GDScript prototype and export visual SVG charts and HTML reports via 'lapis benchmarks'. Best of all, when you compile your production game with 'lapis package game --release', the entire benchmarking apparatus is erased at compile-time via -Dno_benchmarks with zero runtime overhead.
