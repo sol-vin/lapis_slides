@@ -118,7 +118,7 @@ module LapisSlides
         str << "                <div class=\"window-controls\"><span class=\"code-lang-tag\">REPLAY</span></div>\n"
         str << "              </div>\n"
         str << "              <div class=\"terminal-body asciinema-body\" style=\"flex: 1; padding: 0.25rem;\">\n"
-        str << "                <div class=\"asciinema-player-mount\" data-cast-src=\"" << HTML.escape(cast_src) << "\""
+        str << "                <div class=\"asciinema-player-mount\" data-cast-url=\"" << HTML.escape(cast_rel) << "\" data-cast-src=\"" << HTML.escape(cast_src) << "\""
         str << " data-speed=\"" << speed << "\""
         str << " data-loop=\"" << loop_play << "\""
         str << " data-autoplay=\"" << autoplay << "\""

@@ -156,83 +156,110 @@ module LapisSlides
           (function() {
             const asciinemaInstances = new Map();
 
-            function initAsciinemaPlayers() {
-              if (!window.AsciinemaPlayer) return;
+            function decodeBase64Utf8(base64) {
+              const binaryString = atob(base64);
+              const bytes = new Uint8Array(binaryString.length);
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+              }
+              return new TextDecoder('utf-8').decode(bytes);
+            }
 
-              document.querySelectorAll('.asciinema-player-mount').forEach(mount => {
-                if (asciinemaInstances.has(mount)) return;
+            function mountPlayer(mount) {
+              if (asciinemaInstances.has(mount)) return asciinemaInstances.get(mount);
+              if (!window.AsciinemaPlayer) return null;
 
-                const src = mount.dataset.castSrc;
-                if (!src) return;
+              const src = mount.dataset.castSrc;
+              const url = mount.dataset.castUrl;
+              let playerSrc = null;
 
-                const speed = parseFloat(mount.dataset.speed || '1.0');
-                const loop = mount.dataset.loop === 'true';
-                const autoplay = mount.dataset.autoplay === 'true';
-                const theme = mount.dataset.theme || 'monokai';
-                const cols = parseInt(mount.dataset.cols || '86', 10);
-                const rows = parseInt(mount.dataset.rows || '19', 10);
-                const fontSize = mount.dataset.fontSize || '0.75rem';
-                const controlsVal = mount.dataset.controls;
-                const controls = controlsVal === 'true' ? true : (controlsVal === 'false' ? false : 'auto');
-
+              if (src && src.startsWith('data:')) {
                 try {
-                  const player = AsciinemaPlayer.create(src, mount, {
-                    cols: cols,
-                    rows: rows,
-                    speed: speed,
-                    loop: loop,
-                    autoPlay: autoplay,
-                    theme: theme,
-                    terminalFontSize: fontSize,
-                    fit: 'contain',
-                    controls: controls
-                  });
-                  asciinemaInstances.set(mount, player);
-                } catch (err) {
-                  console.warn('Asciinema mount failed:', err);
+                  const base64Content = src.split(',')[1];
+                  const decoded = decodeBase64Utf8(base64Content);
+                  const lines = decoded.trim().split('\n').filter(l => l.trim().length > 0);
+                  const parsed = lines.map(l => JSON.parse(l));
+                  playerSrc = { data: parsed };
+                } catch (e) {
+                  console.warn('Failed to parse inlined base64 cast, using URL fallback:', e);
+                  playerSrc = { url: url || src };
+                }
+              } else if (url) {
+                playerSrc = { url: url };
+              } else if (src) {
+                playerSrc = { url: src };
+              }
+
+              if (!playerSrc) return null;
+
+              const speed = parseFloat(mount.dataset.speed || '1.0');
+              const loop = mount.dataset.loop === 'true';
+              const autoplay = mount.dataset.autoplay === 'true';
+              const theme = mount.dataset.theme || 'monokai';
+              const cols = parseInt(mount.dataset.cols || '80', 10);
+              const rows = parseInt(mount.dataset.rows || '18', 10);
+              const fontSize = mount.dataset.fontSize || '0.75rem';
+              const controlsVal = mount.dataset.controls;
+              const controls = controlsVal === 'true' ? true : (controlsVal === 'false' ? false : 'auto');
+
+              try {
+                const player = AsciinemaPlayer.create(playerSrc, mount, {
+                  cols: cols,
+                  rows: rows,
+                  speed: speed,
+                  loop: loop,
+                  autoPlay: autoplay,
+                  theme: theme,
+                  terminalFontSize: fontSize,
+                  fit: 'contain',
+                  controls: controls
+                });
+                asciinemaInstances.set(mount, player);
+                return player;
+              } catch (err) {
+                console.error('Asciinema mount failed:', err);
+                return null;
+              }
+            }
+
+            function activateSlide(slideEl) {
+              if (!slideEl) return;
+              slideEl.querySelectorAll('.asciinema-player-mount').forEach(mount => {
+                let player = asciinemaInstances.get(mount);
+                if (!player) {
+                  player = mountPlayer(mount);
+                }
+                if (player && typeof player.play === 'function') {
+                  if (typeof player.seek === 'function') {
+                    try { player.seek(0); } catch(e) {}
+                  }
+                  player.play();
                 }
               });
             }
 
-            if (document.readyState === 'loading') {
-              document.addEventListener('DOMContentLoaded', initAsciinemaPlayers);
-            } else {
-              initAsciinemaPlayers();
+            function deactivateSlide(slideEl) {
+              if (!slideEl) return;
+              slideEl.querySelectorAll('.asciinema-player-mount').forEach(mount => {
+                const player = asciinemaInstances.get(mount);
+                if (player && typeof player.pause === 'function') {
+                  player.pause();
+                }
+              });
             }
 
             if (window.Reveal) {
               Reveal.on('ready', () => {
-                initAsciinemaPlayers();
-                const currentSlide = Reveal.getCurrentSlide();
-                if (currentSlide) {
-                  currentSlide.querySelectorAll('.asciinema-player-mount').forEach(mount => {
-                    const player = asciinemaInstances.get(mount);
-                    if (player && typeof player.play === 'function') player.play();
-                  });
-                }
+                setTimeout(() => activateSlide(Reveal.getCurrentSlide()), 50);
               });
 
               Reveal.on('slidechanged', event => {
-                if (event.previousSlide) {
-                  event.previousSlide.querySelectorAll('.asciinema-player-mount').forEach(mount => {
-                    const player = asciinemaInstances.get(mount);
-                    if (player && typeof player.pause === 'function') {
-                      player.pause();
-                    }
-                  });
-                }
-
-                if (event.currentSlide) {
-                  event.currentSlide.querySelectorAll('.asciinema-player-mount').forEach(mount => {
-                    const player = asciinemaInstances.get(mount);
-                    if (player && typeof player.play === 'function') {
-                      if (typeof player.seek === 'function') {
-                        try { player.seek(0); } catch(e) {}
-                      }
-                      player.play();
-                    }
-                  });
-                }
+                deactivateSlide(event.previousSlide);
+                setTimeout(() => activateSlide(event.currentSlide), 50);
+              });
+            } else {
+              document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('.asciinema-player-mount').forEach(mountPlayer);
               });
             }
           })();
