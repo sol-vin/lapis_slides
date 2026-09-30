@@ -6,12 +6,19 @@ badge: 'LIVE DEMO • PART 1: WORKFLOW'
 badge_color: cyan
 palette: spaces_vista
 layout: two-column-layout
-ratio: 1:1
+ratio: 3:2
 left:
-  type: code
+  type: asciinema
   title: Terminal — Scaffold & Hot Reload Session
-  tag: Bash
-  lang: bash
+  cast: casts/lapis_demo_scaffold.cast
+  font_size: '0.72rem'
+  speed: 1.25
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 84
+  rows: 18
   code: |
     # Step 1: Scaffold a ready-to-run Godot 4.8 game
     $ lapis init dungeon_crawl --template=3d-action

@@ -6,10 +6,19 @@ badge: 'LIVE DEMO • PART 5: PRODUCTION SHIPPING'
 badge_color: amber
 palette: spaces_xp_royale
 layout: two-column-layout
-ratio: 1:1
+ratio: 3:2
 left:
-  type: terminal
+  type: asciinema
   title: Terminal — Release Compilation & Packaging
+  cast: casts/lapis_demo_package.cast
+  font_size: '0.70rem'
+  speed: 1.25
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 84
+  rows: 18
   code: |
     # Step 1: Optimized native release build with LLVM LTO
     $ lapis build --release --opt=3

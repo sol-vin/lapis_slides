@@ -3,6 +3,7 @@ require "./models/deck"
 require "./models/palette"
 require "./generator"
 require "./server"
+require "./cast_builder"
 
 module LapisSlides
   class CLI
@@ -69,11 +70,13 @@ module LapisSlides
       case command
       when "build"
         puts "Building presentation deck '#{deck.title}'..."
+        CastBuilder.build_all(File.expand_path("casts", base_dir))
         generator.generate_html(output_html)
         generator.generate_markdown(output_md)
         puts "Successfully built #{deck.slides.size} slides!"
       when "serve"
         puts "Ensuring slides are built before serving..."
+        CastBuilder.build_all(File.expand_path("casts", base_dir))
         generator.generate_html(output_html)
         generator.generate_markdown(output_md)
         Server.run(web_root, port)

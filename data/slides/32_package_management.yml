@@ -6,12 +6,19 @@ badge: ECOSYSTEM • ADDON LIFECYCLE
 badge_color: purple
 palette: spaces_2000
 layout: two-column-layout
-ratio: 1:1
+ratio: 3:2
 left:
-  type: code
+  type: asciinema
   title: Terminal — lapis addon install --release
-  tag: Terminal Session
-  lang: text
+  cast: casts/lapis_addon_install.cast
+  font_size: '0.70rem'
+  speed: 1.25
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 84
+  rows: 18
   code: |
     $ lapis addon install github:sol-vin/combat_system@v1.2 --release
     [Install:Addon] Resolving GitHub release asset for windows-x86_64...
