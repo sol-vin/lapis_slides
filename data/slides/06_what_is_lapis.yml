@@ -7,20 +7,20 @@ badge_color: cyan
 palette: spaces_10
 layout: profile-layout
 stats:
-  - icon: ⚡
+  - icon: bolt
     value: "LLVM Bare Metal"
     label: "Up to 60x faster than GDScript"
-  - icon: 💎
+  - icon: gem
     value: "Ruby-Like Syntax"
     label: "Zen blocks & static nil safety"
-  - icon: 🛠️
+  - icon: screwdriver-wrench
     value: "Self-Hosted Plugin"
     label: "Editor tools written in Crystal"
-  - icon: 📦
+  - icon: box-archive
     value: "Unified Toolchain"
     label: "Build, test, package & debug"
 cards:
-  - title: ⚡ Native LLVM Engine Speed
+  - title: Native LLVM Engine Speed
     color: cyan
     badge: PERFORMANCE
     items:
@@ -28,7 +28,7 @@ cards:
       - "<strong>Up to 60x Faster:</strong> Eliminates CPU bottlenecks in math, physics, and loops."
       - "<strong>Predictable Frame Times:</strong> Low-latency Boehm GC with zero gameplay stutter."
       - "<strong>Compile-Time Nil Safety:</strong> Null pointer crashes eliminated at build time."
-  - title: 💎 Zen Developer Ergonomics
+  - title: Zen Developer Ergonomics
     color: purple
     badge: METAPROGRAMMING
     items:
@@ -36,7 +36,7 @@ cards:
       - "<strong>Automated AST Macros:</strong> Effortless <code>@[Export]</code> properties and signals."
       - "<strong>Doc Comment Harvesting:</strong> Comments automatically populate Godot F1 Help."
       - "<strong>Expressive Ruby-like Code:</strong> Clean blocks, closures, and pattern matching."
-  - title: 🎮 Self-Hosted Editor Integration
+  - title: Self-Hosted Editor Integration
     color: blue
     badge: IN-EDITOR TOOLING
     items:
@@ -44,7 +44,7 @@ cards:
       - "<strong>Script Parity:</strong> Attach and create <code>.cr</code> scripts via Godot's UI."
       - "<strong>Instant F5 Hot-Reload:</strong> Shadow DLL reloading with zero editor restarts."
       - "<strong>CodeEdit Highlighting:</strong> Pure Crystal tokenizer embedded in the editor."
-  - title: 🛠️ Production Game Toolchain
+  - title: Production Game Toolchain
     color: amber
     badge: WORKFLOW & CLI
     items:

@@ -119,7 +119,7 @@ module LapisSlides
           str << "            <div class=\"overlay-card antipattern\">\n"
           str << "              <div class=\"overlay-card-header\">\n"
           str << "                <div class=\"card-title antipattern\">\n"
-          str << "                  <span>" << LayoutRenderer.tint_emojis("⚠️ GDScript Friction &amp; Pitfalls") << "</span>\n"
+          str << "                  <span>" << LayoutRenderer.render_icon("triangle-exclamation") << " GDScript Friction &amp; Pitfalls</span>\n"
           str << "                </div>\n"
           str << "                <span class=\"badge-pill antipattern\" style=\"font-size: 0.68rem; margin: 0;\">ANTIPATTERN</span>\n"
           str << "              </div>\n"
@@ -136,7 +136,7 @@ module LapisSlides
           str << "            <div class=\"overlay-card solution\">\n"
           str << "              <div class=\"overlay-card-header\">\n"
           str << "                <div class=\"card-title solution\">\n"
-          str << "                  <span>" << LayoutRenderer.tint_emojis("✨ Crystal Zen Solution") << "</span>\n"
+          str << "                  <span>" << LayoutRenderer.render_icon("sparkles") << " Crystal Zen Solution</span>\n"
           str << "                </div>\n"
           str << "                <span class=\"badge-pill solution\" style=\"font-size: 0.68rem; margin: 0;\">SOLUTION</span>\n"
           str << "              </div>\n"
@@ -218,14 +218,14 @@ module LapisSlides
         str << "- **Subtitle**: " << slide.subtitle << "\n"
 
         if gd_data && (points = gd_data["points"]?.try(&.as_a))
-          str << "- **⚠️ GDScript Friction & Pitfalls**:\n"
+          str << "- **GDScript Friction & Pitfalls**:\n"
           points.each do |p|
             str << "  - " << LayoutRenderer.clean_text(extract_point_text(p)) << "\n"
           end
         end
 
         if cr_data && (points = cr_data["points"]?.try(&.as_a))
-          str << "- **✨ Crystal Zen Advantages**:\n"
+          str << "- **Crystal Zen Advantages**:\n"
           points.each do |p|
             str << "  - " << LayoutRenderer.clean_text(extract_point_text(p)) << "\n"
           end

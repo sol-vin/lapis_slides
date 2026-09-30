@@ -22,17 +22,17 @@ left:
   code: |
     $ lapis addon install github:sol-vin/combat_system@v1.2 --release
     [Install:Addon] Resolving GitHub release asset for windows-x86_64...
-      ✓ Downloaded combat_system-windows.zip (Precompiled Binary)
+      [OK] Downloaded combat_system-windows.zip (Precompiled Binary)
     [Security:Audit] Inspecting GDExtension binary headers & symbols...
-      ✓ Entrypoint verified: combat_system_init (x86_64)
-      ✓ Hardening check: ASLR & DEP/NX verified
+      [OK] Entrypoint verified: combat_system_init (x86_64)
+      [OK] Hardening check: ASLR & DEP/NX verified
     [Sync:Staging] Staging runtime dependencies to addons/combat_system/...
-      ✓ Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
-      ✓ Purged invalid host libgodot.dll (poison protection)
+      [OK] Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
+      [OK] Purged invalid host libgodot.dll (poison protection)
     [Config] Auto-enabled in project.godot & .godot/extension_list.cfg
     [Shards:AddonNegotiator] Negotiated 'crshader' across 5 addons:
-      ✓ Resolved 1 canonical version in shard.yml (0 conflicts)
-    ✓ Addon 'combat_system' installed successfully! Ready to use.
+      [OK] Resolved 1 canonical version in shard.yml (0 conflicts)
+    [OK] Addon 'combat_system' installed successfully! Ready to use.
 right:
   type: card
   title: GDExtension Addon Lifecycle Invariants

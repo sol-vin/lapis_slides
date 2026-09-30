@@ -27,11 +27,11 @@ left:
 
         # 2. Mathematical compile-time nil safety:
         # item.upcase
-        # ❌ Compile Error: undefined method 'upcase' for Nil (type is String | Nil)
+        # Compile Error: undefined method 'upcase' for Nil (type is String | Nil)
 
         if item
           # Inside guard, compiler narrows type strictly to String:
-          puts "Equipped: #{item.upcase}" # ✅ Safe!
+          puts "Equipped: #{item.upcase}" # Safe!
         end
       end
     end

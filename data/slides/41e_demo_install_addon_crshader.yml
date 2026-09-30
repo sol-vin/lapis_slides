@@ -34,7 +34,7 @@ left:
                github: sol-vin/crshader
     [Bind]   Generated typed Crystal API: src/bindings/crshader.cr
     [Sync]   Synchronized bridge & runtime DLLs across bin/
-    ✓ CrShader v0.2.0 installed & ready with full Crystal autocomplete!
+    [OK] CrShader v0.2.0 installed & ready with full Crystal autocomplete!
 right:
   type: card
   title: Addon Management & Shard Integration

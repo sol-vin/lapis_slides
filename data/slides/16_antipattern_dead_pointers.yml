@@ -7,7 +7,7 @@ badge_color: cyan
 palette: game_station_2
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript / Native C++: Dangling Pointers & Crashes'
+  title: ':circle-xmark: GDScript / Native C++: Dangling Pointers & Crashes'
   lang: gdscript
   tag: GDScript
   code: |
@@ -18,7 +18,7 @@ gdscript:
         # Meanwhile: Boss died from a poison tick and called queue_free()!
         # target pointer still references freed native C++ memory!
         target.take_damage(spell.power) 
-        # 💥 FATAL CRASH: 0xC0000005 ACCESS_VIOLATION at 0x00007ff812a...
+        # FATAL CRASH: 0xC0000005 ACCESS_VIOLATION at 0x00007ff812a...
         # Uncatchable! Instant crash to desktop with NO stack trace!
 
         # Guard boilerplate GDScript requires everywhere:
@@ -29,7 +29,7 @@ gdscript:
   - <strong>Fatal Engine Segfault:</strong> Dereferencing dead pointers crashes immediately with <code>0xC0000005 ACCESS_VIOLATION</code>.
   - <strong>Defensive Clutter:</strong> Developers must litter code with <code>is_instance_valid</code> guards across every single scene access.
 crystal:
-  title: '✨ Crystal: Monotonic 64-Bit ObjectDB Verification'
+  title: ':sparkles: Crystal: Monotonic 64-Bit ObjectDB Verification'
   lang: crystal
   tag: Crystal (Lapis)
   code: |

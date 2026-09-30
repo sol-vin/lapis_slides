@@ -7,7 +7,7 @@ badge_color: amber
 palette: aperture
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Runtime Null Dereference'
+  title: ':circle-xmark: GDScript: Runtime Null Dereference'
   lang: gdscript
   tag: GDScript
   code: |
@@ -29,7 +29,7 @@ gdscript:
   - <strong>Dead Pointer Segfaults:</strong> Freed C++ nodes leave dangling pointers,
     risking fatal engine crashes.
 crystal:
-  title: '✨ Crystal: Flow-Sensitive Compile-Time Checks'
+  title: ':sparkles: Crystal: Flow-Sensitive Compile-Time Checks'
   lang: crystal
   tag: Crystal (Lapis)
   code: |

@@ -23,13 +23,13 @@ left:
     # 1. Automatic Levenshtein typo suggestion and correction
     $ lapis docotr
     [ERROR] Unknown command 'docotr'
-      💡 Did you mean 'doctor'? (distance: 1)
+      Did you mean 'doctor'? (distance: 1)
 
     # 2. Spotlight Command Palette with real-time fuzzy search
     $ lapis --interactive
     ? Search Command to Execute: bench
-    > ⚡ benchmarks  - Run and profile Crystal vs GDScript performance benchmark suite
-      🔬 decompile   - Interactive radare2 pseudo-C disassembler and binary inspector
+    > benchmarks  - Run and profile Crystal vs GDScript performance benchmark suite
+      decompile   - Interactive radare2 pseudo-C disassembler and binary inspector
 
     # 3. Dynamic shell autocompletion (PowerShell, Bash, Zsh, Fish)
     $ lapis completion bash > /etc/bash_completion.d/lapis

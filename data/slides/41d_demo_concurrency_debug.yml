@@ -27,7 +27,7 @@ left:
     Lapis::Test.assert_no_leak do
       100.times { run_room_spawn_cycle }
     end
-    # ✓ Verified 0 leaked nodes • 0 byte drift in memory!
+    # Verified 0 leaked nodes • 0 byte drift in memory!
 
     # 4. Instant native breakpoint triage via radare2:
     # $ lapis run -d => Breaks at illegal memory access

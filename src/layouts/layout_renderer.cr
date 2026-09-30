@@ -1,6 +1,7 @@
 require "html"
 require "../models/slide"
 require "../models/palette"
+require "../icon_registry"
 
 module LapisSlides
   abstract class LayoutRenderer
@@ -27,11 +28,16 @@ module LapisSlides
       HTML.escape(text)
     end
 
+    def self.render_icon(name : String, extra_class : String = "") : String
+      IconRegistry.render(name, extra_class)
+    end
+
+    def self.replace_icons(text : String) : String
+      IconRegistry.replace_icons(text)
+    end
+
     def self.tint_emojis(text : String) : String
-      # Wrap all emojis and pictographs in .emoji-tint class so they are covered by the SVG monochrome color matrix
-      text.gsub(/((\p{Extended_Pictographic}|\p{Emoji_Presentation}|[\x{2600}-\x{27BF}\x{1F300}-\x{1FAFF}★■▲●✖])[\x{FE00}-\x{FE0F}\x{200D}]*)/) do |m|
-        "<span class=\"emoji-tint\">#{m}</span>"
-      end
+      IconRegistry.replace_icons(text)
     end
 
     def self.extract_item_text(node : YAML::Any) : String
@@ -133,7 +139,7 @@ module LapisSlides
         str << "              <span class=\"code-title\">" << LayoutRenderer.tint_emojis(HTML.escape(title)) << "</span>\n"
         str << "              <div class=\"window-controls\">\n"
         str << "                <span class=\"code-lang-tag\">" << (tag || lang.upcase) << "</span>\n"
-        str << "                <span class=\"window-btn close\" title=\"Close\">✕</span>\n"
+        str << "                <span class=\"window-btn close\" title=\"Close\">" << LayoutRenderer.render_icon("xmark") << "</span>\n"
         str << "              </div>\n"
         str << "            </div>\n"
         str << "            <pre><code class=\"language-" << lang.downcase << density_class << "\"" << code_style << ">" << HTML.escape(code.strip) << "</code></pre>\n"

@@ -25,10 +25,10 @@ left:
     ┌───────────────────────┬────────────┬──────────┬───────────────────────┐
     │ Target Workspace      │ Bridge DLL │ Game DLL │ Dependencies Synced   │
     ├───────────────────────┼────────────┼──────────┼───────────────────────┤
-    │ root (Host Game)      │ 2.4 MB ✔   │ 4.1 MB ✔ │ gc.dll, libgodot.dll  │
-    │ test/bin (Test Suite) │ 2.4 MB ✔   │ 3.8 MB ✔ │ gc.dll, libgodot.dll  │
-    │ template/bin (Game)   │ 2.4 MB ✔   │ 2.1 MB ✔ │ gc.dll, libgodot.dll  │
-    │ examples/basic_demo   │ 2.4 MB ✔   │ 3.2 MB ✔ │ gc.dll, libgodot.dll  │
+    │ root (Host Game)      │ 2.4 MB [OK]   │ 4.1 MB [OK] │ gc.dll, libgodot.dll  │
+    │ test/bin (Test Suite) │ 2.4 MB [OK]   │ 3.8 MB [OK] │ gc.dll, libgodot.dll  │
+    │ template/bin (Game)   │ 2.4 MB [OK]   │ 2.1 MB [OK] │ gc.dll, libgodot.dll  │
+    │ examples/basic_demo   │ 2.4 MB [OK]   │ 3.2 MB [OK] │ gc.dll, libgodot.dll  │
     └───────────────────────┴────────────┴──────────┴───────────────────────┘
     [Sync:DAG] Topologically sorted 4 addon manifests (0 cyclic dependencies)
     [Sync:OK] 4 workspace targets fully synchronized in 340ms (0 files locked)

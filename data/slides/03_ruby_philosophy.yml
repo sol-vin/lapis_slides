@@ -32,7 +32,7 @@ left:
       def heal_party(companions, amount)
         companions.select(&:alive?).each do |companion|
           companion.health = [companion.health + amount, 100].min
-          puts "✨ Healed #{companion.name} to #{companion.health} HP"
+          puts "Healed #{companion.name} to #{companion.health} HP"
         end
       end
 

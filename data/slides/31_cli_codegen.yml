@@ -23,9 +23,9 @@ left:
     # 1. Extract engine metadata & synthesize 824 typed classes
     $ lapis bind engine --dump
     [ClassDB:Reflection] Querying Godot engine GDExtension interface...
-      ✓ Dumped extension_api.json (Godot 4.8.0-custom, 6.2 MB)
-      ✓ Parsed 824 classes, 1,418 enums, 4,912 method signatures
-      ✓ Generated src/libgodot/generated/ in 1.18s! 0 errors.
+      [OK] Dumped extension_api.json (Godot 4.8.0-custom, 6.2 MB)
+      [OK] Parsed 824 classes, 1,418 enums, 4,912 method signatures
+      [OK] Generated src/libgodot/generated/ in 1.18s! 0 errors.
 
     # 2. Decompile Crystal method to side-by-side assembly & pseudo-C
     $ lapis decompile bin/game.dll "Player#_physics_process" --side-by-side
@@ -37,8 +37,8 @@ left:
 
     # 3. Audit GDExtension ABI exports & memory boundary health
     $ lapis decompile bin/crystal_bridge.dll --verify
-      ✓ Entrypoint verified: godot_gdextension_entry (x86_64 ABI)
-      ✓ Hardening: ASLR & DEP/NX verified • 0 boundary faults
+      [OK] Entrypoint verified: godot_gdextension_entry (x86_64 ABI)
+      [OK] Hardening: ASLR & DEP/NX verified • 0 boundary faults
 right:
   type: card
   title: Automation & Maintenance Invariants

@@ -7,7 +7,7 @@ badge_color: amber
 palette: spaces_xp_royale
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Dictionary Sprawl & String Signals'
+  title: ':circle-xmark: GDScript: Dictionary Sprawl & String Signals'
   lang: gdscript
   tag: GDScript
   code: |
@@ -32,7 +32,7 @@ gdscript:
   - <strong>No Parameter Validation:</strong> Emit calls cannot verify argument counts
     or types at compile time.
 crystal:
-  title: '✨ Crystal: Compile-Time AST Macro Synthesis'
+  title: ':sparkles: Crystal: Compile-Time AST Macro Synthesis'
   lang: crystal
   tag: Crystal (Lapis)
   code: |

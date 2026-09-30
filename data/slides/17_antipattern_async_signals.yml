@@ -7,7 +7,7 @@ badge_color: amber
 palette: aperture
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Unsafe Await & Leaked Coroutines'
+  title: ':circle-xmark: GDScript: Unsafe Await & Leaked Coroutines'
   lang: gdscript
   tag: GDScript
   code: |
@@ -28,7 +28,7 @@ gdscript:
   - <strong>No Built-In Timeouts:</strong> Adding timeouts requires manual timer nodes and complex cleanup logic.
   - <strong>Boilerplate Handlers:</strong> Connecting signals requires authoring separate named handler functions.
 crystal:
-  title: '✨ Crystal: First-Class Signal Handles & Timeouts'
+  title: ':sparkles: Crystal: First-Class Signal Handles & Timeouts'
   lang: crystal
   tag: Crystal (Lapis)
   code: |

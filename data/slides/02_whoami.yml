@@ -7,28 +7,28 @@ badge_color: amber
 palette: warm_paper
 layout: profile-layout
 stats:
-  - icon: 🛡️
+  - icon: shield-halved
     value: "2 Published CVEs"
     label: "VStarCam & Xiongmai Exploits"
-  - icon: 🎮
+  - icon: gamepad
     value: "Steam Author"
     label: "Solo Oasis: Unlimited Places"
-  - icon: 🏆
+  - icon: trophy
     value: "1st Place Winner"
     label: "Trijam 363 & 1dayjam #3"
-  - icon: ⚡
+  - icon: bolt
     value: "Lapis Creator"
     label: "10+ Years Crystal Ecosystem"
 cards:
-  - title: ⚡ Open Source & Lapis
+  - title: Open Source & Lapis
     color: cyan
     badge: TOOLCHAINS
     items:
       - "<strong>Creator of Lapis:</strong> High-performance Crystal bindings &amp; toolchain for Godot 4.8+."
-      - "<strong>raylib-cr (118 ★):</strong> Idiomatic, zero-overhead Crystal bindings for the Raylib game engine."
-      - "<strong>celestine (97 ★):</strong> Expressive SVG compiler, vector graphics library, and canvas DSL."
+      - "<strong>raylib-cr (118 :star:):</strong> Idiomatic, zero-overhead Crystal bindings for the Raylib game engine."
+      - "<strong>celestine (97 :star:):</strong> Expressive SVG compiler, vector graphics library, and canvas DSL."
       - "<strong>libsunvox &amp; wireland:</strong> SunVox modular synth bindings and circuit simulation."
-  - title: 🛡️ Security & Systems Rigor
+  - title: Security & Systems Rigor
     color: blue
     badge: RESEARCH
     items:
@@ -36,7 +36,7 @@ cards:
       - "<strong>CVE-2019-11014:</strong> Author of VStarCam remote hijacking &amp; RTSP exploitation advisory."
       - "<strong>CVE-2019-11878:</strong> Discovered Xiongmai DVR integer overflow leading to remote execution."
       - "<strong>Reverse Engineering:</strong> Firmware extraction, exploit toolkits (XET), and protocol fuzzing."
-  - title: 🎮 Shipped Games & Jams
+  - title: Shipped Games & Jams
     color: purple
     badge: STEAM / ITCH
     items:
@@ -44,7 +44,7 @@ cards:
       - "<strong>Trijam 363 Winner:</strong> 1st place overall with 'The Problem With Trolleys' (built in &lt; 3 hours)."
       - "<strong>1dayjam #3 Winner:</strong> 1st place overall in 24-hour high-intensity game development sprint."
       - "<strong>Game Jam Velocity:</strong> Fast prototyping and iteration without sacrificing determinism."
-  - title: 🎙️ Talks & Community
+  - title: Talks & Community
     color: amber
     badge: SPEAKER
     items:

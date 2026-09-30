@@ -23,7 +23,7 @@ module LapisSlides
           cards.each do |c|
             title = c["title"]?.try(&.as_s) || ""
             badge = c["badge"]?.try(&.as_s) || ""
-            icon = c["icon"]?.try(&.as_s) || "★"
+            icon = c["icon"]?.try(&.as_s) || "star"
             color = c["color"]?.try(&.as_s) || "cyan"
             link = c["link"]?.try(&.as_s) || ""
             desc = c["desc"]?.try(&.as_s) || ""
@@ -31,7 +31,7 @@ module LapisSlides
             str << "            <div class=\"closing-card " << color << "\">\n"
             str << "              <div class=\"closing-card-header\">\n"
             str << "                <div class=\"closing-card-title-wrap\">\n"
-            str << "                  <span class=\"closing-icon\">" << LayoutRenderer.tint_emojis(icon) << "</span>\n"
+            str << "                  <span class=\"closing-icon\">" << LayoutRenderer.render_icon(icon) << "</span>\n"
             str << "                  <span class=\"closing-title\">" << LayoutRenderer.tint_emojis(HTML.escape(title)) << "</span>\n"
             str << "                </div>\n"
             if !badge.empty?
@@ -58,7 +58,7 @@ module LapisSlides
 
         if quickstart
           str << "          <div class=\"closing-quickstart-bar\">\n"
-          str << "            <span class=\"quickstart-label\">🚀 Quickstart:</span>\n"
+          str << "            <span class=\"quickstart-label\">" << LayoutRenderer.render_icon("rocket") << " Quickstart:</span>\n"
           str << "            <code class=\"quickstart-code\">" << HTML.escape(quickstart) << "</code>\n"
           str << "          </div>\n"
         end

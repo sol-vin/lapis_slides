@@ -21,19 +21,19 @@ left:
   rows: 19
   code: |
     ╔════════════════════════════════════════════════════════════════════════════════════╗
-    ║ ⚡ LAPIS PERFORMANCE BENCHMARK DASHBOARD                            ALL RUNS ✔     ║
+    ║ LAPIS PERFORMANCE BENCHMARK DASHBOARD                            ALL RUNS [OK]     ║
     ║ Host: windows-x64 │ Engine: Godot 4.8-custom │ Crystal: -O3 │ Iterations: 3        ║
     ║ [██████████████████████████████████████] 100% (8/8 benchmarks • 3 iters)           ║
     ╚════════════════════════════════════════════════════════════════════════════════════╝
     ┌─ BENCHMARKS (8 SUITES) ────────┐ ┌─ LIVE PERFORMANCE & SPEEDUP RATIOS ─────────────┐
-    │ ► ✔ 01. N-Body Physics (10k)   │ │ GDScript: 184.2 ms │ Crystal: 3.1 ms [ 59.4x ]  │
-    │   ✔ 02. Perlin Noise (256x256) │ │ GDScript:  92.4 ms │ Crystal: 2.8 ms [ 33.0x ]  │
-    │   ✔ 03. A* Pathing (1k agents) │ │ GDScript:  64.8 ms │ Crystal: 4.2 ms [ 15.4x ]  │
-    │   ✔ 04. Raycast Spatial Octree │ │ GDScript:  45.6 ms │ Crystal: 5.1 ms [  8.9x ]  │
-    │   ✔ 05. Matrix 4x4 SIMD (100k) │ │ GDScript:  38.1 ms │ Crystal: 1.4 ms [ 27.2x ]  │
-    │   ✔ 06. Procedural Dungeon Gen │ │ GDScript: 112.5 ms │ Crystal: 3.9 ms [ 28.8x ]  │
-    │   ✔ 07. Particle Sim (50k)     │ │                                                 │
-    │   ✔ 08. Multiplayer RPC Sync   │ │ ALL 8 BENCHMARKS COMPLETE (Mean Speedup: 28.9x) │
+    │ ► [OK] 01. N-Body Physics (10k)   │ │ GDScript: 184.2 ms │ Crystal: 3.1 ms [ 59.4x ]  │
+    │   [OK] 02. Perlin Noise (256x256) │ │ GDScript:  92.4 ms │ Crystal: 2.8 ms [ 33.0x ]  │
+    │   [OK] 03. A* Pathing (1k agents) │ │ GDScript:  64.8 ms │ Crystal: 4.2 ms [ 15.4x ]  │
+    │   [OK] 04. Raycast Spatial Octree │ │ GDScript:  45.6 ms │ Crystal: 5.1 ms [  8.9x ]  │
+    │   [OK] 05. Matrix 4x4 SIMD (100k) │ │ GDScript:  38.1 ms │ Crystal: 1.4 ms [ 27.2x ]  │
+    │   [OK] 06. Procedural Dungeon Gen │ │ GDScript: 112.5 ms │ Crystal: 3.9 ms [ 28.8x ]  │
+    │   [OK] 07. Particle Sim (50k)     │ │                                                 │
+    │   [OK] 08. Multiplayer RPC Sync   │ │ ALL 8 BENCHMARKS COMPLETE (Mean Speedup: 28.9x) │
     └────────────────────────────────┘ └─────────────────────────────────────────────────┘
      [↑↓/jk] Select Benchmark  [Enter] Detailed Metrics Modal  [q] Exit  [?] Help
 right:

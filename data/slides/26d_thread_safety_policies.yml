@@ -25,13 +25,13 @@ left:
 
       mesh_node = Godot.create(Godot::MeshInstance3D)
       mesh_node.mesh = generate_room_mesh(seed: 1234)
-      room.add_child(mesh_node) # ✅ Allowed: room is an orphan
+      room.add_child(mesh_node) # Allowed: room is an orphan
 
       collider = Godot.create(Godot::CollisionShape3D)
       collider.shape = generate_convex_shape(mesh_node.mesh)
-      room.add_child(collider)  # ✅ Allowed: detached hierarchy
+      room.add_child(collider)  # Allowed: detached hierarchy
 
-      # 🚫 Accidental live-tree mutation fails fast:
+      # Accidental live-tree mutation fails fast:
       # get_tree.root.add_child(room)
       # => Raises Godot::ThreadAffinityError with calling context!
     end

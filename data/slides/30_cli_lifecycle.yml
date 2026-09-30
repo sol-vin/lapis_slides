@@ -22,17 +22,17 @@ left:
   code: |
     # Launch interactive Lapis Command Center dashboard
     $ lapis
-      🔮 LAPIS COMMAND CENTER (v0.8.2)
+      LAPIS COMMAND CENTER (v0.8.2)
       Project: void_runner (branch: main)
       Platform: windows-x64 │ Godot: 4.8.0-custom │ Crystal: v1.15.0
-      Bridge DLL: Compiled ✔ │ Game DLL: Present ✔
+      Bridge DLL: Compiled [OK] │ Game DLL: Present [OK]
 
     # Single-key action hub: [B]uild, [T]est, [D]octor, [E]ditor, [/] Palette
     > [ S ] Scaffold New Game or Addon (lapis new)
 
     # Scaffolding initializes complete game with embedded templates
     $ lapis init void_runner --template=3d-action
-      ✓ project.godot, shard.yml, src/main.cr, scenes/
+      [OK] project.godot, shard.yml, src/main.cr, scenes/
 right:
   type: card
   title: Command Center & Project Lifecycle

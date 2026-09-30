@@ -2202,14 +2202,54 @@ ul.card-list li strong {
 
 
 /* ==========================================================================
-   Emoji Color Matrix Filter (Strict Monochrome Accent Tint)
+   FontAwesome Pro 7.1.0 Inline SVG System
+   Theme-Aware, Zero-CORS, Resolution-Independent Vector Glyphs
    ========================================================================== */
+.fa-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+  margin: 0 0.15em;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, fill 0.15s ease;
+}
+
+.window-btn .fa-icon {
+  width: 0.65em;
+  height: 0.65em;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.stat-icon .fa-icon,
+.closing-icon .fa-icon,
+.banner-icon .fa-icon,
+.spec-icon .fa-icon {
+  margin: 0;
+  vertical-align: middle;
+}
+
+.intro-pill .fa-icon {
+  margin-right: 0.35em;
+  vertical-align: -0.1em;
+}
+
+.card-title .fa-icon {
+  vertical-align: -0.1em;
+  margin-right: 0.25em;
+}
+
+.quickstart-label .fa-icon {
+  margin-right: 0.3em;
+  vertical-align: -0.1em;
+}
+
 .emoji-tint {
   display: inline-block;
-  vertical-align: -0.06em;
+  vertical-align: -0.12em;
   margin: 0 0.12em;
-  filter: var(--emoji-filter) !important;
-  transition: filter 0.2s ease, transform 0.2s ease;
 }
 
 /* ==========================================================================

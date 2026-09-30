@@ -34,7 +34,7 @@ left:
       def heal_party(companions : Enumerable(Player), amount : Int32) : Void
         companions.select(&.alive?).each do |companion|
           companion.health = (companion.health + amount).clamp(0, 100)
-          puts "✨ Healed #{companion.name} to #{companion.health} HP"
+          puts "Healed #{companion.name} to #{companion.health} HP"
         end
       end
 

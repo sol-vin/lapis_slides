@@ -7,7 +7,7 @@ badge_color: cyan
 palette: spaces_xp_royale
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Imperative Loops & Array Mutation'
+  title: ':circle-xmark: GDScript: Imperative Loops & Array Mutation'
   lang: gdscript
   tag: GDScript
   font_size: '0.90rem'
@@ -29,7 +29,7 @@ gdscript:
   - <strong>Missing Functional Primitives:</strong> Lacks standard pipeline operations (<code>map</code>, <code>select</code>, <code>reject</code>, <code>tally</code>, <code>chunk</code>).
   - <strong>Boilerplate Flags:</strong> Requires manual <code>for</code> loops and break statements for simple boolean queries like <code>any?</code>.
 crystal:
-  title: '✨ Crystal: Zen Enumerable Chaining'
+  title: ':sparkles: Crystal: Zen Enumerable Chaining'
   lang: crystal
   tag: Crystal (Lapis)
   font_size: '0.90rem'

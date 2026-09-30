@@ -24,7 +24,7 @@ left:
     $ lapis build --release --opt=3
     [Lapis] Compiling release binaries with -O3 -s...
     [Lapis] Stripping debug symbols & eliding trace logging
-    ✓ Compiled bin/game.dll (2.1 MB) & bin/game.exe (3.4 MB)
+    [OK] Compiled bin/game.dll (2.1 MB) & bin/game.exe (3.4 MB)
 
     # Step 2: Package standalone release distribution
     $ lapis package game --release -n DungeonCrawl
@@ -33,8 +33,8 @@ left:
     [Package] Bundling GDExtension bridge & crshader addon
     [Package] Creating standalone archive: dist/DungeonCrawl-windows-x64.zip
     [Package] Computing cryptographic SHA256 hashes...
-    ✓ Created dist/DungeonCrawl-windows-x64.zip (48.2 MB)
-    ✓ Ready to ship to Steam, itch.io, or direct download!
+    [OK] Created dist/DungeonCrawl-windows-x64.zip (48.2 MB)
+    [OK] Ready to ship to Steam, itch.io, or direct download!
 right:
   type: card
   title: Turnkey Shipping Invariants

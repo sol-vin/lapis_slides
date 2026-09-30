@@ -22,16 +22,16 @@ left:
   code: |
     # Step 1: Scaffold a ready-to-run Godot 4.8 game
     $ lapis init dungeon_crawl --template=3d-action
-    ✓ Created project.godot, shard.yml, src/main.cr, scenes/
+    [OK] Created project.godot, shard.yml, src/main.cr, scenes/
 
     # Step 2: Open project in official Godot Editor
     $ lapis editor
-    ✓ Godot 4.8-dev6 launched (GDExtension bridge loaded)
+    [OK] Godot 4.8-dev6 launched (GDExtension bridge loaded)
 
     # Step 3: Edit code in IDE & press F5 in Godot
     [EditorPlugin] F5 rebuild triggered: compiling bin/game.dll...
     [Bridge] Timestamped shadow loaded: game_8421_1727641200.dll
-    ✓ 0 file locks on Windows • Game reloaded in 0.42s!
+    [OK] 0 file locks on Windows • Game reloaded in 0.42s!
 right:
   type: card
   title: Developer Flow & Zero-Lock Invariants

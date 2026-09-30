@@ -26,7 +26,7 @@ module LapisSlides
           str << "              <span class=\"code-title\">" << LayoutRenderer.tint_emojis(HTML.escape(m_title)) << "</span>\n"
           str << "              <div class=\"window-controls\">\n"
           str << "                <span class=\"code-lang-tag\">" << HTML.escape(m_tag) << "</span>\n"
-          str << "                <span class=\"window-btn close\" title=\"Close\">✕</span>\n"
+          str << "                <span class=\"window-btn close\" title=\"Close\">" << LayoutRenderer.render_icon("xmark") << "</span>\n"
           str << "              </div>\n"
           str << "            </div>\n"
           str << "            <div style=\"flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--bg-window); overflow: hidden; position: relative;\">\n"

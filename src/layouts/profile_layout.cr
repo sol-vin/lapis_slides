@@ -13,11 +13,11 @@ module LapisSlides
         if stats && !stats.empty?
           str << "          <div class=\"profile-stats-ribbon\">\n"
           stats.each do |st|
-            icon = st["icon"]?.try(&.as_s) || "★"
+            icon = st["icon"]?.try(&.as_s) || "star"
             val = st["value"]?.try(&.as_s) || ""
             lbl = st["label"]?.try(&.as_s) || ""
             str << "            <div class=\"profile-stat-chip\">\n"
-            str << "              <span class=\"stat-icon\">" << LayoutRenderer.tint_emojis(HTML.escape(icon)) << "</span>\n"
+            str << "              <span class=\"stat-icon\">" << LayoutRenderer.render_icon(icon) << "</span>\n"
             str << "              <div class=\"stat-meta\">\n"
             str << "                <span class=\"stat-value\">" << LayoutRenderer.tint_emojis(HTML.escape(val)) << "</span>\n"
             str << "                <span class=\"stat-label\">" << LayoutRenderer.tint_emojis(HTML.escape(lbl)) << "</span>\n"

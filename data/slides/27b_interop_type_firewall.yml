@@ -7,7 +7,7 @@ badge_color: purple
 palette: former_rain
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Duck-Typing & Malformed Arguments'
+  title: ':circle-xmark: GDScript: Duck-Typing & Malformed Arguments'
   lang: gdscript
   tag: GDScript
   code: |
@@ -26,7 +26,7 @@ gdscript:
   - <strong>Memory Corruption Risk:</strong> Untyped native bindings risk severe memory corruption on illegal type reinterpretation.
   - <strong>Perimeter Interception:</strong> Lapis ensures the Godot engine catches malformed calls at the boundary before execution.
 crystal:
-  title: '✨ Crystal: Strongly-Typed ClassDB Registration'
+  title: ':sparkles: Crystal: Strongly-Typed ClassDB Registration'
   lang: crystal
   tag: Crystal (Lapis)
   code: |
@@ -39,7 +39,7 @@ crystal:
       end
     end
 
-    # 🛡️ THE LAPIS TYPE FIREWALL:
+    # THE LAPIS TYPE FIREWALL:
     # 1. GDExtension validates types before invoking native code
     # 2. Strict Variant unboxing: TypeCastError on mismatch
     # 3. Crystal method is NEVER executed with malformed data!

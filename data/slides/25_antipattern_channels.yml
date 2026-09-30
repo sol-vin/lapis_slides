@@ -7,7 +7,7 @@ badge_color: cyan
 palette: spaces_97
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Mutex Locking & SceneTree Hazard'
+  title: ':circle-xmark: GDScript: Mutex Locking & SceneTree Hazard'
   lang: gdscript
   tag: GDScript
   code: |
@@ -29,7 +29,7 @@ gdscript:
   - <strong>Fatal SceneTree Corruption:</strong> Modifying nodes from background threads corrupts Godot's child arrays.
   - <strong>No Typed Communication Queue:</strong> Lacks clean cross-thread actor queues.
 crystal:
-  title: '✨ Crystal: Buffered Actor Channels'
+  title: ':sparkles: Crystal: Buffered Actor Channels'
   lang: crystal
   tag: Crystal (Lapis)
   code: |

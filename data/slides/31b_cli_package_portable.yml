@@ -23,20 +23,20 @@ left:
     # 1. Package turnkey playable standalone game
     $ lapis package game --release -p my_game -n VoidRunner
     [PackageGame] Generating standalone project pack: VoidRunner.pck...
-      ✓ Exported PCK archive via Godot headless
-      ✓ Staged crystal_bridge.dll, gc.dll, pcre2-8.dll, iconv-2.dll
-      ✓ Auto-generated .godot/extension_list.cfg manifest
+      [OK] Exported PCK archive via Godot headless
+      [OK] Staged crystal_bridge.dll, gc.dll, pcre2-8.dll, iconv-2.dll
+      [OK] Auto-generated .godot/extension_list.cfg manifest
 
     # 2. Package zero-dependency portable binary (embedded PCK footer)
     $ lapis package game --portable --embed-pck --release
     [PackageGame] Embedding PCK directly into binary footer (GDPC magic)...
-      ✓ Appended 42.8 MB PCK data + 12-byte GDPC trailer
-      ✓ Generated portable executable: bin/VoidRunner_portable.exe
-      ✓ Created standalone archive: bin/VoidRunner-portable.zip
+      [OK] Appended 42.8 MB PCK data + 12-byte GDPC trailer
+      [OK] Generated portable executable: bin/VoidRunner_portable.exe
+      [OK] Created standalone archive: bin/VoidRunner-portable.zip
 
     # 3. Direct portable shorthand & custom output targets
     $ lapis package portable -t dist/v1.0.0
-      ✓ Ready to upload to Steam, itch.io, or LAN distribution!
+      [OK] Ready to upload to Steam, itch.io, or LAN distribution!
 right:
   type: card
   title: Portable Packaging Invariants

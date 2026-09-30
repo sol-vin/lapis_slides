@@ -21,19 +21,19 @@ left:
   rows: 19
   code: |
     ╔════════════════════════════════════════════════════════════════════════════════════╗
-    ║ 🔮 LAPIS UNIFIED TEST SUITE DASHBOARD                                ALL PASSED ✔  ║
+    ║ LAPIS UNIFIED TEST SUITE DASHBOARD                                ALL PASSED [OK]  ║
     ║ Host: windows │ Godot: 4.8.0-custom │ Crystal: v1.15.0 │ Time: 00:14.2            ║
     ║ [████████████████████████████████████████] 100% (45/45 suites • 420+ specs)        ║
     ╚════════════════════════════════════════════════════════════════════════════════════╝
     ┌─ TEST PHASES (45 SUITES) ──────┐ ┌─ LIVE EXECUTION LOG STREAM ─────────────────────┐
-    │ ► ✔ 01. Core Language & Math   │ │ ► Phase: Standalone Runtime Engine Suites       │
-    │   ✔ 02. Variant Conversions    │ ├─────────────────────────────────────────────────┤
-    │   ✔ 03. GC & Monotonic Guards  │ │ [10:24:12] [PASS] CharacterBody3D physics step  │
-    │   ✔ 04. Headless In-Editor @tool│ │ [10:24:13] [PASS] AStar2D pathfinding routing  │
-    │   ✔ 05. Async Signal Awaiting  │ │ [10:24:14] [PASS] Multiplayer RPC synchronized  │
-    │   ✔ 06. 40+ Engine Spec Suites │ │ [10:24:15] [PASS] GDExtension ClassDB dispatch  │
-    │   ✔ 07. Zero-Leak Verification │ │ [10:24:16] [PASS] assert_no_leak: ΔObjects == 0 │
-    │   ✔ 08. In-Editor Test Docks   │ │                                                 │
+    │ ► [OK] 01. Core Language & Math   │ │ ► Phase: Standalone Runtime Engine Suites       │
+    │   [OK] 02. Variant Conversions    │ ├─────────────────────────────────────────────────┤
+    │   [OK] 03. GC & Monotonic Guards  │ │ [10:24:12] [PASS] CharacterBody3D physics step  │
+    │   [OK] 04. Headless In-Editor @tool│ │ [10:24:13] [PASS] AStar2D pathfinding routing  │
+    │   [OK] 05. Async Signal Awaiting  │ │ [10:24:14] [PASS] Multiplayer RPC synchronized  │
+    │   [OK] 06. 40+ Engine Spec Suites │ │ [10:24:15] [PASS] GDExtension ClassDB dispatch  │
+    │   [OK] 07. Zero-Leak Verification │ │ [10:24:16] [PASS] assert_no_leak: ΔObjects == 0 │
+    │   [OK] 08. In-Editor Test Docks   │ │                                                 │
     │                                │ │ ALL 45 SUITES PASSED (420+ specs, 0 leaks)      │
     └────────────────────────────────┘ └─────────────────────────────────────────────────┘
      [↑↓/jk] Select Phase  [Enter] Drill-down Modal  [q] Exit  [?] Help

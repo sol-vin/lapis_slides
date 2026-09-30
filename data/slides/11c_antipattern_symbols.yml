@@ -7,7 +7,7 @@ badge_color: cyan
 palette: spaces_vista
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs'
+  title: ':circle-xmark: GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs'
   lang: gdscript
   tag: GDScript
   code: |
@@ -16,11 +16,11 @@ gdscript:
     blackboard["target_enemy"] = player_node
     # Typo in key silently returns null, causing downstream crash:
     var target = blackboard.get("target_enmy") # => null!
-    target.take_damage(10) # 💥 Runtime Crash: Invalid call on base Nil
+    target.take_damage(10) # Runtime Crash: Invalid call on base Nil
 
     # PROBLEM 2: State Machine String Hashing & Typo Blindspots
     var state: StringName = &"patrol"
-    if state == &"petrol": # ⚠️ Typo compiles silently! Logic fails at runtime.
+    if state == &"petrol": # Typo compiles silently! Logic fails at runtime.
         refuel_vehicle()
 
     # PROBLEM 3: Frame-by-Frame String Comparison & Intern Table Locks
@@ -37,14 +37,14 @@ gdscript:
   - '<strong>Hashing & Intern Mutex Churn:</strong> Strings require runtime byte comparisons. StringNames require global mutex locking and hash table queries inside Godot''s engine pool.'
   - '<strong>Untyped String Dispatch:</strong> Method calls and event tags via StringName lack compiler validation and cannot leverage symbol-to-proc.'
 crystal:
-  title: '✨ Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing'
+  title: ':sparkles: Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing'
   lang: crystal
   tag: Crystal (Lapis)
   code: |
     # SOLUTION 1: NamedTuple — Compile-Time Key Typo Proofing
     blackboard = {target_enemy: player_node, alert_level: :high}
     target = blackboard[:target_enemy] # Strongly typed as Player!
-    # blackboard[:target_enmy] # 🚫 COMPILE ERROR: missing key 'target_enmy'!
+    # blackboard[:target_enmy] # COMPILE ERROR: missing key 'target_enmy'!
 
     # SOLUTION 2: 32-Bit Immediate Integer (cmp eax, imm32) — 0 Allocations
     # Symbols are NOT strings: they are immediate 32-bit compiler IDs:

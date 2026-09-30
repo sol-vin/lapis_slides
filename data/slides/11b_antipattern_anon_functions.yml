@@ -7,7 +7,7 @@ badge_color: purple
 palette: super_es
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Verbose Lambdas, Callable Allocations & Churn'
+  title: ':circle-xmark: GDScript: Verbose Lambdas, Callable Allocations & Churn'
   lang: gdscript
   tag: GDScript
   font_size: '0.80rem'
@@ -38,7 +38,7 @@ gdscript:
   - <strong>Clunky Lambda Syntax:</strong> No compact block syntax or symbol-to-proc; even simple 1-line predicates require full function signature boilerplate.
   - <strong>Chaining & Intermediate Arrays:</strong> Chaining operations like <code>filter</code> and <code>map</code> creates intermediate temporary arrays, multiplying memory pressure.
 crystal:
-  title: '✨ Crystal: Inlined Blocks, Chained Enumerators & Zero Closures'
+  title: ':sparkles: Crystal: Inlined Blocks, Chained Enumerators & Zero Closures'
   lang: crystal
   tag: Crystal (Lapis)
   code: |

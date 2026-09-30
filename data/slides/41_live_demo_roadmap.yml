@@ -20,7 +20,7 @@ steps:
       - Manifests, bridge DLL & default scenes
       - Windows timestamped shadow loading
       - Instant F5 loop without restarting
-    highlight: '⚡ Turnkey Zero-Lock Init'
+    highlight: ':bolt: Turnkey Zero-Lock Init'
 
   - phase: 'STEP 2 • 02:00'
     title: 'Gameplay & Traits'
@@ -38,7 +38,7 @@ steps:
       - Modular <code>gmodule Damageable</code> mixin
       - Live Inspector sliders & UI hints
       - Type-safe engine signals & await
-    highlight: '💎 Pure Declarative Zen'
+    highlight: ':gem: Pure Declarative Zen'
 
   - phase: 'STEP 3 • 04:30'
     title: 'Install CrShader Addon'
@@ -52,7 +52,7 @@ steps:
       - Auto-enables plugin in <code>project.godot</code>
       - Links <code>shard.yml</code> Crystal dependency
       - Generates typed bindings in <code>src/bindings/</code>
-    highlight: '📦 One-Command Ecosystem'
+    highlight: ':box-archive: One-Command Ecosystem'
 
   - phase: 'STEP 4 • 07:00'
     title: 'Live Shaders & FX'
@@ -69,7 +69,7 @@ steps:
       - Direct Crystal-to-GPU uniform sync
       - Live shield distortion & pulse effects
       - Real-time in-editor <code>@[Tool]</code> feedback
-    highlight: '🎨 Procedural GPU Power'
+    highlight: ':palette: Procedural GPU Power'
 
   - phase: 'STEP 5 • 09:30'
     title: 'Compile & Package'
@@ -84,8 +84,8 @@ steps:
       - Bundles PCK, runtime DLLs & all addons
       - Standalone zero-dependency executable
       - Generates cryptographic SHA256 checksums
-    highlight: '🚀 Ship-Ready Distribution'
-summary: '🎯 <strong>Live Demo Mission:</strong> From an empty directory to a feature-rich, shader-powered 3D Godot game with hot reloading, ecosystem addons, and a standalone release package in under 12 minutes.'
+    highlight: ':rocket: Ship-Ready Distribution'
+summary: ':bullseye: <strong>Live Demo Mission:</strong> From an empty directory to a feature-rich, shader-powered 3D Godot game with hot reloading, ecosystem addons, and a standalone release package in under 12 minutes.'
 notes: |
   Welcome to our comprehensive live demonstration.
   We will take you on a complete hands-on journey from a blank terminal all the way to a finished, packaged game:

@@ -14,10 +14,10 @@ left:
   lang: ruby
   font_size: '0.78rem'
   code: |
-    # ❌ Anti-Pattern: String eval is unsafe, unhygienic & slow
+    # Anti-Pattern: String eval is unsafe, unhygienic & slow
     # eval("player.#{action}(#{value})") # Injection risk, syntax errors!
 
-    # ✅ The "Better Eval": instance_exec rebinds `self` to an object
+    # The "Better Eval": instance_exec rebinds `self` to an object
     class CombatRoomBuilder
       def initialize(@room); end
       def wave(enemy_type, count); @room.spawn_wave(enemy_type, count); end

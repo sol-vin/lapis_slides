@@ -13,7 +13,7 @@ module LapisSlides
 
         if banner
           str << "          <div class=\"self-hosted-banner\">\n"
-          str << "            <span class=\"banner-icon\">💎</span>\n"
+          str << "            <span class=\"banner-icon\">" << LayoutRenderer.render_icon("gem") << "</span>\n"
           str << "            <div class=\"banner-text\">" << LayoutRenderer.tint_emojis(banner) << "</div>\n"
           str << "          </div>\n"
         end
@@ -37,7 +37,7 @@ module LapisSlides
             str << "                </div>\n"
             if !flow.empty?
               str << "                <div class=\"dual-mode-flow\">\n"
-              str << "                  <code>" << flow << "</code>\n"
+              str << "                  <code>" << LayoutRenderer.replace_icons(flow) << "</code>\n"
               str << "                </div>\n"
             end
             str << "              </div>\n"
@@ -47,9 +47,9 @@ module LapisSlides
               specs.each do |s|
                 label = s["label"]?.try(&.as_s) || ""
                 value = s["value"]?.try(&.as_s) || ""
-                icon = s["icon"]?.try(&.as_s) || "•"
+                icon = s["icon"]?.try(&.as_s) || "bullseye"
                 str << "                <div class=\"dual-mode-spec-row\">\n"
-                str << "                  <span class=\"spec-label\"><span class=\"spec-icon\">" << LayoutRenderer.tint_emojis(icon) << "</span> " << HTML.escape(label) << "</span>\n"
+                str << "                  <span class=\"spec-label\"><span class=\"spec-icon\">" << LayoutRenderer.render_icon(icon) << "</span> " << HTML.escape(label) << "</span>\n"
                 str << "                  <span class=\"spec-value\">" << LayoutRenderer.tint_emojis(value) << "</span>\n"
                 str << "                </div>\n"
               end

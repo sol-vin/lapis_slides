@@ -56,9 +56,9 @@ module LapisSlides
           str << "            </div>\n"
         elsif !repo_link.empty?
           str << "            <div class=\"intro-pills-row\">\n"
-          str << "              <span class=\"intro-pill\">⚡ LLVM Native C-Speed</span>\n"
-          str << "              <span class=\"intro-pill\">💎 Ruby-Like Zen DSL</span>\n"
-          str << "              <span class=\"intro-pill\">🎮 First-Class Godot 4.8+</span>\n"
+          str << "              <span class=\"intro-pill\">" << LayoutRenderer.render_icon("bolt") << " LLVM Native C-Speed</span>\n"
+          str << "              <span class=\"intro-pill\">" << LayoutRenderer.render_icon("gem") << " Ruby-Like Zen DSL</span>\n"
+          str << "              <span class=\"intro-pill\">" << LayoutRenderer.render_icon("gamepad") << " First-Class Godot 4.8+</span>\n"
           str << "              <span class=\"intro-pill\"><code>" << HTML.escape(repo_link) << "</code></span>\n"
           str << "            </div>\n"
         end

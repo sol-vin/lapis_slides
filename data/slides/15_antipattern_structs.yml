@@ -7,7 +7,7 @@ badge_color: cyan
 palette: spaces_11
 layout: code-comparison-layout
 gdscript:
-  title: '❌ GDScript: Heap RefCounted & Untyped Dictionaries'
+  title: ':circle-xmark: GDScript: Heap RefCounted & Untyped Dictionaries'
   lang: gdscript
   tag: GDScript
   code: |
@@ -27,7 +27,7 @@ gdscript:
   - <strong>Untyped Dictionaries:</strong> High memory overhead, zero editor autocomplete, and silent failure on key typos.
   - <strong>Heavy GC Churn:</strong> Thousands of combat packets in action games cause noticeable garbage collection hitches.
 crystal:
-  title: '✨ Crystal: Stack-Allocated Value Structs'
+  title: ':sparkles: Crystal: Stack-Allocated Value Structs'
   lang: crystal
   tag: Crystal (Lapis)
   code: |
