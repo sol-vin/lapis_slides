@@ -804,34 +804,38 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Zero-Boilerplate State Transitions with Compile-Time Verification
 - **Code Example (`enemy_fsm.cr — Declarative State Machine DSL`)**:
   ```crystal
-  # Declare states and transitions with an expressive macro DSL
+  # Declare states, transitions & lifecycle hooks with a macro DSL
   fsm BossState do
     state Patrol, initial: true do
+      before { start_patrol_path }
       on :see_player, transition_to: Chase
-      after 5.seconds, transition_to: ScanArea
+      after { alert_nearby_allies }
     end
   
     state Chase do
+      before { play_animation("run") }
       on :in_attack_range, transition_to: Attack
       on :lost_player, transition_to: Patrol
     end
   
     state Attack do
+      before { play_sound("roar") }
       on :attack_finished, transition_to: Recover
+      after { reset_hitbox }
     end
   
     state Recover do
-      after 1.5.seconds, transition_to: Chase
+      on :timer_done, transition_to: Patrol
     end
   end
   ```
 - **What the Macro Generates**:
   - Typed Enum & Handlers: Generates concrete enum BossState with type-checked transition methods.
+  - Lifecycle Hooks (before & after): Entry (before) and exit (after) hooks are inlined directly into native state transition branches.
   - Compile-Time Transition Validation: Referencing an undeclared state or illegal transition fails at compile time.
-  - Zero Reflection Overhead: Transitions compile to direct jump tables; no dictionary lookups or string comparisons.
-  - Automatic Frame Timers: after 5.seconds hooks into Godot's frame delta without manual timer node instantiations.
+  - Zero Reflection Overhead: Transitions compile to direct jump tables; zero lambda allocations or dictionary lookups.
 - **Presenter Script**:
-  > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead."*
+  > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead."*
 
 ---
 ### Slide 23: Behind the DSL: The FSM AST Macro
@@ -841,7 +845,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: How Crystal's Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums & Jump Tables
 - **Code Example (`fsm_macro.cr — AST Rewriting Engine`)**:
   ```crystal
-  # 🪄 Compile-Time AST Macro: parses block into enums & jump table
+  # 🪄 Compile-Time AST Macro: parses block into enums, hooks & jump table
   macro fsm(name, &block)
     # 1. Synthesize typed Enum for all declared states:
     enum {{name.id}}
@@ -850,7 +854,7 @@ This document outlines each slide's exact theme palette, architectural category,
       {% end %}
     end
   
-    # 2. Synthesize StateMachine class with zero-reflection jump table:
+    # 2. Synthesize StateMachine with zero-reflection jump table:
     class {{name.id}}Machine
       getter current_state : {{name.id}} = {{name.id}}::Patrol
   
@@ -859,28 +863,49 @@ This document outlines each slide's exact theme palette, architectural category,
         case @current_state
         {% for state in block.body.expressions %}
           when .{{state.args[0].id.underscore}}?
-            {% for on_call in state.block.body.expressions %}
-              if event == {{on_call.args[0]}}
-                return transition_to({{name.id}}::{{on_call.named_args[:transition_to]}})
-              end
+            {% for call in state.block.body.expressions %}
+              {% if call.name == "on" %}
+                if event == {{call.args[0]}}
+                  return transition_to({{name.id}}::{{call.named_args[:transition_to]}})
+                end
+              {% end %}
             {% end %}
         {% end %}
         end
       end
   
+      # 4. Inlines 'after' (exit) & 'before' (enter) lifecycle hooks:
       private def transition_to(target : {{name.id}}) : Void
+        case @current_state
+        {% for s in block.body.expressions %}
+          when .{{s.args[0].id.underscore}}?
+            {% for c in s.block.body.expressions %}
+              {% if c.name == "after" %} {{c.block.body}} {% end %}
+            {% end %}
+        {% end %}
+        end
+  
         @current_state = target
+  
+        case target
+        {% for s in block.body.expressions %}
+          when .{{s.args[0].id.underscore}}?
+            {% for c in s.block.body.expressions %}
+              {% if c.name == "before" %} {{c.block.body}} {% end %}
+            {% end %}
+        {% end %}
+        end
       end
     end
   end
   ```
 - **Compile-Time Metaprogramming Invariants**:
+  - Inlined Lifecycle Hooks (before & after): The macro extracts after (exit) and before (enter) blocks and inlines them directly into native case branches — zero lambda overhead, zero virtual dispatches!
   - Compile-Time AST Traversal: Unlike Ruby's method_missing or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.
   - Synthesizes Concrete Types: The macro generates real enum BossState variants (Patrol, Chase), giving developers full compiler autocomplete and exhaustiveness checks.
   - Zero Runtime Overhead: trigger(:event) expands into a flat native case statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!
-  - Fail-Fast Verification: Transitioning to a typoed or non-existent state produces an immediate compile error (e.g. undefined constant BossState::Pattrol).
 - **Presenter Script**:
-  > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice what's happening: this is not string interpolation or runtime reflection. Crystal passes the code inside the block directly to the macro as an Abstract Syntax Tree (AST). The macro loops over the expressions during compilation, extracts each `state` call, and synthesizes a genuine, strongly-typed `enum`. Then it writes the state machine class and an event dispatcher that unfolds into a flat, O(1) CPU jump table. If a developer makes a typo in a state transition, the compiler fails immediately because the enum variant doesn't exist. You get the beauty of a high-level DSL with the raw execution speed and safety of hand-written C."*
+  > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—one that inlines the current state's `after` exit hook, updates @current_state, and one that inlines the target state's `before` enter hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C."*
 
 ---
 ### Slide 24: Where Macros Shine: Zero-Reflection Serialization & Save Systems

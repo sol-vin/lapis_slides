@@ -13,24 +13,28 @@ left:
   tag: Crystal
   lang: crystal
   code: |
-    # Declare states and transitions with an expressive macro DSL
+    # Declare states, transitions & lifecycle hooks with a macro DSL
     fsm BossState do
       state Patrol, initial: true do
+        before { start_patrol_path }
         on :see_player, transition_to: Chase
-        after 5.seconds, transition_to: ScanArea
+        after { alert_nearby_allies }
       end
 
       state Chase do
+        before { play_animation("run") }
         on :in_attack_range, transition_to: Attack
         on :lost_player, transition_to: Patrol
       end
 
       state Attack do
+        before { play_sound("roar") }
         on :attack_finished, transition_to: Recover
+        after { reset_hitbox }
       end
 
       state Recover do
-        after 1.5.seconds, transition_to: Chase
+        on :timer_done, transition_to: Patrol
       end
     end
 right:
@@ -38,17 +42,9 @@ right:
   title: What the Macro Generates
   color: purple
   items:
-  - <strong>Typed Enum & Handlers:</strong> Generates concrete <code>enum BossState</code>
-    with type-checked transition methods.
-  - <strong>Compile-Time Transition Validation:</strong> Referencing an undeclared
-    state or illegal transition fails at compile time.
-  - <strong>Zero Reflection Overhead:</strong> Transitions compile to direct jump
-    tables; no dictionary lookups or string comparisons.
-  - <strong>Automatic Frame Timers:</strong> <code>after 5.seconds</code> hooks into
-    Godot's frame delta without manual timer node instantiations.
-notes: State machines are ubiquitous in gameplay engineering, but they often devolve
-  into massive switch statements or complex class hierarchies. With Crystal's AST
-  macros, we can write a clean, declarative state machine DSL that reads like a specification
-  document. Under the hood, the macro generates strongly-typed transition methods,
-  validates that all transitions are valid at compile time, and compiles down to direct
-  jump tables with zero reflection overhead.
+  - <strong>Typed Enum & Handlers:</strong> Generates concrete <code>enum BossState</code> with type-checked transition methods.
+  - <strong>Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> Entry (<code>before</code>) and exit (<code>after</code>) hooks are inlined directly into native state transition branches.
+  - <strong>Compile-Time Transition Validation:</strong> Referencing an undeclared state or illegal transition fails at compile time.
+  - <strong>Zero Reflection Overhead:</strong> Transitions compile to direct jump tables; zero lambda allocations or dictionary lookups.
+notes: |
+  State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead.
