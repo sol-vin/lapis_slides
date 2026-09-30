@@ -56,15 +56,15 @@ left:
     end
 right:
   type: card
-  title: Architectural Rigor & Safety Invariants
+  title: Architectural Rigor & Safety
   color: purple
   compact: true
   items:
-    - '<strong>Composed Module Inheritance (<code>gmodule A &lt; B</code>):</strong> Modules inherit from modules. <code>Combatant</code> inherits all <code>Damageable</code> properties and signals, adding its own.'
-    - '<strong>Cooperative Lifecycle Chaining (<code>super</code>):</strong> Calling <code>super</code> in <code>_process</code> or <code>_ready</code> chains lifecycle hooks across all traits in linearized MRO order.'
-    - '<strong>Compile-Time Abstract Contracts:</strong> <code>abstract def</code> in a trait enforces required node implementations at compile time with zero runtime reflection.'
-    - '<strong>Defeats the Diamond Problem:</strong> Linearized mixin semantics eliminate C++ virtual diamond inheritance ambiguities while enabling deep composition.'
-    - '<strong>Autonomous Gameplay Traits:</strong> Traits like <code>AutoRegen</code> manage autonomous per-frame updates without dedicated child node allocations.'
+    - '<strong>Composed Inheritance:</strong> Traits inherit traits (<code>gmodule A &lt; B</code>), inheriting all properties and signals.'
+    - '<strong>Cooperative Chaining:</strong> Calling <code>super</code> in <code>_process</code> chains lifecycle hooks across all mixed-in traits.'
+    - '<strong>Abstract Contracts:</strong> <code>abstract def</code> enforces required node implementations at compile time.'
+    - '<strong>Diamond-Free:</strong> Linearized mixin semantics eliminate C++ virtual diamond ambiguities cleanly.'
+    - '<strong>Autonomous Traits:</strong> Traits like <code>AutoRegen</code> manage per-frame updates with zero child node cost.'
 notes: |
   gmodule goes far beyond simple flat mixins—it unlocks a complete, robust trait architecture for game engines.
   First, gmodule supports composed inheritance: writing 'gmodule Combatant < Damageable' means Combatant inherits all exported properties, typed signals, and methods from Damageable. When BossMonster includes Combatant, it gets health, defense, attack power, and all corresponding signals in one shot.

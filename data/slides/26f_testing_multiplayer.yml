@@ -1,0 +1,59 @@
+---
+id: 26f_testing_multiplayer
+title: 'Multiplayer Testing: Lapis::Multiplayer::Harness'
+subtitle: Deterministic Multi-Client Simulation, Virtual Input Pumping & Packet Auditing
+badge: MULTIPLAYER • SIMULATION HARNESS
+badge_color: purple
+palette: playbox
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: test_multiplayer_simulation.cr — Multi-Client Harness
+  tag: Crystal
+  lang: crystal
+  font_size: '0.64rem'
+  code: |
+    require "spec_helper"
+    include Lapis::Test
+
+    multiplayer_test "Simulated duel with Wireshark packet spy", clients: 2 do |harness|
+      # 1. Deterministic peer topology (Server: 1, Clients: 2, 3)
+      assert_eq harness.server.peer_id, 1
+      assert_eq harness.client(1).peer_id, 2
+      server_hero = harness.server.spawn(HeroNode, name: "Hero")
+
+      # 2. Virtual input pumping & RPC dispatch
+      harness.client(1).send_action(:attack, pressed: true)
+      harness.client(1).rpc_id(1, :apply_damage, 35)
+
+      # 3. Synchronous lockstep frame stepping
+      harness.step_frames(3)
+      assert_eq server_hero.health, 65
+
+      # 4. Wireshark-style Spy packet auditing
+      spy = harness.spy
+      spy.assert_rpc_sent(from: 2, to: 1, method: :apply_damage)
+      spy.assert_max_bandwidth(10240.0) # < 10 KB/s budget
+
+      # 5. Native forensics snapshot on network anomalies
+      if spy.latency_ms > 50.0
+        spy.capture_r2_forensics!("Latency Spike", 0x140001000_u64)
+      end
+    end
+right:
+  type: card
+  title: Deterministic Simulation Invariants
+  color: purple
+  compact: true
+  items:
+    - '<strong>In-Memory Peer Mesh:</strong> <code>multiplayer_test</code> instantiates a full server + N client topology in a single fast, isolated process.'
+    - '<strong>Lockstep Frame Stepping:</strong> <code>harness.step_frames(n)</code> pumps network queues, RPC dispatches, and physics synchronously.'
+    - '<strong>Virtual Input Injection:</strong> <code>client.send_action(:attack)</code> pumps simulated hardware actions without OS window focus.'
+    - '<strong>Wireshark-Style Spy:</strong> <code>harness.spy</code> audits every transmitted packet, verifying reliability, channel, sender, and bandwidth.'
+    - '<strong>Zero Network Flakiness:</strong> Runs deterministically in-memory with zero port binding conflicts, socket timeouts, or race conditions.'
+notes: |
+  Testing multiplayer networking in game engines is notoriously painful. Running multiple editor instances or launching background processes leads to port collisions, timing jitter, and flaky CI tests.
+  Lapis completely solves this with Lapis::Multiplayer::Harness. The multiplayer_test macro spins up a full multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.
+  Using harness.step_frames(n), you step network packets, physics ticks, and SceneTree lifecycles synchronously and deterministically. You can pump virtual input actions like send_action(:attack) and dispatch RPCs.
+  Furthermore, harness.spy acts as an embedded Wireshark packet inspector. You can assert that specific RPCs were delivered (spy.assert_rpc_sent), verify reliable vs unreliable delivery, enforce strict bandwidth caps (spy.assert_max_bandwidth), and even trigger native crash forensics if an anomaly occurs!

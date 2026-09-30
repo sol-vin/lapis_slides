@@ -65,6 +65,7 @@ slides:
 - 26d_thread_safety_policies
 - 26e_main_thread_dispatch
 - 26b_multiplayer_rpc
+- 26f_testing_multiplayer
 - 26c_concurrency_patterns
 - 27_interop_gdscript_calls_crystal
 - 27b_interop_type_firewall
@@ -82,6 +83,7 @@ slides:
 - 34d_cli_log_triage
 - 34b_r2_test_suite
 - 36_testing_zero_leak
+- 36b_testing_editor_driver
 - 37_tool_testing_tui
 - 35_benchmarks
 - 35b_custom_benchmarks

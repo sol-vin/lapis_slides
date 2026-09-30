@@ -14,18 +14,18 @@ left:
   lang: crystal
   font_size: '0.75rem'
   code: |
-    # 1. Operators /, %, and bare ~ for node resolution:
+    # 1. Operators /, %, and bare ~ / ~? for node resolution:
     camera = self / "CameraRig" / Camera3D
     health_bar = self % ProgressBar
-    sprite = ~Sprite2D
+    sprite = ~Sprite2D           # Strict lookup & up-cast (like self[T])
 
-    # 2. Strongly typed child retrieval with onready macro:
-    onready weapon : Weapon = ~("WeaponMount/Sword").as(Weapon)
-
-    # 3. Safe navigation with optional nodes (returns T?):
-    if hud = self["$UI/HUDLayer", HUD]?
+    # 2. Safe navigation with nilable ~Class? (returns T?):
+    if hud = ~HUD?               # Safe lookup & up-cast (like self[T]?)
       hud.update_health(current_health)
     end
+
+    # 3. Strongly typed child retrieval with onready macro:
+    onready weapon : Weapon = ~("WeaponMount/Sword").as(Weapon)
 
     # 4. Typed scene loading & dynamic instantiation:
     packed = Godot.load_as(Godot::PackedScene, "res://scenes/companion.tscn")
@@ -41,10 +41,10 @@ right:
   color: cyan
   compact: true
   items:
-  - '<strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "Camera" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and context resolution (<code>~Sprite2D</code>).'
+  - '<strong>Operators <code>/</code>, <code>%</code> & <code>~</code> / <code>~?</code>:</strong> Chained paths (<code>self / "Camera"</code>), unique nodes (<code>self % ProgressBar</code>), and strict (<code>~Sprite2D</code>) or safe (<code>~HUD?</code>) up-casting.'
   - '<strong>Declarative onready Macro:</strong> <code>onready weapon : Weapon = ~("...").as(Weapon)</code> binds nodes safely during <code>_ready</code>.'
-  - '<strong>Compile-Time Nil Safety:</strong> <code>self[path, HUD]?</code> returns <code>HUD?</code>; Crystal forces flow-sensitive nil checks before dispatch.'
-  - '<strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> and <code>scene.instantiate_as(T)</code> construct typed scenes without casting.'
+  - '<strong>Compile-Time Nil Safety:</strong> <code>~HUD?</code> and <code>self[path, HUD]?</code> return <code>HUD?</code>; Crystal forces flow-sensitive checks.'
+  - '<strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> and <code>scene.instantiate_as(T)</code> construct typed scenes cleanly.'
   - '<strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> exposes typed properties to the Inspector with custom editor sliders and ranges.'
 notes: |
   In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.

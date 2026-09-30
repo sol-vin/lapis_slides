@@ -291,32 +291,33 @@ ul.card-list li strong {
 /* Compact Card Variant for dense content and col-2 narrow columns */
 .card.compact,
 .col-2 .card {
-  padding: 0.75rem 1.1rem;
-  gap: 0.35rem;
+  padding: 0.55rem 0.85rem !important;
+  gap: 0.25rem !important;
 }
 
 .card.compact .card-title,
 .col-2 .card .card-title {
-  font-size: 1.05rem;
-  margin-bottom: 0.2rem;
+  font-size: 0.95rem !important;
+  margin-bottom: 0.15rem !important;
+  padding-bottom: 0.2rem !important;
 }
 
 .card.compact ul.card-list,
 .col-2 .card ul.card-list {
-  gap: 0.32rem;
-  justify-content: flex-start;
+  gap: 0.22rem !important;
+  justify-content: flex-start !important;
 }
 
 .card.compact ul.card-list li,
 .col-2 .card ul.card-list li {
-  font-size: 0.76rem;
-  line-height: 1.32;
-  padding-left: 1.1rem;
+  font-size: 0.70rem !important;
+  line-height: 1.22 !important;
+  padding-left: 0.9rem !important;
 }
 
 .col-2 .card.compact ul.card-list li {
-  font-size: 0.72rem;
-  line-height: 1.28;
+  font-size: 0.68rem !important;
+  line-height: 1.20 !important;
 }
 
 /* Code Display & Highlight.js Integration */
@@ -1038,6 +1039,11 @@ ul.card-list li strong {
   border-radius: 6px !important;
 }
 
+.solvin-slide .card.compact {
+  padding: 0.55rem 0.85rem !important;
+  gap: 0.25rem !important;
+}
+
 .solvin-slide .card-title {
   color: var(--accent-color, var(--text-color)) !important;
   font-family: 'Quicksand', sans-serif !important;
@@ -1047,9 +1053,22 @@ ul.card-list li strong {
   margin-bottom: 0.5rem;
 }
 
+.solvin-slide .card.compact .card-title {
+  font-size: 0.95rem !important;
+  margin-bottom: 0.15rem !important;
+  padding-bottom: 0.2rem !important;
+}
+
 .solvin-slide .card-list li,
 .solvin-slide ul li {
   color: var(--text-color) !important;
+}
+
+.solvin-slide .card.compact .card-list li,
+.solvin-slide .card.compact ul.card-list li {
+  font-size: 0.70rem !important;
+  line-height: 1.22 !important;
+  padding-left: 0.9rem !important;
 }
 
 .solvin-slide .card-list li strong,
@@ -3442,7 +3461,7 @@ ul.card-list li strong {
 }
 
 /* ==========================================================================
-   Asciinema Player Sol.vin Terminal Integration
+   Asciinema Player Sol.vin Dynamic Terminal Integration
    ========================================================================== */
 .asciinema-window {
   height: 480px !important;
@@ -3451,15 +3470,56 @@ ul.card-list li strong {
   flex-direction: column !important;
 }
 
+.solvin-slide .asciinema-window {
+  border: 1.5px solid var(--border-color) !important;
+  box-shadow: 3.5px 3.5px 0px var(--shadow-color) !important;
+  border-radius: 6px !important;
+}
+
+.solvin-slide .asciinema-window .terminal-header {
+  background-color: var(--bg-window) !important;
+  color: var(--text-color) !important;
+  border-bottom: 1.5px dashed var(--border-color) !important;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.solvin-slide .asciinema-window .terminal-title {
+  font-family: var(--code-font) !important;
+  font-size: 0.75rem !important;
+  color: var(--accent-color, var(--text-color)) !important;
+  letter-spacing: 0.03em;
+}
+
 .asciinema-window .window-controls .code-lang-tag {
   cursor: pointer;
   user-select: none;
   transition: all 0.15s ease-in-out;
 }
 
+.solvin-slide .asciinema-window .window-controls .code-lang-tag {
+  background-color: var(--bg-color, var(--bg-window)) !important;
+  color: var(--accent-color) !important;
+  border: 1px solid var(--border-color) !important;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+}
+
 .asciinema-window .window-controls .code-lang-tag:hover {
   filter: brightness(1.2);
   transform: translateY(-1px);
+}
+
+.solvin-slide .asciinema-window .window-controls .code-lang-tag:hover {
+  border-color: var(--border-active) !important;
+  color: var(--border-active) !important;
 }
 
 .asciinema-window .asciinema-body {
@@ -3468,8 +3528,8 @@ ul.card-list li strong {
   min-height: 0 !important;
   display: flex !important;
   flex-direction: column !important;
-  padding: 0.5rem !important;
-  background: #181818 !important;
+  padding: 0.4rem !important;
+  background: var(--bg-window, #181818) !important;
   box-sizing: border-box !important;
   overflow: hidden !important;
 }
@@ -3491,12 +3551,41 @@ ul.card-list li strong {
   justify-content: center !important;
 }
 
-/* Prevent general .solvin-slide pre styles from clobbering asciinema terminal */
+/* Dynamic Palette Mapping for Asciinema Player & Terminal Colors */
+.solvin-slide .asciinema-player-mount .ap-player,
+.asciinema-player-mount .ap-player {
+  background-color: var(--bg-window) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+
+  /* Terminal Colors dynamically mapped from Sol.vin palette */
+  --term-color-background: var(--bg-window) !important;
+  --term-color-foreground: var(--text-color) !important;
+  --term-color-0: var(--bg-window) !important;
+  --term-color-1: #e11d48 !important; /* High-contrast Red */
+  --term-color-2: var(--accent-secondary, #10b981) !important; /* Palette Green */
+  --term-color-3: #d97706 !important; /* High-contrast Amber/Gold */
+  --term-color-4: var(--border-active, #0284c7) !important; /* Palette Blue */
+  --term-color-5: var(--accent-color, #9333ea) !important; /* Palette Magenta */
+  --term-color-6: var(--border-active, #0891b2) !important; /* Palette Cyan */
+  --term-color-7: var(--text-color, #f8fafc) !important; /* Palette Foreground */
+  --term-color-8: var(--text-dim, #64748b) !important; /* Palette Dim */
+  --term-color-9: #f43f5e !important; /* Bright Red */
+  --term-color-10: var(--accent-secondary, #34d399) !important; /* Bright Green */
+  --term-color-11: #f59e0b !important; /* Bright Amber */
+  --term-color-12: var(--link-color, #38bdf8) !important; /* Bright Blue */
+  --term-color-13: var(--accent-color, #c084fc) !important; /* Bright Magenta */
+  --term-color-14: var(--border-active, #38bdf8) !important; /* Bright Cyan */
+  --term-color-15: var(--text-color, #ffffff) !important; /* Bright White */
+}
+
+/* Asciinema Terminal font scaling and typography */
 .solvin-slide .asciinema-player-mount pre.ap-terminal,
 .asciinema-player-mount pre.ap-terminal {
-  background-color: var(--term-color-background, #272822) !important;
-  color: var(--term-color-foreground, #f8f8f2) !important;
-  font-family: var(--font-mono, Consolas, "JetBrains Mono", monospace) !important;
+  background-color: var(--bg-window) !important;
+  border-color: var(--bg-window) !important;
+  color: var(--text-color) !important;
+  font-family: var(--code-font, Consolas, "JetBrains Mono", monospace) !important;
   font-size: 0.60rem !important;
   line-height: 1.25 !important;
   border: none !important;
@@ -3505,18 +3594,12 @@ ul.card-list li strong {
   padding: 0.25rem 0.5rem !important;
 }
 
-.solvin-slide .asciinema-player-mount .ap-player,
-.asciinema-player-mount .ap-player {
-  background-color: var(--term-color-background, #272822) !important;
-  border-radius: 6px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45) !important;
-}
-
 .asciinema-player-mount .ap-control-bar {
   opacity: 0.85;
   transition: opacity 0.2s ease-in-out;
-  background: rgba(20, 20, 20, 0.95) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: var(--bg-color, rgba(20, 20, 20, 0.95)) !important;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1)) !important;
+  color: var(--text-color) !important;
 }
 
 .asciinema-player-mount:hover .ap-control-bar {

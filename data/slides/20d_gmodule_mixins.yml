@@ -57,15 +57,15 @@ left:
     end
 right:
   type: card
-  title: Why gmodule Beats Raw Modules & Child Nodes
+  title: Why gmodule Beats Raw Modules
   color: cyan
   compact: true
   items:
-    - '<strong>The Raw Module Gap:</strong> Standard Crystal modules inline methods, but Godot is unaware of them—leaving Inspector properties and signals unregistered.'
-    - '<strong>Compile-Time ClassDB Registration:</strong> <code>macro node</code> inspects included <code>gmodule</code> traits via <code>macro finished</code> and flattens properties/signals into ClassDB.'
-    - '<strong>Full Inspector Parity:</strong> Export ranges, defaults, and <code>@[ExportToolButton]</code> actions render in the Godot Inspector as native node properties.'
-    - '<strong>Zero SceneTree Overhead:</strong> Mixins incur zero child node allocations and zero SceneTree traversal cost compared to composition nodes.'
-    - '<strong>Cross-Branch Reuse:</strong> Mix identical combat, interaction, or inventory logic into <code>CharacterBody2D</code>, <code>RigidBody3D</code>, or <code>Area2D</code>.'
+    - '<strong>The Raw Module Gap:</strong> Standard modules inline methods, but cannot register Godot properties or signals.'
+    - '<strong>ClassDB Registration:</strong> <code>macro node</code> inspects <code>gmodule</code> traits and flattens exports into ClassDB.'
+    - '<strong>Full Inspector Parity:</strong> Export ranges, defaults, and <code>@[ExportToolButton]</code> render as native properties.'
+    - '<strong>Zero SceneTree Overhead:</strong> Mixins incur zero child node allocations and zero scene traversal cost.'
+    - '<strong>Cross-Branch Reuse:</strong> Share identical combat logic across <code>CharacterBody2D</code>, <code>RigidBody3D</code>, or <code>Area2D</code>.'
 notes: |
   While Crystal has always supported mixin modules, integrating them into Godot presents a unique architectural challenge: Godot requires classes, properties, and signals to be explicitly registered in its reflection database, ClassDB. If you write a standard Crystal module, its methods compile into the class, but Godot's Inspector has no idea the properties exist, and signals cannot be wired up in the engine!
   To solve this, Lapis introduces the gmodule macro. Inside a gmodule, you declare @[Export] properties with ranges, typed signals, and even interactive @[ExportToolButton] actions. When your node writes 'include Damageable', the compiler introspects all included gmodules and flattens their properties and signals into the node's ClassDB registry entry.
