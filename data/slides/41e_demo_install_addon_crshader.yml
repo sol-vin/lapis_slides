@@ -1,0 +1,40 @@
+---
+id: 41e_demo_install_addon_crshader
+title: 'Demo 3: Ecosystem Addons — Installing CrShader'
+subtitle: Single-Command GDExtension Installation, Manifest Wiring & Shard Binding
+badge: 'LIVE DEMO • PART 3: ADDON ECOSYSTEM'
+badge_color: green
+palette: retro_future
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — lapis install addon
+  code: |
+    # Step 1: Install CrShader with shard dependency & type bindings
+    $ lapis install addon github:sol-vin/crshader --shard --bind
+
+    [Addon] Resolving 'github:sol-vin/crshader' from GitHub Releases...
+    [Addon] Extracted to addons/crshader/
+            ├── crshader.gdextension
+            ├── plugin.cfg & plugin.gd
+            └── bin/crshader.dll
+    [Config] Auto-enabled 'res://addons/crshader/plugin.cfg' in project.godot
+    [Shard]  Added dependency to shard.yml:
+             crshader:
+               github: sol-vin/crshader
+    [Bind]   Generated typed Crystal API: src/bindings/crshader.cr
+    [Sync]   Synchronized bridge & runtime DLLs across bin/
+    ✓ CrShader v0.2.0 installed & ready with full Crystal autocomplete!
+right:
+  type: card
+  title: Addon Management & Shard Integration
+  color: green
+  items:
+    - '<strong>Zero-Friction GDExtension Wiring:</strong> <code>lapis install addon</code> fetches release archives, extracts assets, and validates extension manifests automatically.'
+    - '<strong>Headless project.godot Configuration:</strong> Enables the plugin in <code>project.godot</code> programmatically—no clicking through editor menus required.'
+    - '<strong>Shard Dependency Linking (<code>--shard</code>):</strong> Injects the shard declaration into <code>shard.yml</code>, allowing Crystal code to import the addon directly.'
+    - '<strong>Automatic Typed Bindings (<code>--bind</code>):</strong> Analyzes the addon''s GDExtension API and synthesizes type-safe Crystal wrappers with full IDE autocomplete.'
+    - '<strong>Multi-Addon ClassDB Safety:</strong> Validates extension naming and class prefixes, preventing ClassDB symbol collisions across community plugins.'
+notes: |
+  In Part 3 of our demo, we demonstrate the power of the Lapis ecosystem. Installing third-party GDExtension plugins in traditional Godot setups involves downloading zips, manually placing files into addons/, editing project.godot, and configuring build scripts. With Lapis, it's a single turnkey command: lapis install addon github:sol-vin/crshader with --shard and --bind. Lapis downloads the release binary, unpacks the GDExtension manifest, enables the plugin in project.godot, injects the dependency into shard.yml, and automatically generates typed Crystal wrapper classes in src/bindings/. In seconds, our game has access to real-time procedural shader synthesis with full compiler type checking.

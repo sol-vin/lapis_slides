@@ -12,6 +12,7 @@ left:
   title: context_exec_builder.rb
   tag: Ruby
   lang: ruby
+  font_size: '0.78rem'
   code: |
     # ❌ Anti-Pattern: String eval is unsafe, unhygienic & slow
     # eval("player.#{action}(#{value})") # Injection risk, syntax errors!

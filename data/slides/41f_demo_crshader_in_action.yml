@@ -1,0 +1,61 @@
+---
+id: 41f_demo_crshader_in_action
+title: 'Demo 4: CrShader in Action — Live Procedural FX'
+subtitle: Dynamic Shader Synthesis, Real-Time GPU Uniform Streaming & Reactive Gameplay FX
+badge: 'LIVE DEMO • PART 4: SHADER SYNTHESIS'
+badge_color: magenta
+palette: synthwave
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: src/nodes/energy_shield.cr — Procedural Visuals
+  tag: Crystal
+  lang: crystal
+  font_size: '0.64rem'
+  code: |
+    require "crshader"
+
+    # Procedural energy shield reacting to combat gameplay state
+    node EnergyShield < Sprite2D do
+      include Damageable # Mixed-in health, defense & signals!
+
+      @[Export(range: 0.1..5.0, step: 0.1)]
+      property pulse_speed : Float32 = 2.0_f32
+
+      @[Export]
+      property shield_tint : Godot::Color = Godot::Color.new(0.2, 0.8, 1.0, 0.85)
+
+      # 1. Synthesize live procedural shader material via CrShader:
+      onready shield_mat : CrShader::Material = CrShader.material do |m|
+        m.shader = "res://addons/crshader/shaders/plasma_shield.gdshader"
+        m.set_uniform("tint", shield_tint)
+        m.set_uniform("distortion", 1.8_f32)
+      end
+
+      # 2. Stream gameplay parameters directly into GPU uniforms:
+      def _process(delta : Float64) : Void
+        time = Godot::Time.get_ticks_msec / 1000.0
+        pulse = Math.sin(time * pulse_speed).to_f32
+
+        # Direct GPU uniform sync without dictionary boxing:
+        shield_mat.set_uniform("pulse_intensity", pulse)
+        shield_mat.set_uniform("damage_ratio", 1.0_f32 - (health.to_f32 / max_health))
+      end
+    end
+right:
+  type: card
+  title: Reactive Shaders & GPU Ergonomics
+  color: magenta
+  items:
+    - '<strong>Direct Crystal-to-GPU Uniforms:</strong> <code>shield_mat.set_uniform</code> writes float/vector values directly into shader uniform buffers without dictionary boxing.'
+    - '<strong>Dynamic Material Synthesis:</strong> <code>CrShader.material</code> compiles and constructs GPU materials on the fly with declarative Crystal blocks.'
+    - '<strong>Reactive Gameplay FX:</strong> Player health changes from <code>Damageable</code> immediately drive shield color distortion and glitch pulses in real time.'
+    - '<strong>In-Editor Viewport Reactivity:</strong> Level designers can scrub <code>pulse_speed</code> and <code>shield_tint</code> in the Inspector to preview visual changes instantly.'
+    - '<strong>Zero Heap Allocation Per Frame:</strong> Uniform dispatches use direct native GDExtension pointers, ensuring zero GC pressure in <code>_process</code>.'
+notes: |
+  In Part 4, we showcase what CrShader can do inside our game.
+  We create an EnergyShield node that mixes in our Damageable trait. Using CrShader.material, we synthesize an animated plasma shield material right in Crystal.
+  Look at _process: every single frame, we calculate a pulse oscillation and a damage ratio, and we push them straight into the GPU shader uniforms—with zero dictionary allocations and zero string hashing.
+  When the player takes damage, the shield visibly distorts, reddens, and pulses more rapidly.
+  Because this runs in real time in Godot, level designers can adjust the pulse_speed slider in the Inspector dock and see the shader respond immediately in the editor viewport!

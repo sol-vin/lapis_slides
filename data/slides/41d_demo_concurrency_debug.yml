@@ -1,8 +1,8 @@
 ---
 id: 41d_demo_concurrency_debug
-title: 'Demo 3: Concurrency & Debugging'
+title: 'Demo 6: Concurrency & Debugging'
 subtitle: Background Workers, on_main_thread, Zero-Leak Proof & radare2
-badge: 'LIVE DEMO • PART 3: SYSTEMS RIGOR'
+badge: 'LIVE DEMO • PART 6: SYSTEMS RIGOR'
 badge_color: amber
 palette: game_station_2
 layout: two-column-layout

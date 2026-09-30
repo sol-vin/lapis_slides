@@ -90,6 +90,9 @@ slides:
 - 41_live_demo_roadmap
 - 41b_demo_scaffold_hot_reload
 - 41c_demo_gameplay_dsl
+- 41e_demo_install_addon_crshader
+- 41f_demo_crshader_in_action
+- 41g_demo_compile_and_package
 - 41d_demo_concurrency_debug
 - 43_future_roadmap
 - 44_thanks_closing

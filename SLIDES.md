@@ -1,6 +1,6 @@
-# Lapis for Crystal — Complete 88-Slide Presentation Deck Reference
+# Lapis for Crystal — Complete 91-Slide Presentation Deck Reference
 
-Welcome to the definitive reference document for the 88-slide presentation deck: **Lapis for Crystal: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+**.
+Welcome to the definitive reference document for the 91-slide presentation deck: **Lapis for Crystal: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+**.
 
 This document outlines each slide's exact theme palette, architectural category, on-screen card structures, code examples, and full presenter speaking script.
 
@@ -3019,64 +3019,73 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Sol.vin Theme Palette**: `spaces_10` (Spaces 10) [BG: `#1f1f1f` | Window: `#2c2c2c` | Text: `#f3f3f3` | Accent: `#26b5ff`]
 - **Category Badge**: `LIVE DEMONSTRATION • ROADMAP`
 - **Title**: Live DEMO: End-to-End Workflow Roadmap
-- **Subtitle**: Step-by-Step Hands-On Demonstration of the Lapis CLI, In-Editor Tooling, Hot Reloading, and Test Automation
+- **Subtitle**: Hands-On Journey from Zero-Config Scaffolding to Addon Integration, Shader FX & Release Packaging
 - **Demo Timeline Stages**:
-  - **STEP 1 • 00:00: Scaffold & Doctor**
+  - **STEP 1 • 00:00: Scaffold & Hot-Reload**
     - *Command*:
       ```bash
-      $ lapis init live_game
-      $ cd live_game && lapis doctor
+      $ lapis init dungeon_crawl
+      $ lapis editor
+      # Press F5 in Godot:
+      # Shadow reload in 0.4s!
       ```
-    - Scaffolds shard.yml, manifests, & scenes
-    - Verifies Crystal, Godot, & radare2 toolchain
-    - Scaffolds self-hosted Crystal editor plugin
-    - Compiles C++ GDExtension bridge DLL
-  - **STEP 2 • 02:00: Author Player Node**
+    - Zero-config project bootstrapping
+    - Manifests, bridge DLL & default scenes
+    - Windows timestamped shadow loading
+    - Instant F5 loop without restarting
+  - **STEP 2 • 02:00: Gameplay & Traits**
     - *Code*:
       ```crystal
       node Player < CharacterBody3D do
+        include Damageable
         @[Export]
         property speed : Float32 = 8.0_f32
-      
         signal coin_collected(n : Int32)
-      
-        def _physics_process(delta : Float64) : Void
-          self.velocity = Godot::Vector3.new(0, 0, -speed)
-          move_and_slide
-        end
       end
       ```
-    - Zen ergonomics with node DSL
-    - Automatic ClassDB registration
-    - @[Export] sliders in Godot Inspector
-    - Type-safe engine signals & async await
-  - **STEP 3 • 05:00: F5 Shadow Hot-Reload**
+    - Elegant Ruby-like node DSL
+    - Modular gmodule Damageable mixin
+    - Live Inspector sliders & UI hints
+    - Type-safe engine signals & await
+  - **STEP 3 • 04:30: Install CrShader Addon**
     - *Command*:
       ```bash
-      $ lapis editor
-      # Press F5 in Godot:
-      # Compiles -> bin/game.dll
-      # Loads -> shadow DLL copy
+      $ lapis install addon \
+        github:sol-vin/crshader \
+        --shard --bind
       ```
-    - Self-hosted plugin handles build hook
-    - Timestamped shadow copy avoids file locks
-    - Hot reloads code without restarting Godot
-    - Live Inspector value tweaking during play
-  - **STEP 4 • 08:00: Quality Gate & r2 Debug**
+    - Fetches & stages GDExtension plugin
+    - Auto-enables plugin in project.godot
+    - Links shard.yml Crystal dependency
+    - Generates typed bindings in src/bindings/
+  - **STEP 4 • 07:00: Live Shaders & FX**
+    - *Code*:
+      ```crystal
+      onready mat = CrShader.material do |m|
+        m.shader = "res://.../plasma.gdshader"
+        m.set_uniform("tint", shield_color)
+      end
+      # Direct GPU uniform sync in _process!
+      ```
+    - Procedural shader material synthesis
+    - Direct Crystal-to-GPU uniform sync
+    - Live shield distortion & pulse effects
+    - Real-time in-editor @[Tool] feedback
+  - **STEP 5 • 09:30: Compile & Package**
     - *Command*:
       ```bash
-      $ lapis test --tui
-      # ✔ Zero Leaks: ΔObjects = 0
-      $ lapis debug
-      # radare2: dc, pdf, rw 0x7ffd...
+      $ lapis build --release -O3
+      $ lapis package game -r \
+        -n DungeonCrawl
+      # -> dist/DungeonCrawl-win-x64.zip
       ```
-    - Double-buffered ANSI TUI test dashboard
-    - Headless in-editor @tool tests
-    - Mathematical zero-leak verification
-    - Disassemble & inspect native registers
-- **Demonstration Goal**: 🎯 Live Demo Mission: From an empty directory to a playable 3D Godot game with hot reloading, visual inspector controls, and zero-leak test suites in under 10 minutes.
+    - LLVM link-time optimization & symbol strip
+    - Bundles PCK, runtime DLLs & all addons
+    - Standalone zero-dependency executable
+    - Generates cryptographic SHA256 checksums
+- **Demonstration Goal**: 🎯 Live Demo Mission: From an empty directory to a feature-rich, shader-powered 3D Godot game with hot reloading, ecosystem addons, and a standalone release package in under 12 minutes.
 - **Presenter Script**:
-  > *"Now let's switch over to our live demonstration. In Step 1, we start from a clean terminal, running lapis init to scaffold our project and lapis doctor to verify all toolchain dependencies. In Step 2, we author a Player node in Crystal using our concise DSL, declaring an exported speed property, an engine signal, and 3D physics movement. In Step 3, we open Godot. Our self-hosted Crystal editor plugin hooks into F5. We press F5, and thanks to Windows shadow DLL loading, the game recompiles and hot reloads in milliseconds while we tweak the speed slider in the Inspector. Finally in Step 4, we run lapis test --tui to watch our automated specs and zero memory leak verification execute live, followed by launching radare2 to demonstrate native debugging and hardware watchpoints."*
+  > *"Welcome to our comprehensive live demonstration. We will take you on a complete hands-on journey from a blank terminal all the way to a finished, packaged game: In Step 1, we scaffold a brand new project and demonstrate Windows shadow DLL hot-reloading on F5 without ever locking binaries. In Step 2, we author gameplay with our declarative node DSL, mixing in reusable gmodule traits and reactive Inspector sliders. In Step 3, we demonstrate the Lapis addon ecosystem by installing the CrShader visual effects plugin with a single command—automatically wiring GDExtension manifests, enabling the plugin in project.godot, and generating typed Crystal bindings. In Step 4, we put CrShader to work: synthesizing a procedural plasma shield material and streaming Crystal gameplay data directly into GPU shader uniforms every frame. And in Step 5, we run an optimized release build and package the complete standalone playable game into a self-contained release archive ready to ship to Steam or itch.io!"*
 
 ---
 ### Slide 84: Demo 1: Scaffolding & Hot Reload
@@ -3117,19 +3126,19 @@ This document outlines each slide's exact theme palette, architectural category,
   ```crystal
   # src/nodes/player_controller.cr
   node PlayerController < CharacterBody3D do
+    include Damageable # Reusable health, defense & signals!
+  
     @[Export(range: 1.0_f32..25.0_f32, step: 0.5_f32)]
     property speed : Float32 = 8.0_f32
   
     # Strongly typed onready caching with bare ~:
     onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)
   
-    signal health_changed(current : Int32, max : Int32)
-  
     def _ready : Void
       # Direct typed child lookup via ~Class:
       hp_bar = ~ProgressBar
   
-      # Type-safe signal connection:
+      # Type-safe signal connection inherited from Damageable:
       health_changed.connect do |cur, max|
         hp_bar.value = (cur.to_f / max) * 100.0
       end
@@ -3145,10 +3154,123 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. For child nodes, we use our clean unary tilde (~) ergonomics: 'onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)' caches the camera automatically, while '~ProgressBar' looks up the UI node with zero boilerplate. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database."*
 
 ---
-### Slide 86: Demo 3: Concurrency & Debugging
+### Slide 86: Demo 3: Ecosystem Addons — Installing CrShader
+- **Sol.vin Theme Palette**: `warm_paper` (Warm Paper (Default)) [BG: `#faf6ee` | Window: `#faf6ee` | Text: `#1c1c1e` | Accent: `#1c1c1e`]
+- **Category Badge**: `LIVE DEMO • PART 3: ADDON ECOSYSTEM`
+- **Title**: Demo 3: Ecosystem Addons — Installing CrShader
+- **Subtitle**: Single-Command GDExtension Installation, Manifest Wiring & Shard Binding
+- **Terminal Command (`Terminal — lapis install addon`)**:
+  ```bash
+  # Step 1: Install CrShader with shard dependency & type bindings
+  $ lapis install addon github:sol-vin/crshader --shard --bind
+  
+  [Addon] Resolving 'github:sol-vin/crshader' from GitHub Releases...
+  [Addon] Extracted to addons/crshader/
+          ├── crshader.gdextension
+          ├── plugin.cfg & plugin.gd
+          └── bin/crshader.dll
+  [Config] Auto-enabled 'res://addons/crshader/plugin.cfg' in project.godot
+  [Shard]  Added dependency to shard.yml:
+           crshader:
+             github: sol-vin/crshader
+  [Bind]   Generated typed Crystal API: src/bindings/crshader.cr
+  [Sync]   Synchronized bridge & runtime DLLs across bin/
+  ✓ CrShader v0.2.0 installed & ready with full Crystal autocomplete!
+  ```
+- **Addon Management & Shard Integration**:
+  - Zero-Friction GDExtension Wiring: lapis install addon fetches release archives, extracts assets, and validates extension manifests automatically.
+  - Headless project.godot Configuration: Enables the plugin in project.godot programmatically—no clicking through editor menus required.
+  - Shard Dependency Linking (--shard): Injects the shard declaration into shard.yml, allowing Crystal code to import the addon directly.
+  - Automatic Typed Bindings (--bind): Analyzes the addon's GDExtension API and synthesizes type-safe Crystal wrappers with full IDE autocomplete.
+  - Multi-Addon ClassDB Safety: Validates extension naming and class prefixes, preventing ClassDB symbol collisions across community plugins.
+- **Presenter Script**:
+  > *"In Part 3 of our demo, we demonstrate the power of the Lapis ecosystem. Installing third-party GDExtension plugins in traditional Godot setups involves downloading zips, manually placing files into addons/, editing project.godot, and configuring build scripts. With Lapis, it's a single turnkey command: lapis install addon github:sol-vin/crshader with --shard and --bind. Lapis downloads the release binary, unpacks the GDExtension manifest, enables the plugin in project.godot, injects the dependency into shard.yml, and automatically generates typed Crystal wrapper classes in src/bindings/. In seconds, our game has access to real-time procedural shader synthesis with full compiler type checking."*
+
+---
+### Slide 87: Demo 4: CrShader in Action — Live Procedural FX
+- **Sol.vin Theme Palette**: `warm_paper` (Warm Paper (Default)) [BG: `#faf6ee` | Window: `#faf6ee` | Text: `#1c1c1e` | Accent: `#1c1c1e`]
+- **Category Badge**: `LIVE DEMO • PART 4: SHADER SYNTHESIS`
+- **Title**: Demo 4: CrShader in Action — Live Procedural FX
+- **Subtitle**: Dynamic Shader Synthesis, Real-Time GPU Uniform Streaming & Reactive Gameplay FX
+- **Code Example (`src/nodes/energy_shield.cr — Procedural Visuals`)**:
+  ```crystal
+  require "crshader"
+  
+  # Procedural energy shield reacting to combat gameplay state
+  node EnergyShield < Sprite2D do
+    include Damageable # Mixed-in health, defense & signals!
+  
+    @[Export(range: 0.1..5.0, step: 0.1)]
+    property pulse_speed : Float32 = 2.0_f32
+  
+    @[Export]
+    property shield_tint : Godot::Color = Godot::Color.new(0.2, 0.8, 1.0, 0.85)
+  
+    # 1. Synthesize live procedural shader material via CrShader:
+    onready shield_mat : CrShader::Material = CrShader.material do |m|
+      m.shader = "res://addons/crshader/shaders/plasma_shield.gdshader"
+      m.set_uniform("tint", shield_tint)
+      m.set_uniform("distortion", 1.8_f32)
+    end
+  
+    # 2. Stream gameplay parameters directly into GPU uniforms:
+    def _process(delta : Float64) : Void
+      time = Godot::Time.get_ticks_msec / 1000.0
+      pulse = Math.sin(time * pulse_speed).to_f32
+  
+      # Direct GPU uniform sync without dictionary boxing:
+      shield_mat.set_uniform("pulse_intensity", pulse)
+      shield_mat.set_uniform("damage_ratio", 1.0_f32 - (health.to_f32 / max_health))
+    end
+  end
+  ```
+- **Reactive Shaders & GPU Ergonomics**:
+  - Direct Crystal-to-GPU Uniforms: shield_mat.set_uniform writes float/vector values directly into shader uniform buffers without dictionary boxing.
+  - Dynamic Material Synthesis: CrShader.material compiles and constructs GPU materials on the fly with declarative Crystal blocks.
+  - Reactive Gameplay FX: Player health changes from Damageable immediately drive shield color distortion and glitch pulses in real time.
+  - In-Editor Viewport Reactivity: Level designers can scrub pulse_speed and shield_tint in the Inspector to preview visual changes instantly.
+  - Zero Heap Allocation Per Frame: Uniform dispatches use direct native GDExtension pointers, ensuring zero GC pressure in _process.
+- **Presenter Script**:
+  > *"In Part 4, we showcase what CrShader can do inside our game. We create an EnergyShield node that mixes in our Damageable trait. Using CrShader.material, we synthesize an animated plasma shield material right in Crystal. Look at _process: every single frame, we calculate a pulse oscillation and a damage ratio, and we push them straight into the GPU shader uniforms—with zero dictionary allocations and zero string hashing. When the player takes damage, the shield visibly distorts, reddens, and pulses more rapidly. Because this runs in real time in Godot, level designers can adjust the pulse_speed slider in the Inspector dock and see the shader respond immediately in the editor viewport!"*
+
+---
+### Slide 88: Demo 5: Release Build & Distribution Packaging
+- **Sol.vin Theme Palette**: `spaces_xp_royale` (Spaces XP Royale) [BG: `#141820` | Window: `#1f2430` | Text: `#f0f4f9` | Accent: `#4090ff`]
+- **Category Badge**: `LIVE DEMO • PART 5: PRODUCTION SHIPPING`
+- **Title**: Demo 5: Release Build & Distribution Packaging
+- **Subtitle**: High-Performance Release Compilation, Dead-Code Stripping & Turnkey Distribution
+- **Terminal Command (`Terminal — Release Compilation & Packaging`)**:
+  ```bash
+  # Step 1: Optimized native release build with LLVM LTO
+  $ lapis build --release --opt=3
+  [Lapis] Compiling release binaries with -O3 -s...
+  [Lapis] Stripping debug symbols & eliding trace logging
+  ✓ Compiled bin/game.dll (2.1 MB) & bin/game.exe (3.4 MB)
+  
+  # Step 2: Package standalone release distribution
+  $ lapis package game --release -n DungeonCrawl
+  [Package] Bundling Godot PCK archive: dist/DungeonCrawl.pck
+  [Package] Staging runtime libraries: gc.dll, pcre2-8.dll, libgodot.dll
+  [Package] Bundling GDExtension bridge & crshader addon
+  [Package] Creating standalone archive: dist/DungeonCrawl-windows-x64.zip
+  [Package] Computing cryptographic SHA256 hashes...
+  ✓ Created dist/DungeonCrawl-windows-x64.zip (48.2 MB)
+  ✓ Ready to ship to Steam, itch.io, or direct download!
+  ```
+- **Turnkey Shipping Invariants**:
+  - LLVM -O3 Optimization: Full link-time optimization, function inlining, and aggressive dead-code elimination produce lean, ultra-fast binaries.
+  - Automated PCK & Asset Bundling: Godot scenes, shader materials, and texture assets are packed into an optimized standalone .pck file.
+  - Self-Contained Portability: Bundles the executable runner alongside libgodot.dll, Boehm GC, PCRE2, and all installed addons (crshader).
+  - Zero-Dependency Client Execution: The exported archive extracts and runs cleanly on any clean end-user PC without Godot, Crystal, or build tools.
+  - Automated Checksums: Generates cryptographic SHA256SUMS.txt automatically for release verification and CI deployment.
+- **Presenter Script**:
+  > *"In the final part of our demo, we take our finished game and prepare it for production shipping. First, we run lapis build with --release --opt=3. The Crystal compiler invokes LLVM with aggressive optimizations, strips symbols, and produces lean binaries with zero debug bloat. Second, we run lapis package game --release. In a single command, Lapis gathers all scene files and assets into a Godot PCK archive, stages the Crystal runtime libraries, bundles the official GDExtension bridge and our CrShader addon, and zips everything into a self-contained release package. The resulting archive requires zero external dependencies—it runs immediately on any clean PC and is ready for publishing to Steam or itch.io!"*
+
+---
+### Slide 89: Demo 6: Concurrency & Debugging
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
-- **Category Badge**: `LIVE DEMO • PART 3: SYSTEMS RIGOR`
-- **Title**: Demo 3: Concurrency & Debugging
+- **Category Badge**: `LIVE DEMO • PART 6: SYSTEMS RIGOR`
+- **Title**: Demo 6: Concurrency & Debugging
 - **Subtitle**: Background Workers, on_main_thread, Zero-Leak Proof & radare2
 - **Code Example (`procedural_streamer_and_debug.cr`)**:
   ```crystal
@@ -3180,7 +3302,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In Part 3 of our demo, we demonstrate production systems rigor. First, we launch a background OS thread that generates complex procedural geometry off-thread. Because of Scope::TreeOnly, this worker can assemble large detached orphan trees across CPU cores with zero mutex contention. When ready, Godot.on_main_thread queues the block to be drained deterministically at the next frame boundary, mounting the room with zero stutter. Next, we run our test suite: Lapis::Test.assert_no_leak exercises 100 spawn cycles, queries Godot's native Performance monitors and Crystal GC, and proves zero object leaks mathematically. Finally, if any crash or bug ever occurs, lapis run -d drops us directly into radare2 for native machine code disassembly and register forensics."*
 
 ---
-### Slide 87: The Future of Native Scripting in Godot
+### Slide 90: The Future of Native Scripting in Godot
 - **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `CONCLUSION • LOOKING AHEAD`
 - **Title**: The Future of Native Scripting in Godot
@@ -3199,7 +3321,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Thank you all for listening! We believe Lapis represents the future of native scripting in Godot: the raw machine speed and type safety of C++ combined with the joy, clarity, and ergonomics of Ruby. The project is open source and ready for you to try today. Check out our repository on GitHub, join our Discord, and start building high-performance Godot games in Crystal!"*
 
 ---
-### Slide 88: THANKS FOR WATCHING!
+### Slide 91: THANKS FOR WATCHING!
 - **Sol.vin Theme Palette**: `m64` (M64) [BG: `#232328` | Window: `#32323a` | Text: `#d0d0d8` | Accent: `#f0c018`]
 - **Category Badge**: `PROJECT WRAP-UP • THANK YOU`
 - **Title**: THANKS FOR WATCHING!

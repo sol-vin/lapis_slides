@@ -11,7 +11,7 @@ module LapisSlides
         str << "        <div class=\"slide-body demo-roadmap-body\" style=\"display: flex; flex-direction: column; gap: 0.65rem; flex: 1;\">\n"
 
         if steps
-          str << "          <div class=\"demo-steps-grid\">\n"
+          str << "          <div class=\"demo-steps-grid\" style=\"grid-template-columns: repeat(#{steps.size}, 1fr) !important;\">\n"
           steps.each do |s|
             phase = s["phase"]?.try(&.as_s) || ""
             title = s["title"]?.try(&.as_s) || ""

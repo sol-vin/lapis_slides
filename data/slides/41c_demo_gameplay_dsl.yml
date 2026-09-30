@@ -16,19 +16,19 @@ left:
   code: |
     # src/nodes/player_controller.cr
     node PlayerController < CharacterBody3D do
+      include Damageable # Reusable health, defense & signals!
+
       @[Export(range: 1.0_f32..25.0_f32, step: 0.5_f32)]
       property speed : Float32 = 8.0_f32
 
       # Strongly typed onready caching with bare ~:
       onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)
 
-      signal health_changed(current : Int32, max : Int32)
-
       def _ready : Void
         # Direct typed child lookup via ~Class:
         hp_bar = ~ProgressBar
 
-        # Type-safe signal connection:
+        # Type-safe signal connection inherited from Damageable:
         health_changed.connect do |cur, max|
           hp_bar.value = (cur.to_f / max) * 100.0
         end

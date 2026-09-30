@@ -1,0 +1,43 @@
+---
+id: 41g_demo_compile_and_package
+title: 'Demo 5: Release Build & Distribution Packaging'
+subtitle: High-Performance Release Compilation, Dead-Code Stripping & Turnkey Distribution
+badge: 'LIVE DEMO • PART 5: PRODUCTION SHIPPING'
+badge_color: amber
+palette: spaces_xp_royale
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — Release Compilation & Packaging
+  code: |
+    # Step 1: Optimized native release build with LLVM LTO
+    $ lapis build --release --opt=3
+    [Lapis] Compiling release binaries with -O3 -s...
+    [Lapis] Stripping debug symbols & eliding trace logging
+    ✓ Compiled bin/game.dll (2.1 MB) & bin/game.exe (3.4 MB)
+
+    # Step 2: Package standalone release distribution
+    $ lapis package game --release -n DungeonCrawl
+    [Package] Bundling Godot PCK archive: dist/DungeonCrawl.pck
+    [Package] Staging runtime libraries: gc.dll, pcre2-8.dll, libgodot.dll
+    [Package] Bundling GDExtension bridge & crshader addon
+    [Package] Creating standalone archive: dist/DungeonCrawl-windows-x64.zip
+    [Package] Computing cryptographic SHA256 hashes...
+    ✓ Created dist/DungeonCrawl-windows-x64.zip (48.2 MB)
+    ✓ Ready to ship to Steam, itch.io, or direct download!
+right:
+  type: card
+  title: Turnkey Shipping Invariants
+  color: amber
+  items:
+    - '<strong>LLVM -O3 Optimization:</strong> Full link-time optimization, function inlining, and aggressive dead-code elimination produce lean, ultra-fast binaries.'
+    - '<strong>Automated PCK & Asset Bundling:</strong> Godot scenes, shader materials, and texture assets are packed into an optimized standalone <code>.pck</code> file.'
+    - '<strong>Self-Contained Portability:</strong> Bundles the executable runner alongside <code>libgodot.dll</code>, Boehm GC, PCRE2, and all installed addons (<code>crshader</code>).'
+    - '<strong>Zero-Dependency Client Execution:</strong> The exported archive extracts and runs cleanly on any clean end-user PC without Godot, Crystal, or build tools.'
+    - '<strong>Automated Checksums:</strong> Generates cryptographic <code>SHA256SUMS.txt</code> automatically for release verification and CI deployment.'
+notes: |
+  In the final part of our demo, we take our finished game and prepare it for production shipping.
+  First, we run lapis build with --release --opt=3. The Crystal compiler invokes LLVM with aggressive optimizations, strips symbols, and produces lean binaries with zero debug bloat.
+  Second, we run lapis package game --release. In a single command, Lapis gathers all scene files and assets into a Godot PCK archive, stages the Crystal runtime libraries, bundles the official GDExtension bridge and our CrShader addon, and zips everything into a self-contained release package.
+  The resulting archive requires zero external dependencies—it runs immediately on any clean PC and is ready for publishing to Steam or itch.io!
