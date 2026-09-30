@@ -1,5 +1,6 @@
 require "./layout_renderer"
 require "./hero_layout"
+require "./intro_layout"
 require "./code_comparison_layout"
 require "./two_column_layout"
 require "./three_column_layout"
@@ -16,7 +17,8 @@ require "./closing_layout"
 module LapisSlides
   class LayoutRouter
     @@renderers = {
-      "hero-layout"                => HeroLayout.new.as(LayoutRenderer),
+      "hero-layout"                => IntroLayout.new.as(LayoutRenderer),
+      "intro-layout"               => IntroLayout.new.as(LayoutRenderer),
       "code-comparison-layout"     => CodeComparisonLayout.new.as(LayoutRenderer),
       "antipattern-compare-layout" => CodeComparisonLayout.new.as(LayoutRenderer),
       "two-column-layout"          => TwoColumnLayout.new.as(LayoutRenderer),

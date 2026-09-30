@@ -7,7 +7,7 @@ module LapisSlides
       hero_cube = "<div class=\"hero-cube\" data-size=\"#{cube_size}\" title=\"Spinning 3D Isometric Cube • Click or Drag to Spin!\"></div>"
 
       body = String.build do |str|
-        str << render_slide_header(slide, hero_cube) << "\n"
+        str << render_slide_header(slide) << "\n"
         str << "        <div class=\"slide-body\" style=\"margin-top: 1rem;\">\n"
 
         if cards = slide.raw["cards"]?.try(&.as_a)

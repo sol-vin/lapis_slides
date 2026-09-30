@@ -181,54 +181,83 @@
         <div class="palette-corner-badge" title="Theme: Spaces XP Royale">
           <span class="palette-corner-dot"></span> PALETTE: Spaces XP Royale
         </div>
-        <div class="slide-header" style="border: none; padding-bottom: 0; display: flex; align-items: center; justify-content: space-between;">
+        <div class="hero-cube intro-cube" data-size="420" title="Spinning 3D Isometric Cube • Click or Drag to Spin!"></div>
+        <div class="intro-content" style="position: relative; z-index: 5; display: flex; flex-direction: column; gap: 0.75rem; flex: 1;">
+        <div class="slide-header" style="">
           <div>
             <span class="badge-pill cyan">HIGH-PERFORMANCE GAMEPLAY TOOLCHAIN</span>
             <h2 class="slide-title">Lapis for Crystal</h2>
             <p class="slide-subtitle">Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</p>
           </div>
-          <div class="hero-cube" data-size="72" title="Spinning 3D Isometric Cube • Click or Drag to Spin!"></div>
         </div>
-        <div class="slide-body" style="margin-top: 1rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>LLVM Native Speed</span>
+          <div class="intro-cards-grid">
+            <div class="intro-card cyan">
+              <div class="intro-card-header">
+                <div class="intro-card-title-wrap">
+                  <span class="intro-icon"><span class="emoji-tint">⚡</span></span>
+                  <span class="intro-title">LLVM Native Speed</span>
+                </div>
+                <span class="badge-pill cyan" style="font-size: 0.58rem; margin: 0;">BARE-METAL</span>
+              </div>
+              <div class="intro-tagline">
+                <code>AOT Compiled • Direct Memory • Zero GC Hitching</code>
+              </div>
+              <div class="intro-desc">
+                Bare-metal C-speed performance with predictable microsecond physics cycles and zero VM overhead.
+              </div>
             </div>
-            <ul class="card-list">
-              <li><strong>Compiled Ahead-of-Time:</strong> No bytecode VM interpreter overhead.</li>
-              <li><strong>Zero GC Hitching:</strong> Predictable, low-latency physics cycles.</li>
-              <li><strong>C-Level Throughput:</strong> Direct memory access and optimized math.</li>
-            </ul>
+            <div class="intro-card purple">
+              <div class="intro-card-header">
+                <div class="intro-card-title-wrap">
+                  <span class="intro-icon"><span class="emoji-tint">💎</span></span>
+                  <span class="intro-title">Zen Ergonomics</span>
+                </div>
+                <span class="badge-pill purple" style="font-size: 0.58rem; margin: 0;">RUBY-LIKE JOY</span>
+              </div>
+              <div class="intro-tagline">
+                <code>Static Nil Safety • Expressive DSL • Zero Ceremony</code>
+              </div>
+              <div class="intro-desc">
+                Elegant syntax with declarative node macros, typed signals, and compile-time null safety.
+              </div>
+            </div>
+            <div class="intro-card cyan">
+              <div class="intro-card-header">
+                <div class="intro-card-title-wrap">
+                  <span class="intro-icon"><span class="emoji-tint">🎮</span></span>
+                  <span class="intro-title">First-Class Editor</span>
+                </div>
+                <span class="badge-pill cyan" style="font-size: 0.58rem; margin: 0;">SCRIPT PARITY</span>
+              </div>
+              <div class="intro-tagline">
+                <code>CodeEdit Tokenizer • Gutter Breakpoints • Radare2</code>
+              </div>
+              <div class="intro-desc">
+                Seamless Godot integration with live syntax highlighting and interactive native debugger forensics.
+              </div>
+            </div>
+            <div class="intro-card amber">
+              <div class="intro-card-header">
+                <div class="intro-card-title-wrap">
+                  <span class="intro-icon"><span class="emoji-tint">🛠️</span></span>
+                  <span class="intro-title">Unified Toolchain</span>
+                </div>
+                <span class="badge-pill amber" style="font-size: 0.58rem; margin: 0;">DUAL MODES</span>
+              </div>
+              <div class="intro-tagline">
+                <code>Lapis CLI • Dual Runtimes • In-Editor &amp; Standalone</code>
+              </div>
+              <div class="intro-desc">
+                Develop with instant hot reload in the editor, or ship lean, ultra-fast standalone binaries.
+              </div>
+            </div>
           </div>
-          <div class="card purple col">
-            <div class="card-title purple">
-              <span>Zen Ergonomics</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Expressive Syntax:</strong> Blocks, closures, and declarative DSLs.</li>
-              <li><strong>Static Nil Safety:</strong> Compile-time null pointer elimination.</li>
-              <li><strong>Clean Node DSL:</strong> Eliminates 70%+ of GDExtension boilerplate.</li>
-            </ul>
+          <div class="intro-quickstart-bar">
+            <span class="intro-quickstart-label">🚀 Quickstart:</span>
+            <code class="intro-quickstart-code">lapis init my_game &amp;&amp; cd my_game &amp;&amp; lapis run</code>
           </div>
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>First-Class Editor</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Script Parity:</strong> Attach <code>.cr</code> files via Godot Editor UI.</li>
-              <li><strong>Built-In Highlighter:</strong> Pure Crystal tokenizer in CodeEdit.</li>
-              <li><strong>In-Editor r2:</strong> Gutter breakpoints & live radare2 diagnostics.</li>
-            </ul>
-          </div>
-          <div class="card amber col">
-            <div class="card-title amber">
-              <span>Complete Toolchain</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Unified CLI:</strong> <code>lapis init</code>, <code>test</code>, <code>package</code>, <code>benchmarks</code>.</li>
-              <li><strong>Dual Modes:</strong> In-editor GDExtension + Standalone host.</li>
-              <li><strong>Presenter:</strong> sol.vin (Ian Rash).</li>
-            </ul>
+          <div class="intro-signature">
+            Presented by Ian Rash (sol.vin) • sol-vin/lapis • Godot Engine 4.8+ GDExtension
           </div>
         </div>
         <div class="slide-footer">

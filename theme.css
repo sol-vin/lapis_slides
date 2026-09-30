@@ -3250,6 +3250,173 @@ ul.card-list li strong {
   font-style: italic !important;
 }
 
+/* ==========================================================================
+   Intro Layout (Slide 1: Hero & Presentation Title)
+   ========================================================================== */
+
+.intro-cube {
+  position: absolute !important;
+  top: 48% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 1 !important;
+  pointer-events: auto !important;
+  width: 440px !important;
+  height: 440px !important;
+  opacity: 0.85 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.intro-cube:hover {
+  opacity: 1 !important;
+}
+
+.intro-cube .cube-svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.intro-cube .cube-edge {
+  stroke: var(--accent-color, var(--cube, #4090ff)) !important;
+  stroke-width: 2.8px !important;
+  stroke-linecap: round !important;
+}
+
+.intro-cube:hover .cube-edge {
+  stroke: var(--cube-hover, #ffffff) !important;
+}
+
+.intro-content {
+  position: relative !important;
+  z-index: 5 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.7rem !important;
+  flex: 1 !important;
+}
+
+.intro-cards-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  column-gap: 15rem !important;
+  row-gap: 1.1rem !important;
+  flex: 1 !important;
+  align-content: center !important;
+}
+
+.intro-card {
+  background: rgba(22, 22, 28, 0.72) !important;
+  backdrop-filter: blur(6px) !important;
+  border: 1.5px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 0.95rem !important;
+  box-shadow: 3px 3px 0px var(--shadow-color) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease !important;
+}
+
+.intro-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: var(--accent-color) !important;
+  background: rgba(22, 22, 28, 0.90) !important;
+}
+
+.intro-card.cyan { border-left: 4.5px solid var(--border-active) !important; }
+.intro-card.amber { border-left: 4.5px solid var(--accent-color) !important; }
+.intro-card.purple { border-left: 4.5px solid var(--accent-secondary) !important; }
+.intro-card.green { border-left: 4.5px solid var(--link-color) !important; }
+
+.intro-card-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.intro-card-title-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+}
+
+.intro-icon {
+  font-size: 1.1rem !important;
+}
+
+.intro-title {
+  font-size: 0.90rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+}
+
+.intro-tagline code,
+.intro-tagline {
+  font-family: var(--code-font) !important;
+  font-size: 0.68rem !important;
+  background: rgba(15, 15, 20, 0.85) !important;
+  color: var(--accent-color, #4090ff) !important;
+  padding: 0.12rem 0.4rem !important;
+  border-radius: 4px !important;
+  border: 1px solid var(--border-color) !important;
+  display: inline-block !important;
+}
+
+.intro-desc {
+  font-size: 0.66rem !important;
+  color: #c0c0c8 !important;
+  line-height: 1.35 !important;
+}
+
+.intro-card-list {
+  font-size: 0.66rem !important;
+  color: #c0c0c8 !important;
+  margin: 0 !important;
+  padding-left: 1.1rem !important;
+}
+
+.intro-card-list li {
+  margin-bottom: 0.2rem !important;
+}
+
+.intro-quickstart-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  background: rgba(28, 28, 34, 0.82) !important;
+  backdrop-filter: blur(6px) !important;
+  border: 1.5px solid var(--accent-color) !important;
+  border-radius: 6px !important;
+  padding: 0.35rem 0.85rem !important;
+  box-shadow: 3px 3px 0px var(--shadow-color) !important;
+}
+
+.intro-quickstart-label {
+  font-size: 0.70rem !important;
+  font-weight: 800 !important;
+  color: var(--accent-color, #4090ff) !important;
+  white-space: nowrap !important;
+}
+
+.intro-quickstart-code {
+  font-family: var(--code-font) !important;
+  font-size: 0.65rem !important;
+  color: #ffffff !important;
+  background: rgba(15, 15, 20, 0.85) !important;
+  padding: 0.08rem 0.4rem !important;
+  border-radius: 4px !important;
+  border: 1px solid var(--border-color) !important;
+  flex: 1 !important;
+}
+
+.intro-signature {
+  font-size: 0.66rem !important;
+  color: var(--text-dim) !important;
+  text-align: center !important;
+  font-style: italic !important;
+}
+
+
 
 
 

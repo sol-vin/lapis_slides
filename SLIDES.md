@@ -11,23 +11,13 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `HIGH-PERFORMANCE GAMEPLAY TOOLCHAIN`
 - **Title**: Lapis for Crystal
 - **Subtitle**: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
-- **Cards & Structure**:
-  - **LLVM Native Speed**:
-    - Compiled Ahead-of-Time: No bytecode VM interpreter overhead.
-    - Zero GC Hitching: Predictable, low-latency physics cycles.
-    - C-Level Throughput: Direct memory access and optimized math.
-  - **Zen Ergonomics**:
-    - Expressive Syntax: Blocks, closures, and declarative DSLs.
-    - Static Nil Safety: Compile-time null pointer elimination.
-    - Clean Node DSL: Eliminates 70%+ of GDExtension boilerplate.
-  - **First-Class Editor**:
-    - Script Parity: Attach .cr files via Godot Editor UI.
-    - Built-In Highlighter: Pure Crystal tokenizer in CodeEdit.
-    - In-Editor r2: Gutter breakpoints & live radare2 diagnostics.
-  - **Complete Toolchain**:
-    - Unified CLI: lapis init, test, package, benchmarks.
-    - Dual Modes: In-editor GDExtension + Standalone host.
-    - Presenter: sol.vin (Ian Rash).
+- **Key Pillars**:
+  - **LLVM Native Speed** (`AOT Compiled • Direct Memory • Zero GC Hitching`): Bare-metal C-speed performance with predictable microsecond physics cycles and zero VM overhead.
+  - **Zen Ergonomics** (`Static Nil Safety • Expressive DSL • Zero Ceremony`): Elegant syntax with declarative node macros, typed signals, and compile-time null safety.
+  - **First-Class Editor** (`CodeEdit Tokenizer • Gutter Breakpoints • Radare2`): Seamless Godot integration with live syntax highlighting and interactive native debugger forensics.
+  - **Unified Toolchain** (`Lapis CLI • Dual Runtimes • In-Editor & Standalone`): Develop with instant hot reload in the editor, or ship lean, ultra-fast standalone binaries.
+- **Quickstart**: `lapis init my_game && cd my_game && lapis run`
+- **Presenter**: Presented by Ian Rash (sol.vin) • sol-vin/lapis • Godot Engine 4.8+ GDExtension
 - **Presenter Script**:
   > *"Welcome everyone! Today I'm thrilled to present Lapis: the high-performance Crystal language bindings and developer toolchain for Godot Engine 4.8+. In this presentation, we'll explore why Crystal is uniquely suited for game development, how Lapis eliminates the massive boilerplate associated with C++ and Rust, its first-class integration directly inside the Godot editor, and how it delivers bare-metal performance with zen metaprogramming and expressive DSL ergonomics."*
 
