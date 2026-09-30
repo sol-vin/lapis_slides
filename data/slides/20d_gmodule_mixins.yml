@@ -14,8 +14,6 @@ left:
   lang: crystal
   font_size: '0.80rem'
   code: |
-    require "libgodot"
-
     # Reusable gameplay trait with full engine reflection
     gmodule Damageable do
       signal health_changed(current : Int32, max_health : Int32)
