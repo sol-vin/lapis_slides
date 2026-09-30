@@ -10,6 +10,7 @@ gdscript:
   title: '❌ GDScript: Verbose Lambdas, Callable Allocations & Churn'
   lang: gdscript
   tag: GDScript
+  font_size: '0.80rem'
   code: |
     # 1. Custom sort allocates heap Callable object
     inventory.sort_custom(func(a, b): return a.weight < b.weight)

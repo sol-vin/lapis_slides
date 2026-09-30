@@ -12,6 +12,7 @@ left:
   title: reactive_events.cr — Type-Safe Signal Subscriptions
   tag: Crystal
   lang: crystal
+  font_size: '0.90rem'
   code: |
     # 1. Connecting engine signals with first-class bound handles
     start_btn = self["$UI/StartButton", Godot::Button]

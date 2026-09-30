@@ -53,8 +53,9 @@ module LapisSlides
           gd_lang = gd_data["lang"]?.try(&.as_s) || "gdscript"
           gd_code = gd_data["code"]?.try(&.as_s) || ""
           gd_tag = gd_data["tag"]?.try(&.as_s) || "GDScript"
+          gd_font_size = gd_data["font_size"]?.try(&.as_s) || slide.raw["font_size"]?.try(&.as_s) || slide.raw["code_font_size"]?.try(&.as_s)
           str << "          <div class=\"col comparison-pane antipattern-pane\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col antipattern-code", "var(--border-color)") << "\n"
+          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col antipattern-code", "var(--border-color)", gd_font_size) << "\n"
           str << "          </div>\n"
         end
 
@@ -63,8 +64,9 @@ module LapisSlides
           cr_lang = cr_data["lang"]?.try(&.as_s) || "crystal"
           cr_code = cr_data["code"]?.try(&.as_s) || ""
           cr_tag = cr_data["tag"]?.try(&.as_s) || "Crystal (Lapis)"
+          cr_font_size = cr_data["font_size"]?.try(&.as_s) || slide.raw["font_size"]?.try(&.as_s) || slide.raw["code_font_size"]?.try(&.as_s)
           str << "          <div class=\"col comparison-pane solution-pane\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-color)") << "\n"
+          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-color)", cr_font_size) << "\n"
           str << "          </div>\n"
         end
 
@@ -92,8 +94,9 @@ module LapisSlides
           gd_lang = gd_data["lang"]?.try(&.as_s) || "gdscript"
           gd_code = gd_data["code"]?.try(&.as_s) || ""
           gd_tag = gd_data["tag"]?.try(&.as_s) || "GDScript"
+          gd_font_size = gd_data["font_size"]?.try(&.as_s) || slide.raw["font_size"]?.try(&.as_s) || slide.raw["code_font_size"]?.try(&.as_s)
           str << "          <div class=\"col comparison-pane antipattern-pane dimmed-code\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col antipattern-code", "var(--border-color)") << "\n"
+          str << render_code_container(gd_title, gd_lang, gd_code, gd_tag, "col antipattern-code", "var(--border-color)", gd_font_size) << "\n"
           str << "          </div>\n"
         end
 
@@ -102,8 +105,9 @@ module LapisSlides
           cr_lang = cr_data["lang"]?.try(&.as_s) || "crystal"
           cr_code = cr_data["code"]?.try(&.as_s) || ""
           cr_tag = cr_data["tag"]?.try(&.as_s) || "Crystal (Lapis)"
+          cr_font_size = cr_data["font_size"]?.try(&.as_s) || slide.raw["font_size"]?.try(&.as_s) || slide.raw["code_font_size"]?.try(&.as_s)
           str << "          <div class=\"col comparison-pane solution-pane dimmed-code\" style=\"display: flex; flex-direction: column; flex: 1;\">\n"
-          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-color)") << "\n"
+          str << render_code_container(cr_title, cr_lang, cr_code, cr_tag, "col solution-code", "var(--border-color)", cr_font_size) << "\n"
           str << "          </div>\n"
         end
 

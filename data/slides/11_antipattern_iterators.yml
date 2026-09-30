@@ -10,6 +10,7 @@ gdscript:
   title: '❌ GDScript: Imperative Loops & Array Mutation'
   lang: gdscript
   tag: GDScript
+  font_size: '0.90rem'
   code: |
     # Manual loop, intermediate array allocations, verbose checks
     var active_targets: Array[String] = []
@@ -31,6 +32,7 @@ crystal:
   title: '✨ Crystal: Zen Enumerable Chaining'
   lang: crystal
   tag: Crystal (Lapis)
+  font_size: '0.90rem'
   code: |
     # Pipeline: 'map as' casts Node -> Enemy -> String
     active_targets : Array(String) =

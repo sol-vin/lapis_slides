@@ -12,7 +12,7 @@ left:
   title: operator_node_retrieval.cr
   tag: Crystal
   lang: crystal
-  font_size: '0.76rem'
+  font_size: '0.80rem'
   code: |
     node PlayerController < CharacterBody2D do
       def _ready : Void

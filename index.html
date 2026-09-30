@@ -2874,7 +2874,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.76rem !important; line-height: 1.25 !important;">node PlayerController &lt; CharacterBody2D do
+            <pre><code class="language-crystal" style="font-size: 0.80rem !important; line-height: 1.25 !important;">node PlayerController &lt; CharacterBody2D do
   def _ready : Void
     # 1. Path traversal with / and .as(T):
     camera = (self / &quot;CameraRig/Camera2D&quot;).as(Camera2D)
@@ -3254,7 +3254,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.64rem !important; line-height: 1.25 !important;"># 1. Operators /, %, and bare ~ for node resolution:
+            <pre><code class="language-crystal" style="font-size: 0.90rem !important; line-height: 1.25 !important;"># 1. Operators /, %, and bare ~ for node resolution:
 camera = self / &quot;CameraRig&quot; / Camera3D
 health_bar = self % ProgressBar
 sprite = ~Sprite2D
@@ -3324,7 +3324,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3337,7 +3337,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense"># 1. Connecting engine signals with first-class bound handles
+            <pre><code class="language-crystal" style="font-size: 0.90rem !important; line-height: 1.25 !important;"># 1. Connecting engine signals with first-class bound handles
 start_btn = self[&quot;$UI/StartButton&quot;, Godot::Button]
 start_btn.pressed.connect do
   start_game_sequence
@@ -3419,7 +3419,7 @@ emit_health_changed(current: 75, max_health: 100)</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># Manual loop, intermediate array allocations, verbose checks
+            <pre><code class="language-gdscript" style="font-size: 0.90rem !important; line-height: 1.25 !important;"># Manual loop, intermediate array allocations, verbose checks
 var active_targets: Array[String] = []
 for node in get_tree().get_nodes_in_group(&quot;enemies&quot;):
     if node is Enemy and node.is_alive():
@@ -3447,7 +3447,7 @@ for name in active_targets:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Pipeline: &#39;map as&#39; casts Node -&gt; Enemy -&gt; String
+            <pre><code class="language-crystal" style="font-size: 0.90rem !important; line-height: 1.25 !important;"># Pipeline: &#39;map as&#39; casts Node -&gt; Enemy -&gt; String
 active_targets : Array(String) =
   get_tree.nodes_in_group(&quot;enemies&quot;)
     .map(&amp;.as(Enemy))        # =&gt; Array(Enemy)
@@ -3509,7 +3509,7 @@ enemy_types : Hash(String, Int32) =
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># Manual loop, intermediate array allocations, verbose checks
+            <pre><code class="language-gdscript" style="font-size: 0.90rem !important; line-height: 1.25 !important;"># Manual loop, intermediate array allocations, verbose checks
 var active_targets: Array[String] = []
 for node in get_tree().get_nodes_in_group(&quot;enemies&quot;):
     if node is Enemy and node.is_alive():
@@ -3537,7 +3537,7 @@ for name in active_targets:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Pipeline: &#39;map as&#39; casts Node -&gt; Enemy -&gt; String
+            <pre><code class="language-crystal" style="font-size: 0.90rem !important; line-height: 1.25 !important;"># Pipeline: &#39;map as&#39; casts Node -&gt; Enemy -&gt; String
 active_targets : Array(String) =
   get_tree.nodes_in_group(&quot;enemies&quot;)
     .map(&amp;.as(Enemy))        # =&gt; Array(Enemy)
@@ -3621,7 +3621,7 @@ enemy_types : Hash(String, Int32) =
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code code-dense" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3634,7 +3634,7 @@ enemy_types : Hash(String, Int32) =
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript code-dense"># 1. Custom sort allocates heap Callable object
+            <pre><code class="language-gdscript" style="font-size: 0.80rem !important; line-height: 1.25 !important;"># 1. Custom sort allocates heap Callable object
 inventory.sort_custom(func(a, b): return a.weight &lt; b.weight)
 
 # 2. Filtering allocates closure environment per invocation
@@ -3721,7 +3721,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code code-dense" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3734,7 +3734,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript code-dense"># 1. Custom sort allocates heap Callable object
+            <pre><code class="language-gdscript" style="font-size: 0.80rem !important; line-height: 1.25 !important;"># 1. Custom sort allocates heap Callable object
 inventory.sort_custom(func(a, b): return a.weight &lt; b.weight)
 
 # 2. Filtering allocates closure environment per invocation
@@ -6017,7 +6017,7 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -6030,7 +6030,7 @@ end
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-compact">node NetworkPlayer &lt; CharacterBody3D do
+            <pre><code class="language-crystal" style="font-size: 0.70rem !important; line-height: 1.25 !important;">node NetworkPlayer &lt; CharacterBody3D do
   @[Export]
   property player_id : Int32 = 1
 
