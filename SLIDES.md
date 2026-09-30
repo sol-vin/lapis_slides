@@ -1214,7 +1214,7 @@ This document outlines each slide's exact theme palette, architectural category,
   sprite = ~Sprite2D
   
   # 2. Strongly typed child retrieval with onready macro:
-  onready weapon : Weapon = get_node_as(Weapon, "WeaponMount/Sword")
+  onready weapon : Weapon = ~("WeaponMount/Sword").as(Weapon)
   
   # 3. Safe navigation with optional nodes (returns T?):
   if hud = self[HUD, "UI/HUDLayer"]?
@@ -1232,7 +1232,7 @@ This document outlines each slide's exact theme palette, architectural category,
   ```
 - **Why It's Effortless**:
   - Operators /, % & ~: Chained paths (self / "CameraRig" / Camera3D), unique nodes (self % ProgressBar), and bare context resolution (~Sprite2D) eliminate verbose casting.
-  - Declarative onready Macro: onready weapon : Weapon = get_node_as(...) binds nodes safely during _ready.
+  - Declarative onready Macro: onready weapon : Weapon = ~("...").as(Weapon) binds nodes safely during _ready.
   - Compile-Time Nil Safety: self[HUD, path]? returns HUD?; Crystal's compiler forces flow-sensitive nil checks before method dispatch.
   - Typed Scene Instantiation: Godot.load_as(PackedScene, path) combined with scene.instantiate_as(T) constructs typed scenes with zero reflection.
   - Declarative Export Hints: @[ExportRange] publishes Crystal properties directly into Godot's Inspector with editor UI hints.
