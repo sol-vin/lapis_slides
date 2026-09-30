@@ -10,6 +10,7 @@ ratio: 3:2
 left:
   type: terminal
   title: Terminal — make package-release
+  font_size: '0.60rem'
   code: |
     # Build complete official release distribution matrix
     $ make package-release

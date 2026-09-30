@@ -4,14 +4,14 @@ title: 'Demo 3: Ecosystem Addons — Installing CrShader'
 subtitle: Single-Command GDExtension Installation, Manifest Wiring & Shard Binding
 badge: 'LIVE DEMO • PART 3: ADDON ECOSYSTEM'
 badge_color: green
-palette: retro_future
+palette: spaces_95
 layout: two-column-layout
 ratio: 3:2
 left:
   type: asciinema
   title: Terminal — lapis install addon
   cast: casts/lapis_demo_install_addon.cast
-  font_size: '0.67rem'
+  font_size: '0.60rem'
   speed: 1.25
   loop: true
   autoplay: true

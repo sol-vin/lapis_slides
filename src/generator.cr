@@ -198,7 +198,7 @@ module LapisSlides
               const theme = mount.dataset.theme || 'monokai';
               const cols = parseInt(mount.dataset.cols || '80', 10);
               const rows = parseInt(mount.dataset.rows || '18', 10);
-              const fontSize = mount.dataset.fontSize || '0.75rem';
+              const fontSize = mount.dataset.fontSize || '0.60rem';
               const controlsVal = mount.dataset.controls;
               const controls = controlsVal === 'true' ? true : (controlsVal === 'false' ? false : 'auto');
 

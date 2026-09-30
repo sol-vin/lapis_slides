@@ -1,7 +1,7 @@
 ---
 id: 30_cli_lifecycle
-title: 'CLI: Project Lifecycle'
-subtitle: Scaffolding, Fast Iteration & Native Debugging
+title: 'CLI: Command Center & Lifecycle'
+subtitle: Interactive Dashboard, Live Telemetry & Rapid Scaffolding
 badge: TOOLCHAIN • THE LAPIS CLI
 badge_color: cyan
 palette: spaces_95
@@ -9,36 +9,38 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: asciinema
-  title: Terminal — lapis CLI Workflow
+  title: Terminal — Lapis Command Center & Scaffolding
   cast: casts/lapis_cli_lifecycle.cast
-  font_size: '0.72rem'
+  font_size: '0.60rem'
   speed: 1.25
   loop: true
   autoplay: true
   controls: auto
   theme: monokai
-  cols: 80
-  rows: 18
+  cols: 86
+  rows: 19
   code: |
-    # Initialize a new game project with embedded templates
-    $ lapis init my_game --template=3d-action
+    # Launch interactive Lapis Command Center dashboard
+    $ lapis
+      🔮 LAPIS COMMAND CENTER (v0.8.2)
+      Project: void_runner (branch: main)
+      Platform: windows-x64 │ Godot: 4.8.0-custom │ Crystal: v1.15.0
+      Bridge DLL: Compiled ✔ │ Game DLL: Present ✔
 
-    # Open Godot Editor with hot-reloading (F5 recompiles)
-    $ lapis editor
+    # Single-key action hub: [B]uild, [T]est, [D]octor, [E]ditor, [/] Palette
+    > [ S ] Scaffold New Game or Addon (lapis new)
 
-    # Launch standalone game under radare2 native debugger
-    $ lapis run -d
-
-    # Run multi-tier test suite with interactive ANSI TUI
-    $ lapis test --tui
+    # Scaffolding initializes complete game with embedded templates
+    $ lapis init void_runner --template=3d-action
+      ✓ project.godot, shard.yml, src/main.cr, scenes/
 right:
   type: card
-  title: Core CLI Capabilities
+  title: Command Center & Project Lifecycle
   color: cyan
   items:
-  - <strong>Zero-Config Scaffolding:</strong> <code>lapis init</code> scaffolds ready-to-run Godot projects with configured <code>shard.yml</code> and <code>project.godot</code>.
-  - <strong>Embedded Baked Assets:</strong> CLI embeds starter templates, manifests, and bridge sources via <code>BakedFileSystem</code> for offline portability.
-  - <strong>Native Debug Launchers:</strong> <code>lapis editor -d</code> and <code>lapis run -d</code> launch instances directly under radare2.
-  - <strong>Unified Toolchain:</strong> Replaces fractured Makefiles and shell scripts with a single standardized executable across Windows, Linux, and macOS.
+  - <strong>Interactive Command Center:</strong> Running <code>lapis</code> without arguments opens a real-time dashboard displaying engine health, git branch, and compiler statuses.
+  - <strong>Single-Key Action Hub:</strong> Direct hotkey triggers for common developer workflows: <code>[B]</code> Build, <code>[T]</code> Test, <code>[D]</code> Doctor, <code>[E]</code> Editor, <code>[/]</code> Command Palette.
+  - <strong>Zero-Config Scaffolding:</strong> <code>lapis init</code> scaffolds ready-to-run Godot projects with configured <code>shard.yml</code> and <code>project.godot</code> in milliseconds.
+  - <strong>Embedded Baked Assets:</strong> CLI embeds starter templates, manifests, and bridge sources via <code>BakedFileSystem</code> for complete offline portability.
 notes: |
-  Developer tooling is just as important as the language itself. We built the lapis CLI to serve as the single, unified toolchain for the entire game lifecycle. With commands like lapis init, lapis build, lapis editor -d, lapis run -d, and lapis test, developers get an instant, zero-config onboarding experience with native radare2 debugging from day one.
+  Developer tooling is the foundation of game programming speed. When run without arguments in an interactive terminal, lapis launches the Lapis Command Center—providing real-time telemetry on engine status, compiler versions, git branch, and bridge DLL states. Developers can trigger instant single-key builds, launch Godot with dynamic shadow hot-reloading, or run tests with a single stroke. Scaffolding new projects with lapis init leverages embedded templates to get playable games running in seconds.

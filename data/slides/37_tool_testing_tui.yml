@@ -11,7 +11,7 @@ left:
   type: asciinema
   title: Terminal — lapis test --tui Dashboard
   cast: casts/test_runner_tui.cast
-  font_size: '0.67rem'
+  font_size: '0.60rem'
   speed: 1.25
   loop: true
   autoplay: true

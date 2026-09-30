@@ -3485,6 +3485,8 @@ ul.card-list li strong {
   background-color: var(--term-color-background, #272822) !important;
   color: var(--term-color-foreground, #f8f8f2) !important;
   font-family: var(--font-mono, Consolas, "JetBrains Mono", monospace) !important;
+  font-size: 0.60rem !important;
+  line-height: 1.25 !important;
   border: none !important;
   box-shadow: none !important;
   margin: 0 !important;

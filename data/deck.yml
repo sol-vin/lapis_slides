@@ -72,11 +72,14 @@ slides:
 - 29_interop_crystal_calls_gdscript_typed
 - 33_editor_integration
 - 30_cli_lifecycle
-- 32_package_management
+- 30b_cli_fuzzy_palette
+- 30c_cli_doctor
 - 31_cli_codegen
 - 31b_cli_package_portable
+- 32_package_management
 - 34_debugger_radare2
 - 34c_debug_workflows
+- 34d_cli_log_triage
 - 34b_r2_test_suite
 - 36_testing_zero_leak
 - 37_tool_testing_tui

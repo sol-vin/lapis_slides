@@ -11,14 +11,14 @@ left:
   type: asciinema
   title: Terminal — lapis addon install --release
   cast: casts/lapis_addon_install.cast
-  font_size: '0.70rem'
+  font_size: '0.60rem'
   speed: 1.25
   loop: true
   autoplay: true
   controls: auto
   theme: monokai
-  cols: 84
-  rows: 18
+  cols: 86
+  rows: 19
   code: |
     $ lapis addon install github:sol-vin/combat_system@v1.2 --release
     [Install:Addon] Resolving GitHub release asset for windows-x86_64...
