@@ -470,7 +470,7 @@ ul.card-list li strong {
   box-sizing: border-box;
 }
 
-.terminal-body pre {
+.terminal-body:not(.asciinema-body) pre {
   margin: 0 !important;
   padding: 0 !important;
   box-shadow: none !important;
@@ -484,7 +484,7 @@ ul.card-list li strong {
   display: block !important;
 }
 
-.terminal-body code {
+.terminal-body:not(.asciinema-body) code {
   padding: 0 !important;
   background: transparent !important;
   font-family: inherit !important;
@@ -532,18 +532,18 @@ ul.card-list li strong {
 }
 
 /* Suppress all scrollbars inside terminal-window */
-.terminal-window pre,
-.terminal-window .terminal-body pre,
-.terminal-window .terminal-body code {
+.terminal-window:not(.asciinema-window) pre,
+.terminal-window:not(.asciinema-window) .terminal-body pre,
+.terminal-window:not(.asciinema-window) .terminal-body code {
   overflow: hidden !important;
   max-height: 100% !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
 
-.terminal-window pre::-webkit-scrollbar,
-.terminal-window .terminal-body pre::-webkit-scrollbar,
-.terminal-window .terminal-body code::-webkit-scrollbar {
+.terminal-window:not(.asciinema-window) pre::-webkit-scrollbar,
+.terminal-window:not(.asciinema-window) .terminal-body pre::-webkit-scrollbar,
+.terminal-window:not(.asciinema-window) .terminal-body code::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
@@ -1223,9 +1223,9 @@ ul.card-list li strong {
   color: var(--text-color) !important;
 }
 
-.solvin-slide .terminal-window pre,
-.solvin-slide .terminal-window .terminal-body pre,
-.solvin-slide .terminal-window .terminal-body code {
+.solvin-slide .terminal-window:not(.asciinema-window) pre,
+.solvin-slide .terminal-window:not(.asciinema-window) .terminal-body pre,
+.solvin-slide .terminal-window:not(.asciinema-window) .terminal-body code {
   background-color: var(--bg-window) !important;
   color: var(--text-color) !important;
   font-family: var(--code-font) !important;
@@ -1444,9 +1444,9 @@ ul.card-list li strong {
 
 /* Code Pre/Body Backgrounds */
 .solvin-slide .code-container pre,
-.solvin-slide .terminal-window pre,
-.solvin-slide .terminal-body pre,
-.solvin-slide .terminal-body code {
+.solvin-slide .terminal-window:not(.asciinema-window) pre,
+.solvin-slide .terminal-body:not(.asciinema-body) pre,
+.solvin-slide .terminal-body:not(.asciinema-body) code {
   background-color: transparent !important;
   color: var(--text-color) !important;
 }
@@ -3464,8 +3464,10 @@ ul.card-list li strong {
    Asciinema Player Sol.vin Dynamic Terminal Integration
    ========================================================================== */
 .asciinema-window {
-  height: 480px !important;
+  flex: 1 1 0 !important;
+  height: 100% !important;
   min-height: 420px;
+  max-height: 525px;
   display: flex !important;
   flex-direction: column !important;
 }
@@ -3584,14 +3586,9 @@ ul.card-list li strong {
 .asciinema-player-mount pre.ap-terminal {
   background-color: var(--bg-window) !important;
   border-color: var(--bg-window) !important;
-  color: var(--text-color) !important;
-  font-family: var(--code-font, Consolas, "JetBrains Mono", monospace) !important;
-  border: none !important;
+  font-family: Consolas, Menlo, monospace !important;
   box-shadow: none !important;
   margin: 0 !important;
-  padding: 0.25rem 0.5rem !important;
-  box-sizing: content-box !important;
-  max-width: 100% !important;
 }
 
 .asciinema-player-mount .ap-control-bar {
