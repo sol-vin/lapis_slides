@@ -2204,13 +2204,13 @@ macro fsm(name, &amp;block)
       end
     end
 
-    # 4. Inlines &#39;after&#39; (exit) &amp; &#39;before&#39; (enter) lifecycle hooks:
+    # 4. Inlines &#39;before&#39; (exit) &amp; &#39;after&#39; (enter) lifecycle hooks:
     private def transition_to(target : {{name.id}}) : Void
       case @current_state
       {% for s in block.body.expressions %}
         when .{{s.args[0].id.underscore}}?
           {% for c in s.block.body.expressions %}
-            {% if c.name == &quot;after&quot; %} {{c.block.body}} {% end %}
+            {% if c.name == &quot;before&quot; %} {{c.block.body}} {% end %}
           {% end %}
       {% end %}
       end
@@ -2221,7 +2221,7 @@ macro fsm(name, &amp;block)
       {% for s in block.body.expressions %}
         when .{{s.args[0].id.underscore}}?
           {% for c in s.block.body.expressions %}
-            {% if c.name == &quot;before&quot; %} {{c.block.body}} {% end %}
+            {% if c.name == &quot;after&quot; %} {{c.block.body}} {% end %}
           {% end %}
       {% end %}
       end
@@ -2236,7 +2236,7 @@ end</code></pre>
               <span>Compile-Time Metaprogramming Invariants</span>
             </div>
             <ul class="card-list">
-              <li><strong>Inlined Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> The macro extracts <code>after</code> (exit) and <code>before</code> (enter) blocks and inlines them directly into native <code>case</code> branches — zero lambda overhead, zero virtual dispatches!</li>
+              <li><strong>Inlined Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> The macro extracts <code>before</code> (pre-transition) and <code>after</code> (post-transition) blocks and inlines them directly into native <code>case</code> branches — zero lambda overhead, zero virtual dispatches!</li>
               <li><strong>Compile-Time AST Traversal:</strong> Unlike Ruby's <code>method_missing</code> or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.</li>
               <li><strong>Synthesizes Concrete Types:</strong> The macro generates real <code>enum BossState</code> variants (<code>Patrol</code>, <code>Chase</code>), giving developers full compiler autocomplete and exhaustiveness checks.</li>
               <li><strong>Zero Runtime Overhead:</strong> <code>trigger(:event)</code> expands into a flat native <code>case</code> statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!</li>
@@ -2250,7 +2250,7 @@ end</code></pre>
           <span>Slide 24 / 86</span>
         </div>
         <aside class="notes">
-          This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—one that inlines the current state's `after` exit hook, updates @current_state, and one that inlines the target state's `before` enter hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C.
+          This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C.
         </aside>
       </section>
 

@@ -917,13 +917,13 @@ This document outlines each slide's exact theme palette, architectural category,
         end
       end
   
-      # 4. Inlines 'after' (exit) & 'before' (enter) lifecycle hooks:
+      # 4. Inlines 'before' (exit) & 'after' (enter) lifecycle hooks:
       private def transition_to(target : {{name.id}}) : Void
         case @current_state
         {% for s in block.body.expressions %}
           when .{{s.args[0].id.underscore}}?
             {% for c in s.block.body.expressions %}
-              {% if c.name == "after" %} {{c.block.body}} {% end %}
+              {% if c.name == "before" %} {{c.block.body}} {% end %}
             {% end %}
         {% end %}
         end
@@ -934,7 +934,7 @@ This document outlines each slide's exact theme palette, architectural category,
         {% for s in block.body.expressions %}
           when .{{s.args[0].id.underscore}}?
             {% for c in s.block.body.expressions %}
-              {% if c.name == "before" %} {{c.block.body}} {% end %}
+              {% if c.name == "after" %} {{c.block.body}} {% end %}
             {% end %}
         {% end %}
         end
@@ -943,12 +943,12 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   ```
 - **Compile-Time Metaprogramming Invariants**:
-  - Inlined Lifecycle Hooks (before & after): The macro extracts after (exit) and before (enter) blocks and inlines them directly into native case branches — zero lambda overhead, zero virtual dispatches!
+  - Inlined Lifecycle Hooks (before & after): The macro extracts before (pre-transition) and after (post-transition) blocks and inlines them directly into native case branches — zero lambda overhead, zero virtual dispatches!
   - Compile-Time AST Traversal: Unlike Ruby's method_missing or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.
   - Synthesizes Concrete Types: The macro generates real enum BossState variants (Patrol, Chase), giving developers full compiler autocomplete and exhaustiveness checks.
   - Zero Runtime Overhead: trigger(:event) expands into a flat native case statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!
 - **Presenter Script**:
-  > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—one that inlines the current state's `after` exit hook, updates @current_state, and one that inlines the target state's `before` enter hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C."*
+  > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C."*
 
 ---
 ### Slide 25: Where Macros Shine: Zero-Reflection Serialization & Save Systems
