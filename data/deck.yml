@@ -32,6 +32,7 @@ slides:
 - 10f_crystal_closures
 - 10c_static_metaprogramming_tradeoffs
 - 14b_crystal_macro_hooks
+- 14c_macro_finished_introspection
 - 18_macro_state_machines
 - 18b_macro_fsm_implementation
 - 19_macro_serialization

@@ -1,51 +1,56 @@
 ---
 id: 14b_crystal_macro_hooks
-title: 'Macro Hooks: Zero-Cost Reflection'
-subtitle: inherited, method_added, macro finished & AST Introspection
+title: 'Macro Hooks: included & inherited'
+subtitle: 'Compile-Time Mixins & Automated Subclass Registration'
 badge: METAPROGRAMMING • AST HOOKS
 badge_color: amber
 palette: aperture
 layout: two-column-layout
-ratio: 1:1
+ratio: 3:2
 left:
   type: code
-  title: compile_time_macro_hooks.cr
+  title: macro_lifecycle_hooks.cr — Compile-Time Composition
   tag: Crystal
   lang: crystal
   code: |
-    # Crystal macro hooks execute inside the compiler AST:
-    abstract class BaseComponent
-      macro inherited
-        # Hook 1: Runs whenever a subclass is declared
-        ALL_COMPONENTS << {{@type.name.stringify}}
+    # 1. macro included: Composable mixin behavior at compile time
+    module Damageable
+      macro included
+        # Injects properties & methods into the including class:
+        property health : Int32 = 100
 
-        # Hook 2: Inspect instance vars & synthesize methods
-        macro finished
-          def serialize : Hash(String, String)
-            data = Hash(String, String).new
-            {% for ivar in @type.instance_vars %}
-              data[{{ivar.name.stringify}}] = @{{ivar.name}}.to_s
-            {% end %}
-            data
-          end
+        def take_damage(amount : Int32) : Void
+          @health = Math.max(0, @health - amount)
         end
       end
     end
 
-    # Zero runtime reflection, zero manual registration:
-    class HealthComponent < BaseComponent
-      property max_hp : Int32 = 100
-      property shield : Int32 = 25
+    # 2. macro inherited: Subclass tracking & automated registration
+    abstract class GameEntity
+      # Global compile-time list of all registered game entities
+      ENTITY_TYPES = [] of String
+
+      macro inherited
+        # Fires whenever a new subclass is declared:
+        ENTITY_TYPES << {{@type.name.stringify}}
+      end
     end
-    # => Compiler automatically synthesizes serialize()!
+
+    class Player < GameEntity
+      include Damageable # Injects health & take_damage!
+    end
 right:
   type: card
-  title: Compile-Time Metaprogramming
+  title: Compile-Time Module & Class Hooks
   color: amber
   items:
-    - '<strong>Lifecycle AST Hooks:</strong> <code>inherited</code>, <code>included</code>, and <code>method_added</code> trigger macro execution during compilation as code is parsed.'
-    - '<strong>Static Type Introspection:</strong> Macro variables (<code>@type.instance_vars</code>, <code>@type.methods</code>) inspect types without JVM/CLR runtime reflection.'
-    - '<strong>Deferred Synthesis (<code>macro finished</code>):</strong> Waits until the class definition has been fully parsed to synthesize complete serializers and vtables.'
-    - '<strong>Zero Runtime Overhead:</strong> Synthesized code compiles straight into bare-metal machine instructions, eliminating reflection latency in game loops.'
+    - '<strong>The <code>macro included</code> Hook:</strong> Executes whenever a module is included into a class. Automatically injects instance variables, methods, and validations into the receiver.'
+    - '<strong>Replaces Ruby''s <code>self.included</code>:</strong> Ruby required runtime metaprogramming tricks (<code>base.extend ClassMethods</code>). Crystal achieves full mixin synthesis at compile time with zero runtime reflection.'
+    - '<strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to inspect, configure, and register child types automatically.'
+    - '<strong>Zero-Overhead Registries:</strong> Build entity factories and plugin lists during compilation—no manual arrays or reflection scanning at startup.'
+    - '<strong>Type-Safe & Inlined:</strong> All injected code participates in standard global type inference and compiles directly into bare-metal machine code.'
 notes: |
-  How does Crystal provide the rich metaprogramming of Ruby without suffering the runtime performance penalty? The secret is Macro Hooks. While C macros are dumb text replacements, and Ruby metaprogramming relies on runtime eval and reflection, Crystal's macros are AST transformations that plug into compiler lifecycle hooks. Hooks like inherited, included, and method_added execute as classes are compiled. Even more powerful is macro finished, which waits until a class has been completely declared and uses compile-time introspection—like @type.instance_vars and @type.methods—to synthesize serializers, network replication tables, or Godot ClassDB bindings. The result is pure, native LLVM machine code with zero runtime reflection overhead.
+  In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods).
+  In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type.
+  Similarly, macro inherited fires the instant a class is subclassed. This lets frameworks and game engines automatically register derived entity types into factories or registries without manual registration boilerplate or slow runtime reflection scans.
+  Everything is resolved and validated during compilation, compiling down to direct, inlined machine instructions.
