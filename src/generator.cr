@@ -233,7 +233,7 @@ module LapisSlides
                   if (typeof player.seek === 'function') {
                     try { player.seek(0); } catch(e) {}
                   }
-                  player.play();
+                  try { player.play(); } catch(e) {}
                 }
               });
             }
@@ -243,10 +243,23 @@ module LapisSlides
               slideEl.querySelectorAll('.asciinema-player-mount').forEach(mount => {
                 const player = asciinemaInstances.get(mount);
                 if (player && typeof player.pause === 'function') {
-                  player.pause();
+                  try { player.pause(); } catch(e) {}
                 }
               });
             }
+
+            document.addEventListener('click', event => {
+              const replayBtn = event.target && event.target.closest ? event.target.closest('.asciinema-window .code-lang-tag') : null;
+              if (replayBtn) {
+                const win = replayBtn.closest('.asciinema-window');
+                const mount = win ? win.querySelector('.asciinema-player-mount') : null;
+                const player = mount ? asciinemaInstances.get(mount) : null;
+                if (player) {
+                  try { player.seek(0); } catch(e) {}
+                  try { player.play(); } catch(e) {}
+                }
+              }
+            });
 
             if (window.Reveal) {
               if (typeof Reveal.isReady === 'function' && Reveal.isReady()) {
