@@ -1131,18 +1131,25 @@ This document outlines each slide's exact theme palette, architectural category,
   ```crystal
   node PlayerController < CharacterBody2D do
     def _ready : Void
-      # 1. Path traversal / (String, Typed Class, or .as(T)):
-      camera = (self / "CameraRig/Camera2D").as(Camera2D) # Explicit .as(T) casting!
-      mount  = self / "Visuals" / Marker2D               # Chained typed child!
-      cam_up = camera / ".."                             # Upward parent traversal
+      # 1. Path traversal with / and .as(T):
+      # Traversal paired with explicit type casting
+      camera = (self / "CameraRig/Camera2D").as(Camera2D)
+      # Chained path traversal returning typed child
+      mount = self / "Visuals" / Marker2D
+      # Upward traversal to parent node
+      cam_up = camera / ".."
   
-      # 2. Scene Unique Nodes % (mirrors GDScript % with .as(T)):
-      hud    = (self % "PlayerHUD").as(CanvasLayer)      # String unique node with .as(T)
-      bar    = self % ProgressBar                       # Direct typed %ProgressBar!
+      # 2. Scene Unique Nodes with % and .as(T):
+      # Unique node lookup with explicit .as(T)
+      hud = (self % "PlayerHUD").as(CanvasLayer)
+      # Direct unique node lookup by class type
+      bar = self % ProgressBar
   
       # 3. Type-safe subscript indexers ([] and []?):
-      sprite = self[Sprite2D]                            # Inferred from class
-      weapon = self[Marker2D, "WeaponMount"]?            # Safe optional Marker2D?
+      # Immediate class lookup
+      sprite = self[Sprite2D]
+      # Safe optional lookup returning Marker2D?
+      weapon = self[Marker2D, "WeaponMount"]?
     end
   end
   ```

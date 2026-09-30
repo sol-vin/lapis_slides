@@ -2687,7 +2687,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2700,20 +2700,27 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">node PlayerController &lt; CharacterBody2D do
+            <pre><code class="language-crystal code-dense">node PlayerController &lt; CharacterBody2D do
   def _ready : Void
-    # 1. Path traversal / (String, Typed Class, or .as(T)):
-    camera = (self / &quot;CameraRig/Camera2D&quot;).as(Camera2D) # Explicit .as(T) casting!
-    mount  = self / &quot;Visuals&quot; / Marker2D               # Chained typed child!
-    cam_up = camera / &quot;..&quot;                             # Upward parent traversal
+    # 1. Path traversal with / and .as(T):
+    # Traversal paired with explicit type casting
+    camera = (self / &quot;CameraRig/Camera2D&quot;).as(Camera2D)
+    # Chained path traversal returning typed child
+    mount = self / &quot;Visuals&quot; / Marker2D
+    # Upward traversal to parent node
+    cam_up = camera / &quot;..&quot;
 
-    # 2. Scene Unique Nodes % (mirrors GDScript % with .as(T)):
-    hud    = (self % &quot;PlayerHUD&quot;).as(CanvasLayer)      # String unique node with .as(T)
-    bar    = self % ProgressBar                       # Direct typed %ProgressBar!
+    # 2. Scene Unique Nodes with % and .as(T):
+    # Unique node lookup with explicit .as(T)
+    hud = (self % &quot;PlayerHUD&quot;).as(CanvasLayer)
+    # Direct unique node lookup by class type
+    bar = self % ProgressBar
 
     # 3. Type-safe subscript indexers ([] and []?):
-    sprite = self[Sprite2D]                            # Inferred from class
-    weapon = self[Marker2D, &quot;WeaponMount&quot;]?            # Safe optional Marker2D?
+    # Immediate class lookup
+    sprite = self[Sprite2D]
+    # Safe optional lookup returning Marker2D?
+    weapon = self[Marker2D, &quot;WeaponMount&quot;]?
   end
 end</code></pre>
           </div>
