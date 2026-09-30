@@ -1,3 +1,4 @@
+require "base64"
 require "./layout_renderer"
 
 module LapisSlides
@@ -77,6 +78,65 @@ module LapisSlides
         str << "                <pre#{style_attr}><code class=\"language-bash\"#{style_attr}>" << HTML.escape(code.strip) << "</code></pre>\n"
         str << "              </div>\n"
         str << "            </div>\n"
+      when "asciinema", "cast"
+        title = data["title"]?.try(&.as_s) || "Terminal Replay"
+        cast_rel = data["cast"]?.try(&.as_s) || ""
+        speed = data["speed"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
+        loop_play = data["loop"]?.try(&.as_bool) != false
+        autoplay = data["autoplay"]?.try(&.as_bool) != false
+        controls = data["controls"]?.try(&.as_s) || "auto"
+        theme = data["theme"]?.try(&.as_s) || "monokai"
+        font_size = data["font_size"]?.try(&.as_s) || data["terminal_font_size"]?.try(&.as_s) || "0.75rem"
+        cols = data["cols"]?.try(&.as_i) || 86
+        rows = data["rows"]?.try(&.as_i) || 19
+        fallback_code = data["code"]?.try(&.as_s)
+
+        # Inlining cast data as base64 for file:// zero-CORS safety
+        cast_file = if File.exists?(cast_rel)
+                      cast_rel
+                    elsif File.exists?(File.expand_path(cast_rel, Dir.current))
+                      File.expand_path(cast_rel, Dir.current)
+                    elsif File.exists?(File.expand_path("slides/#{cast_rel}", Dir.current))
+                      File.expand_path("slides/#{cast_rel}", Dir.current)
+                    elsif File.exists?(File.expand_path("data/#{cast_rel}", Dir.current))
+                      File.expand_path("data/#{cast_rel}", Dir.current)
+                    else
+                      nil
+                    end
+
+        cast_src = if cast_file
+                     content = File.read(cast_file)
+                     "data:text/plain;base64,#{Base64.strict_encode(content)}"
+                   else
+                     cast_rel
+                   end
+
+        str << "            <div class=\"terminal-window col asciinema-window\" style=\"margin: 0; display: flex; flex-direction: column;\">\n"
+        str << "              <div class=\"terminal-header\">\n"
+        str << "                <div class=\"terminal-dots\"><span class=\"terminal-dot dot-1\"></span><span class=\"terminal-dot dot-2\"></span><span class=\"terminal-dot dot-3\"></span></div>\n"
+        str << "                <span class=\"terminal-title\">" << HTML.escape(title) << "</span>\n"
+        str << "                <div class=\"window-controls\"><span class=\"code-lang-tag\">REPLAY</span></div>\n"
+        str << "              </div>\n"
+        str << "              <div class=\"terminal-body asciinema-body\" style=\"flex: 1; padding: 0.25rem;\">\n"
+        str << "                <div class=\"asciinema-player-mount\" data-cast-src=\"" << HTML.escape(cast_src) << "\""
+        str << " data-speed=\"" << speed << "\""
+        str << " data-loop=\"" << loop_play << "\""
+        str << " data-autoplay=\"" << autoplay << "\""
+        str << " data-controls=\"" << HTML.escape(controls) << "\""
+        str << " data-theme=\"" << HTML.escape(theme) << "\""
+        str << " data-cols=\"" << cols << "\""
+        str << " data-rows=\"" << rows << "\""
+        str << " data-font-size=\"" << HTML.escape(font_size) << "\""
+        str << " style=\"font-size: " << HTML.escape(font_size) << " !important;\">\n"
+
+        if fallback_code && !fallback_code.strip.empty?
+          style_attr = font_size ? " style=\"font-size: #{font_size} !important;\"" : ""
+          str << "                  <noscript><pre#{style_attr}><code class=\"language-bash\"#{style_attr}>" << HTML.escape(fallback_code.strip) << "</code></pre></noscript>\n"
+        end
+
+        str << "                </div>\n"
+        str << "              </div>\n"
+        str << "            </div>\n"
       when "barchart"
         title = data["title"]?.try(&.as_s) || "Benchmark Results (Execution Time)"
         badge = data["badge"]?.try(&.as_s) || "LOWER IS BETTER"
@@ -153,10 +213,10 @@ module LapisSlides
               code = item["code"]?.try(&.as_s) || ""
               str << "- **Code Example (`" << title << "`)**:\n"
               str << "  ```" << lang << "\n  " << code.strip.gsub("\n", "\n  ") << "\n  ```\n"
-            elsif item_type == "terminal"
-              title = item["title"]?.try(&.as_s) || "Terminal"
-              code = item["code"]?.try(&.as_s) || ""
-              str << "- **Terminal Command (`" << title << "`)**:\n"
+            elsif item_type == "terminal" || item_type == "asciinema" || item_type == "cast"
+              title = item["title"]?.try(&.as_s) || "Terminal Replay"
+              code = item["code"]?.try(&.as_s) || "Terminal recording: #{item["cast"]?.try(&.as_s)}"
+              str << "- **Terminal Replay (`" << title << "`)**:\n"
               str << "  ```bash\n  " << code.strip.gsub("\n", "\n  ") << "\n  ```\n"
             elsif item_type == "barchart"
               title = item["title"]?.try(&.as_s) || "Benchmark Results"

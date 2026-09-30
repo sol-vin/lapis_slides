@@ -8,9 +8,17 @@ palette: spaces_31
 layout: two-column-layout
 ratio: 3:2
 left:
-  type: terminal
+  type: asciinema
   title: Terminal — lapis test --tui Dashboard
+  cast: casts/test_runner_tui.cast
   font_size: '0.67rem'
+  speed: 1.25
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 19
   code: |
     ╔════════════════════════════════════════════════════════════════════════════════════╗
     ║ 🔮 LAPIS UNIFIED TEST SUITE DASHBOARD                                ALL PASSED ✔  ║

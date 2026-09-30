@@ -8,8 +8,17 @@ palette: spaces_95
 layout: two-column-layout
 ratio: 3:2
 left:
-  type: terminal
+  type: asciinema
   title: Terminal — lapis CLI Workflow
+  cast: casts/lapis_cli_lifecycle.cast
+  font_size: '0.72rem'
+  speed: 1.25
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 80
+  rows: 18
   code: |
     # Initialize a new game project with embedded templates
     $ lapis init my_game --template=3d-action

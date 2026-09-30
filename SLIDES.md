@@ -2581,7 +2581,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: CLI: Project Lifecycle
 - **Subtitle**: Scaffolding, Fast Iteration & Native Debugging
-- **Terminal Command (`Terminal — lapis CLI Workflow`)**:
+- **Terminal Replay (`Terminal — lapis CLI Workflow`)**:
   ```bash
   # Initialize a new game project with embedded templates
   $ lapis init my_game --template=3d-action
@@ -2639,7 +2639,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `TOOLCHAIN • AUTOMATION & CODEGEN`
 - **Title**: CLI: Codegen & Maintenance
 - **Subtitle**: Offline Decompilation, Diagnostics & Packaging
-- **Terminal Command (`Terminal — Advanced CLI Tooling`)**:
+- **Terminal Replay (`Terminal — Advanced CLI Tooling`)**:
   ```bash
   # Decompile Crystal method to pseudo-C & assembly via r2
   $ lapis decompile bin/game.dll "Player#_process" --side-by-side
@@ -2667,7 +2667,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `CLI • PACKAGING & PORTABLE DEPLOYS`
 - **Title**: Packaging & Portable Games: lapis package
 - **Subtitle**: Turnkey Standalone Binaries, Embedded PCK Footers & Zero-Dependency Zips
-- **Terminal Command (`Terminal — lapis package --portable`)**:
+- **Terminal Replay (`Terminal — lapis package --portable`)**:
   ```bash
   # 1. Package turnkey playable standalone game
   $ lapis package game --release -p my_game -n VoidRunner
@@ -2844,7 +2844,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
 - **Subtitle**: Real-Time Terminal User Interface for 45+ Modular Engine Test Suites
-- **Terminal Command (`Terminal — lapis test --tui Dashboard`)**:
+- **Terminal Replay (`Terminal — lapis test --tui Dashboard`)**:
   ```bash
   ╔════════════════════════════════════════════════════════════════════════════════════╗
   ║ 🔮 LAPIS UNIFIED TEST SUITE DASHBOARD                                ALL PASSED ✔  ║
@@ -2992,7 +2992,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
 - **Subtitle**: Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers
-- **Terminal Command (`Terminal — make package-release`)**:
+- **Terminal Replay (`Terminal — make package-release`)**:
   ```bash
   # Build complete official release distribution matrix
   $ make package-release
@@ -3159,7 +3159,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `LIVE DEMO • PART 3: ADDON ECOSYSTEM`
 - **Title**: Demo 3: Ecosystem Addons — Installing CrShader
 - **Subtitle**: Single-Command GDExtension Installation, Manifest Wiring & Shard Binding
-- **Terminal Command (`Terminal — lapis install addon`)**:
+- **Terminal Replay (`Terminal — lapis install addon`)**:
   ```bash
   # Step 1: Install CrShader with shard dependency & type bindings
   $ lapis install addon github:sol-vin/crshader --shard --bind
@@ -3239,7 +3239,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `LIVE DEMO • PART 5: PRODUCTION SHIPPING`
 - **Title**: Demo 5: Release Build & Distribution Packaging
 - **Subtitle**: High-Performance Release Compilation, Dead-Code Stripping & Turnkey Distribution
-- **Terminal Command (`Terminal — Release Compilation & Packaging`)**:
+- **Terminal Replay (`Terminal — Release Compilation & Packaging`)**:
   ```bash
   # Step 1: Optimized native release build with LLVM LTO
   $ lapis build --release --opt=3

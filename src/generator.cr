@@ -55,6 +55,9 @@ module LapisSlides
         <!-- Highlight.js Atom One Dark Syntax Theme -->
         <link rel="stylesheet" href="vendor/highlight/styles/atom-one-dark.min.css">
 
+        <!-- Asciinema Player CSS -->
+        <link rel="stylesheet" href="vendor/asciinema/asciinema-player.css">
+
         <!-- Lapis Brand Presentation Theme -->
         <link rel="stylesheet" href="theme.css">
       </head>
@@ -146,6 +149,94 @@ module LapisSlides
         </script>
         <!-- Sol.vin 3D Isometric Wireframe Cube Engine -->
         <script src="cube.js"></script>
+
+        <!-- Asciinema Player Engine & Reveal.js Synchronization -->
+        <script src="vendor/asciinema/asciinema-player.min.js"></script>
+        <script>
+          (function() {
+            const asciinemaInstances = new Map();
+
+            function initAsciinemaPlayers() {
+              if (!window.AsciinemaPlayer) return;
+
+              document.querySelectorAll('.asciinema-player-mount').forEach(mount => {
+                if (asciinemaInstances.has(mount)) return;
+
+                const src = mount.dataset.castSrc;
+                if (!src) return;
+
+                const speed = parseFloat(mount.dataset.speed || '1.0');
+                const loop = mount.dataset.loop === 'true';
+                const autoplay = mount.dataset.autoplay === 'true';
+                const theme = mount.dataset.theme || 'monokai';
+                const cols = parseInt(mount.dataset.cols || '86', 10);
+                const rows = parseInt(mount.dataset.rows || '19', 10);
+                const fontSize = mount.dataset.fontSize || '0.75rem';
+                const controlsVal = mount.dataset.controls;
+                const controls = controlsVal === 'true' ? true : (controlsVal === 'false' ? false : 'auto');
+
+                try {
+                  const player = AsciinemaPlayer.create(src, mount, {
+                    cols: cols,
+                    rows: rows,
+                    speed: speed,
+                    loop: loop,
+                    autoPlay: autoplay,
+                    theme: theme,
+                    terminalFontSize: fontSize,
+                    fit: 'contain',
+                    controls: controls
+                  });
+                  asciinemaInstances.set(mount, player);
+                } catch (err) {
+                  console.warn('Asciinema mount failed:', err);
+                }
+              });
+            }
+
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', initAsciinemaPlayers);
+            } else {
+              initAsciinemaPlayers();
+            }
+
+            if (window.Reveal) {
+              Reveal.on('ready', () => {
+                initAsciinemaPlayers();
+                const currentSlide = Reveal.getCurrentSlide();
+                if (currentSlide) {
+                  currentSlide.querySelectorAll('.asciinema-player-mount').forEach(mount => {
+                    const player = asciinemaInstances.get(mount);
+                    if (player && typeof player.play === 'function') player.play();
+                  });
+                }
+              });
+
+              Reveal.on('slidechanged', event => {
+                if (event.previousSlide) {
+                  event.previousSlide.querySelectorAll('.asciinema-player-mount').forEach(mount => {
+                    const player = asciinemaInstances.get(mount);
+                    if (player && typeof player.pause === 'function') {
+                      player.pause();
+                    }
+                  });
+                }
+
+                if (event.currentSlide) {
+                  event.currentSlide.querySelectorAll('.asciinema-player-mount').forEach(mount => {
+                    const player = asciinemaInstances.get(mount);
+                    if (player && typeof player.play === 'function') {
+                      if (typeof player.seek === 'function') {
+                        try { player.seek(0); } catch(e) {}
+                      }
+                      player.play();
+                    }
+                  });
+                }
+              });
+            }
+          })();
+        </script>
       </body>
 
       </html>
