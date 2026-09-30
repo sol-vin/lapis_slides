@@ -1,7 +1,7 @@
 ---
 id: 41c_demo_gameplay_dsl
 title: 'Demo 2: Live Node Authoring'
-subtitle: Writing Gameplay with %, /, @Export Sliders & Signals
+subtitle: Writing Gameplay with ~, onready, @Export Sliders & Typed Signals
 badge: 'LIVE DEMO • PART 2: GAMEPLAY DSL'
 badge_color: purple
 palette: playbox
@@ -12,18 +12,21 @@ left:
   title: src/nodes/player_controller.cr
   tag: Crystal
   lang: crystal
+  font_size: '0.74rem'
   code: |
     # src/nodes/player_controller.cr
     node PlayerController < CharacterBody3D do
       @[Export(range: 1.0_f32..25.0_f32, step: 0.5_f32)]
       property speed : Float32 = 8.0_f32
 
+      # Strongly typed onready caching with bare ~:
+      onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)
+
       signal health_changed(current : Int32, max : Int32)
 
       def _ready : Void
-        # Ergonomic traversal using / and %:
-        cam = (self / "CameraBoom" / "Camera3D")[Godot::Camera3D]
-        hp_bar = self % Godot::ProgressBar
+        # Direct typed child lookup via ~Class:
+        hp_bar = ~ProgressBar
 
         # Type-safe signal connection:
         health_changed.connect do |cur, max|
@@ -37,8 +40,8 @@ right:
   color: purple
   items:
     - '<strong>Live Inspector Sliders:</strong> <code>@[Export]</code> properties immediately render native drag sliders and range constraints in Godot Inspector.'
-    - '<strong>Operator Path Traversal:</strong> <code>self / "CameraBoom" / "Camera3D"</code> navigates scene graphs cleanly with left-associative syntax.'
+    - '<strong>Bare ~ Resolution:</strong> <code>~("CameraBoom/Camera3D").as(Camera3D)</code> resolves and types nested scene nodes via <code>NodeContext</code>.'
+    - '<strong>Typed Child Lookup (<code>~Class</code>):</strong> <code>~ProgressBar</code> queries child nodes by class name and returns a concrete, typed reference.'
     - '<strong>Type-Safe Signals:</strong> Declared signals synthesize compile-time checked connection helpers and auto-complete parameters.'
-    - '<strong>Automatic Doc Harvesting:</strong> Comments above properties and signals are automatically extracted into Godot offline F1 Help tooltips.'
 notes: |
-  In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. In our _ready method, we retrieve child nodes using our new operator syntax—traversing the camera boom with the slash operator and looking up our UI progress bar with the percent operator. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database.
+  In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. For child nodes, we use our clean unary tilde (~) ergonomics: 'onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)' caches the camera automatically, while '~ProgressBar' looks up the UI node with zero boilerplate. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database.
