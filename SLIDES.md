@@ -945,7 +945,8 @@ This document outlines each slide's exact theme palette, architectural category,
     public float Speed { get; set; } = 7.0f;
   
     [Signal]
-    public delegate void HealthChangedEventHandler(int hp);
+    public delegate void
+      HealthChangedEventHandler(int hp);
   
     [Signal]
     public delegate void DiedEventHandler();
@@ -970,7 +971,8 @@ This document outlines each slide's exact theme palette, architectural category,
       Self { base, speed: 7.0 }
     }
     fn ready(&mut self) {
-      godot_print!("Ready: {}", self.base().get_name());
+      godot_print!("Ready: {}",
+        self.base().get_name());
     }
   }
   #[godot_api]
@@ -989,9 +991,11 @@ This document outlines each slide's exact theme palette, architectural category,
   protected:
     static void _bind_methods() {
       ClassDB::bind_method(
-        D_METHOD("get_speed"), &Player::get_speed);
+        D_METHOD("get_speed"),
+        &Player::get_speed);
       ClassDB::bind_method(
-        D_METHOD("set_speed", "s"), &Player::set_speed);
+        D_METHOD("set_speed", "s"),
+        &Player::set_speed);
       ADD_PROPERTY(
         PropertyInfo(Variant::FLOAT, "speed",
           PROPERTY_HINT_RANGE, "1.0,20.0"),

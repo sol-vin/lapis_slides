@@ -625,15 +625,36 @@ ul.card-list li strong {
 .slide-body.four-cols .code-container {
   min-width: 0;
   overflow: hidden;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.slide-body.four-cols .code-container pre {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
 .slide-body.four-cols .code-container pre code {
-  font-size: 0.67rem !important;
-  line-height: 1.32 !important;
-  padding: 0.45rem 0.55rem !important;
+  font-size: 0.58rem !important;
+  line-height: 1.25 !important;
+  padding: 0.35rem 0.45rem !important;
   overflow-x: hidden !important;
-  word-break: normal;
-  white-space: pre !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+
+.slide-body.four-cols .code-container.code-dense pre code,
+.slide-body.four-cols .code-container pre code.code-dense {
+  font-size: 0.52rem !important;
+  line-height: 1.18 !important;
+}
+
+.slide-body.four-cols .code-container.code-compact pre code,
+.slide-body.four-cols .code-container pre code.code-compact {
+  font-size: 0.46rem !important;
+  line-height: 1.14 !important;
 }
 
 .slide-body.four-cols .code-header {

@@ -2274,7 +2274,8 @@ end</code></pre>
   public float Speed { get; set; } = 7.0f;
 
   [Signal]
-  public delegate void HealthChangedEventHandler(int hp);
+  public delegate void
+    HealthChangedEventHandler(int hp);
 
   [Signal]
   public delegate void DiedEventHandler();
@@ -2310,7 +2311,8 @@ impl ICharacterBody3D for Player {
     Self { base, speed: 7.0 }
   }
   fn ready(&amp;mut self) {
-    godot_print!(&quot;Ready: {}&quot;, self.base().get_name());
+    godot_print!(&quot;Ready: {}&quot;,
+      self.base().get_name());
   }
 }
 #[godot_api]
@@ -2340,9 +2342,11 @@ impl Player {
 protected:
   static void _bind_methods() {
     ClassDB::bind_method(
-      D_METHOD(&quot;get_speed&quot;), &amp;Player::get_speed);
+      D_METHOD(&quot;get_speed&quot;),
+      &amp;Player::get_speed);
     ClassDB::bind_method(
-      D_METHOD(&quot;set_speed&quot;, &quot;s&quot;), &amp;Player::set_speed);
+      D_METHOD(&quot;set_speed&quot;, &quot;s&quot;),
+      &amp;Player::set_speed);
     ADD_PROPERTY(
       PropertyInfo(Variant::FLOAT, &quot;speed&quot;,
         PROPERTY_HINT_RANGE, &quot;1.0,20.0&quot;),
