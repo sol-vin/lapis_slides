@@ -45,6 +45,8 @@ slides:
 - 20_node_dsl
 - 20b_ergonomic_node_access
 - 20c_node_context_tilde_operator
+- 20d_gmodule_mixins
+- 20e_gmodule_composition_and_lifecycle
 - 08_effortless_access
 - 09_signals_async
 - 11_antipattern_iterators
