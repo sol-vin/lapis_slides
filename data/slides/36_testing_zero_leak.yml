@@ -1,7 +1,7 @@
 ---
 id: 36_testing_zero_leak
 title: 'Testing Framework: Writing Tests & Zero-Leak Proof'
-subtitle: Comprehensive Spec Testing and Mathematical Zero-Memory-Leak Verification
+subtitle: Comprehensive Spec Testing, Deterministic Simulation & Zero-Leak Proof
 badge: QUALITY GATES • ZERO-LEAK TESTING
 badge_color: cyan
 palette: spaces_2000
@@ -12,41 +12,47 @@ left:
   title: gameplay_spec.cr — Lapis::Test Suite
   tag: Crystal
   lang: crystal
+  font_size: '0.74rem'
   code: |
-    require "lapis/test"
+    include Lapis::Test
 
-    Lapis::Test.test_suite "Player Combat System" do
-      test "spawning and taking damage" do
-        player = Godot.create(Player)
-        player.take_damage(25)
+    test_suite "Player Combat System" do
+      test "damage calculation & signal dispatch" do |root|
+        player = add_child_autofree(root, Godot.create(Player))
+        assert_alive player
+
+        # Asynchronously asserts signal fires within timeout
+        assert_emits(player, "health_changed", timeout_sec: 1.0) do
+          player.take_damage(25)
+        end
         assert_eq player.health, 75
-        player.destroy # Clean deallocation
+      end
+
+      test "deterministic physics step & vector assertions" do
+        bullet = autofree(Godot.create(Bullet))
+        bullet.velocity = Godot::Vector2.new(100.0, 0.0)
+        simulate(bullet, frames: 5, physics: true)
+        assert_vector_approx bullet.position, Godot::Vector2.new(500.0, 0.0), 0.01
       end
 
       test "mathematical zero memory leak verification" do
-        Lapis::Test.assert_no_leak do
+        # Proves ΔObjects == 0 across 100 allocation cycles
+        assert_no_leak(max_delta_objects: 0) do
           100.times do
-            bullet = Godot.create(Bullet)
-            bullet.destroy
+            fx = Godot.create(ParticleFX)
+            fx.destroy
           end
         end
       end
     end
 right:
   type: card
-  title: Zero-Leak Mathematical Proof
+  title: Testing Apparatus Invariants
   color: cyan
   items:
-  - <strong>Godot Performance Monitors:</strong> Queries engine singletons (<code>OBJECT_COUNT</code>,
-    <code>OBJECT_NODE_COUNT</code>, <code>MEMORY_STATIC</code>).
-  - <strong>GC Equilibrium Enforcement:</strong> Calls <code>GC.collect</code> before
-    and after iterations to settle heap state.
-  - '<strong>Strict Delta Verification:</strong> Mathematically proves that delta
-    object count is strictly zero: <code>ΔObjects == 0</code>.'
-  - <strong>Prevents Release Regressions:</strong> CI quality gates automatically
-    fail if any PR introduces a memory leak.
-notes: Memory leaks are fatal in long-running games. Lapis includes a dedicated testing
-  apparatus with mathematical zero-leak verification. Using Lapis::Test.assert_no_leak,
-  our test runner queries Godot's Performance singletons and forces GC equilibrium
-  before and after running iterations, mathematically proving that zero objects or
-  memory leaked.
+  - <strong>Automated Fixture Tracking:</strong> <code>add_child_autofree</code> and <code>autofree</code> track spawned nodes and automatically queue-free them after each test.
+  - <strong>Async Signals & Simulation:</strong> <code>assert_emits</code> and <code>simulate</code> advance processing frames cooperatively to test event-driven game logic.
+  - <strong>Godot ObjectDB Assertions:</strong> <code>assert_alive</code> and <code>assert_vector_approx</code> prevent dead-pointer crashes and validate spatial precision.
+  - <strong>Zero-Leak Mathematical Proof:</strong> <code>assert_no_leak</code> enforces <code>ΔObjects == 0</code> across engine singletons (<code>OBJECT_COUNT</code>, <code>MEMORY_STATIC</code>).
+notes: |
+  Memory leaks and dead pointers are fatal in game development. Lapis provides a full-featured testing apparatus tailored for Godot. Using add_child_autofree, nodes are tracked and automatically cleaned up after test runs. With assert_emits and simulate, you can cooperatively step idle and physics frames to verify asynchronous event dispatch and spatial positions. Finally, assert_no_leak queries Godot's Performance singletons and forces GC equilibrium before and after runs, mathematically proving that zero native objects or memory leaked.

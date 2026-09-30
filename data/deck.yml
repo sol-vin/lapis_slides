@@ -71,6 +71,7 @@ slides:
 - 30_cli_lifecycle
 - 32_package_management
 - 31_cli_codegen
+- 31b_cli_package_portable
 - 34_debugger_radare2
 - 34c_debug_workflows
 - 34b_r2_test_suite
