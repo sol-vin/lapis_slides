@@ -788,9 +788,9 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
 - **Title**: Where Macros Shine: Declarative State Machines
 - **Subtitle**: Zero-Boilerplate State Transitions with Compile-Time Verification
-- **Code Example (`enemy_fsm.cr — Declarative State Machine DSL`)**:
+- **Code Example (`enemy_fsm.cr — Declarative DSL & Gameplay Usage`)**:
   ```crystal
-  # Declare states, transitions & lifecycle hooks with a macro DSL
+  # 1. Declare states & transitions with macro DSL
   fsm BossState do
     state Patrol, initial: true do
       before { start_patrol_path }
@@ -801,17 +801,28 @@ This document outlines each slide's exact theme palette, architectural category,
     state Chase do
       before { play_animation("run") }
       on :in_attack_range, transition_to: Attack
-      on :lost_player, transition_to: Patrol
+      on :lost_player,     transition_to: Patrol
     end
   
     state Attack do
       before { play_sound("roar") }
-      on :attack_finished, transition_to: Recover
+      on :attack_finished, transition_to: Patrol
       after { reset_hitbox }
     end
+  end
   
-    state Recover do
-      on :timer_done, transition_to: Patrol
+  # 2. Actual runtime gameplay usage
+  fsm = BossStateMachine.new
+  
+  def _physics_process(delta : Float64) : Void
+    if distance_to(player) < 15.0
+      fsm.trigger(:see_player) # -> Chase (runs before/after hooks!)
+    end
+  
+    case fsm.current_state
+    when .patrol? then move_along_path(delta)
+    when .chase?  then navigate_to(player, delta)
+    when .attack? then execute_slam_attack
     end
   end
   ```
@@ -821,7 +832,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Compile-Time Transition Validation: Referencing an undeclared state or illegal transition fails at compile time.
   - Zero Reflection Overhead: Transitions compile to direct jump tables; zero lambda allocations or dictionary lookups.
 - **Presenter Script**:
-  > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead."*
+  > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process."*
 
 ---
 ### Slide 23: Behind the DSL: The FSM AST Macro

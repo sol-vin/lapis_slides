@@ -1954,20 +1954,20 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title">enemy_fsm.cr — Declarative State Machine DSL</span>
+              <span class="code-title">enemy_fsm.cr — Declarative DSL &amp; Gameplay Usage</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal</span>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense"># Declare states, transitions &amp; lifecycle hooks with a macro DSL
+            <pre><code class="language-crystal code-compact"># 1. Declare states &amp; transitions with macro DSL
 fsm BossState do
   state Patrol, initial: true do
     before { start_patrol_path }
@@ -1978,17 +1978,28 @@ fsm BossState do
   state Chase do
     before { play_animation(&quot;run&quot;) }
     on :in_attack_range, transition_to: Attack
-    on :lost_player, transition_to: Patrol
+    on :lost_player,     transition_to: Patrol
   end
 
   state Attack do
     before { play_sound(&quot;roar&quot;) }
-    on :attack_finished, transition_to: Recover
+    on :attack_finished, transition_to: Patrol
     after { reset_hitbox }
   end
+end
 
-  state Recover do
-    on :timer_done, transition_to: Patrol
+# 2. Actual runtime gameplay usage
+fsm = BossStateMachine.new
+
+def _physics_process(delta : Float64) : Void
+  if distance_to(player) &lt; 15.0
+    fsm.trigger(:see_player) # -&gt; Chase (runs before/after hooks!)
+  end
+
+  case fsm.current_state
+  when .patrol? then move_along_path(delta)
+  when .chase?  then navigate_to(player, delta)
+  when .attack? then execute_slam_attack
   end
 end</code></pre>
           </div>
@@ -2013,7 +2024,7 @@ end</code></pre>
           <span>Slide 22 / 83</span>
         </div>
         <aside class="notes">
-          State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead.
+          State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process.
         </aside>
       </section>
 
