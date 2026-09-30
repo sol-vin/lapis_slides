@@ -23,6 +23,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Update apt package index
+        run: sudo apt-get update
+
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
         with:
