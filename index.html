@@ -6079,45 +6079,55 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title">dynamic_caller.cr — Variant Dynamic Dispatch</span>
+              <span class="code-title">dynamic_caller.cr — Variant Dynamic Dispatch &amp; Safe Set/Get</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal</span>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Retrieve a GDScript node from the scene tree
-gd_dialogue = get_node(Godot::Node, &quot;UI/DialogueManager&quot;)
+            <pre><code class="language-crystal code-dense"># 1. Retrieve a GDScript node from scene tree:
+gd_dialogue = (self / &quot;UI/DialogueManager&quot;).as(Godot::Node)
 
-# Dynamic method invocation with Variant marshalling
+# 2. Dynamic method call with Variant marshalling:
 result = gd_dialogue.call(&quot;show_dialogue&quot;, &quot;npc_elder_01&quot;, 100)
 
-# Check if a GDScript node has a method before invoking
+# Check method existence before dispatch:
 if gd_dialogue.has_method(&quot;custom_hook&quot;)
   gd_dialogue.call(&quot;custom_hook&quot;)
 end
 
-# Dynamic property get and set
+# 3. Dynamic property get and set:
 current_line = gd_dialogue.get(&quot;current_line&quot;).as_s
-gd_dialogue.set(&quot;dialogue_speed&quot;, 1.5)</code></pre>
+gd_dialogue.set(&quot;dialogue_speed&quot;, 1.5)
+
+# 4. What if the property does NOT exist?
+gd_dialogue.set(&quot;not_a_real_variable&quot;, &quot;some bullshit value&quot;)
+# =&gt; Safely ignored by Godot ObjectDB: returns false, zero crash!
+
+missing = gd_dialogue.get(&quot;not_a_real_variable&quot;)
+# =&gt; Returns Variant(Nil) / nil safely
+
+# For true dynamic key-value storage, use metadata:
+gd_dialogue.set_meta(&quot;custom_data&quot;, &quot;persisted_value&quot;)</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="card purple col">
             <div class="card-title purple">
-              <span>Dynamic Interop &amp; Automated Bindings</span>
+              <span>Dynamic Interop &amp; Unknown Properties</span>
             </div>
             <ul class="card-list">
-              <li><strong>Universal Variant Marshalling:</strong> Automatically marshals numbers, strings, vectors, and arrays between Crystal and GDScript.</li>
-              <li><strong>Reflection Inspection:</strong> <code>has_method("name")</code> checks method presence at runtime before dispatching.</li>
-              <li><strong>Automated Bindings Generator:</strong> Lapis automatically parses <code>extension_api.json</code> and GDScript ASTs to generate typed wrappers with zero manual glue code.</li>
-              <li><strong>Dead-Pointer Protected:</strong> Dynamic dispatches validate node liveness via <code>#check_alive!</code> before invoking.</li>
+              <li><strong>Universal Variant Marshalling:</strong> Marshals numbers, strings, vectors, and arrays transparently between Crystal and GDScript.</li>
+              <li><strong>Unknown Property Handling:</strong> Setting a non-existent property via <code>.set("invalid", val)</code> is safely ignored by Godot's <code>ObjectDB</code> (returns <code>false</code>); <code>.get("invalid")</code> returns <code>nil</code> with zero crashes.</li>
+              <li><strong>Metadata for Dynamic Attributes:</strong> Use <code>set_meta("key", val)</code> and <code>get_meta("key")</code> when you need genuine dynamic dictionary storage on nodes.</li>
+              <li><strong>Reflection & Safety:</strong> <code>has_method("name")</code> checks presence before invoking; dispatches are dead-pointer guarded via <code>#check_alive!</code>.</li>
             </ul>
           </div>
           </div>
@@ -6128,7 +6138,7 @@ gd_dialogue.set(&quot;dialogue_speed&quot;, 1.5)</code></pre>
           <span>Slide 63 / 83</span>
         </div>
         <aside class="notes">
-          What about calling GDScript from Crystal? Lapis provides both flexible dynamic dispatch via .call, .get, and .set, and an automated bindings generator. Lapis inspects Godot's extension_api.json and GDScript reflection to synthesize typed Crystal wrappers with zero manual C-API boilerplate. Arguments are marshalled transparently through Godot's Variant type, and every invocation is guarded by our monotonic 64-bit instance ID check.
+          What happens when calling GDScript dynamically from Crystal? Lapis provides full Variant reflection via .call, .get, and .set. If you call .set("not_a_real_variable", "some bullshit value"), Godot's ObjectDB checks ClassDB and script member tables; because the property doesn't exist, it safely returns false and ignores the write without crashing or corrupting memory, while .get returns nil. If you genuinely want dynamic runtime key-value attributes on a node, Godot provides set_meta and get_meta. Every dynamic call is dead-pointer protected by Lapis's monotonic 64-bit instance ID check.
         </aside>
       </section>
 

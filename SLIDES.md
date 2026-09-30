@@ -2278,30 +2278,40 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
 - **Subtitle**: Rapid Script Prototyping and Dynamic GDScript Invocation via Variant Reflection
-- **Code Example (`dynamic_caller.cr — Variant Dynamic Dispatch`)**:
+- **Code Example (`dynamic_caller.cr — Variant Dynamic Dispatch & Safe Set/Get`)**:
   ```crystal
-  # Retrieve a GDScript node from the scene tree
-  gd_dialogue = get_node(Godot::Node, "UI/DialogueManager")
+  # 1. Retrieve a GDScript node from scene tree:
+  gd_dialogue = (self / "UI/DialogueManager").as(Godot::Node)
   
-  # Dynamic method invocation with Variant marshalling
+  # 2. Dynamic method call with Variant marshalling:
   result = gd_dialogue.call("show_dialogue", "npc_elder_01", 100)
   
-  # Check if a GDScript node has a method before invoking
+  # Check method existence before dispatch:
   if gd_dialogue.has_method("custom_hook")
     gd_dialogue.call("custom_hook")
   end
   
-  # Dynamic property get and set
+  # 3. Dynamic property get and set:
   current_line = gd_dialogue.get("current_line").as_s
   gd_dialogue.set("dialogue_speed", 1.5)
+  
+  # 4. What if the property does NOT exist?
+  gd_dialogue.set("not_a_real_variable", "some bullshit value")
+  # => Safely ignored by Godot ObjectDB: returns false, zero crash!
+  
+  missing = gd_dialogue.get("not_a_real_variable")
+  # => Returns Variant(Nil) / nil safely
+  
+  # For true dynamic key-value storage, use metadata:
+  gd_dialogue.set_meta("custom_data", "persisted_value")
   ```
-- **Dynamic Interop & Automated Bindings**:
-  - Universal Variant Marshalling: Automatically marshals numbers, strings, vectors, and arrays between Crystal and GDScript.
-  - Reflection Inspection: has_method("name") checks method presence at runtime before dispatching.
-  - Automated Bindings Generator: Lapis automatically parses extension_api.json and GDScript ASTs to generate typed wrappers with zero manual glue code.
-  - Dead-Pointer Protected: Dynamic dispatches validate node liveness via #check_alive! before invoking.
+- **Dynamic Interop & Unknown Properties**:
+  - Universal Variant Marshalling: Marshals numbers, strings, vectors, and arrays transparently between Crystal and GDScript.
+  - Unknown Property Handling: Setting a non-existent property via .set("invalid", val) is safely ignored by Godot's ObjectDB (returns false); .get("invalid") returns nil with zero crashes.
+  - Metadata for Dynamic Attributes: Use set_meta("key", val) and get_meta("key") when you need genuine dynamic dictionary storage on nodes.
+  - Reflection & Safety: has_method("name") checks presence before invoking; dispatches are dead-pointer guarded via #check_alive!.
 - **Presenter Script**:
-  > *"What about calling GDScript from Crystal? Lapis provides both flexible dynamic dispatch via .call, .get, and .set, and an automated bindings generator. Lapis inspects Godot's extension_api.json and GDScript reflection to synthesize typed Crystal wrappers with zero manual C-API boilerplate. Arguments are marshalled transparently through Godot's Variant type, and every invocation is guarded by our monotonic 64-bit instance ID check."*
+  > *"What happens when calling GDScript dynamically from Crystal? Lapis provides full Variant reflection via .call, .get, and .set. If you call .set("not_a_real_variable", "some bullshit value"), Godot's ObjectDB checks ClassDB and script member tables; because the property doesn't exist, it safely returns false and ignores the write without crashing or corrupting memory, while .get returns nil. If you genuinely want dynamic runtime key-value attributes on a node, Godot provides set_meta and get_meta. Every dynamic call is dead-pointer protected by Lapis's monotonic 64-bit instance ID check."*
 
 ---
 ### Slide 64: Crystal Calling GDScript: Strongly-Typed Bindings
