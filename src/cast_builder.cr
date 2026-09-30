@@ -391,29 +391,84 @@ module LapisSlides
       sess.save(File.join(output_dir, "lapis_bind.cast"), 86, 19, "Lapis Codegen & ClassDB Reflection")
     end
 
-    # 6. Portable Packaging (Slide 31b)
+    # 5b. Project & Addon Scaffolding Wizard (Slide 30d)
+    def self.build_scaffold_wizard_cast(output_dir : String)
+      sess = Session.new
+      sess.clear_screen
+
+      p1 = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects#{C_RESET}$ "
+      sess.type_command("lapis cli -n", p1, 22.0)
+
+      # TUI Wizard Step 1
+      sess.emit(0.15_f64, "#{C_CYAN}:: LAPIS PROJECT & ADDON SCAFFOLDING WIZARD ::#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "#{C_DIM}Create standalone games, redistributable GDExtension addons, or showcase examples#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "#{C_YELLOW}Step 1: Select Project Type#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "  #{C_GREEN}► [*] [GAME] Standalone Game Project#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "        A complete Godot game project with Crystal gameplay nodes and scenes.\r\n")
+      sess.emit(0.06_f64, "    [ ] [ADDON] Redistributable GDExtension Addon\r\n")
+      sess.emit(0.06_f64, "        Reusable extension package with export plugin, manifests, and shard specs.\r\n")
+      sess.emit(0.06_f64, "    [ ] [EXAMPLE] Showcase Example\r\n")
+      sess.emit(0.06_f64, "        Self-contained demo showcasing features and patterns.\r\n")
+      sess.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      sess.emit(0.1_f64, "  #{C_CYAN}Tab / ↑↓: Navigate Fields │ Enter: Next │ F: Choose Folder │ Esc: Exit Wizard#{C_RESET}\r\n\r\n")
+      sess.pause(1.2)
+
+      # Step 2 Details & Instant Creation
+      sess.emit(0.2_f64, "#{C_CYAN}[Scaffold]#{C_RESET} Initializing standalone game 'void_runner' in ./void_runner...\r\n")
+      sess.spinner("Creating scene tree, crystal sources, and engine configuration...", frames_count: 10)
+      sess.spinner_done("Scaffold generated in 0.38s")
+      sess.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} project.godot (Godot 4.8.0-custom)\r\n")
+      sess.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} shard.yml (libgodot ~> 0.8.2)\r\n")
+      sess.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} src/main.cr (Root Game Host & Player character node)\r\n")
+      sess.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} scenes/main.tscn & scenes/player.tscn\r\n\r\n")
+      sess.pause(1.0)
+
+      # Direct CLI command
+      sess.type_command("lapis scaffold game void_runner", p1, 22.0)
+      sess.emit(0.15_f64, "#{C_BOLD}#{C_GREEN}[Success]#{C_RESET} Project 'void_runner' ready! Run 'cd void_runner && lapis editor'\r\n")
+      sess.pause(3.5)
+      sess.save(File.join(output_dir, "lapis_scaffold_wizard.cast"), 86, 20, "Lapis Scaffolding Wizard & CLI")
+    end
+
+    # 6. Portable Packaging (Slide 31b) - TUI Form + Direct CLI Command
     def self.build_package_cast(output_dir : String)
       pkg_session = Session.new
       pkg_session.clear_screen
 
-      p_pkg = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/dungeon_crawl#{C_RESET}$ "
-      pkg_session.type_command("lapis package game --portable --embed-pck --release -n VoidRunner", p_pkg, 22.0)
+      p_pkg = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
+      pkg_session.type_command("lapis cli -p", p_pkg, 22.0)
 
-      pkg_session.emit(0.15_f64, "#{C_CYAN}[Package]#{C_RESET} Compiling release binary with LLVM -O3 optimizations...\r\n")
-      pkg_session.spinner("Running Crystal compiler with --release -O3 --no-debug...", frames_count: 14)
+      # 1. Interactive TUI Form
+      pkg_session.emit(0.15_f64, "#{C_MAGENTA}:: LAPIS PACKAGING & EXPORT CENTER ::#{C_RESET}\r\n")
+      pkg_session.emit(0.06_f64, "#{C_DIM}Configure export targets, bundles, optimizations, and release installers#{C_RESET}\r\n")
+      pkg_session.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      pkg_session.emit(0.06_f64, "  Target Artifact:     ( ) Playable Game      #{C_GREEN}(*) Portable Executable#{C_RESET}\r\n")
+      pkg_session.emit(0.06_f64, "                       ( ) GDExtension Addon  ( ) Windows Installer (.exe)\r\n")
+      pkg_session.emit(0.06_f64, "  Release Mode:        #{C_GREEN}[X] Optimized (--release -O3)#{C_RESET}\r\n")
+      pkg_session.emit(0.06_f64, "  Bundle Deps:         #{C_GREEN}[X] Include runtime DLLs (gc.dll, crystal_bridge.dll)#{C_RESET}\r\n")
+      pkg_session.emit(0.06_f64, "  Destination Dir:     [ bin/release_dist ]\r\n")
+      pkg_session.emit(0.06_f64, "  Release Version:     [ 1.0.0 ]\r\n")
+      pkg_session.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      pkg_session.emit(0.1_f64, "  #{C_CYAN}Tab / ↑↓: Navigate Fields │ Space: Toggle Option │ Enter: Start Build │ Esc: Back#{C_RESET}\r\n\r\n")
+      pkg_session.pause(1.2)
+
+      # 2. Build Execution inside TUI
+      pkg_session.emit(0.2_f64, "#{C_CYAN}[Build]#{C_RESET} Compiling release binary with LLVM -O3 optimizations...\r\n")
+      pkg_session.spinner("Running Crystal compiler with --release -O3 --no-debug...", frames_count: 10)
       pkg_session.spinner_done("Compiled bin/game.dll (2.1 MB) & bin/game.exe in 2.1s")
 
-      pkg_session.emit(0.15_f64, "#{C_MAGENTA}[Package]#{C_RESET} Bundling Godot scene pack & runtime libraries...\r\n")
-      pkg_session.spinner("Bundling scene assets into PCK archive...", frames_count: 10)
-      pkg_session.spinner_done("Created dist/VoidRunner.pck (42.8 MB)")
+      pkg_session.emit(0.15_f64, "#{C_MAGENTA}[GDPC]#{C_RESET} Injecting 12-byte GDPC trailer for standalone single-file binary...\r\n")
+      pkg_session.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} Embedded PCK payload at EOF offset 0x0041B000 (44,882,912 bytes)\r\n")
+      pkg_session.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} Appended GDPC magic trailer [0x43504447]\r\n")
+      pkg_session.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} Output: #{C_BOLD}bin/release_dist/VoidRunner.exe#{C_RESET} (SHA-256: 8a4f91b7e402...)\r\n\r\n")
+      pkg_session.pause(1.2)
 
-      pkg_session.emit(0.15_f64, "#{C_CYAN}[Package:GDPC]#{C_RESET} Injecting 12-byte GDPC trailer for standalone single-file binary...\r\n")
-      pkg_session.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Embedded PCK payload at EOF offset 0x0041B000 (44,882,912 bytes)\r\n")
-      pkg_session.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Appended GDPC magic trailer [0x43504447]\r\n")
-      pkg_session.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Generated turnkey single-file executable: #{C_BOLD}bin/VoidRunner.exe#{C_RESET}\r\n")
-      pkg_session.emit(0.15_f64, "#{C_BOLD}#{C_GREEN}[Success]#{C_RESET} Turnkey standalone executable packaged (zero external dependencies)!\r\n")
+      # 3. Direct CLI Command execution
+      pkg_session.type_command("lapis package game --portable --embed-pck --release -n VoidRunner", p_pkg, 22.0)
+      pkg_session.emit(0.12_f64, "#{C_BOLD}#{C_GREEN}[Success]#{C_RESET} Turnkey standalone executable packaged (zero external dependencies)!\r\n")
       pkg_session.pause(3.5)
-      pkg_session.save(File.join(output_dir, "lapis_package.cast"), 86, 19, "Lapis Portable Packaging with GDPC Trailer")
+      pkg_session.save(File.join(output_dir, "lapis_package.cast"), 86, 20, "Lapis Portable Packaging with GDPC Trailer")
     end
 
     # 7. Addon Management (Slide 32)
@@ -421,11 +476,11 @@ module LapisSlides
       addon_session = Session.new
       addon_session.clear_screen
 
-      p_addon = "#{C_BOLD}#{C_GREEN}dev@lapis#{C_RESET}:#{C_BLUE}~/game#{C_RESET}$ "
+      p_addon = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
       addon_session.type_command("lapis addon install github:sol-vin/combat_system@v1.2", p_addon, 22.0)
 
       addon_session.emit(0.15_f64, "#{C_CYAN}[Addon:Resolve]#{C_RESET} Resolving GitHub release asset for windows-x86_64...\r\n")
-      addon_session.spinner("Downloading precompiled binary package...", frames_count: 12)
+      addon_session.spinner("Downloading precompiled binary package...", frames_count: 10)
       addon_session.spinner_done("Downloaded combat_system-windows.zip (1.4 MB)")
 
       addon_session.emit(0.15_f64, "#{C_MAGENTA}[Addon:Audit]#{C_RESET} Inspecting GDExtension binary headers & symbols...\r\n")
@@ -433,14 +488,51 @@ module LapisSlides
       addon_session.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} Hardening check: ASLR enabled, DEP/NX enabled, 0 poison hooks\r\n")
 
       addon_session.emit(0.15_f64, "#{C_YELLOW}[Shards:Negotiator]#{C_RESET} Checking multi-addon shard dependencies...\r\n")
-      addon_session.spinner("Negotiating transitive shard versions...", frames_count: 10)
+      addon_session.spinner("Negotiating transitive shard versions...", frames_count: 8)
       addon_session.spinner_done("Negotiated crshader v0.2 across 5 addons: 0 conflicts")
 
-      addon_session.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Extracted to addons/combat_system/\r\n")
-      addon_session.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Generated typed Crystal API: src/bindings/combat_system.cr\r\n")
+      addon_session.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} Extracted to addons/combat_system/\r\n")
+      addon_session.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} Generated typed Crystal API: src/bindings/combat_system.cr\r\n")
       addon_session.emit(0.2_f64, "#{C_BOLD}#{C_GREEN}✓ Addon 'combat_system' installed successfully! Ready with autocomplete.#{C_RESET}\r\n")
       addon_session.pause(3.5)
-      addon_session.save(File.join(output_dir, "lapis_addon_install.cast"), 86, 19, "Lapis Addon Management & Shard Negotiation")
+      addon_session.save(File.join(output_dir, "lapis_addon_install.cast"), 86, 20, "Lapis Addon Management & Shard Negotiation")
+    end
+
+    # 7b. Persistent Editor Launcher & Supervisor (Slide 33b)
+    def self.build_editor_launcher_cast(output_dir : String)
+      sess = Session.new
+      sess.clear_screen
+
+      p1 = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
+      sess.type_command("lapis cli -e", p1, 22.0)
+
+      # TUI Supervisor Header & Panes
+      sess.emit(0.15_f64, "#{C_CYAN}:: LAPIS EDITOR SUPERVISOR & LIVE LOG WATCHER ::#{C_RESET}      Project: void_runner\r\n")
+      sess.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "┌─ Process Status ────────┐ Log Stream #{C_DIM}[Auto-Scroll: ON] (148 lines)#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "│ State:      #{C_GREEN}[RUNNING]#{C_RESET}   │ #{C_BLUE}[GODOT]#{C_RESET} Godot Engine v4.8.0.custom_build\r\n")
+      sess.emit(0.06_f64, "│ PID:        18420       │ #{C_CYAN}[LAPIS]#{C_RESET} Initialized Crystal bridge DLL\r\n")
+      sess.emit(0.06_f64, "│ Uptime:     42s         │ #{C_GREEN}[GAME]#{C_RESET}  Player initialized: CharacterBody3D\r\n")
+      sess.emit(0.06_f64, "│ Reloads:    3           │ #{C_GREEN}[GAME]#{C_RESET}  Emitted signal: health_changed (100)\r\n")
+      sess.emit(0.06_f64, "├─ Quick Actions ─────────┤ #{C_MAGENTA}[LAPIS]#{C_RESET} Recompiling game.dll on F5 save...\r\n")
+      sess.emit(0.06_f64, "│ #{C_BOLD}[ R ]#{C_RESET} Build & Reload    │ #{C_CYAN}[LAPIS]#{C_RESET} Shadow copy loaded: game_18420_1048.dll\r\n")
+      sess.emit(0.06_f64, "│ #{C_RED}[ K ]#{C_RESET} Graceful Kill     │ #{C_GREEN}[GAME]#{C_RESET}  Reload complete in 184ms\r\n")
+      sess.emit(0.06_f64, "│ #{C_DIM}[ C ]#{C_RESET} Clear Log Stream  │ #{C_BLUE}[GODOT]#{C_RESET} Scene re-instantiated successfully\r\n")
+      sess.emit(0.06_f64, "└─────────────────────────┘\r\n")
+      sess.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      sess.emit(0.1_f64, "  #{C_CYAN}R: Recompile & Reload │ K: Kill Editor │ Space: Scroll Lock │ Esc: Return#{C_RESET}\r\n\r\n")
+      sess.pause(1.2)
+
+      # Trigger R (Hot-recompile action)
+      sess.emit(0.2_f64, "#{C_MAGENTA}[Supervisor]#{C_RESET} Hot-reload key [R] triggered. Recompiling game.dll...\r\n")
+      sess.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Recompiled in 192ms. Shadow DLL swapped: game_18420_1049.dll\r\n\r\n")
+      sess.pause(1.0)
+
+      # Direct command
+      sess.type_command("lapis editor --path .", p1, 22.0)
+      sess.emit(0.15_f64, "#{C_BOLD}#{C_GREEN}[Editor]#{C_RESET} Godot Editor spawned (PID 18420) with active Crystal bridge.\r\n")
+      sess.pause(3.5)
+      sess.save(File.join(output_dir, "lapis_editor_launcher.cast"), 86, 20, "Lapis Editor Supervisor & Log Watcher")
     end
 
     # 8. Side-by-Side Decompile & Native Debug (Slide 34c)
@@ -468,7 +560,7 @@ module LapisSlides
       dbg_session.emit(0.18_f64, "#{C_GREEN}[Forensics]#{C_RESET} RCX = 0x0000021b3759c2f0 (InstanceID: 4120894102) -> VALID ObjectDB\r\n")
       dbg_session.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Dead-pointer check: Object is alive. Resuming execution.\r\n")
       dbg_session.pause(3.5)
-      dbg_session.save(File.join(output_dir, "lapis_debug_workflows.cast"), 86, 19, "Lapis Debug Helper & Side-by-Side Decompilation")
+      dbg_session.save(File.join(output_dir, "lapis_debug_workflows.cast"), 86, 20, "Lapis Debug Helper & Side-by-Side Decompilation")
     end
 
     # 9. Multi-Channel Log Triage & Fuzzy Search (Slide 34d)
@@ -498,7 +590,69 @@ module LapisSlides
       sess.emit(0.08_f64, "#{C_CYAN}└─────────────────────────────────────────────────────────────────────────────────┘#{C_RESET}\r\n")
       sess.emit(0.1_f64, "  #{C_DIM}[↑↓] Select Line  [Enter] Full Context  [/] Refilter  [q] Exit#{C_RESET}\r\n")
       sess.pause(3.5)
-      sess.save(File.join(output_dir, "lapis_log.cast"), 86, 19, "Lapis Multi-Channel Log Triage & Fuzzy Search")
+      sess.save(File.join(output_dir, "lapis_log.cast"), 86, 20, "Lapis Multi-Channel Log Triage & Fuzzy Search")
+    end
+
+    # 9b. Runtime Performance Monitor (Slide 34e)
+    def self.build_run_monitor_cast(output_dir : String)
+      sess = Session.new
+      sess.clear_screen
+
+      p1 = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
+      sess.type_command("lapis cli -r", p1, 22.0)
+
+      # Telemetry Dashboard
+      sess.emit(0.15_f64, "#{C_YELLOW}:: LAPIS RUNTIME PERFORMANCE MONITOR ::#{C_RESET} │ Status: #{C_GREEN}[#] RUNNING (PID 9420)#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "#{C_CYAN}Target: bin/game.exe │ Uptime: 01:24 │ FPS: 60.0 │ RAM: 48.2 MB (Peak: 52.4 MB)#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      sess.emit(0.06_f64, "┌─ Frame Rate (FPS) ─────────────┐ ┌─ Memory Allocation (MB) ────────┐\r\n")
+      sess.emit(0.06_f64, "│ 120 ┤                          │ │ 100 ┤                           │\r\n")
+      sess.emit(0.06_f64, "│  90 ┤                          │ │  75 ┤                           │\r\n")
+      sess.emit(0.06_f64, "│  60 ┼───────────────────────── │ │  50 ┼────────────────────────── │\r\n")
+      sess.emit(0.06_f64, "│  30 ┤                          │ │  25 ┤   #{C_CYAN}▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄#{C_RESET} │\r\n")
+      sess.emit(0.06_f64, "│   0 ┴───────────────────────── │ │   0 ┴────────────────────────── │\r\n")
+      sess.emit(0.06_f64, "│     14:20:00          14:20:30 │ │     14:20:00           14:20:30 │\r\n")
+      sess.emit(0.06_f64, "└────────────────────────────────┘ └─────────────────────────────────┘\r\n")
+      sess.emit(0.06_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
+      sess.emit(0.1_f64, "  #{C_CYAN}Ctrl+K / K: Terminate Process │ R: Restart │ Esc / Q: Exit Monitor#{C_RESET}\r\n\r\n")
+      sess.pause(1.5)
+
+      # Graceful Kill
+      sess.emit(0.2_f64, "#{C_YELLOW}[Monitor]#{C_RESET} Hotkey [K] received: Sending graceful termination signal...\r\n")
+      sess.emit(0.1_f64, "  #{C_GREEN}✓#{C_RESET} Process 9420 cleanly terminated. Peak RAM: 52.4 MB. 0 memory leaks.\r\n\r\n")
+      sess.pause(1.0)
+
+      # Direct command
+      sess.type_command("lapis run", p1, 22.0)
+      sess.emit(0.15_f64, "#{C_BOLD}#{C_GREEN}[Run]#{C_RESET} Launching standalone host game bin/game.exe...\r\n")
+      sess.pause(3.5)
+      sess.save(File.join(output_dir, "lapis_run_monitor.cast"), 86, 20, "Lapis Runtime Performance Monitor")
+    end
+
+    # 9c. Multi-Target Synchronization (Slide 34f)
+    def self.build_sync_targets_cast(output_dir : String)
+      sess = Session.new
+      sess.clear_screen
+
+      p1 = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/lapis#{C_RESET}$ "
+      sess.type_command("lapis sync --verbose", p1, 22.0)
+
+      sess.emit(0.15_f64, "#{C_CYAN}[Sync]#{C_RESET} Synchronizing multi-target workspace binaries & manifests...\r\n")
+      sess.emit(0.08_f64, "#{C_CYAN}┌───────────────────────┬────────────┬──────────┬───────────────────────┐#{C_RESET}\r\n")
+      sess.emit(0.08_f64, "│ #{C_BOLD}Target Workspace#{C_RESET}      │ #{C_BOLD}Bridge DLL#{C_RESET} │ #{C_BOLD}Game DLL#{C_RESET} │ #{C_BOLD}Dependencies Synced#{C_RESET}   │\r\n")
+      sess.emit(0.08_f64, "#{C_CYAN}├───────────────────────┼────────────┼──────────┼───────────────────────┤#{C_RESET}\r\n")
+      sess.emit(0.08_f64, "│ root (Host Game)      │ 2.4 MB #{C_GREEN}✔#{C_RESET}   │ 4.1 MB #{C_GREEN}✔#{C_RESET} │ gc.dll, libgodot.dll  │\r\n")
+      sess.emit(0.08_f64, "│ test/bin (Test Suite) │ 2.4 MB #{C_GREEN}✔#{C_RESET}   │ 3.8 MB #{C_GREEN}✔#{C_RESET} │ gc.dll, libgodot.dll  │\r\n")
+      sess.emit(0.08_f64, "│ template/bin (Game)   │ 2.4 MB #{C_GREEN}✔#{C_RESET}   │ 2.1 MB #{C_GREEN}✔#{C_RESET} │ gc.dll, libgodot.dll  │\r\n")
+      sess.emit(0.08_f64, "│ examples/basic_demo   │ 2.4 MB #{C_GREEN}✔#{C_RESET}   │ 3.2 MB #{C_GREEN}✔#{C_RESET} │ gc.dll, libgodot.dll  │\r\n")
+      sess.emit(0.08_f64, "#{C_CYAN}└───────────────────────┴────────────┴──────────┴───────────────────────┘#{C_RESET}\r\n\r\n")
+
+      sess.emit(0.12_f64, "#{C_YELLOW}[Sync:DAG]#{C_RESET} Topologically sorting 4 addon manifests...\r\n")
+      sess.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} Dependency DAG resolved: [crshader -> combat_system -> ui_kit]\r\n")
+      sess.emit(0.08_f64, "  #{C_GREEN}✓#{C_RESET} extension_list.cfg load order updated (0 cyclic dependencies)\r\n")
+      sess.emit(0.15_f64, "#{C_BOLD}#{C_GREEN}[Sync:OK]#{C_RESET} 4 workspace targets fully synchronized in 340ms! (0 files locked)\r\n")
+      sess.pause(3.5)
+      sess.save(File.join(output_dir, "lapis_sync_targets.cast"), 86, 20, "Lapis Multi-Target Workspace Synchronization")
     end
 
     # 10. Performance Benchmarks TUI (Slide 35c)
@@ -728,11 +882,15 @@ module LapisSlides
       build_cli_lifecycle_cast(output_dir)
       build_fuzzy_palette_cast(output_dir)
       build_doctor_cast(output_dir)
+      build_scaffold_wizard_cast(output_dir)
       build_bind_cast(output_dir)
       build_package_cast(output_dir)
       build_addon_install_cast(output_dir)
+      build_editor_launcher_cast(output_dir)
       build_debug_workflows_cast(output_dir)
       build_log_cast(output_dir)
+      build_run_monitor_cast(output_dir)
+      build_sync_targets_cast(output_dir)
       build_benchmarks_cast(output_dir)
       build_custom_benchmarks_cast(output_dir)
       build_multiplayer_test_cast(output_dir)

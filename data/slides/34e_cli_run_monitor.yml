@@ -1,0 +1,47 @@
+---
+id: 34e_cli_run_monitor
+title: 'CLI: Game Runtime Performance Monitor'
+subtitle: Live Rolling FPS/RAM Telemetry Graphs & Graceful Process Supervision
+badge: RUNTIME TELEMETRY • LAPIS CLI
+badge_color: green
+palette: fruit_osx
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: asciinema
+  title: Terminal — lapis cli -r & lapis run
+  cast: casts/lapis_run_monitor.cast
+  font_size: '0.60rem'
+  speed: 1.25
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 19
+  code: |
+    $ lapis cli -r
+    :: LAPIS RUNTIME PERFORMANCE MONITOR :: │ Status: [#] RUNNING (PID 9420)
+    Target: bin/game.exe │ Uptime: 01:24 │ FPS: 60.0 │ RAM: 48.2 MB (Peak: 52.4 MB)
+    ──────────────────────────────────────────────────────────────────────────
+    ┌─ Frame Rate (FPS) ─────────────┐ ┌─ Memory Allocation (MB) ────────┐
+    │ 120 ┤                          │ │ 100 ┤                           │
+    │  90 ┤                          │ │  75 ┤                           │
+    │  60 ┼───────────────────────── │ │  50 ┼────────────────────────── │
+    │  30 ┤                          │ │  25 ┤   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄ │
+    │   0 ┴───────────────────────── │ │   0 ┴────────────────────────── │
+    │     14:20:00          14:20:30 │ │     14:20:00           14:20:30 │
+    └────────────────────────────────┘ └─────────────────────────────────┘
+    ──────────────────────────────────────────────────────────────────────────
+    Ctrl+K / K: Terminate Process │ R: Restart │ Esc / Q: Exit Monitor
+right:
+  type: card
+  title: Real-Time Gameplay Telemetry
+  color: green
+  items:
+  - <strong>Dual Rolling Line Graphs (<code>lapis cli -r</code>):</strong> Real-time ASCII graphs plot frame rate (FPS) and heap memory allocation (MB) side-by-side with 500ms sampling granularity.
+  - <strong>Engine Process Supervision:</strong> Continuously monitors host binary execution, detecting PID changes, unhandled exceptions, and clean exit codes.
+  - <strong>Graceful Process Termination:</strong> Pressing <code>Ctrl+K</code> issues clean OS termination signals, allowing Godot scenes and native C++ resources to unregister safely.
+  - <strong>Sub-Millisecond Overhead:</strong> Telemetry collection runs in an isolated non-blocking background fiber, ensuring zero impact on gameplay physics or render frame pacing.
+notes: |
+  Profiling runtime performance shouldn't require attaching bulky external profilers that alter frame timing. The Lapis Runtime Performance Monitor (lapis cli -r) launches the game executable and displays real-time rolling graphs of frame rate stability and heap memory allocation right in the terminal. If performance drops or memory balloons, developers can spot regressions instantly and terminate runaway processes gracefully with a single hotkey.

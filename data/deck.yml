@@ -75,12 +75,16 @@ slides:
 - 30_cli_lifecycle
 - 30b_cli_fuzzy_palette
 - 30c_cli_doctor
+- 30d_cli_scaffold_wizard
 - 31_cli_codegen
 - 31b_cli_package_portable
 - 32_package_management
+- 33b_cli_editor_launcher
 - 34_debugger_radare2
 - 34c_debug_workflows
 - 34d_cli_log_triage
+- 34e_cli_run_monitor
+- 34f_cli_sync_targets
 - 34b_r2_test_suite
 - 36_testing_zero_leak
 - 36b_testing_editor_driver

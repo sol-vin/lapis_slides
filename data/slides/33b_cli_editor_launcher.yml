@@ -1,0 +1,47 @@
+---
+id: 33b_cli_editor_launcher
+title: 'CLI: Persistent Editor Supervisor & Log Watcher'
+subtitle: Dual-Pane Engine Supervision, Process Health & Real-Time Hot-Reloading
+badge: SUPERVISOR • LAPIS CLI
+badge_color: yellow
+palette: aperture
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: asciinema
+  title: Terminal — lapis cli -e & lapis editor
+  cast: casts/lapis_editor_launcher.cast
+  font_size: '0.60rem'
+  speed: 1.25
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 19
+  code: |
+    $ lapis cli -e
+    :: LAPIS EDITOR SUPERVISOR & LIVE LOG WATCHER ::      Project: void_runner
+    ──────────────────────────────────────────────────────────────────────────
+    ┌─ Process Status ────────┐ Log Stream [Auto-Scroll: ON] (148 lines)
+    │ State:      [RUNNING]   │ [GODOT] Godot Engine v4.8.0.custom_build
+    │ PID:        18420       │ [LAPIS] Initialized Crystal bridge DLL
+    │ Uptime:     42s         │ [GAME] Player initialized: CharacterBody3D
+    │ Reloads:    3           │ [GAME] Emitted signal: health_changed (100)
+    ├─ Quick Actions ─────────┤ [LAPIS] Recompiling game.dll on F5 save...
+    │ [ R ] Build & Reload    │ [LAPIS] Shadow copy loaded: game_18420_1048.dll
+    │ [ K ] Graceful Kill     │ [GAME] Reload complete in 184ms
+    │ [ C ] Clear Log Stream  │ [GODOT] Scene re-instantiated successfully
+    ──────────────────────────────────────────────────────────────────────────
+    R: Recompile & Reload │ K: Kill Editor │ Space: Scroll Lock │ Esc: Return
+right:
+  type: card
+  title: Persistent Engine Supervision
+  color: yellow
+  items:
+  - <strong>Persistent Supervisor (<code>lapis cli -e</code>):</strong> Runs alongside the Godot Editor in a dedicated terminal pane, monitoring engine process health and capturing crash diagnostics.
+  - <strong>Real-Time Process Telemetry:</strong> Continuously tracks engine PID, process uptime, reload cycle count, memory consumption, and exit status codes.
+  - <strong>Unified Log Stream:</strong> Multiplexes Godot engine stdout/stderr and Crystal runtime logs into a live rolling viewer with auto-scroll and scrollback buffer lock.
+  - <strong>Instant Quick Actions:</strong> Hotkeys allow triggering immediate recompile and hot-reload (<code>R</code>), graceful process termination (<code>K</code>), or log buffer clearing (<code>C</code>) without leaving the terminal.
+notes: |
+  Developing native GDExtensions requires deep visibility into what the engine is doing while the editor is running. The Lapis Editor Supervisor (lapis cli -e) keeps a persistent terminal window open that monitors the Godot Editor process, captures all engine and runtime output, and displays live process metrics. Developers can trigger hot-recompilation on demand or freeze the log buffer to inspect stack traces without switching focus or digging through external log files.

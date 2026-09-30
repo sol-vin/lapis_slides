@@ -549,7 +549,7 @@ ul.card-list li strong {
   height: 0 !important;
 }
 
-.reveal pre,
+.reveal pre:not(.ap-terminal),
 .reveal pre.code-wrapper {
   position: relative !important;
   margin: 0 !important;
@@ -3586,12 +3586,12 @@ ul.card-list li strong {
   border-color: var(--bg-window) !important;
   color: var(--text-color) !important;
   font-family: var(--code-font, Consolas, "JetBrains Mono", monospace) !important;
-  font-size: 0.60rem !important;
-  line-height: 1.25 !important;
   border: none !important;
   box-shadow: none !important;
   margin: 0 !important;
   padding: 0.25rem 0.5rem !important;
+  box-sizing: content-box !important;
+  max-width: 100% !important;
 }
 
 .asciinema-player-mount .ap-control-bar {

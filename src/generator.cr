@@ -211,7 +211,8 @@ module LapisSlides
                   autoPlay: autoplay,
                   theme: theme,
                   terminalFontSize: fontSize,
-                  fit: 'both',
+                  terminalFontFamily: "Consolas, 'JetBrains Mono', monospace",
+                  fit: false,
                   controls: controls
                 });
                 asciinemaInstances.set(mount, player);
