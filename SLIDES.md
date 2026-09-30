@@ -951,10 +951,10 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C."*
 
 ---
-### Slide 25: Where Macros Shine: Zero-Reflection Serialization & Save Systems
+### Slide 25: Macros: Zero-Reflection Serialization
 - **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
-- **Title**: Where Macros Shine: Zero-Reflection Serialization & Save Systems
+- **Title**: Macros: Zero-Reflection Serialization
 - **Subtitle**: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
 - **Code Example (`save_game_state.cr — Serialization Without Reflection`)**:
   ```crystal

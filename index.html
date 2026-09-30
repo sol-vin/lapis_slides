@@ -2255,7 +2255,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 25: Spaces 97 (Where Macros Shine: Zero-Reflection Serialization & Save Systems)
+           SLIDE 25: Spaces 97 (Macros: Zero-Reflection Serialization)
            =================================================================== -->
       <section data-background-color="#f0f4f8"
                data-palette-name="Spaces 97"
@@ -2270,13 +2270,13 @@ end</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill purple">AST METAPROGRAMMING • ARCHITECTURE</span>
-            <h2 class="slide-title">Where Macros Shine: Zero-Reflection Serialization &amp; Save Systems</h2>
+            <h2 class="slide-title">Macros: Zero-Reflection Serialization</h2>
             <p class="slide-subtitle">Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2289,7 +2289,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense">require &quot;json&quot;
+            <pre><code class="language-crystal" style="font-size: 0.94rem !important; line-height: 1.25 !important;">require &quot;json&quot;
 
 # Structs and classes serialize with a single macro inclusion
 struct PlayerSaveData
@@ -2330,7 +2330,11 @@ loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
           <span>Slide 25 / 86</span>
         </div>
         <aside class="notes">
-          Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping.
+          Save systems and network state serialization often suffer from runtime reflection
+          overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable
+          to a struct generates complete, high-speed serialization and deserialization code
+          at compile time. It validates schemas strictly, serializes directly into buffers,
+          and requires zero manual dictionary mapping.
         </aside>
       </section>
 

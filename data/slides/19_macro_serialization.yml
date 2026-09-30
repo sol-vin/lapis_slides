@@ -1,6 +1,6 @@
 ---
 id: 19_macro_serialization
-title: 'Where Macros Shine: Zero-Reflection Serialization & Save Systems'
+title: 'Macros: Zero-Reflection Serialization'
 subtitle: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
 badge: AST METAPROGRAMMING • ARCHITECTURE
 badge_color: purple
@@ -12,6 +12,7 @@ left:
   title: save_game_state.cr — Serialization Without Reflection
   tag: Crystal
   lang: crystal
+  font_size: '0.94rem'
   code: |
     require "json"
 
@@ -45,7 +46,8 @@ right:
     for JSON, YAML, and binary formats.
   - <strong>Engine Agnostic Data Structures:</strong> Save models exist as pure Crystal
     data structures independent of Godot node hierarchies.
-notes: Save systems and network state serialization often suffer from runtime reflection
+notes: |
+  Save systems and network state serialization often suffer from runtime reflection
   overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable
   to a struct generates complete, high-speed serialization and deserialization code
   at compile time. It validates schemas strictly, serializes directly into buffers,
