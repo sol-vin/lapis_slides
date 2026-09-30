@@ -2687,7 +2687,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2700,21 +2700,20 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense">node PlayerController &lt; CharacterBody2D do
+            <pre><code class="language-crystal">node PlayerController &lt; CharacterBody2D do
   def _ready : Void
-    # 1. Path traversal / (String or Typed Class):
-    camera = self / &quot;CameraRig&quot; / Camera2D   # Typed child!
-    mount  = self / &quot;Visuals/WeaponMount&quot;    # Nested string path
-    cam_up = camera / &quot;..&quot;                   # Upward parent
+    # 1. Path traversal / (String, Typed Class, or .as(T)):
+    camera = (self / &quot;CameraRig/Camera2D&quot;).as(Camera2D) # Explicit .as(T) casting!
+    mount  = self / &quot;Visuals&quot; / Marker2D               # Chained typed child!
+    cam_up = camera / &quot;..&quot;                             # Upward parent traversal
 
-    # 2. Scene Unique Nodes % (mirrors GDScript %):
-    health_bar = self % ProgressBar          # Typed %ProgressBar!
-    hud        = self % :player_hud          # Auto-camelcased %PlayerHUD
-    named_bar  = self % &quot;HealthBar&quot;          # String unique node
+    # 2. Scene Unique Nodes % (mirrors GDScript % with .as(T)):
+    hud    = (self % &quot;PlayerHUD&quot;).as(CanvasLayer)      # String unique node with .as(T)
+    bar    = self % ProgressBar                       # Direct typed %ProgressBar!
 
     # 3. Type-safe subscript indexers ([] and []?):
-    sprite = self[Sprite2D]                  # Inferred from class
-    weapon = self[Marker2D, :weapon_mount]?  # Safe optional T?
+    sprite = self[Sprite2D]                            # Inferred from class
+    weapon = self[Marker2D, &quot;WeaponMount&quot;]?            # Safe optional Marker2D?
   end
 end</code></pre>
           </div>
@@ -2725,9 +2724,9 @@ end</code></pre>
               <span>Type-Safe Operators &amp; Indexers</span>
             </div>
             <ul class="card-list">
-              <li><strong>Path Traversal with <code>/</code>:</strong> Pass strings (<code>"Rig/Cam"</code>) or concrete class types (<code>Camera2D</code> returning typed <code>Camera2D</code> directly with zero casting).</li>
-              <li><strong>Scene Unique Nodes with <code>%</code>:</strong> GDScript <code>%Node</code> parity! Pass strings (<code>"HealthBar"</code>), symbols (<code>:health_bar</code>), or class types (<code>ProgressBar</code> returning typed <code>ProgressBar</code>).</li>
-              <li><strong>Typed Indexers & Safe Queries (<code>[]</code>, <code>[]?</code>):</strong> <code>self[Sprite2D]</code> for quick class lookups, and <code>self[T, path]?</code> returning <code>T?</code> for safe optional navigation without exceptions.</li>
+              <li><strong>Path Traversal with <code>/</code> &amp; <code>.as(T)</code>:</strong> Traverse hierarchies with strings or classes; pair with <code>.as(Camera2D)</code> for instant, explicit compile-time typing.</li>
+              <li><strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>(self % "HUD").as(CanvasLayer)</code> or typed <code>self % ProgressBar</code>.</li>
+              <li><strong>Typed Indexers &amp; Safe Queries (<code>[]</code>, <code>[]?</code>):</strong> <code>self[Sprite2D]</code> for direct class lookups, and <code>self[T, path]?</code> returning <code>T?</code> for safe optional navigation without exceptions.</li>
               <li><strong>Upward Navigation (<code>..</code>):</strong> Traverse parent hierarchies with <code>node / ".."</code> without breaking out of chained operator expressions.</li>
             </ul>
           </div>
@@ -2739,7 +2738,7 @@ end</code></pre>
           <span>Slide 29 / 83</span>
         </div>
         <aside class="notes">
-          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types: self / "CameraRig" / Camera2D resolves the nested node and returns a typed Camera2D instance directly! The percent operator (%) provides 100% parity with GDScript's scene-unique nodes, supporting strings, symbols, and typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster and safer than GDScript.
+          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types, and works seamlessly with Crystal's native .as(Class): (self / "CameraRig/Camera2D").as(Camera2D) resolves the nested node and types it with zero ceremony! The percent operator (%) provides 100% parity with GDScript's scene-unique nodes: query unique nodes with (self % "PlayerHUD").as(CanvasLayer) or direct typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster, safer, and cleaner than GDScript.
         </aside>
       </section>
 

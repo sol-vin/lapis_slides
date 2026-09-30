@@ -15,19 +15,18 @@ left:
   code: |
     node PlayerController < CharacterBody2D do
       def _ready : Void
-        # 1. Path traversal / (String or Typed Class):
-        camera = self / "CameraRig" / Camera2D   # Typed child!
-        mount  = self / "Visuals/WeaponMount"    # Nested string path
-        cam_up = camera / ".."                   # Upward parent
+        # 1. Path traversal / (String, Typed Class, or .as(T)):
+        camera = (self / "CameraRig/Camera2D").as(Camera2D) # Explicit .as(T) casting!
+        mount  = self / "Visuals" / Marker2D               # Chained typed child!
+        cam_up = camera / ".."                             # Upward parent traversal
 
-        # 2. Scene Unique Nodes % (mirrors GDScript %):
-        health_bar = self % ProgressBar          # Typed %ProgressBar!
-        hud        = self % :player_hud          # Auto-camelcased %PlayerHUD
-        named_bar  = self % "HealthBar"          # String unique node
+        # 2. Scene Unique Nodes % (mirrors GDScript % with .as(T)):
+        hud    = (self % "PlayerHUD").as(CanvasLayer)      # String unique node with .as(T)
+        bar    = self % ProgressBar                       # Direct typed %ProgressBar!
 
         # 3. Type-safe subscript indexers ([] and []?):
-        sprite = self[Sprite2D]                  # Inferred from class
-        weapon = self[Marker2D, :weapon_mount]?  # Safe optional T?
+        sprite = self[Sprite2D]                            # Inferred from class
+        weapon = self[Marker2D, "WeaponMount"]?            # Safe optional Marker2D?
       end
     end
 right:
@@ -35,9 +34,9 @@ right:
   title: Type-Safe Operators & Indexers
   color: cyan
   items:
-    - '<strong>Path Traversal with <code>/</code>:</strong> Pass strings (<code>"Rig/Cam"</code>) or concrete class types (<code>Camera2D</code> returning typed <code>Camera2D</code> directly with zero casting).'
-    - '<strong>Scene Unique Nodes with <code>%</code>:</strong> GDScript <code>%Node</code> parity! Pass strings (<code>"HealthBar"</code>), symbols (<code>:health_bar</code>), or class types (<code>ProgressBar</code> returning typed <code>ProgressBar</code>).'
-    - '<strong>Typed Indexers & Safe Queries (<code>[]</code>, <code>[]?</code>):</strong> <code>self[Sprite2D]</code> for quick class lookups, and <code>self[T, path]?</code> returning <code>T?</code> for safe optional navigation without exceptions.'
+    - '<strong>Path Traversal with <code>/</code> &amp; <code>.as(T)</code>:</strong> Traverse hierarchies with strings or classes; pair with <code>.as(Camera2D)</code> for instant, explicit compile-time typing.'
+    - '<strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>(self % "HUD").as(CanvasLayer)</code> or typed <code>self % ProgressBar</code>.'
+    - '<strong>Typed Indexers &amp; Safe Queries (<code>[]</code>, <code>[]?</code>):</strong> <code>self[Sprite2D]</code> for direct class lookups, and <code>self[T, path]?</code> returning <code>T?</code> for safe optional navigation without exceptions.'
     - '<strong>Upward Navigation (<code>..</code>):</strong> Traverse parent hierarchies with <code>node / ".."</code> without breaking out of chained operator expressions.'
 notes: |
-  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types: self / "CameraRig" / Camera2D resolves the nested node and returns a typed Camera2D instance directly! The percent operator (%) provides 100% parity with GDScript's scene-unique nodes, supporting strings, symbols, and typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster and safer than GDScript.
+  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types, and works seamlessly with Crystal's native .as(Class): (self / "CameraRig/Camera2D").as(Camera2D) resolves the nested node and types it with zero ceremony! The percent operator (%) provides 100% parity with GDScript's scene-unique nodes: query unique nodes with (self % "PlayerHUD").as(CanvasLayer) or direct typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster, safer, and cleaner than GDScript.
