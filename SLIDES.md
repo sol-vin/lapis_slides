@@ -2633,30 +2633,34 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Sol.vin Theme Palette**: `spaces_31` (Spaces 3.1) [BG: `#ffffff` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
-- **Subtitle**: Real-Time Terminal User Interface for Headless and In-Editor Test Suites
+- **Subtitle**: Real-Time Terminal User Interface for 45+ Modular Engine Test Suites
 - **Terminal Command (`Terminal — lapis test --tui Dashboard`)**:
   ```bash
-  ┌─ Lapis Unified Test Suite Dashboard ────────────────────────┐
-  │ [✔] 1. Engine & Core Bindings Specs (42/42 passed)           │
-  │ [✔] 2. Headless In-Editor @tool Tests (18/18 passed)         │
-  │ [✔] 3. Standalone Runtime Host Suites (35/35 passed)         │
-  │ [✔] 4. Quantitative Zero Leak Verification (0 leaks)         │
-  ├─────────────────────────────────────────────────────────────┤
-  │ LIVE LOG STREAM (Phase 3: Runtime Suites):                  │
-  │ [10:24:12] SUITE: Combat System ... OK (12ms)                │
-  │ [10:24:13] SUITE: Physics N-Body ... OK (8ms)                │
-  │ [10:24:14] SUITE: Memory Monotonic Guard ... OK (4ms)        │
-  │                                                             │
-  │ STATUS: ALL 95 TESTS PASSED (0 failures, 0 leaks)            │
-  └─────────────────────────────────────────────────────────────┘
+  ╔════════════════════════════════════════════════════════════════════════════════════╗
+  ║ 🔮 LAPIS UNIFIED TEST SUITE DASHBOARD                                ALL PASSED ✔  ║
+  ║ Host: windows │ Godot: 4.8.0-custom │ Crystal: v1.15.0 │ Time: 00:14.2            ║
+  ║ [████████████████████████████████████████] 100% (45/45 suites • 420+ specs)        ║
+  ╚════════════════════════════════════════════════════════════════════════════════════╝
+  ┌─ TEST PHASES (45 SUITES) ──────┐ ┌─ LIVE EXECUTION LOG STREAM ─────────────────────┐
+  │ ► ✔ 01. Core Language & Math   │ │ ► Phase: Standalone Runtime Engine Suites       │
+  │   ✔ 02. Variant Conversions    │ ├─────────────────────────────────────────────────┤
+  │   ✔ 03. GC & Monotonic Guards  │ │ [10:24:12] [PASS] CharacterBody3D physics step  │
+  │   ✔ 04. Headless In-Editor @tool│ │ [10:24:13] [PASS] AStar2D pathfinding routing  │
+  │   ✔ 05. Async Signal Awaiting  │ │ [10:24:14] [PASS] Multiplayer RPC synchronized  │
+  │   ✔ 06. 40+ Engine Spec Suites │ │ [10:24:15] [PASS] GDExtension ClassDB dispatch  │
+  │   ✔ 07. Zero-Leak Verification │ │ [10:24:16] [PASS] assert_no_leak: ΔObjects == 0 │
+  │   ✔ 08. In-Editor Test Docks   │ │                                                 │
+  │                                │ │ ALL 45 SUITES PASSED (420+ specs, 0 leaks)      │
+  └────────────────────────────────┘ └─────────────────────────────────────────────────┘
+   [↑↓/jk] Select Phase  [Enter] Drill-down Modal  [q] Exit  [?] Help
   ```
-- **TUI Dashboard Features**:
-  - Double-Buffered ANSI Interface: Real-time rolling metrics, execution phase tracking, and split-pane logs.
-  - Interactive Inspection: Navigate phases with arrow keys; drill down into detailed logs with Enter.
-  - Automated CI Fallback: Gracefully falls back to clean streaming text in automated CI pipelines (NO_TUI=1).
-  - Editor Driver Integration: Launches headless Godot to test tool scripts and editor docks without opening a GUI.
+- **Comprehensive TUI Test Harness**:
+  - Extensive 45+ Modular Suites: Validates 420+ specifications across 2D/3D physics, A* navigation, multiplayer RPCs, and headless tool scripts.
+  - Double-Buffered Split-Pane UI: Zero-flicker ANSI terminal interface with rolling execution progress, active phase tracking, and live colored logs.
+  - Interactive Drill-Down Inspection: Use keyboard navigation (↑/↓/j/k) to select any phase and press Enter for full test modal logs.
+  - Automated CI Fallback: Seamlessly degrades to clean, unbuffered streaming log output in automated CI pipelines (NO_TUI=1).
 - **Presenter Script**:
-  > *"Running tests shouldn't be boring. When you run lapis test, it launches an interactive double-buffered ANSI TUI dashboard. You see live multi-phase progress, rolling logs with syntax coloring, and instant leak verification metrics. It makes continuous testing a genuinely satisfying part of the development loop."*
+  > *"With a test base exceeding 45 modular suites and 420 individual tests, plain terminal output quickly becomes overwhelming. Lapis features an interactive, double-buffered ANSI TUI dashboard launched via lapis test (or make test TUI=1). Developers get a split-pane view showing live multi-phase progress across core language bindings, headless in-editor tool tests, runtime suites, and mathematical zero-leak verification. You can navigate phases with arrow keys, inspect full logs in interactive modals with Enter, or run in headless CI mode with NO_TUI=1."*
 
 ---
 ### Slide 75: Quantitative Benchmarks: Crystal vs GDScript
