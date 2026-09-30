@@ -27,7 +27,7 @@ left:
     end
 
     # Consumer usage: 100% typed, with compiler autocomplete!
-    dialogue = self[DialogueSystem, "Dialogue"]
+    dialogue = self["Dialogue", DialogueSystem]
     dialogue.show_dialogue("Hero", 42)
 right:
   type: card

@@ -2839,7 +2839,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 30: Monokai (Node Ergonomics: Operators / & %)
+           SLIDE 30: Monokai (Node Ergonomics: Operators /, %, and [])
            =================================================================== -->
       <section data-background-color="#272822"
                data-palette-name="Monokai"
@@ -2854,13 +2854,13 @@ end</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill cyan">LAPIS DSL • OPERATOR ERGONOMICS</span>
-            <h2 class="slide-title">Node Ergonomics: Operators / &amp; %</h2>
-            <p class="slide-subtitle">Path Traversal (/), Scene Unique Nodes (%), and Typed Indexers ([])</p>
+            <h2 class="slide-title">Node Ergonomics: Operators /, %, and []</h2>
+            <p class="slide-subtitle">Path Traversal (/), Scene Unique Nodes (%), and Typed Subscripts ([])</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2873,27 +2873,24 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense">node PlayerController &lt; CharacterBody2D do
+            <pre><code class="language-crystal" style="font-size: 0.76rem !important; line-height: 1.25 !important;">node PlayerController &lt; CharacterBody2D do
   def _ready : Void
     # 1. Path traversal with / and .as(T):
-    # Traversal paired with explicit type casting
     camera = (self / &quot;CameraRig/Camera2D&quot;).as(Camera2D)
-    # Chained path traversal returning typed child
     mount = self / &quot;Visuals&quot; / Marker2D
-    # Upward traversal to parent node
     cam_up = camera / &quot;..&quot;
 
     # 2. Scene Unique Nodes with % and .as(T):
-    # Unique node lookup with explicit .as(T)
     hud = (self % &quot;PlayerHUD&quot;).as(CanvasLayer)
-    # Direct unique node lookup by class type
     bar = self % ProgressBar
 
     # 3. Type-safe subscript indexers ([] and []?):
-    # Immediate class lookup
-    sprite = self[Sprite2D]
-    # Safe optional lookup returning Marker2D?
-    weapon = self[Marker2D, &quot;WeaponMount&quot;]?
+    sprite = self[Sprite2D]                 # Class-based lookup
+    weapon = self[&quot;WeaponMount&quot;, Marker2D]? # Path, Class order!
+
+    # 4. Supports $ and % path prefixes in [] and []?:
+    hud_bar = self[&quot;%PlayerHUD&quot;, CanvasLayer]   # Unique node via %
+    blaster = self[&quot;$Weapons/Blaster&quot;, Node3D]? # Explicit $ path
   end
 end</code></pre>
           </div>
@@ -2906,7 +2903,8 @@ end</code></pre>
             <ul class="card-list">
               <li><strong>Path Traversal with <code>/</code> &amp; <code>.as(T)</code>:</strong> Traverse hierarchies with strings or classes; pair with <code>.as(Camera2D)</code> for instant, explicit compile-time typing.</li>
               <li><strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>(self % "HUD").as(CanvasLayer)</code> or typed <code>self % ProgressBar</code>.</li>
-              <li><strong>Typed Indexers &amp; Safe Queries (<code>[]</code>, <code>[]?</code>):</strong> <code>self[Sprite2D]</code> for direct class lookups, and <code>self[T, path]?</code> returning <code>T?</code> for safe optional navigation without exceptions.</li>
+              <li><strong>Typed Indexers (<code>self["path", T]</code>):</strong> Reads naturally as path first, then type: <code>self["WeaponMount", Marker2D]</code> (or safe <code>[]?</code> returning <code>T?</code>).</li>
+              <li><strong>Full <code>$</code> &amp; <code>%</code> Prefix Support in Subscripts:</strong> <code>self[]</code> and <code>self[]?</code> handle <code>"$"</code> and <code>"%"</code> prefixes natively (e.g. <code>self["%HUD", CanvasLayer]</code>).</li>
               <li><strong>Upward Navigation (<code>..</code>):</strong> Traverse parent hierarchies with <code>node / ".."</code> without breaking out of chained operator expressions.</li>
             </ul>
           </div>
@@ -2918,7 +2916,9 @@ end</code></pre>
           <span>Slide 30 / 88</span>
         </div>
         <aside class="notes">
-          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types, and works seamlessly with Crystal's native .as(Class): (self / "CameraRig/Camera2D").as(Camera2D) resolves the nested node and types it with zero ceremony! The percent operator (%) provides 100% parity with GDScript's scene-unique nodes: query unique nodes with (self % "PlayerHUD").as(CanvasLayer) or direct typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster, safer, and cleaner than GDScript.
+          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics.
+          Our slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 100% parity with GDScript's scene-unique nodes.
+          Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate. Both self[] and self[]? natively handle leading '$' and '%' prefixes, allowing expressions like self["%PlayerHUD", CanvasLayer] or safe queries like self["$Weapons/Blaster", Node3D]?.
         </aside>
       </section>
 
@@ -3269,7 +3269,7 @@ sprite = ~Sprite2D
 onready weapon : Weapon = ~(&quot;WeaponMount/Sword&quot;).as(Weapon)
 
 # 3. Safe navigation with optional nodes (returns T?):
-if hud = self[HUD, &quot;UI/HUDLayer&quot;]?
+if hud = self[&quot;$UI/HUDLayer&quot;, HUD]?
   hud.update_health(current_health)
 end
 
@@ -3291,7 +3291,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
             <ul class="card-list">
               <li><strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "CameraRig" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and bare context resolution (<code>~Sprite2D</code>) eliminate verbose casting.</li>
               <li><strong>Declarative onready Macro:</strong> <code>onready weapon : Weapon = ~("...").as(Weapon)</code> binds nodes safely during <code>_ready</code>.</li>
-              <li><strong>Compile-Time Nil Safety:</strong> <code>self[HUD, path]?</code> returns <code>HUD?</code>; Crystal's compiler forces flow-sensitive nil checks before method dispatch.</li>
+              <li><strong>Compile-Time Nil Safety:</strong> <code>self[path, HUD]?</code> (with <code>$</code> and <code>%</code> support) returns <code>HUD?</code>; Crystal's compiler forces flow-sensitive nil checks before method dispatch.</li>
               <li><strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> combined with <code>scene.instantiate_as(T)</code> constructs typed scenes with zero reflection.</li>
               <li><strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> publishes Crystal properties directly into Godot's Inspector with editor UI hints.</li>
             </ul>
@@ -3304,7 +3304,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
           <span>Slide 34 / 88</span>
         </div>
         <aside class="notes">
-          In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self[HUD, path]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.
+          In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.
         </aside>
       </section>
 
@@ -3344,7 +3344,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
               </div>
             </div>
             <pre><code class="language-crystal code-dense"># 1. Connecting engine signals with first-class bound handles
-start_btn = self[Godot::Button, &quot;UI/StartButton&quot;]
+start_btn = self[&quot;$UI/StartButton&quot;, Godot::Button]
 start_btn.pressed.connect do
   start_game_sequence
 end
@@ -6615,7 +6615,7 @@ class DialogueSystem &lt; Godot::Node
 end
 
 # Consumer usage: 100% typed, with compiler autocomplete!
-dialogue = self[DialogueSystem, &quot;Dialogue&quot;]
+dialogue = self[&quot;Dialogue&quot;, DialogueSystem]
 dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
           </div>
           </div>

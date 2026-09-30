@@ -14,7 +14,7 @@ left:
   lang: crystal
   code: |
     # 1. Connecting engine signals with first-class bound handles
-    start_btn = self[Godot::Button, "UI/StartButton"]
+    start_btn = self["$UI/StartButton", Godot::Button]
     start_btn.pressed.connect do
       start_game_sequence
     end

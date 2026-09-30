@@ -22,7 +22,7 @@ left:
     onready weapon : Weapon = ~("WeaponMount/Sword").as(Weapon)
 
     # 3. Safe navigation with optional nodes (returns T?):
-    if hud = self[HUD, "UI/HUDLayer"]?
+    if hud = self["$UI/HUDLayer", HUD]?
       hud.update_health(current_health)
     end
 
@@ -41,8 +41,8 @@ right:
   items:
   - '<strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "CameraRig" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and bare context resolution (<code>~Sprite2D</code>) eliminate verbose casting.'
   - '<strong>Declarative onready Macro:</strong> <code>onready weapon : Weapon = ~("...").as(Weapon)</code> binds nodes safely during <code>_ready</code>.'
-  - '<strong>Compile-Time Nil Safety:</strong> <code>self[HUD, path]?</code> returns <code>HUD?</code>; Crystal''s compiler forces flow-sensitive nil checks before method dispatch.'
+  - '<strong>Compile-Time Nil Safety:</strong> <code>self[path, HUD]?</code> (with <code>$</code> and <code>%</code> support) returns <code>HUD?</code>; Crystal''s compiler forces flow-sensitive nil checks before method dispatch.'
   - '<strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> combined with <code>scene.instantiate_as(T)</code> constructs typed scenes with zero reflection.'
   - '<strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> publishes Crystal properties directly into Godot''s Inspector with editor UI hints.'
 notes: |
-  In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self[HUD, path]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.
+  In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.

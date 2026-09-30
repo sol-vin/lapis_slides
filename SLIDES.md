@@ -1216,44 +1216,42 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Here is what authoring a Godot node actually looks like in Lapis. Notice how clean, concise, and declarative it is. You write node Player < CharacterBody3D, declare exported properties with ranges, define typed signals, and write your lifecycle methods. Regular comments above properties are harvested at compile time into Godot's in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or Rust."*
 
 ---
-### Slide 30: Node Ergonomics: Operators / & %
+### Slide 30: Node Ergonomics: Operators /, %, and []
 - **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
 - **Category Badge**: `LAPIS DSL • OPERATOR ERGONOMICS`
-- **Title**: Node Ergonomics: Operators / & %
-- **Subtitle**: Path Traversal (/), Scene Unique Nodes (%), and Typed Indexers ([])
+- **Title**: Node Ergonomics: Operators /, %, and []
+- **Subtitle**: Path Traversal (/), Scene Unique Nodes (%), and Typed Subscripts ([])
 - **Code Example (`operator_node_retrieval.cr`)**:
   ```crystal
   node PlayerController < CharacterBody2D do
     def _ready : Void
       # 1. Path traversal with / and .as(T):
-      # Traversal paired with explicit type casting
       camera = (self / "CameraRig/Camera2D").as(Camera2D)
-      # Chained path traversal returning typed child
       mount = self / "Visuals" / Marker2D
-      # Upward traversal to parent node
       cam_up = camera / ".."
   
       # 2. Scene Unique Nodes with % and .as(T):
-      # Unique node lookup with explicit .as(T)
       hud = (self % "PlayerHUD").as(CanvasLayer)
-      # Direct unique node lookup by class type
       bar = self % ProgressBar
   
       # 3. Type-safe subscript indexers ([] and []?):
-      # Immediate class lookup
-      sprite = self[Sprite2D]
-      # Safe optional lookup returning Marker2D?
-      weapon = self[Marker2D, "WeaponMount"]?
+      sprite = self[Sprite2D]                 # Class-based lookup
+      weapon = self["WeaponMount", Marker2D]? # Path, Class order!
+  
+      # 4. Supports $ and % path prefixes in [] and []?:
+      hud_bar = self["%PlayerHUD", CanvasLayer]   # Unique node via %
+      blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
     end
   end
   ```
 - **Type-Safe Operators & Indexers**:
   - Path Traversal with / & .as(T): Traverse hierarchies with strings or classes; pair with .as(Camera2D) for instant, explicit compile-time typing.
   - Scene Unique Nodes with % & .as(T): GDScript %Node parity! Query unique nodes with (self % "HUD").as(CanvasLayer) or typed self % ProgressBar.
-  - Typed Indexers & Safe Queries ([], []?): self[Sprite2D] for direct class lookups, and self[T, path]? returning T? for safe optional navigation without exceptions.
+  - Typed Indexers (self["path", T]): Reads naturally as path first, then type: self["WeaponMount", Marker2D] (or safe []? returning T?).
+  - Full $ & % Prefix Support in Subscripts: self[] and self[]? handle "$" and "%" prefixes natively (e.g. self["%HUD", CanvasLayer]).
   - Upward Navigation (..): Traverse parent hierarchies with node / ".." without breaking out of chained operator expressions.
 - **Presenter Script**:
-  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types, and works seamlessly with Crystal's native .as(Class): (self / "CameraRig/Camera2D").as(Camera2D) resolves the nested node and types it with zero ceremony! The percent operator (%) provides 100% parity with GDScript's scene-unique nodes: query unique nodes with (self % "PlayerHUD").as(CanvasLayer) or direct typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster, safer, and cleaner than GDScript."*
+  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 100% parity with GDScript's scene-unique nodes. Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate. Both self[] and self[]? natively handle leading '$' and '%' prefixes, allowing expressions like self["%PlayerHUD", CanvasLayer] or safe queries like self["$Weapons/Blaster", Node3D]?."*
 
 ---
 ### Slide 31: Bare Scene Ergonomics: The Unary ~ Operator
@@ -1438,7 +1436,7 @@ This document outlines each slide's exact theme palette, architectural category,
   onready weapon : Weapon = ~("WeaponMount/Sword").as(Weapon)
   
   # 3. Safe navigation with optional nodes (returns T?):
-  if hud = self[HUD, "UI/HUDLayer"]?
+  if hud = self["$UI/HUDLayer", HUD]?
     hud.update_health(current_health)
   end
   
@@ -1454,11 +1452,11 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Why It's Effortless**:
   - Operators /, % & ~: Chained paths (self / "CameraRig" / Camera3D), unique nodes (self % ProgressBar), and bare context resolution (~Sprite2D) eliminate verbose casting.
   - Declarative onready Macro: onready weapon : Weapon = ~("...").as(Weapon) binds nodes safely during _ready.
-  - Compile-Time Nil Safety: self[HUD, path]? returns HUD?; Crystal's compiler forces flow-sensitive nil checks before method dispatch.
+  - Compile-Time Nil Safety: self[path, HUD]? (with $ and % support) returns HUD?; Crystal's compiler forces flow-sensitive nil checks before method dispatch.
   - Typed Scene Instantiation: Godot.load_as(PackedScene, path) combined with scene.instantiate_as(T) constructs typed scenes with zero reflection.
   - Declarative Export Hints: @[ExportRange] publishes Crystal properties directly into Godot's Inspector with editor UI hints.
 - **Presenter Script**:
-  > *"In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self[HUD, path]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible."*
+  > *"In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible."*
 
 ---
 ### Slide 35: Signals & Events: Reactive Zen Ergonomics
@@ -1469,7 +1467,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Code Example (`reactive_events.cr — Type-Safe Signal Subscriptions`)**:
   ```crystal
   # 1. Connecting engine signals with first-class bound handles
-  start_btn = self[Godot::Button, "UI/StartButton"]
+  start_btn = self["$UI/StartButton", Godot::Button]
   start_btn.pressed.connect do
     start_game_sequence
   end
@@ -2553,7 +2551,7 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   
   # Consumer usage: 100% typed, with compiler autocomplete!
-  dialogue = self[DialogueSystem, "Dialogue"]
+  dialogue = self["Dialogue", DialogueSystem]
   dialogue.show_dialogue("Hero", 42)
   ```
 - **Typed Binding Benefits**:
