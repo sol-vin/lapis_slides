@@ -12,6 +12,7 @@ left:
   title: enemy_fsm.cr — Declarative DSL & Gameplay Usage
   tag: Crystal
   lang: crystal
+  font_size: '0.74rem'
   code: |
     # 1. Declare states & transitions with macro DSL
     fsm BossState do

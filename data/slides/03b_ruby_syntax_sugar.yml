@@ -12,6 +12,7 @@ left:
   title: bare_words_and_operators.rb
   tag: Ruby
   lang: ruby
+  font_size: '0.76rem'
   code: |
     # 1. Bare Words & Uniform Access: my_func vs my_func()
     def max_health

@@ -12,6 +12,7 @@ left:
   title: gameplay_modules.cr — Horizontal Composition
   tag: Crystal
   lang: crystal
+  font_size: '0.78rem'
   code: |
     # 1. Composable Mixin Module with abstract contract:
     module Damageable

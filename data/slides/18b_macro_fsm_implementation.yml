@@ -12,6 +12,7 @@ left:
   title: fsm_macro.cr — AST Rewriting Engine
   tag: Crystal
   lang: crystal
+  font_size: '0.68rem'
   code: |
     # 🪄 Compile-Time AST Macro: parses block into enums, hooks & jump table
     macro fsm(name, &block)

@@ -534,7 +534,7 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -547,7 +547,7 @@ end
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby code-compact"># 1. Bare Words &amp; Uniform Access: my_func vs my_func()
+            <pre><code class="language-ruby" style="font-size: 0.76rem !important; line-height: 1.25 !important;"># 1. Bare Words &amp; Uniform Access: my_func vs my_func()
 def max_health
   100
 end
@@ -1833,7 +1833,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1846,7 +1846,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-compact"># 1. Composable Mixin Module with abstract contract:
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;"># 1. Composable Mixin Module with abstract contract:
 module Damageable
   abstract def max_health : Int32
   property health : Int32 = 100
@@ -2365,7 +2365,7 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2378,7 +2378,7 @@ end
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-compact"># 1. Declare states &amp; transitions with macro DSL
+            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># 1. Declare states &amp; transitions with macro DSL
 fsm BossState do
   state Patrol, initial: true do
     before { start_patrol_path }
@@ -2461,7 +2461,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2474,7 +2474,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-compact"># 🪄 Compile-Time AST Macro: parses block into enums, hooks &amp; jump table
+            <pre><code class="language-crystal" style="font-size: 0.68rem !important; line-height: 1.25 !important;"># 🪄 Compile-Time AST Macro: parses block into enums, hooks &amp; jump table
 macro fsm(name, &amp;block)
   # 1. Synthesize typed Enum for all declared states:
   enum {{name.id}}
@@ -6112,7 +6112,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -6125,7 +6125,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-compact"># Off-thread worker actor with buffered channels
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;"># Off-thread worker actor with buffered channels
 class NavmeshWorker
   getter requests = Channel(PathReq).new(capacity: 64)
   getter results  = Channel(PathRes).new(capacity: 64)
