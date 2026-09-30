@@ -18,6 +18,7 @@ slides:
 - 03c_ruby_closures
 - 03d_ruby_context_exec
 - 03e_ruby_monkey_patching
+- 03g_ruby_runtime_metaprogramming
 - 03f_ruby_dynamic_dispatch
 - 04_sorbet_dilemma
 

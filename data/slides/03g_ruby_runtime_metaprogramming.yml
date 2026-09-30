@@ -1,0 +1,56 @@
+---
+id: 03g_ruby_runtime_metaprogramming
+title: 'Runtime Metaprogramming & Singleton Classes'
+subtitle: define_method, Object Eigenclasses & The Magic (and Chaos) of Mutable Types
+badge: RUBY HERITAGE • RUNTIME METAPROGRAMMING
+badge_color: amber
+palette: monokai
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: runtime_eigenclasses.rb
+  tag: Ruby
+  lang: ruby
+  font_size: '0.74rem'
+  code: |
+    # 1. Dynamic class methods: synthesize verbs from runtime data
+    [:slash, :pierce, :smite, :fireball].each do |spell|
+      Player.define_method("cast_#{spell}") do |target, power = 10|
+        puts "#{name} casts #{spell} at #{target} for #{power} dmg!"
+      end
+    end
+
+    hero = Player.new("Arthur")
+    hero.cast_smite("Goblin", 50) # Synthesized at runtime!
+
+    # 2. Singleton Classes (Eigenclasses): Mutating a single instance
+    boss = Enemy.new("Malakor", hp: 10_000)
+
+    # Inject bespoke behavior ONLY into this one specific instance:
+    def boss.enrage!
+      @phase = :enraged
+      puts "Malakor enters Phase 2! Unlocking meteor storm!"
+    end
+
+    # Or directly open the object's hidden singleton eigenclass:
+    class << boss
+      def summon_meteor(target)
+        target.take_damage(999)
+      end
+    end
+
+    minion = Enemy.new("Skeleton", hp: 20)
+    boss.enrage!   # => Works!
+    minion.enrage! # => NoMethodError! (minion has no eigenclass method)
+right:
+  type: card
+  title: The Eigenclass & The JIT Nightmare
+  color: amber
+  items:
+    - '<strong>Dynamic <code>define_method</code>:</strong> Classes synthesize entirely new method dispatch tables on the fly at runtime based on configs, loops, or network data.'
+    - '<strong>Instance Eigenclasses (<code>class &lt;&lt; obj</code>):</strong> Every object in Ruby has a hidden singleton class inserted before its class in the ancestor lookup hierarchy.'
+    - '<strong>Per-Instance Method Mutation:</strong> A single object can gain custom methods (<code>def boss.enrage!</code>) that no other instance of the same class possesses.'
+    - '<strong>The Compiler & JIT Nightmare:</strong> Polymorphic inline caches (PIC) shatter. A compiler cannot predict memory layouts or inline calls when an object''s VTable is mutable heap state.'
+notes: |
+  This slide captures the magnificent runtime insanity that made developers fall in love with Ruby—and made compiler engineers weep. In Ruby, classes aren't static blueprints; you can loop over an array of symbols at runtime and call define_method to synthesize methods on the fly. Even wilder, every single object in Ruby has a hidden 'singleton class'—often called an eigenclass or metaclass. You can attach methods to a single specific instance of an enemy that no other enemy has! This enabled magical testing frameworks like RSpec and dynamic mocks. But for game engines running at 60 FPS, this is devastating: the VM cannot inline method calls, polymorphic inline caches are constantly invalidated, and LLVM cannot compile ahead-of-time because an object's method dispatch table is literally mutable state living on the heap. Crystal took this joy and asked: how do we achieve this expressive elegance at compile time?
