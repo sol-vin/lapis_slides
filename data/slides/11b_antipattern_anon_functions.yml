@@ -47,8 +47,8 @@ crystal:
     # 2. Clean block filter with static type inference
     ready_items = inventory.select { |i| i.durability > 0 && !i.broken }
 
-    # 3. Instant frequency Hash via Enumerable#tally
-    counts = inventory.map(&.category).tally # => Hash(String, Int32)
+    # 3. Instant frequency Hash via Enumerable#tally:
+    counts = inventory.tally(&.category) # => Hash(String, Int32) in 1 pass!
 
     # 4. First-class block connection: zero Callable overhead!
     timer.timeout.connect { on_tick(1) }

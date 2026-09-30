@@ -12,12 +12,26 @@ left:
   title: gameplay_spec.cr — Lapis::Test Suite
   tag: Crystal
   lang: crystal
-  code: "require \"lapis/test\"\r\n\nLapis::Test.test_suite \"Player Combat System\"
-    do\r\n  test \"spawning and taking damage\" do\r\n    player = Godot.create(Player)\r\n
-    \   player.take_damage(25)\r\n    assert_equal 75, player.health\r\n    player.destroy
-    # Clean deallocation\r\n  end\r\n\n  test \"mathematical zero memory leak verification\"
-    do\r\n    Lapis::Test.assert_no_leak do\r\n      100.times do\r\n        bullet
-    = Godot.create(Bullet)\r\n        bullet.destroy\r\n      end\r\n    end\r\n  end\r\nend"
+  code: |
+    require "lapis/test"
+
+    Lapis::Test.test_suite "Player Combat System" do
+      test "spawning and taking damage" do
+        player = Godot.create(Player)
+        player.take_damage(25)
+        assert_eq player.health, 75
+        player.destroy # Clean deallocation
+      end
+
+      test "mathematical zero memory leak verification" do
+        Lapis::Test.assert_no_leak do
+          100.times do
+            bullet = Godot.create(Bullet)
+            bullet.destroy
+          end
+        end
+      end
+    end
 right:
   type: card
   title: Zero-Leak Mathematical Proof

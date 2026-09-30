@@ -12,13 +12,23 @@ left:
   title: dialogue_system.cr — Strongly-Typed GDScript Wrapper
   tag: Crystal
   lang: crystal
-  code: "# Generate typed binding with: lapis bind res://scripts/dialogue.gd\r\nclass
-    DialogueSystem < Godot::Node\r\n  # Type-safe method proxy synthesized by Lapis\r\n
-    \ def show_dialogue(speaker : String, line_id : Int32) : Bool\r\n    call(\"show_dialogue\",
-    speaker, line_id).as_bool\r\n  end\r\n\n  # Typed property wrapper\r\n  def dialogue_speed
-    : Float32\r\n    get(\"dialogue_speed\").as_f32\r\n  end\r\nend\r\n\n# Consumer
-    usage: 100% typed, with compiler autocomplete!\r\ndialogue = get_node_as(DialogueSystem,
-    \"Dialogue\")\r\ndialogue.show_dialogue(\"Hero\", 42)"
+  code: |
+    # Generate typed binding with: lapis bind res://scripts/dialogue.gd
+    class DialogueSystem < Godot::Node
+      # Type-safe method proxy synthesized by Lapis
+      def show_dialogue(speaker : String, line_id : Int32) : Bool
+        call("show_dialogue", speaker, line_id).as_bool
+      end
+
+      # Typed property wrapper
+      def dialogue_speed : Float32
+        get("dialogue_speed").as_f32
+      end
+    end
+
+    # Consumer usage: 100% typed, with compiler autocomplete!
+    dialogue = self[DialogueSystem, "Dialogue"]
+    dialogue.show_dialogue("Hero", 42)
 right:
   type: card
   title: Typed Binding Benefits

@@ -214,10 +214,9 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Why instance_exec Powers World-Class DSLs**:
   - Rebinding self on the Fly: instance_exec temporarily switches self to the receiver inside the block, eliminating repetitive builder. prefixes.
   - The "Better Eval": Replaces dangerous string eval() with structured AST blocks—giving you syntax highlighting, linter checks, and zero injection vulnerabilities.
-  - Lexical Scope Retention: Uniquely combines outer scope variable capture with inner receiver method dispatch (and accepts block arguments).
-  - The DSL Secret Weapon: This exact mechanism powered iconic Ruby frameworks including Rails routing (routes.rb), RSpec test suites, and FactoryBot.
+  - Dynamic DSL Construction: Enables clean, declarative builder patterns without polluting global namespaces or requiring explicit receiver prefixes.
 - **Presenter Script**:
-  > *"Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This single feature became the secret weapon behind RSpec's describe/it syntax, Rails routes, and FactoryBot—giving Ruby the most elegant, readable configuration and testing DSLs in software engineering."*
+  > *"Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This enabled Ruby to pioneer elegant, readable configuration and game entity builders."*
 
 ---
 ### Slide 7: Open Classes & Monkey Patching
@@ -325,7 +324,7 @@ This document outlines each slide's exact theme palette, architectural category,
     - Metaprogramming breaks static analyzers; teams must maintain 10,000+ brittle RBI shims.
     - The Catch: Still interpreted on YARV! Paid the full syntax tax of types with ZERO native speed gains.
   - **STAGE 4 • 2020+ • Why Crystal Came About**:
-    - Designed from day one as a compiled language with global Hindley-Milner type inference.
+    - Designed from day one as a compiled language with whole-program flow-sensitive type inference.
     - Writes like Ruby, reads like Ruby 95% of types are inferred with zero signature noise.
     - Compile-time nil safety guarantees NoMethodError is mathematically impossible.
     - Compiles to lean native machine code via LLVM 50x-100x faster than Ruby/GDScript with zero VM overhead.
@@ -344,7 +343,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Why Not C++? Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded 0xC0000005 segfaults.
   - Why Not GDScript? Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).
   - Why Not C#? Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.
-  - The Crystal Sweet Spot: Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and pure developer joy!
+  - The Crystal Sweet Spot: Bare-metal LLVM machine code, whole-program type inference, Ruby-like expressive syntax, and pure developer joy!
 - **Presenter Script**:
   > *"When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?' Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes. Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby."*
 
@@ -353,10 +352,10 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `COMPILER REVOLUTION • CRYSTAL ORIGINS`
 - **Title**: The Birth of Crystal
-- **Subtitle**: Fast as C, Slick as Ruby Native LLVM Speed
+- **Subtitle**: Fast as C, Slick as Ruby • Native LLVM Speed
 - **Code Example (`crystal_origins.cr — Clean Syntax, Native Machine Code`)**:
   ```crystal
-  # 1. Elegant Ruby-like syntax with zero typing clutter
+  # 1. Elegant Ruby-like syntax with zero typing clutter:
   class Enemy
     property health : Int32
     property name : String
@@ -364,14 +363,14 @@ This document outlines each slide's exact theme palette, architectural category,
     def initialize(@name : String, @health : Int32 = 100)
     end
   
-    # 2. Ahead-of-time compiled to native LLVM x86_64 / ARM64
+    # 2. Ahead-of-time compiled to native LLVM machine code:
     def take_damage(amount : Int32) : Bool
       @health -= amount
-      @health <= 0
+      @health <= 0 # Returns true if defeated
     end
   end
   
-  # 3. Global type inference: compiler proves safety at compile time
+  # 3. Global type inference: compiler proves safety at compile time!
   enemy = Enemy.new("Goblin", 50)
   enemy.take_damage(25) # Direct C-speed CPU instruction!
   ```
@@ -382,14 +381,14 @@ This document outlines each slide's exact theme palette, architectural category,
   - Static Nil Safety: Null pointer dereferences are caught at compile time. T cannot be nil; only T? can, forcing explicit compiler-checked handling.
   - Direct C ABI Interop: Seamless bindings to native C libraries without JNI or FFI marshalling penalties.
 - **Presenter Script**:
-  > *"In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility."*
+  > *"In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility."*
 
 ---
 ### Slide 12: The Zero-Tax Type System
 - **Sol.vin Theme Palette**: `spaces_xp` (Spaces XP) [BG: `#e2ebf4` | Window: `#ffffff` | Text: `#0f2545` | Accent: `#0055ea`]
 - **Category Badge**: `TYPE SYSTEM • COMPILE-TIME RIGOR`
 - **Title**: The Zero-Tax Type System
-- **Subtitle**: Global Hindley-Milner Inference & Mathematically Proven Nil Safety
+- **Subtitle**: Global Flow-Sensitive Inference & Mathematically Proven Nil Safety
 - **Code Example (`type_inference_and_nil_safety.cr`)**:
   ```crystal
   # Crystal writes like Ruby, but with 100% static type safety:
@@ -421,7 +420,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Zero Runtime Tag Boxing: Primitives (Int32, Float64) and structs live unboxed on the stack with zero dynamic type-tag overhead.
   - Native LLVM Speed: Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.
 - **Presenter Script**:
-  > *"When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code."*
+  > *"When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code."*
 
 ---
 ### Slide 13: Expressive Ergonomics: High-Level Language Primitives
@@ -468,11 +467,11 @@ This document outlines each slide's exact theme palette, architectural category,
     def initialize(@room : Room)
     end
   
-    def wave(enemy : Symbol, count : Int32)
+    def wave(enemy : String, count : Int32)
       @room.spawn_wave(enemy, count)
     end
   
-    def reward(item : Symbol)
+    def reward(item : String)
       @room.set_chest(item)
     end
   
@@ -486,8 +485,8 @@ This document outlines each slide's exact theme palette, architectural category,
   
   # 2. Pure declarative DSL — zero "builder." boilerplate:
   dungeon = CombatRoomBuilder.build("Dungeon_A1") do
-    wave :skeleton_archer, count: 4 # Calls wave on builder!
-    reward :obsidian_key            # 100% type-checked at compile time!
+    wave "skeleton_archer", count: 4 # Calls wave on builder!
+    reward "obsidian_key"            # 100% type-checked at compile time!
   end
   ```
 - **How Crystal Elevates Ruby's Secret Weapon**:
@@ -862,19 +861,15 @@ This document outlines each slide's exact theme palette, architectural category,
   ```
 - **Code Example (`Godot C# (.NET)`)**:
   ```csharp
-  public partial class Player
-    : CharacterBody3D {
-    [Export(PropertyHint.Range,
-            "1.0,20.0")]
-    public float Speed { get; set; }
-      = 7.0f;
+  public partial class Player : CharacterBody3D {
+    [Export(PropertyHint.Range, "1.0,20.0")]
+    public float Speed { get; set; } = 7.0f;
   
     [Signal]
-    public delegate void
-      HealthChangedEventHandler(int hp);
+    public delegate void HealthChangedEventHandler(int hp);
+  
     [Signal]
-    public delegate void
-      DiedEventHandler();
+    public delegate void DiedEventHandler();
   
     public override void _Ready() {
       GD.Print($"Ready: {Name}");
@@ -892,13 +887,11 @@ This document outlines each slide's exact theme palette, architectural category,
   }
   #[godot_api]
   impl ICharacterBody3D for Player {
-    fn init(base:
-      Base<CharacterBody3D>) -> Self {
+    fn init(base: Base<CharacterBody3D>) -> Self {
       Self { base, speed: 7.0 }
     }
     fn ready(&mut self) {
-      godot_print!("Ready: {}",
-        self.base().get_name());
+      godot_print!("Ready: {}", self.base().get_name());
     }
   }
   #[godot_api]
@@ -917,15 +910,12 @@ This document outlines each slide's exact theme palette, architectural category,
   protected:
     static void _bind_methods() {
       ClassDB::bind_method(
-        D_METHOD("get_speed"),
-        &Player::get_speed);
+        D_METHOD("get_speed"), &Player::get_speed);
       ClassDB::bind_method(
-        D_METHOD("set_speed", "s"),
-        &Player::set_speed);
+        D_METHOD("set_speed", "s"), &Player::set_speed);
       ADD_PROPERTY(
-        PropertyInfo(Variant::FLOAT,
-          "speed", PROPERTY_HINT_RANGE,
-          "1.0,20.0"),
+        PropertyInfo(Variant::FLOAT, "speed",
+          PROPERTY_HINT_RANGE, "1.0,20.0"),
         "set_speed", "get_speed");
       ADD_SIGNAL(MethodInfo("died"));
     }
@@ -1069,24 +1059,24 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Clean, Strongly-Typed Object Access Without Casting or Null Crashes
 - **Code Example (`gameplay_controller.cr — Typed Scene & Node Resolution`)**:
   ```crystal
-  # 1. Strongly typed child retrieval with onready macro
+  # 1. Strongly typed child retrieval with onready macro:
   onready weapon : Weapon = get_node_as(Weapon, "WeaponMount/Sword")
   
-  # 2. Safe navigation with optional nodes (returns T?)
+  # 2. Safe navigation with optional nodes (returns T?):
   if hud = get_node_as?(HUD, "UI/HUDLayer")
     hud.update_health(current_health)
   end
   
-  # 3. Scene-unique nodes (%UniqueName) & recursive search
-  health_bar = get_unique_node_as(ProgressBar, "%HealthBar")
+  # 3. Scene-unique nodes (%UniqueName) & recursive search:
+  health_bar = get_unique_node_as(Godot::ProgressBar, "%HealthBar")
   shield = find_child_as(Shield, "EquippedShield")
   
-  # 4. Typed scene loading & dynamic instantiation
+  # 4. Typed scene loading & dynamic instantiation:
   packed = Godot.load_as(Godot::PackedScene, "res://scenes/companion.tscn")
   companion = packed.instantiate_as(Companion)
   add_child(companion)
   
-  # 5. Declarative property exports with inspector hints
+  # 5. Declarative property exports with inspector hints:
   @[ExportRange(50.0..500.0, 10.0)]
   property move_speed : Float32 = 250.0_f32
   ```
@@ -1107,9 +1097,9 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Declarative Signal Connections, Auto-Synthesized Listeners, and Decoupled Systems
 - **Code Example (`reactive_events.cr — Type-Safe Signal Subscriptions`)**:
   ```crystal
-  # 1. Connecting engine signals with clean Crystal blocks
-  start_btn = get_node(Button, "UI/StartButton")
-  start_btn.signal("pressed").connect do
+  # 1. Connecting engine signals with first-class bound handles
+  start_btn = self[Godot::Button, "UI/StartButton"]
+  start_btn.pressed.connect do
     start_game_sequence
   end
   
@@ -1189,7 +1179,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Boilerplate Flags: Requires manual for loops and break statements for simple boolean queries like any?.
 - **✨ Crystal Zen Advantages**:
   - Downcasting with map as: .map(&.as(Enemy)) statically casts base Godot nodes into typed wrappers in a single pass.
-  - Strict Type Propagation: Hindley-Milner inference tracks types across every chain step (Node &rarr; Enemy &rarr; String).
+  - Strict Type Propagation: Flow-sensitive inference tracks types across every chain step (Node &rarr; Enemy &rarr; String).
   - Typed Output Chaining: Downstream methods like any? (Bool) and tally (Hash(String, Int32)) are fully compile-time checked.
   - Zero GC Heap Thrashing: Chained functional blocks compile to inlined native machine loops with zero intermediate arrays.
 - **Key Takeaway**: Crystal's Enumerable module transforms clunky, bug-prone loops into clean, readable, self-documenting data pipelines.
@@ -1234,8 +1224,8 @@ This document outlines each slide's exact theme palette, architectural category,
   # 2. Clean block filter with static type inference
   ready_items = inventory.select { |i| i.durability > 0 && !i.broken }
   
-  # 3. Instant frequency Hash via Enumerable#tally
-  counts = inventory.map(&.category).tally # => Hash(String, Int32)
+  # 3. Instant frequency Hash via Enumerable#tally:
+  counts = inventory.tally(&.category) # => Hash(String, Int32) in 1 pass!
   
   # 4. First-class block connection: zero Callable overhead!
   timer.timeout.connect { on_tick(1) }
@@ -1424,7 +1414,12 @@ This document outlines each slide's exact theme palette, architectural category,
   ```
 - **Crystal Code Example (`✨ Crystal: Exhaustive Case & Tuple Patterns`)**:
   ```crystal
-  enum State; Idle; Run; Attack; Dead; end
+  enum State
+    Idle
+    Run
+    Attack
+    Dead
+  end
   
   def handle_state(state : State, health : Int32) : Void
     # Compiler enforces exhaustiveness across all variants:
@@ -1747,7 +1742,7 @@ This document outlines each slide's exact theme palette, architectural category,
   # Offload heavy procedural generation to native OS thread
   worker_thread = Thread.new do
     # Heavy CPU computation across hardware cores
-    noise = FastNoiseLite.new
+    noise = Godot::FastNoiseLite.new
     mesh_data = generate_marching_cubes(noise)
   
     # Notify main thread via thread-safe deferred dispatch
@@ -1841,16 +1836,16 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Code Example (`thread_safety_guards.cr — Safe Cross-Thread Dispatch`)**:
   ```crystal
   # Thread-safe mutation via call_deferred
-  def offload_pathfinding(start : Vector3, target : Vector3)
+  def offload_pathfinding(start : Godot::Vector3, target : Godot::Vector3)
     Thread.new do
       path = compute_astar_path(start, target)
-      
+  
       # Buffers dispatch into Godot's thread-safe MessageQueue
       call_deferred("apply_nav_path", path)
     end
   end
   
-  def apply_nav_path(path : Array(Vector3)) : Void
+  def apply_nav_path(path : Array(Godot::Vector3)) : Void
     # Executes safely on main loop thread
     @nav_agent.set_target_position(path.last)
   end
@@ -1878,14 +1873,14 @@ This document outlines each slide's exact theme palette, architectural category,
   # 2. Worker thread builds detached orphan graph in parallel
   Thread.new do
     # Scope::TreeOnly permits building detached nodes off-thread:
-    room = Godot.create(Node3D)
+    room = Godot.create(Godot::Node3D)
     room.name = "DungeonRoom_A1"
   
-    mesh_node = Godot.create(MeshInstance3D)
+    mesh_node = Godot.create(Godot::MeshInstance3D)
     mesh_node.mesh = generate_room_mesh(seed: 1234)
     room.add_child(mesh_node) # ✅ Allowed: room is an orphan
   
-    collider = Godot.create(CollisionShape3D)
+    collider = Godot.create(Godot::CollisionShape3D)
     collider.shape = generate_convex_shape(mesh_node.mesh)
     room.add_child(collider)  # ✅ Allowed: detached hierarchy
   
@@ -2038,6 +2033,8 @@ This document outlines each slide's exact theme palette, architectural category,
     @[Export]
     property speed : Float32 = 7.0_f32
   
+    property health : Int32 = 100
+  
     signal health_changed(current : Int32)
   
     def heal(amount : Int32) : Int32
@@ -2175,7 +2172,7 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   
   # Consumer usage: 100% typed, with compiler autocomplete!
-  dialogue = get_node_as(DialogueSystem, "Dialogue")
+  dialogue = self[DialogueSystem, "Dialogue"]
   dialogue.show_dialogue("Hero", 42)
   ```
 - **Typed Binding Benefits**:
@@ -2401,7 +2398,7 @@ This document outlines each slide's exact theme palette, architectural category,
     test "spawning and taking damage" do
       player = Godot.create(Player)
       player.take_damage(25)
-      assert_equal 75, player.health
+      assert_eq player.health, 75
       player.destroy # Clean deallocation
     end
   
@@ -2574,10 +2571,13 @@ This document outlines each slide's exact theme palette, architectural category,
     - *Code*:
       ```crystal
       node Player < CharacterBody3D do
-        @[Export] property speed : Float32 = 8.0_f32
+        @[Export]
+        property speed : Float32 = 8.0_f32
+      
         signal coin_collected(n : Int32)
+      
         def _physics_process(delta : Float64) : Void
-          self.velocity = Vector3.new(0, 0, -speed)
+          self.velocity = Godot::Vector3.new(0, 0, -speed)
           move_and_slide
         end
       end

@@ -666,8 +666,7 @@ end</code></pre>
             <ul class="card-list">
               <li><strong>Rebinding <code>self</code> on the Fly:</strong> <code>instance_exec</code> temporarily switches <code>self</code> to the receiver inside the block, eliminating repetitive <code>builder.</code> prefixes.</li>
               <li><strong>The "Better Eval":</strong> Replaces dangerous string <code>eval()</code> with structured AST blocks—giving you syntax highlighting, linter checks, and zero injection vulnerabilities.</li>
-              <li><strong>Lexical Scope Retention:</strong> Uniquely combines outer scope variable capture with inner receiver method dispatch (and accepts block arguments).</li>
-              <li><strong>The DSL Secret Weapon:</strong> This exact mechanism powered iconic Ruby frameworks including Rails routing (<code>routes.rb</code>), RSpec test suites, and FactoryBot.</li>
+              <li><strong>Dynamic DSL Construction:</strong> Enables clean, declarative builder patterns without polluting global namespaces or requiring explicit receiver prefixes.</li>
             </ul>
           </div>
           </div>
@@ -678,7 +677,7 @@ end</code></pre>
           <span>Slide 6 / 80</span>
         </div>
         <aside class="notes">
-          Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This single feature became the secret weapon behind RSpec's describe/it syntax, Rails routes, and FactoryBot—giving Ruby the most elegant, readable configuration and testing DSLs in software engineering.
+          Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This enabled Ruby to pioneer elegant, readable configuration and game entity builders.
         </aside>
       </section>
 
@@ -935,7 +934,7 @@ end</code></pre>
                 <div class="timeline-card-title">Why Crystal Came About</div>
               </div>
               <ul class="card-list">
-                <li>Designed from day one as a compiled language with global Hindley-Milner type inference.</li>
+                <li>Designed from day one as a compiled language with whole-program flow-sensitive type inference.</li>
                 <li>Writes like Ruby, reads like Ruby 95% of types are inferred with zero signature noise.</li>
                 <li>Compile-time nil safety guarantees <code>NoMethodError</code> is mathematically impossible.</li>
                 <li>Compiles to lean native machine code via LLVM 50x-100x faster than Ruby/GDScript with zero VM overhead.</li>
@@ -1008,7 +1007,7 @@ end</code></pre>
               <li><strong>Why Not C++?</strong> Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded <code>0xC0000005</code> segfaults.</li>
               <li><strong>Why Not GDScript?</strong> Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).</li>
               <li><strong>Why Not C#?</strong> Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.</li>
-              <li><strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em></li>
+              <li><strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, whole-program type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em></li>
             </ul>
           </div>
         </div>
@@ -1040,7 +1039,7 @@ end</code></pre>
           <div>
             <span class="badge-pill cyan">COMPILER REVOLUTION • CRYSTAL ORIGINS</span>
             <h2 class="slide-title">The Birth of Crystal</h2>
-            <p class="slide-subtitle">Fast as C, Slick as Ruby Native LLVM Speed</p>
+            <p class="slide-subtitle">Fast as C, Slick as Ruby • Native LLVM Speed</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
@@ -1058,7 +1057,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Elegant Ruby-like syntax with zero typing clutter
+            <pre><code class="language-crystal"># 1. Elegant Ruby-like syntax with zero typing clutter:
 class Enemy
   property health : Int32
   property name : String
@@ -1066,14 +1065,14 @@ class Enemy
   def initialize(@name : String, @health : Int32 = 100)
   end
 
-  # 2. Ahead-of-time compiled to native LLVM x86_64 / ARM64
+  # 2. Ahead-of-time compiled to native LLVM machine code:
   def take_damage(amount : Int32) : Bool
     @health -= amount
-    @health &lt;= 0
+    @health &lt;= 0 # Returns true if defeated
   end
 end
 
-# 3. Global type inference: compiler proves safety at compile time
+# 3. Global type inference: compiler proves safety at compile time!
 enemy = Enemy.new(&quot;Goblin&quot;, 50)
 enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
           </div>
@@ -1099,7 +1098,7 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
           <span>Slide 11 / 80</span>
         </div>
         <aside class="notes">
-          In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility.
+          In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility.
         </aside>
       </section>
 
@@ -1119,7 +1118,7 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
           <div>
             <span class="badge-pill cyan">TYPE SYSTEM • COMPILE-TIME RIGOR</span>
             <h2 class="slide-title">The Zero-Tax Type System</h2>
-            <p class="slide-subtitle">Global Hindley-Milner Inference &amp; Mathematically Proven Nil Safety</p>
+            <p class="slide-subtitle">Global Flow-Sensitive Inference &amp; Mathematically Proven Nil Safety</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
@@ -1181,7 +1180,7 @@ end</code></pre>
           <span>Slide 12 / 80</span>
         </div>
         <aside class="notes">
-          When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
+          When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
         </aside>
       </section>
 
@@ -1299,11 +1298,11 @@ class CombatRoomBuilder
   def initialize(@room : Room)
   end
 
-  def wave(enemy : Symbol, count : Int32)
+  def wave(enemy : String, count : Int32)
     @room.spawn_wave(enemy, count)
   end
 
-  def reward(item : Symbol)
+  def reward(item : String)
     @room.set_chest(item)
   end
 
@@ -1317,8 +1316,8 @@ end
 
 # 2. Pure declarative DSL — zero &quot;builder.&quot; boilerplate:
 dungeon = CombatRoomBuilder.build(&quot;Dungeon_A1&quot;) do
-  wave :skeleton_archer, count: 4 # Calls wave on builder!
-  reward :obsidian_key            # 100% type-checked at compile time!
+  wave &quot;skeleton_archer&quot;, count: 4 # Calls wave on builder!
+  reward &quot;obsidian_key&quot;            # 100% type-checked at compile time!
 end</code></pre>
           </div>
           </div>
@@ -2094,19 +2093,15 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-csharp">public partial class Player
-  : CharacterBody3D {
-  [Export(PropertyHint.Range,
-          &quot;1.0,20.0&quot;)]
-  public float Speed { get; set; }
-    = 7.0f;
+            <pre><code class="language-csharp">public partial class Player : CharacterBody3D {
+  [Export(PropertyHint.Range, &quot;1.0,20.0&quot;)]
+  public float Speed { get; set; } = 7.0f;
 
   [Signal]
-  public delegate void
-    HealthChangedEventHandler(int hp);
+  public delegate void HealthChangedEventHandler(int hp);
+
   [Signal]
-  public delegate void
-    DiedEventHandler();
+  public delegate void DiedEventHandler();
 
   public override void _Ready() {
     GD.Print($&quot;Ready: {Name}&quot;);
@@ -2135,13 +2130,11 @@ pub struct Player {
 }
 #[godot_api]
 impl ICharacterBody3D for Player {
-  fn init(base:
-    Base&lt;CharacterBody3D&gt;) -&gt; Self {
+  fn init(base: Base&lt;CharacterBody3D&gt;) -&gt; Self {
     Self { base, speed: 7.0 }
   }
   fn ready(&amp;mut self) {
-    godot_print!(&quot;Ready: {}&quot;,
-      self.base().get_name());
+    godot_print!(&quot;Ready: {}&quot;, self.base().get_name());
   }
 }
 #[godot_api]
@@ -2171,15 +2164,12 @@ impl Player {
 protected:
   static void _bind_methods() {
     ClassDB::bind_method(
-      D_METHOD(&quot;get_speed&quot;),
-      &amp;Player::get_speed);
+      D_METHOD(&quot;get_speed&quot;), &amp;Player::get_speed);
     ClassDB::bind_method(
-      D_METHOD(&quot;set_speed&quot;, &quot;s&quot;),
-      &amp;Player::set_speed);
+      D_METHOD(&quot;set_speed&quot;, &quot;s&quot;), &amp;Player::set_speed);
     ADD_PROPERTY(
-      PropertyInfo(Variant::FLOAT,
-        &quot;speed&quot;, PROPERTY_HINT_RANGE,
-        &quot;1.0,20.0&quot;),
+      PropertyInfo(Variant::FLOAT, &quot;speed&quot;,
+        PROPERTY_HINT_RANGE, &quot;1.0,20.0&quot;),
       &quot;set_speed&quot;, &quot;get_speed&quot;);
     ADD_SIGNAL(MethodInfo(&quot;died&quot;));
   }
@@ -2599,24 +2589,24 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Strongly typed child retrieval with onready macro
+            <pre><code class="language-crystal"># 1. Strongly typed child retrieval with onready macro:
 onready weapon : Weapon = get_node_as(Weapon, &quot;WeaponMount/Sword&quot;)
 
-# 2. Safe navigation with optional nodes (returns T?)
+# 2. Safe navigation with optional nodes (returns T?):
 if hud = get_node_as?(HUD, &quot;UI/HUDLayer&quot;)
   hud.update_health(current_health)
 end
 
-# 3. Scene-unique nodes (%UniqueName) &amp; recursive search
-health_bar = get_unique_node_as(ProgressBar, &quot;%HealthBar&quot;)
+# 3. Scene-unique nodes (%UniqueName) &amp; recursive search:
+health_bar = get_unique_node_as(Godot::ProgressBar, &quot;%HealthBar&quot;)
 shield = find_child_as(Shield, &quot;EquippedShield&quot;)
 
-# 4. Typed scene loading &amp; dynamic instantiation
+# 4. Typed scene loading &amp; dynamic instantiation:
 packed = Godot.load_as(Godot::PackedScene, &quot;res://scenes/companion.tscn&quot;)
 companion = packed.instantiate_as(Companion)
 add_child(companion)
 
-# 5. Declarative property exports with inspector hints
+# 5. Declarative property exports with inspector hints:
 @[ExportRange(50.0..500.0, 10.0)]
 property move_speed : Float32 = 250.0_f32</code></pre>
           </div>
@@ -2680,9 +2670,9 @@ property move_speed : Float32 = 250.0_f32</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Connecting engine signals with clean Crystal blocks
-start_btn = get_node(Button, &quot;UI/StartButton&quot;)
-start_btn.signal(&quot;pressed&quot;).connect do
+            <pre><code class="language-crystal"># 1. Connecting engine signals with first-class bound handles
+start_btn = self[Godot::Button, &quot;UI/StartButton&quot;]
+start_btn.pressed.connect do
   start_game_sequence
 end
 
@@ -2916,7 +2906,7 @@ enemy_types : Hash(String, Int32) =
               </div>
               <ul class="card-list">
                 <li><strong>Downcasting with <code>map as</code>:</strong> <code>.map(&.as(Enemy))</code> statically casts base Godot nodes into typed wrappers in a single pass.</li>
-                <li><strong>Strict Type Propagation:</strong> Hindley-Milner inference tracks types across every chain step (<code>Node</code> &rarr; <code>Enemy</code> &rarr; <code>String</code>).</li>
+                <li><strong>Strict Type Propagation:</strong> Flow-sensitive inference tracks types across every chain step (<code>Node</code> &rarr; <code>Enemy</code> &rarr; <code>String</code>).</li>
                 <li><strong>Typed Output Chaining:</strong> Downstream methods like <code>any?</code> (<code>Bool</code>) and <code>tally</code> (<code>Hash(String, Int32)</code>) are fully compile-time checked.</li>
                 <li><strong>Zero GC Heap Thrashing:</strong> Chained functional blocks compile to inlined native machine loops with zero intermediate arrays.</li>
               </ul>
@@ -3017,8 +3007,8 @@ inventory.sort_by!(&amp;.weight)
 # 2. Clean block filter with static type inference
 ready_items = inventory.select { |i| i.durability &gt; 0 &amp;&amp; !i.broken }
 
-# 3. Instant frequency Hash via Enumerable#tally
-counts = inventory.map(&amp;.category).tally # =&gt; Hash(String, Int32)
+# 3. Instant frequency Hash via Enumerable#tally:
+counts = inventory.tally(&amp;.category) # =&gt; Hash(String, Int32) in 1 pass!
 
 # 4. First-class block connection: zero Callable overhead!
 timer.timeout.connect { on_tick(1) }
@@ -3116,8 +3106,8 @@ inventory.sort_by!(&amp;.weight)
 # 2. Clean block filter with static type inference
 ready_items = inventory.select { |i| i.durability &gt; 0 &amp;&amp; !i.broken }
 
-# 3. Instant frequency Hash via Enumerable#tally
-counts = inventory.map(&amp;.category).tally # =&gt; Hash(String, Int32)
+# 3. Instant frequency Hash via Enumerable#tally:
+counts = inventory.tally(&amp;.category) # =&gt; Hash(String, Int32) in 1 pass!
 
 # 4. First-class block connection: zero Callable overhead!
 timer.timeout.connect { on_tick(1) }
@@ -3687,7 +3677,12 @@ func handle_state(state: State, health: int) -&gt; void:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">enum State; Idle; Run; Attack; Dead; end
+            <pre><code class="language-crystal">enum State
+  Idle
+  Run
+  Attack
+  Dead
+end
 
 def handle_state(state : State, health : Int32) : Void
   # Compiler enforces exhaustiveness across all variants:
@@ -3783,7 +3778,12 @@ func handle_state(state: State, health: int) -&gt; void:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">enum State; Idle; Run; Attack; Dead; end
+            <pre><code class="language-crystal">enum State
+  Idle
+  Run
+  Attack
+  Dead
+end
 
 def handle_state(state : State, health : Int32) : Void
   # Compiler enforces exhaustiveness across all variants:
@@ -4807,7 +4807,7 @@ end</code></pre>
             <pre><code class="language-crystal"># Offload heavy procedural generation to native OS thread
 worker_thread = Thread.new do
   # Heavy CPU computation across hardware cores
-  noise = FastNoiseLite.new
+  noise = Godot::FastNoiseLite.new
   mesh_data = generate_marching_cubes(noise)
 
   # Notify main thread via thread-safe deferred dispatch
@@ -5102,16 +5102,16 @@ end</code></pre>
               </div>
             </div>
             <pre><code class="language-crystal"># Thread-safe mutation via call_deferred
-def offload_pathfinding(start : Vector3, target : Vector3)
+def offload_pathfinding(start : Godot::Vector3, target : Godot::Vector3)
   Thread.new do
     path = compute_astar_path(start, target)
-    
+
     # Buffers dispatch into Godot&#39;s thread-safe MessageQueue
     call_deferred(&quot;apply_nav_path&quot;, path)
   end
 end
 
-def apply_nav_path(path : Array(Vector3)) : Void
+def apply_nav_path(path : Array(Godot::Vector3)) : Void
   # Executes safely on main loop thread
   @nav_agent.set_target_position(path.last)
 end</code></pre>
@@ -5182,14 +5182,14 @@ Godot::ThreadSafety.scope  = Godot::ThreadSafety::Scope::TreeOnly
 # 2. Worker thread builds detached orphan graph in parallel
 Thread.new do
   # Scope::TreeOnly permits building detached nodes off-thread:
-  room = Godot.create(Node3D)
+  room = Godot.create(Godot::Node3D)
   room.name = &quot;DungeonRoom_A1&quot;
 
-  mesh_node = Godot.create(MeshInstance3D)
+  mesh_node = Godot.create(Godot::MeshInstance3D)
   mesh_node.mesh = generate_room_mesh(seed: 1234)
   room.add_child(mesh_node) # ✅ Allowed: room is an orphan
 
-  collider = Godot.create(CollisionShape3D)
+  collider = Godot.create(Godot::CollisionShape3D)
   collider.shape = generate_convex_shape(mesh_node.mesh)
   room.add_child(collider)  # ✅ Allowed: detached hierarchy
 
@@ -5519,6 +5519,8 @@ end</code></pre>
             <pre><code class="language-crystal">node Player &lt; CharacterBody3D do
   @[Export]
   property speed : Float32 = 7.0_f32
+
+  property health : Int32 = 100
 
   signal health_changed(current : Int32)
 
@@ -5898,7 +5900,7 @@ class DialogueSystem &lt; Godot::Node
 end
 
 # Consumer usage: 100% typed, with compiler autocomplete!
-dialogue = get_node_as(DialogueSystem, &quot;Dialogue&quot;)
+dialogue = self[DialogueSystem, &quot;Dialogue&quot;]
 dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
           </div>
           </div>
@@ -6446,7 +6448,7 @@ Lapis::Test.test_suite &quot;Player Combat System&quot; do
   test &quot;spawning and taking damage&quot; do
     player = Godot.create(Player)
     player.take_damage(25)
-    assert_equal 75, player.health
+    assert_eq player.health, 75
     player.destroy # Clean deallocation
   end
 
@@ -7040,10 +7042,13 @@ $ cd live_game &amp;&amp; lapis doctor</code></pre>
               </div>
               <div class="demo-step-box code-box">
                 <pre><code class="language-crystal">node Player &lt; CharacterBody3D do
-  @[Export] property speed : Float32 = 8.0_f32
+  @[Export]
+  property speed : Float32 = 8.0_f32
+
   signal coin_collected(n : Int32)
+
   def _physics_process(delta : Float64) : Void
-    self.velocity = Vector3.new(0, 0, -speed)
+    self.velocity = Godot::Vector3.new(0, 0, -speed)
     move_and_slide
   end
 end</code></pre>

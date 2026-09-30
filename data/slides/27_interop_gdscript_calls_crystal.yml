@@ -12,19 +12,39 @@ left:
   title: player.cr — Exported Crystal Node
   tag: Crystal
   lang: crystal
-  code: "node Player < CharacterBody3D do\r\n  @[Export]\r\n  property speed : Float32
-    = 7.0_f32\r\n\n  signal health_changed(current : Int32)\r\n\n  def heal(amount
-    : Int32) : Int32\r\n    @health += amount\r\n    emit_health_changed(@health)\r\n
-    \   @health\r\n  end\r\nend"
+  code: |
+    node Player < CharacterBody3D do
+      @[Export]
+      property speed : Float32 = 7.0_f32
+
+      property health : Int32 = 100
+
+      signal health_changed(current : Int32)
+
+      def heal(amount : Int32) : Int32
+        @health += amount
+        emit_health_changed(@health)
+        @health
+      end
+    end
 right:
   type: code
   title: ui_controller.gd — GDScript Consumer
   tag: GDScript
   lang: gdscript
-  code: "extends Control\r\n\n@onready var player: Player = $Player\r\n\nfunc _on_heal_pressed()
-    -> void:\r\n    # Calls Crystal method directly with autocompletion!\r\n    var
-    new_hp = player.heal(25)\r\n    $HPLabel.text = \"HP: %d\" % new_hp\r\n\nfunc
-    _ready() -> void:\r\n    # Connects to Crystal signal seamlessly\r\n    player.health_changed.connect(_on_hp_changed)"
+  code: |
+    extends Control
+
+    @onready var player: Player = $Player
+
+    func _on_heal_pressed() -> void:
+        # Calls Crystal method directly with autocompletion!
+        var new_hp = player.heal(25)
+        $HPLabel.text = "HP: %d" % new_hp
+
+    func _ready() -> void:
+        # Connects to Crystal signal seamlessly
+        player.health_changed.connect(_on_hp_changed)
 notes: You don't have to rewrite your entire game in Crystal to use Lapis. Lapis nodes
   register directly with Godot's ClassDB. That means GDScript developers on your team
   can instantiate Crystal nodes, call Crystal methods, inspect exported properties,

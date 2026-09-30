@@ -34,7 +34,12 @@ crystal:
   lang: crystal
   tag: Crystal (Lapis)
   code: |
-    enum State; Idle; Run; Attack; Dead; end
+    enum State
+      Idle
+      Run
+      Attack
+      Dead
+    end
 
     def handle_state(state : State, health : Int32) : Void
       # Compiler enforces exhaustiveness across all variants:

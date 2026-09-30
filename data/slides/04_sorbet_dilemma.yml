@@ -39,7 +39,7 @@ cards:
   title: "Why Crystal Came About"
   color: cyan
   items:
-  - Designed from day one as a compiled language with global Hindley-Milner type inference.
+  - Designed from day one as a compiled language with whole-program flow-sensitive type inference.
   - Writes like Ruby, reads like Ruby: 95% of types are inferred with zero signature noise.
   - Compile-time nil safety guarantees <code>NoMethodError</code> is mathematically impossible.
   - Compiles to lean native machine code via LLVM: 50x-100x faster than Ruby/GDScript with zero VM overhead.

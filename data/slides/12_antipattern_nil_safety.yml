@@ -10,12 +10,17 @@ gdscript:
   title: '❌ GDScript: Runtime Null Dereference'
   lang: gdscript
   tag: GDScript
-  code: "func attack_target(target: Node) -> void:\r\n    # Compiles fine! But crashes
-    during gameplay if weapon is missing or freed\r\n    var weapon = target.get_node_or_null(\"EquippedWeapon\")\r\n
-    \   weapon.slash(45)\r\n    # CRASH: Invalid call to function 'slash' in base
-    'Nil'.\r\n    # Or worse: ACCESS_VIOLATION if native C++ node was freed!\r\n\n
-    \   # Forces developers to litter code with defensive guards:\r\n    if is_instance_valid(weapon):\r\n
-    \       weapon.slash(45)"
+  code: |
+    func attack_target(target: Node) -> void:
+        # Compiles fine! But crashes during gameplay if weapon is missing or freed
+        var weapon = target.get_node_or_null("EquippedWeapon")
+        weapon.slash(45)
+        # CRASH: Invalid call to function 'slash' in base 'Nil'.
+        # Or worse: ACCESS_VIOLATION if native C++ node was freed!
+
+        # Forces developers to litter code with defensive guards:
+        if is_instance_valid(weapon):
+            weapon.slash(45)
   points:
   - <strong>Nullable by Default:</strong> Variables are nullable without compiler
     enforcement or warnings.
@@ -27,12 +32,18 @@ crystal:
   title: '✨ Crystal: Flow-Sensitive Compile-Time Checks'
   lang: crystal
   tag: Crystal (Lapis)
-  code: "def attack_target(target : Godot::Node) : Void\r\n  # weapon is Weapon? (Union
-    type: Weapon | Nil). Compiler forces checking!\r\n  if weapon = target.get_node_as?(Weapon,
-    \"EquippedWeapon\")\r\n    weapon.slash(45) # Compiler narrows type to Weapon!\r\n
-    \ end\r\n\n  # Or concise safe navigation with .try:\r\n  target.get_node_as?(Weapon,
-    \"EquippedWeapon\").try(&.slash(45))\r\n\n  # Monotonic 64-bit ID check (#check_alive!)
-    prevents dead-pointer segfaults\r\nend"
+  code: |
+    def attack_target(target : Godot::Node) : Void
+      # weapon is Weapon? (Union type: Weapon | Nil). Compiler forces checking!
+      if weapon = target.get_node_as?(Weapon, "EquippedWeapon")
+        weapon.slash(45) # Compiler narrows type to Weapon!
+      end
+
+      # Or concise safe navigation with .try:
+      target.get_node_as?(Weapon, "EquippedWeapon").try(&.slash(45))
+
+      # Monotonic 64-bit ID check (#check_alive!) prevents dead-pointer segfaults
+    end
   points:
   - <strong>Non-Nil by Default:</strong> <code>Weapon</code> cannot be nil; only <code>Weapon?</code>
     explicitly allows nil.

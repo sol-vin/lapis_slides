@@ -1,7 +1,7 @@
 ---
 id: 05b_crystal_type_system
 title: 'The Zero-Tax Type System'
-subtitle: Global Hindley-Milner Inference & Mathematically Proven Nil Safety
+subtitle: Global Flow-Sensitive Inference & Mathematically Proven Nil Safety
 badge: TYPE SYSTEM • COMPILE-TIME RIGOR
 badge_color: cyan
 palette: spaces_xp
@@ -45,4 +45,4 @@ right:
     - '<strong>Zero Runtime Tag Boxing:</strong> Primitives (<code>Int32</code>, <code>Float64</code>) and structs live unboxed on the stack with zero dynamic type-tag overhead.'
     - '<strong>Native LLVM Speed:</strong> Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.'
 notes: |
-  When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global Hindley-Milner type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
+  When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.

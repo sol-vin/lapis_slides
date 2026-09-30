@@ -13,9 +13,9 @@ left:
   tag: Crystal
   lang: crystal
   code: |
-    # 1. Connecting engine signals with clean Crystal blocks
-    start_btn = get_node(Button, "UI/StartButton")
-    start_btn.signal("pressed").connect do
+    # 1. Connecting engine signals with first-class bound handles
+    start_btn = self[Godot::Button, "UI/StartButton"]
+    start_btn.pressed.connect do
       start_game_sequence
     end
 

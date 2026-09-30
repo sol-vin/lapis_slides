@@ -1,7 +1,7 @@
 ---
 id: 05_birth_of_crystal
 title: 'The Birth of Crystal'
-subtitle: Fast as C, Slick as Ruby Native LLVM Speed
+subtitle: Fast as C, Slick as Ruby • Native LLVM Speed
 badge: COMPILER REVOLUTION • CRYSTAL ORIGINS
 badge_color: cyan
 palette: spaces_98
@@ -12,35 +12,34 @@ left:
   title: crystal_origins.cr — Clean Syntax, Native Machine Code
   tag: Crystal
   lang: crystal
-  code: "# 1. Elegant Ruby-like syntax with zero typing clutter\r\nclass Enemy\r\n
-    \ property health : Int32\r\n  property name : String\r\n\n  def initialize(@name
-    : String, @health : Int32 = 100)\r\n  end\r\n\n  # 2. Ahead-of-time compiled to
-    native LLVM x86_64 / ARM64\r\n  def take_damage(amount : Int32) : Bool\r\n    @health
-    -= amount\r\n    @health <= 0\r\n  end\r\nend\r\n\n# 3. Global type inference:
-    compiler proves safety at compile time\r\nenemy = Enemy.new(\"Goblin\", 50)\r\nenemy.take_damage(25)
-    # Direct C-speed CPU instruction!"
+  code: |
+    # 1. Elegant Ruby-like syntax with zero typing clutter:
+    class Enemy
+      property health : Int32
+      property name : String
+
+      def initialize(@name : String, @health : Int32 = 100)
+      end
+
+      # 2. Ahead-of-time compiled to native LLVM machine code:
+      def take_damage(amount : Int32) : Bool
+        @health -= amount
+        @health <= 0 # Returns true if defeated
+      end
+    end
+
+    # 3. Global type inference: compiler proves safety at compile time!
+    enemy = Enemy.new("Goblin", 50)
+    enemy.take_damage(25) # Direct C-speed CPU instruction!
 right:
   type: card
   title: The Compiler Synthesis
   color: cyan
   items:
-  - <strong>Designed from Day One for Types:</strong> Crystal wasn't a dynamic language
-    patched with types; it was built from scratch as a statically typed language.
-  - <strong>Global Type Inference:</strong> You rarely write type annotations for
-    local variables. The compiler analyzes the entire program flow and infers concrete
-    types.
-  - '<strong>LLVM Native Backend:</strong> Crystal emits LLVM IR, benefiting from
-    decades of optimization: autovectorization, link-time optimization (LTO), and
-    register allocation.'
-  - <strong>Static Nil Safety:</strong> Null pointer dereferences are caught at compile
-    time. <code>T</code> cannot be nil; only <code>T?</code> can, forcing explicit
-    compiler-checked handling.
-  - <strong>Direct C ABI Interop:</strong> Seamless bindings to native C libraries
-    without JNI or FFI marshalling penalties.
-notes: 'In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact
-  dilemma. Instead of bolting types onto a dynamic runtime, they built a new language
-  from the ground up: syntax as slick and human as Ruby, but statically typed with
-  a global type inference engine and an LLVM native compiler backend. Crystal gives
-  you the developer experience of a high-level scripting language, but compiles straight
-  to bare-metal machine code with zero VM overhead, complete static nil safety, and
-  direct C ABI compatibility.'
+  - <strong>Designed from Day One for Types:</strong> Crystal wasn't a dynamic language patched with types; it was built from scratch as a statically typed language.
+  - <strong>Global Type Inference:</strong> You rarely write type annotations for local variables. The compiler analyzes the entire program flow and infers concrete types.
+  - '<strong>LLVM Native Backend:</strong> Crystal emits LLVM IR, benefiting from decades of optimization: autovectorization, link-time optimization (LTO), and register allocation.'
+  - <strong>Static Nil Safety:</strong> Null pointer dereferences are caught at compile time. <code>T</code> cannot be nil; only <code>T?</code> can, forcing explicit compiler-checked handling.
+  - <strong>Direct C ABI Interop:</strong> Seamless bindings to native C libraries without JNI or FFI marshalling penalties.
+notes: |
+  In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Crystal gives you the developer experience of a high-level scripting language, but compiles straight to bare-metal machine code with zero VM overhead, complete static nil safety, and direct C ABI compatibility.

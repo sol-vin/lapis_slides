@@ -12,11 +12,21 @@ left:
   title: thread_safety_guards.cr — Safe Cross-Thread Dispatch
   tag: Crystal
   lang: crystal
-  code: "# Thread-safe mutation via call_deferred\r\ndef offload_pathfinding(start
-    : Vector3, target : Vector3)\r\n  Thread.new do\r\n    path = compute_astar_path(start,
-    target)\r\n    \r\n    # Buffers dispatch into Godot's thread-safe MessageQueue\r\n
-    \   call_deferred(\"apply_nav_path\", path)\r\n  end\r\nend\r\n\ndef apply_nav_path(path
-    : Array(Vector3)) : Void\r\n  # Executes safely on main loop thread\r\n  @nav_agent.set_target_position(path.last)\r\nend"
+  code: |
+    # Thread-safe mutation via call_deferred
+    def offload_pathfinding(start : Godot::Vector3, target : Godot::Vector3)
+      Thread.new do
+        path = compute_astar_path(start, target)
+
+        # Buffers dispatch into Godot's thread-safe MessageQueue
+        call_deferred("apply_nav_path", path)
+      end
+    end
+
+    def apply_nav_path(path : Array(Godot::Vector3)) : Void
+      # Executes safely on main loop thread
+      @nav_agent.set_target_position(path.last)
+    end
 right:
   type: card
   title: Core Safety Invariants

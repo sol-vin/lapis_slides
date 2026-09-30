@@ -12,12 +12,24 @@ left:
   title: dialogue_cutscene.cr — Cooperative Gameplay Fibers
   tag: Crystal
   lang: crystal
-  code: "# Spawn lightweight cooperative fiber on main thread\r\nspawn do\r\n  dialogue_box.typewrite(\"A
-    storm is approaching...\")\r\n  await(dialogue_box.finished)\r\n\n  await(1.5.seconds)
-    # Non-blocking delay\r\n  camera.screen_shake(intensity: 0.8)\r\n  lightning.trigger_flash\r\n\n
-    \ await(lightning.flash_completed)\r\n  dialogue_box.typewrite(\"We must take
-    shelter!\")\r\nend\r\n\ndef _process(delta : Float64) : Void\r\n  # Yield cooperative
-    slice to spawned fibers\r\n  Fiber.yield\r\nend"
+  code: |
+    # Spawn lightweight cooperative fiber on main thread
+    spawn do
+      dialogue_box.typewrite("A storm is approaching...")
+      await(dialogue_box.finished)
+
+      await(1.5.seconds) # Non-blocking delay
+      camera.screen_shake(intensity: 0.8)
+      lightning.trigger_flash
+
+      await(lightning.flash_completed)
+      dialogue_box.typewrite("We must take shelter!")
+    end
+
+    def _process(delta : Float64) : Void
+      # Yield cooperative slice to spawned fibers
+      Fiber.yield
+    end
 right:
   type: card
   title: Fiber Concurrency Invariants

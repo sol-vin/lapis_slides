@@ -10,16 +10,20 @@ ratio: 3:2
 left:
   type: terminal
   title: Terminal — lapis test --tui Dashboard
-  code: "┌─ Lapis Unified Test Suite Dashboard ────────────────────────┐\r\n│ [✔]
-    1. Engine & Core Bindings Specs (42/42 passed)           │\r\n│ [✔] 2. Headless
-    In-Editor @tool Tests (18/18 passed)         │\r\n│ [✔] 3. Standalone Runtime
-    Host Suites (35/35 passed)         │\r\n│ [✔] 4. Quantitative Zero Leak Verification
-    (0 leaks)         │\r\n├─────────────────────────────────────────────────────────────┤\r\n│
-    LIVE LOG STREAM (Phase 3: Runtime Suites):                  │\r\n│ [10:24:12]
-    SUITE: Combat System ... OK (12ms)                │\r\n│ [10:24:13] SUITE: Physics
-    N-Body ... OK (8ms)                │\r\n│ [10:24:14] SUITE: Memory Monotonic Guard
-    ... OK (4ms)        │\r\n│                                                             │\r\n│
-    STATUS: ALL 95 TESTS PASSED (0 failures, 0 leaks)            │\r\n└─────────────────────────────────────────────────────────────┘"
+  code: |
+    ┌─ Lapis Unified Test Suite Dashboard ────────────────────────┐
+    │ [✔] 1. Engine & Core Bindings Specs (42/42 passed)           │
+    │ [✔] 2. Headless In-Editor @tool Tests (18/18 passed)         │
+    │ [✔] 3. Standalone Runtime Host Suites (35/35 passed)         │
+    │ [✔] 4. Quantitative Zero Leak Verification (0 leaks)         │
+    ├─────────────────────────────────────────────────────────────┤
+    │ LIVE LOG STREAM (Phase 3: Runtime Suites):                  │
+    │ [10:24:12] SUITE: Combat System ... OK (12ms)                │
+    │ [10:24:13] SUITE: Physics N-Body ... OK (8ms)                │
+    │ [10:24:14] SUITE: Memory Monotonic Guard ... OK (4ms)        │
+    │                                                             │
+    │ STATUS: ALL 95 TESTS PASSED (0 failures, 0 leaks)            │
+    └─────────────────────────────────────────────────────────────┘
 right:
   type: card
   title: TUI Dashboard Features

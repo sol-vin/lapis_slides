@@ -12,13 +12,27 @@ left:
   title: enemy_fsm.cr — Declarative State Machine DSL
   tag: Crystal
   lang: crystal
-  code: "# Declare states and transitions with an expressive macro DSL\r\nfsm BossState
-    do\r\n  state Patrol, initial: true do\r\n    on :see_player, transition_to: Chase\r\n
-    \   after 5.seconds, transition_to: ScanArea\r\n  end\r\n\n  state Chase do\r\n
-    \   on :in_attack_range, transition_to: Attack\r\n    on :lost_player, transition_to:
-    Patrol\r\n  end\r\n\n  state Attack do\r\n    on :attack_finished, transition_to:
-    Recover\r\n  end\r\n\n  state Recover do\r\n    after 1.5.seconds, transition_to:
-    Chase\r\n  end\r\nend"
+  code: |
+    # Declare states and transitions with an expressive macro DSL
+    fsm BossState do
+      state Patrol, initial: true do
+        on :see_player, transition_to: Chase
+        after 5.seconds, transition_to: ScanArea
+      end
+
+      state Chase do
+        on :in_attack_range, transition_to: Attack
+        on :lost_player, transition_to: Patrol
+      end
+
+      state Attack do
+        on :attack_finished, transition_to: Recover
+      end
+
+      state Recover do
+        after 1.5.seconds, transition_to: Chase
+      end
+    end
 right:
   type: card
   title: What the Macro Generates

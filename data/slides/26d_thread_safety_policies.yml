@@ -20,14 +20,14 @@ left:
     # 2. Worker thread builds detached orphan graph in parallel
     Thread.new do
       # Scope::TreeOnly permits building detached nodes off-thread:
-      room = Godot.create(Node3D)
+      room = Godot.create(Godot::Node3D)
       room.name = "DungeonRoom_A1"
 
-      mesh_node = Godot.create(MeshInstance3D)
+      mesh_node = Godot.create(Godot::MeshInstance3D)
       mesh_node.mesh = generate_room_mesh(seed: 1234)
       room.add_child(mesh_node) # ✅ Allowed: room is an orphan
 
-      collider = Godot.create(CollisionShape3D)
+      collider = Godot.create(Godot::CollisionShape3D)
       collider.shape = generate_convex_shape(mesh_node.mesh)
       room.add_child(collider)  # ✅ Allowed: detached hierarchy
 

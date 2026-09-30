@@ -47,7 +47,7 @@ crystal:
       active_targets.tally # Frequency Hash!
   points:
   - <strong>Downcasting with <code>map as</code>:</strong> <code>.map(&.as(Enemy))</code> statically casts base Godot nodes into typed wrappers in a single pass.
-  - <strong>Strict Type Propagation:</strong> Hindley-Milner inference tracks types across every chain step (<code>Node</code> &rarr; <code>Enemy</code> &rarr; <code>String</code>).
+  - <strong>Strict Type Propagation:</strong> Flow-sensitive inference tracks types across every chain step (<code>Node</code> &rarr; <code>Enemy</code> &rarr; <code>String</code>).
   - <strong>Typed Output Chaining:</strong> Downstream methods like <code>any?</code> (<code>Bool</code>) and <code>tally</code> (<code>Hash(String, Int32)</code>) are fully compile-time checked.
   - <strong>Zero GC Heap Thrashing:</strong> Chained functional blocks compile to inlined native machine loops with zero intermediate arrays.
 takeaway:

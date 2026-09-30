@@ -13,12 +13,21 @@ left:
   title: terrain_worker.cr — Background Multi-Core Worker
   tag: Crystal
   lang: crystal
-  code: "# Offload heavy procedural generation to native OS thread\r\nworker_thread
-    = Thread.new do\r\n  # Heavy CPU computation across hardware cores\r\n  noise
-    = FastNoiseLite.new\r\n  mesh_data = generate_marching_cubes(noise)\r\n\n  # Notify
-    main thread via thread-safe deferred dispatch\r\n  call_deferred(\"on_terrain_ready\",
-    mesh_data)\r\nend\r\n\ndef on_terrain_ready(data : MeshData) : Void\r\n  # Dispatched
-    safely on Godot main thread\r\n  update_surface_mesh(data)\r\nend"
+  code: |
+    # Offload heavy procedural generation to native OS thread
+    worker_thread = Thread.new do
+      # Heavy CPU computation across hardware cores
+      noise = Godot::FastNoiseLite.new
+      mesh_data = generate_marching_cubes(noise)
+
+      # Notify main thread via thread-safe deferred dispatch
+      call_deferred("on_terrain_ready", mesh_data)
+    end
+
+    def on_terrain_ready(data : MeshData) : Void
+      # Dispatched safely on Godot main thread
+      update_surface_mesh(data)
+    end
 right:
   type: card
   title: OS Thread Invariants

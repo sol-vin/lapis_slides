@@ -22,7 +22,7 @@ card:
   - <strong>Why Not C++?</strong> Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded <code>0xC0000005</code> segfaults.
   - <strong>Why Not GDScript?</strong> Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).
   - <strong>Why Not C#?</strong> Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.
-  - <strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, Hindley-Milner type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em>
+  - <strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, whole-program type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em>
 notes: |
   When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?'
   Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes.

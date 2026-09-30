@@ -12,13 +12,26 @@ left:
   title: save_game_state.cr — Serialization Without Reflection
   tag: Crystal
   lang: crystal
-  code: "require \"json\"\r\n\n# Structs and classes serialize with a single macro
-    inclusion\r\nstruct PlayerSaveData\r\n  include JSON::Serializable\r\n\n  property
-    player_name : String\r\n  property level : Int32\r\n  property health : Float32\r\n
-    \ property inventory_items : Array(String)\r\n  property position_checkpoint :
-    Godot::Vector3\r\nend\r\n\n# 1. Serializing to JSON string: direct bytecode generation\r\ndata
-    = PlayerSaveData.new(...)\r\njson_str = data.to_json\r\n\n# 2. Deserializing from
-    JSON: type-safe, strict validation\r\nloaded_data = PlayerSaveData.from_json(json_str)"
+  code: |
+    require "json"
+
+    # Structs and classes serialize with a single macro inclusion
+    struct PlayerSaveData
+      include JSON::Serializable
+
+      property player_name : String
+      property level : Int32
+      property health : Float32
+      property inventory_items : Array(String)
+      property position_checkpoint : Godot::Vector3
+    end
+
+    # 1. Serializing to JSON string: direct bytecode generation
+    data = PlayerSaveData.new(...)
+    json_str = data.to_json
+
+    # 2. Deserializing from JSON: type-safe, strict validation
+    loaded_data = PlayerSaveData.from_json(json_str)
 right:
   type: card
   title: Why It Beats GDScript & C# Serialization

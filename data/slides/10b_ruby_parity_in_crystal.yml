@@ -20,11 +20,11 @@ left:
       def initialize(@room : Room)
       end
 
-      def wave(enemy : Symbol, count : Int32)
+      def wave(enemy : String, count : Int32)
         @room.spawn_wave(enemy, count)
       end
 
-      def reward(item : Symbol)
+      def reward(item : String)
         @room.set_chest(item)
       end
 
@@ -38,8 +38,8 @@ left:
 
     # 2. Pure declarative DSL — zero "builder." boilerplate:
     dungeon = CombatRoomBuilder.build("Dungeon_A1") do
-      wave :skeleton_archer, count: 4 # Calls wave on builder!
-      reward :obsidian_key            # 100% type-checked at compile time!
+      wave "skeleton_archer", count: 4 # Calls wave on builder!
+      reward "obsidian_key"            # 100% type-checked at compile time!
     end
 right:
   type: card

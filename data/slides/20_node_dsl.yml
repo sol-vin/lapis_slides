@@ -12,14 +12,30 @@ left:
   title: player_character.cr — Declarative Node Definition
   tag: Crystal
   lang: crystal
-  code: "require \"libgodot\"\r\n\n# Declares Godot class registered in ClassDB\r\nnode
-    Player < CharacterBody3D do\r\n  # Movement speed in meters per second\r\n  @[Export(range:
-    1.0_f32..20.0_f32, step: 0.5_f32)]\r\n  property speed : Float32 = 7.0_f32\r\n\n
-    \ # Maximum hit points\r\n  @[Export(range: 10..500, step: 10)]\r\n  property
-    max_health : Int32 = 100\r\n\n  signal health_changed(current : Int32, max_health
-    : Int32)\r\n  signal died\r\n\n  def _ready : Void\r\n    Godot.print(\"Player
-    initialized: #{name}\")\r\n  end\r\n\n  def _physics_process(delta : Float64)
-    : Void\r\n    # Fixed-rate physics step\r\n  end\r\nend"
+  code: |
+    require "libgodot"
+
+    # Declares Godot class registered in ClassDB
+    node Player < CharacterBody3D do
+      # Movement speed in meters per second
+      @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
+      property speed : Float32 = 7.0_f32
+
+      # Maximum hit points
+      @[Export(range: 10..500, step: 10)]
+      property max_health : Int32 = 100
+
+      signal health_changed(current : Int32, max_health : Int32)
+      signal died
+
+      def _ready : Void
+        Godot.print("Player initialized: #{name}")
+      end
+
+      def _physics_process(delta : Float64) : Void
+        # Fixed-rate physics step
+      end
+    end
 right:
   type: card
   title: Clean Node DSL Invariants

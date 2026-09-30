@@ -12,13 +12,24 @@ left:
   title: ruby_gameplay.rb — The Joy of Expressive Syntax
   tag: Ruby
   lang: ruby
-  code: "# Ruby's human-centric syntax: blocks, closures, and clean reads\r\nclass
-    Player\r\n  attr_accessor :health, :inventory\r\n\n  def initialize(health = 100)\r\n
-    \   @health = health\r\n    @inventory = []\r\n  end\r\n\n  # Idiomatic iteration
-    with blocks: natural English read\r\n  def heal_all_companions(party, amount)\r\n
-    \   party.select(&:alive?).each do |companion|\r\n      companion.health += amount\r\n
-    \     puts \"Healed #{companion.name} to #{companion.health} HP\"\r\n    end\r\n
-    \ end\r\nend"
+  code: |
+    # Ruby's human-centric syntax: blocks, closures, and clean reads
+    class Player
+      attr_accessor :health, :inventory
+
+      def initialize(health = 100)
+        @health = health
+        @inventory = []
+      end
+
+      # Idiomatic iteration with blocks: natural English read
+      def heal_all_companions(party, amount)
+        party.select(&:alive?).each do |companion|
+          companion.health += amount
+          puts "Healed #{companion.name} to #{companion.health} HP"
+        end
+      end
+    end
 right:
   type: card
   title: Why Ruby Won Developer Hearts
