@@ -12,6 +12,7 @@ left:
   title: player_character.cr — Declarative Node Definition
   tag: Crystal
   lang: crystal
+  font_size: '0.90rem'
   code: |
     require "libgodot"
 
