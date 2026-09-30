@@ -12,6 +12,7 @@ left:
   title: dynamic_dispatch_and_mixins.rb
   tag: Ruby
   lang: ruby
+  font_size: '0.80rem'
   code: |
     # 1. method_missing: Ghost methods & dynamic proxying
     class EntityProxy
