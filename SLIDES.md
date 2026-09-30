@@ -1057,7 +1057,8 @@ This document outlines each slide's exact theme palette, architectural category,
   
     # 2. Synthesize StateMachine with zero-reflection jump table:
     class {{name.id}}Machine
-      getter current_state : {{name.id}} = {{name.id}}::Patrol
+      {% first_state = block.body.expressions.find(&.name.== "state").args[0] %}
+      getter current_state : {{name.id}} = {{name.id}}::{{first_state.id}}
   
       # 3. Flattens nested DSL calls into flat case branches:
       def trigger(event : Symbol) : Void
