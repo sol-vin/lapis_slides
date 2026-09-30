@@ -373,7 +373,7 @@
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -386,7 +386,7 @@
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby"># Ruby&#39;s human-centric syntax: blocks, closures, and clean reads
+            <pre><code class="language-ruby code-dense"># Ruby&#39;s human-centric syntax: blocks, closures, and clean reads
 class Player
   attr_accessor :health, :inventory
 
@@ -452,7 +452,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -465,7 +465,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby"># Other languages require compiler keywords for features.
+            <pre><code class="language-ruby code-dense"># Other languages require compiler keywords for features.
 # Ruby achieves rich ecosystems with methods &amp; blocks:
 
 # 1. Properties &amp; Accessors? Just a class method:
@@ -539,7 +539,7 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -552,7 +552,7 @@ end
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby"># 1. Bare Words &amp; Uniform Access: my_func vs my_func()
+            <pre><code class="language-ruby code-compact"># 1. Bare Words &amp; Uniform Access: my_func vs my_func()
 def max_health
   100
 end
@@ -629,7 +629,7 @@ puts v3[:x]        # Sugar for: v3.[](:x) =&gt; 15</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -642,7 +642,7 @@ puts v3[:x]        # Sugar for: v3.[](:x) =&gt; 15</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby"># 1. Blocks &amp; Yield: Lightweight, zero-allocation closures
+            <pre><code class="language-ruby code-dense"># 1. Blocks &amp; Yield: Lightweight, zero-allocation closures
 def benchmark
   t0 = Time.now
   yield # Passes control directly to caller&#39;s ephemeral block
@@ -711,7 +711,7 @@ puts transform_all([1, 2, 3], &amp;double) # =&gt; [2, 4, 6]</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -724,7 +724,7 @@ puts transform_all([1, 2, 3], &amp;double) # =&gt; [2, 4, 6]</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby"># ❌ Anti-Pattern: String eval is unsafe, unhygienic &amp; slow
+            <pre><code class="language-ruby code-dense"># ❌ Anti-Pattern: String eval is unsafe, unhygienic &amp; slow
 # eval(&quot;player.#{action}(#{value})&quot;) # Injection risk, syntax errors!
 
 # ✅ The &quot;Better Eval&quot;: instance_exec rebinds `self` to an object
@@ -791,7 +791,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -804,7 +804,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby"># 1. Open Classes: Extend existing classes with domain verbs
+            <pre><code class="language-ruby code-dense"># 1. Open Classes: Extend existing classes with domain verbs
 class Numeric
   def meters
     self * 1.0
@@ -875,7 +875,7 @@ puts &quot;Forest Temple (Zone 1)&quot;.to_slug # =&gt; &quot;forest_temple__zon
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -888,7 +888,7 @@ puts &quot;Forest Temple (Zone 1)&quot;.to_slug # =&gt; &quot;forest_temple__zon
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby"># 1. method_missing: Ghost methods &amp; dynamic proxying
+            <pre><code class="language-ruby code-compact"># 1. method_missing: Ghost methods &amp; dynamic proxying
 class EntityProxy
   def initialize(@target); end
 
@@ -1133,7 +1133,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1146,7 +1146,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Elegant Ruby-like syntax with zero typing clutter:
+            <pre><code class="language-crystal code-dense"># 1. Elegant Ruby-like syntax with zero typing clutter:
 class Enemy
   property health : Int32
   property name : String
@@ -1212,7 +1212,7 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1225,7 +1225,7 @@ enemy.take_damage(25) # Direct C-speed CPU instruction!</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Crystal writes like Ruby, but with 100% static type safety:
+            <pre><code class="language-crystal code-dense"># Crystal writes like Ruby, but with 100% static type safety:
 class Inventory
   getter items = [] of String # Inferred as Array(String)
 
@@ -1367,7 +1367,7 @@ active_particles = particle_pool[0...active_count]</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1380,7 +1380,7 @@ active_particles = particle_pool[0...active_count]</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Declarative Builder Class:
+            <pre><code class="language-crystal code-compact"># 1. Declarative Builder Class:
 class CombatRoomBuilder
   getter room : Room
 
@@ -1455,7 +1455,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1468,7 +1468,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Composable Mixin Module with abstract contract:
+            <pre><code class="language-crystal code-compact"># 1. Composable Mixin Module with abstract contract:
 module Damageable
   abstract def max_health : Int32
   property health : Int32 = 100
@@ -1545,7 +1545,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1558,7 +1558,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Re-opening standard primitives with game units:
+            <pre><code class="language-crystal code-dense"># 1. Re-opening standard primitives with game units:
 class Int32
   def tiles : Float32
     self.to_f32 * 32.0_f32
@@ -1629,7 +1629,7 @@ grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1642,7 +1642,7 @@ grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
+            <pre><code class="language-crystal code-dense"># 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
 def measure(label : String)
   t0 = Time.monotonic
   yield # Passes control directly to block with 0 allocation
@@ -1711,7 +1711,7 @@ enemies.select(&amp;.alive?).map(&amp;.health)</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1724,7 +1724,7 @@ enemies.select(&amp;.alive?).map(&amp;.health)</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># ❌ What Ruby allows that Crystal CANNOT do:
+            <pre><code class="language-crystal code-dense"># ❌ What Ruby allows that Crystal CANNOT do:
 # target.send(&quot;cast_spell&quot;, 50)           # No runtime send!
 # eval(&quot;class Boss &lt; #{dyn_parent}; end&quot;) # No runtime eval!
 # target.instance_variable_set(&quot;@hp&quot;, 100)# Frozen schemas!
@@ -1800,7 +1800,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1813,7 +1813,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. macro included: Composable mixin behavior at compile time
+            <pre><code class="language-crystal code-compact"># 1. macro included: Composable mixin behavior at compile time
 module Damageable
   macro included
     # Injects properties &amp; methods into the including class:
@@ -1890,7 +1890,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1903,7 +1903,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># macro finished: Defers execution until the type is fully parsed
+            <pre><code class="language-crystal code-compact"># macro finished: Defers execution until the type is fully parsed
 abstract class NetworkSync
   macro inherited
     # Wait until all properties, methods, and files are parsed:
@@ -1981,7 +1981,7 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -1994,7 +1994,7 @@ end
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Declare states and transitions with an expressive macro DSL
+            <pre><code class="language-crystal code-dense"># Declare states and transitions with an expressive macro DSL
 fsm BossState do
   state Patrol, initial: true do
     on :see_player, transition_to: Chase
@@ -2061,7 +2061,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2074,44 +2074,35 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 🪄 Compile-time AST macro: parses the block to synthesize types &amp; dispatches
+            <pre><code class="language-crystal code-compact"># 🪄 Compile-Time AST Macro: parses block into enums &amp; jump table
 macro fsm(name, &amp;block)
-  # 1. Synthesize strongly-typed Enum for all declared states:
+  # 1. Synthesize typed Enum for all declared states:
   enum {{name.id}}
     {% for call in block.body.expressions %}
-      {% if call.is_a?(Call) &amp;&amp; call.name.stringify == &quot;state&quot; %}
-        {{call.args[0].id}}
-      {% end %}
+      {% if call.name == &quot;state&quot; %} {{call.args[0].id}} {% end %}
     {% end %}
   end
 
-  # 2. Synthesize state machine class with zero-reflection jump tables:
+  # 2. Synthesize StateMachine class with zero-reflection jump table:
   class {{name.id}}Machine
-    getter current_state : {{name.id}}
-    getter timer : Float64 = 0.0_f64
+    getter current_state : {{name.id}} = {{name.id}}::Patrol
 
-    # 3. Compile-time event dispatcher: generates O(1) jump table
+    # 3. Flattens nested DSL calls into flat case branches:
     def trigger(event : Symbol) : Void
       case @current_state
-      {% for call in block.body.expressions %}
-        {% if call.is_a?(Call) &amp;&amp; call.name.stringify == &quot;state&quot; &amp;&amp; call.block %}
-          when .{{call.args[0].id.underscore}}?
-            {% for exp in (call.block.body.is_a?(Expressions) ? call.block.body.expressions : [call.block.body]) %}
-              {% if exp.is_a?(Call) &amp;&amp; exp.name.stringify == &quot;on&quot; %}
-                if event == {{exp.args[0]}}
-                  transition_to({{name.id}}::{% for a in exp.named_args %}{% if a.name.stringify == &quot;transition_to&quot; %}{{a.value.id}}{% end %}{% end %})
-                  return
-                end
-              {% end %}
-            {% end %}
-        {% end %}
+      {% for state in block.body.expressions %}
+        when .{{state.args[0].id.underscore}}?
+          {% for on_call in state.block.body.expressions %}
+            if event == {{on_call.args[0]}}
+              return transition_to({{name.id}}::{{on_call.named_args[:transition_to]}})
+            end
+          {% end %}
       {% end %}
       end
     end
 
-    private def transition_to(new_state : {{name.id}}) : Void
-      @current_state = new_state
-      @timer = 0.0_f64
+    private def transition_to(target : {{name.id}}) : Void
+      @current_state = target
     end
   end
 end</code></pre>
@@ -2162,7 +2153,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2175,7 +2166,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">require &quot;json&quot;
+            <pre><code class="language-crystal code-dense">require &quot;json&quot;
 
 # Structs and classes serialize with a single macro inclusion
 struct PlayerSaveData
@@ -2293,7 +2284,7 @@ end</code></pre>
   }
 }</code></pre>
           </div>
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2306,7 +2297,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-rust">#[derive(GodotClass)]
+            <pre><code class="language-rust code-dense">#[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
 pub struct Player {
   base: Base&lt;CharacterBody3D&gt;,
@@ -2330,7 +2321,7 @@ impl Player {
   fn died();
 }</code></pre>
           </div>
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2343,7 +2334,7 @@ impl Player {
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-cpp">class Player : public CharacterBody3D {
+            <pre><code class="language-cpp code-dense">class Player : public CharacterBody3D {
   GDCLASS(Player, CharacterBody3D);
   float speed = 7.0f;
 protected:
@@ -2599,7 +2590,7 @@ public:
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2612,7 +2603,7 @@ public:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">require &quot;libgodot&quot;
+            <pre><code class="language-crystal code-dense">require &quot;libgodot&quot;
 
 # Declares Godot class registered in ClassDB
 node Player &lt; CharacterBody3D do
@@ -2683,7 +2674,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2696,7 +2687,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">node PlayerController &lt; CharacterBody2D do
+            <pre><code class="language-crystal code-dense">node PlayerController &lt; CharacterBody2D do
   def _ready : Void
     # 1. Path traversal with / (left-associative):
     camera = (self / &quot;CameraRig&quot;)[Godot::Camera2D]
@@ -2761,7 +2752,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2774,7 +2765,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Strongly typed child retrieval with onready macro:
+            <pre><code class="language-crystal code-dense"># 1. Strongly typed child retrieval with onready macro:
 onready weapon : Weapon = get_node_as(Weapon, &quot;WeaponMount/Sword&quot;)
 
 # 2. Safe navigation with optional nodes (returns T?):
@@ -2842,7 +2833,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2855,7 +2846,7 @@ property move_speed : Float32 = 250.0_f32</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Connecting engine signals with first-class bound handles
+            <pre><code class="language-crystal code-dense"># 1. Connecting engine signals with first-class bound handles
 start_btn = self[Godot::Button, &quot;UI/StartButton&quot;]
 start_btn.pressed.connect do
   start_game_sequence
@@ -3136,7 +3127,7 @@ enemy_types : Hash(String, Int32) =
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3149,7 +3140,7 @@ enemy_types : Hash(String, Int32) =
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># 1. Custom sort allocates heap Callable object
+            <pre><code class="language-gdscript code-dense"># 1. Custom sort allocates heap Callable object
 inventory.sort_custom(func(a, b): return a.weight &lt; b.weight)
 
 # 2. Filtering allocates closure environment per invocation
@@ -3235,7 +3226,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3248,7 +3239,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># 1. Custom sort allocates heap Callable object
+            <pre><code class="language-gdscript code-dense"># 1. Custom sort allocates heap Callable object
 inventory.sort_custom(func(a, b): return a.weight &lt; b.weight)
 
 # 2. Filtering allocates closure environment per invocation
@@ -3367,7 +3358,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3380,7 +3371,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># PROBLEM 1: Dictionary String Keys — Silent Null on Typos
+            <pre><code class="language-gdscript code-dense"># PROBLEM 1: Dictionary String Keys — Silent Null on Typos
 var blackboard: Dictionary = {}
 blackboard[&quot;target_enemy&quot;] = player_node
 # Typo in key silently returns null, causing downstream crash:
@@ -3403,7 +3394,7 @@ call(&amp;&quot;on_damage_taken&quot;, 15) # Untyped string dispatch</code></pre
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3416,7 +3407,7 @@ call(&amp;&quot;on_damage_taken&quot;, 15) # Untyped string dispatch</code></pre
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># SOLUTION 1: NamedTuple — Compile-Time Key Typo Proofing
+            <pre><code class="language-crystal code-dense"># SOLUTION 1: NamedTuple — Compile-Time Key Typo Proofing
 blackboard = {target_enemy: player_node, alert_level: :high}
 target = blackboard[:target_enemy] # Strongly typed as Player!
 # blackboard[:target_enmy] # 🚫 COMPILE ERROR: missing key &#39;target_enmy&#39;!
@@ -3474,7 +3465,7 @@ active = enemies.select(&amp;.alive?) # inlines .alive? on each item</code></pre
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3487,7 +3478,7 @@ active = enemies.select(&amp;.alive?) # inlines .alive? on each item</code></pre
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># PROBLEM 1: Dictionary String Keys — Silent Null on Typos
+            <pre><code class="language-gdscript code-dense"># PROBLEM 1: Dictionary String Keys — Silent Null on Typos
 var blackboard: Dictionary = {}
 blackboard[&quot;target_enemy&quot;] = player_node
 # Typo in key silently returns null, causing downstream crash:
@@ -3510,7 +3501,7 @@ call(&amp;&quot;on_damage_taken&quot;, 15) # Untyped string dispatch</code></pre
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3523,7 +3514,7 @@ call(&amp;&quot;on_damage_taken&quot;, 15) # Untyped string dispatch</code></pre
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># SOLUTION 1: NamedTuple — Compile-Time Key Typo Proofing
+            <pre><code class="language-crystal code-dense"># SOLUTION 1: NamedTuple — Compile-Time Key Typo Proofing
 blackboard = {target_enemy: player_node, alert_level: :high}
 target = blackboard[:target_enemy] # Strongly typed as Player!
 # blackboard[:target_enmy] # 🚫 COMPILE ERROR: missing key &#39;target_enmy&#39;!
@@ -3849,7 +3840,7 @@ func handle_state(state: State, health: int) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3862,7 +3853,7 @@ func handle_state(state: State, health: int) -&gt; void:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">enum State
+            <pre><code class="language-crystal code-dense">enum State
   Idle
   Run
   Attack
@@ -3950,7 +3941,7 @@ func handle_state(state: State, health: int) -&gt; void:
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3963,7 +3954,7 @@ func handle_state(state: State, health: int) -&gt; void:
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">enum State
+            <pre><code class="language-crystal code-dense">enum State
   Idle
   Run
   Attack
@@ -4899,7 +4890,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -4912,7 +4903,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Spawn lightweight cooperative fiber on main thread
+            <pre><code class="language-crystal code-dense"># Spawn lightweight cooperative fiber on main thread
 spawn do
   dialogue_box.typewrite(&quot;A storm is approaching...&quot;)
   await(dialogue_box.finished)
@@ -5080,7 +5071,7 @@ func _worker_task():
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -5093,7 +5084,7 @@ func _worker_task():
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Background worker thread with typed, buffered Actor Channel
+            <pre><code class="language-crystal code-dense"># Background worker thread with typed, buffered Actor Channel
 @channel = Channel(TerrainMesh).new(capacity: 32)
 Thread.new do
   mesh = generate_terrain_mesh
@@ -5175,7 +5166,7 @@ func _worker_task():
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -5188,7 +5179,7 @@ func _worker_task():
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Background worker thread with typed, buffered Actor Channel
+            <pre><code class="language-crystal code-dense"># Background worker thread with typed, buffered Actor Channel
 @channel = Channel(TerrainMesh).new(capacity: 32)
 Thread.new do
   mesh = generate_terrain_mesh
@@ -5347,7 +5338,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -5360,7 +5351,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Configure enforcement policy across environments
+            <pre><code class="language-crystal code-dense"># 1. Configure enforcement policy across environments
 Godot::ThreadSafety.policy = Godot::ThreadSafety::Policy::Raise
 Godot::ThreadSafety.scope  = Godot::ThreadSafety::Scope::TreeOnly
 
@@ -5429,7 +5420,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -5442,7 +5433,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Background worker streams procedural geometry
+            <pre><code class="language-crystal code-dense"># Background worker streams procedural geometry
 Thread.new do
   # 1. Heavy computation runs off-thread across CPU cores
   room_node = assemble_dungeon_room(seed: 42)
@@ -5509,7 +5500,7 @@ end
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -5522,7 +5513,7 @@ end
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">node NetworkPlayer &lt; CharacterBody3D do
+            <pre><code class="language-crystal code-compact">node NetworkPlayer &lt; CharacterBody3D do
   @[Export]
   property player_id : Int32 = 1
 
@@ -5597,7 +5588,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -5610,7 +5601,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Off-thread worker actor with buffered channels
+            <pre><code class="language-crystal code-compact"># Off-thread worker actor with buffered channels
 class NavmeshWorker
   getter requests = Channel(PathReq).new(capacity: 64)
   getter results  = Channel(PathRes).new(capacity: 64)
@@ -6279,7 +6270,8 @@ $ lapis test --tui</code></pre>
   ✓ Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
   ✓ Purged invalid host libgodot.dll (poison protection)
 [Config] Auto-enabled in project.godot &amp; .godot/extension_list.cfg
-[Shards:AddonNegotiator] Negotiated &#39;crshader&#39; across 5 addons (1 canonical version, 0 conflicts)
+[Shards:AddonNegotiator] Negotiated &#39;crshader&#39; across 5 addons:
+  ✓ Resolved 1 canonical version in shard.yml (0 conflicts)
 ✓ Addon &#39;combat_system&#39; installed successfully! Ready to use.</code></pre>
           </div>
           </div>
@@ -6451,7 +6443,7 @@ $ lapis package game --release</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -6464,7 +6456,7 @@ $ lapis package game --release</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-text">$ lapis editor -d --log-file=log/editor.log
+            <pre><code class="language-text code-dense">$ lapis editor -d --log-file=log/editor.log
 [Editor] Launching Godot Editor under radare2 debugger...
   Engine Log:  log/editor.log
   Crystal Log: log/editor-crystal.log
@@ -6528,7 +6520,7 @@ $ lapis package game --release</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-compact" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -6541,7 +6533,7 @@ $ lapis package game --release</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">require &quot;spec_helper&quot;
+            <pre><code class="language-crystal code-compact">require &quot;spec_helper&quot;
 
 describe &quot;Lapis Binary Forensics via radare2&quot; do
   driver = Godot::Debugger::RadareDriver.new
@@ -6614,7 +6606,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -6627,7 +6619,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal">require &quot;lapis/test&quot;
+            <pre><code class="language-crystal code-dense">require &quot;lapis/test&quot;
 
 Lapis::Test.test_suite &quot;Player Combat System&quot; do
   test &quot;spawning and taking damage&quot; do
@@ -7402,7 +7394,7 @@ $ lapis editor
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -7415,7 +7407,7 @@ $ lapis editor
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># src/nodes/player_controller.cr
+            <pre><code class="language-crystal code-dense"># src/nodes/player_controller.cr
 node PlayerController &lt; CharacterBody3D do
   @[Export(range: 1.0_f32..25.0_f32, step: 0.5_f32)]
   property speed : Float32 = 8.0_f32
@@ -7480,7 +7472,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
+          <div class="code-container col code-dense" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -7493,7 +7485,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal"># 1. Background worker threads offload heavy math:
+            <pre><code class="language-crystal code-dense"># 1. Background worker threads offload heavy math:
 Thread.new do
   room = generate_dungeon_room(seed: 42) # Detached orphan
 

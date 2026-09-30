@@ -841,44 +841,35 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: How Crystal's Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums & Jump Tables
 - **Code Example (`fsm_macro.cr — AST Rewriting Engine`)**:
   ```crystal
-  # 🪄 Compile-time AST macro: parses the block to synthesize types & dispatches
+  # 🪄 Compile-Time AST Macro: parses block into enums & jump table
   macro fsm(name, &block)
-    # 1. Synthesize strongly-typed Enum for all declared states:
+    # 1. Synthesize typed Enum for all declared states:
     enum {{name.id}}
       {% for call in block.body.expressions %}
-        {% if call.is_a?(Call) && call.name.stringify == "state" %}
-          {{call.args[0].id}}
-        {% end %}
+        {% if call.name == "state" %} {{call.args[0].id}} {% end %}
       {% end %}
     end
   
-    # 2. Synthesize state machine class with zero-reflection jump tables:
+    # 2. Synthesize StateMachine class with zero-reflection jump table:
     class {{name.id}}Machine
-      getter current_state : {{name.id}}
-      getter timer : Float64 = 0.0_f64
+      getter current_state : {{name.id}} = {{name.id}}::Patrol
   
-      # 3. Compile-time event dispatcher: generates O(1) jump table
+      # 3. Flattens nested DSL calls into flat case branches:
       def trigger(event : Symbol) : Void
         case @current_state
-        {% for call in block.body.expressions %}
-          {% if call.is_a?(Call) && call.name.stringify == "state" && call.block %}
-            when .{{call.args[0].id.underscore}}?
-              {% for exp in (call.block.body.is_a?(Expressions) ? call.block.body.expressions : [call.block.body]) %}
-                {% if exp.is_a?(Call) && exp.name.stringify == "on" %}
-                  if event == {{exp.args[0]}}
-                    transition_to({{name.id}}::{% for a in exp.named_args %}{% if a.name.stringify == "transition_to" %}{{a.value.id}}{% end %}{% end %})
-                    return
-                  end
-                {% end %}
-              {% end %}
-          {% end %}
+        {% for state in block.body.expressions %}
+          when .{{state.args[0].id.underscore}}?
+            {% for on_call in state.block.body.expressions %}
+              if event == {{on_call.args[0]}}
+                return transition_to({{name.id}}::{{on_call.named_args[:transition_to]}})
+              end
+            {% end %}
         {% end %}
         end
       end
   
-      private def transition_to(new_state : {{name.id}}) : Void
-        @current_state = new_state
-        @timer = 0.0_f64
+      private def transition_to(target : {{name.id}}) : Void
+        @current_state = target
       end
     end
   end
@@ -2336,7 +2327,8 @@ This document outlines each slide's exact theme palette, architectural category,
     ✓ Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
     ✓ Purged invalid host libgodot.dll (poison protection)
   [Config] Auto-enabled in project.godot & .godot/extension_list.cfg
-  [Shards:AddonNegotiator] Negotiated 'crshader' across 5 addons (1 canonical version, 0 conflicts)
+  [Shards:AddonNegotiator] Negotiated 'crshader' across 5 addons:
+    ✓ Resolved 1 canonical version in shard.yml (0 conflicts)
   ✓ Addon 'combat_system' installed successfully! Ready to use.
   ```
 - **GDExtension Addon Lifecycle Invariants**:

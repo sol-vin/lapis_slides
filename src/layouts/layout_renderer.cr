@@ -110,8 +110,16 @@ module LapisSlides
 
     def render_code_container(title : String, lang : String, code : String, tag : String? = nil, col_class : String = "col", border_color : String? = nil) : String
       border_style = border_color ? " border-color: #{border_color};" : ""
+      line_count = code.strip.lines.size
+      density_class = if line_count > 24
+                        " code-compact"
+                      elsif line_count > 16
+                        " code-dense"
+                      else
+                        ""
+                      end
       String.build do |str|
-        str << "          <div class=\"code-container " << col_class << "\" style=\"" << border_style << "\">\n"
+        str << "          <div class=\"code-container " << col_class << density_class << "\" style=\"" << border_style << "\">\n"
         str << "            <div class=\"code-header\">\n"
         str << "              <div class=\"terminal-dots\">\n"
         str << "                <span class=\"terminal-dot dot-1\" title=\"Close\"></span>\n"
@@ -124,7 +132,7 @@ module LapisSlides
         str << "                <span class=\"window-btn close\" title=\"Close\">✕</span>\n"
         str << "              </div>\n"
         str << "            </div>\n"
-        str << "            <pre><code class=\"language-" << lang.downcase << "\">" << HTML.escape(code.strip) << "</code></pre>\n"
+        str << "            <pre><code class=\"language-" << lang.downcase << density_class << "\">" << HTML.escape(code.strip) << "</code></pre>\n"
         str << "          </div>"
       end
     end

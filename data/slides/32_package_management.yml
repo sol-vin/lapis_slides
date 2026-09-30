@@ -23,7 +23,8 @@ left:
       ✓ Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
       ✓ Purged invalid host libgodot.dll (poison protection)
     [Config] Auto-enabled in project.godot & .godot/extension_list.cfg
-    [Shards:AddonNegotiator] Negotiated 'crshader' across 5 addons (1 canonical version, 0 conflicts)
+    [Shards:AddonNegotiator] Negotiated 'crshader' across 5 addons:
+      ✓ Resolved 1 canonical version in shard.yml (0 conflicts)
     ✓ Addon 'combat_system' installed successfully! Ready to use.
 right:
   type: card
