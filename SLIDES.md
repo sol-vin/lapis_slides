@@ -55,32 +55,49 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Developer Happiness, Small Syntax & Expressive Human Reach
 - **Code Example (`ruby_gameplay.rb — The Joy of Expressive Syntax`)**:
   ```ruby
-  # Ruby's human-centric syntax: blocks, closures, and clean reads
+  # The joy of expressive, human-centric syntax
   class Player
-    attr_accessor :health, :inventory
+    attr_accessor :name, :health, :inventory
   
-    def initialize(health = 100)
+    def initialize(name, health: 100)
+      @name = name
       @health = health
       @inventory = []
     end
   
-    # Idiomatic iteration with blocks: natural English read
-    def heal_all_companions(party, amount)
-      party.select(&:alive?).each do |companion|
-        companion.health += amount
-        puts "Healed #{companion.name} to #{companion.health} HP"
+    def alive?
+      @health > 0
+    end
+  
+    # Fluent collection pipelines with blocks & symbol-to-proc
+    def heal_party(companions, amount)
+      companions.select(&:alive?).each do |companion|
+        companion.health = [companion.health + amount, 100].min
+        puts "✨ Healed #{companion.name} to #{companion.health} HP"
       end
     end
+  
+    # Expressive English-like statement modifiers & shovel operator
+    def equip(item)
+      return unless item.usable?
+      @inventory << item
+      puts "#{@name} equipped #{item.name}!"
+    end
   end
+  
+  # Reading like natural prose:
+  hero  = Player.new("Arthur", health: 85)
+  party = [hero, Player.new("Gwen", health: 40)]
+  hero.heal_party(party, 25)
   ```
 - **Why Ruby Won Developer Hearts**:
   - Developer Happiness as Primary Goal: Yukihiro 'Matz' Matsumoto designed Ruby to prioritize human cognitive comfort over machine convenience.
   - Small Syntax, Massive Reach: A minimal grammatical surface area that bends to almost any domain—turning simple method calls and blocks into DSLs without language bloat.
-  - First-Class Blocks & Closures: Passing blocks to methods transformed data manipulation into an expressive, natural language flow.
-  - Principle of Least Surprise (POLS): The language behaved consistently and intuitively, minimizing cognitive friction.
+  - First-Class Blocks & Closures: Chaining Enumerable methods (select(&:alive?)) turned data manipulation into an expressive, natural English flow.
+  - Principle of Least Surprise (POLS): Statement modifiers (return unless) and predicates (alive?) feel intuitive and minimize cognitive friction.
   - The Downside in Game Tech: Dynamic method dispatch (YARV byte interpreter) was too slow for 60/120 FPS physics, frame budgets, and tight loops.
 - **Presenter Script**:
-  > *"To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English. Crucially, Ruby proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive: a remarkably small, orthogonal syntax can provide an almost infinite variety of usages across web, systems, and gaming. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time physics and rendering."*
+  > *"To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English. Notice how clean this gameplay snippet is: keyword arguments, predicate methods with question marks like alive?, chained Enumerable pipelines with symbol-to-proc, and statement modifiers like 'return unless'. Crucially, Ruby proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time physics and rendering."*
 
 ---
 ### Slide 4: Small Syntax: Postage-Stamp Grammar

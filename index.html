@@ -349,7 +349,7 @@
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -362,23 +362,40 @@
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-ruby code-dense"># Ruby&#39;s human-centric syntax: blocks, closures, and clean reads
+            <pre><code class="language-ruby" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># The joy of expressive, human-centric syntax
 class Player
-  attr_accessor :health, :inventory
+  attr_accessor :name, :health, :inventory
 
-  def initialize(health = 100)
+  def initialize(name, health: 100)
+    @name = name
     @health = health
     @inventory = []
   end
 
-  # Idiomatic iteration with blocks: natural English read
-  def heal_all_companions(party, amount)
-    party.select(&amp;:alive?).each do |companion|
-      companion.health += amount
-      puts &quot;Healed #{companion.name} to #{companion.health} HP&quot;
+  def alive?
+    @health &gt; 0
+  end
+
+  # Fluent collection pipelines with blocks &amp; symbol-to-proc
+  def heal_party(companions, amount)
+    companions.select(&amp;:alive?).each do |companion|
+      companion.health = [companion.health + amount, 100].min
+      puts &quot;✨ Healed #{companion.name} to #{companion.health} HP&quot;
     end
   end
-end</code></pre>
+
+  # Expressive English-like statement modifiers &amp; shovel operator
+  def equip(item)
+    return unless item.usable?
+    @inventory &lt;&lt; item
+    puts &quot;#{@name} equipped #{item.name}!&quot;
+  end
+end
+
+# Reading like natural prose:
+hero  = Player.new(&quot;Arthur&quot;, health: 85)
+party = [hero, Player.new(&quot;Gwen&quot;, health: 40)]
+hero.heal_party(party, 25)</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
@@ -389,8 +406,8 @@ end</code></pre>
             <ul class="card-list">
               <li><strong>Developer Happiness as Primary Goal:</strong> Yukihiro 'Matz' Matsumoto designed Ruby to prioritize human cognitive comfort over machine convenience.</li>
               <li><strong>Small Syntax, Massive Reach:</strong> A minimal grammatical surface area that bends to almost any domain—turning simple method calls and blocks into DSLs without language bloat.</li>
-              <li><strong>First-Class Blocks & Closures:</strong> Passing blocks to methods transformed data manipulation into an expressive, natural language flow.</li>
-              <li><strong>Principle of Least Surprise (POLS):</strong> The language behaved consistently and intuitively, minimizing cognitive friction.</li>
+              <li><strong>First-Class Blocks & Closures:</strong> Chaining Enumerable methods (<code>select(&:alive?)</code>) turned data manipulation into an expressive, natural English flow.</li>
+              <li><strong>Principle of Least Surprise (POLS):</strong> Statement modifiers (<code>return unless</code>) and predicates (<code>alive?</code>) feel intuitive and minimize cognitive friction.</li>
               <li><strong>The Downside in Game Tech:</strong> Dynamic method dispatch (YARV byte interpreter) was too slow for 60/120 FPS physics, frame budgets, and tight loops.</li>
             </ul>
           </div>
@@ -403,7 +420,7 @@ end</code></pre>
         </div>
         <aside class="notes">
           To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English.
-          Crucially, Ruby proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive: a remarkably small, orthogonal syntax can provide an almost infinite variety of usages across web, systems, and gaming. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time physics and rendering.
+          Notice how clean this gameplay snippet is: keyword arguments, predicate methods with question marks like alive?, chained Enumerable pipelines with symbol-to-proc, and statement modifiers like 'return unless'. Crucially, Ruby proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time physics and rendering.
         </aside>
       </section>
 
