@@ -1204,1192 +1204,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 13: Spaces 98 (The Birth of Crystal)
-           =================================================================== -->
-      <section data-background-color="#f0f4f4"
-               data-palette-name="Spaces 98"
-               data-palette-cube="#000000"
-               data-palette-cube-hover="#10549c"
-               class="solvin-slide spaces_98 slide-05_birth_of_crystal"
-               data-slide-id="05_birth_of_crystal"
-               style="--bg-color: #f0f4f4; --bg-window: #c0c0c0; --text-color: #000000; --text-dim: #444444; --link-color: #000080; --border-color: #000080; --border-active: #10549c; --accent-color: #000080; --accent-secondary: #10549c; --accent-tertiary: #008080; --accent-quaternary: #000080; --shadow-color: #004040; --cube: #000000; --cube-hover: #10549c; --emoji-filter: url(#emoji-filter-spaces_98); ">
-        <div class="palette-corner-badge" title="Theme: Spaces 98">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces 98
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">COMPILER REVOLUTION • CRYSTAL ORIGINS</span>
-            <h2 class="slide-title">The Birth of Crystal</h2>
-            <p class="slide-subtitle">Fast as C, Slick as Ruby • Native LLVM Speed</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">crystal_origins.cr — Clean Syntax, Native Machine Code</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># Clean Ruby ergonomics — Ahead-of-Time LLVM Compiled
-class Player
-  property name : String
-  property health : Int32
-  property inventory : Array(String)
-
-  # Shorthand constructor with default parameters:
-  def initialize(@name : String, @health : Int32 = 100)
-    @inventory = [] of String
-  end
-
-  # Concise predicate method:
-  def alive? : Bool
-    @health &gt; 0
-  end
-
-  # Zero-cost block inlining: Enumerable pipelines compile to tight loops
-  def heal_party(companions : Enumerable(Player), amount : Int32) : Void
-    companions.select(&amp;.alive?).each do |companion|
-      companion.health = (companion.health + amount).clamp(0, 100)
-      puts &quot;✨ Healed #{companion.name} to #{companion.health} HP&quot;
-    end
-  end
-
-  # Flow-sensitive nil safety: String? requires explicit compiler checks
-  def inspect_equipped : String?
-    @inventory.first?
-  end
-end
-
-# 1. Global type inference: zero redundant type declarations
-hero  = Player.new(&quot;Arthur&quot;, 85)
-party = [hero, Player.new(&quot;Gwen&quot;, 40)]
-hero.heal_party(party, 25)
-
-# 2. Flow typing proves non-nil without runtime null dereferences
-if item = hero.inspect_equipped
-  puts &quot;Equipped: #{item.upcase}&quot; # Compiler knows item is String!
-end</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>The Compiler Synthesis</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Designed from Day One for Types:</strong> Crystal wasn't a dynamic language patched with types; it was built from scratch as a statically typed language.</li>
-              <li><strong>Global Type Inference:</strong> You rarely write type annotations for local variables. The compiler analyzes the entire program flow and infers concrete types.</li>
-              <li><strong>LLVM Native Backend:</strong> Crystal emits LLVM IR, benefiting from decades of optimization: autovectorization, link-time optimization (LTO), and register allocation.</li>
-              <li><strong>Static Nil Safety:</strong> Null pointer dereferences are caught at compile time. <code>T</code> cannot be nil; only <code>T?</code> can, forcing explicit compiler-checked handling.</li>
-              <li><strong>Direct C ABI Interop:</strong> Seamless bindings to native C libraries without JNI or FFI marshalling penalties.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces 98)</span>
-          <span>Slide 13 / 88</span>
-        </div>
-        <aside class="notes">
-          In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend.
-          Notice how closely this mirrors the Ruby heritage we saw earlier: shorthand property declarations, predicates, statement modifiers, and block iterators. But every single operation is resolved statically at compile time—the Enumerable pipelines inline into tight machine loops, types are proven with global inference, and nil dereferences are mathematically impossible at runtime.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 14: Spaces XP (The Zero-Tax Type System)
-           =================================================================== -->
-      <section data-background-color="#e2ebf4"
-               data-palette-name="Spaces XP"
-               data-palette-cube="#0f2545"
-               data-palette-cube-hover="#d84315"
-               class="solvin-slide spaces_xp slide-05b_crystal_type_system"
-               data-slide-id="05b_crystal_type_system"
-               style="--bg-color: #e2ebf4; --bg-window: #ffffff; --text-color: #0f2545; --text-dim: #4e6580; --link-color: #0055ea; --border-color: #0055ea; --border-active: #2e7d32; --accent-color: #0055ea; --accent-secondary: #2e7d32; --accent-tertiary: #d84315; --accent-quaternary: #0055ea; --shadow-color: #a0b4cc; --cube: #0f2545; --cube-hover: #d84315; --emoji-filter: url(#emoji-filter-spaces_xp); ">
-        <div class="palette-corner-badge" title="Theme: Spaces XP">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces XP
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">TYPE SYSTEM • COMPILE-TIME RIGOR</span>
-            <h2 class="slide-title">The Zero-Tax Type System</h2>
-            <p class="slide-subtitle">Global Flow-Sensitive Inference &amp; Mathematically Proven Nil Safety</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">type_inference_and_nil_safety.cr</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-dense"># Crystal writes like Ruby, but with 100% static type safety:
-class Inventory
-  getter items = [] of String # Inferred as Array(String)
-
-  # 1. Zero signature noise: parameter &amp; return types inferred!
-  def find_item(name)
-    @items.find { |item| item == name } # Inferred: String | Nil
-  end
-
-  def equip(name)
-    item = find_item(name)
-
-    # 2. Mathematical compile-time nil safety:
-    # item.upcase
-    # ❌ Compile Error: undefined method &#39;upcase&#39; for Nil (type is String | Nil)
-
-    if item
-      # Inside guard, compiler narrows type strictly to String:
-      puts &quot;Equipped: #{item.upcase}&quot; # ✅ Safe!
-    end
-  end
-end</code></pre>
-          </div>
-          </div>
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>How Crystal Defeats Sorbet &amp; RBS</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Global Type Inference:</strong> Infers 95%+ of types across your entire codebase, completely eliminating verbose <code>sig { params(...).returns(...) }</code> clutter.</li>
-              <li><strong>Exhaustive Nil Safety:</strong> Treats <code>Nil</code> as a real type; accessing methods on nullable unions without checking fails at compile time, eliminating <code>NoMethodError</code>.</li>
-              <li><strong>Zero Runtime Tag Boxing:</strong> Primitives (<code>Int32</code>, <code>Float64</code>) and structs live unboxed on the stack with zero dynamic type-tag overhead.</li>
-              <li><strong>Native LLVM Speed:</strong> Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces XP)</span>
-          <span>Slide 14 / 88</span>
-        </div>
-        <aside class="notes">
-          When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 15: Playbox (Expressive Ergonomics: High-Level Language Primitives)
-           =================================================================== -->
-      <section data-background-color="#2d224b"
-               data-palette-name="Playbox"
-               data-palette-cube="#ffffff"
-               data-palette-cube-hover="#22c55e"
-               class="solvin-slide playbox slide-10_expressive_ergonomics"
-               data-slide-id="10_expressive_ergonomics"
-               style="--bg-color: #2d224b; --bg-window: #563f91; --text-color: #ffffff; --text-dim: #b0a4d0; --link-color: #22c55e; --border-color: #8b75c8; --border-active: #22c55e; --accent-color: #ef4444; --accent-secondary: #22c55e; --accent-tertiary: #ef4444; --accent-quaternary: #8b75c8; --shadow-color: #19122c; --cube: #ffffff; --cube-hover: #22c55e; --emoji-filter: url(#emoji-filter-playbox); ">
-        <div class="palette-corner-badge" title="Theme: Playbox">
-          <span class="palette-corner-dot"></span> PALETTE: Playbox
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">CRYSTAL ERGONOMICS • EXPRESSION</span>
-            <h2 class="slide-title">Expressive Ergonomics: High-Level Language Primitives</h2>
-            <p class="slide-subtitle">Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">gameplay_primitives.cr — Expressive Systems Syntax</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;"># 1. Clean vector math &amp; operator overloading (SIMD-accelerated)
-velocity = direction.normalized * move_speed + gravity * delta
-new_position = global_position + velocity
-
-# 2. Strict numeric literals &amp; zero-cost tuple destructuring
-base_friction = 0.85_f32     # Explicit 32-bit float
-name, level, score = {&quot;Shadow Knight&quot;, 85, 142_500_u64}
-
-# 3. Infinite range slicing (endless &amp; beginningless ranges)
-inventory = [&quot;Potion&quot;, &quot;Shield&quot;, &quot;Sword&quot;, &quot;Helm&quot;, &quot;Boots&quot;]
-
-# Endless range [2..]: slices from index 2 all the way to the end
-tail_gear = inventory[2..]
-# =&gt; [&quot;Sword&quot;, &quot;Helm&quot;, &quot;Boots&quot;]
-
-# Beginningless range [..1]: slices from the beginning up to index 1
-quick_bar = inventory[..1]
-# =&gt; [&quot;Potion&quot;, &quot;Shield&quot;]
-
-# Negative offset with endless range [-3..]: slices last 3 items
-recent_events = [&quot;Spawn&quot;, &quot;Aggro&quot;, &quot;Hit: 12&quot;, &quot;Crit: 45&quot;, &quot;Died&quot;]
-combat_tail   = recent_events[-3..]
-# =&gt; [&quot;Hit: 12&quot;, &quot;Crit: 45&quot;, &quot;Died&quot;]</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>Expressive Language Primitives</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Operator Overloading:</strong> Natural mathematical expressions (<code>velocity = dir * speed + grav * delta</code>) with direct CPU SIMD vectorization.</li>
-              <li><strong>Explicit Numeric Precision:</strong> Literals like <code>1.0_f32</code>, <code>250_u32</code>, and <code>1_000_000_u64</code> eliminate ambiguous runtime type coercion bugs.</li>
-              <li><strong>Zero-Cost Tuples:</strong> Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.</li>
-              <li><strong>Infinite &amp; Endless Range Slicing:</strong> Expressive endless (<code>[2..]</code>), beginningless (<code>[..1]</code>), and negative-offset (<code>[-3..]</code>) slices on contiguous arrays with zero manual length math.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Playbox)</span>
-          <span>Slide 15 / 88</span>
-        </div>
-        <aside class="notes">
-          Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
-          Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 16: DigitalGuy (The DSL Engine: with self yield & Macros)
-           =================================================================== -->
-      <section data-background-color="#000000"
-               data-palette-name="DigitalGuy"
-               data-palette-cube="#ff0000"
-               data-palette-cube-hover="#ff5555"
-               class="solvin-slide digital_guy slide-10b_ruby_parity_in_crystal"
-               data-slide-id="10b_ruby_parity_in_crystal"
-               style="--bg-color: #000000; --bg-window: #110000; --text-color: #ff0000; --text-dim: #880000; --link-color: #ff3333; --border-color: #ff0000; --border-active: #ff5555; --accent-color: #ff0000; --accent-secondary: #ff3333; --accent-tertiary: #ff5555; --accent-quaternary: #880000; --shadow-color: #330000; --cube: #ff0000; --cube-hover: #ff5555; --emoji-filter: url(#emoji-filter-digital_guy); ">
-        <div class="palette-corner-badge" title="Theme: DigitalGuy">
-          <span class="palette-corner-dot"></span> PALETTE: DigitalGuy
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">CRYSTAL METAPROGRAMMING • COMPILE-TIME DSLs</span>
-            <h2 class="slide-title">The DSL Engine: with self yield &amp; Macros</h2>
-            <p class="slide-subtitle">Compile-Time Context Shifting: How Rails Routes, RSpec &amp; FactoryBot Become 100% Type-Safe</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">compile_time_dsl.cr — Pure Ruby Ergonomics, Zero Cost</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal" style="font-size: 0.80rem !important; line-height: 1.25 !important;"># 1. Declarative Builder Class:
-class CombatRoomBuilder
-  getter room : Room
-
-  def initialize(@room : Room)
-  end
-
-  def wave(enemy : String, count : Int32)
-    @room.spawn_wave(enemy, count)
-  end
-
-  def reward(item : String)
-    @room.set_chest(item)
-  end
-
-  # &#39;with builder yield&#39; rebinds self inside the caller&#39;s block!
-  def self.build(name : String, &amp;block : CombatRoomBuilder -&gt;) : Room
-    builder = new(Room.new(name))
-    with builder yield # self IS builder inside block!
-    builder.room
-  end
-end
-
-# 2. Pure declarative DSL — zero &quot;builder.&quot; boilerplate:
-dungeon = CombatRoomBuilder.build(&quot;Dungeon_A1&quot;) do
-  wave &quot;skeleton_archer&quot;, count: 4 # Calls wave on builder!
-  reward &quot;obsidian_key&quot;            # 100% type-checked at compile time!
-end</code></pre>
-          </div>
-          </div>
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>How Crystal Elevates Ruby&#39;s Secret Weapon</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>The Secret Weapon of Ruby DSLs:</strong> In Ruby, <code>instance_exec</code> powered iconic frameworks like Rails routes (<code>routes.rb</code>), RSpec (<code>describe</code>/<code>it</code>), and FactoryBot by rebinding <code>self</code>.</li>
-              <li><strong>Static Context Shifting (<code>with ... yield</code>):</strong> Crystal achieves this exact ergonomic miracle at compile time: <code>with builder yield</code> rebinds <code>self</code> to the builder inside the block without runtime dynamic evaluation.</li>
-              <li><strong>100% Compile-Time Verification:</strong> Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.</li>
-              <li><strong>Zero Heap & Reflection Overhead:</strong> LLVM inlines the context-shifted block directly at the call site—delivering pure declarative DSL beauty with bare-metal C execution speed.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (DigitalGuy)</span>
-          <span>Slide 16 / 88</span>
-        </div>
-        <aside class="notes">
-          In the Ruby section, we saw how instance_exec was the secret weapon that made Ruby famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 17: Creation (Modules: Mixins, Traits & Namespaces)
-           =================================================================== -->
-      <section data-background-color="#141518"
-               data-palette-name="Creation"
-               data-palette-cube="#e8e8ed"
-               data-palette-cube-hover="#e6222b"
-               class="solvin-slide creation slide-10d_crystal_modules"
-               data-slide-id="10d_crystal_modules"
-               style="--bg-color: #141518; --bg-window: #1e2024; --text-color: #e8e8ed; --text-dim: #7a7e85; --link-color: #d81b24; --border-color: #c81018; --border-active: #e6222b; --accent-color: #d4af37; --accent-secondary: #d81b24; --accent-tertiary: #e6222b; --accent-quaternary: #c81018; --shadow-color: #0a0b0d; --cube: #e8e8ed; --cube-hover: #e6222b; --emoji-filter: url(#emoji-filter-creation); ">
-        <div class="palette-corner-badge" title="Theme: Creation">
-          <span class="palette-corner-dot"></span> PALETTE: Creation
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">CRYSTAL ARCHITECTURE • COMPOSITION</span>
-            <h2 class="slide-title">Modules: Mixins, Traits &amp; Namespaces</h2>
-            <p class="slide-subtitle">Horizontal Behavior Composition via include/extend with Zero Virtual Overhead</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">gameplay_modules.cr — Horizontal Composition</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-compact"># 1. Composable Mixin Module with abstract contract:
-module Damageable
-  abstract def max_health : Int32
-  property health : Int32 = 100
-
-  def take_damage(amount : Int32) : Bool
-    @health = (@health - amount).clamp(0, max_health)
-    @health &gt; 0
-  end
-
-  # Reusable concrete gameplay behavior:
-  def apply_shield(amount : Int32) : Void
-    @health = (@health + amount).clamp(0, max_health)
-  end
-end
-
-# 2. Namespace &amp; Singleton utility module:
-module SpatialMath
-  extend self # Callable as SpatialMath.dist_sq or mixed in
-  def dist_sq(a : Godot::Vector2, b : Godot::Vector2) : Float32
-    (a.x - b.x) ** 2 + (a.y - b.y) ** 2
-  end
-end
-
-# 3. Horizontal composition into Godot nodes:
-class Enemy &lt; Godot::CharacterBody2D
-  include Damageable # Inlines health, take_damage &amp; apply_shield
-
-  def max_health : Int32; 150; end
-end</code></pre>
-          </div>
-          </div>
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>Zero-Cost Architectural Composition</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Horizontal Composition via <code>include</code>:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance hierarchies or multiple inheritance hazards.</li>
-              <li><strong>Zero Virtual Dispatch Overhead:</strong> Mixin methods resolve statically at compile time and inline directly into the receiver's machine code—no ancestor chain lookups.</li>
-              <li><strong>Abstract Method Contracts:</strong> <code>abstract def</code> in modules enforces compile-time interface conformance without runtime reflection or interface boxing.</li>
-              <li><strong>Namespace & Singleton Utilities:</strong> <code>extend self</code> enables modules to act simultaneously as standalone functional namespaces and mixable traits.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Creation)</span>
-          <span>Slide 17 / 88</span>
-        </div>
-        <aside class="notes">
-          In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy. In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains. Crystal gives us the best of both worlds: modules act as zero-cost horizontal mixins. You can define abstract contracts with abstract def and provide concrete shared methods. When included into a class, Crystal resolves all methods statically at compile time with zero virtual dispatch overhead and zero runtime method lookup. With extend self, modules seamlessly double as standalone utility namespaces.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 18: Monokai (Open Classes: Static Monkey Patching)
-           =================================================================== -->
-      <section data-background-color="#272822"
-               data-palette-name="Monokai"
-               data-palette-cube="#f8f8f2"
-               data-palette-cube-hover="#f92672"
-               class="solvin-slide monokai slide-10e_crystal_monkey_patching"
-               data-slide-id="10e_crystal_monkey_patching"
-               style="--bg-color: #272822; --bg-window: #1e1f1c; --text-color: #f8f8f2; --text-dim: #75715e; --link-color: #66d9ef; --border-color: #f92672; --border-active: #a6e22e; --accent-color: #fd971f; --accent-secondary: #a6e22e; --accent-tertiary: #66d9ef; --accent-quaternary: #f92672; --shadow-color: #141411; --cube: #f8f8f2; --cube-hover: #f92672; --emoji-filter: url(#emoji-filter-monokai); ">
-        <div class="palette-corner-badge" title="Theme: Monokai">
-          <span class="palette-corner-dot"></span> PALETTE: Monokai
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">CRYSTAL METAPROGRAMMING • OPEN CLASSES</span>
-            <h2 class="slide-title">Open Classes: Static Monkey Patching</h2>
-            <p class="slide-subtitle">Re-opening Types &amp; Built-ins with LLVM Inlining &amp; Zero Load-Order Race Conditions</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">static_open_classes.cr — Domain Vocabulary</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-dense"># 1. Re-opening standard primitives with game units:
-class Int32
-  def tiles : Float32
-    self.to_f32 * 32.0_f32
-  end
-  def meters : Float32
-    self.to_f32 * 1.0_f32
-  end
-end
-
-# 2. Extending native Godot engine types directly:
-struct Godot::Vector2
-  def to_iso : Godot::Vector2
-    Godot::Vector2.new(x - y, (x + y) * 0.5_f32)
-  end
-  def tile_snap(size : Float32 = 32.0_f32) : Godot::Vector2
-    Godot::Vector2.new((x / size).round * size, (y / size).round * size)
-  end
-end
-
-# 3. Fluent gameplay domain vocabulary in action:
-jump_distance = 5.meters
-map_offset = 4.tiles
-grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap</code></pre>
-          </div>
-          </div>
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>The Power of Open Classes Without the Peril</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Compile-Time Open Classes:</strong> Any class, struct, or primitive (<code>Int32</code>, <code>String</code>, <code>Vector2</code>) can be re-opened across files to add domain-specific verbs.</li>
-              <li><strong>Eliminating Ruby's Load-Order Hell:</strong> Because Crystal builds a unified whole-program AST before codegen, there are no runtime race conditions based on which <code>require</code> ran first.</li>
-              <li><strong>Zero Runtime Memory Overhead:</strong> Injected methods compile directly into native machine code and direct call sites—no dynamic method tables or cache invalidations.</li>
-              <li><strong>Extending Native Engine Types:</strong> Enrich native Godot structs and classes with project-specific mathematics without clunky wrappers or verbose helper classes.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Monokai)</span>
-          <span>Slide 18 / 88</span>
-        </div>
-        <aside class="notes">
-          One of Ruby's most powerful yet polarizing features is open classes—the ability to monkey patch any class, including built-ins like Numeric or String. In dynamic Ruby, monkey patching is dangerous: if two gems patch the same method, whichever file is required last overwrites the other, creating terrifying load-order bugs. In Crystal, open classes are fully embraced, but with static safety. Because Crystal parses the entire project into a single unified AST before type checking and compilation, method additions are resolved deterministically. You can re-open Int32 to add game unit converters like 5.meters, or re-open Godot's Vector2 to add isometric conversions or tile snapping. LLVM inlines these methods directly, giving you pure Ruby ergonomics with zero runtime performance cost.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 19: Aperture (Blocks, Procs & Lambdas: Inlined Closures)
-           =================================================================== -->
-      <section data-background-color="#1f232a"
-               data-palette-name="Aperture"
-               data-palette-cube="#ffee55"
-               data-palette-cube-hover="#ff9900"
-               class="solvin-slide aperture slide-10f_crystal_closures"
-               data-slide-id="10f_crystal_closures"
-               style="--bg-color: #1f232a; --bg-window: #262a33; --text-color: #ffee55; --text-dim: #c4a63a; --link-color: #ff9900; --border-color: #ffcc00; --border-active: #ff9100; --accent-color: #ffcc00; --accent-secondary: #ff9900; --accent-tertiary: #ffee55; --accent-quaternary: #ff6600; --shadow-color: #101216; --cube: #ffee55; --cube-hover: #ff9900; --emoji-filter: url(#emoji-filter-aperture); ">
-        <div class="palette-corner-badge" title="Theme: Aperture">
-          <span class="palette-corner-dot"></span> PALETTE: Aperture
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill cyan">CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS</span>
-            <h2 class="slide-title">Blocks, Procs &amp; Lambdas: Inlined Closures</h2>
-            <p class="slide-subtitle">Ephemeral Inlined Blocks, Typed Reified Procs &amp; C-Function Pointer Interop</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">closures_and_procs.cr — Zero-Cost First-Class Functions</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-dense"># 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
-def measure(label : String)
-  t0 = Time.monotonic
-  yield # Passes control directly to block with 0 allocation
-  elapsed = (Time.monotonic - t0).total_milliseconds
-  puts &quot;#{label}: #{elapsed}ms&quot;
-end
-measure(&quot;Physics Tick&quot;) { run_simulation }
-
-# 2. First-Class Procs: Reified objects with strict types
-scale = 1.5_f32
-damage_calc = -&gt;(base : Int32) { (base * scale).to_i }
-# Statically typed as Proc(Int32, Int32) with captured &#39;scale&#39;
-
-# 3. Non-Capturing Procs = Bare C Function Pointers!
-# Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
-bridge_cb = -&gt;(target_id : UInt64, event : Int32) do
-  Godot::Bridge.dispatch_event(target_id, event)
-end
-
-# 4. Symbol-to-Proc shorthand for iterator pipelines:
-enemies.select(&amp;.alive?).map(&amp;.health)</code></pre>
-          </div>
-          </div>
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
-            <div class="card-title cyan">
-              <span>The Spectrum of Zero-Cost Closures</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Ephemeral Blocks (<code>yield</code>):</strong> Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.</li>
-              <li><strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code>. Explicit parameter and return types (e.g. <code>Proc(Int32, Int32)</code>) with strict compile-time arity.</li>
-              <li><strong>Non-Capturing Procs = C Pointers:</strong> When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.</li>
-              <li><strong>Symbol-to-Proc Shorthand:</strong> <code>&amp;.alive?</code> and <code>&amp;.health</code> transform symbols into inlined block invocations with zero lambda boilerplate.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Aperture)</span>
-          <span>Slide 19 / 88</span>
-        </div>
-        <aside class="notes">
-          Closures are one of the most expressive parts of modern languages, but in interpreted engines like Ruby or Python they incur significant heap allocations and call frame overhead. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 20: Candy (Static Trade-Offs: No 'send' & Limits of 'exec')
-           =================================================================== -->
-      <section data-background-color="#fdf0f8"
-               data-palette-name="Candy"
-               data-palette-cube="#4a2c58"
-               data-palette-cube-hover="#d84b9b"
-               class="solvin-slide candy slide-10c_static_metaprogramming_tradeoffs"
-               data-slide-id="10c_static_metaprogramming_tradeoffs"
-               style="--bg-color: #fdf0f8; --bg-window: #ffffff; --text-color: #4a2c58; --text-dim: #8c6899; --link-color: #d84b9b; --border-color: #e5a8d8; --border-active: #d84b9b; --accent-color: #b8388c; --accent-secondary: #d84b9b; --accent-tertiary: #b8388c; --accent-quaternary: #e5a8d8; --shadow-color: #d6b2dc; --cube: #4a2c58; --cube-hover: #d84b9b; --emoji-filter: url(#emoji-filter-candy); ">
-        <div class="palette-corner-badge" title="Theme: Candy">
-          <span class="palette-corner-dot"></span> PALETTE: Candy
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill amber">METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS</span>
-            <h2 class="slide-title">Static Trade-Offs: No &#39;send&#39; &amp; Limits of &#39;exec&#39;</h2>
-            <p class="slide-subtitle">The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">static_vs_dynamic.cr — No Runtime Plasticity</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-dense"># ❌ What Ruby allows that Crystal CANNOT do:
-# target.send(&quot;cast_spell&quot;, 50)           # No runtime send!
-# eval(&quot;class Boss &lt; #{dyn_parent}; end&quot;) # No runtime eval!
-# target.instance_variable_set(&quot;@hp&quot;, 100)# Frozen schemas!
-
-# ✨ How Crystal solves it at Compile Time:
-# 1. Macro method_missing (evaluated during compilation):
-macro method_missing(call)
-  {% if call.name.starts_with?(&quot;can_&quot;) %}
-    # Synthesizes concrete, typed methods at compile time!
-    def {{call.name}} : Bool
-      true
-    end
-  {% else %}
-    super
-  {% end %}
-end
-
-# 2. Static unrolled dispatch instead of dynamic send:
-case action_name
-when &quot;jump&quot;   then player.jump
-when &quot;attack&quot; then player.attack
-else raise &quot;Unknown action: #{action_name}&quot;
-end</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
-            <div class="card-title amber">
-              <span>The Limits of Static Metaprogramming</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>No Dynamic <code>send</code>:</strong> Crystal compiles to native LLVM symbols and static vtables. Arbitrary runtime method strings cannot be dispatched dynamically.</li>
-              <li><strong>Zero Runtime <code>eval</code>:</strong> Code cannot be parsed or generated from strings at runtime; all syntax manipulation occurs at compile time via AST macros.</li>
-              <li><strong>Limits of 'exec':</strong> <code>with self yield</code> rebinds lexical context, but cannot inject dynamic ivars or alter object layout on the heap.</li>
-              <li><strong>Compile-Time <code>method_missing</code>:</strong> Macros intercept AST calls during compilation to generate real typed methods—not dynamic runtime proxies.</li>
-              <li><strong>The Grand Trade-Off:</strong> Giving up runtime plasticity earns 50x-100x bare-metal execution speed, SIMD vectorization, and compile-time safety.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Candy)</span>
-          <span>Slide 20 / 88</span>
-        </div>
-        <aside class="notes">
-          We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop.
-          In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object.
-          Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search!
-          Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time.
-          Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get bare-metal C++ speed, zero GC pauses, and complete compile-time type safety.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 21: Aperture (Macro Hooks: included & inherited)
-           =================================================================== -->
-      <section data-background-color="#1f232a"
-               data-palette-name="Aperture"
-               data-palette-cube="#ffee55"
-               data-palette-cube-hover="#ff9900"
-               class="solvin-slide aperture slide-14b_crystal_macro_hooks"
-               data-slide-id="14b_crystal_macro_hooks"
-               style="--bg-color: #1f232a; --bg-window: #262a33; --text-color: #ffee55; --text-dim: #c4a63a; --link-color: #ff9900; --border-color: #ffcc00; --border-active: #ff9100; --accent-color: #ffcc00; --accent-secondary: #ff9900; --accent-tertiary: #ffee55; --accent-quaternary: #ff6600; --shadow-color: #101216; --cube: #ffee55; --cube-hover: #ff9900; --emoji-filter: url(#emoji-filter-aperture); ">
-        <div class="palette-corner-badge" title="Theme: Aperture">
-          <span class="palette-corner-dot"></span> PALETTE: Aperture
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill amber">METAPROGRAMMING • AST HOOKS</span>
-            <h2 class="slide-title">Macro Hooks: included &amp; inherited</h2>
-            <p class="slide-subtitle">Compile-Time Mixins &amp; Automated Subclass Registration</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">macro_lifecycle_hooks.cr — Compile-Time Composition</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-compact"># 1. macro included: Composable mixin behavior at compile time
-module Damageable
-  macro included
-    # Injects properties &amp; methods into the including class:
-    property health : Int32 = 100
-
-    def take_damage(amount : Int32) : Void
-      @health = Math.max(0, @health - amount)
-    end
-  end
-end
-
-# 2. macro inherited: Subclass tracking &amp; automated registration
-abstract class GameEntity
-  # Global compile-time list of all registered game entities
-  ENTITY_TYPES = [] of String
-
-  macro inherited
-    # Fires whenever a new subclass is declared:
-    ENTITY_TYPES &lt;&lt; {{@type.name.stringify}}
-  end
-end
-
-class Player &lt; GameEntity
-  include Damageable # Injects health &amp; take_damage!
-end</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
-            <div class="card-title amber">
-              <span>Compile-Time Module &amp; Class Hooks</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>The <code>macro included</code> Hook:</strong> Executes whenever a module is included into a class. Automatically injects instance variables, methods, and validations into the receiver.</li>
-              <li><strong>Replaces Ruby's <code>self.included</code>:</strong> Ruby required runtime metaprogramming tricks (<code>base.extend ClassMethods</code>). Crystal achieves full mixin synthesis at compile time with zero runtime reflection.</li>
-              <li><strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to inspect, configure, and register child types automatically.</li>
-              <li><strong>Zero-Overhead Registries:</strong> Build entity factories and plugin lists during compilation—no manual arrays or reflection scanning at startup.</li>
-              <li><strong>Type-Safe & Inlined:</strong> All injected code participates in standard global type inference and compiles directly into bare-metal machine code.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Aperture)</span>
-          <span>Slide 21 / 88</span>
-        </div>
-        <aside class="notes">
-          In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods).
-          In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type.
-          Similarly, macro inherited fires the instant a class is subclassed. This lets frameworks and game engines automatically register derived entity types into factories or registries without manual registration boilerplate or slow runtime reflection scans.
-          Everything is resolved and validated during compilation, compiling down to direct, inlined machine instructions.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 22: Creation (Deferred Synthesis: macro finished)
-           =================================================================== -->
-      <section data-background-color="#141518"
-               data-palette-name="Creation"
-               data-palette-cube="#e8e8ed"
-               data-palette-cube-hover="#e6222b"
-               class="solvin-slide creation slide-14c_macro_finished_introspection"
-               data-slide-id="14c_macro_finished_introspection"
-               style="--bg-color: #141518; --bg-window: #1e2024; --text-color: #e8e8ed; --text-dim: #7a7e85; --link-color: #d81b24; --border-color: #c81018; --border-active: #e6222b; --accent-color: #d4af37; --accent-secondary: #d81b24; --accent-tertiary: #e6222b; --accent-quaternary: #c81018; --shadow-color: #0a0b0d; --cube: #e8e8ed; --cube-hover: #e6222b; --emoji-filter: url(#emoji-filter-creation); ">
-        <div class="palette-corner-badge" title="Theme: Creation">
-          <span class="palette-corner-dot"></span> PALETTE: Creation
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill purple">METAPROGRAMMING • DEFERRED AST</span>
-            <h2 class="slide-title">Deferred Synthesis: macro finished</h2>
-            <p class="slide-subtitle">Exhaustive AST Introspection Without Runtime Reflection</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">deferred_introspection.cr — Complete Type Reflection</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-compact"># macro finished: Defers execution until the type is fully parsed
-abstract class NetworkSync
-  macro inherited
-    # Wait until all properties, methods, and files are parsed:
-    macro finished
-      # 1. Exhaustive compile-time instance variable reflection:
-      def serialize_network_state(io : IO) : Void
-        {% for ivar in @type.instance_vars %}
-          io.write_bytes(@{{ivar.name}})
-        {% end %}
-      end
-
-      # 2. Annotation inspection (e.g. @[Replicated], @[Export]):
-      def field_count : Int32
-        {{ @type.instance_vars.size }}
-      end
-    end
-  end
-end
-
-class Character &lt; NetworkSync
-  property position_x : Float32 = 0.0_f32
-  property position_y : Float32 = 0.0_f32
-  property health     : Int32   = 100
-end
-# =&gt; Compiler automatically synthesizes serialize_network_state()!</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
-            <div class="card-title amber">
-              <span>The Power of Deferred Introspection</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>The Open-Class Challenge:</strong> Because Crystal classes can be reopened across multiple files, the compiler cannot know all instance variables while parsing the class header.</li>
-              <li><strong>Deferred Execution:</strong> <code>macro finished</code> pauses macro expansion until the compiler has parsed every reopen, field, and method in the class.</li>
-              <li><strong>Static Type Reflection:</strong> Macro variables like <code>@type.instance_vars</code>, <code>@type.methods</code>, and <code>@type.annotations</code> allow complete type inspection.</li>
-              <li><strong>Boilerplate Annihilation:</strong> Powers Lapis's automated Godot <code>ClassDB</code> registration, <code>@[Export]</code> hints, and binary save/RPC serialization.</li>
-              <li><strong>Zero Runtime Cost:</strong> Generates sequential, unrolled machine instructions. No runtime reflection lookups, no string dictionaries, and zero GC allocations.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Creation)</span>
-          <span>Slide 22 / 88</span>
-        </div>
-        <aside class="notes">
-          In dynamic languages like Ruby, you can inspect instance variables and methods at any time at runtime using reflection. But how do you do compile-time reflection in a statically typed language where classes are open and spread across multiple source files?
-          If you inspect @type.instance_vars at the top of a class, the compiler hasn't parsed the rest of the file yet, let alone other files reopening the class!
-          Crystal solves this with 'macro finished'. This special hook tells the compiler: 'Pause! Wait until every file, reopen, and method in this type has been completely parsed by the frontend, then run this macro.'
-          Inside macro finished, you have exhaustive, authoritative knowledge of the entire type: all instance variables, their types, all methods, and all annotations.
-          In Lapis, this is the secret weapon: macro finished inspects your node classes, discovers every @[Export] property and signal, and synthesizes complete Godot ClassDB bindings and binary serializers before emitting LLVM IR. You get all the automation of reflection with 100% bare-metal performance.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 23: Super ES (Where Macros Shine: Declarative State Machines)
-           =================================================================== -->
-      <section data-background-color="#f0f0f5"
-               data-palette-name="Super ES"
-               data-palette-cube="#4f3880"
-               data-palette-cube-hover="#5c439b"
-               class="solvin-slide super_es slide-18_macro_state_machines"
-               data-slide-id="18_macro_state_machines"
-               style="--bg-color: #f0f0f5; --bg-window: #e2e2ea; --text-color: #1b1924; --text-dim: #605c70; --link-color: #5c439b; --border-color: #4f3880; --border-active: #785dba; --accent-color: #4f3880; --accent-secondary: #785dba; --accent-tertiary: #5c439b; --accent-quaternary: #605c70; --shadow-color: #b0b0c0; --cube: #4f3880; --cube-hover: #5c439b; --emoji-filter: url(#emoji-filter-super_es); ">
-        <div class="palette-corner-badge" title="Theme: Super ES">
-          <span class="palette-corner-dot"></span> PALETTE: Super ES
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill purple">AST METAPROGRAMMING • ARCHITECTURE</span>
-            <h2 class="slide-title">Where Macros Shine: Declarative State Machines</h2>
-            <p class="slide-subtitle">Zero-Boilerplate State Transitions with Compile-Time Verification</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">enemy_fsm.cr — Declarative DSL &amp; Gameplay Usage</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-compact"># 1. Declare states &amp; transitions with macro DSL
-fsm BossState do
-  state Patrol, initial: true do
-    before { start_patrol_path }
-    on :see_player, transition_to: Chase
-    after { alert_nearby_allies }
-  end
-
-  state Chase do
-    before { play_animation(&quot;run&quot;) }
-    on :in_attack_range, transition_to: Attack
-    on :lost_player,     transition_to: Patrol
-  end
-
-  state Attack do
-    before { play_sound(&quot;roar&quot;) }
-    on :attack_finished, transition_to: Patrol
-    after { reset_hitbox }
-  end
-end
-
-# 2. Actual runtime gameplay usage
-fsm = BossStateMachine.new
-
-def _physics_process(delta : Float64) : Void
-  if distance_to(player) &lt; 15.0
-    fsm.trigger(:see_player) # -&gt; Chase (runs before/after hooks!)
-  end
-
-  case fsm.current_state
-  when .patrol? then move_along_path(delta)
-  when .chase?  then navigate_to(player, delta)
-  when .attack? then execute_slam_attack
-  end
-end</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
-            <div class="card-title purple">
-              <span>What the Macro Generates</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Typed Enum & Handlers:</strong> Generates concrete <code>enum BossState</code> with type-checked transition methods.</li>
-              <li><strong>Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> Entry (<code>before</code>) and exit (<code>after</code>) hooks are inlined directly into native state transition branches.</li>
-              <li><strong>Compile-Time Transition Validation:</strong> Referencing an undeclared state or illegal transition fails at compile time.</li>
-              <li><strong>Zero Reflection Overhead:</strong> Transitions compile to direct jump tables; zero lambda allocations or dictionary lookups.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Super ES)</span>
-          <span>Slide 23 / 88</span>
-        </div>
-        <aside class="notes">
-          State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 24: Super ES (Behind the DSL: The FSM AST Macro)
-           =================================================================== -->
-      <section data-background-color="#f0f0f5"
-               data-palette-name="Super ES"
-               data-palette-cube="#4f3880"
-               data-palette-cube-hover="#5c439b"
-               class="solvin-slide super_es slide-18b_macro_fsm_implementation"
-               data-slide-id="18b_macro_fsm_implementation"
-               style="--bg-color: #f0f0f5; --bg-window: #e2e2ea; --text-color: #1b1924; --text-dim: #605c70; --link-color: #5c439b; --border-color: #4f3880; --border-active: #785dba; --accent-color: #4f3880; --accent-secondary: #785dba; --accent-tertiary: #5c439b; --accent-quaternary: #605c70; --shadow-color: #b0b0c0; --cube: #4f3880; --cube-hover: #5c439b; --emoji-filter: url(#emoji-filter-super_es); ">
-        <div class="palette-corner-badge" title="Theme: Super ES">
-          <span class="palette-corner-dot"></span> PALETTE: Super ES
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill amber">AST METAPROGRAMMING • UNDER THE HOOD</span>
-            <h2 class="slide-title">Behind the DSL: The FSM AST Macro</h2>
-            <p class="slide-subtitle">How Crystal&#39;s Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums &amp; Jump Tables</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-compact" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">fsm_macro.cr — AST Rewriting Engine</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal code-compact"># 🪄 Compile-Time AST Macro: parses block into enums, hooks &amp; jump table
-macro fsm(name, &amp;block)
-  # 1. Synthesize typed Enum for all declared states:
-  enum {{name.id}}
-    {% for call in block.body.expressions %}
-      {% if call.name == &quot;state&quot; %} {{call.args[0].id}} {% end %}
-    {% end %}
-  end
-
-  # 2. Synthesize StateMachine with zero-reflection jump table:
-  class {{name.id}}Machine
-    getter current_state : {{name.id}} = {{name.id}}::Patrol
-
-    # 3. Flattens nested DSL calls into flat case branches:
-    def trigger(event : Symbol) : Void
-      case @current_state
-      {% for state in block.body.expressions %}
-        when .{{state.args[0].id.underscore}}?
-          {% for call in state.block.body.expressions %}
-            {% if call.name == &quot;on&quot; %}
-              if event == {{call.args[0]}}
-                return transition_to({{name.id}}::{{call.named_args[:transition_to]}})
-              end
-            {% end %}
-          {% end %}
-      {% end %}
-      end
-    end
-
-    # 4. Inlines &#39;before&#39; (exit) &amp; &#39;after&#39; (enter) lifecycle hooks:
-    private def transition_to(target : {{name.id}}) : Void
-      case @current_state
-      {% for s in block.body.expressions %}
-        when .{{s.args[0].id.underscore}}?
-          {% for c in s.block.body.expressions %}
-            {% if c.name == &quot;before&quot; %} {{c.block.body}} {% end %}
-          {% end %}
-      {% end %}
-      end
-
-      @current_state = target
-
-      case target
-      {% for s in block.body.expressions %}
-        when .{{s.args[0].id.underscore}}?
-          {% for c in s.block.body.expressions %}
-            {% if c.name == &quot;after&quot; %} {{c.block.body}} {% end %}
-          {% end %}
-      {% end %}
-      end
-    end
-  end
-end</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
-            <div class="card-title amber">
-              <span>Compile-Time Metaprogramming Invariants</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Inlined Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> The macro extracts <code>before</code> (pre-transition) and <code>after</code> (post-transition) blocks and inlines them directly into native <code>case</code> branches — zero lambda overhead, zero virtual dispatches!</li>
-              <li><strong>Compile-Time AST Traversal:</strong> Unlike Ruby's <code>method_missing</code> or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.</li>
-              <li><strong>Synthesizes Concrete Types:</strong> The macro generates real <code>enum BossState</code> variants (<code>Patrol</code>, <code>Chase</code>), giving developers full compiler autocomplete and exhaustiveness checks.</li>
-              <li><strong>Zero Runtime Overhead:</strong> <code>trigger(:event)</code> expands into a flat native <code>case</code> statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Super ES)</span>
-          <span>Slide 24 / 88</span>
-        </div>
-        <aside class="notes">
-          This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 25: Spaces 97 (Macros: Zero-Reflection Serialization)
-           =================================================================== -->
-      <section data-background-color="#f0f4f8"
-               data-palette-name="Spaces 97"
-               data-palette-cube="#000000"
-               data-palette-cube-hover="#000080"
-               class="solvin-slide spaces_97 slide-19_macro_serialization"
-               data-slide-id="19_macro_serialization"
-               style="--bg-color: #f0f4f8; --bg-window: #d4d0c8; --text-color: #000000; --text-dim: #333333; --link-color: #000080; --border-color: #2b579a; --border-active: #1084d0; --accent-color: #000080; --accent-secondary: #1084d0; --accent-tertiary: #2b579a; --accent-quaternary: #000080; --shadow-color: #1a385c; --cube: #000000; --cube-hover: #000080; --emoji-filter: url(#emoji-filter-spaces_97); ">
-        <div class="palette-corner-badge" title="Theme: Spaces 97">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces 97
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill purple">AST METAPROGRAMMING • ARCHITECTURE</span>
-            <h2 class="slide-title">Macros: Zero-Reflection Serialization</h2>
-            <p class="slide-subtitle">Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">save_game_state.cr — Serialization Without Reflection</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close">✕</span>
-              </div>
-            </div>
-            <pre><code class="language-crystal" style="font-size: 0.94rem !important; line-height: 1.25 !important;">require &quot;json&quot;
-
-# Structs and classes serialize with a single macro inclusion
-struct PlayerSaveData
-  include JSON::Serializable
-
-  property player_name : String
-  property level : Int32
-  property health : Float32
-  property inventory_items : Array(String)
-  property position_checkpoint : Godot::Vector3
-end
-
-# 1. Serializing to JSON string: direct bytecode generation
-data = PlayerSaveData.new(...)
-json_str = data.to_json
-
-# 2. Deserializing from JSON: type-safe, strict validation
-loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
-            <div class="card-title purple">
-              <span>Why It Beats GDScript &amp; C# Serialization</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Zero Runtime Reflection:</strong> Serialization code is synthesized by macros at compile time; no reflection API overhead.</li>
-              <li><strong>Strict Schema Validation:</strong> Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.</li>
-              <li><strong>Built-in Format Support:</strong> First-class standard library support for JSON, YAML, and binary formats.</li>
-              <li><strong>Engine Agnostic Data Structures:</strong> Save models exist as pure Crystal data structures independent of Godot node hierarchies.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces 97)</span>
-          <span>Slide 25 / 88</span>
-        </div>
-        <aside class="notes">
-          Save systems and network state serialization often suffer from runtime reflection
-          overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable
-          to a struct generates complete, high-speed serialization and deserialization code
-          at compile time. It validates schemas strictly, serializes directly into buffers,
-          and requires zero manual dictionary mapping.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 26: Spaces 98 (Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++)
+           SLIDE 13: Spaces 98 (Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 98"
@@ -2541,7 +1356,7 @@ public:
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 98)</span>
-          <span>Slide 26 / 88</span>
+          <span>Slide 13 / 88</span>
         </div>
         <aside class="notes">
           Let's put the four major GDExtension languages side by side. Here is the exact same Player node implemented in Lapis, C#, Rust, and C++. Look at the contrast: Lapis requires just 11 lines of clean, expressive code. C# requires 16 lines with delegate declarations. Rust requires 26 lines with Base<T> wrapping and separate impl blocks. And C++ requires over 32 lines with manual _bind_methods boilerplate. Lapis delivers native machine speed without the syntactic punishment.
@@ -2549,7 +1364,7 @@ public:
       </section>
 
       <!-- ===================================================================
-           SLIDE 27: Spaces 95 (Language & GDExtension Ecosystem Feature Matrix)
+           SLIDE 14: Spaces 95 (Language & GDExtension Ecosystem Feature Matrix)
            =================================================================== -->
       <section data-background-color="#f0f4f4"
                data-palette-name="Spaces 95"
@@ -2630,10 +1445,1195 @@ public:
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Spaces 95)</span>
-          <span>Slide 27 / 88</span>
+          <span>Slide 14 / 88</span>
         </div>
         <aside class="notes">
           When evaluating language bindings for Godot, developers face distinct trade-offs across execution speed, compiler friction, type safety, and ergonomics. GDScript is quick for scripting but hits performance walls; C# brings garbage collection pauses; Rust fights the scene graph; C++ is plagued by boilerplate. Lapis occupies the sweet spot: LLVM performance, static nil safety, and Ruby-like ergonomics.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 15: Spaces 98 (The Birth of Crystal)
+           =================================================================== -->
+      <section data-background-color="#f0f4f4"
+               data-palette-name="Spaces 98"
+               data-palette-cube="#000000"
+               data-palette-cube-hover="#10549c"
+               class="solvin-slide spaces_98 slide-05_birth_of_crystal"
+               data-slide-id="05_birth_of_crystal"
+               style="--bg-color: #f0f4f4; --bg-window: #c0c0c0; --text-color: #000000; --text-dim: #444444; --link-color: #000080; --border-color: #000080; --border-active: #10549c; --accent-color: #000080; --accent-secondary: #10549c; --accent-tertiary: #008080; --accent-quaternary: #000080; --shadow-color: #004040; --cube: #000000; --cube-hover: #10549c; --emoji-filter: url(#emoji-filter-spaces_98); ">
+        <div class="palette-corner-badge" title="Theme: Spaces 98">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces 98
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">COMPILER REVOLUTION • CRYSTAL ORIGINS</span>
+            <h2 class="slide-title">The Birth of Crystal</h2>
+            <p class="slide-subtitle">Fast as C, Slick as Ruby • Native LLVM Speed</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">crystal_origins.cr — Clean Syntax, Native Machine Code</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># Clean Ruby ergonomics — Ahead-of-Time LLVM Compiled
+class Player
+  property name : String
+  property health : Int32
+  property inventory : Array(String)
+
+  # Shorthand constructor with default parameters:
+  def initialize(@name : String, @health : Int32 = 100)
+    @inventory = [] of String
+  end
+
+  # Concise predicate method:
+  def alive? : Bool
+    @health &gt; 0
+  end
+
+  # Zero-cost block inlining: Enumerable pipelines compile to tight loops
+  def heal_party(companions : Enumerable(Player), amount : Int32) : Void
+    companions.select(&amp;.alive?).each do |companion|
+      companion.health = (companion.health + amount).clamp(0, 100)
+      puts &quot;✨ Healed #{companion.name} to #{companion.health} HP&quot;
+    end
+  end
+
+  # Flow-sensitive nil safety: String? requires explicit compiler checks
+  def inspect_equipped : String?
+    @inventory.first?
+  end
+end
+
+# 1. Global type inference: zero redundant type declarations
+hero  = Player.new(&quot;Arthur&quot;, 85)
+party = [hero, Player.new(&quot;Gwen&quot;, 40)]
+hero.heal_party(party, 25)
+
+# 2. Flow typing proves non-nil without runtime null dereferences
+if item = hero.inspect_equipped
+  puts &quot;Equipped: #{item.upcase}&quot; # Compiler knows item is String!
+end</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>The Compiler Synthesis</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Designed from Day One for Types:</strong> Crystal wasn't a dynamic language patched with types; it was built from scratch as a statically typed language.</li>
+              <li><strong>Global Type Inference:</strong> You rarely write type annotations for local variables. The compiler analyzes the entire program flow and infers concrete types.</li>
+              <li><strong>LLVM Native Backend:</strong> Crystal emits LLVM IR, benefiting from decades of optimization: autovectorization, link-time optimization (LTO), and register allocation.</li>
+              <li><strong>Static Nil Safety:</strong> Null pointer dereferences are caught at compile time. <code>T</code> cannot be nil; only <code>T?</code> can, forcing explicit compiler-checked handling.</li>
+              <li><strong>Direct C ABI Interop:</strong> Seamless bindings to native C libraries without JNI or FFI marshalling penalties.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces 98)</span>
+          <span>Slide 15 / 88</span>
+        </div>
+        <aside class="notes">
+          In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend.
+          Notice how closely this mirrors the Ruby heritage we saw earlier: shorthand property declarations, predicates, statement modifiers, and block iterators. But every single operation is resolved statically at compile time—the Enumerable pipelines inline into tight machine loops, types are proven with global inference, and nil dereferences are mathematically impossible at runtime.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 16: Spaces XP (The Zero-Tax Type System)
+           =================================================================== -->
+      <section data-background-color="#e2ebf4"
+               data-palette-name="Spaces XP"
+               data-palette-cube="#0f2545"
+               data-palette-cube-hover="#d84315"
+               class="solvin-slide spaces_xp slide-05b_crystal_type_system"
+               data-slide-id="05b_crystal_type_system"
+               style="--bg-color: #e2ebf4; --bg-window: #ffffff; --text-color: #0f2545; --text-dim: #4e6580; --link-color: #0055ea; --border-color: #0055ea; --border-active: #2e7d32; --accent-color: #0055ea; --accent-secondary: #2e7d32; --accent-tertiary: #d84315; --accent-quaternary: #0055ea; --shadow-color: #a0b4cc; --cube: #0f2545; --cube-hover: #d84315; --emoji-filter: url(#emoji-filter-spaces_xp); ">
+        <div class="palette-corner-badge" title="Theme: Spaces XP">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces XP
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">TYPE SYSTEM • COMPILE-TIME RIGOR</span>
+            <h2 class="slide-title">The Zero-Tax Type System</h2>
+            <p class="slide-subtitle">Global Flow-Sensitive Inference &amp; Mathematically Proven Nil Safety</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-dense" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">type_inference_and_nil_safety.cr</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-dense"># Crystal writes like Ruby, but with 100% static type safety:
+class Inventory
+  getter items = [] of String # Inferred as Array(String)
+
+  # 1. Zero signature noise: parameter &amp; return types inferred!
+  def find_item(name)
+    @items.find { |item| item == name } # Inferred: String | Nil
+  end
+
+  def equip(name)
+    item = find_item(name)
+
+    # 2. Mathematical compile-time nil safety:
+    # item.upcase
+    # ❌ Compile Error: undefined method &#39;upcase&#39; for Nil (type is String | Nil)
+
+    if item
+      # Inside guard, compiler narrows type strictly to String:
+      puts &quot;Equipped: #{item.upcase}&quot; # ✅ Safe!
+    end
+  end
+end</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>How Crystal Defeats Sorbet &amp; RBS</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Global Type Inference:</strong> Infers 95%+ of types across your entire codebase, completely eliminating verbose <code>sig { params(...).returns(...) }</code> clutter.</li>
+              <li><strong>Exhaustive Nil Safety:</strong> Treats <code>Nil</code> as a real type; accessing methods on nullable unions without checking fails at compile time, eliminating <code>NoMethodError</code>.</li>
+              <li><strong>Zero Runtime Tag Boxing:</strong> Primitives (<code>Int32</code>, <code>Float64</code>) and structs live unboxed on the stack with zero dynamic type-tag overhead.</li>
+              <li><strong>Native LLVM Speed:</strong> Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces XP)</span>
+          <span>Slide 16 / 88</span>
+        </div>
+        <aside class="notes">
+          When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 17: Playbox (Expressive Ergonomics: High-Level Language Primitives)
+           =================================================================== -->
+      <section data-background-color="#2d224b"
+               data-palette-name="Playbox"
+               data-palette-cube="#ffffff"
+               data-palette-cube-hover="#22c55e"
+               class="solvin-slide playbox slide-10_expressive_ergonomics"
+               data-slide-id="10_expressive_ergonomics"
+               style="--bg-color: #2d224b; --bg-window: #563f91; --text-color: #ffffff; --text-dim: #b0a4d0; --link-color: #22c55e; --border-color: #8b75c8; --border-active: #22c55e; --accent-color: #ef4444; --accent-secondary: #22c55e; --accent-tertiary: #ef4444; --accent-quaternary: #8b75c8; --shadow-color: #19122c; --cube: #ffffff; --cube-hover: #22c55e; --emoji-filter: url(#emoji-filter-playbox); ">
+        <div class="palette-corner-badge" title="Theme: Playbox">
+          <span class="palette-corner-dot"></span> PALETTE: Playbox
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL ERGONOMICS • EXPRESSION</span>
+            <h2 class="slide-title">Expressive Ergonomics: High-Level Language Primitives</h2>
+            <p class="slide-subtitle">Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">gameplay_primitives.cr — Expressive Systems Syntax</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;"># 1. Clean vector math &amp; operator overloading (SIMD-accelerated)
+velocity = direction.normalized * move_speed + gravity * delta
+new_position = global_position + velocity
+
+# 2. Strict numeric literals &amp; zero-cost tuple destructuring
+base_friction = 0.85_f32     # Explicit 32-bit float
+name, level, score = {&quot;Shadow Knight&quot;, 85, 142_500_u64}
+
+# 3. Infinite range slicing (endless &amp; beginningless ranges)
+inventory = [&quot;Potion&quot;, &quot;Shield&quot;, &quot;Sword&quot;, &quot;Helm&quot;, &quot;Boots&quot;]
+
+# Endless range [2..]: slices from index 2 all the way to the end
+tail_gear = inventory[2..]
+# =&gt; [&quot;Sword&quot;, &quot;Helm&quot;, &quot;Boots&quot;]
+
+# Beginningless range [..1]: slices from the beginning up to index 1
+quick_bar = inventory[..1]
+# =&gt; [&quot;Potion&quot;, &quot;Shield&quot;]
+
+# Negative offset with endless range [-3..]: slices last 3 items
+recent_events = [&quot;Spawn&quot;, &quot;Aggro&quot;, &quot;Hit: 12&quot;, &quot;Crit: 45&quot;, &quot;Died&quot;]
+combat_tail   = recent_events[-3..]
+# =&gt; [&quot;Hit: 12&quot;, &quot;Crit: 45&quot;, &quot;Died&quot;]</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>Expressive Language Primitives</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Operator Overloading:</strong> Natural mathematical expressions (<code>velocity = dir * speed + grav * delta</code>) with direct CPU SIMD vectorization.</li>
+              <li><strong>Explicit Numeric Precision:</strong> Literals like <code>1.0_f32</code>, <code>250_u32</code>, and <code>1_000_000_u64</code> eliminate ambiguous runtime type coercion bugs.</li>
+              <li><strong>Zero-Cost Tuples:</strong> Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.</li>
+              <li><strong>Infinite &amp; Endless Range Slicing:</strong> Expressive endless (<code>[2..]</code>), beginningless (<code>[..1]</code>), and negative-offset (<code>[-3..]</code>) slices on contiguous arrays with zero manual length math.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Playbox)</span>
+          <span>Slide 17 / 88</span>
+        </div>
+        <aside class="notes">
+          Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
+          Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 18: DigitalGuy (The DSL Engine: with self yield & Macros)
+           =================================================================== -->
+      <section data-background-color="#000000"
+               data-palette-name="DigitalGuy"
+               data-palette-cube="#ff0000"
+               data-palette-cube-hover="#ff5555"
+               class="solvin-slide digital_guy slide-10b_ruby_parity_in_crystal"
+               data-slide-id="10b_ruby_parity_in_crystal"
+               style="--bg-color: #000000; --bg-window: #110000; --text-color: #ff0000; --text-dim: #880000; --link-color: #ff3333; --border-color: #ff0000; --border-active: #ff5555; --accent-color: #ff0000; --accent-secondary: #ff3333; --accent-tertiary: #ff5555; --accent-quaternary: #880000; --shadow-color: #330000; --cube: #ff0000; --cube-hover: #ff5555; --emoji-filter: url(#emoji-filter-digital_guy); ">
+        <div class="palette-corner-badge" title="Theme: DigitalGuy">
+          <span class="palette-corner-dot"></span> PALETTE: DigitalGuy
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL METAPROGRAMMING • COMPILE-TIME DSLs</span>
+            <h2 class="slide-title">The DSL Engine: with self yield &amp; Macros</h2>
+            <p class="slide-subtitle">Compile-Time Context Shifting: How Rails Routes, RSpec &amp; FactoryBot Become 100% Type-Safe</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">compile_time_dsl.cr — Pure Ruby Ergonomics, Zero Cost</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal" style="font-size: 0.80rem !important; line-height: 1.25 !important;"># 1. Declarative Builder Class:
+class CombatRoomBuilder
+  getter room : Room
+
+  def initialize(@room : Room)
+  end
+
+  def wave(enemy : String, count : Int32)
+    @room.spawn_wave(enemy, count)
+  end
+
+  def reward(item : String)
+    @room.set_chest(item)
+  end
+
+  # &#39;with builder yield&#39; rebinds self inside the caller&#39;s block!
+  def self.build(name : String, &amp;block : CombatRoomBuilder -&gt;) : Room
+    builder = new(Room.new(name))
+    with builder yield # self IS builder inside block!
+    builder.room
+  end
+end
+
+# 2. Pure declarative DSL — zero &quot;builder.&quot; boilerplate:
+dungeon = CombatRoomBuilder.build(&quot;Dungeon_A1&quot;) do
+  wave &quot;skeleton_archer&quot;, count: 4 # Calls wave on builder!
+  reward &quot;obsidian_key&quot;            # 100% type-checked at compile time!
+end</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>How Crystal Elevates Ruby&#39;s Secret Weapon</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>The Secret Weapon of Ruby DSLs:</strong> In Ruby, <code>instance_exec</code> powered iconic frameworks like Rails routes (<code>routes.rb</code>), RSpec (<code>describe</code>/<code>it</code>), and FactoryBot by rebinding <code>self</code>.</li>
+              <li><strong>Static Context Shifting (<code>with ... yield</code>):</strong> Crystal achieves this exact ergonomic miracle at compile time: <code>with builder yield</code> rebinds <code>self</code> to the builder inside the block without runtime dynamic evaluation.</li>
+              <li><strong>100% Compile-Time Verification:</strong> Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.</li>
+              <li><strong>Zero Heap & Reflection Overhead:</strong> LLVM inlines the context-shifted block directly at the call site—delivering pure declarative DSL beauty with bare-metal C execution speed.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (DigitalGuy)</span>
+          <span>Slide 18 / 88</span>
+        </div>
+        <aside class="notes">
+          In the Ruby section, we saw how instance_exec was the secret weapon that made Ruby famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 19: Creation (Modules: Mixins, Traits & Namespaces)
+           =================================================================== -->
+      <section data-background-color="#141518"
+               data-palette-name="Creation"
+               data-palette-cube="#e8e8ed"
+               data-palette-cube-hover="#e6222b"
+               class="solvin-slide creation slide-10d_crystal_modules"
+               data-slide-id="10d_crystal_modules"
+               style="--bg-color: #141518; --bg-window: #1e2024; --text-color: #e8e8ed; --text-dim: #7a7e85; --link-color: #d81b24; --border-color: #c81018; --border-active: #e6222b; --accent-color: #d4af37; --accent-secondary: #d81b24; --accent-tertiary: #e6222b; --accent-quaternary: #c81018; --shadow-color: #0a0b0d; --cube: #e8e8ed; --cube-hover: #e6222b; --emoji-filter: url(#emoji-filter-creation); ">
+        <div class="palette-corner-badge" title="Theme: Creation">
+          <span class="palette-corner-dot"></span> PALETTE: Creation
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL ARCHITECTURE • COMPOSITION</span>
+            <h2 class="slide-title">Modules: Mixins, Traits &amp; Namespaces</h2>
+            <p class="slide-subtitle">Horizontal Behavior Composition via include/extend with Zero Virtual Overhead</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-compact" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">gameplay_modules.cr — Horizontal Composition</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-compact"># 1. Composable Mixin Module with abstract contract:
+module Damageable
+  abstract def max_health : Int32
+  property health : Int32 = 100
+
+  def take_damage(amount : Int32) : Bool
+    @health = (@health - amount).clamp(0, max_health)
+    @health &gt; 0
+  end
+
+  # Reusable concrete gameplay behavior:
+  def apply_shield(amount : Int32) : Void
+    @health = (@health + amount).clamp(0, max_health)
+  end
+end
+
+# 2. Namespace &amp; Singleton utility module:
+module SpatialMath
+  extend self # Callable as SpatialMath.dist_sq or mixed in
+  def dist_sq(a : Godot::Vector2, b : Godot::Vector2) : Float32
+    (a.x - b.x) ** 2 + (a.y - b.y) ** 2
+  end
+end
+
+# 3. Horizontal composition into Godot nodes:
+class Enemy &lt; Godot::CharacterBody2D
+  include Damageable # Inlines health, take_damage &amp; apply_shield
+
+  def max_health : Int32; 150; end
+end</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>Zero-Cost Architectural Composition</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Horizontal Composition via <code>include</code>:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance hierarchies or multiple inheritance hazards.</li>
+              <li><strong>Zero Virtual Dispatch Overhead:</strong> Mixin methods resolve statically at compile time and inline directly into the receiver's machine code—no ancestor chain lookups.</li>
+              <li><strong>Abstract Method Contracts:</strong> <code>abstract def</code> in modules enforces compile-time interface conformance without runtime reflection or interface boxing.</li>
+              <li><strong>Namespace & Singleton Utilities:</strong> <code>extend self</code> enables modules to act simultaneously as standalone functional namespaces and mixable traits.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Creation)</span>
+          <span>Slide 19 / 88</span>
+        </div>
+        <aside class="notes">
+          In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy. In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains. Crystal gives us the best of both worlds: modules act as zero-cost horizontal mixins. You can define abstract contracts with abstract def and provide concrete shared methods. When included into a class, Crystal resolves all methods statically at compile time with zero virtual dispatch overhead and zero runtime method lookup. With extend self, modules seamlessly double as standalone utility namespaces.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 20: Monokai (Open Classes: Static Monkey Patching)
+           =================================================================== -->
+      <section data-background-color="#272822"
+               data-palette-name="Monokai"
+               data-palette-cube="#f8f8f2"
+               data-palette-cube-hover="#f92672"
+               class="solvin-slide monokai slide-10e_crystal_monkey_patching"
+               data-slide-id="10e_crystal_monkey_patching"
+               style="--bg-color: #272822; --bg-window: #1e1f1c; --text-color: #f8f8f2; --text-dim: #75715e; --link-color: #66d9ef; --border-color: #f92672; --border-active: #a6e22e; --accent-color: #fd971f; --accent-secondary: #a6e22e; --accent-tertiary: #66d9ef; --accent-quaternary: #f92672; --shadow-color: #141411; --cube: #f8f8f2; --cube-hover: #f92672; --emoji-filter: url(#emoji-filter-monokai); ">
+        <div class="palette-corner-badge" title="Theme: Monokai">
+          <span class="palette-corner-dot"></span> PALETTE: Monokai
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL METAPROGRAMMING • OPEN CLASSES</span>
+            <h2 class="slide-title">Open Classes: Static Monkey Patching</h2>
+            <p class="slide-subtitle">Re-opening Types &amp; Built-ins with LLVM Inlining &amp; Zero Load-Order Race Conditions</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-dense" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">static_open_classes.cr — Domain Vocabulary</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-dense"># 1. Re-opening standard primitives with game units:
+class Int32
+  def tiles : Float32
+    self.to_f32 * 32.0_f32
+  end
+  def meters : Float32
+    self.to_f32 * 1.0_f32
+  end
+end
+
+# 2. Extending native Godot engine types directly:
+struct Godot::Vector2
+  def to_iso : Godot::Vector2
+    Godot::Vector2.new(x - y, (x + y) * 0.5_f32)
+  end
+  def tile_snap(size : Float32 = 32.0_f32) : Godot::Vector2
+    Godot::Vector2.new((x / size).round * size, (y / size).round * size)
+  end
+end
+
+# 3. Fluent gameplay domain vocabulary in action:
+jump_distance = 5.meters
+map_offset = 4.tiles
+grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>The Power of Open Classes Without the Peril</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Compile-Time Open Classes:</strong> Any class, struct, or primitive (<code>Int32</code>, <code>String</code>, <code>Vector2</code>) can be re-opened across files to add domain-specific verbs.</li>
+              <li><strong>Eliminating Ruby's Load-Order Hell:</strong> Because Crystal builds a unified whole-program AST before codegen, there are no runtime race conditions based on which <code>require</code> ran first.</li>
+              <li><strong>Zero Runtime Memory Overhead:</strong> Injected methods compile directly into native machine code and direct call sites—no dynamic method tables or cache invalidations.</li>
+              <li><strong>Extending Native Engine Types:</strong> Enrich native Godot structs and classes with project-specific mathematics without clunky wrappers or verbose helper classes.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Monokai)</span>
+          <span>Slide 20 / 88</span>
+        </div>
+        <aside class="notes">
+          One of Ruby's most powerful yet polarizing features is open classes—the ability to monkey patch any class, including built-ins like Numeric or String. In dynamic Ruby, monkey patching is dangerous: if two gems patch the same method, whichever file is required last overwrites the other, creating terrifying load-order bugs. In Crystal, open classes are fully embraced, but with static safety. Because Crystal parses the entire project into a single unified AST before type checking and compilation, method additions are resolved deterministically. You can re-open Int32 to add game unit converters like 5.meters, or re-open Godot's Vector2 to add isometric conversions or tile snapping. LLVM inlines these methods directly, giving you pure Ruby ergonomics with zero runtime performance cost.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 21: Aperture (Blocks, Procs & Lambdas: Inlined Closures)
+           =================================================================== -->
+      <section data-background-color="#1f232a"
+               data-palette-name="Aperture"
+               data-palette-cube="#ffee55"
+               data-palette-cube-hover="#ff9900"
+               class="solvin-slide aperture slide-10f_crystal_closures"
+               data-slide-id="10f_crystal_closures"
+               style="--bg-color: #1f232a; --bg-window: #262a33; --text-color: #ffee55; --text-dim: #c4a63a; --link-color: #ff9900; --border-color: #ffcc00; --border-active: #ff9100; --accent-color: #ffcc00; --accent-secondary: #ff9900; --accent-tertiary: #ffee55; --accent-quaternary: #ff6600; --shadow-color: #101216; --cube: #ffee55; --cube-hover: #ff9900; --emoji-filter: url(#emoji-filter-aperture); ">
+        <div class="palette-corner-badge" title="Theme: Aperture">
+          <span class="palette-corner-dot"></span> PALETTE: Aperture
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill cyan">CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS</span>
+            <h2 class="slide-title">Blocks, Procs &amp; Lambdas: Inlined Closures</h2>
+            <p class="slide-subtitle">Ephemeral Inlined Blocks, Typed Reified Procs &amp; C-Function Pointer Interop</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-dense" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">closures_and_procs.cr — Zero-Cost First-Class Functions</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-dense"># 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
+def measure(label : String)
+  t0 = Time.monotonic
+  yield # Passes control directly to block with 0 allocation
+  elapsed = (Time.monotonic - t0).total_milliseconds
+  puts &quot;#{label}: #{elapsed}ms&quot;
+end
+measure(&quot;Physics Tick&quot;) { run_simulation }
+
+# 2. First-Class Procs: Reified objects with strict types
+scale = 1.5_f32
+damage_calc = -&gt;(base : Int32) { (base * scale).to_i }
+# Statically typed as Proc(Int32, Int32) with captured &#39;scale&#39;
+
+# 3. Non-Capturing Procs = Bare C Function Pointers!
+# Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
+bridge_cb = -&gt;(target_id : UInt64, event : Int32) do
+  Godot::Bridge.dispatch_event(target_id, event)
+end
+
+# 4. Symbol-to-Proc shorthand for iterator pipelines:
+enemies.select(&amp;.alive?).map(&amp;.health)</code></pre>
+          </div>
+          </div>
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
+            <div class="card-title cyan">
+              <span>The Spectrum of Zero-Cost Closures</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Ephemeral Blocks (<code>yield</code>):</strong> Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.</li>
+              <li><strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code>. Explicit parameter and return types (e.g. <code>Proc(Int32, Int32)</code>) with strict compile-time arity.</li>
+              <li><strong>Non-Capturing Procs = C Pointers:</strong> When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.</li>
+              <li><strong>Symbol-to-Proc Shorthand:</strong> <code>&amp;.alive?</code> and <code>&amp;.health</code> transform symbols into inlined block invocations with zero lambda boilerplate.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Aperture)</span>
+          <span>Slide 21 / 88</span>
+        </div>
+        <aside class="notes">
+          Closures are one of the most expressive parts of modern languages, but in interpreted engines like Ruby or Python they incur significant heap allocations and call frame overhead. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 22: Candy (Static Trade-Offs: No 'send' & Limits of 'exec')
+           =================================================================== -->
+      <section data-background-color="#fdf0f8"
+               data-palette-name="Candy"
+               data-palette-cube="#4a2c58"
+               data-palette-cube-hover="#d84b9b"
+               class="solvin-slide candy slide-10c_static_metaprogramming_tradeoffs"
+               data-slide-id="10c_static_metaprogramming_tradeoffs"
+               style="--bg-color: #fdf0f8; --bg-window: #ffffff; --text-color: #4a2c58; --text-dim: #8c6899; --link-color: #d84b9b; --border-color: #e5a8d8; --border-active: #d84b9b; --accent-color: #b8388c; --accent-secondary: #d84b9b; --accent-tertiary: #b8388c; --accent-quaternary: #e5a8d8; --shadow-color: #d6b2dc; --cube: #4a2c58; --cube-hover: #d84b9b; --emoji-filter: url(#emoji-filter-candy); ">
+        <div class="palette-corner-badge" title="Theme: Candy">
+          <span class="palette-corner-dot"></span> PALETTE: Candy
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill amber">METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS</span>
+            <h2 class="slide-title">Static Trade-Offs: No &#39;send&#39; &amp; Limits of &#39;exec&#39;</h2>
+            <p class="slide-subtitle">The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-dense" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">static_vs_dynamic.cr — No Runtime Plasticity</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-dense"># ❌ What Ruby allows that Crystal CANNOT do:
+# target.send(&quot;cast_spell&quot;, 50)           # No runtime send!
+# eval(&quot;class Boss &lt; #{dyn_parent}; end&quot;) # No runtime eval!
+# target.instance_variable_set(&quot;@hp&quot;, 100)# Frozen schemas!
+
+# ✨ How Crystal solves it at Compile Time:
+# 1. Macro method_missing (evaluated during compilation):
+macro method_missing(call)
+  {% if call.name.starts_with?(&quot;can_&quot;) %}
+    # Synthesizes concrete, typed methods at compile time!
+    def {{call.name}} : Bool
+      true
+    end
+  {% else %}
+    super
+  {% end %}
+end
+
+# 2. Static unrolled dispatch instead of dynamic send:
+case action_name
+when &quot;jump&quot;   then player.jump
+when &quot;attack&quot; then player.attack
+else raise &quot;Unknown action: #{action_name}&quot;
+end</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card amber col">
+            <div class="card-title amber">
+              <span>The Limits of Static Metaprogramming</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>No Dynamic <code>send</code>:</strong> Crystal compiles to native LLVM symbols and static vtables. Arbitrary runtime method strings cannot be dispatched dynamically.</li>
+              <li><strong>Zero Runtime <code>eval</code>:</strong> Code cannot be parsed or generated from strings at runtime; all syntax manipulation occurs at compile time via AST macros.</li>
+              <li><strong>Limits of 'exec':</strong> <code>with self yield</code> rebinds lexical context, but cannot inject dynamic ivars or alter object layout on the heap.</li>
+              <li><strong>Compile-Time <code>method_missing</code>:</strong> Macros intercept AST calls during compilation to generate real typed methods—not dynamic runtime proxies.</li>
+              <li><strong>The Grand Trade-Off:</strong> Giving up runtime plasticity earns 50x-100x bare-metal execution speed, SIMD vectorization, and compile-time safety.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Candy)</span>
+          <span>Slide 22 / 88</span>
+        </div>
+        <aside class="notes">
+          We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop.
+          In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object.
+          Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search!
+          Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time.
+          Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get bare-metal C++ speed, zero GC pauses, and complete compile-time type safety.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 23: Aperture (Macro Hooks: included & inherited)
+           =================================================================== -->
+      <section data-background-color="#1f232a"
+               data-palette-name="Aperture"
+               data-palette-cube="#ffee55"
+               data-palette-cube-hover="#ff9900"
+               class="solvin-slide aperture slide-14b_crystal_macro_hooks"
+               data-slide-id="14b_crystal_macro_hooks"
+               style="--bg-color: #1f232a; --bg-window: #262a33; --text-color: #ffee55; --text-dim: #c4a63a; --link-color: #ff9900; --border-color: #ffcc00; --border-active: #ff9100; --accent-color: #ffcc00; --accent-secondary: #ff9900; --accent-tertiary: #ffee55; --accent-quaternary: #ff6600; --shadow-color: #101216; --cube: #ffee55; --cube-hover: #ff9900; --emoji-filter: url(#emoji-filter-aperture); ">
+        <div class="palette-corner-badge" title="Theme: Aperture">
+          <span class="palette-corner-dot"></span> PALETTE: Aperture
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill amber">METAPROGRAMMING • AST HOOKS</span>
+            <h2 class="slide-title">Macro Hooks: included &amp; inherited</h2>
+            <p class="slide-subtitle">Compile-Time Mixins &amp; Automated Subclass Registration</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-compact" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">macro_lifecycle_hooks.cr — Compile-Time Composition</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-compact"># 1. macro included: Composable mixin behavior at compile time
+module Damageable
+  macro included
+    # Injects properties &amp; methods into the including class:
+    property health : Int32 = 100
+
+    def take_damage(amount : Int32) : Void
+      @health = Math.max(0, @health - amount)
+    end
+  end
+end
+
+# 2. macro inherited: Subclass tracking &amp; automated registration
+abstract class GameEntity
+  # Global compile-time list of all registered game entities
+  ENTITY_TYPES = [] of String
+
+  macro inherited
+    # Fires whenever a new subclass is declared:
+    ENTITY_TYPES &lt;&lt; {{@type.name.stringify}}
+  end
+end
+
+class Player &lt; GameEntity
+  include Damageable # Injects health &amp; take_damage!
+end</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card amber col">
+            <div class="card-title amber">
+              <span>Compile-Time Module &amp; Class Hooks</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>The <code>macro included</code> Hook:</strong> Executes whenever a module is included into a class. Automatically injects instance variables, methods, and validations into the receiver.</li>
+              <li><strong>Replaces Ruby's <code>self.included</code>:</strong> Ruby required runtime metaprogramming tricks (<code>base.extend ClassMethods</code>). Crystal achieves full mixin synthesis at compile time with zero runtime reflection.</li>
+              <li><strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to inspect, configure, and register child types automatically.</li>
+              <li><strong>Zero-Overhead Registries:</strong> Build entity factories and plugin lists during compilation—no manual arrays or reflection scanning at startup.</li>
+              <li><strong>Type-Safe & Inlined:</strong> All injected code participates in standard global type inference and compiles directly into bare-metal machine code.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Aperture)</span>
+          <span>Slide 23 / 88</span>
+        </div>
+        <aside class="notes">
+          In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods).
+          In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type.
+          Similarly, macro inherited fires the instant a class is subclassed. This lets frameworks and game engines automatically register derived entity types into factories or registries without manual registration boilerplate or slow runtime reflection scans.
+          Everything is resolved and validated during compilation, compiling down to direct, inlined machine instructions.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 24: Creation (Deferred Synthesis: macro finished)
+           =================================================================== -->
+      <section data-background-color="#141518"
+               data-palette-name="Creation"
+               data-palette-cube="#e8e8ed"
+               data-palette-cube-hover="#e6222b"
+               class="solvin-slide creation slide-14c_macro_finished_introspection"
+               data-slide-id="14c_macro_finished_introspection"
+               style="--bg-color: #141518; --bg-window: #1e2024; --text-color: #e8e8ed; --text-dim: #7a7e85; --link-color: #d81b24; --border-color: #c81018; --border-active: #e6222b; --accent-color: #d4af37; --accent-secondary: #d81b24; --accent-tertiary: #e6222b; --accent-quaternary: #c81018; --shadow-color: #0a0b0d; --cube: #e8e8ed; --cube-hover: #e6222b; --emoji-filter: url(#emoji-filter-creation); ">
+        <div class="palette-corner-badge" title="Theme: Creation">
+          <span class="palette-corner-dot"></span> PALETTE: Creation
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill purple">METAPROGRAMMING • DEFERRED AST</span>
+            <h2 class="slide-title">Deferred Synthesis: macro finished</h2>
+            <p class="slide-subtitle">Exhaustive AST Introspection Without Runtime Reflection</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-compact" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">deferred_introspection.cr — Complete Type Reflection</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-compact"># macro finished: Defers execution until the type is fully parsed
+abstract class NetworkSync
+  macro inherited
+    # Wait until all properties, methods, and files are parsed:
+    macro finished
+      # 1. Exhaustive compile-time instance variable reflection:
+      def serialize_network_state(io : IO) : Void
+        {% for ivar in @type.instance_vars %}
+          io.write_bytes(@{{ivar.name}})
+        {% end %}
+      end
+
+      # 2. Annotation inspection (e.g. @[Replicated], @[Export]):
+      def field_count : Int32
+        {{ @type.instance_vars.size }}
+      end
+    end
+  end
+end
+
+class Character &lt; NetworkSync
+  property position_x : Float32 = 0.0_f32
+  property position_y : Float32 = 0.0_f32
+  property health     : Int32   = 100
+end
+# =&gt; Compiler automatically synthesizes serialize_network_state()!</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card amber col">
+            <div class="card-title amber">
+              <span>The Power of Deferred Introspection</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>The Open-Class Challenge:</strong> Because Crystal classes can be reopened across multiple files, the compiler cannot know all instance variables while parsing the class header.</li>
+              <li><strong>Deferred Execution:</strong> <code>macro finished</code> pauses macro expansion until the compiler has parsed every reopen, field, and method in the class.</li>
+              <li><strong>Static Type Reflection:</strong> Macro variables like <code>@type.instance_vars</code>, <code>@type.methods</code>, and <code>@type.annotations</code> allow complete type inspection.</li>
+              <li><strong>Boilerplate Annihilation:</strong> Powers Lapis's automated Godot <code>ClassDB</code> registration, <code>@[Export]</code> hints, and binary save/RPC serialization.</li>
+              <li><strong>Zero Runtime Cost:</strong> Generates sequential, unrolled machine instructions. No runtime reflection lookups, no string dictionaries, and zero GC allocations.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Creation)</span>
+          <span>Slide 24 / 88</span>
+        </div>
+        <aside class="notes">
+          In dynamic languages like Ruby, you can inspect instance variables and methods at any time at runtime using reflection. But how do you do compile-time reflection in a statically typed language where classes are open and spread across multiple source files?
+          If you inspect @type.instance_vars at the top of a class, the compiler hasn't parsed the rest of the file yet, let alone other files reopening the class!
+          Crystal solves this with 'macro finished'. This special hook tells the compiler: 'Pause! Wait until every file, reopen, and method in this type has been completely parsed by the frontend, then run this macro.'
+          Inside macro finished, you have exhaustive, authoritative knowledge of the entire type: all instance variables, their types, all methods, and all annotations.
+          In Lapis, this is the secret weapon: macro finished inspects your node classes, discovers every @[Export] property and signal, and synthesizes complete Godot ClassDB bindings and binary serializers before emitting LLVM IR. You get all the automation of reflection with 100% bare-metal performance.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 25: Super ES (Where Macros Shine: Declarative State Machines)
+           =================================================================== -->
+      <section data-background-color="#f0f0f5"
+               data-palette-name="Super ES"
+               data-palette-cube="#4f3880"
+               data-palette-cube-hover="#5c439b"
+               class="solvin-slide super_es slide-18_macro_state_machines"
+               data-slide-id="18_macro_state_machines"
+               style="--bg-color: #f0f0f5; --bg-window: #e2e2ea; --text-color: #1b1924; --text-dim: #605c70; --link-color: #5c439b; --border-color: #4f3880; --border-active: #785dba; --accent-color: #4f3880; --accent-secondary: #785dba; --accent-tertiary: #5c439b; --accent-quaternary: #605c70; --shadow-color: #b0b0c0; --cube: #4f3880; --cube-hover: #5c439b; --emoji-filter: url(#emoji-filter-super_es); ">
+        <div class="palette-corner-badge" title="Theme: Super ES">
+          <span class="palette-corner-dot"></span> PALETTE: Super ES
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill purple">AST METAPROGRAMMING • ARCHITECTURE</span>
+            <h2 class="slide-title">Where Macros Shine: Declarative State Machines</h2>
+            <p class="slide-subtitle">Zero-Boilerplate State Transitions with Compile-Time Verification</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-compact" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">enemy_fsm.cr — Declarative DSL &amp; Gameplay Usage</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-compact"># 1. Declare states &amp; transitions with macro DSL
+fsm BossState do
+  state Patrol, initial: true do
+    before { start_patrol_path }
+    on :see_player, transition_to: Chase
+    after { alert_nearby_allies }
+  end
+
+  state Chase do
+    before { play_animation(&quot;run&quot;) }
+    on :in_attack_range, transition_to: Attack
+    on :lost_player,     transition_to: Patrol
+  end
+
+  state Attack do
+    before { play_sound(&quot;roar&quot;) }
+    on :attack_finished, transition_to: Patrol
+    after { reset_hitbox }
+  end
+end
+
+# 2. Actual runtime gameplay usage
+fsm = BossStateMachine.new
+
+def _physics_process(delta : Float64) : Void
+  if distance_to(player) &lt; 15.0
+    fsm.trigger(:see_player) # -&gt; Chase (runs before/after hooks!)
+  end
+
+  case fsm.current_state
+  when .patrol? then move_along_path(delta)
+  when .chase?  then navigate_to(player, delta)
+  when .attack? then execute_slam_attack
+  end
+end</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card purple col">
+            <div class="card-title purple">
+              <span>What the Macro Generates</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Typed Enum & Handlers:</strong> Generates concrete <code>enum BossState</code> with type-checked transition methods.</li>
+              <li><strong>Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> Entry (<code>before</code>) and exit (<code>after</code>) hooks are inlined directly into native state transition branches.</li>
+              <li><strong>Compile-Time Transition Validation:</strong> Referencing an undeclared state or illegal transition fails at compile time.</li>
+              <li><strong>Zero Reflection Overhead:</strong> Transitions compile to direct jump tables; zero lambda allocations or dictionary lookups.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Super ES)</span>
+          <span>Slide 25 / 88</span>
+        </div>
+        <aside class="notes">
+          State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 26: Super ES (Behind the DSL: The FSM AST Macro)
+           =================================================================== -->
+      <section data-background-color="#f0f0f5"
+               data-palette-name="Super ES"
+               data-palette-cube="#4f3880"
+               data-palette-cube-hover="#5c439b"
+               class="solvin-slide super_es slide-18b_macro_fsm_implementation"
+               data-slide-id="18b_macro_fsm_implementation"
+               style="--bg-color: #f0f0f5; --bg-window: #e2e2ea; --text-color: #1b1924; --text-dim: #605c70; --link-color: #5c439b; --border-color: #4f3880; --border-active: #785dba; --accent-color: #4f3880; --accent-secondary: #785dba; --accent-tertiary: #5c439b; --accent-quaternary: #605c70; --shadow-color: #b0b0c0; --cube: #4f3880; --cube-hover: #5c439b; --emoji-filter: url(#emoji-filter-super_es); ">
+        <div class="palette-corner-badge" title="Theme: Super ES">
+          <span class="palette-corner-dot"></span> PALETTE: Super ES
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill amber">AST METAPROGRAMMING • UNDER THE HOOD</span>
+            <h2 class="slide-title">Behind the DSL: The FSM AST Macro</h2>
+            <p class="slide-subtitle">How Crystal&#39;s Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums &amp; Jump Tables</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col code-compact" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">fsm_macro.cr — AST Rewriting Engine</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal code-compact"># 🪄 Compile-Time AST Macro: parses block into enums, hooks &amp; jump table
+macro fsm(name, &amp;block)
+  # 1. Synthesize typed Enum for all declared states:
+  enum {{name.id}}
+    {% for call in block.body.expressions %}
+      {% if call.name == &quot;state&quot; %} {{call.args[0].id}} {% end %}
+    {% end %}
+  end
+
+  # 2. Synthesize StateMachine with zero-reflection jump table:
+  class {{name.id}}Machine
+    getter current_state : {{name.id}} = {{name.id}}::Patrol
+
+    # 3. Flattens nested DSL calls into flat case branches:
+    def trigger(event : Symbol) : Void
+      case @current_state
+      {% for state in block.body.expressions %}
+        when .{{state.args[0].id.underscore}}?
+          {% for call in state.block.body.expressions %}
+            {% if call.name == &quot;on&quot; %}
+              if event == {{call.args[0]}}
+                return transition_to({{name.id}}::{{call.named_args[:transition_to]}})
+              end
+            {% end %}
+          {% end %}
+      {% end %}
+      end
+    end
+
+    # 4. Inlines &#39;before&#39; (exit) &amp; &#39;after&#39; (enter) lifecycle hooks:
+    private def transition_to(target : {{name.id}}) : Void
+      case @current_state
+      {% for s in block.body.expressions %}
+        when .{{s.args[0].id.underscore}}?
+          {% for c in s.block.body.expressions %}
+            {% if c.name == &quot;before&quot; %} {{c.block.body}} {% end %}
+          {% end %}
+      {% end %}
+      end
+
+      @current_state = target
+
+      case target
+      {% for s in block.body.expressions %}
+        when .{{s.args[0].id.underscore}}?
+          {% for c in s.block.body.expressions %}
+            {% if c.name == &quot;after&quot; %} {{c.block.body}} {% end %}
+          {% end %}
+      {% end %}
+      end
+    end
+  end
+end</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card amber col">
+            <div class="card-title amber">
+              <span>Compile-Time Metaprogramming Invariants</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Inlined Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> The macro extracts <code>before</code> (pre-transition) and <code>after</code> (post-transition) blocks and inlines them directly into native <code>case</code> branches — zero lambda overhead, zero virtual dispatches!</li>
+              <li><strong>Compile-Time AST Traversal:</strong> Unlike Ruby's <code>method_missing</code> or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.</li>
+              <li><strong>Synthesizes Concrete Types:</strong> The macro generates real <code>enum BossState</code> variants (<code>Patrol</code>, <code>Chase</code>), giving developers full compiler autocomplete and exhaustiveness checks.</li>
+              <li><strong>Zero Runtime Overhead:</strong> <code>trigger(:event)</code> expands into a flat native <code>case</code> statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Super ES)</span>
+          <span>Slide 26 / 88</span>
+        </div>
+        <aside class="notes">
+          This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 27: Spaces 97 (Macros: Zero-Reflection Serialization)
+           =================================================================== -->
+      <section data-background-color="#f0f4f8"
+               data-palette-name="Spaces 97"
+               data-palette-cube="#000000"
+               data-palette-cube-hover="#000080"
+               class="solvin-slide spaces_97 slide-19_macro_serialization"
+               data-slide-id="19_macro_serialization"
+               style="--bg-color: #f0f4f8; --bg-window: #d4d0c8; --text-color: #000000; --text-dim: #333333; --link-color: #000080; --border-color: #2b579a; --border-active: #1084d0; --accent-color: #000080; --accent-secondary: #1084d0; --accent-tertiary: #2b579a; --accent-quaternary: #000080; --shadow-color: #1a385c; --cube: #000000; --cube-hover: #000080; --emoji-filter: url(#emoji-filter-spaces_97); ">
+        <div class="palette-corner-badge" title="Theme: Spaces 97">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces 97
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill purple">AST METAPROGRAMMING • ARCHITECTURE</span>
+            <h2 class="slide-title">Macros: Zero-Reflection Serialization</h2>
+            <p class="slide-subtitle">Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">save_game_state.cr — Serialization Without Reflection</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close">✕</span>
+              </div>
+            </div>
+            <pre><code class="language-crystal" style="font-size: 0.94rem !important; line-height: 1.25 !important;">require &quot;json&quot;
+
+# Structs and classes serialize with a single macro inclusion
+struct PlayerSaveData
+  include JSON::Serializable
+
+  property player_name : String
+  property level : Int32
+  property health : Float32
+  property inventory_items : Array(String)
+  property position_checkpoint : Godot::Vector3
+end
+
+# 1. Serializing to JSON string: direct bytecode generation
+data = PlayerSaveData.new(...)
+json_str = data.to_json
+
+# 2. Deserializing from JSON: type-safe, strict validation
+loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card purple col">
+            <div class="card-title purple">
+              <span>Why It Beats GDScript &amp; C# Serialization</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Zero Runtime Reflection:</strong> Serialization code is synthesized by macros at compile time; no reflection API overhead.</li>
+              <li><strong>Strict Schema Validation:</strong> Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.</li>
+              <li><strong>Built-in Format Support:</strong> First-class standard library support for JSON, YAML, and binary formats.</li>
+              <li><strong>Engine Agnostic Data Structures:</strong> Save models exist as pure Crystal data structures independent of Godot node hierarchies.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces 97)</span>
+          <span>Slide 27 / 88</span>
+        </div>
+        <aside class="notes">
+          Save systems and network state serialization often suffer from runtime reflection
+          overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable
+          to a struct generates complete, high-speed serialization and deserialization code
+          at compile time. It validates schemas strictly, serializes directly into buffers,
+          and requires zero manual dictionary mapping.
         </aside>
       </section>
 

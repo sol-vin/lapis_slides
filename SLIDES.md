@@ -439,603 +439,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?' Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes. Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby."*
 
 ---
-### Slide 13: The Birth of Crystal
-- **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
-- **Category Badge**: `COMPILER REVOLUTION • CRYSTAL ORIGINS`
-- **Title**: The Birth of Crystal
-- **Subtitle**: Fast as C, Slick as Ruby • Native LLVM Speed
-- **Code Example (`crystal_origins.cr — Clean Syntax, Native Machine Code`)**:
-  ```crystal
-  # Clean Ruby ergonomics — Ahead-of-Time LLVM Compiled
-  class Player
-    property name : String
-    property health : Int32
-    property inventory : Array(String)
-  
-    # Shorthand constructor with default parameters:
-    def initialize(@name : String, @health : Int32 = 100)
-      @inventory = [] of String
-    end
-  
-    # Concise predicate method:
-    def alive? : Bool
-      @health > 0
-    end
-  
-    # Zero-cost block inlining: Enumerable pipelines compile to tight loops
-    def heal_party(companions : Enumerable(Player), amount : Int32) : Void
-      companions.select(&.alive?).each do |companion|
-        companion.health = (companion.health + amount).clamp(0, 100)
-        puts "✨ Healed #{companion.name} to #{companion.health} HP"
-      end
-    end
-  
-    # Flow-sensitive nil safety: String? requires explicit compiler checks
-    def inspect_equipped : String?
-      @inventory.first?
-    end
-  end
-  
-  # 1. Global type inference: zero redundant type declarations
-  hero  = Player.new("Arthur", 85)
-  party = [hero, Player.new("Gwen", 40)]
-  hero.heal_party(party, 25)
-  
-  # 2. Flow typing proves non-nil without runtime null dereferences
-  if item = hero.inspect_equipped
-    puts "Equipped: #{item.upcase}" # Compiler knows item is String!
-  end
-  ```
-- **The Compiler Synthesis**:
-  - Designed from Day One for Types: Crystal wasn't a dynamic language patched with types; it was built from scratch as a statically typed language.
-  - Global Type Inference: You rarely write type annotations for local variables. The compiler analyzes the entire program flow and infers concrete types.
-  - LLVM Native Backend: Crystal emits LLVM IR, benefiting from decades of optimization: autovectorization, link-time optimization (LTO), and register allocation.
-  - Static Nil Safety: Null pointer dereferences are caught at compile time. T cannot be nil; only T? can, forcing explicit compiler-checked handling.
-  - Direct C ABI Interop: Seamless bindings to native C libraries without JNI or FFI marshalling penalties.
-- **Presenter Script**:
-  > *"In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Notice how closely this mirrors the Ruby heritage we saw earlier: shorthand property declarations, predicates, statement modifiers, and block iterators. But every single operation is resolved statically at compile time—the Enumerable pipelines inline into tight machine loops, types are proven with global inference, and nil dereferences are mathematically impossible at runtime."*
-
----
-### Slide 14: The Zero-Tax Type System
-- **Sol.vin Theme Palette**: `spaces_xp` (Spaces XP) [BG: `#e2ebf4` | Window: `#ffffff` | Text: `#0f2545` | Accent: `#0055ea`]
-- **Category Badge**: `TYPE SYSTEM • COMPILE-TIME RIGOR`
-- **Title**: The Zero-Tax Type System
-- **Subtitle**: Global Flow-Sensitive Inference & Mathematically Proven Nil Safety
-- **Code Example (`type_inference_and_nil_safety.cr`)**:
-  ```crystal
-  # Crystal writes like Ruby, but with 100% static type safety:
-  class Inventory
-    getter items = [] of String # Inferred as Array(String)
-  
-    # 1. Zero signature noise: parameter & return types inferred!
-    def find_item(name)
-      @items.find { |item| item == name } # Inferred: String | Nil
-    end
-  
-    def equip(name)
-      item = find_item(name)
-  
-      # 2. Mathematical compile-time nil safety:
-      # item.upcase
-      # ❌ Compile Error: undefined method 'upcase' for Nil (type is String | Nil)
-  
-      if item
-        # Inside guard, compiler narrows type strictly to String:
-        puts "Equipped: #{item.upcase}" # ✅ Safe!
-      end
-    end
-  end
-  ```
-- **How Crystal Defeats Sorbet & RBS**:
-  - Global Type Inference: Infers 95%+ of types across your entire codebase, completely eliminating verbose sig { params(...).returns(...) } clutter.
-  - Exhaustive Nil Safety: Treats Nil as a real type; accessing methods on nullable unions without checking fails at compile time, eliminating NoMethodError.
-  - Zero Runtime Tag Boxing: Primitives (Int32, Float64) and structs live unboxed on the stack with zero dynamic type-tag overhead.
-  - Native LLVM Speed: Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.
-- **Presenter Script**:
-  > *"When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code."*
-
----
-### Slide 15: Expressive Ergonomics: High-Level Language Primitives
-- **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
-- **Category Badge**: `CRYSTAL ERGONOMICS • EXPRESSION`
-- **Title**: Expressive Ergonomics: High-Level Language Primitives
-- **Subtitle**: Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax
-- **Code Example (`gameplay_primitives.cr — Expressive Systems Syntax`)**:
-  ```crystal
-  # 1. Clean vector math & operator overloading (SIMD-accelerated)
-  velocity = direction.normalized * move_speed + gravity * delta
-  new_position = global_position + velocity
-  
-  # 2. Strict numeric literals & zero-cost tuple destructuring
-  base_friction = 0.85_f32     # Explicit 32-bit float
-  name, level, score = {"Shadow Knight", 85, 142_500_u64}
-  
-  # 3. Infinite range slicing (endless & beginningless ranges)
-  inventory = ["Potion", "Shield", "Sword", "Helm", "Boots"]
-  
-  # Endless range [2..]: slices from index 2 all the way to the end
-  tail_gear = inventory[2..]
-  # => ["Sword", "Helm", "Boots"]
-  
-  # Beginningless range [..1]: slices from the beginning up to index 1
-  quick_bar = inventory[..1]
-  # => ["Potion", "Shield"]
-  
-  # Negative offset with endless range [-3..]: slices last 3 items
-  recent_events = ["Spawn", "Aggro", "Hit: 12", "Crit: 45", "Died"]
-  combat_tail   = recent_events[-3..]
-  # => ["Hit: 12", "Crit: 45", "Died"]
-  ```
-- **Expressive Language Primitives**:
-  - Operator Overloading: Natural mathematical expressions (velocity = dir * speed + grav * delta) with direct CPU SIMD vectorization.
-  - Explicit Numeric Precision: Literals like 1.0_f32, 250_u32, and 1_000_000_u64 eliminate ambiguous runtime type coercion bugs.
-  - Zero-Cost Tuples: Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.
-  - Infinite & Endless Range Slicing: Expressive endless ([2..]), beginningless ([..1]), and negative-offset ([-3..]) slices on contiguous arrays with zero manual length math.
-- **Presenter Script**:
-  > *"Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice."*
-
----
-### Slide 16: The DSL Engine: with self yield & Macros
-- **Sol.vin Theme Palette**: `digital_guy` (DigitalGuy) [BG: `#000000` | Window: `#110000` | Text: `#ff0000` | Accent: `#ff0000`]
-- **Category Badge**: `CRYSTAL METAPROGRAMMING • COMPILE-TIME DSLs`
-- **Title**: The DSL Engine: with self yield & Macros
-- **Subtitle**: Compile-Time Context Shifting: How Rails Routes, RSpec & FactoryBot Become 100% Type-Safe
-- **Code Example (`compile_time_dsl.cr — Pure Ruby Ergonomics, Zero Cost`)**:
-  ```crystal
-  # 1. Declarative Builder Class:
-  class CombatRoomBuilder
-    getter room : Room
-  
-    def initialize(@room : Room)
-    end
-  
-    def wave(enemy : String, count : Int32)
-      @room.spawn_wave(enemy, count)
-    end
-  
-    def reward(item : String)
-      @room.set_chest(item)
-    end
-  
-    # 'with builder yield' rebinds self inside the caller's block!
-    def self.build(name : String, &block : CombatRoomBuilder ->) : Room
-      builder = new(Room.new(name))
-      with builder yield # self IS builder inside block!
-      builder.room
-    end
-  end
-  
-  # 2. Pure declarative DSL — zero "builder." boilerplate:
-  dungeon = CombatRoomBuilder.build("Dungeon_A1") do
-    wave "skeleton_archer", count: 4 # Calls wave on builder!
-    reward "obsidian_key"            # 100% type-checked at compile time!
-  end
-  ```
-- **How Crystal Elevates Ruby's Secret Weapon**:
-  - The Secret Weapon of Ruby DSLs: In Ruby, instance_exec powered iconic frameworks like Rails routes (routes.rb), RSpec (describe/it), and FactoryBot by rebinding self.
-  - Static Context Shifting (with ... yield): Crystal achieves this exact ergonomic miracle at compile time: with builder yield rebinds self to the builder inside the block without runtime dynamic evaluation.
-  - 100% Compile-Time Verification: Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.
-  - Zero Heap & Reflection Overhead: LLVM inlines the context-shifted block directly at the call site—delivering pure declarative DSL beauty with bare-metal C execution speed.
-- **Presenter Script**:
-  > *"In the Ruby section, we saw how instance_exec was the secret weapon that made Ruby famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead."*
-
----
-### Slide 17: Modules: Mixins, Traits & Namespaces
-- **Sol.vin Theme Palette**: `creation` (Creation) [BG: `#141518` | Window: `#1e2024` | Text: `#e8e8ed` | Accent: `#d4af37`]
-- **Category Badge**: `CRYSTAL ARCHITECTURE • COMPOSITION`
-- **Title**: Modules: Mixins, Traits & Namespaces
-- **Subtitle**: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
-- **Code Example (`gameplay_modules.cr — Horizontal Composition`)**:
-  ```crystal
-  # 1. Composable Mixin Module with abstract contract:
-  module Damageable
-    abstract def max_health : Int32
-    property health : Int32 = 100
-  
-    def take_damage(amount : Int32) : Bool
-      @health = (@health - amount).clamp(0, max_health)
-      @health > 0
-    end
-  
-    # Reusable concrete gameplay behavior:
-    def apply_shield(amount : Int32) : Void
-      @health = (@health + amount).clamp(0, max_health)
-    end
-  end
-  
-  # 2. Namespace & Singleton utility module:
-  module SpatialMath
-    extend self # Callable as SpatialMath.dist_sq or mixed in
-    def dist_sq(a : Godot::Vector2, b : Godot::Vector2) : Float32
-      (a.x - b.x) ** 2 + (a.y - b.y) ** 2
-    end
-  end
-  
-  # 3. Horizontal composition into Godot nodes:
-  class Enemy < Godot::CharacterBody2D
-    include Damageable # Inlines health, take_damage & apply_shield
-  
-    def max_health : Int32; 150; end
-  end
-  ```
-- **Zero-Cost Architectural Composition**:
-  - Horizontal Composition via include: Mix reusable behaviors across unrelated scene nodes without deep inheritance hierarchies or multiple inheritance hazards.
-  - Zero Virtual Dispatch Overhead: Mixin methods resolve statically at compile time and inline directly into the receiver's machine code—no ancestor chain lookups.
-  - Abstract Method Contracts: abstract def in modules enforces compile-time interface conformance without runtime reflection or interface boxing.
-  - Namespace & Singleton Utilities: extend self enables modules to act simultaneously as standalone functional namespaces and mixable traits.
-- **Presenter Script**:
-  > *"In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy. In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains. Crystal gives us the best of both worlds: modules act as zero-cost horizontal mixins. You can define abstract contracts with abstract def and provide concrete shared methods. When included into a class, Crystal resolves all methods statically at compile time with zero virtual dispatch overhead and zero runtime method lookup. With extend self, modules seamlessly double as standalone utility namespaces."*
-
----
-### Slide 18: Open Classes: Static Monkey Patching
-- **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
-- **Category Badge**: `CRYSTAL METAPROGRAMMING • OPEN CLASSES`
-- **Title**: Open Classes: Static Monkey Patching
-- **Subtitle**: Re-opening Types & Built-ins with LLVM Inlining & Zero Load-Order Race Conditions
-- **Code Example (`static_open_classes.cr — Domain Vocabulary`)**:
-  ```crystal
-  # 1. Re-opening standard primitives with game units:
-  class Int32
-    def tiles : Float32
-      self.to_f32 * 32.0_f32
-    end
-    def meters : Float32
-      self.to_f32 * 1.0_f32
-    end
-  end
-  
-  # 2. Extending native Godot engine types directly:
-  struct Godot::Vector2
-    def to_iso : Godot::Vector2
-      Godot::Vector2.new(x - y, (x + y) * 0.5_f32)
-    end
-    def tile_snap(size : Float32 = 32.0_f32) : Godot::Vector2
-      Godot::Vector2.new((x / size).round * size, (y / size).round * size)
-    end
-  end
-  
-  # 3. Fluent gameplay domain vocabulary in action:
-  jump_distance = 5.meters
-  map_offset = 4.tiles
-  grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap
-  ```
-- **The Power of Open Classes Without the Peril**:
-  - Compile-Time Open Classes: Any class, struct, or primitive (Int32, String, Vector2) can be re-opened across files to add domain-specific verbs.
-  - Eliminating Ruby's Load-Order Hell: Because Crystal builds a unified whole-program AST before codegen, there are no runtime race conditions based on which require ran first.
-  - Zero Runtime Memory Overhead: Injected methods compile directly into native machine code and direct call sites—no dynamic method tables or cache invalidations.
-  - Extending Native Engine Types: Enrich native Godot structs and classes with project-specific mathematics without clunky wrappers or verbose helper classes.
-- **Presenter Script**:
-  > *"One of Ruby's most powerful yet polarizing features is open classes—the ability to monkey patch any class, including built-ins like Numeric or String. In dynamic Ruby, monkey patching is dangerous: if two gems patch the same method, whichever file is required last overwrites the other, creating terrifying load-order bugs. In Crystal, open classes are fully embraced, but with static safety. Because Crystal parses the entire project into a single unified AST before type checking and compilation, method additions are resolved deterministically. You can re-open Int32 to add game unit converters like 5.meters, or re-open Godot's Vector2 to add isometric conversions or tile snapping. LLVM inlines these methods directly, giving you pure Ruby ergonomics with zero runtime performance cost."*
-
----
-### Slide 19: Blocks, Procs & Lambdas: Inlined Closures
-- **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
-- **Category Badge**: `CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS`
-- **Title**: Blocks, Procs & Lambdas: Inlined Closures
-- **Subtitle**: Ephemeral Inlined Blocks, Typed Reified Procs & C-Function Pointer Interop
-- **Code Example (`closures_and_procs.cr — Zero-Cost First-Class Functions`)**:
-  ```crystal
-  # 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
-  def measure(label : String)
-    t0 = Time.monotonic
-    yield # Passes control directly to block with 0 allocation
-    elapsed = (Time.monotonic - t0).total_milliseconds
-    puts "#{label}: #{elapsed}ms"
-  end
-  measure("Physics Tick") { run_simulation }
-  
-  # 2. First-Class Procs: Reified objects with strict types
-  scale = 1.5_f32
-  damage_calc = ->(base : Int32) { (base * scale).to_i }
-  # Statically typed as Proc(Int32, Int32) with captured 'scale'
-  
-  # 3. Non-Capturing Procs = Bare C Function Pointers!
-  # Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
-  bridge_cb = ->(target_id : UInt64, event : Int32) do
-    Godot::Bridge.dispatch_event(target_id, event)
-  end
-  
-  # 4. Symbol-to-Proc shorthand for iterator pipelines:
-  enemies.select(&.alive?).map(&.health)
-  ```
-- **The Spectrum of Zero-Cost Closures**:
-  - Ephemeral Blocks (yield): Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.
-  - Statically Typed Proc Objects: Created via ->(x : T) { ... } or Proc.new. Explicit parameter and return types (e.g. Proc(Int32, Int32)) with strict compile-time arity.
-  - Non-Capturing Procs = C Pointers: When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.
-  - Symbol-to-Proc Shorthand: &.alive? and &.health transform symbols into inlined block invocations with zero lambda boilerplate.
-- **Presenter Script**:
-  > *"Closures are one of the most expressive parts of modern languages, but in interpreted engines like Ruby or Python they incur significant heap allocations and call frame overhead. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead."*
-
----
-### Slide 20: Static Trade-Offs: No 'send' & Limits of 'exec'
-- **Sol.vin Theme Palette**: `candy` (Candy) [BG: `#fdf0f8` | Window: `#ffffff` | Text: `#4a2c58` | Accent: `#b8388c`]
-- **Category Badge**: `METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS`
-- **Title**: Static Trade-Offs: No 'send' & Limits of 'exec'
-- **Subtitle**: The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity
-- **Code Example (`static_vs_dynamic.cr — No Runtime Plasticity`)**:
-  ```crystal
-  # ❌ What Ruby allows that Crystal CANNOT do:
-  # target.send("cast_spell", 50)           # No runtime send!
-  # eval("class Boss < #{dyn_parent}; end") # No runtime eval!
-  # target.instance_variable_set("@hp", 100)# Frozen schemas!
-  
-  # ✨ How Crystal solves it at Compile Time:
-  # 1. Macro method_missing (evaluated during compilation):
-  macro method_missing(call)
-    {% if call.name.starts_with?("can_") %}
-      # Synthesizes concrete, typed methods at compile time!
-      def {{call.name}} : Bool
-        true
-      end
-    {% else %}
-      super
-    {% end %}
-  end
-  
-  # 2. Static unrolled dispatch instead of dynamic send:
-  case action_name
-  when "jump"   then player.jump
-  when "attack" then player.attack
-  else raise "Unknown action: #{action_name}"
-  end
-  ```
-- **The Limits of Static Metaprogramming**:
-  - No Dynamic send: Crystal compiles to native LLVM symbols and static vtables. Arbitrary runtime method strings cannot be dispatched dynamically.
-  - Zero Runtime eval: Code cannot be parsed or generated from strings at runtime; all syntax manipulation occurs at compile time via AST macros.
-  - Limits of 'exec': with self yield rebinds lexical context, but cannot inject dynamic ivars or alter object layout on the heap.
-  - Compile-Time method_missing: Macros intercept AST calls during compilation to generate real typed methods—not dynamic runtime proxies.
-  - The Grand Trade-Off: Giving up runtime plasticity earns 50x-100x bare-metal execution speed, SIMD vectorization, and compile-time safety.
-- **Presenter Script**:
-  > *"We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop. In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object. Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search! Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time. Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get bare-metal C++ speed, zero GC pauses, and complete compile-time type safety."*
-
----
-### Slide 21: Macro Hooks: included & inherited
-- **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
-- **Category Badge**: `METAPROGRAMMING • AST HOOKS`
-- **Title**: Macro Hooks: included & inherited
-- **Subtitle**: Compile-Time Mixins & Automated Subclass Registration
-- **Code Example (`macro_lifecycle_hooks.cr — Compile-Time Composition`)**:
-  ```crystal
-  # 1. macro included: Composable mixin behavior at compile time
-  module Damageable
-    macro included
-      # Injects properties & methods into the including class:
-      property health : Int32 = 100
-  
-      def take_damage(amount : Int32) : Void
-        @health = Math.max(0, @health - amount)
-      end
-    end
-  end
-  
-  # 2. macro inherited: Subclass tracking & automated registration
-  abstract class GameEntity
-    # Global compile-time list of all registered game entities
-    ENTITY_TYPES = [] of String
-  
-    macro inherited
-      # Fires whenever a new subclass is declared:
-      ENTITY_TYPES << {{@type.name.stringify}}
-    end
-  end
-  
-  class Player < GameEntity
-    include Damageable # Injects health & take_damage!
-  end
-  ```
-- **Compile-Time Module & Class Hooks**:
-  - The macro included Hook: Executes whenever a module is included into a class. Automatically injects instance variables, methods, and validations into the receiver.
-  - Replaces Ruby's self.included: Ruby required runtime metaprogramming tricks (base.extend ClassMethods). Crystal achieves full mixin synthesis at compile time with zero runtime reflection.
-  - The macro inherited Hook: Fires the instant a class is subclassed, allowing base classes to inspect, configure, and register child types automatically.
-  - Zero-Overhead Registries: Build entity factories and plugin lists during compilation—no manual arrays or reflection scanning at startup.
-  - Type-Safe & Inlined: All injected code participates in standard global type inference and compiles directly into bare-metal machine code.
-- **Presenter Script**:
-  > *"In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods). In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type. Similarly, macro inherited fires the instant a class is subclassed. This lets frameworks and game engines automatically register derived entity types into factories or registries without manual registration boilerplate or slow runtime reflection scans. Everything is resolved and validated during compilation, compiling down to direct, inlined machine instructions."*
-
----
-### Slide 22: Deferred Synthesis: macro finished
-- **Sol.vin Theme Palette**: `creation` (Creation) [BG: `#141518` | Window: `#1e2024` | Text: `#e8e8ed` | Accent: `#d4af37`]
-- **Category Badge**: `METAPROGRAMMING • DEFERRED AST`
-- **Title**: Deferred Synthesis: macro finished
-- **Subtitle**: Exhaustive AST Introspection Without Runtime Reflection
-- **Code Example (`deferred_introspection.cr — Complete Type Reflection`)**:
-  ```crystal
-  # macro finished: Defers execution until the type is fully parsed
-  abstract class NetworkSync
-    macro inherited
-      # Wait until all properties, methods, and files are parsed:
-      macro finished
-        # 1. Exhaustive compile-time instance variable reflection:
-        def serialize_network_state(io : IO) : Void
-          {% for ivar in @type.instance_vars %}
-            io.write_bytes(@{{ivar.name}})
-          {% end %}
-        end
-  
-        # 2. Annotation inspection (e.g. @[Replicated], @[Export]):
-        def field_count : Int32
-          {{ @type.instance_vars.size }}
-        end
-      end
-    end
-  end
-  
-  class Character < NetworkSync
-    property position_x : Float32 = 0.0_f32
-    property position_y : Float32 = 0.0_f32
-    property health     : Int32   = 100
-  end
-  # => Compiler automatically synthesizes serialize_network_state()!
-  ```
-- **The Power of Deferred Introspection**:
-  - The Open-Class Challenge: Because Crystal classes can be reopened across multiple files, the compiler cannot know all instance variables while parsing the class header.
-  - Deferred Execution: macro finished pauses macro expansion until the compiler has parsed every reopen, field, and method in the class.
-  - Static Type Reflection: Macro variables like @type.instance_vars, @type.methods, and @type.annotations allow complete type inspection.
-  - Boilerplate Annihilation: Powers Lapis's automated Godot ClassDB registration, @[Export] hints, and binary save/RPC serialization.
-  - Zero Runtime Cost: Generates sequential, unrolled machine instructions. No runtime reflection lookups, no string dictionaries, and zero GC allocations.
-- **Presenter Script**:
-  > *"In dynamic languages like Ruby, you can inspect instance variables and methods at any time at runtime using reflection. But how do you do compile-time reflection in a statically typed language where classes are open and spread across multiple source files? If you inspect @type.instance_vars at the top of a class, the compiler hasn't parsed the rest of the file yet, let alone other files reopening the class! Crystal solves this with 'macro finished'. This special hook tells the compiler: 'Pause! Wait until every file, reopen, and method in this type has been completely parsed by the frontend, then run this macro.' Inside macro finished, you have exhaustive, authoritative knowledge of the entire type: all instance variables, their types, all methods, and all annotations. In Lapis, this is the secret weapon: macro finished inspects your node classes, discovers every @[Export] property and signal, and synthesizes complete Godot ClassDB bindings and binary serializers before emitting LLVM IR. You get all the automation of reflection with 100% bare-metal performance."*
-
----
-### Slide 23: Where Macros Shine: Declarative State Machines
-- **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
-- **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
-- **Title**: Where Macros Shine: Declarative State Machines
-- **Subtitle**: Zero-Boilerplate State Transitions with Compile-Time Verification
-- **Code Example (`enemy_fsm.cr — Declarative DSL & Gameplay Usage`)**:
-  ```crystal
-  # 1. Declare states & transitions with macro DSL
-  fsm BossState do
-    state Patrol, initial: true do
-      before { start_patrol_path }
-      on :see_player, transition_to: Chase
-      after { alert_nearby_allies }
-    end
-  
-    state Chase do
-      before { play_animation("run") }
-      on :in_attack_range, transition_to: Attack
-      on :lost_player,     transition_to: Patrol
-    end
-  
-    state Attack do
-      before { play_sound("roar") }
-      on :attack_finished, transition_to: Patrol
-      after { reset_hitbox }
-    end
-  end
-  
-  # 2. Actual runtime gameplay usage
-  fsm = BossStateMachine.new
-  
-  def _physics_process(delta : Float64) : Void
-    if distance_to(player) < 15.0
-      fsm.trigger(:see_player) # -> Chase (runs before/after hooks!)
-    end
-  
-    case fsm.current_state
-    when .patrol? then move_along_path(delta)
-    when .chase?  then navigate_to(player, delta)
-    when .attack? then execute_slam_attack
-    end
-  end
-  ```
-- **What the Macro Generates**:
-  - Typed Enum & Handlers: Generates concrete enum BossState with type-checked transition methods.
-  - Lifecycle Hooks (before & after): Entry (before) and exit (after) hooks are inlined directly into native state transition branches.
-  - Compile-Time Transition Validation: Referencing an undeclared state or illegal transition fails at compile time.
-  - Zero Reflection Overhead: Transitions compile to direct jump tables; zero lambda allocations or dictionary lookups.
-- **Presenter Script**:
-  > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process."*
-
----
-### Slide 24: Behind the DSL: The FSM AST Macro
-- **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
-- **Category Badge**: `AST METAPROGRAMMING • UNDER THE HOOD`
-- **Title**: Behind the DSL: The FSM AST Macro
-- **Subtitle**: How Crystal's Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums & Jump Tables
-- **Code Example (`fsm_macro.cr — AST Rewriting Engine`)**:
-  ```crystal
-  # 🪄 Compile-Time AST Macro: parses block into enums, hooks & jump table
-  macro fsm(name, &block)
-    # 1. Synthesize typed Enum for all declared states:
-    enum {{name.id}}
-      {% for call in block.body.expressions %}
-        {% if call.name == "state" %} {{call.args[0].id}} {% end %}
-      {% end %}
-    end
-  
-    # 2. Synthesize StateMachine with zero-reflection jump table:
-    class {{name.id}}Machine
-      getter current_state : {{name.id}} = {{name.id}}::Patrol
-  
-      # 3. Flattens nested DSL calls into flat case branches:
-      def trigger(event : Symbol) : Void
-        case @current_state
-        {% for state in block.body.expressions %}
-          when .{{state.args[0].id.underscore}}?
-            {% for call in state.block.body.expressions %}
-              {% if call.name == "on" %}
-                if event == {{call.args[0]}}
-                  return transition_to({{name.id}}::{{call.named_args[:transition_to]}})
-                end
-              {% end %}
-            {% end %}
-        {% end %}
-        end
-      end
-  
-      # 4. Inlines 'before' (exit) & 'after' (enter) lifecycle hooks:
-      private def transition_to(target : {{name.id}}) : Void
-        case @current_state
-        {% for s in block.body.expressions %}
-          when .{{s.args[0].id.underscore}}?
-            {% for c in s.block.body.expressions %}
-              {% if c.name == "before" %} {{c.block.body}} {% end %}
-            {% end %}
-        {% end %}
-        end
-  
-        @current_state = target
-  
-        case target
-        {% for s in block.body.expressions %}
-          when .{{s.args[0].id.underscore}}?
-            {% for c in s.block.body.expressions %}
-              {% if c.name == "after" %} {{c.block.body}} {% end %}
-            {% end %}
-        {% end %}
-        end
-      end
-    end
-  end
-  ```
-- **Compile-Time Metaprogramming Invariants**:
-  - Inlined Lifecycle Hooks (before & after): The macro extracts before (pre-transition) and after (post-transition) blocks and inlines them directly into native case branches — zero lambda overhead, zero virtual dispatches!
-  - Compile-Time AST Traversal: Unlike Ruby's method_missing or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.
-  - Synthesizes Concrete Types: The macro generates real enum BossState variants (Patrol, Chase), giving developers full compiler autocomplete and exhaustiveness checks.
-  - Zero Runtime Overhead: trigger(:event) expands into a flat native case statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!
-- **Presenter Script**:
-  > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C."*
-
----
-### Slide 25: Macros: Zero-Reflection Serialization
-- **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
-- **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
-- **Title**: Macros: Zero-Reflection Serialization
-- **Subtitle**: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
-- **Code Example (`save_game_state.cr — Serialization Without Reflection`)**:
-  ```crystal
-  require "json"
-  
-  # Structs and classes serialize with a single macro inclusion
-  struct PlayerSaveData
-    include JSON::Serializable
-  
-    property player_name : String
-    property level : Int32
-    property health : Float32
-    property inventory_items : Array(String)
-    property position_checkpoint : Godot::Vector3
-  end
-  
-  # 1. Serializing to JSON string: direct bytecode generation
-  data = PlayerSaveData.new(...)
-  json_str = data.to_json
-  
-  # 2. Deserializing from JSON: type-safe, strict validation
-  loaded_data = PlayerSaveData.from_json(json_str)
-  ```
-- **Why It Beats GDScript & C# Serialization**:
-  - Zero Runtime Reflection: Serialization code is synthesized by macros at compile time; no reflection API overhead.
-  - Strict Schema Validation: Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.
-  - Built-in Format Support: First-class standard library support for JSON, YAML, and binary formats.
-  - Engine Agnostic Data Structures: Save models exist as pure Crystal data structures independent of Godot node hierarchies.
-- **Presenter Script**:
-  > *"Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping."*
-
----
-### Slide 26: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
+### Slide 13: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
 - **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `LANGUAGE COMPARISON • BOILERPLATE`
 - **Title**: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
@@ -1128,7 +532,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Let's put the four major GDExtension languages side by side. Here is the exact same Player node implemented in Lapis, C#, Rust, and C++. Look at the contrast: Lapis requires just 11 lines of clean, expressive code. C# requires 16 lines with delegate declarations. Rust requires 26 lines with Base<T> wrapping and separate impl blocks. And C++ requires over 32 lines with manual _bind_methods boilerplate. Lapis delivers native machine speed without the syntactic punishment."*
 
 ---
-### Slide 27: Language & GDExtension Ecosystem Feature Matrix
+### Slide 14: Language & GDExtension Ecosystem Feature Matrix
 - **Sol.vin Theme Palette**: `spaces_95` (Spaces 95) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `FEATURE MATRIX • ECOSYSTEM COMPARISON`
 - **Title**: Language & GDExtension Ecosystem Feature Matrix
@@ -1143,6 +547,602 @@ This document outlines each slide's exact theme palette, architectural category,
 | godot-cpp (C++) | Native Clang/MSVC/GCC | Slow (Heavy headers) | Unsafe (Segfault / UB) | C Preprocessor Macros | Massive boilerplate |
 - **Presenter Script**:
   > *"When evaluating language bindings for Godot, developers face distinct trade-offs across execution speed, compiler friction, type safety, and ergonomics. GDScript is quick for scripting but hits performance walls; C# brings garbage collection pauses; Rust fights the scene graph; C++ is plagued by boilerplate. Lapis occupies the sweet spot: LLVM performance, static nil safety, and Ruby-like ergonomics."*
+
+---
+### Slide 15: The Birth of Crystal
+- **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
+- **Category Badge**: `COMPILER REVOLUTION • CRYSTAL ORIGINS`
+- **Title**: The Birth of Crystal
+- **Subtitle**: Fast as C, Slick as Ruby • Native LLVM Speed
+- **Code Example (`crystal_origins.cr — Clean Syntax, Native Machine Code`)**:
+  ```crystal
+  # Clean Ruby ergonomics — Ahead-of-Time LLVM Compiled
+  class Player
+    property name : String
+    property health : Int32
+    property inventory : Array(String)
+  
+    # Shorthand constructor with default parameters:
+    def initialize(@name : String, @health : Int32 = 100)
+      @inventory = [] of String
+    end
+  
+    # Concise predicate method:
+    def alive? : Bool
+      @health > 0
+    end
+  
+    # Zero-cost block inlining: Enumerable pipelines compile to tight loops
+    def heal_party(companions : Enumerable(Player), amount : Int32) : Void
+      companions.select(&.alive?).each do |companion|
+        companion.health = (companion.health + amount).clamp(0, 100)
+        puts "✨ Healed #{companion.name} to #{companion.health} HP"
+      end
+    end
+  
+    # Flow-sensitive nil safety: String? requires explicit compiler checks
+    def inspect_equipped : String?
+      @inventory.first?
+    end
+  end
+  
+  # 1. Global type inference: zero redundant type declarations
+  hero  = Player.new("Arthur", 85)
+  party = [hero, Player.new("Gwen", 40)]
+  hero.heal_party(party, 25)
+  
+  # 2. Flow typing proves non-nil without runtime null dereferences
+  if item = hero.inspect_equipped
+    puts "Equipped: #{item.upcase}" # Compiler knows item is String!
+  end
+  ```
+- **The Compiler Synthesis**:
+  - Designed from Day One for Types: Crystal wasn't a dynamic language patched with types; it was built from scratch as a statically typed language.
+  - Global Type Inference: You rarely write type annotations for local variables. The compiler analyzes the entire program flow and infers concrete types.
+  - LLVM Native Backend: Crystal emits LLVM IR, benefiting from decades of optimization: autovectorization, link-time optimization (LTO), and register allocation.
+  - Static Nil Safety: Null pointer dereferences are caught at compile time. T cannot be nil; only T? can, forcing explicit compiler-checked handling.
+  - Direct C ABI Interop: Seamless bindings to native C libraries without JNI or FFI marshalling penalties.
+- **Presenter Script**:
+  > *"In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend. Notice how closely this mirrors the Ruby heritage we saw earlier: shorthand property declarations, predicates, statement modifiers, and block iterators. But every single operation is resolved statically at compile time—the Enumerable pipelines inline into tight machine loops, types are proven with global inference, and nil dereferences are mathematically impossible at runtime."*
+
+---
+### Slide 16: The Zero-Tax Type System
+- **Sol.vin Theme Palette**: `spaces_xp` (Spaces XP) [BG: `#e2ebf4` | Window: `#ffffff` | Text: `#0f2545` | Accent: `#0055ea`]
+- **Category Badge**: `TYPE SYSTEM • COMPILE-TIME RIGOR`
+- **Title**: The Zero-Tax Type System
+- **Subtitle**: Global Flow-Sensitive Inference & Mathematically Proven Nil Safety
+- **Code Example (`type_inference_and_nil_safety.cr`)**:
+  ```crystal
+  # Crystal writes like Ruby, but with 100% static type safety:
+  class Inventory
+    getter items = [] of String # Inferred as Array(String)
+  
+    # 1. Zero signature noise: parameter & return types inferred!
+    def find_item(name)
+      @items.find { |item| item == name } # Inferred: String | Nil
+    end
+  
+    def equip(name)
+      item = find_item(name)
+  
+      # 2. Mathematical compile-time nil safety:
+      # item.upcase
+      # ❌ Compile Error: undefined method 'upcase' for Nil (type is String | Nil)
+  
+      if item
+        # Inside guard, compiler narrows type strictly to String:
+        puts "Equipped: #{item.upcase}" # ✅ Safe!
+      end
+    end
+  end
+  ```
+- **How Crystal Defeats Sorbet & RBS**:
+  - Global Type Inference: Infers 95%+ of types across your entire codebase, completely eliminating verbose sig { params(...).returns(...) } clutter.
+  - Exhaustive Nil Safety: Treats Nil as a real type; accessing methods on nullable unions without checking fails at compile time, eliminating NoMethodError.
+  - Zero Runtime Tag Boxing: Primitives (Int32, Float64) and structs live unboxed on the stack with zero dynamic type-tag overhead.
+  - Native LLVM Speed: Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.
+- **Presenter Script**:
+  > *"When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal makes NoMethodError for nil mathematically impossible: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into bare-metal machine code."*
+
+---
+### Slide 17: Expressive Ergonomics: High-Level Language Primitives
+- **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
+- **Category Badge**: `CRYSTAL ERGONOMICS • EXPRESSION`
+- **Title**: Expressive Ergonomics: High-Level Language Primitives
+- **Subtitle**: Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax
+- **Code Example (`gameplay_primitives.cr — Expressive Systems Syntax`)**:
+  ```crystal
+  # 1. Clean vector math & operator overloading (SIMD-accelerated)
+  velocity = direction.normalized * move_speed + gravity * delta
+  new_position = global_position + velocity
+  
+  # 2. Strict numeric literals & zero-cost tuple destructuring
+  base_friction = 0.85_f32     # Explicit 32-bit float
+  name, level, score = {"Shadow Knight", 85, 142_500_u64}
+  
+  # 3. Infinite range slicing (endless & beginningless ranges)
+  inventory = ["Potion", "Shield", "Sword", "Helm", "Boots"]
+  
+  # Endless range [2..]: slices from index 2 all the way to the end
+  tail_gear = inventory[2..]
+  # => ["Sword", "Helm", "Boots"]
+  
+  # Beginningless range [..1]: slices from the beginning up to index 1
+  quick_bar = inventory[..1]
+  # => ["Potion", "Shield"]
+  
+  # Negative offset with endless range [-3..]: slices last 3 items
+  recent_events = ["Spawn", "Aggro", "Hit: 12", "Crit: 45", "Died"]
+  combat_tail   = recent_events[-3..]
+  # => ["Hit: 12", "Crit: 45", "Died"]
+  ```
+- **Expressive Language Primitives**:
+  - Operator Overloading: Natural mathematical expressions (velocity = dir * speed + grav * delta) with direct CPU SIMD vectorization.
+  - Explicit Numeric Precision: Literals like 1.0_f32, 250_u32, and 1_000_000_u64 eliminate ambiguous runtime type coercion bugs.
+  - Zero-Cost Tuples: Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.
+  - Infinite & Endless Range Slicing: Expressive endless ([2..]), beginningless ([..1]), and negative-offset ([-3..]) slices on contiguous arrays with zero manual length math.
+- **Presenter Script**:
+  > *"Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations. Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice."*
+
+---
+### Slide 18: The DSL Engine: with self yield & Macros
+- **Sol.vin Theme Palette**: `digital_guy` (DigitalGuy) [BG: `#000000` | Window: `#110000` | Text: `#ff0000` | Accent: `#ff0000`]
+- **Category Badge**: `CRYSTAL METAPROGRAMMING • COMPILE-TIME DSLs`
+- **Title**: The DSL Engine: with self yield & Macros
+- **Subtitle**: Compile-Time Context Shifting: How Rails Routes, RSpec & FactoryBot Become 100% Type-Safe
+- **Code Example (`compile_time_dsl.cr — Pure Ruby Ergonomics, Zero Cost`)**:
+  ```crystal
+  # 1. Declarative Builder Class:
+  class CombatRoomBuilder
+    getter room : Room
+  
+    def initialize(@room : Room)
+    end
+  
+    def wave(enemy : String, count : Int32)
+      @room.spawn_wave(enemy, count)
+    end
+  
+    def reward(item : String)
+      @room.set_chest(item)
+    end
+  
+    # 'with builder yield' rebinds self inside the caller's block!
+    def self.build(name : String, &block : CombatRoomBuilder ->) : Room
+      builder = new(Room.new(name))
+      with builder yield # self IS builder inside block!
+      builder.room
+    end
+  end
+  
+  # 2. Pure declarative DSL — zero "builder." boilerplate:
+  dungeon = CombatRoomBuilder.build("Dungeon_A1") do
+    wave "skeleton_archer", count: 4 # Calls wave on builder!
+    reward "obsidian_key"            # 100% type-checked at compile time!
+  end
+  ```
+- **How Crystal Elevates Ruby's Secret Weapon**:
+  - The Secret Weapon of Ruby DSLs: In Ruby, instance_exec powered iconic frameworks like Rails routes (routes.rb), RSpec (describe/it), and FactoryBot by rebinding self.
+  - Static Context Shifting (with ... yield): Crystal achieves this exact ergonomic miracle at compile time: with builder yield rebinds self to the builder inside the block without runtime dynamic evaluation.
+  - 100% Compile-Time Verification: Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.
+  - Zero Heap & Reflection Overhead: LLVM inlines the context-shifted block directly at the call site—delivering pure declarative DSL beauty with bare-metal C execution speed.
+- **Presenter Script**:
+  > *"In the Ruby section, we saw how instance_exec was the secret weapon that made Ruby famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead."*
+
+---
+### Slide 19: Modules: Mixins, Traits & Namespaces
+- **Sol.vin Theme Palette**: `creation` (Creation) [BG: `#141518` | Window: `#1e2024` | Text: `#e8e8ed` | Accent: `#d4af37`]
+- **Category Badge**: `CRYSTAL ARCHITECTURE • COMPOSITION`
+- **Title**: Modules: Mixins, Traits & Namespaces
+- **Subtitle**: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
+- **Code Example (`gameplay_modules.cr — Horizontal Composition`)**:
+  ```crystal
+  # 1. Composable Mixin Module with abstract contract:
+  module Damageable
+    abstract def max_health : Int32
+    property health : Int32 = 100
+  
+    def take_damage(amount : Int32) : Bool
+      @health = (@health - amount).clamp(0, max_health)
+      @health > 0
+    end
+  
+    # Reusable concrete gameplay behavior:
+    def apply_shield(amount : Int32) : Void
+      @health = (@health + amount).clamp(0, max_health)
+    end
+  end
+  
+  # 2. Namespace & Singleton utility module:
+  module SpatialMath
+    extend self # Callable as SpatialMath.dist_sq or mixed in
+    def dist_sq(a : Godot::Vector2, b : Godot::Vector2) : Float32
+      (a.x - b.x) ** 2 + (a.y - b.y) ** 2
+    end
+  end
+  
+  # 3. Horizontal composition into Godot nodes:
+  class Enemy < Godot::CharacterBody2D
+    include Damageable # Inlines health, take_damage & apply_shield
+  
+    def max_health : Int32; 150; end
+  end
+  ```
+- **Zero-Cost Architectural Composition**:
+  - Horizontal Composition via include: Mix reusable behaviors across unrelated scene nodes without deep inheritance hierarchies or multiple inheritance hazards.
+  - Zero Virtual Dispatch Overhead: Mixin methods resolve statically at compile time and inline directly into the receiver's machine code—no ancestor chain lookups.
+  - Abstract Method Contracts: abstract def in modules enforces compile-time interface conformance without runtime reflection or interface boxing.
+  - Namespace & Singleton Utilities: extend self enables modules to act simultaneously as standalone functional namespaces and mixable traits.
+- **Presenter Script**:
+  > *"In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy. In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains. Crystal gives us the best of both worlds: modules act as zero-cost horizontal mixins. You can define abstract contracts with abstract def and provide concrete shared methods. When included into a class, Crystal resolves all methods statically at compile time with zero virtual dispatch overhead and zero runtime method lookup. With extend self, modules seamlessly double as standalone utility namespaces."*
+
+---
+### Slide 20: Open Classes: Static Monkey Patching
+- **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
+- **Category Badge**: `CRYSTAL METAPROGRAMMING • OPEN CLASSES`
+- **Title**: Open Classes: Static Monkey Patching
+- **Subtitle**: Re-opening Types & Built-ins with LLVM Inlining & Zero Load-Order Race Conditions
+- **Code Example (`static_open_classes.cr — Domain Vocabulary`)**:
+  ```crystal
+  # 1. Re-opening standard primitives with game units:
+  class Int32
+    def tiles : Float32
+      self.to_f32 * 32.0_f32
+    end
+    def meters : Float32
+      self.to_f32 * 1.0_f32
+    end
+  end
+  
+  # 2. Extending native Godot engine types directly:
+  struct Godot::Vector2
+    def to_iso : Godot::Vector2
+      Godot::Vector2.new(x - y, (x + y) * 0.5_f32)
+    end
+    def tile_snap(size : Float32 = 32.0_f32) : Godot::Vector2
+      Godot::Vector2.new((x / size).round * size, (y / size).round * size)
+    end
+  end
+  
+  # 3. Fluent gameplay domain vocabulary in action:
+  jump_distance = 5.meters
+  map_offset = 4.tiles
+  grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap
+  ```
+- **The Power of Open Classes Without the Peril**:
+  - Compile-Time Open Classes: Any class, struct, or primitive (Int32, String, Vector2) can be re-opened across files to add domain-specific verbs.
+  - Eliminating Ruby's Load-Order Hell: Because Crystal builds a unified whole-program AST before codegen, there are no runtime race conditions based on which require ran first.
+  - Zero Runtime Memory Overhead: Injected methods compile directly into native machine code and direct call sites—no dynamic method tables or cache invalidations.
+  - Extending Native Engine Types: Enrich native Godot structs and classes with project-specific mathematics without clunky wrappers or verbose helper classes.
+- **Presenter Script**:
+  > *"One of Ruby's most powerful yet polarizing features is open classes—the ability to monkey patch any class, including built-ins like Numeric or String. In dynamic Ruby, monkey patching is dangerous: if two gems patch the same method, whichever file is required last overwrites the other, creating terrifying load-order bugs. In Crystal, open classes are fully embraced, but with static safety. Because Crystal parses the entire project into a single unified AST before type checking and compilation, method additions are resolved deterministically. You can re-open Int32 to add game unit converters like 5.meters, or re-open Godot's Vector2 to add isometric conversions or tile snapping. LLVM inlines these methods directly, giving you pure Ruby ergonomics with zero runtime performance cost."*
+
+---
+### Slide 21: Blocks, Procs & Lambdas: Inlined Closures
+- **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
+- **Category Badge**: `CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS`
+- **Title**: Blocks, Procs & Lambdas: Inlined Closures
+- **Subtitle**: Ephemeral Inlined Blocks, Typed Reified Procs & C-Function Pointer Interop
+- **Code Example (`closures_and_procs.cr — Zero-Cost First-Class Functions`)**:
+  ```crystal
+  # 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
+  def measure(label : String)
+    t0 = Time.monotonic
+    yield # Passes control directly to block with 0 allocation
+    elapsed = (Time.monotonic - t0).total_milliseconds
+    puts "#{label}: #{elapsed}ms"
+  end
+  measure("Physics Tick") { run_simulation }
+  
+  # 2. First-Class Procs: Reified objects with strict types
+  scale = 1.5_f32
+  damage_calc = ->(base : Int32) { (base * scale).to_i }
+  # Statically typed as Proc(Int32, Int32) with captured 'scale'
+  
+  # 3. Non-Capturing Procs = Bare C Function Pointers!
+  # Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
+  bridge_cb = ->(target_id : UInt64, event : Int32) do
+    Godot::Bridge.dispatch_event(target_id, event)
+  end
+  
+  # 4. Symbol-to-Proc shorthand for iterator pipelines:
+  enemies.select(&.alive?).map(&.health)
+  ```
+- **The Spectrum of Zero-Cost Closures**:
+  - Ephemeral Blocks (yield): Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.
+  - Statically Typed Proc Objects: Created via ->(x : T) { ... } or Proc.new. Explicit parameter and return types (e.g. Proc(Int32, Int32)) with strict compile-time arity.
+  - Non-Capturing Procs = C Pointers: When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.
+  - Symbol-to-Proc Shorthand: &.alive? and &.health transform symbols into inlined block invocations with zero lambda boilerplate.
+- **Presenter Script**:
+  > *"Closures are one of the most expressive parts of modern languages, but in interpreted engines like Ruby or Python they incur significant heap allocations and call frame overhead. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead."*
+
+---
+### Slide 22: Static Trade-Offs: No 'send' & Limits of 'exec'
+- **Sol.vin Theme Palette**: `candy` (Candy) [BG: `#fdf0f8` | Window: `#ffffff` | Text: `#4a2c58` | Accent: `#b8388c`]
+- **Category Badge**: `METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS`
+- **Title**: Static Trade-Offs: No 'send' & Limits of 'exec'
+- **Subtitle**: The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity
+- **Code Example (`static_vs_dynamic.cr — No Runtime Plasticity`)**:
+  ```crystal
+  # ❌ What Ruby allows that Crystal CANNOT do:
+  # target.send("cast_spell", 50)           # No runtime send!
+  # eval("class Boss < #{dyn_parent}; end") # No runtime eval!
+  # target.instance_variable_set("@hp", 100)# Frozen schemas!
+  
+  # ✨ How Crystal solves it at Compile Time:
+  # 1. Macro method_missing (evaluated during compilation):
+  macro method_missing(call)
+    {% if call.name.starts_with?("can_") %}
+      # Synthesizes concrete, typed methods at compile time!
+      def {{call.name}} : Bool
+        true
+      end
+    {% else %}
+      super
+    {% end %}
+  end
+  
+  # 2. Static unrolled dispatch instead of dynamic send:
+  case action_name
+  when "jump"   then player.jump
+  when "attack" then player.attack
+  else raise "Unknown action: #{action_name}"
+  end
+  ```
+- **The Limits of Static Metaprogramming**:
+  - No Dynamic send: Crystal compiles to native LLVM symbols and static vtables. Arbitrary runtime method strings cannot be dispatched dynamically.
+  - Zero Runtime eval: Code cannot be parsed or generated from strings at runtime; all syntax manipulation occurs at compile time via AST macros.
+  - Limits of 'exec': with self yield rebinds lexical context, but cannot inject dynamic ivars or alter object layout on the heap.
+  - Compile-Time method_missing: Macros intercept AST calls during compilation to generate real typed methods—not dynamic runtime proxies.
+  - The Grand Trade-Off: Giving up runtime plasticity earns 50x-100x bare-metal execution speed, SIMD vectorization, and compile-time safety.
+- **Presenter Script**:
+  > *"We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop. In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object. Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search! Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time. Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get bare-metal C++ speed, zero GC pauses, and complete compile-time type safety."*
+
+---
+### Slide 23: Macro Hooks: included & inherited
+- **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
+- **Category Badge**: `METAPROGRAMMING • AST HOOKS`
+- **Title**: Macro Hooks: included & inherited
+- **Subtitle**: Compile-Time Mixins & Automated Subclass Registration
+- **Code Example (`macro_lifecycle_hooks.cr — Compile-Time Composition`)**:
+  ```crystal
+  # 1. macro included: Composable mixin behavior at compile time
+  module Damageable
+    macro included
+      # Injects properties & methods into the including class:
+      property health : Int32 = 100
+  
+      def take_damage(amount : Int32) : Void
+        @health = Math.max(0, @health - amount)
+      end
+    end
+  end
+  
+  # 2. macro inherited: Subclass tracking & automated registration
+  abstract class GameEntity
+    # Global compile-time list of all registered game entities
+    ENTITY_TYPES = [] of String
+  
+    macro inherited
+      # Fires whenever a new subclass is declared:
+      ENTITY_TYPES << {{@type.name.stringify}}
+    end
+  end
+  
+  class Player < GameEntity
+    include Damageable # Injects health & take_damage!
+  end
+  ```
+- **Compile-Time Module & Class Hooks**:
+  - The macro included Hook: Executes whenever a module is included into a class. Automatically injects instance variables, methods, and validations into the receiver.
+  - Replaces Ruby's self.included: Ruby required runtime metaprogramming tricks (base.extend ClassMethods). Crystal achieves full mixin synthesis at compile time with zero runtime reflection.
+  - The macro inherited Hook: Fires the instant a class is subclassed, allowing base classes to inspect, configure, and register child types automatically.
+  - Zero-Overhead Registries: Build entity factories and plugin lists during compilation—no manual arrays or reflection scanning at startup.
+  - Type-Safe & Inlined: All injected code participates in standard global type inference and compiles directly into bare-metal machine code.
+- **Presenter Script**:
+  > *"In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods). In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type. Similarly, macro inherited fires the instant a class is subclassed. This lets frameworks and game engines automatically register derived entity types into factories or registries without manual registration boilerplate or slow runtime reflection scans. Everything is resolved and validated during compilation, compiling down to direct, inlined machine instructions."*
+
+---
+### Slide 24: Deferred Synthesis: macro finished
+- **Sol.vin Theme Palette**: `creation` (Creation) [BG: `#141518` | Window: `#1e2024` | Text: `#e8e8ed` | Accent: `#d4af37`]
+- **Category Badge**: `METAPROGRAMMING • DEFERRED AST`
+- **Title**: Deferred Synthesis: macro finished
+- **Subtitle**: Exhaustive AST Introspection Without Runtime Reflection
+- **Code Example (`deferred_introspection.cr — Complete Type Reflection`)**:
+  ```crystal
+  # macro finished: Defers execution until the type is fully parsed
+  abstract class NetworkSync
+    macro inherited
+      # Wait until all properties, methods, and files are parsed:
+      macro finished
+        # 1. Exhaustive compile-time instance variable reflection:
+        def serialize_network_state(io : IO) : Void
+          {% for ivar in @type.instance_vars %}
+            io.write_bytes(@{{ivar.name}})
+          {% end %}
+        end
+  
+        # 2. Annotation inspection (e.g. @[Replicated], @[Export]):
+        def field_count : Int32
+          {{ @type.instance_vars.size }}
+        end
+      end
+    end
+  end
+  
+  class Character < NetworkSync
+    property position_x : Float32 = 0.0_f32
+    property position_y : Float32 = 0.0_f32
+    property health     : Int32   = 100
+  end
+  # => Compiler automatically synthesizes serialize_network_state()!
+  ```
+- **The Power of Deferred Introspection**:
+  - The Open-Class Challenge: Because Crystal classes can be reopened across multiple files, the compiler cannot know all instance variables while parsing the class header.
+  - Deferred Execution: macro finished pauses macro expansion until the compiler has parsed every reopen, field, and method in the class.
+  - Static Type Reflection: Macro variables like @type.instance_vars, @type.methods, and @type.annotations allow complete type inspection.
+  - Boilerplate Annihilation: Powers Lapis's automated Godot ClassDB registration, @[Export] hints, and binary save/RPC serialization.
+  - Zero Runtime Cost: Generates sequential, unrolled machine instructions. No runtime reflection lookups, no string dictionaries, and zero GC allocations.
+- **Presenter Script**:
+  > *"In dynamic languages like Ruby, you can inspect instance variables and methods at any time at runtime using reflection. But how do you do compile-time reflection in a statically typed language where classes are open and spread across multiple source files? If you inspect @type.instance_vars at the top of a class, the compiler hasn't parsed the rest of the file yet, let alone other files reopening the class! Crystal solves this with 'macro finished'. This special hook tells the compiler: 'Pause! Wait until every file, reopen, and method in this type has been completely parsed by the frontend, then run this macro.' Inside macro finished, you have exhaustive, authoritative knowledge of the entire type: all instance variables, their types, all methods, and all annotations. In Lapis, this is the secret weapon: macro finished inspects your node classes, discovers every @[Export] property and signal, and synthesizes complete Godot ClassDB bindings and binary serializers before emitting LLVM IR. You get all the automation of reflection with 100% bare-metal performance."*
+
+---
+### Slide 25: Where Macros Shine: Declarative State Machines
+- **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
+- **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
+- **Title**: Where Macros Shine: Declarative State Machines
+- **Subtitle**: Zero-Boilerplate State Transitions with Compile-Time Verification
+- **Code Example (`enemy_fsm.cr — Declarative DSL & Gameplay Usage`)**:
+  ```crystal
+  # 1. Declare states & transitions with macro DSL
+  fsm BossState do
+    state Patrol, initial: true do
+      before { start_patrol_path }
+      on :see_player, transition_to: Chase
+      after { alert_nearby_allies }
+    end
+  
+    state Chase do
+      before { play_animation("run") }
+      on :in_attack_range, transition_to: Attack
+      on :lost_player,     transition_to: Patrol
+    end
+  
+    state Attack do
+      before { play_sound("roar") }
+      on :attack_finished, transition_to: Patrol
+      after { reset_hitbox }
+    end
+  end
+  
+  # 2. Actual runtime gameplay usage
+  fsm = BossStateMachine.new
+  
+  def _physics_process(delta : Float64) : Void
+    if distance_to(player) < 15.0
+      fsm.trigger(:see_player) # -> Chase (runs before/after hooks!)
+    end
+  
+    case fsm.current_state
+    when .patrol? then move_along_path(delta)
+    when .chase?  then navigate_to(player, delta)
+    when .attack? then execute_slam_attack
+    end
+  end
+  ```
+- **What the Macro Generates**:
+  - Typed Enum & Handlers: Generates concrete enum BossState with type-checked transition methods.
+  - Lifecycle Hooks (before & after): Entry (before) and exit (after) hooks are inlined directly into native state transition branches.
+  - Compile-Time Transition Validation: Referencing an undeclared state or illegal transition fails at compile time.
+  - Zero Reflection Overhead: Transitions compile to direct jump tables; zero lambda allocations or dictionary lookups.
+- **Presenter Script**:
+  > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process."*
+
+---
+### Slide 26: Behind the DSL: The FSM AST Macro
+- **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
+- **Category Badge**: `AST METAPROGRAMMING • UNDER THE HOOD`
+- **Title**: Behind the DSL: The FSM AST Macro
+- **Subtitle**: How Crystal's Compile-Time AST Rewriting Synthesizes Strongly-Typed Enums & Jump Tables
+- **Code Example (`fsm_macro.cr — AST Rewriting Engine`)**:
+  ```crystal
+  # 🪄 Compile-Time AST Macro: parses block into enums, hooks & jump table
+  macro fsm(name, &block)
+    # 1. Synthesize typed Enum for all declared states:
+    enum {{name.id}}
+      {% for call in block.body.expressions %}
+        {% if call.name == "state" %} {{call.args[0].id}} {% end %}
+      {% end %}
+    end
+  
+    # 2. Synthesize StateMachine with zero-reflection jump table:
+    class {{name.id}}Machine
+      getter current_state : {{name.id}} = {{name.id}}::Patrol
+  
+      # 3. Flattens nested DSL calls into flat case branches:
+      def trigger(event : Symbol) : Void
+        case @current_state
+        {% for state in block.body.expressions %}
+          when .{{state.args[0].id.underscore}}?
+            {% for call in state.block.body.expressions %}
+              {% if call.name == "on" %}
+                if event == {{call.args[0]}}
+                  return transition_to({{name.id}}::{{call.named_args[:transition_to]}})
+                end
+              {% end %}
+            {% end %}
+        {% end %}
+        end
+      end
+  
+      # 4. Inlines 'before' (exit) & 'after' (enter) lifecycle hooks:
+      private def transition_to(target : {{name.id}}) : Void
+        case @current_state
+        {% for s in block.body.expressions %}
+          when .{{s.args[0].id.underscore}}?
+            {% for c in s.block.body.expressions %}
+              {% if c.name == "before" %} {{c.block.body}} {% end %}
+            {% end %}
+        {% end %}
+        end
+  
+        @current_state = target
+  
+        case target
+        {% for s in block.body.expressions %}
+          when .{{s.args[0].id.underscore}}?
+            {% for c in s.block.body.expressions %}
+              {% if c.name == "after" %} {{c.block.body}} {% end %}
+            {% end %}
+        {% end %}
+        end
+      end
+    end
+  end
+  ```
+- **Compile-Time Metaprogramming Invariants**:
+  - Inlined Lifecycle Hooks (before & after): The macro extracts before (pre-transition) and after (post-transition) blocks and inlines them directly into native case branches — zero lambda overhead, zero virtual dispatches!
+  - Compile-Time AST Traversal: Unlike Ruby's method_missing or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.
+  - Synthesizes Concrete Types: The macro generates real enum BossState variants (Patrol, Chase), giving developers full compiler autocomplete and exhaustiveness checks.
+  - Zero Runtime Overhead: trigger(:event) expands into a flat native case statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!
+- **Presenter Script**:
+  > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C."*
+
+---
+### Slide 27: Macros: Zero-Reflection Serialization
+- **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
+- **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
+- **Title**: Macros: Zero-Reflection Serialization
+- **Subtitle**: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
+- **Code Example (`save_game_state.cr — Serialization Without Reflection`)**:
+  ```crystal
+  require "json"
+  
+  # Structs and classes serialize with a single macro inclusion
+  struct PlayerSaveData
+    include JSON::Serializable
+  
+    property player_name : String
+    property level : Int32
+    property health : Float32
+    property inventory_items : Array(String)
+    property position_checkpoint : Godot::Vector3
+  end
+  
+  # 1. Serializing to JSON string: direct bytecode generation
+  data = PlayerSaveData.new(...)
+  json_str = data.to_json
+  
+  # 2. Deserializing from JSON: type-safe, strict validation
+  loaded_data = PlayerSaveData.from_json(json_str)
+  ```
+- **Why It Beats GDScript & C# Serialization**:
+  - Zero Runtime Reflection: Serialization code is synthesized by macros at compile time; no reflection API overhead.
+  - Strict Schema Validation: Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.
+  - Built-in Format Support: First-class standard library support for JSON, YAML, and binary formats.
+  - Engine Agnostic Data Structures: Save models exist as pure Crystal data structures independent of Godot node hierarchies.
+- **Presenter Script**:
+  > *"Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping."*
 
 ---
 ### Slide 28: What is Lapis?

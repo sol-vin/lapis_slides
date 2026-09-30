@@ -24,6 +24,8 @@ slides:
 
 # --- SECTION 3: Crystal — The Compiled Solution ---
 - 07_why_crystal_video
+- 21_boilerplate_elimination
+- 22_feature_matrix
 - 05_birth_of_crystal
 - 05b_crystal_type_system
 - 10_expressive_ergonomics
@@ -37,8 +39,6 @@ slides:
 - 18_macro_state_machines
 - 18b_macro_fsm_implementation
 - 19_macro_serialization
-- 21_boilerplate_elimination
-- 22_feature_matrix
 
 # --- SECTION 4: Lapis — Godot Engine & Antipattern Face-Off ---
 - 06_what_is_lapis
