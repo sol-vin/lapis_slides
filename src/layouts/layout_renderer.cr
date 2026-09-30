@@ -67,7 +67,8 @@ module LapisSlides
         str << "               data-palette-name=\"" << palette.name << "\"\n"
         str << "               data-palette-cube=\"" << cube_color << "\"\n"
         str << "               data-palette-cube-hover=\"" << cube_hover << "\"\n"
-        str << "               class=\"solvin-slide " << palette.id << "\"\n"
+        str << "               class=\"solvin-slide " << palette.id << " slide-" << slide.id << "\"\n"
+        str << "               data-slide-id=\"" << slide.id << "\"\n"
         str << "               style=\"" << palette.css_vars << "\">\n"
         str << "        <div class=\"palette-corner-badge\" title=\"Theme: " << palette.name << "\">\n"
         str << "          <span class=\"palette-corner-dot\"></span> PALETTE: " << palette.name << "\n"
@@ -108,16 +109,19 @@ module LapisSlides
       end
     end
 
-    def render_code_container(title : String, lang : String, code : String, tag : String? = nil, col_class : String = "col", border_color : String? = nil) : String
+    def render_code_container(title : String, lang : String, code : String, tag : String? = nil, col_class : String = "col", border_color : String? = nil, font_size : String? = nil) : String
       border_style = border_color ? " border-color: #{border_color};" : ""
       line_count = code.strip.lines.size
-      density_class = if line_count > 24
+      density_class = if font_size
+                        ""
+                      elsif line_count > 24
                         " code-compact"
                       elsif line_count > 16
                         " code-dense"
                       else
                         ""
                       end
+      code_style = font_size ? " style=\"font-size: #{font_size} !important; line-height: 1.25 !important;\"" : ""
       String.build do |str|
         str << "          <div class=\"code-container " << col_class << density_class << "\" style=\"" << border_style << "\">\n"
         str << "            <div class=\"code-header\">\n"
@@ -132,7 +136,7 @@ module LapisSlides
         str << "                <span class=\"window-btn close\" title=\"Close\">✕</span>\n"
         str << "              </div>\n"
         str << "            </div>\n"
-        str << "            <pre><code class=\"language-" << lang.downcase << density_class << "\">" << HTML.escape(code.strip) << "</code></pre>\n"
+        str << "            <pre><code class=\"language-" << lang.downcase << density_class << "\"" << code_style << ">" << HTML.escape(code.strip) << "</code></pre>\n"
         str << "          </div>"
       end
     end

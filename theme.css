@@ -3420,6 +3420,15 @@ ul.card-list li strong {
   color: var(--accent-color, #4090ff) !important;
 }
 
+/* ==========================================================================
+   Slide 71 (34b_r2_test_suite): 1.5X Bigger Code Text Size
+   ========================================================================== */
+.slide-34b_r2_test_suite .code-container pre code,
+[data-slide-id="34b_r2_test_suite"] .code-container pre code {
+  font-size: 0.94rem !important;
+  line-height: 1.25 !important;
+}
+
 
 
 

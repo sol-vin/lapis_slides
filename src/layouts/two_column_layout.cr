@@ -60,7 +60,9 @@ module LapisSlides
         lang = data["lang"]?.try(&.as_s) || "crystal"
         code = data["code"]?.try(&.as_s) || ""
         tag = data["tag"]?.try(&.as_s)
-        str << render_code_container(title, lang, code, tag, "col") << "\n"
+        font_size = data["font_size"]?.try(&.as_s) || data["code_font_size"]?.try(&.as_s)
+        border_color = data["border_color"]?.try(&.as_s)
+        str << render_code_container(title, lang, code, tag, "col", border_color, font_size) << "\n"
       when "terminal"
         title = data["title"]?.try(&.as_s) || "Terminal"
         code = data["code"]?.try(&.as_s) || ""

@@ -2519,14 +2519,12 @@ This document outlines each slide's exact theme palette, architectural category,
     driver = Godot::Debugger::RadareDriver.new
   
     it "verifies ASLR & DEP/NX binary hardening" do
-      # Audits compiled game.dll security flags in CI
       flags = driver.audit_hardening("bin/game.dll")
       flags.aslr?.should be_true
       flags.dep_nx?.should be_true
     end
   
     it "guarantees zero exported symbol leaks" do
-      # Ensures Boehm GC & C++ bridge internals don't leak
       leaks = driver.scan_unwanted_exports("bin/game.dll")
       leaks.should be_empty
     end
@@ -2535,7 +2533,7 @@ This document outlines each slide's exact theme palette, architectural category,
       server = Godot::Debugger::RadareDriver.new
       client = Godot::Debugger::RadareDriver.new
       client.break_at("player.cr", 42)
-      server.paused?.should be_true # Zero network timeouts!
+      server.paused?.should be_true
     end
   end
   ```
