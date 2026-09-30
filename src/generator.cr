@@ -177,7 +177,7 @@ module LapisSlides
                 try {
                   const base64Content = src.split(',')[1];
                   const decoded = decodeBase64Utf8(base64Content);
-                  const lines = decoded.trim().split('\n').filter(l => l.trim().length > 0);
+                  const lines = decoded.split(String.fromCharCode(10)).map(l => l.trim()).filter(l => l.length > 0);
                   const parsed = lines.map(l => JSON.parse(l));
                   playerSrc = { data: parsed };
                 } catch (e) {
@@ -211,7 +211,7 @@ module LapisSlides
                   autoPlay: autoplay,
                   theme: theme,
                   terminalFontSize: fontSize,
-                  fit: 'contain',
+                  fit: 'both',
                   controls: controls
                 });
                 asciinemaInstances.set(mount, player);
@@ -249,14 +249,23 @@ module LapisSlides
             }
 
             if (window.Reveal) {
-              Reveal.on('ready', () => {
+              if (typeof Reveal.isReady === 'function' && Reveal.isReady()) {
                 setTimeout(() => activateSlide(Reveal.getCurrentSlide()), 50);
-              });
+              } else {
+                Reveal.on('ready', () => {
+                  setTimeout(() => activateSlide(Reveal.getCurrentSlide()), 50);
+                });
+              }
 
               Reveal.on('slidechanged', event => {
                 deactivateSlide(event.previousSlide);
                 setTimeout(() => activateSlide(event.currentSlide), 50);
               });
+
+              // Extra safeguard for direct hash landings
+              setTimeout(() => {
+                activateSlide(Reveal.getCurrentSlide());
+              }, 300);
             } else {
               document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('.asciinema-player-mount').forEach(mountPlayer);
