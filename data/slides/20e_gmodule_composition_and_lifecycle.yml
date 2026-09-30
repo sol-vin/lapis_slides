@@ -12,12 +12,11 @@ left:
   title: composed_traits.cr — Inheritance & Cooperative Hooks
   tag: Crystal
   lang: crystal
-  font_size: '0.78rem'
+  font_size: '0.64rem'
   code: |
     # 1. Composed Module Inheritance (Module < Module):
     gmodule Combatant < Damageable do
       signal attack_landed(target : String, damage : Int32)
-
       @[Export]
       property attack_power : Int32 = 25
 
@@ -31,7 +30,6 @@ left:
     # 2. Cooperative Engine Lifecycle Hooks:
     gmodule AutoRegen do
       include Damageable
-
       @[Export]
       property regen_rate : Float32 = 2.0_f32
 

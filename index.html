@@ -3044,19 +3044,15 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.80rem !important; line-height: 1.25 !important;">require &quot;libgodot&quot;
-
-# Reusable gameplay trait with full engine reflection
+            <pre><code class="language-crystal" style="font-size: 0.64rem !important; line-height: 1.25 !important;"># Reusable gameplay trait with full engine reflection
 gmodule Damageable do
   signal health_changed(current : Int32, max_health : Int32)
   signal died
 
   @[Export(range: 0..500)]
   property health : Int32 = 100
-
   @[Export]
   property max_health : Int32 = 100
-
   @[Export]
   property defense : Float32 = 5.0_f32
 
@@ -3082,7 +3078,6 @@ end
 # Custom node mixing in Damageable
 node HeroCharacter &lt; CharacterBody2D do
   include Damageable
-
   @[Export]
   property hero_name : String = &quot;Hero&quot;
 
@@ -3154,10 +3149,9 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;"># 1. Composed Module Inheritance (Module &lt; Module):
+            <pre><code class="language-crystal" style="font-size: 0.64rem !important; line-height: 1.25 !important;"># 1. Composed Module Inheritance (Module &lt; Module):
 gmodule Combatant &lt; Damageable do
   signal attack_landed(target : String, damage : Int32)
-
   @[Export]
   property attack_power : Int32 = 25
 
@@ -3171,7 +3165,6 @@ end
 # 2. Cooperative Engine Lifecycle Hooks:
 gmodule AutoRegen do
   include Damageable
-
   @[Export]
   property regen_rate : Float32 = 2.0_f32
 
@@ -3248,7 +3241,7 @@ end</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -3261,7 +3254,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense"># 1. Operators /, %, and bare ~ for node resolution:
+            <pre><code class="language-crystal" style="font-size: 0.64rem !important; line-height: 1.25 !important;"># 1. Operators /, %, and bare ~ for node resolution:
 camera = self / &quot;CameraRig&quot; / Camera3D
 health_bar = self % ProgressBar
 sprite = ~Sprite2D

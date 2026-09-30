@@ -12,6 +12,7 @@ left:
   title: gameplay_controller.cr — Typed Scene & Node Resolution
   tag: Crystal
   lang: crystal
+  font_size: '0.64rem'
   code: |
     # 1. Operators /, %, and bare ~ for node resolution:
     camera = self / "CameraRig" / Camera3D

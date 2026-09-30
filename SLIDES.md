@@ -1304,8 +1304,6 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Reusable Gameplay Mixins with Godot ClassDB & Inspector Parity
 - **Code Example (`damageable_trait.cr — First-Class Godot Mixin`)**:
   ```crystal
-  require "libgodot"
-  
   # Reusable gameplay trait with full engine reflection
   gmodule Damageable do
     signal health_changed(current : Int32, max_health : Int32)
@@ -1313,10 +1311,8 @@ This document outlines each slide's exact theme palette, architectural category,
   
     @[Export(range: 0..500)]
     property health : Int32 = 100
-  
     @[Export]
     property max_health : Int32 = 100
-  
     @[Export]
     property defense : Float32 = 5.0_f32
   
@@ -1342,7 +1338,6 @@ This document outlines each slide's exact theme palette, architectural category,
   # Custom node mixing in Damageable
   node HeroCharacter < CharacterBody2D do
     include Damageable
-  
     @[Export]
     property hero_name : String = "Hero"
   
@@ -1371,7 +1366,6 @@ This document outlines each slide's exact theme palette, architectural category,
   # 1. Composed Module Inheritance (Module < Module):
   gmodule Combatant < Damageable do
     signal attack_landed(target : String, damage : Int32)
-  
     @[Export]
     property attack_power : Int32 = 25
   
@@ -1385,7 +1379,6 @@ This document outlines each slide's exact theme palette, architectural category,
   # 2. Cooperative Engine Lifecycle Hooks:
   gmodule AutoRegen do
     include Damageable
-  
     @[Export]
     property regen_rate : Float32 = 2.0_f32
   

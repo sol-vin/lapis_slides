@@ -12,7 +12,7 @@ left:
   title: damageable_trait.cr — First-Class Godot Mixin
   tag: Crystal
   lang: crystal
-  font_size: '0.80rem'
+  font_size: '0.64rem'
   code: |
     # Reusable gameplay trait with full engine reflection
     gmodule Damageable do
@@ -21,10 +21,8 @@ left:
 
       @[Export(range: 0..500)]
       property health : Int32 = 100
-
       @[Export]
       property max_health : Int32 = 100
-
       @[Export]
       property defense : Float32 = 5.0_f32
 
@@ -50,7 +48,6 @@ left:
     # Custom node mixing in Damageable
     node HeroCharacter < CharacterBody2D do
       include Damageable
-
       @[Export]
       property hero_name : String = "Hero"
 
