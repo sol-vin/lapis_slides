@@ -1,0 +1,53 @@
+---
+id: 03a_ruby_small_syntax
+title: 'Small Syntax: Postage-Stamp Grammar'
+subtitle: '~40 Keywords Fueling an Infinite Universe of Domain Usages'
+badge: RUBY HERITAGE • MINIMAL GRAMMAR
+badge_color: purple
+palette: spaces_xp_royale
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: postage_stamp_syntax.rb — Methods Over Grammar
+  tag: Ruby
+  lang: ruby
+  code: |
+    # Other languages require compiler keywords for features.
+    # Ruby achieves rich ecosystems with methods & blocks:
+
+    # 1. Properties & Accessors? Just a class method:
+    attr_accessor :health, :inventory
+
+    # 2. Access control visibility? Just a method call:
+    private
+
+    # 3. Testing suites? Ordinary methods taking blocks:
+    describe "BossFight" do
+      it "enrages at low health" do
+        boss.take_damage(900)
+        expect(boss.enraged?).to be true
+      end
+    end
+
+    # 4. Declarative Web Routing? Plain method + block:
+    get "/player/status" do
+      render json: { level: 42, alive: true }
+    end
+
+    # All of this powered by only ~40 core keywords!
+right:
+  type: card
+  title: The Postage-Stamp Advantage
+  color: purple
+  items:
+    - '<strong>Fits on a Postage Stamp:</strong> While C++ and C# continually bloat their grammars with 80+ keywords, Ruby''s core grammar famously fits on a postage stamp (~40 keywords).'
+    - '<strong>Methods Over Keywords:</strong> Features like properties (<code>attr_accessor</code>), visibility (<code>private</code>), and mixins (<code>include</code>) are plain methods, not compiler grammar.'
+    - '<strong>Blocks as Universal Primitives:</strong> A single, universal construct—the block (<code>do...end</code>)—powers iteration, resource safety (<code>File.open</code>), and rich DSLs.'
+    - '<strong>Zero Syntax Bloat:</strong> Ecosystems like Rails, RSpec, and Sinatra look like dedicated domain languages, yet require zero new syntax rules in the compiler.'
+    - '<strong>The Crystal Connection:</strong> Crystal inherits this exact philosophy—giving you boundless DSL expressiveness with a clean, postage-stamp core compiled to native LLVM code.'
+notes: |
+  In computer science lore, Alan Kay famously observed that Smalltalk was so elegant that its entire grammar could fit on a postcard. Matz brought this profound insight to Ruby: you do not need 80 or 100 keywords to build a powerful programming language.
+  In fact, adding keywords often restricts what developers can do. In C#, Java, or C++, if you want properties, asynchronous tasks, or access control, the language committee must invent new keywords and syntax rules.
+  In Ruby, properties like attr_accessor, access modifiers like private, testing constructs like describe/it, and web routes like get/post are simply ordinary methods combined with blocks!
+  By keeping the core grammar down to a postage-stamp size of ~40 keywords, Ruby unlocked an unbounded universe of domain-specific languages. And as we'll see, Crystal inherited this exact same philosophy: keeping the grammar tiny, clean, and elegant, but compiling it straight to bare-metal LLVM machine code.

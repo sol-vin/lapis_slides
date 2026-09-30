@@ -1,7 +1,7 @@
 ---
 id: 03_ruby_philosophy
 title: 'The Ruby Heritage'
-subtitle: Developer Happiness & Expressive Human Syntax
+subtitle: Developer Happiness, Small Syntax & Expressive Human Reach
 badge: HISTORICAL CONTEXT • THE RUBY HERITAGE
 badge_color: purple
 palette: super_es
@@ -37,16 +37,14 @@ right:
   items:
   - <strong>Developer Happiness as Primary Goal:</strong> Yukihiro 'Matz' Matsumoto
     designed Ruby to prioritize human cognitive comfort over machine convenience.
+  - <strong>Small Syntax, Massive Reach:</strong> A minimal grammatical surface area
+    that bends to almost any domain—turning simple method calls and blocks into DSLs without language bloat.
   - <strong>First-Class Blocks & Closures:</strong> Passing blocks to methods transformed
     data manipulation into an expressive, natural language flow.
   - <strong>Principle of Least Surprise (POLS):</strong> The language behaved consistently
     and intuitively, minimizing cognitive friction.
   - <strong>The Downside in Game Tech:</strong> Dynamic method dispatch (YARV byte
     interpreter) was too slow for 60/120 FPS physics, frame budgets, and tight loops.
-notes: To understand why Crystal exists and why Lapis is designed the way it is, we
-  have to look back at the Ruby era. In the early 2000s, Ruby took the software world
-  by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly
-  designed Ruby for human happiness, introducing first-class blocks, elegant closures,
-  and a syntax that reads like natural English. But for game developers, Ruby's interpreted
-  virtual machine was far too slow to meet the brutal 16-millisecond frame budget
-  demanded by real-time rendering and physics engines.
+notes: |
+  To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English.
+  Crucially, Ruby proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive: a remarkably small, orthogonal syntax can provide an almost infinite variety of usages across web, systems, and gaming. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time physics and rendering.

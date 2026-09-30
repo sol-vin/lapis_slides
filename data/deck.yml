@@ -13,6 +13,7 @@ slides:
 
 # --- SECTION 2: Ruby — Philosophy, Sugar, Dynamic Dispatch & The Wall ---
 - 03_ruby_philosophy
+- 03a_ruby_small_syntax
 - 03b_ruby_syntax_sugar
 - 03c_ruby_closures
 - 03d_ruby_context_exec
