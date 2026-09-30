@@ -1006,7 +1006,7 @@ This document outlines each slide's exact theme palette, architectural category,
 ---
 ### Slide 26: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
 - **Sol.vin Theme Palette**: `spaces_98` (Spaces 98) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
-- **Category Badge**: `GDSCRIPT COMPARISON • BOILERPLATE`
+- **Category Badge**: `LANGUAGE COMPARISON • BOILERPLATE`
 - **Title**: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
 - **Subtitle**: Side-by-Side Implementation of the Same Player Node with Exported Property and Signal
 - **Code Example (`Lapis (Crystal)`)**:

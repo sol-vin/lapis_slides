@@ -3,7 +3,7 @@ id: 21_boilerplate_elimination
 title: 'Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++'
 subtitle: Side-by-Side Implementation of the Same Player Node with Exported Property
   and Signal
-badge: GDSCRIPT COMPARISON • BOILERPLATE
+badge: LANGUAGE COMPARISON • BOILERPLATE
 badge_color: purple
 palette: spaces_98
 layout: four-column-layout
