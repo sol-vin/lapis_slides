@@ -12,6 +12,7 @@ left:
   title: compile_time_dsl.cr — Pure Ruby Ergonomics, Zero Cost
   tag: Crystal
   lang: crystal
+  font_size: '0.80rem'
   code: |
     # 1. Declarative Builder Class:
     class CombatRoomBuilder
