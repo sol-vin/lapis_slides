@@ -1,44 +1,43 @@
 ---
 id: 20b_ergonomic_node_access
-title: 'Node Ergonomics: % & /'
-subtitle: Subscript Indexers [], Scene Unique Nodes %, Paths /, and Bare Macros
-badge: LAPIS DSL • SYNTAX ERGONOMICS
+title: 'Node Ergonomics: Operators / & %'
+subtitle: Multi-Type Path Traversal (/), Scene Unique Nodes (%), and Typed Indexers ([])
+badge: LAPIS DSL • OPERATOR ERGONOMICS
 badge_color: cyan
 palette: monokai
 layout: two-column-layout
 ratio: 1:1
 left:
   type: code
-  title: ergonomic_node_retrieval.cr
+  title: operator_node_retrieval.cr
   tag: Crystal
   lang: crystal
   code: |
     node PlayerController < CharacterBody2D do
       def _ready : Void
-        # 1. Path traversal with / (left-associative):
-        camera = (self / "CameraRig")[Godot::Camera2D]
+        # 1. Path traversal / (String, Symbol, or Typed Class):
+        camera = self / "CameraRig" / Camera2D   # Typed child!
+        mount  = self / :visuals / :weapon_mount # Auto-camelcased
+        cam_up = camera / ".."                   # Upward parent
 
-        # 2. Scene Unique Node with % (mirrors GDScript %):
-        health_bar = self % Godot::ProgressBar
-        hud = self % "PlayerHUD"
+        # 2. Scene Unique Nodes % (mirrors GDScript %):
+        health_bar = self % ProgressBar          # Typed %ProgressBar!
+        hud        = self % :player_hud          # Auto-camelcased %PlayerHUD
+        named_bar  = self % "HealthBar"          # String unique node
 
-        # 3. Type-safe subscript indexers []:
-        sprite = self[Godot::Sprite2D]
-        weapon = self[Godot::Marker2D, "Visuals/WeaponMount"]
-
-        # 4. Bare retrieval macros (no 'self.' prefix):
-        hp_ui = u!(Godot::ProgressBar)
-        maybe_cam = n?(Godot::Camera2D) # Returns nil if absent
+        # 3. Type-safe subscript indexers ([] and []?):
+        sprite = self[Sprite2D]                  # Inferred from class
+        weapon = self[Marker2D, :weapon_mount]?  # Safe optional T?
       end
     end
 right:
   type: card
-  title: Type-Safe Scene Graph Ergonomics
+  title: Type-Safe Operators & Indexers
   color: cyan
   items:
-    - '<strong>Path Traversal with <code>/</code>:</strong> Intuitive left-associative syntax supporting nested string paths (<code>self / "CameraRig"</code>).'
-    - '<strong>Scene Unique Nodes with <code>%</code>:</strong> Statically typed retrieval that mirrors GDScript <code>%Node</code> syntax without brittle dynamic casting.'
-    - '<strong>Subscript Indexers (<code>self[Type]</code>):</strong> Type-inferred lookup matching class name, custom paths, and safe optional variants (<code>self[T]?</code>).'
-    - '<strong>Bare Macros (<code>n!</code>, <code>u!</code>, <code>n?</code>):</strong> Clean shorthand for typed child nodes and unique nodes inside methods with zero boilerplate.'
+    - '<strong>Multi-Type <code>/</code> Traversal:</strong> Pass strings (<code>"Rig/Cam"</code>), symbols (<code>:camera_rig</code> auto-camelcased), or class types (<code>Camera2D</code> returning typed <code>Camera2D</code> directly with zero casting).'
+    - '<strong>Scene Unique Nodes with <code>%</code>:</strong> GDScript <code>%Node</code> parity! Pass strings (<code>"HealthBar"</code>), symbols (<code>:health_bar</code>), or class types (<code>ProgressBar</code> returning typed <code>ProgressBar</code>).'
+    - '<strong>Typed Indexers & Safe Queries (<code>[]</code>, <code>[]?</code>):</strong> <code>self[Sprite2D]</code> for quick class lookups, and <code>self[T, path]?</code> returning <code>T?</code> for safe optional navigation without exceptions.'
+    - '<strong>Upward Navigation (<code>..</code>):</strong> Traverse parent hierarchies with <code>node / ".."</code> without breaking out of chained operator expressions.'
 notes: |
-  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. You can traverse paths naturally using the slash operator (self / "CameraRig" / "Camera3D"), look up scene unique nodes using the percent operator (self % Godot::ProgressBar), or use type-inferred subscript indexers like self[Godot::Sprite2D]. We even provide bare macros—n! for child nodes and u! for unique nodes—so your gameplay scripts read with the exact same terse elegance as GDScript, but with 100% compile-time type safety.
+  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) now accepts Strings, Symbols, and Class types: self / "CameraRig" / Camera2D resolves the nested node and returns a typed Camera2D instance directly! Symbols like :weapon_mount are automatically converted from snake_case to CamelCase. The percent operator (%) provides 100% parity with GDScript's scene-unique nodes, supporting strings, symbols, and typed classes like self % ProgressBar. Together with subscript indexers ([] and []?) and upward parent navigation (node / ".."), navigating Godot's scene tree in Crystal is faster and safer than GDScript.

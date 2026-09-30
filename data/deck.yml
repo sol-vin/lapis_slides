@@ -43,6 +43,7 @@ slides:
 - 06_what_is_lapis
 - 20_node_dsl
 - 20b_ergonomic_node_access
+- 20c_node_context_tilde_operator
 - 08_effortless_access
 - 09_signals_async
 - 11_antipattern_iterators
