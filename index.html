@@ -402,7 +402,7 @@ hero.heal_party(party, 25)</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
+          <div class="card purple col compact">
             <div class="card-title purple">
               <span>Why Ruby Won Developer Hearts</span>
             </div>
@@ -488,7 +488,7 @@ end
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
+          <div class="card purple col compact">
             <div class="card-title purple">
               <span>The Postage-Stamp Advantage</span>
             </div>
@@ -1532,7 +1532,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>The Compiler Synthesis</span>
             </div>
@@ -2135,7 +2135,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
+          <div class="card amber col compact">
             <div class="card-title amber">
               <span>The Limits of Static Metaprogramming</span>
             </div>
@@ -2227,7 +2227,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
+          <div class="card amber col compact">
             <div class="card-title amber">
               <span>Compile-Time Module &amp; Class Hooks</span>
             </div>
@@ -2318,7 +2318,7 @@ end
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
+          <div class="card amber col compact">
             <div class="card-title amber">
               <span>The Power of Deferred Introspection</span>
             </div>
@@ -2818,7 +2818,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>Clean Node DSL Invariants</span>
             </div>
@@ -2900,7 +2900,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>Type-Safe Operators &amp; Indexers</span>
             </div>
@@ -2988,7 +2988,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
+          <div class="card purple col compact">
             <div class="card-title purple">
               <span>How NodeContext &amp; ~ Work</span>
             </div>
@@ -3033,7 +3033,7 @@ end</code></pre>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
@@ -3090,17 +3090,17 @@ node HeroCharacter &lt; CharacterBody2D do
 end</code></pre>
           </div>
           </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>Why gmodule Beats Raw Modules &amp; Child Nodes</span>
             </div>
             <ul class="card-list">
-              <li><strong>The Raw Module Gap in Godot:</strong> Crystal's standard <code>module</code> inlines methods, but Godot is unaware of it—no Inspector properties, no ClassDB signals, and no tool buttons.</li>
-              <li><strong>First-Class ClassDB Registration:</strong> At compile time, <code>macro node</code> inspects included <code>gmodule</code> ancestors via <code>macro finished</code> and flattens all properties and signals into Godot's reflection table.</li>
-              <li><strong>Full Inspector Parity:</strong> Export ranges, defaults, and <code>@[ExportToolButton]</code> actions render directly in the Godot Editor Inspector as if declared on the node itself.</li>
-              <li><strong>Zero SceneTree Overhead:</strong> Unlike child node components (e.g. <code>add_child(HealthComponent.new)</code>), mixins have zero SceneTree traversal cost and zero separate node heap allocations.</li>
-              <li><strong>Cross-Branch Gameplay Reuse:</strong> Mix identical damage, interaction, or inventory behavior into <code>CharacterBody2D</code>, <code>RigidBody3D</code>, or <code>Area2D</code> cleanly.</li>
+              <li><strong>The Raw Module Gap:</strong> Standard Crystal modules inline methods, but Godot is unaware of them—leaving Inspector properties and signals unregistered.</li>
+              <li><strong>Compile-Time ClassDB Registration:</strong> <code>macro node</code> inspects included <code>gmodule</code> traits via <code>macro finished</code> and flattens properties/signals into ClassDB.</li>
+              <li><strong>Full Inspector Parity:</strong> Export ranges, defaults, and <code>@[ExportToolButton]</code> actions render in the Godot Inspector as native node properties.</li>
+              <li><strong>Zero SceneTree Overhead:</strong> Mixins incur zero child node allocations and zero SceneTree traversal cost compared to composition nodes.</li>
+              <li><strong>Cross-Branch Reuse:</strong> Mix identical combat, interaction, or inventory logic into <code>CharacterBody2D</code>, <code>RigidBody3D</code>, or <code>Area2D</code>.</li>
             </ul>
           </div>
           </div>
@@ -3138,7 +3138,7 @@ end</code></pre>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
@@ -3194,17 +3194,17 @@ node BossMonster &lt; CharacterBody3D do
 end</code></pre>
           </div>
           </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card purple col compact">
             <div class="card-title purple">
               <span>Architectural Rigor &amp; Safety Invariants</span>
             </div>
             <ul class="card-list">
-              <li><strong>Composed Module Inheritance (<code>gmodule A &lt; B</code>):</strong> Modules can inherit from other modules! <code>Combatant</code> automatically brings along all <code>Damageable</code> properties and signals, then adds its own.</li>
-              <li><strong>Cooperative Lifecycle Chaining (<code>super</code>):</strong> Modules implement <code>_process</code>, <code>_physics_process</code>, or <code>_ready</code>. Calling <code>super</code> guarantees all mixed-in traits execute in proper MRO sequence.</li>
-              <li><strong>Compile-Time Abstract Contracts:</strong> <code>abstract def</code> inside a module guarantees that any node including the trait implements the contract—verified at compile time with zero runtime reflection.</li>
-              <li><strong>Defeats the Diamond Problem:</strong> Linearized Crystal mixin semantics eliminate C++ virtual diamond inheritance ambiguities while enabling deep behavioral composition.</li>
-              <li><strong>Autonomous Gameplay Traits:</strong> Modules like <code>AutoRegen</code> manage their own per-frame timers and state without requiring dedicated child nodes or manual plumbing.</li>
+              <li><strong>Composed Module Inheritance (<code>gmodule A &lt; B</code>):</strong> Modules inherit from modules. <code>Combatant</code> inherits all <code>Damageable</code> properties and signals, adding its own.</li>
+              <li><strong>Cooperative Lifecycle Chaining (<code>super</code>):</strong> Calling <code>super</code> in <code>_process</code> or <code>_ready</code> chains lifecycle hooks across all traits in linearized MRO order.</li>
+              <li><strong>Compile-Time Abstract Contracts:</strong> <code>abstract def</code> in a trait enforces required node implementations at compile time with zero runtime reflection.</li>
+              <li><strong>Defeats the Diamond Problem:</strong> Linearized mixin semantics eliminate C++ virtual diamond inheritance ambiguities while enabling deep composition.</li>
+              <li><strong>Autonomous Gameplay Traits:</strong> Traits like <code>AutoRegen</code> manage autonomous per-frame updates without dedicated child node allocations.</li>
             </ul>
           </div>
           </div>
@@ -3243,7 +3243,7 @@ end</code></pre>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
@@ -3257,7 +3257,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close">✕</span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.90rem !important; line-height: 1.25 !important;"># 1. Operators /, %, and bare ~ for node resolution:
+            <pre><code class="language-crystal" style="font-size: 0.75rem !important; line-height: 1.25 !important;"># 1. Operators /, %, and bare ~ for node resolution:
 camera = self / &quot;CameraRig&quot; / Camera3D
 health_bar = self % ProgressBar
 sprite = ~Sprite2D
@@ -3280,17 +3280,17 @@ add_child(companion)
 property move_speed : Float32 = 250.0_f32</code></pre>
           </div>
           </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>Why It&#39;s Effortless</span>
             </div>
             <ul class="card-list">
-              <li><strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "CameraRig" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and bare context resolution (<code>~Sprite2D</code>) eliminate verbose casting.</li>
+              <li><strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "Camera" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and context resolution (<code>~Sprite2D</code>).</li>
               <li><strong>Declarative onready Macro:</strong> <code>onready weapon : Weapon = ~("...").as(Weapon)</code> binds nodes safely during <code>_ready</code>.</li>
-              <li><strong>Compile-Time Nil Safety:</strong> <code>self[path, HUD]?</code> (with <code>$</code> and <code>%</code> support) returns <code>HUD?</code>; Crystal's compiler forces flow-sensitive nil checks before method dispatch.</li>
-              <li><strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> combined with <code>scene.instantiate_as(T)</code> constructs typed scenes with zero reflection.</li>
-              <li><strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> publishes Crystal properties directly into Godot's Inspector with editor UI hints.</li>
+              <li><strong>Compile-Time Nil Safety:</strong> <code>self[path, HUD]?</code> returns <code>HUD?</code>; Crystal forces flow-sensitive nil checks before dispatch.</li>
+              <li><strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> and <code>scene.instantiate_as(T)</code> construct typed scenes without casting.</li>
+              <li><strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> exposes typed properties to the Inspector with custom editor sliders and ranges.</li>
             </ul>
           </div>
           </div>
@@ -6662,7 +6662,7 @@ dialogue.show_dialogue(&quot;Hero&quot;, 42)</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>In-Editor Feature Highlights</span>
             </div>
@@ -7172,7 +7172,7 @@ $ lapis package portable -t dist/v1.0.0
           </div>
           </div>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>In-Editor &amp; Out-of-Editor Debugging via CLI</span>
             </div>
@@ -7405,7 +7405,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>How We Test Lapis with r2</span>
             </div>
@@ -8552,7 +8552,7 @@ $ lapis install addon github:sol-vin/crshader --shard --bind
             </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card green col">
+          <div class="card green col compact">
             <div class="card-title green">
               <span>Addon Management &amp; Shard Integration</span>
             </div>
@@ -8643,7 +8643,7 @@ end</code></pre>
           </div>
           </div>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card magenta col">
+          <div class="card magenta col compact">
             <div class="card-title magenta">
               <span>Reactive Shaders &amp; GPU Ergonomics</span>
             </div>
@@ -8721,7 +8721,7 @@ $ lapis package game --release -n DungeonCrawl
             </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card amber col">
+          <div class="card amber col compact">
             <div class="card-title amber">
               <span>Turnkey Shipping Invariants</span>
             </div>

@@ -141,9 +141,10 @@ module LapisSlides
       end
     end
 
-    def render_card(title : String, color : String, items : Array(String), col_class : String = "col", badge : String? = nil) : String
+    def render_card(title : String, color : String, items : Array(String), col_class : String = "col", badge : String? = nil, compact : Bool = false) : String
+      compact_class = compact ? " compact" : ""
       String.build do |str|
-        str << "          <div class=\"card " << color << " " << col_class << "\">\n"
+        str << "          <div class=\"card " << color << " " << col_class << compact_class << "\">\n"
         str << "            <div class=\"card-title " << color << "\">\n"
         str << "              <span>" << LayoutRenderer.tint_emojis(HTML.escape(title)) << "</span>\n"
         if badge

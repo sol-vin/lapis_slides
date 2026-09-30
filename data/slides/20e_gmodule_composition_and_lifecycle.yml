@@ -6,7 +6,7 @@ badge: LAPIS ARCHITECTURE • TRAIT COMPOSITION
 badge_color: purple
 palette: monokai
 layout: two-column-layout
-ratio: 3:2
+ratio: 1:1
 left:
   type: code
   title: composed_traits.cr — Inheritance & Cooperative Hooks
@@ -58,12 +58,13 @@ right:
   type: card
   title: Architectural Rigor & Safety Invariants
   color: purple
+  compact: true
   items:
-    - '<strong>Composed Module Inheritance (<code>gmodule A &lt; B</code>):</strong> Modules can inherit from other modules! <code>Combatant</code> automatically brings along all <code>Damageable</code> properties and signals, then adds its own.'
-    - '<strong>Cooperative Lifecycle Chaining (<code>super</code>):</strong> Modules implement <code>_process</code>, <code>_physics_process</code>, or <code>_ready</code>. Calling <code>super</code> guarantees all mixed-in traits execute in proper MRO sequence.'
-    - '<strong>Compile-Time Abstract Contracts:</strong> <code>abstract def</code> inside a module guarantees that any node including the trait implements the contract—verified at compile time with zero runtime reflection.'
-    - '<strong>Defeats the Diamond Problem:</strong> Linearized Crystal mixin semantics eliminate C++ virtual diamond inheritance ambiguities while enabling deep behavioral composition.'
-    - '<strong>Autonomous Gameplay Traits:</strong> Modules like <code>AutoRegen</code> manage their own per-frame timers and state without requiring dedicated child nodes or manual plumbing.'
+    - '<strong>Composed Module Inheritance (<code>gmodule A &lt; B</code>):</strong> Modules inherit from modules. <code>Combatant</code> inherits all <code>Damageable</code> properties and signals, adding its own.'
+    - '<strong>Cooperative Lifecycle Chaining (<code>super</code>):</strong> Calling <code>super</code> in <code>_process</code> or <code>_ready</code> chains lifecycle hooks across all traits in linearized MRO order.'
+    - '<strong>Compile-Time Abstract Contracts:</strong> <code>abstract def</code> in a trait enforces required node implementations at compile time with zero runtime reflection.'
+    - '<strong>Defeats the Diamond Problem:</strong> Linearized mixin semantics eliminate C++ virtual diamond inheritance ambiguities while enabling deep composition.'
+    - '<strong>Autonomous Gameplay Traits:</strong> Traits like <code>AutoRegen</code> manage autonomous per-frame updates without dedicated child node allocations.'
 notes: |
   gmodule goes far beyond simple flat mixins—it unlocks a complete, robust trait architecture for game engines.
   First, gmodule supports composed inheritance: writing 'gmodule Combatant < Damageable' means Combatant inherits all exported properties, typed signals, and methods from Damageable. When BossMonster includes Combatant, it gets health, defense, attack power, and all corresponding signals in one shot.

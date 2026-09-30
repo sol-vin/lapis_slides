@@ -1347,11 +1347,11 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   ```
 - **Why gmodule Beats Raw Modules & Child Nodes**:
-  - The Raw Module Gap in Godot: Crystal's standard module inlines methods, but Godot is unaware of it—no Inspector properties, no ClassDB signals, and no tool buttons.
-  - First-Class ClassDB Registration: At compile time, macro node inspects included gmodule ancestors via macro finished and flattens all properties and signals into Godot's reflection table.
-  - Full Inspector Parity: Export ranges, defaults, and @[ExportToolButton] actions render directly in the Godot Editor Inspector as if declared on the node itself.
-  - Zero SceneTree Overhead: Unlike child node components (e.g. add_child(HealthComponent.new)), mixins have zero SceneTree traversal cost and zero separate node heap allocations.
-  - Cross-Branch Gameplay Reuse: Mix identical damage, interaction, or inventory behavior into CharacterBody2D, RigidBody3D, or Area2D cleanly.
+  - The Raw Module Gap: Standard Crystal modules inline methods, but Godot is unaware of them—leaving Inspector properties and signals unregistered.
+  - Compile-Time ClassDB Registration: macro node inspects included gmodule traits via macro finished and flattens properties/signals into ClassDB.
+  - Full Inspector Parity: Export ranges, defaults, and @[ExportToolButton] actions render in the Godot Inspector as native node properties.
+  - Zero SceneTree Overhead: Mixins incur zero child node allocations and zero SceneTree traversal cost compared to composition nodes.
+  - Cross-Branch Reuse: Mix identical combat, interaction, or inventory logic into CharacterBody2D, RigidBody3D, or Area2D.
 - **Presenter Script**:
   > *"While Crystal has always supported mixin modules, integrating them into Godot presents a unique architectural challenge: Godot requires classes, properties, and signals to be explicitly registered in its reflection database, ClassDB. If you write a standard Crystal module, its methods compile into the class, but Godot's Inspector has no idea the properties exist, and signals cannot be wired up in the engine! To solve this, Lapis introduces the gmodule macro. Inside a gmodule, you declare @[Export] properties with ranges, typed signals, and even interactive @[ExportToolButton] actions. When your node writes 'include Damageable', the compiler introspects all included gmodules and flattens their properties and signals into the node's ClassDB registry entry. In the Godot editor, health, max_health, defense, and the 'Reset Health & Stats' button appear in the Inspector just like native properties, yet you have zero SceneTree traversal overhead and zero heap component allocations!"*
 
@@ -1405,11 +1405,11 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   ```
 - **Architectural Rigor & Safety Invariants**:
-  - Composed Module Inheritance (gmodule A < B): Modules can inherit from other modules! Combatant automatically brings along all Damageable properties and signals, then adds its own.
-  - Cooperative Lifecycle Chaining (super): Modules implement _process, _physics_process, or _ready. Calling super guarantees all mixed-in traits execute in proper MRO sequence.
-  - Compile-Time Abstract Contracts: abstract def inside a module guarantees that any node including the trait implements the contract—verified at compile time with zero runtime reflection.
-  - Defeats the Diamond Problem: Linearized Crystal mixin semantics eliminate C++ virtual diamond inheritance ambiguities while enabling deep behavioral composition.
-  - Autonomous Gameplay Traits: Modules like AutoRegen manage their own per-frame timers and state without requiring dedicated child nodes or manual plumbing.
+  - Composed Module Inheritance (gmodule A < B): Modules inherit from modules. Combatant inherits all Damageable properties and signals, adding its own.
+  - Cooperative Lifecycle Chaining (super): Calling super in _process or _ready chains lifecycle hooks across all traits in linearized MRO order.
+  - Compile-Time Abstract Contracts: abstract def in a trait enforces required node implementations at compile time with zero runtime reflection.
+  - Defeats the Diamond Problem: Linearized mixin semantics eliminate C++ virtual diamond inheritance ambiguities while enabling deep composition.
+  - Autonomous Gameplay Traits: Traits like AutoRegen manage autonomous per-frame updates without dedicated child node allocations.
 - **Presenter Script**:
   > *"gmodule goes far beyond simple flat mixins—it unlocks a complete, robust trait architecture for game engines. First, gmodule supports composed inheritance: writing 'gmodule Combatant < Damageable' means Combatant inherits all exported properties, typed signals, and methods from Damageable. When BossMonster includes Combatant, it gets health, defense, attack power, and all corresponding signals in one shot. Second, gmodule solves the dreaded lifecycle callback problem. Traditional component architectures struggle with multiple systems needing _process or _physics_process. With gmodule, calling super in _process ensures every included trait's frame logic executes in predictable method-resolution order without dropping callbacks. And third, using Crystal's native abstract def inside a gmodule creates hard compile-time interface contracts. If a node includes Interactable but forgets to implement on_interact, the compiler refuses to build. It delivers total architectural safety with zero virtual call overhead."*
 
@@ -1444,11 +1444,11 @@ This document outlines each slide's exact theme palette, architectural category,
   property move_speed : Float32 = 250.0_f32
   ```
 - **Why It's Effortless**:
-  - Operators /, % & ~: Chained paths (self / "CameraRig" / Camera3D), unique nodes (self % ProgressBar), and bare context resolution (~Sprite2D) eliminate verbose casting.
+  - Operators /, % & ~: Chained paths (self / "Camera" / Camera3D), unique nodes (self % ProgressBar), and context resolution (~Sprite2D).
   - Declarative onready Macro: onready weapon : Weapon = ~("...").as(Weapon) binds nodes safely during _ready.
-  - Compile-Time Nil Safety: self[path, HUD]? (with $ and % support) returns HUD?; Crystal's compiler forces flow-sensitive nil checks before method dispatch.
-  - Typed Scene Instantiation: Godot.load_as(PackedScene, path) combined with scene.instantiate_as(T) constructs typed scenes with zero reflection.
-  - Declarative Export Hints: @[ExportRange] publishes Crystal properties directly into Godot's Inspector with editor UI hints.
+  - Compile-Time Nil Safety: self[path, HUD]? returns HUD?; Crystal forces flow-sensitive nil checks before dispatch.
+  - Typed Scene Instantiation: Godot.load_as(PackedScene, path) and scene.instantiate_as(T) construct typed scenes without casting.
+  - Declarative Export Hints: @[ExportRange] exposes typed properties to the Inspector with custom editor sliders and ranges.
 - **Presenter Script**:
   > *"In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible."*
 

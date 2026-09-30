@@ -187,7 +187,8 @@ module LapisSlides
         if raw_items = data["items"]?.try(&.as_a)
           raw_items.each { |it| items << LayoutRenderer.extract_item_text(it) }
         end
-        str << render_card(title, color, items, "col", badge) << "\n"
+        compact = data["compact"]?.try(&.as_bool) || (data["density"]?.try(&.as_s) == "compact") || (items.size >= 5)
+        str << render_card(title, color, items, "col", badge, compact: compact) << "\n"
       end
     end
 

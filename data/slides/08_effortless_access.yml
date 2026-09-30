@@ -6,13 +6,13 @@ badge: CRYSTAL ERGONOMICS • GAMEPLAY SCRIPTING
 badge_color: cyan
 palette: spaces_7
 layout: two-column-layout
-ratio: 3:2
+ratio: 1:1
 left:
   type: code
   title: gameplay_controller.cr — Typed Scene & Node Resolution
   tag: Crystal
   lang: crystal
-  font_size: '0.90rem'
+  font_size: '0.75rem'
   code: |
     # 1. Operators /, %, and bare ~ for node resolution:
     camera = self / "CameraRig" / Camera3D
@@ -39,11 +39,12 @@ right:
   type: card
   title: Why It's Effortless
   color: cyan
+  compact: true
   items:
-  - '<strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "CameraRig" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and bare context resolution (<code>~Sprite2D</code>) eliminate verbose casting.'
+  - '<strong>Operators <code>/</code>, <code>%</code> & <code>~</code>:</strong> Chained paths (<code>self / "Camera" / Camera3D</code>), unique nodes (<code>self % ProgressBar</code>), and context resolution (<code>~Sprite2D</code>).'
   - '<strong>Declarative onready Macro:</strong> <code>onready weapon : Weapon = ~("...").as(Weapon)</code> binds nodes safely during <code>_ready</code>.'
-  - '<strong>Compile-Time Nil Safety:</strong> <code>self[path, HUD]?</code> (with <code>$</code> and <code>%</code> support) returns <code>HUD?</code>; Crystal''s compiler forces flow-sensitive nil checks before method dispatch.'
-  - '<strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> combined with <code>scene.instantiate_as(T)</code> constructs typed scenes with zero reflection.'
-  - '<strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> publishes Crystal properties directly into Godot''s Inspector with editor UI hints.'
+  - '<strong>Compile-Time Nil Safety:</strong> <code>self[path, HUD]?</code> returns <code>HUD?</code>; Crystal forces flow-sensitive nil checks before dispatch.'
+  - '<strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> and <code>scene.instantiate_as(T)</code> construct typed scenes without casting.'
+  - '<strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> exposes typed properties to the Inspector with custom editor sliders and ranges.'
 notes: |
   In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.

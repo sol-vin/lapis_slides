@@ -6,7 +6,7 @@ badge: LAPIS DSL • MODULAR MIXINS
 badge_color: cyan
 palette: bring_me_hope
 layout: two-column-layout
-ratio: 3:2
+ratio: 1:1
 left:
   type: code
   title: damageable_trait.cr — First-Class Godot Mixin
@@ -59,12 +59,13 @@ right:
   type: card
   title: Why gmodule Beats Raw Modules & Child Nodes
   color: cyan
+  compact: true
   items:
-    - '<strong>The Raw Module Gap in Godot:</strong> Crystal''s standard <code>module</code> inlines methods, but Godot is unaware of it—no Inspector properties, no ClassDB signals, and no tool buttons.'
-    - '<strong>First-Class ClassDB Registration:</strong> At compile time, <code>macro node</code> inspects included <code>gmodule</code> ancestors via <code>macro finished</code> and flattens all properties and signals into Godot''s reflection table.'
-    - '<strong>Full Inspector Parity:</strong> Export ranges, defaults, and <code>@[ExportToolButton]</code> actions render directly in the Godot Editor Inspector as if declared on the node itself.'
-    - '<strong>Zero SceneTree Overhead:</strong> Unlike child node components (e.g. <code>add_child(HealthComponent.new)</code>), mixins have zero SceneTree traversal cost and zero separate node heap allocations.'
-    - '<strong>Cross-Branch Gameplay Reuse:</strong> Mix identical damage, interaction, or inventory behavior into <code>CharacterBody2D</code>, <code>RigidBody3D</code>, or <code>Area2D</code> cleanly.'
+    - '<strong>The Raw Module Gap:</strong> Standard Crystal modules inline methods, but Godot is unaware of them—leaving Inspector properties and signals unregistered.'
+    - '<strong>Compile-Time ClassDB Registration:</strong> <code>macro node</code> inspects included <code>gmodule</code> traits via <code>macro finished</code> and flattens properties/signals into ClassDB.'
+    - '<strong>Full Inspector Parity:</strong> Export ranges, defaults, and <code>@[ExportToolButton]</code> actions render in the Godot Inspector as native node properties.'
+    - '<strong>Zero SceneTree Overhead:</strong> Mixins incur zero child node allocations and zero SceneTree traversal cost compared to composition nodes.'
+    - '<strong>Cross-Branch Reuse:</strong> Mix identical combat, interaction, or inventory logic into <code>CharacterBody2D</code>, <code>RigidBody3D</code>, or <code>Area2D</code>.'
 notes: |
   While Crystal has always supported mixin modules, integrating them into Godot presents a unique architectural challenge: Godot requires classes, properties, and signals to be explicitly registered in its reflection database, ClassDB. If you write a standard Crystal module, its methods compile into the class, but Godot's Inspector has no idea the properties exist, and signals cannot be wired up in the engine!
   To solve this, Lapis introduces the gmodule macro. Inside a gmodule, you declare @[Export] properties with ranges, typed signals, and even interactive @[ExportToolButton] actions. When your node writes 'include Damageable', the compiler introspects all included gmodules and flattens their properties and signals into the node's ClassDB registry entry.
