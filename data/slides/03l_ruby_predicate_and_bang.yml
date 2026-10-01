@@ -1,7 +1,7 @@
 ---
 id: 03l_ruby_predicate_and_bang
 title: 'Semantic Punctuation: "?" and "!" Method Endings'
-subtitle: Conversational Predicates & Unmissable Mutation Flares in Method Names
+subtitle: Predicates, Nil Over Errors & Unmissable Mutation Flares
 badge: RUBY QUIRKS • SEMANTIC IDENTIFIERS
 badge_color: purple
 palette: candy
@@ -10,38 +10,42 @@ ratio: 1:1
 left:
   type: code
   title: predicates_and_bangs.rb — Expressive Punctuation
-  tag: Ruby
+  tag: Ruby & Crystal
   lang: ruby
-  font_size: '0.74rem'
+  font_size: '0.70rem'
   code: |
     # 1. Predicates (?): Returns boolean, asks a clear question
-    player.alive?        # vs player.is_alive() or player.get_is_alive()
-    inventory.empty?     # vs inventory.isEmpty()
-    shield.can_absorb?   # Natural, conversational English!
+    player.alive?        # Returns Bool (vs player.is_alive())
+    inventory.empty?     # Returns Bool (vs inventory.isEmpty())
+    shield.can_absorb?   # Conversational, fluent English!
 
-    # 2. Bang methods (!): Warns of in-place mutation or danger
+    # 2. Nil Over Errors (?): Guarantees NO ERROR IS THROWN!
+    party.first?         # Returns Player | Nil (party.first raises if empty!)
+    items[99]?           # Returns Item | Nil (items[99] raises IndexError!)
+    "abc".to_i?          # Returns Int32 | Nil ("abc".to_i raises ArgumentError!)
+    world.find_node?("X")# Returns Node | Nil (safe nilable traversal)
+
+    # 3. Bang methods (!): Warns of in-place mutation or danger
     inventory.sort       # PURE: returns a new sorted copy
     inventory.sort!      # MUTATING: alters array in place!
+    vector.normalize!    # Mutates existing Vector3 in place
 
-    vector.normalize     # Returns new normalized Vector3
-    vector.normalize!    # Mutates existing Vector3 instance in place
-
-    # 3. Bang methods (!): Raising exceptions vs soft failure
-    user.save            # Returns false on validation failure
-    user.save!           # Throws RecordInvalid exception!
-
-    boss.enrage!         # Dramatic, irreversible state mutation
+    # 4. Bang methods (!): Raising exceptions vs soft nilable returns
+    user.save            # Soft failure: returns false/nil on invalid
+    user.save!           # Hard failure: raises RecordInvalid exception!
 right:
   type: card
   title: Punctuation as High-Signal Communication
   color: purple
   items:
-    - '<strong>The Outsider''s Bafflement:</strong> In C, Java, Go, and Python, punctuation characters in identifiers are illegal syntax errors. In C# or Swift, <code>?</code> and <code>!</code> are reserved for nullability operators.'
-    - '<strong>Eliminating Prefix Bikeshedding:</strong> Kills the eternal naming debates between <code>is_empty</code>, <code>has_items</code>, <code>check_alive</code>, and <code>should_spawn</code>. A question mark turns any word into an English question.'
-    - '<strong>In-Place Mutation Flare:</strong> A developer scanning a pull request can instantly spot destructive mutations (<code>sort!</code>, <code>compact!</code>) versus harmless pure functions.'
-    - '<strong>Dual Error Handling APIs:</strong> Elegant, idiomatic pairing between soft failure (<code>save</code> returns false) and strict assertion (<code>save!</code> raises an exception).'
-    - '<strong>First-Class in Crystal:</strong> Crystal natively embraces <code>?</code> and <code>!</code> in method names, enforcing strict boolean return types on predicates at compile time.'
+    - '<strong>The Outsider''s Bafflement:</strong> In C, Java, Go, and Python, punctuation characters in identifiers are illegal syntax errors. In C# or Swift, <code>?</code> is reserved solely for nullability operators.'
+    - '<strong>Eliminating Prefix Bikeshedding:</strong> Kills naming debates between <code>is_empty</code>, <code>has_items</code>, <code>check_alive</code>, and <code>should_spawn</code>. A question mark turns any word into an English question.'
+    - '<strong>Nil Over Errors Guarantee (<code>some_method?</code>):</strong> In Ruby and Crystal, <code>?</code> systematically guarantees <strong>no error will be thrown</strong>. Methods like <code>first?</code>, <code>to_i?</code>, and <code>[]?</code> return <code>nil</code> instead of raising crashes!'
+    - '<strong>In-Place Mutation Flare (<code>!</code>):</strong> A developer scanning a pull request can instantly spot destructive mutations (<code>sort!</code>, <code>normalize!</code>) versus harmless pure functions.'
+    - '<strong>Dual Error Handling APIs:</strong> Elegant, idiomatic pairing between non-throwing nilable lookups (<code>find?</code>), soft boolean returns (<code>save</code>), and strict assertions (<code>save!</code>).'
+    - '<strong>Crystal Compile-Time Nil Safety:</strong> Crystal enforces strict compile-time checks on <code>T | Nil</code> returns from <code>?</code> methods, making null pointer dereferences impossible.'
 notes: |
-  In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores: [a-zA-Z0-9_]. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error. In modern languages like C# or Swift, question marks and exclamation points are reserved operators for optional chaining and force-unwrapping. Seeing them as part of a function's name looks utterly bizarre to outsiders.
-  In Ruby, Matz realized that punctuation can convey profound semantic intent without bloating the vocabulary. Method names ending in a question mark are 'predicates': they ask a question and return a boolean. This single convention permanently eliminated thousands of hours of pointless bikeshedding over whether a function should be named 'is_alive', 'has_health', 'check_active', or 'get_is_alive'. It simply becomes 'player.alive?'.
-  Even more powerful is the exclamation point, or 'bang' method. A bang method acts as a bright red safety flare signaling danger: it means 'this method mutates the receiver in place' (like sort! modifying the array rather than returning a copy), or 'this method raises an exception instead of returning false/nil' (like save!). When reviewing code, you can immediately identify every mutating or throwing call at a glance. Crystal fully embraces this convention, giving you expressive semantic punctuation that compiles directly to high-speed native code.
+  In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores: [a-zA-Z0-9_]. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error. In modern languages like C# or Swift, question marks are compiler operators for optional types and safe navigation.
+  In Ruby and Crystal, punctuation is elevated into a rich semantic communication tool. First, methods ending in '?' are 'predicates'—they ask a question and return a boolean. This single convention permanently eliminated thousands of hours of bikeshedding over whether a function should be named 'is_alive', 'has_health', 'check_active', or 'get_is_alive'.
+  Second, and profoundly important: 'some_method?' implies nilability and guarantees that NO ERROR WILL BE THROWN! This embodies the beloved 'Nil over Errors' philosophy. In languages like Python or Java, looking up a missing key or parsing an invalid integer throws an exception ('KeyError', 'IndexOutOfBoundsException', 'ValueError'), forcing developers into bloated try/catch blocks for routine control flow. In Ruby and Crystal, 'items[99]?' and '"abc".to_i?' guarantee that no exception is raised—they simply return 'nil'! Callers can handle edge cases cleanly with nil checks or fallback operators (like 'val || default').
+  Third, the exclamation point, or 'bang' method, acts as an unmissable safety flare: it signals in-place destructive mutation ('sort!' vs 'sort') or that the method raises an exception on failure ('save!' vs 'save'). Crystal preserves these exact conventions and enforces compile-time nil safety and boolean typing with zero runtime overhead.
