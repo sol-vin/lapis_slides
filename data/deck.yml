@@ -94,6 +94,8 @@ slides:
 - 36b_testing_editor_driver
 - 37_tool_testing_tui
 - 35_benchmarks
+- 35d_multilang_benchmarks
+- 35e_native_shootout
 - 35b_custom_benchmarks
 - 35c_benchmark_tui
 - 38_architecture_layers

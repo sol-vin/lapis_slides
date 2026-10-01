@@ -2535,7 +2535,7 @@ ul.card-list li strong {
 .bar-fill.gdscript {
   height: 100% !important;
   background-color: var(--border-color) !important;
-  opacity: 0.75 !important;
+  opacity: 0.8 !important;
   border-radius: 2px !important;
 }
 
@@ -2544,6 +2544,27 @@ ul.card-list li strong {
   background-color: var(--accent-color) !important;
   border-radius: 2px !important;
   box-shadow: 0 0 5px var(--accent-color) !important;
+}
+
+.bar-fill.cpp {
+  height: 100% !important;
+  background-color: #569cd6 !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 4px rgba(86, 156, 214, 0.6) !important;
+}
+
+.bar-fill.rust {
+  height: 100% !important;
+  background-color: #dea584 !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 4px rgba(222, 165, 132, 0.6) !important;
+}
+
+.bar-fill.csharp {
+  height: 100% !important;
+  background-color: #d2a8ff !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 4px rgba(210, 168, 255, 0.6) !important;
 }
 
 .bar-val {

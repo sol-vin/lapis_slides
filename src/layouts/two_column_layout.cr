@@ -155,27 +155,75 @@ module LapisSlides
         if benchmarks = data["benchmarks"]?.try(&.as_a)
           benchmarks.each do |b|
             b_name = b["name"]?.try(&.as_s) || ""
-            gd_ms = b["gdscript"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
-            cr_ms = b["crystal"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
-            speedup = b["speedup"]?.try(&.as_s) || sprintf("%.1fx", gd_ms / cr_ms)
-            cr_pct = [2.5, (cr_ms / gd_ms * 100.0)].max.round(1)
+
+            # Determine bars to render across all languages/platforms
+            bars_data = [] of Tuple(String, String, Float64) # platform_display, lang_class, val_ms
+            if raw_bars = b["bars"]?.try(&.as_a)
+              raw_bars.each do |r_bar|
+                p_name = r_bar["platform"]?.try(&.as_s) || "Platform"
+                l_cls = r_bar["lang"]?.try(&.as_s) || p_name.downcase.gsub(/[^a-z0-9]/, "")
+                v_num = r_bar["val"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 0.0_f64
+                bars_data << {p_name, l_cls, v_num}
+              end
+            else
+              # Check explicit language keys
+              [
+                {"GDScript", "gdscript", b["gdscript"]?},
+                {"C#", "csharp", b["csharp"]?},
+                {"Rust", "rust", b["rust"]?},
+                {"C++", "cpp", b["cpp"]?},
+                {"Crystal", "crystal", b["crystal"]?}
+              ].each do |(p_name, l_cls, raw_v)|
+                if raw_v
+                  v_num = raw_v.as_f? || raw_v.as_i?.try(&.to_f) || 0.0_f64
+                  bars_data << {p_name, l_cls, v_num}
+                end
+              end
+            end
+
+            # Fallback to GDScript vs Crystal default if empty
+            if bars_data.empty?
+              gd_ms = b["gdscript"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
+              cr_ms = b["crystal"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
+              bars_data = [
+                {"GDScript", "gdscript", gd_ms},
+                {"Crystal", "crystal", cr_ms}
+              ]
+            end
+
+            max_val = bars_data.map(&.[2]).max
+            max_val = 1.0_f64 if max_val <= 0.0
+
+            raw_speedup = b["speedup"]?.try(&.as_s)
+            speedup_text = if raw_speedup
+              if raw_speedup.includes?(" ") || raw_speedup.includes?("x") || raw_speedup.downcase.includes?("parity") || raw_speedup.downcase.includes?("shootout")
+                raw_speedup
+              else
+                "#{raw_speedup} faster"
+              end
+            elsif (gd_t = bars_data.find { |t| t[1] == "gdscript" }) && (cr_t = bars_data.find { |t| t[1] == "crystal" }) && cr_t[2] > 0
+              sprintf("%.1fx faster", gd_t[2] / cr_t[2])
+            else
+              nil
+            end
 
             str << "                <div class=\"barchart-row\">\n"
             str << "                  <div class=\"barchart-row-header\">\n"
             str << "                    <span class=\"barchart-name\">" << LayoutRenderer.tint_emojis(HTML.escape(b_name)) << "</span>\n"
-            str << "                    <span class=\"barchart-speedup badge-pill\">" << HTML.escape(speedup) << " faster</span>\n"
+            if speedup_text
+              str << "                    <span class=\"barchart-speedup badge-pill\">" << HTML.escape(speedup_text) << "</span>\n"
+            end
             str << "                  </div>\n"
             str << "                  <div class=\"barchart-bars\">\n"
-            str << "                    <div class=\"barchart-bar-line\">\n"
-            str << "                      <span class=\"bar-platform\">GDScript</span>\n"
-            str << "                      <div class=\"bar-track\"><div class=\"bar-fill gdscript\" style=\"width: 100%;\"></div></div>\n"
-            str << "                      <span class=\"bar-val\">" << gd_ms.round(1) << " " << unit << "</span>\n"
-            str << "                    </div>\n"
-            str << "                    <div class=\"barchart-bar-line\">\n"
-            str << "                      <span class=\"bar-platform\">Crystal</span>\n"
-            str << "                      <div class=\"bar-track\"><div class=\"bar-fill crystal\" style=\"width: " << cr_pct << "%;\"></div></div>\n"
-            str << "                      <span class=\"bar-val\">" << cr_ms.round(1) << " " << unit << "</span>\n"
-            str << "                    </div>\n"
+            bars_data.each do |(p_name, l_cls, v_num)|
+              pct = [2.0, (v_num / max_val * 100.0)].max.round(1)
+              val_str = v_num < 10.0 ? sprintf("%.2f", v_num) : sprintf("%.1f", v_num)
+              str << "                    <div class=\"barchart-bar-line\">\n"
+              str << "                      <span class=\"bar-platform\">" << HTML.escape(p_name) << "</span>\n"
+              str << "                      <div class=\"bar-track\"><div class=\"bar-fill " << l_cls << "\" style=\"width: " << pct << "%;\"></div></div>\n"
+              str << "                      <span class=\"bar-val\">" << val_str << " " << unit << "</span>\n"
+              str << "                    </div>\n"
+            end
             str << "                  </div>\n"
             str << "                </div>\n"
           end
@@ -230,10 +278,32 @@ module LapisSlides
               if benchmarks = item["benchmarks"]?.try(&.as_a)
                 benchmarks.each do |b|
                   b_name = b["name"]?.try(&.as_s) || ""
-                  gd_ms = b["gdscript"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
-                  cr_ms = b["crystal"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 1.0_f64
-                  speedup = b["speedup"]?.try(&.as_s) || sprintf("%.1fx", gd_ms / cr_ms)
-                  str << "  - **" << b_name << "**: GDScript `" << gd_ms.round(1) << " " << unit << "` vs Crystal `" << cr_ms.round(1) << " " << unit << "` (**" << speedup << " faster**)\n"
+                  b_bars = [] of Tuple(String, Float64)
+                  if raw_bars = b["bars"]?.try(&.as_a)
+                    raw_bars.each do |r_bar|
+                      p_name = r_bar["platform"]?.try(&.as_s) || "Platform"
+                      v_num = r_bar["val"]?.try { |v| v.as_f? || v.as_i?.try(&.to_f) } || 0.0_f64
+                      b_bars << {p_name, v_num}
+                    end
+                  else
+                    [
+                      {"GDScript", b["gdscript"]?},
+                      {"C#", b["csharp"]?},
+                      {"Rust", b["rust"]?},
+                      {"C++", b["cpp"]?},
+                      {"Crystal", b["crystal"]?}
+                    ].each do |(p_name, raw_v)|
+                      if raw_v
+                        v_num = raw_v.as_f? || raw_v.as_i?.try(&.to_f) || 0.0_f64
+                        b_bars << {p_name, v_num}
+                      end
+                    end
+                  end
+
+                  speedup_str = b["speedup"]?.try(&.as_s)
+                  speedup_suffix = speedup_str ? " (**#{speedup_str}**)" : ""
+                  bar_summary = b_bars.map { |(p, v)| "#{p} `#{v < 10.0 ? sprintf("%.2f", v) : sprintf("%.1f", v)} #{unit}`" }.join(" vs ")
+                  str << "  - **" << b_name << "**: " << bar_summary << speedup_suffix << "\n"
                 end
               end
             else
