@@ -16,6 +16,7 @@ left:
     - '<strong>Assigning an <code>if</code> statement?</strong> Writing <code>val = if cond</code> looks like an illegal syntax error or a broken ternary operator.'
     - '<strong>Why is <code>if</code> at the end of the line?</strong> Prefix-trained brains flinch when control flow conditions appear after the action has already been written.'
     - '<strong>Punctuation inside method names?</strong> In C-family languages, <code>?</code> and <code>!</code> are reserved operators for optionals and negations, not valid identifier characters.'
+    - '<strong>Where is the <code>for</code> loop?</strong> Developers search in vain for traditional loops, baffled to find people calling methods on numbers (<code>5.times</code>).'
     - '<strong>Re-opening classes from other files?</strong> To Java and C++ developers, modifying existing classes violates the sacred law of closed compilation units.'
 right:
   type: card

@@ -24,6 +24,7 @@ slides:
 - 03j_ruby_if_assignment
 - 03k_ruby_statement_modifiers
 - 03l_ruby_predicate_and_bang
+- 03m_ruby_missing_for_loop
 - 03e_ruby_monkey_patching
 
 # --- SECTION 2C: Dynamic Metaprogramming & The Scale Wall ---
