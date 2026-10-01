@@ -2846,7 +2846,91 @@ end
       </section>
 
       <!-- ===================================================================
-           SLIDE 31: Super ES (Where Macros Shine: Declarative State Machines)
+           SLIDE 31: Spaces 97 (Macros: Zero-Reflection Serialization)
+           =================================================================== -->
+      <section data-background-color="#f0f4f8"
+               data-palette-name="Spaces 97"
+               data-palette-cube="#000000"
+               data-palette-cube-hover="#000080"
+               class="solvin-slide spaces_97 slide-19_macro_serialization"
+               data-slide-id="19_macro_serialization"
+               style="--bg-color: #f0f4f8; --bg-window: #d4d0c8; --text-color: #000000; --text-dim: #333333; --link-color: #000080; --border-color: #2b579a; --border-active: #1084d0; --accent-color: #000080; --accent-secondary: #1084d0; --accent-tertiary: #2b579a; --accent-quaternary: #000080; --shadow-color: #1a385c; --cube: #000000; --cube-hover: #000080; --emoji-filter: url(#emoji-filter-spaces_97); ">
+        <div class="palette-corner-badge" title="Theme: Spaces 97">
+          <span class="palette-corner-dot"></span> PALETTE: Spaces 97
+        </div>
+        <div class="slide-header" style="">
+          <div>
+            <span class="badge-pill purple">AST METAPROGRAMMING • ARCHITECTURE</span>
+            <h2 class="slide-title">Macros: Zero-Reflection Serialization</h2>
+            <p class="slide-subtitle">Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead</p>
+          </div>
+        </div>
+        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="code-container col" style="">
+            <div class="code-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-1" title="Close"></span>
+                <span class="terminal-dot dot-2" title="Minimize"></span>
+                <span class="terminal-dot dot-3" title="Maximize"></span>
+              </div>
+              <span class="code-title">save_game_state.cr — Serialization Without Reflection</span>
+              <div class="window-controls">
+                <span class="code-lang-tag">Crystal</span>
+                <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
+              </div>
+            </div>
+            <pre><code class="language-crystal" style="font-size: 0.94rem !important; line-height: 1.25 !important;">require &quot;json&quot;
+
+# Structs and classes serialize with a single macro inclusion
+struct PlayerSaveData
+  include JSON::Serializable
+
+  property player_name : String
+  property level : Int32
+  property health : Float32
+  property inventory_items : Array(String)
+  property position_checkpoint : Godot::Vector3
+end
+
+# 1. Serializing to JSON string: direct bytecode generation
+data = PlayerSaveData.new(...)
+json_str = data.to_json
+
+# 2. Deserializing from JSON: type-safe, strict validation
+loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
+          </div>
+          </div>
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card purple col">
+            <div class="card-title purple">
+              <span>Why It Beats GDScript &amp; C# Serialization</span>
+            </div>
+            <ul class="card-list">
+              <li><strong>Zero Runtime Reflection:</strong> Serialization code is synthesized by macros at compile time; no reflection API overhead.</li>
+              <li><strong>Strict Schema Validation:</strong> Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.</li>
+              <li><strong>Built-in Format Support:</strong> First-class standard library support for JSON, YAML, and binary formats.</li>
+              <li><strong>Engine Agnostic Data Structures:</strong> Save models exist as pure Crystal data structures independent of Godot node hierarchies.</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Lapis for Crystal • Godot 4.8+</span>
+          <span>sol.vin (Spaces 97)</span>
+          <span>Slide 31 / 123</span>
+        </div>
+        <aside class="notes">
+          Save systems and network state serialization often suffer from runtime reflection
+          overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable
+          to a struct generates complete, high-speed serialization and deserialization code
+          at compile time. It validates schemas strictly, serializes directly into buffers,
+          and requires zero manual dictionary mapping.
+        </aside>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 32: Super ES (Where Macros Shine: Declarative State Machines)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -2934,7 +3018,7 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 31 / 123</span>
+          <span>Slide 32 / 123</span>
         </div>
         <aside class="notes">
           State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process.
@@ -2942,7 +3026,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 32: Super ES (Behind the DSL: The FSM AST Macro)
+           SLIDE 33: Super ES (Behind the DSL: The FSM AST Macro)
            =================================================================== -->
       <section data-background-color="#f0f0f5"
                data-palette-name="Super ES"
@@ -3049,94 +3133,10 @@ end</code></pre>
         <div class="slide-footer">
           <span>Lapis for Crystal • Godot 4.8+</span>
           <span>sol.vin (Super ES)</span>
-          <span>Slide 32 / 123</span>
-        </div>
-        <aside class="notes">
-          This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C.
-        </aside>
-      </section>
-
-      <!-- ===================================================================
-           SLIDE 33: Spaces 97 (Macros: Zero-Reflection Serialization)
-           =================================================================== -->
-      <section data-background-color="#f0f4f8"
-               data-palette-name="Spaces 97"
-               data-palette-cube="#000000"
-               data-palette-cube-hover="#000080"
-               class="solvin-slide spaces_97 slide-19_macro_serialization"
-               data-slide-id="19_macro_serialization"
-               style="--bg-color: #f0f4f8; --bg-window: #d4d0c8; --text-color: #000000; --text-dim: #333333; --link-color: #000080; --border-color: #2b579a; --border-active: #1084d0; --accent-color: #000080; --accent-secondary: #1084d0; --accent-tertiary: #2b579a; --accent-quaternary: #000080; --shadow-color: #1a385c; --cube: #000000; --cube-hover: #000080; --emoji-filter: url(#emoji-filter-spaces_97); ">
-        <div class="palette-corner-badge" title="Theme: Spaces 97">
-          <span class="palette-corner-dot"></span> PALETTE: Spaces 97
-        </div>
-        <div class="slide-header" style="">
-          <div>
-            <span class="badge-pill purple">AST METAPROGRAMMING • ARCHITECTURE</span>
-            <h2 class="slide-title">Macros: Zero-Reflection Serialization</h2>
-            <p class="slide-subtitle">Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead</p>
-          </div>
-        </div>
-        <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col" style="">
-            <div class="code-header">
-              <div class="terminal-dots">
-                <span class="terminal-dot dot-1" title="Close"></span>
-                <span class="terminal-dot dot-2" title="Minimize"></span>
-                <span class="terminal-dot dot-3" title="Maximize"></span>
-              </div>
-              <span class="code-title">save_game_state.cr — Serialization Without Reflection</span>
-              <div class="window-controls">
-                <span class="code-lang-tag">Crystal</span>
-                <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
-              </div>
-            </div>
-            <pre><code class="language-crystal" style="font-size: 0.94rem !important; line-height: 1.25 !important;">require &quot;json&quot;
-
-# Structs and classes serialize with a single macro inclusion
-struct PlayerSaveData
-  include JSON::Serializable
-
-  property player_name : String
-  property level : Int32
-  property health : Float32
-  property inventory_items : Array(String)
-  property position_checkpoint : Godot::Vector3
-end
-
-# 1. Serializing to JSON string: direct bytecode generation
-data = PlayerSaveData.new(...)
-json_str = data.to_json
-
-# 2. Deserializing from JSON: type-safe, strict validation
-loaded_data = PlayerSaveData.from_json(json_str)</code></pre>
-          </div>
-          </div>
-          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
-            <div class="card-title purple">
-              <span>Why It Beats GDScript &amp; C# Serialization</span>
-            </div>
-            <ul class="card-list">
-              <li><strong>Zero Runtime Reflection:</strong> Serialization code is synthesized by macros at compile time; no reflection API overhead.</li>
-              <li><strong>Strict Schema Validation:</strong> Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.</li>
-              <li><strong>Built-in Format Support:</strong> First-class standard library support for JSON, YAML, and binary formats.</li>
-              <li><strong>Engine Agnostic Data Structures:</strong> Save models exist as pure Crystal data structures independent of Godot node hierarchies.</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div class="slide-footer">
-          <span>Lapis for Crystal • Godot 4.8+</span>
-          <span>sol.vin (Spaces 97)</span>
           <span>Slide 33 / 123</span>
         </div>
         <aside class="notes">
-          Save systems and network state serialization often suffer from runtime reflection
-          overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable
-          to a struct generates complete, high-speed serialization and deserialization code
-          at compile time. It validates schemas strictly, serializes directly into buffers,
-          and requires zero manual dictionary mapping.
+          This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C.
         </aside>
       </section>
 

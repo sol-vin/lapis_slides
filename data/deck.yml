@@ -46,9 +46,9 @@ slides:
 - 10c_static_metaprogramming_tradeoffs
 - 14b_crystal_macro_hooks
 - 14c_macro_finished_introspection
+- 19_macro_serialization
 - 18_macro_state_machines
 - 18b_macro_fsm_implementation
-- 19_macro_serialization
 
 # --- SECTION 4: Lapis — Godot Engine & Antipattern Face-Off ---
 - 06_what_is_lapis

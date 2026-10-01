@@ -1209,7 +1209,43 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In dynamic languages like Ruby, you can inspect instance variables and methods at any time at runtime using reflection. But how do you do compile-time reflection in a statically typed language where classes are open and spread across multiple source files? If you inspect @type.instance_vars at the top of a class, the compiler hasn't parsed the rest of the file yet, let alone other files reopening the class! Crystal solves this with 'macro finished'. This special hook tells the compiler: 'Pause! Wait until every file, reopen, and method in this type has been completely parsed by the frontend, then run this macro.' Inside macro finished, you have exhaustive, authoritative knowledge of the entire type: all instance variables, their types, all methods, and all annotations. In Lapis, this is the secret weapon: macro finished inspects your node classes, discovers every @[Export] property and signal, and synthesizes complete Godot ClassDB bindings and binary serializers before emitting LLVM IR. You get all the automation of reflection with 100% bare-metal performance."*
 
 ---
-### Slide 31: Where Macros Shine: Declarative State Machines
+### Slide 31: Macros: Zero-Reflection Serialization
+- **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
+- **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
+- **Title**: Macros: Zero-Reflection Serialization
+- **Subtitle**: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
+- **Code Example (`save_game_state.cr — Serialization Without Reflection`)**:
+  ```crystal
+  require "json"
+  
+  # Structs and classes serialize with a single macro inclusion
+  struct PlayerSaveData
+    include JSON::Serializable
+  
+    property player_name : String
+    property level : Int32
+    property health : Float32
+    property inventory_items : Array(String)
+    property position_checkpoint : Godot::Vector3
+  end
+  
+  # 1. Serializing to JSON string: direct bytecode generation
+  data = PlayerSaveData.new(...)
+  json_str = data.to_json
+  
+  # 2. Deserializing from JSON: type-safe, strict validation
+  loaded_data = PlayerSaveData.from_json(json_str)
+  ```
+- **Why It Beats GDScript & C# Serialization**:
+  - Zero Runtime Reflection: Serialization code is synthesized by macros at compile time; no reflection API overhead.
+  - Strict Schema Validation: Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.
+  - Built-in Format Support: First-class standard library support for JSON, YAML, and binary formats.
+  - Engine Agnostic Data Structures: Save models exist as pure Crystal data structures independent of Godot node hierarchies.
+- **Presenter Script**:
+  > *"Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping."*
+
+---
+### Slide 32: Where Macros Shine: Declarative State Machines
 - **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
 - **Title**: Where Macros Shine: Declarative State Machines
@@ -1261,7 +1297,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document. Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct jump tables with zero reflection overhead. Below the definition, you see actual gameplay usage: instantiating BossStateMachine, triggering events like :see_player, and matching exhaustively on current_state in _physics_process."*
 
 ---
-### Slide 32: Behind the DSL: The FSM AST Macro
+### Slide 33: Behind the DSL: The FSM AST Macro
 - **Sol.vin Theme Palette**: `super_es` (Super ES) [BG: `#f0f0f5` | Window: `#e2e2ea` | Text: `#1b1924` | Accent: `#4f3880`]
 - **Category Badge**: `AST METAPROGRAMMING • UNDER THE HOOD`
 - **Title**: Behind the DSL: The FSM AST Macro
@@ -1330,42 +1366,6 @@ This document outlines each slide's exact theme palette, architectural category,
   - Zero Runtime Overhead: trigger(:event) expands into a flat native case statement compiled to direct CPU jump tables — zero dictionaries, zero string comparisons, zero heap allocations!
 - **Presenter Script**:
   > *"This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with the performance of hand-optimized C."*
-
----
-### Slide 33: Macros: Zero-Reflection Serialization
-- **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
-- **Category Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
-- **Title**: Macros: Zero-Reflection Serialization
-- **Subtitle**: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
-- **Code Example (`save_game_state.cr — Serialization Without Reflection`)**:
-  ```crystal
-  require "json"
-  
-  # Structs and classes serialize with a single macro inclusion
-  struct PlayerSaveData
-    include JSON::Serializable
-  
-    property player_name : String
-    property level : Int32
-    property health : Float32
-    property inventory_items : Array(String)
-    property position_checkpoint : Godot::Vector3
-  end
-  
-  # 1. Serializing to JSON string: direct bytecode generation
-  data = PlayerSaveData.new(...)
-  json_str = data.to_json
-  
-  # 2. Deserializing from JSON: type-safe, strict validation
-  loaded_data = PlayerSaveData.from_json(json_str)
-  ```
-- **Why It Beats GDScript & C# Serialization**:
-  - Zero Runtime Reflection: Serialization code is synthesized by macros at compile time; no reflection API overhead.
-  - Strict Schema Validation: Missing required fields or mismatched types raise clear parse errors rather than corrupting save state.
-  - Built-in Format Support: First-class standard library support for JSON, YAML, and binary formats.
-  - Engine Agnostic Data Structures: Save models exist as pure Crystal data structures independent of Godot node hierarchies.
-- **Presenter Script**:
-  > *"Save systems and network state serialization often suffer from runtime reflection overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable to a struct generates complete, high-speed serialization and deserialization code at compile time. It validates schemas strictly, serializes directly into buffers, and requires zero manual dictionary mapping."*
 
 ---
 ### Slide 34: What is Lapis?
