@@ -128,7 +128,8 @@ module LapisSlides
                 if (window.hljs && window.hljs.listLanguages) {
                   window.hljs.listLanguages().forEach((lang) => {
                     const def = window.hljs.getLanguage(lang);
-                    if (def && !internalHljs.getLanguage(lang)) {
+                    if (def) {
+                      try { internalHljs.unregisterLanguage(lang); } catch(e) {}
                       internalHljs.registerLanguage(lang, def.rawDefinition || (() => def));
                     }
                   });

@@ -1487,9 +1487,12 @@ This document outlines each slide's exact theme palette, architectural category,
   node PlayerController < CharacterBody2D do
     def _ready : Void
       # 1. Bare String & NodePath via active context:
-      camera = ~"$CameraRig/Camera2D"
-      hud_bar = ~"%PlayerHUD"
-  
+      camera = ~"$CameraRig/Camera2D" # => Node (or NodeNotFoundError)
+      hud_bar = ~"%PlayerHUD" # => Node (or NodeNotFoundError)
+      inventory = ~"%Inventory".as Inventory # => Inventory (or NodeNotFoundError)
+      backpack = ~"$Back/Backpack".as(Backpack) # => Backpack (or NodeNotFoundError)
+      item = ~"%Inventory/HeldItem".as? Item  # => Item or nil (or NodeNotFoundError)
+      
       # 2. Strict ~Class: Resolves & casts up (like self[T]):
       sprite = ~Sprite2D           # Searches tree, up-casts, raises if nil
       weapon = ~Weapon             # Up-casts derived Sword/Bow to Weapon

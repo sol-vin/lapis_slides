@@ -3463,9 +3463,12 @@ end</code></pre>
             <pre><code class="language-crystal code-compact">node PlayerController &lt; CharacterBody2D do
   def _ready : Void
     # 1. Bare String &amp; NodePath via active context:
-    camera = ~&quot;$CameraRig/Camera2D&quot;
-    hud_bar = ~&quot;%PlayerHUD&quot;
-
+    camera = ~&quot;$CameraRig/Camera2D&quot; # =&gt; Node (or NodeNotFoundError)
+    hud_bar = ~&quot;%PlayerHUD&quot; # =&gt; Node (or NodeNotFoundError)
+    inventory = ~&quot;%Inventory&quot;.as Inventory # =&gt; Inventory (or NodeNotFoundError)
+    backpack = ~&quot;$Back/Backpack&quot;.as(Backpack) # =&gt; Backpack (or NodeNotFoundError)
+    item = ~&quot;%Inventory/HeldItem&quot;.as? Item  # =&gt; Item or nil (or NodeNotFoundError)
+    
     # 2. Strict ~Class: Resolves &amp; casts up (like self[T]):
     sprite = ~Sprite2D           # Searches tree, up-casts, raises if nil
     weapon = ~Weapon             # Up-casts derived Sword/Bow to Weapon
@@ -11253,7 +11256,8 @@ end
           if (window.hljs && window.hljs.listLanguages) {
             window.hljs.listLanguages().forEach((lang) => {
               const def = window.hljs.getLanguage(lang);
-              if (def && !internalHljs.getLanguage(lang)) {
+              if (def) {
+                try { internalHljs.unregisterLanguage(lang); } catch(e) {}
                 internalHljs.registerLanguage(lang, def.rawDefinition || (() => def));
               }
             });
