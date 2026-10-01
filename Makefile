@@ -13,3 +13,7 @@ validate:
 
 clean:
 	rm -rf bin/
+
+casts:
+	$(CRYSTAL) run scripts/record_casts.cr -- --all
+
