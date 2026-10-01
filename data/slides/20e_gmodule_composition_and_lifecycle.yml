@@ -12,47 +12,33 @@ left:
   title: composed_traits.cr — Inheritance & Cooperative Hooks
   tag: Crystal
   lang: crystal
-  font_size: '0.64rem'
+  font_size: '0.80rem'
   code: |
-    # 1. Composed Module Inheritance (Module < Module):
+    # 1. Composed Module Inheritance (Module < Module)
     gmodule Combatant < Damageable do
       signal attack_landed(target : String, damage : Int32)
       @[Export]
       property attack_power : Int32 = 25
-
-      def perform_attack(target_name : String) : Int32
-        dmg = self.attack_power
-        emit(attack_landed, target_name, dmg)
-        dmg
+      def attack(target : String) : Void
+        emit(attack_landed, target, attack_power)
       end
     end
 
-    # 2. Cooperative Engine Lifecycle Hooks:
+    # 2. Cooperative Engine Lifecycle Hooks
     gmodule AutoRegen do
       include Damageable
       @[Export]
       property regen_rate : Float32 = 2.0_f32
-
       def _process(delta : Float64) : Void
-        super # Chains through all mixed-in modules & base node!
-        self.heal((self.regen_rate * delta).to_i32)
+        super # Chains through all mixed-in modules!
+        heal((regen_rate * delta).to_i32)
       end
     end
 
-    # 3. Abstract Interface Contracts:
-    gmodule Interactable do
-      signal interacted(actor : String)
-      abstract def on_interact(actor : String) : Void
-    end
-
+    # 3. Composed Node with Multiple Traits
     node BossMonster < CharacterBody3D do
-      include Combatant    # Inherits Combatant + Damageable!
-      include AutoRegen    # Autonomous frame regeneration
-      include Interactable # Enforces on_interact at compile time
-
-      def on_interact(actor : String) : Void
-        emit(interacted, actor)
-      end
+      include Combatant # Inherits Combatant + Damageable!
+      include AutoRegen # Autonomous frame regeneration
     end
 right:
   type: card

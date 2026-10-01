@@ -2,4 +2,7 @@ bin/
 *.exe
 *.pdb
 *.uid
+*.import
+scratch/
+slide_*.png
 __pycache__/

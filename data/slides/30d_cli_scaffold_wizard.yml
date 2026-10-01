@@ -6,19 +6,19 @@ badge: SCAFFOLDING • LAPIS CLI
 badge_color: cyan
 palette: spaces_95
 layout: two-column-layout
-ratio: 3:2
+ratio: 2:1
 left:
   type: asciinema
   title: Terminal — lapis cli -n & lapis scaffold
   cast: casts/lapis_scaffold_wizard.cast
-  font_size: '0.60rem'
+  font_size: '0.80rem'
   speed: 1.0
   loop: true
   autoplay: true
   controls: auto
   theme: monokai
   cols: 86
-  rows: 19
+  rows: 22
   code: |
     $ lapis cli -n
     :: LAPIS PROJECT & ADDON SCAFFOLDING WIZARD ::

@@ -25,11 +25,13 @@ module LapisSlides
       output_md = File.expand_path("SLIDES.md", base_dir)
       web_root = base_dir
 
+      skip_casts = false
       parser = OptionParser.new do |opts|
         opts.banner = "Usage: crystal run slides/src/builder.cr -- [command] [options]"
         opts.on("build", "Compile slide YAML files into index.html and SLIDES.md (default)") { command = "build" }
         opts.on("serve", "Build and launch live HTTP presentation preview server") { command = "serve" }
         opts.on("validate", "Validate slide YAML files, layouts, and theme palettes") { command = "validate" }
+        opts.on("--no-casts", "Skip rebuilding cast files") { skip_casts = true }
         opts.on("-p PORT", "--port=PORT", "Port for HTTP preview server (default: 8000)") { |p| port = p.to_i }
         opts.on("-h", "--help", "Show help and commands") do
           puts opts
@@ -70,13 +72,13 @@ module LapisSlides
       case command
       when "build"
         puts "Building presentation deck '#{deck.title}'..."
-        CastBuilder.build_all(File.expand_path("casts", base_dir))
+        CastBuilder.build_all(File.expand_path("casts", base_dir)) unless skip_casts
         generator.generate_html(output_html)
         generator.generate_markdown(output_md)
         puts "Successfully built #{deck.slides.size} slides!"
       when "serve"
         puts "Ensuring slides are built before serving..."
-        CastBuilder.build_all(File.expand_path("casts", base_dir))
+        CastBuilder.build_all(File.expand_path("casts", base_dir)) unless skip_casts
         generator.generate_html(output_html)
         generator.generate_markdown(output_md)
         Server.run(web_root, port)

@@ -177,6 +177,11 @@
   min-width: 0 !important;
 }
 
+.col-4 {
+  flex: 4 !important;
+  min-width: 0 !important;
+}
+
 /* Content Cards */
 .card {
   background-color: var(--card-bg);
@@ -288,36 +293,55 @@ ul.card-list li strong {
   font-weight: 700;
 }
 
-/* Compact Card Variant for dense content and col-2 narrow columns */
+/* Card Proportions for Two-Column Layouts (Balanced Sizing for col-2 and compact) */
 .card.compact,
 .col-2 .card {
-  padding: 0.55rem 0.85rem !important;
-  gap: 0.25rem !important;
+  padding: 0.85rem 1.15rem !important;
+  gap: 0.40rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
 }
 
 .card.compact .card-title,
 .col-2 .card .card-title {
-  font-size: 0.95rem !important;
-  margin-bottom: 0.15rem !important;
-  padding-bottom: 0.2rem !important;
+  font-size: 1.05rem !important;
+  margin-bottom: 0.35rem !important;
+  padding-bottom: 0.30rem !important;
 }
 
 .card.compact ul.card-list,
 .col-2 .card ul.card-list {
-  gap: 0.22rem !important;
-  justify-content: flex-start !important;
+  gap: 0.55rem !important;
+  justify-content: space-evenly !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
 }
 
-.card.compact ul.card-list li,
 .col-2 .card ul.card-list li {
-  font-size: 0.70rem !important;
-  line-height: 1.22 !important;
-  padding-left: 0.9rem !important;
+  font-size: 0.84rem !important;
+  line-height: 1.40 !important;
+  padding-left: 1.15rem !important;
 }
 
+.col-2 .card ul.card-list li code {
+  font-size: 0.78rem !important;
+  padding: 0.05rem 0.32rem !important;
+}
+
+/* Compact variant when 5 or more items are present */
+.card.compact ul.card-list li,
 .col-2 .card.compact ul.card-list li {
-  font-size: 0.68rem !important;
-  line-height: 1.20 !important;
+  font-size: 0.78rem !important;
+  line-height: 1.32 !important;
+  padding-left: 1.05rem !important;
+}
+
+.card.compact ul.card-list,
+.col-2 .card.compact ul.card-list {
+  gap: 0.35rem !important;
+  justify-content: space-between !important;
 }
 
 /* Code Display & Highlight.js Integration */
@@ -458,10 +482,10 @@ ul.card-list li strong {
 }
 
 .terminal-body {
-  padding: 0.55rem 0.85rem !important;
+  padding: 0.70rem 1.0rem !important;
   font-family: var(--code-font) !important;
-  font-size: 0.69rem !important;
-  line-height: 1.34 !important;
+  font-size: 0.82rem !important;
+  line-height: 1.38 !important;
   color: #e2e8f0;
   overflow: hidden !important;
   flex: 1;
@@ -1040,8 +1064,8 @@ ul.card-list li strong {
 }
 
 .solvin-slide .card.compact {
-  padding: 0.55rem 0.85rem !important;
-  gap: 0.25rem !important;
+  padding: 0.75rem 1.05rem !important;
+  gap: 0.35rem !important;
 }
 
 .solvin-slide .card-title {
@@ -1050,13 +1074,13 @@ ul.card-list li strong {
   font-weight: 700 !important;
   border-bottom: 1px dashed var(--border-color) !important;
   padding-bottom: 0.35rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .solvin-slide .card.compact .card-title {
-  font-size: 0.95rem !important;
-  margin-bottom: 0.15rem !important;
-  padding-bottom: 0.2rem !important;
+  font-size: 1.05rem !important;
+  margin-bottom: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
 }
 
 .solvin-slide .card-list li,
@@ -1066,9 +1090,9 @@ ul.card-list li strong {
 
 .solvin-slide .card.compact .card-list li,
 .solvin-slide .card.compact ul.card-list li {
-  font-size: 0.70rem !important;
-  line-height: 1.22 !important;
-  padding-left: 0.9rem !important;
+  font-size: 0.78rem !important;
+  line-height: 1.32 !important;
+  padding-left: 1.05rem !important;
 }
 
 .solvin-slide .card-list li strong,
@@ -1600,8 +1624,8 @@ ul.card-list li strong {
   background-color: transparent !important;
   color: var(--text-color) !important;
   font-family: var(--code-font) !important;
-  font-size: 0.78rem !important;
-  line-height: 1.38 !important;
+  font-size: 0.82rem !important;
+  line-height: 1.40 !important;
   white-space: pre-wrap !important;
   word-break: break-word !important;
   overflow-wrap: anywhere !important;
@@ -1610,14 +1634,14 @@ ul.card-list li strong {
 
 .code-container.code-dense pre code,
 .code-container pre code.code-dense {
-  font-size: 0.70rem !important;
-  line-height: 1.28 !important;
+  font-size: 0.76rem !important;
+  line-height: 1.32 !important;
 }
 
 .code-container.code-compact pre code,
 .code-container pre code.code-compact {
-  font-size: 0.62rem !important;
-  line-height: 1.22 !important;
+  font-size: 0.68rem !important;
+  line-height: 1.24 !important;
 }
 
 .code-container pre code .hljs-keyword,

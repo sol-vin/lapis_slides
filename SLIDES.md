@@ -1315,36 +1315,24 @@ This document outlines each slide's exact theme palette, architectural category,
     property health : Int32 = 100
     @[Export]
     property max_health : Int32 = 100
-    @[Export]
-    property defense : Float32 = 5.0_f32
   
-    @[ExportToolButton("Reset Health & Stats")]
+    @[ExportToolButton("Reset Stats")]
     def reset_stats : Void
       self.health = self.max_health
-      Godot.print("Stats reset to maximum.")
     end
   
     def take_damage(amount : Int32) : Void
-      effective = Math.max(0, amount - self.defense.to_i32)
-      self.health = Math.max(0, self.health - effective)
+      self.health = Math.max(0, self.health - amount)
       emit(health_changed, self.health, self.max_health)
       emit(died) if self.health == 0
     end
-  
-    def heal(amount : Int32) : Void
-      self.health = Math.min(self.max_health, self.health + amount)
-      emit(health_changed, self.health, self.max_health)
-    end
   end
   
-  # Custom node mixing in Damageable
+  # Custom node mixing in Damageable trait
   node HeroCharacter < CharacterBody2D do
     include Damageable
-    @[Export]
-    property hero_name : String = "Hero"
-  
     def _ready : Void
-      Godot.print("#{hero_name} ready: #{health}/#{max_health} HP")
+      Godot.print("Hero ready: #{health}/#{max_health} HP")
     end
   end
   ```
@@ -1365,45 +1353,31 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Composed Module Inheritance, Cooperative Lifecycle Chaining & Abstract Contracts
 - **Code Example (`composed_traits.cr — Inheritance & Cooperative Hooks`)**:
   ```crystal
-  # 1. Composed Module Inheritance (Module < Module):
+  # 1. Composed Module Inheritance (Module < Module)
   gmodule Combatant < Damageable do
     signal attack_landed(target : String, damage : Int32)
     @[Export]
     property attack_power : Int32 = 25
-  
-    def perform_attack(target_name : String) : Int32
-      dmg = self.attack_power
-      emit(attack_landed, target_name, dmg)
-      dmg
+    def attack(target : String) : Void
+      emit(attack_landed, target, attack_power)
     end
   end
   
-  # 2. Cooperative Engine Lifecycle Hooks:
+  # 2. Cooperative Engine Lifecycle Hooks
   gmodule AutoRegen do
     include Damageable
     @[Export]
     property regen_rate : Float32 = 2.0_f32
-  
     def _process(delta : Float64) : Void
-      super # Chains through all mixed-in modules & base node!
-      self.heal((self.regen_rate * delta).to_i32)
+      super # Chains through all mixed-in modules!
+      heal((regen_rate * delta).to_i32)
     end
   end
   
-  # 3. Abstract Interface Contracts:
-  gmodule Interactable do
-    signal interacted(actor : String)
-    abstract def on_interact(actor : String) : Void
-  end
-  
+  # 3. Composed Node with Multiple Traits
   node BossMonster < CharacterBody3D do
-    include Combatant    # Inherits Combatant + Damageable!
-    include AutoRegen    # Autonomous frame regeneration
-    include Interactable # Enforces on_interact at compile time
-  
-    def on_interact(actor : String) : Void
-      emit(interacted, actor)
-    end
+    include Combatant # Inherits Combatant + Damageable!
+    include AutoRegen # Autonomous frame regeneration
   end
   ```
 - **Architectural Rigor & Safety**:

@@ -12,7 +12,7 @@ left:
   title: src/nodes/energy_shield.cr — Procedural Visuals
   tag: Crystal
   lang: crystal
-  font_size: '0.64rem'
+  font_size: '0.80rem'
   code: |
     require "crshader"
 

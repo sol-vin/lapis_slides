@@ -12,7 +12,7 @@ left:
   title: damageable_trait.cr — First-Class Godot Mixin
   tag: Crystal
   lang: crystal
-  font_size: '0.64rem'
+  font_size: '0.80rem'
   code: |
     # Reusable gameplay trait with full engine reflection
     gmodule Damageable do
@@ -23,36 +23,24 @@ left:
       property health : Int32 = 100
       @[Export]
       property max_health : Int32 = 100
-      @[Export]
-      property defense : Float32 = 5.0_f32
 
-      @[ExportToolButton("Reset Health & Stats")]
+      @[ExportToolButton("Reset Stats")]
       def reset_stats : Void
         self.health = self.max_health
-        Godot.print("Stats reset to maximum.")
       end
 
       def take_damage(amount : Int32) : Void
-        effective = Math.max(0, amount - self.defense.to_i32)
-        self.health = Math.max(0, self.health - effective)
+        self.health = Math.max(0, self.health - amount)
         emit(health_changed, self.health, self.max_health)
         emit(died) if self.health == 0
       end
-
-      def heal(amount : Int32) : Void
-        self.health = Math.min(self.max_health, self.health + amount)
-        emit(health_changed, self.health, self.max_health)
-      end
     end
 
-    # Custom node mixing in Damageable
+    # Custom node mixing in Damageable trait
     node HeroCharacter < CharacterBody2D do
       include Damageable
-      @[Export]
-      property hero_name : String = "Hero"
-
       def _ready : Void
-        Godot.print("#{hero_name} ready: #{health}/#{max_health} HP")
+        Godot.print("Hero ready: #{health}/#{max_health} HP")
       end
     end
 right:

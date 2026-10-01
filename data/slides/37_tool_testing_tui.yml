@@ -6,19 +6,19 @@ badge: QUALITY GATES • TESTING APPARATUS
 badge_color: cyan
 palette: spaces_31
 layout: two-column-layout
-ratio: 3:2
+ratio: 2:1
 left:
   type: asciinema
   title: Terminal — lapis test --tui Dashboard
   cast: casts/test_runner_tui.cast
-  font_size: '0.60rem'
+  font_size: '0.80rem'
   speed: 1.0
   loop: true
   autoplay: true
   controls: auto
   theme: monokai
   cols: 86
-  rows: 19
+  rows: 22
   code: |
     ╔════════════════════════════════════════════════════════════════════════════════════╗
     ║ LAPIS UNIFIED TEST SUITE DASHBOARD                                ALL PASSED [OK]  ║

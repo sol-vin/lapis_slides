@@ -6,19 +6,19 @@ badge: 'LIVE DEMO • PART 3: ADDON ECOSYSTEM'
 badge_color: green
 palette: spaces_95
 layout: two-column-layout
-ratio: 3:2
+ratio: 2:1
 left:
   type: asciinema
   title: Terminal — lapis install addon
   cast: casts/lapis_demo_install_addon.cast
-  font_size: '0.60rem'
+  font_size: '0.80rem'
   speed: 1.0
   loop: true
   autoplay: true
   controls: auto
   theme: monokai
   cols: 84
-  rows: 18
+  rows: 22
   code: |
     # Step 1: Install CrShader with shard dependency & type bindings
     $ lapis install addon github:sol-vin/crshader --shard --bind

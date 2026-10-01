@@ -12,7 +12,7 @@ left:
   title: custom_benchmark.cr — Lapis::Benchmark DSL
   tag: Crystal
   lang: crystal
-  font_size: '0.64rem'
+  font_size: '0.80rem'
   code: |
     require "lapis/benchmark"
 
@@ -42,9 +42,9 @@ right:
   type: asciinema
   title: lapis benchmarks run — CLI Execution & HTML Report
   cast: casts/lapis_custom_benchmarks.cast
-  font_size: '0.60rem'
+  font_size: '0.80rem'
   cols: 86
-  rows: 19
+  rows: 22
   speed: 1.0
   loop: true
   autoplay: true

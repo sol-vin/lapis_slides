@@ -6,19 +6,19 @@ badge: TOOLCHAIN • THE LAPIS CLI
 badge_color: cyan
 palette: spaces_95
 layout: two-column-layout
-ratio: 3:2
+ratio: 2:1
 left:
   type: asciinema
   title: Terminal — Lapis Command Center & Scaffolding
   cast: casts/lapis_cli_lifecycle.cast
-  font_size: '0.60rem'
+  font_size: '0.80rem'
   speed: 1.0
   loop: true
   autoplay: true
   controls: auto
   theme: monokai
   cols: 86
-  rows: 19
+  rows: 22
   code: |
     # Launch interactive Lapis Command Center dashboard
     $ lapis

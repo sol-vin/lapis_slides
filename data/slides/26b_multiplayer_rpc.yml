@@ -12,7 +12,7 @@ left:
   title: Crystal Multiplayer Node with @[RPC]
   lang: crystal
   tag: Crystal (Lapis)
-  font_size: '0.70rem'
+  font_size: '0.80rem'
   code: |
     node NetworkPlayer < CharacterBody3D do
       @[Export]

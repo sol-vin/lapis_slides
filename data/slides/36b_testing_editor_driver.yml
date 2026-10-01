@@ -12,7 +12,7 @@ left:
   title: editor_driver_spec.cr — Headless In-Editor Driver
   tag: Crystal
   lang: crystal
-  font_size: '0.64rem'
+  font_size: '0.80rem'
   code: |
     require "./spec_helper"
 
@@ -43,9 +43,9 @@ right:
   type: asciinema
   title: lapis test spec/editor_driver_spec.cr — Headless Driver & Reload Cycles
   cast: casts/lapis_editor_driver.cast
-  font_size: '0.60rem'
+  font_size: '0.80rem'
   cols: 86
-  rows: 19
+  rows: 22
   speed: 1.0
   loop: true
   autoplay: true

@@ -9,14 +9,18 @@ module LapisSlides
       right_data = slide.raw["right"]?
 
       left_col_class = case ratio
-                       when "2:1", "3:2" then "col-3"
-                       when "1:2", "2:3" then "col-2"
+                       when "2:1" then "col-4"
+                       when "3:2" then "col-3"
+                       when "1:2" then "col-2"
+                       when "2:3" then "col-2"
                        else "col"
                        end
 
       right_col_class = case ratio
-                        when "2:1", "3:2" then "col-2"
-                        when "1:2", "2:3" then "col-3"
+                        when "2:1" then "col-2"
+                        when "3:2" then "col-2"
+                        when "1:2" then "col-4"
+                        when "2:3" then "col-3"
                         else "col"
                         end
 
@@ -67,8 +71,8 @@ module LapisSlides
       when "terminal"
         title = data["title"]?.try(&.as_s) || "Terminal"
         code = data["code"]?.try(&.as_s) || ""
-        font_size = data["font_size"]?.try(&.as_s) || data["code_font_size"]?.try(&.as_s) || "0.60rem"
-        style_attr = font_size ? " style=\"font-size: #{font_size} !important; line-height: 1.25 !important;\"" : ""
+        font_size = data["font_size"]?.try(&.as_s) || data["code_font_size"]?.try(&.as_s) || "0.80rem"
+        style_attr = font_size ? " style=\"font-size: #{font_size} !important; line-height: 1.30 !important;\"" : ""
         str << "            <div class=\"terminal-window col\" style=\"margin: 0;\">\n"
         str << "              <div class=\"terminal-header\">\n"
         str << "                <div class=\"terminal-dots\"><span class=\"terminal-dot dot-1\"></span><span class=\"terminal-dot dot-2\"></span><span class=\"terminal-dot dot-3\"></span></div>\n"
@@ -86,7 +90,7 @@ module LapisSlides
         autoplay = data["autoplay"]?.try(&.as_bool) != false
         controls = data["controls"]?.try(&.as_s) || "auto"
         theme = data["theme"]?.try(&.as_s) || "monokai"
-        font_size = data["font_size"]?.try(&.as_s) || data["terminal_font_size"]?.try(&.as_s) || "0.60rem"
+        font_size = data["font_size"]?.try(&.as_s) || data["terminal_font_size"]?.try(&.as_s) || "0.80rem"
         cols = data["cols"]?.try(&.as_i) || 86
         rows = data["rows"]?.try(&.as_i) || 19
         fallback_code = data["code"]?.try(&.as_s)

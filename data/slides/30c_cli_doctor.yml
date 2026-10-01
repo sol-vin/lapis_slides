@@ -6,19 +6,19 @@ badge: SYSTEMS HEALTH • LAPIS DOCTOR
 badge_color: green
 palette: classic_green
 layout: two-column-layout
-ratio: 3:2
+ratio: 2:1
 left:
   type: asciinema
   title: Terminal — lapis doctor --verbose
   cast: casts/lapis_doctor.cast
-  font_size: '0.60rem'
+  font_size: '0.80rem'
   speed: 1.0
   loop: true
   autoplay: true
   controls: auto
   theme: monokai
   cols: 86
-  rows: 19
+  rows: 22
   code: |
     $ lapis doctor --verbose
     [Doctor] Diagnosing Lapis development environment...
