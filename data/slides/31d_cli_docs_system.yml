@@ -1,0 +1,41 @@
+---
+id: 31d_cli_docs_system
+title: 'Integrated Documentation Suite: lapis docs'
+subtitle: CLI Lookups, Full-Text Search, TUI Browser & Offline HTML Generation
+badge: TOOLCHAIN • DOCUMENTATION ENGINE
+badge_color: purple
+palette: m64
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — Lapis Docs CLI Lookups & Queries
+  code: |
+    # Query Godot engine ClassDB API using GDScript conventions
+    $ lapis docs lookup gd "CharacterBody3D.move_and_slide"
+      godot CharacterBody3D#move_and_slide() -> Bool
+      Moves the body based on velocity. If the body collides with another...
+
+    # Query project Crystal nodes, signals, and methods
+    $ lapis docs lookup crystal "PlayerController#take_damage"
+      crystal PlayerController#take_damage(amount : Int32) : Nil
+      Reduces player health, emits :health_changed, and triggers hurt flash.
+
+    # Query Crystal standard library types (Fiber, Channel, Mutex)
+    $ lapis docs lookup stdlib "Channel"
+      stdlib Channel(T)
+      Concurrent communication conduit between fibers with M:N scheduler.
+
+    # Launch full-screen interactive TUI docs explorer
+    $ lapis docs tui "concurrency"
+right:
+  type: card
+  title: Documentation Engine Capabilities
+  color: purple
+  items:
+  - <strong>Multi-Context CLI Lookups:</strong> Instant CLI signatures and docstrings across 4 distinct contexts: <code>gd</code> (Godot ClassDB), <code>crystal</code> (project nodes), <code>stdlib</code> (Crystal core), and <code>guide</code> (architectural topics).
+  - <strong>Full-Text Search Engine:</strong> <code>lapis docs search &lt;query&gt;</code> performs rapid tokenized indexing across markdown guides, engine classes, and user scripts.
+  - <strong>Interactive TUI Documentation Explorer:</strong> Full-screen split-pane terminal reader (<code>lapis docs tui</code>) with tree navigation, syntax highlighting, and live search.
+  - <strong>Offline HTML Generator & Patching:</strong> Compiles source YAML and Crystal doc comments into static HTML documentation with custom CSS/JS max-height sidebar fixes.
+notes: |
+  Documentation is built directly into the Lapis CLI. Developers do not need to switch context to a browser: lapis docs lookup gd lets you query Godot ClassDB methods with GDScript naming, while lapis docs lookup crystal inspects your own project nodes and signatures. When exploring broader systems, lapis docs tui opens an interactive split-pane terminal documentation reader. The same engine compiles comprehensive offline HTML documentation with custom CSS/JS patches.

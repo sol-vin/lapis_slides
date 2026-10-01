@@ -1,0 +1,32 @@
+---
+id: 34l_multiplayer_debugger
+title: 'Multiplayer Network Debugging & Lockstep Harness'
+subtitle: Cooperative Lockstep Debugging, Latency Simulation & Wireshark-Style Capture
+badge: SYSTEMS DIAGNOSTICS • MULTIPLAYER DEBUGGER
+badge_color: purple
+palette: playbox
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis test -f "Multiplayer" (Lockstep Network Capture Harness)
+  cast: casts/lapis_multiplayer_test.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+right:
+  type: card
+  title: Multiplayer Debugging & Testing Invariants
+  color: purple
+  items:
+  - <strong>Cooperative Lockstep Debugging:</strong> Hitting a breakpoint in server code pauses all connected client instances in synchronized lockstep—eliminating socket timeout drops during debugging.
+  - <strong>Declarative Simulation Macro:</strong> The <code>multiplayer_test(name, clients = 2)</code> macro spins up a headless authoritative host and N client nodes in a single process.
+  - <strong>Network Jitter & Loss Injection:</strong> Test harnesses dynamically simulate adverse network conditions (e.g. 45ms latency variance and 5% packet loss) to verify delta reconciliation.
+  - <strong>Wireshark-Style Packet Capture:</strong> Automatically logs packet sequence numbers, payload lengths, channel IDs, and RPC transmission bytes for deterministic protocol triage.
+notes: |
+  Multiplayer game development is notoriously difficult to debug because setting a breakpoint usually triggers a network timeout disconnect. Lapis solves this through cooperative lockstep debugging: when the host hits an r2 breakpoint or in-editor gutter break, connected clients freeze in cooperative lockstep, preserving network state. Combined with our declarative multiplayer_test harness and packet capture logging, you can verify netcode, RPCs, and state replication with complete confidence.

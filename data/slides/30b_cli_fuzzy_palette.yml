@@ -1,7 +1,7 @@
 ---
 id: 30b_cli_fuzzy_palette
 title: 'CLI: Spotlight Command Palette & Typo Recovery'
-subtitle: Fuzzy Search, Automatic Typo Correction & Shell Autocompletion
+subtitle: Opal Fuzzy Search, Levenshtein Correction & Shell Autocompletion
 badge: DEVELOPER ERGONOMICS • THE LAPIS CLI
 badge_color: purple
 palette: aperture
@@ -23,24 +23,24 @@ left:
     # 1. Automatic Levenshtein typo suggestion and correction
     $ lapis docotr
     [ERROR] Unknown command 'docotr'
-      Did you mean 'doctor'? (distance: 1)
+      Did you mean 'doctor'? (Levenshtein distance: 1)
 
     # 2. Spotlight Command Palette with real-time fuzzy search
     $ lapis --interactive
     ? Search Command to Execute: bench
-    > benchmarks  - Run and profile Crystal vs GDScript performance benchmark suite
-      decompile   - Interactive radare2 pseudo-C disassembler and binary inspector
+    > benchmarks  - Run benchmarks, export HTML reports, and track progression
+      decompile   - Decompile functions or disassemble binaries using radare2
 
     # 3. Dynamic shell autocompletion (PowerShell, Bash, Zsh, Fish)
-    $ lapis completion bash > /etc/bash_completion.d/lapis
+    $ lapis completion powershell | Out-String | Invoke-Expression
 right:
   type: card
   title: Ergonomics & Zero-Friction Navigation
   color: purple
   items:
-  - <strong>Spotlight Command Palette:</strong> Interactive fuzzy search across all 25+ Lapis subcommands with live query matching and descriptions.
+  - <strong>Opal Spotlight Command Palette:</strong> Interactive fuzzy search across all 30+ Lapis subcommands with live query matching and descriptions.
   - <strong>Intelligent Typo Recovery:</strong> Levenshtein distance matching suggests or autocorrects mistyped commands instantly.
   - <strong>Native Shell Autocompletion:</strong> <code>lapis completion</code> generates dynamic completion scripts for Bash, Zsh, Fish, and PowerShell.
   - <strong>Keyboard-First Workflow:</strong> Navigate subcommands, filter options, and launch tools without memorizing obscure flags.
 notes: |
-  Ergonomics should match raw execution speed. The Lapis CLI features a built-in Spotlight Command Palette that offers instantaneous fuzzy filtering across every toolchain command. When a developer mistypes a command like lapis docotr, intelligent Levenshtein distance analysis immediately suggests the right tool. Combined with first-class shell completion generation for Bash, Zsh, Fish, and PowerShell, developers stay in the flow without checking documentation.
+  Ergonomics should match raw execution speed. The Lapis CLI features a built-in Spotlight Command Palette powered by Opal that offers instantaneous fuzzy filtering across all 30+ toolchain commands. When a developer mistypes a command like lapis docotr, intelligent Levenshtein distance analysis immediately suggests the right tool. Combined with first-class shell completion generation for Bash, Zsh, Fish, and PowerShell, developers stay in the flow without checking documentation.

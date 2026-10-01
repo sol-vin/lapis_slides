@@ -1,0 +1,29 @@
+---
+id: 30f_cli_clean_and_upgrade
+title: 'Workspace Hygiene & Project Upgrade: clean & upgrade'
+subtitle: Shadow DLL Pruning, Dry-Run Previews & In-Place Project Migration
+badge: TOOLCHAIN • WORKSPACE HYGIENE
+badge_color: emerald
+palette: warm_paper
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: card
+  title: Workspace Hygiene (lapis clean)
+  color: emerald
+  items:
+  - <strong>Windows Shadow DLL Pruning (<code>--shadows</code>):</strong> Purges locked <code>*_loaded_*.dll/pdb</code> shadow files produced during Godot hot-reloads without needing to close the editor.
+  - <strong>Reclamation Dry-Run (<code>--dry-run</code>):</strong> Previews candidate build artifacts, intermediate object caches, and exact disk space to be reclaimed before deletion.
+  - <strong>Deep Clean Mode (<code>--all</code>):</strong> Cleans build binaries, shadow DLLs, generated HTML documentation (<code>docs/</code>), engine cache (<code>.godot/</code>), and compiler cache (<code>.crystal/</code>).
+  - <strong>Safe Runtime Preservation:</strong> Automatically preserves foundational runtime DLLs (<code>gc.dll</code>, <code>pcre2-8.dll</code>, <code>iconv-2.dll</code>) to maintain zero-config compilation readiness.
+right:
+  type: card
+  title: Project Upgrade Manager (lapis upgrade)
+  color: emerald
+  items:
+  - <strong>In-Place Engine Migration:</strong> Upgrades an existing project to latest Lapis engine and GDExtension bindings with a single command (<code>lapis upgrade</code>).
+  - <strong>Automated Shard Healing:</strong> Automatically generates and updates <code>shard.override.yml</code> to resolve ambiguous dependency versions and local path overrides.
+  - <strong>Manifest Synchronization:</strong> Refreshes <code>extension_api.json</code> and Godot <code>.gdextension</code> configuration manifests with strict type validation.
+  - <strong>Safe Verification Dry-Run:</strong> <code>lapis upgrade --dry-run</code> previews file updates, schema diffs, and dependency migrations before writing changes to disk.
+notes: |
+  Cleanliness and project longevity are core to the Lapis developer experience. On Windows, hot-reloading native DLLs inside running game engines often leaves locked shadow files on disk. lapis clean --shadows immediately reclaims disk space by pruning orphaned loaded binaries without requiring you to close the Godot Editor. Meanwhile, lapis upgrade solves the long-term maintenance headache: it automatically migrates engine bindings, updates GDExtension manifests, and heals shard dependencies in-place so existing games stay current with zero friction.

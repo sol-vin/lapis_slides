@@ -1,0 +1,38 @@
+---
+id: 31e_cli_ide_tooling
+title: 'IDE & Editor Workspaces: lapis ide'
+subtitle: Instant Zero-Config Setup for VS Code, Cursor, Zed & Neovim
+badge: TOOLCHAIN • WORKSPACE CONFIGURATION
+badge_color: cyan
+palette: monokai
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — lapis ide setup
+  code: |
+    # Configure VS Code / Cursor workspace
+    $ lapis ide setup vscode
+      [Lapis] Generating .vscode configuration...
+      ✔ Created .vscode/settings.json (Crystalline LSP daemon configuration)
+      ✔ Created .vscode/tasks.json (Build Game, Test, Sync, Clean)
+      ✔ Created .vscode/launch.json (Radare2 native debugger launch task)
+
+    # Configure Zed editor workspace
+    $ lapis ide setup zed
+      ✔ Created .zed/settings.json (Crystalline LSP language server binding)
+
+    # Configure Neovim workspace
+    $ lapis ide setup neovim
+      ✔ Created .nvim/init.lua (nvim-lspconfig Crystalline & DAP setup)
+right:
+  type: card
+  title: Multi-Editor Tooling Invariants
+  color: cyan
+  items:
+  - <strong>Crystalline LSP Integration:</strong> Automatically configures the Crystalline language server daemon with background compilation, symbol indexing, and hover signatures.
+  - <strong>Multi-Editor Parity:</strong> Supports modern editor ecosystems: VS Code, Cursor, Zed, and Neovim with identical build tasks and LSP settings.
+  - <strong>Automated Gutter Debugging:</strong> Emits ready-to-run debugger configurations in <code>launch.json</code> or Neovim DAP that connect directly to radare2.
+  - <strong>Zero Manual Boilerplate:</strong> Eliminates manual JSON/Lua editing when onboarding new team members—run <code>lapis ide setup</code> and start coding immediately.
+notes: |
+  Developer onboarding should be instant. With lapis ide setup, developers can configure VS Code, Cursor, Zed, or Neovim in seconds. The command automatically generates workspace configurations, binds the Crystalline LSP daemon for real-time auto-completion and diagnostics, configures build and test tasks, and provisions native radare2 debugger launch profiles for gutter breakpoint debugging.

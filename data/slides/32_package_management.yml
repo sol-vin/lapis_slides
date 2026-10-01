@@ -1,15 +1,15 @@
 ---
 id: 32_package_management
-title: 'Addon Management & Isolation'
-subtitle: Precompiled GDExtensions, DLL Staging & Shard Negotiation
-badge: ECOSYSTEM • ADDON LIFECYCLE
+title: 'Addon & Shard Package Management'
+subtitle: Dual-Mode Installation, Poison Traps & Shard Auto-Healing
+badge: ECOSYSTEM • PACKAGE MANAGEMENT
 badge_color: purple
 palette: spaces_2000
 layout: two-column-layout
 ratio: 2:1
 left:
   type: asciinema
-  title: Terminal — lapis addon install --release
+  title: Terminal — lapis addon install & lapis shard
   cast: casts/lapis_addon_install.cast
   font_size: '0.80rem'
   speed: 1.0
@@ -20,27 +20,28 @@ left:
   cols: 86
   rows: 22
   code: |
-    $ lapis addon install github:sol-vin/combat_system@v1.2 --release
+    # 1. Dual-Mode Addon Installation (GDExtension + Shard + 2-Way Bindings)
+    $ lapis addon install github:sol-vin/combat_system@v1.2 --release --shard --bind
     [Install:Addon] Resolving GitHub release asset for windows-x86_64...
       [OK] Downloaded combat_system-windows.zip (Precompiled Binary)
-    [Security:Audit] Inspecting GDExtension binary headers & symbols...
-      [OK] Entrypoint verified: combat_system_init (x86_64)
-      [OK] Hardening check: ASLR & DEP/NX verified
-    [Sync:Staging] Staging runtime dependencies to addons/combat_system/...
+      [OK] Verified entrypoint & ASLR/DEP hardening
       [OK] Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
       [OK] Purged invalid host libgodot.dll (poison protection)
-    [Config] Auto-enabled in project.godot & .godot/extension_list.cfg
-    [Shards:AddonNegotiator] Negotiated 'crshader' across 5 addons:
-      [OK] Resolved 1 canonical version in shard.yml (0 conflicts)
-    [OK] Addon 'combat_system' installed successfully! Ready to use.
+      [OK] Added shard dependency to shard.yml
+      [OK] Generated typed Crystal bindings for CombatSystem nodes
+
+    # 2. Shard Dependency Management & Auto-Healing
+    $ lapis install shard github:sol-vin/crshader ~> 0.1.0
+      [OK] Resolved semver requirement '~> 0.1.0'
+      [OK] Auto-healed dependency overrides in shard.override.yml
 right:
   type: card
-  title: GDExtension Addon Lifecycle Invariants
+  title: Dual-Mode Packaging Invariants
   color: purple
   items:
-    - '<strong>Runtime DLL Staging & Poison Trap:</strong> Automatically stages required C-runtime DLLs (<code>gc.dll</code>, <code>bridge.dll</code>) and purges illegal host <code>libgodot.dll</code> to prevent fatal ClassDB crashes.'
-    - '<strong>Zero-Toolchain Precompiled Addons:</strong> Designers install and execute compiled binary addons via <code>--release</code> directly from GitHub/GitLab without needing a local Crystal compiler.'
-    - '<strong>Security Auditing & Auto-Config:</strong> Verifies ASLR/DEP binary hardening, audits symbols, and registers extensions directly in <code>project.godot</code> and <code>extension_list.cfg</code>.'
-    - '<strong>Shared Addon Negotiation (<code>AddonNegotiator</code>):</strong> If 5 plugins all depend on the same Crystal plugin (e.g. <code>crshader</code>), Lapis resolves a single canonical version in <code>shard.yml</code> to eliminate duplicate symbol clashes.'
+  - <strong>Dual-Mode Installation:</strong> <code>lapis addon install</code> manages GDExtension plugins, while <code>lapis install shard</code> manages Crystal library dependencies with semantic version matching.
+  - <strong>Automatic 2-Way Binding (<code>--bind</code>):</strong> When installing an addon, <code>--bind</code> automatically scans its custom nodes and generates typed Crystal wrapper classes.
+  - <strong>Automated Shard Healing (<code>shard.override.yml</code>):</strong> Automatically writes and maintains override manifests to resolve ambiguous dependency sources and local paths without editing git-tracked files.
+  - <strong>Poison Protection & DLL Staging:</strong> Automatically stages required C-runtime DLLs (<code>gc.dll</code>, <code>bridge.dll</code>) and purges illegal host <code>libgodot.dll</code> copies to prevent fatal ClassDB crashes.
 notes: |
-  Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage, and if an addon accidentally bundles libgodot.dll, it poisons the host engine's ClassDB and causes fatal memory crashes. Lapis provides complete end-to-end addon management. When you run lapis addon install, it audits binary headers, stages runtime dependencies from BakedFileSystem, purges conflicting host DLLs, and registers the plugin in project.godot and extension_list.cfg. Crucially, AddonNegotiator solves multi-plugin dependency hell: if 5 different plugins all depend on the same Crystal plugin like crshader, Lapis negotiates their semver constraints into a single canonical version in shard.yml, eliminating redundant compilation, duplicate symbols, and fatal ClassDB registration collisions.
+  Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage. Lapis provides complete dual-mode package management. With lapis addon install --shard --bind, Lapis stages precompiled GDExtension binaries, auto-enables the plugin in project.godot, links it into shard.yml, and generates typed Crystal wrappers for its custom nodes in one seamless step. If version conflicts arise across multiple addons, Lapis auto-heals dependencies using shard.override.yml to maintain deterministic builds.

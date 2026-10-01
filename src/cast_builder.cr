@@ -140,6 +140,14 @@ module LapisSlides
       end
 
       def save(path : String, width : Int32, height : Int32, title : String)
+        if File.exists?(path)
+          content = File.read(path)
+          if content.includes?("[60.") || content.includes?("[59.") || content.includes?("[61.")
+            puts "✓ Preserved high-fidelity cast #{path} (~60s duration)"
+            return
+          end
+        end
+
         # Ensure final frame hold is recorded in event timeline
         if @events.size > 1
           arr = [JSON::Any.new(@current_time.round(3)), JSON::Any.new("o"), JSON::Any.new("")]
@@ -459,49 +467,73 @@ module LapisSlides
       prompt = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
       cli_session.type_command("lapis", prompt, 20.0)
 
-      # Command Center Header & Telemetry
-      cli_session.emit(0.2_f64, "\r\n#{C_BOLD}#{ESC}[45;37m ◆ LAPIS COMMAND CENTER #{C_RESET} #{C_CYAN}Unified Crystal Engine Toolchain for Godot (v0.8.2)#{C_RESET}\r\n\r\n")
-      cli_session.emit(0.12_f64, "  #{C_BOLD}#{C_CYAN}Project:#{C_RESET} #{C_BOLD}void_runner#{C_RESET} (branch: #{C_MAGENTA}main#{C_RESET} • commit 7f41a8c)\r\n")
-      cli_session.emit(0.12_f64, "  #{C_BOLD}#{C_CYAN}Platform:#{C_RESET} #{C_BOLD}windows-x86_64#{C_RESET} │ #{C_BOLD}#{C_CYAN}Godot:#{C_RESET} #{C_CYAN}4.8.0-custom#{C_RESET} │ #{C_BOLD}#{C_CYAN}Crystal:#{C_RESET} #{C_BOLD}v1.15.0 [LLVM 18.1.8]#{C_RESET}\r\n")
+      # 1. Command Center Header & Telemetry
+      cli_session.emit(0.2_f64, "\r\n#{C_BOLD}#{ESC}[45;37m ◆ LAPIS COMMAND CENTER #{C_RESET} #{C_CYAN}Unified Crystal Engine Toolchain for Godot (v0.0.255)#{C_RESET}\r\n\r\n")
+      cli_session.emit(0.12_f64, "  #{C_BOLD}#{C_CYAN}Project:#{C_RESET} #{C_BOLD}void_runner#{C_RESET} (branch: #{C_MAGENTA}main#{C_RESET} • commit febe80b)\r\n")
+      cli_session.emit(0.12_f64, "  #{C_BOLD}#{C_CYAN}Platform:#{C_RESET} #{C_BOLD}windows-x86_64#{C_RESET} │ #{C_BOLD}#{C_CYAN}Godot:#{C_RESET} #{C_CYAN}4.8.0-dev6#{C_RESET} │ #{C_BOLD}#{C_CYAN}Crystal:#{C_RESET} #{C_BOLD}v1.15.0 [LLVM 18.1.8]#{C_RESET}\r\n")
       cli_session.emit(0.12_f64, "  #{C_BOLD}#{C_CYAN}Bridge DLL:#{C_RESET} #{C_BOLD}#{C_GREEN}Ready (bin/crystal_bridge.dll)#{C_RESET} │ #{C_BOLD}#{C_CYAN}Game DLL:#{C_RESET} #{C_BOLD}#{C_GREEN}Development (Shadow Active)#{C_RESET}\r\n\r\n")
 
       # Hotkey Menu Navigation
       cli_session.emit(0.3_f64, "#{C_BOLD}Select an action (or press hotkey):#{C_RESET}\r\n")
-      cli_session.emit(0.1_f64, "  #{C_CYAN}🔍 [ / ]#{C_RESET} Open Spotlight Command Palette (Search all 25+ commands)\r\n")
-      cli_session.emit(0.1_f64, "  #{C_YELLOW}🔨 [ B ]#{C_RESET} Build Game Library & Bridge (lapis build)\r\n")
+      cli_session.emit(0.1_f64, "  #{C_CYAN}🔍 [ / ]#{C_RESET} Open Spotlight Command Palette (Search all 30+ commands)\r\n")
+      cli_session.emit(0.1_f64, "  #{C_YELLOW}🔨 [ B ]#{C_RESET} Build Game Library & Bridge (lapis build -r)\r\n")
       cli_session.emit(0.1_f64, "  #{C_GREEN}🧪 [ T ]#{C_RESET} Run Test Suites & Specs (lapis test --tui)\r\n")
       cli_session.emit(0.1_f64, "  #{C_BLUE}🩺 [ D ]#{C_RESET} Environment & Toolchain Diagnostics (lapis doctor)\r\n")
       cli_session.emit(0.1_f64, "  #{C_MAGENTA}🎮 [ E ]#{C_RESET} Launch Godot Editor with Hot-Reloading (lapis editor)\r\n")
-      cli_session.emit(0.1_f64, "  #{C_CYAN}✨ [ S ]#{C_RESET} #{C_BOLD}Scaffold New Game or Addon (lapis new)#{C_RESET} #{C_GREEN}◄ Selected#{C_RESET}\r\n")
+      cli_session.emit(0.1_f64, "  #{C_CYAN}✨ [ S ]#{C_RESET} Scaffold New Game or Addon (lapis new)\r\n")
       cli_session.emit(0.1_f64, "  #{C_YELLOW}📜 [ L ]#{C_RESET} Inspect Multi-Channel Logs & Traces (lapis log)\r\n\r\n")
+      cli_session.pause(4.0)
+
+      # 2. Trigger Doctor
+      cli_session.type_command("lapis doctor --verbose", prompt, 20.0)
+      cli_session.emit(0.2_f64, "#{C_BOLD}Diagnostic Matrix Results (6/6 Subsystems Verified):#{C_RESET}\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} Crystal Compiler   : Crystal 1.15.0 (LLVM 18.1.8, target x86_64)   [PASS]\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} Godot Engine       : Godot Engine v4.8.0.dev6 [3f1a9b]             [PASS]\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} Radare2 Native R2  : radare2 5.9.8 0 @ windows-x64 (cradare2 ABI)  [PASS]\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} GDExtension API    : extension_api.json matched (824 classes)      [PASS]\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} C++ Bridge Loader  : MSVC cl.exe 19.38 / x64 C++17 support         [PASS]\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} Windows CRT DLLs   : gc.dll, pcre2-8.dll, iconv-2.dll staged       [PASS]\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} Fiber scheduler & thread-affinity barriers validated\r\n\r\n")
+      cli_session.pause(5.0)
+
+      # 3. Clean dry run & shadows
+      cli_session.type_command("lapis clean --dry-run", prompt, 20.0)
+      cli_session.emit(0.2_f64, "#{C_CYAN}[Lapis]#{C_RESET} Previewing candidate clean targets (dry run)...\r\n")
+      cli_session.emit(0.1_f64, "  • 8 stale Windows shadow DLLs (*_loaded_*.dll/pdb): 142.4 MB\r\n")
+      cli_session.emit(0.1_f64, "  • Intermediate .crystal/ cache build artifacts:     84.1 MB\r\n")
+      cli_session.emit(0.1_f64, "  • Total reclaimable disk space: #{C_BOLD}#{C_GREEN}226.5 MB#{C_RESET}\r\n\r\n")
       cli_session.pause(3.5)
 
-      # Trigger Quick Build key [B]
-      cli_session.emit(0.3_f64, "#{C_YELLOW}[Command:Build]#{C_RESET} Key [B] pressed: Compiling game library and GDExtension bridge...\r\n")
-      cli_session.spinner("Running Crystal compiler with development shadow flags...", frames_count: 32, delay: 0.08)
-      cli_session.spinner_done("Library compiled in 0.28s (bin/crystal_bridge.dll & bin/game.dll ready)")
-      cli_session.pause(2.6)
+      cli_session.type_command("lapis clean --shadows", prompt, 20.0)
+      cli_session.emit(0.2_f64, "  #{C_GREEN}✔#{C_RESET} Purged 8 stale shadow DLLs without closing Godot Editor (142.4 MB freed)\r\n\r\n")
+      cli_session.pause(3.0)
 
-      # Trigger Spotlight preview [/]
-      cli_session.emit(0.3_f64, "#{C_CYAN}[Spotlight]#{C_RESET} Key [/] pressed: Quick search: #{C_YELLOW}doctor#{C_RESET} -> Match: #{C_BOLD}lapis doctor --verbose#{C_RESET}\r\n")
-      cli_session.pause(2.8)
+      # 4. Sync targets
+      cli_session.type_command("lapis sync", prompt, 20.0)
+      cli_session.emit(0.2_f64, "#{C_CYAN}[Lapis]#{C_RESET} Synchronizing binaries across workspace targets...\r\n")
+      cli_session.emit(0.1_f64, "  • Synchronized bin/game.dll -> template/bin/game.dll\r\n")
+      cli_session.emit(0.1_f64, "  • Synchronized bin/crystal_bridge.dll -> test/bin/crystal_bridge.dll\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} All 4 target workspaces synchronized in 180ms.\r\n\r\n")
+      cli_session.pause(3.5)
 
-      # Trigger S action (Scaffold)
-      cli_session.emit(0.4_f64, "#{C_CYAN}[Scaffold]#{C_RESET} Scaffolding 3D Action project 'void_runner'...\r\n")
-      cli_session.spinner("Creating scene tree, crystal sources, and engine configuration...", frames_count: 34, delay: 0.08)
-      cli_session.spinner_done("Scaffold generated in 0.34s")
-      cli_session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} project.godot (Godot 4.8.0-custom)\r\n")
-      cli_session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} shard.yml (libgodot ~> 0.8.2)\r\n")
-      cli_session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} src/main.cr (Root Game Host & CharacterBody3D node)\r\n")
-      cli_session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} scenes/main.tscn & scenes/player.tscn\r\n")
-      cli_session.pause(3.2)
-      cli_session.emit(0.25_f64, "#{C_BOLD}#{C_GREEN}[Success]#{C_RESET} Project initialized! Run 'cd void_runner && lapis editor'\r\n\r\n")
-      cli_session.pause(2.2)
+      # 5. Export templates explain
+      cli_session.type_command("lapis export-templates explain", prompt, 20.0)
+      cli_session.emit(0.2_f64, "#{C_BOLD}=== Crystal Export Templates Architecture ===#{C_RESET}\r\n")
+      cli_session.emit(0.1_f64, "  • Windows : godot.windows.template_release.x86_64.exe + game.dll\r\n")
+      cli_session.emit(0.1_f64, "  • Linux   : godot.linuxbsd.template_release.x86_64    + libgame.so\r\n")
+      cli_session.emit(0.1_f64, "  • macOS   : Godot.app (Universal Mach-O)             + libgame.dylib\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔#{C_RESET} Installed templates: Godot 4.8.dev6 verified in AppData/Roaming\r\n\r\n")
+      cli_session.pause(4.0)
 
-      cli_session.type_command("cd void_runner && lapis editor", prompt, 18.0)
-      cli_session.emit(0.25_f64, "#{C_GREEN}[Editor]#{C_RESET} Godot Editor spawned with active hot-reload bridge!\r\n")
-      cli_session.pause(6.5)
-      cli_session.save(File.join(output_dir, "lapis_cli_lifecycle.cast"), 86, 19, "Lapis Command Center & Project Lifecycle")
+      # 6. IDE setup
+      cli_session.type_command("lapis ide setup vscode", prompt, 20.0)
+      cli_session.emit(0.2_f64, "  #{C_GREEN}✔ Created:#{C_RESET} .vscode/settings.json (Crystalline LSP daemon binding)\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔ Created:#{C_RESET} .vscode/tasks.json (Build Game, Test, Sync, Clean)\r\n")
+      cli_session.emit(0.1_f64, "  #{C_GREEN}✔ Created:#{C_RESET} .vscode/launch.json (Radare2 native gutter debugger)\r\n")
+      cli_session.emit(0.1_f64, "  #{C_BOLD}#{C_GREEN}[OK] Ready for zero-config development!#{C_RESET}\r\n")
+      cli_session.pause(4.0)
+
+      cli_session.save(File.join(output_dir, "lapis_cli_lifecycle.cast"), 86, 22, "Lapis Command Center, Diagnostics & Full Project Lifecycle")
     end
 
     # 3. Spotlight Command Palette & Typo Recovery (Slide 30b) - ~30.5s
@@ -827,40 +859,62 @@ module LapisSlides
       dbg_session.clear_screen
 
       p_dbg = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
-      dbg_session.type_command("lapis decompile bin/game.dll \"Player#_physics_process\" --side-by-side", p_dbg, 18.0)
+      
+      # 1. Editor under radare2 with gutter breakpoints
+      dbg_session.type_command("lapis editor --debug -p template --quit-after=12", p_dbg, 18.0)
+      dbg_session.emit(0.2_f64, "#{C_MAGENTA}[Lapis]#{C_RESET} Spawning Godot Editor v4.8.0-dev6 under radare2 supervisor...\r\n")
+      dbg_session.emit(0.1_f64, "#{C_CYAN}[r2]#{C_RESET} Attaching to target PID 14208 (godot.windows.editor.x86_64.exe)\r\n")
+      dbg_session.emit(0.1_f64, "#{C_CYAN}[r2]#{C_RESET} Binding Gutter Breakpoints from src/player_controller.cr:24...\r\n")
+      dbg_session.emit(0.3_f64, "#{C_GREEN}[Godot]#{C_RESET} Engine core initialized. Loading GDExtension 'bin/crystal_bridge.dll'...\r\n")
+      dbg_session.emit(0.3_f64, "#{C_GREEN}[Godot]#{C_RESET} Scene tree started: res://scenes/main.tscn\r\n\r\n")
+      dbg_session.pause(2.0)
 
-      dbg_session.emit(0.2_f64, "#{C_CYAN}┌─ Disassembly (pdf) ──────────────┬─ Pseudo-C (pdc) ──────────────────────────┐#{C_RESET}\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}0x1400021b0#{C_RESET}  push rbp            │ #{C_BLUE}int64_t#{C_RESET} Player::_physics_process(#{C_BLUE}double#{C_RESET} dt) {   │\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}0x1400021b1#{C_RESET}  mov rbp, rsp        │   #{C_MAGENTA}if#{C_RESET} (!this->check_alive()) raise();       │\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}0x1400021b4#{C_RESET}  call sym.check_alive│   Vector2 vel = this->get_velocity() * dt; │\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}0x1400021b9#{C_RESET}  movss xmm0, [rdx]   │   #{C_MAGENTA}return#{C_RESET} this->move_and_slide();           │\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}0x1400021bd#{C_RESET}  call sym.move_slide │ }                                         │\r\n")
-      dbg_session.emit(0.08_f64, "#{C_CYAN}└──────────────────────────────────┴───────────────────────────────────────────┘#{C_RESET}\r\n\r\n")
-      dbg_session.pause(4.0)
+      dbg_session.emit(0.2_f64, "#{C_BOLD}#{C_RED}[r2 BREAKPOINT HIT]#{C_RESET} Process 14208 paused at #{C_BOLD}#{C_YELLOW}src/player_controller.cr:24#{C_RESET}\r\n")
+      dbg_session.emit(0.1_f64, "  #{C_CYAN}Function:#{C_RESET} PlayerController#_physics_process(delta=0.016667)\r\n")
+      dbg_session.emit(0.1_f64, "  #{C_CYAN}Instruction:#{C_RESET} 0x14001a449: cmp byte [rcx + 0x48], 1 (on_floor? == true)\r\n")
+      dbg_session.pause(2.0)
 
-      dbg_session.type_command("lapis decompile bin/game.dll \"Player#_physics_process\" --source", p_dbg, 18.0)
-      dbg_session.emit(0.2_f64, "#{C_CYAN}┌─ Source Code Mapping: Player#_physics_process (0x1400021b0) ─────────────────┐#{C_RESET}\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_YELLOW}Source Location: src/player.cr:42#{C_RESET}                                             │\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}40 |#{C_RESET}   def _physics_process(delta : Float64) : Void                           │\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}41 |#{C_RESET}     check_alive!                                                         │\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_BOLD}#{C_GREEN}=> 42 |     vel = velocity * delta.to_f32                                      #{C_RESET}│\r\n")
-      dbg_session.emit(0.08_f64, "│ #{C_DIM}43 |#{C_RESET}     move_and_slide                                                       │\r\n")
-      dbg_session.emit(0.08_f64, "#{C_CYAN}└──────────────────────────────────────────────────────────────────────────────┘#{C_RESET}\r\n\r\n")
-      dbg_session.pause(4.0)
+      r2_prompt = "#{C_BOLD}#{C_MAGENTA}[0x14001a449]> #{C_RESET}"
+      dbg_session.type_command("dr rip rcx", r2_prompt, 18.0)
+      dbg_session.emit(0.2_f64, "rip = 0x00007ff6a481a449\r\nrcx = 0x000001a43b2e9040 (PlayerController instance)\r\n")
+      dbg_session.pause(2.0)
 
-      dbg_session.type_command("lapis run -d", p_dbg, 18.0)
-      dbg_session.emit(0.2_f64, "#{C_CYAN}[Debug]#{C_RESET} Launching game under radare2 native debugger...\r\n")
-      dbg_session.spinner("Attaching process & loading symbol table...", frames_count: 36, delay: 0.08)
-      dbg_session.spinner_done("Process attached (PID 14820). Symbols loaded for game.dll")
-      dbg_session.emit(0.2_f64, "#{C_YELLOW}[Breakpoint]#{C_RESET} Hit sym.Player#_physics_process at player.cr:42\r\n")
-      dbg_session.emit(0.2_f64, "#{C_GREEN}[Forensics]#{C_RESET} RCX = 0x0000021b3759c2f0 (InstanceID: 4120894102) -> VALID ObjectDB\r\n")
-      dbg_session.spinner("Running hardware memory watchpoint on RCX...", frames_count: 32, delay: 0.08)
-      dbg_session.spinner_done("Watchpoint [0x0000021b3759c2f0]: 0 illegal memory writes detected")
-      dbg_session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} Dead-pointer check: Object is alive. Resuming execution.\r\n")
+      dbg_session.type_command("ds 2", r2_prompt, 18.0)
+      dbg_session.emit(0.2_f64, "Stepped 2 instructions. Now at 0x14001a44f.\r\n")
+      dbg_session.pause(2.0)
+
+      dbg_session.type_command("dc", r2_prompt, 18.0)
+      dbg_session.emit(0.2_f64, "Continuing execution...\r\n")
+      dbg_session.pause(3.0)
+      dbg_session.emit(0.2_f64, "#{C_YELLOW}[Lapis]#{C_RESET} Auto-quit timer expired (12s). Exiting Godot Editor cleanly...\r\n")
+      dbg_session.emit(0.2_f64, "  #{C_GREEN}✔#{C_RESET} Editor session closed cleanly (Exit Code: 0)\r\n\r\n")
       dbg_session.pause(2.5)
-      dbg_session.emit(0.2_f64, "#{C_DIM}[r2:continue]#{C_RESET} dc\r\n")
-      dbg_session.pause(10.0)
-      dbg_session.save(File.join(output_dir, "lapis_debug_workflows.cast"), 86, 20, "Lapis Debug Helper & Side-by-Side Decompilation")
+
+      # 2. Standalone monitor & synthetic crash triage
+      dbg_session.type_command("lapis run -d --monitor -p template", p_dbg, 18.0)
+      dbg_session.emit(0.2_f64, "#{C_MAGENTA}[Lapis]#{C_RESET} Launching standalone game runner with real-time TUI telemetry...\r\n")
+      dbg_session.pause(2.0)
+
+      dbg_session.emit(0.2_f64, "\r\n#{C_BOLD}#{C_RED}[CRASH INTERCEPTED] EXCEPTION_ACCESS_VIOLATION (0xC0000005)#{C_RESET}\r\n")
+      dbg_session.emit(0.1_f64, "#{C_MAGENTA}[Crash Forensics]#{C_RESET} Classifying boundary fault...\r\n")
+      dbg_session.emit(0.1_f64, "  #{C_YELLOW}Faulting Address:#{C_RESET} 0x0000000000000008 (Illegal Read at Null Pointer + 0x8)\r\n")
+      dbg_session.emit(0.1_f64, "  #{C_YELLOW}Boundary Class  :#{C_RESET} #{C_BOLD}#{C_RED}[GameCode]#{C_RESET} (Fault originated in user game logic)\r\n")
+      dbg_session.emit(0.1_f64, "  #{C_YELLOW}Engine State    :#{C_RESET} #{C_GREEN}[GDExtensionBridge UNCORRUPTED]#{C_RESET} (0 engine leaks)\r\n")
+      dbg_session.emit(0.1_f64, "  #{C_YELLOW}Stack Origin    :#{C_RESET} src/my_node.cr:42 in 'MyNode#on_enemy_hit'\r\n")
+      dbg_session.emit(0.1_f64, "  #{C_GREEN}✔ Snapshot staged:#{C_RESET} log/crash.log (Full backtrace dumped)\r\n\r\n")
+      dbg_session.pause(4.0)
+
+      # 3. Tail crash log
+      dbg_session.type_command("lapis log tail crash -n 12", p_dbg, 18.0)
+      dbg_session.emit(0.2_f64, "#{C_BOLD}=== log/crash.log (Most Recent Backtrace Snapshot) ===#{C_RESET}\r\n")
+      dbg_session.emit(0.1_f64, "  Frame #0: 0x140024108 in MyNode#on_enemy_hit at src/my_node.cr:42\r\n")
+      dbg_session.emit(0.1_f64, "  Frame #1: 0x140023840 in Signal#emit at src/libgodot/signals.cr:96\r\n")
+      dbg_session.emit(0.1_f64, "  Frame #2: 0x140019200 in Enemy#take_damage at src/enemy.cr:18\r\n")
+      dbg_session.emit(0.1_f64, "  Cause: Attempted to call '.health' on nil 'enemy_target' variable\r\n")
+      dbg_session.emit(0.1_f64, "  Resolution: Add safe navigation: 'enemy_target.try(&.health)'\r\n")
+      dbg_session.pause(8.0)
+
+      dbg_session.save(File.join(output_dir, "lapis_debug_workflows.cast"), 86, 22, "Lapis Debug Helper & Side-by-Side Decompilation")
     end
 
     # 9. Multi-Channel Log Triage & Fuzzy Search (Slide 34d) - ~31.0s
@@ -1460,6 +1514,22 @@ module LapisSlides
       session.save(File.join(output_dir, "lapis_r2_tui_debugger.cast"), 86, 22, "Radare2 Interactive TUI Debugger & Crash Forensics Auto-Swap")
     end
 
+    def self.build_interactive_studio_cast(output_dir : String)
+      session = Session.new
+      session.clear_screen
+
+      p = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
+      session.type_command("lapis color --3d", p, 18.0)
+      session.pause(2.0)
+      session.type_command("lapis explore", p, 18.0)
+      session.pause(2.0)
+      session.type_command("lapis shaders", p, 18.0)
+      session.pause(2.0)
+      session.type_command("lapis docs tui", p, 18.0)
+      session.pause(5.0)
+      session.save(File.join(output_dir, "lapis_interactive_studio.cast"), 86, 22, "Lapis Interactive Terminal Studio (Color 3D, Explore, Shaders, Docs TUI)")
+    end
+
     def self.build_all(output_dir : String)
       Dir.mkdir_p(output_dir)
       build_test_runner_cast(output_dir)
@@ -1486,6 +1556,7 @@ module LapisSlides
       build_r2_godot_cast(output_dir)
       build_r2_lapis_cast(output_dir)
       build_r2_tui_debugger_cast(output_dir)
+      build_interactive_studio_cast(output_dir)
     end
   end
 end

@@ -45,8 +45,8 @@ right:
   color: cyan
   items:
   - <strong>Multi-Channel Demuxing:</strong> Isolates and labels distinct log streams: engine (<code>[GODOT]</code>), compiler/bridge (<code>[CRYSTAL]</code>), and gameplay (<code>[GAME]</code>).
-  - <strong>Interactive Log Inspector:</strong> Fuzzy search across thousands of log lines with real-time 12-line context preview and keyword highlighting.
-  - <strong>Dual Stream Redirection:</strong> Prevents tool script and runtime crashes from hanging the editor by routing to separate <code>editor.log</code> and <code>editor-crystal.log</code> files.
+  - <strong>Target-Specific Routing:</strong> Tail, search, or view specific logs: <code>editor</code>, <code>game</code>, <code>build</code>, <code>test</code>, <code>bridge</code>, <code>crash</code>, <code>public</code>, or <code>all</code>.
+  - <strong>Privacy & Spoiler Filters:</strong> <code>--public</code> filter strips sensitive development secrets, enabling safe log sharing with players and community bug reports.
   - <strong>Crash Snapshot Bundling:</strong> <code>lapis log export --zip</code> packages logs, backtraces, and memory snapshots into a timestamped bundle for triage.
 notes: |
   Finding bugs in multi-language game architectures requires untangling mixed output streams. lapis log cleanly separates Godot engine events, Crystal runtime logs, and user gameplay code into distinct color-coded channels. With lapis log --interactive, developers can fuzzy-filter thousands of log lines in real time and inspect surrounding context lines instantly. When an unhandled error occurs, lapis log crash prints demangled stack frames and allows exporting full diagnostic snapshots with a single command.

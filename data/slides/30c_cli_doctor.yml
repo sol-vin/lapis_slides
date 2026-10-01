@@ -22,28 +22,28 @@ left:
   code: |
     $ lapis doctor --verbose
     [Doctor] Diagnosing Lapis development environment...
-    Diagnostic Results:
+    Diagnostic Results (6/6 Subsystems Verified):
     ┌────────┬────────────────────┬─────────────────────────────────────────────────┐
     │ Status │ Component          │ Diagnostic Detail                               │
     ├────────┼────────────────────┼─────────────────────────────────────────────────┤
     │  PASS  │ Crystal Compiler   │ Crystal 1.15.0 (LLVM 18.1.8, target x86_64)    │
-    │  PASS  │ Godot Engine       │ Godot Engine v4.8.0.custom_build [3f1a9b]       │
+    │  PASS  │ Godot Engine       │ Godot Engine v4.8.0.dev6 [3f1a9b]               │
     │  PASS  │ Radare2 Native R2  │ radare2 5.9.8 0 @ windows-x64 (cradare2 ABI)   │
     │  PASS  │ GDExtension API    │ extension_api.json matched (824 classes)       │
     │  PASS  │ C++ Bridge Loader  │ MSVC cl.exe 19.38 / x64 C++17 support          │
     │  PASS  │ Windows CRT DLLs   │ gc.dll, pcre2-8.dll, iconv-2.dll staged        │
-    │  PASS  │ Project Config     │ void_runner is fully configured for Crystal!   │
     └────────┴────────────────────┴─────────────────────────────────────────────────┘
-    Toolchain Readiness: 100% (7/7)
+    ✔ Fiber scheduler & thread-affinity barriers validated
+    Toolchain Readiness: 100% (6/6 verified)
     [██████████████████████████████████████████████████████] 100% READY
 right:
   type: card
   title: Zero-Friction Toolchain Verification
   color: green
   items:
-  - <strong>Full-Stack Toolchain Audit:</strong> Validates Crystal, LLVM 18, Godot 4.8+, radare2, MSVC/GCC, and CRT runtime dependencies in one pass.
+  - <strong>Full-Stack Toolchain Audit:</strong> Validates Crystal, LLVM 18, Godot 4.8-dev6, radare2, MSVC/GCC, and CRT runtime dependencies in one pass.
+  - <strong>Fiber & Concurrency Verification:</strong> Validates Crystal's M:N fiber scheduler, thread-affinity barriers, and Godot main thread dispatch queues.
   - <strong>Live Readiness Meter:</strong> Visual progress gauge displays environment readiness percentage and actionable status badges.
   - <strong>Automated Remediation (<code>--fix</code>):</strong> Automatically repairs missing <code>extension_list.cfg</code> entries, purges locked shadow DLLs, and stages missing runtime libraries.
-  - <strong>Poison Protection:</strong> Detects and purges rogue host <code>libgodot.dll</code> copies in addon directories that cause fatal ClassDB crashes.
 notes: |
   Toolchain setup issues are the number one cause of onboarding friction in native game development. lapis doctor audits your entire developer environment in seconds—checking the Crystal compiler, LLVM backends, Godot engine binaries, radare2, and runtime DLLs. If anything is missing or misconfigured, running lapis doctor --fix automatically resolves configuration gaps, purges stale Windows shadow DLLs, and stages required libraries without manual intervention.

@@ -1,0 +1,57 @@
+---
+id: 03j_ruby_if_assignment
+title: 'Control Expressions: Assigning "if" and "case"'
+subtitle: "The Readable Analog to the Ternary '?:' Operator — Without the Cramping or Spaghetti"
+badge: RUBY QUIRKS • EXPRESSION ASSIGNMENT
+badge_color: emerald
+palette: fos
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: if_assignment.rb — The Ternary Elevated
+  tag: Ruby
+  lang: ruby
+  font_size: '0.74rem'
+  code: |
+    # The Old C/Java/Python Way (Imperative Dummy Variable):
+    # let speed = 0; // Uninitialized/mutable state!
+    # if (boosted) { speed = 100; } else { speed = 50; }
+
+    # The Traditional Ternary (Single line only, cramped):
+    # speed = boosted ? 100 : 50
+
+    # The Ruby/Crystal Expression Way: if IS a readable ternary!
+    speed = if boosted?
+              play_sfx(:turbo)
+              100 # Evaluates to branch value
+            else
+              50
+            end
+
+    # Multi-branch case expression replaces nested ternary spaghetti:
+    loot = case dice_roll
+           when 95..100 then :legendary_sword
+           when 80..94  then :rare_shield
+           when 50..79  then :health_potion
+           else              :rusty_dagger
+           end
+
+    # Pass conditional expressions directly into method arguments:
+    render_dialog(title: "Warning",
+                  color: if critical? then :red else :yellow end)
+right:
+  type: card
+  title: Why It Baffles Other Languages & Why It Wins
+  color: emerald
+  items:
+    - '<strong>The Outsider''s Shock:</strong> In C, Java, C#, Go, and Python, <code>if</code> is a statement, not an expression. Writing <code>x = if (cond)</code> is a compiler syntax error.'
+    - '<strong>The Mental Bridge (The Ternary Analogy):</strong> Every programmer understands <code>val = cond ? a : b</code>. In Ruby and Crystal, <code>if</code> is the exact same concept—an expression that yields a value—elevated into a clean, formatted block.'
+    - '<strong>Eliminating Mutable Dummy State:</strong> Eliminates declaring uninitialized variables (<code>var result;</code>) outside an if-block, killing temporal coupling and null pointer bugs.'
+    - '<strong>Curing Nested Ternary Hell:</strong> Chained ternaries (<code>a ? b : c ? d : e</code>) are unreadable eye-strain traps. Expression <code>if</code> and <code>case</code> allow formatted indentation, comments, and preparatory code per branch.'
+    - '<strong>Crystal Type Union Resolution:</strong> In Crystal, <code>val = if cond then 42 else "fallback" end</code> infers the static union <code>Int32 | String</code> with zero heap allocation or boxing.'
+notes: |
+  In traditional languages like C, C++, Java, or Go, there is a strict divide between 'statements' and 'expressions'. Expressions evaluate to a value (like 2 + 2 or a ? b : c), while statements only execute actions and return nothing (like if, while, or for). When developers from those languages see 'speed = if boosted? ...', their brain screams: 'You can't assign an if statement to a variable!'
+  The key to understanding this is the ternary operator. Every programmer is familiar with 'speed = boosted ? 100 : 50'. In Ruby and Crystal, 'if' is literally the ternary operator elevated into a first-class block structure!
+  Why is this better than the ternary? Because the ternary operator is notoriously cramped: it cannot support multi-line logic, you cannot run preparatory statements or sound effects inside a branch, and chaining multiple ternaries together creates an unreadable nightmare of colons and question marks.
+  With expression if and case, you get the mathematical purity of assigning expressions without declaring uninitialized dummy variables outside the block. And in Crystal, this is completely type-safe: the compiler analyzes all branches and infers precise static union types with zero runtime overhead.

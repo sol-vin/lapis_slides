@@ -1,0 +1,37 @@
+---
+id: 34k_in_editor_debugger
+title: 'In-Editor Debugging: Gutter Breakpoints & Godot radare2 Panel'
+subtitle: Interactive Native Debugging Directly Inside the Godot 4.8 Editor Dock
+badge: SYSTEMS DIAGNOSTICS • IN-EDITOR DEBUGGER
+badge_color: blue
+palette: game_station_2
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: Godot Script Editor — Gutter Breakpoints in Crystal
+  lang: crystal
+  tag: Godot Script Editor
+  code: |
+    # In Godot Script Editor, click the left gutter to set breakpoints:
+    class PlayerController < Godot::CharacterBody3D
+      def _physics_process(delta : Float64) : Nil
+        velocity.y -= GRAVITY * delta
+        move_and_slide
+
+    ●   if on_floor? && Input.action_just_pressed?(:jump)
+          velocity.y = JUMP_VELOCITY
+        end
+      end
+    end
+right:
+  type: card
+  title: "Bottom Dock Debugger Panel: Crystal (radare2)"
+  color: blue
+  items:
+  - <strong>Automatic Dock Integration:</strong> The <strong>Crystal (radare2)</strong> tab appears automatically in Godot Editor's bottom debugger dock alongside Output and Profiler.
+  - <strong>Native Gutter Breakpoints:</strong> Clicking line numbers in the Godot script editor binds hardware and software breakpoints directly into the running radare2 process.
+  - <strong>3-Pane In-Editor Inspection:</strong> When a breakpoint triggers on F5 run, Godot displays active Call Stacks, 64-bit CPU Registers, and decompiled pseudo-C (<code>pdc</code>) in real-time.
+  - <strong>Multiplayer Cooperative Lockstep:</strong> Pausing execution in the editor automatically freezes server and client simulation instances in lockstep without socket disconnects.
+notes: |
+  Debugging Crystal in Godot is a first-class, seamless in-editor experience. Developers do not need to juggle external debuggers: you open your Crystal script in the Godot Script Editor, click the gutter to set a breakpoint, and press F5. When hit, the bottom debugger dock reveals the Crystal (radare2) panel—rendering real-time decompiled pseudo-C, live CPU registers, and call stacks directly inside the Godot interface.

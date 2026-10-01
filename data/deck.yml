@@ -11,13 +11,22 @@ slides:
 - 01_hero
 - 02_whoami
 
-# --- SECTION 2: Ruby — Philosophy, Sugar, Dynamic Dispatch & The Wall ---
+# --- SECTION 2A: Ruby — The Philosophy of Developer Happiness ---
 - 03_ruby_philosophy
 - 03a_ruby_small_syntax
 - 03b_ruby_syntax_sugar
 - 03c_ruby_closures
 - 03d_ruby_context_exec
+
+# --- SECTION 2B: The Ruby "Oddities" — Weird to Outsiders, Cherished by Rubyists ---
+- 03h_ruby_oddities_intro
+- 03i_ruby_implicit_returns
+- 03j_ruby_if_assignment
+- 03k_ruby_statement_modifiers
+- 03l_ruby_predicate_and_bang
 - 03e_ruby_monkey_patching
+
+# --- SECTION 2C: Dynamic Metaprogramming & The Scale Wall ---
 - 03g_ruby_runtime_metaprogramming
 - 03f_ruby_dynamic_dispatch
 - 04_sorbet_dilemma
@@ -76,16 +85,24 @@ slides:
 - 30b_cli_fuzzy_palette
 - 30c_cli_doctor
 - 30d_cli_scaffold_wizard
+- 30e_cli_interactive_studio
+- 30f_cli_clean_and_upgrade
 - 31_cli_codegen
 - 31b_cli_package_portable
+- 31c_cli_templates_and_export
+- 31d_cli_docs_system
+- 31e_cli_ide_tooling
 - 32_package_management
 - 33b_cli_editor_launcher
 - 34_debugger_radare2
 - 34c_debug_workflows
+- 34k_in_editor_debugger
 - 34g_r2_crystal_runtime
 - 34h_r2_godot_internals
 - 34i_r2_lapis_supervisor
 - 34j_r2_tui_debugger
+- 34l_multiplayer_debugger
+- 34m_binary_analysis_audit
 - 34b_r2_test_suite
 - 34d_cli_log_triage
 - 34e_cli_run_monitor
@@ -96,8 +113,10 @@ slides:
 - 35_benchmarks
 - 35d_multilang_benchmarks
 - 35e_native_shootout
+- 35f_interop_benchmarks
 - 35b_custom_benchmarks
 - 35c_benchmark_tui
+- 35g_benchmark_reports_ci
 - 38_architecture_layers
 - 39_dual_modes
 - 40_packaging_dist

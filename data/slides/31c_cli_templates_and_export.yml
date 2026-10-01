@@ -1,0 +1,29 @@
+---
+id: 31c_cli_templates_and_export
+title: 'Modular Templates & Export Pipeline: template & export-templates'
+subtitle: Global Starter Store, Full Packaging & Native Platform Templates
+badge: PACKAGING • TEMPLATES & EXPORT
+badge_color: cyan
+palette: spaces_xp_royale
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: card
+  title: Modular Template Manager (lapis template)
+  color: cyan
+  items:
+  - <strong>Global Template Store:</strong> Package any existing project directory into the global reusable store using <code>lapis template save &lt;name&gt; --tags="..."</code>.
+  - <strong>Portable Zip Archives:</strong> Easily export templates (<code>lapis template export my_rpg -o my_rpg.zip</code>) and import them on other machines (<code>lapis template import</code>).
+  - <strong>Detailed Metadata Inspection:</strong> <code>lapis template info &lt;name&gt;</code> displays author, description, tags, version, and file manifests.
+  - <strong>Interactive Template Manager TUI:</strong> Full-screen terminal dashboard (<code>lapis template manager</code>) for browsing, previewing, and managing templates interactively.
+right:
+  type: card
+  title: Export Templates Inspector (lapis export-templates)
+  color: cyan
+  items:
+  - <strong>Official Template Integration:</strong> Automatically checks, downloads, and configures matching Godot export templates for the active engine version.
+  - <strong>Architectural Inspector (<code>explain</code>):</strong> Explains how Godot runner executables link against Crystal GDExtension binaries across Windows, Linux, and macOS.
+  - <strong>Integrity & Header Verification:</strong> <code>lapis export-templates verify</code> inspects PE, ELF, and Mach-O binary headers and checks cryptographic checksums.
+  - <strong>Multi-Platform Cross-Packaging:</strong> Integrates directly with <code>lapis package</code> to produce standalone runnable games for Steam and itch.io.
+notes: |
+  Building and distributing games requires robust template management and export pipelines. With lapis template, studios can curate their own internal library of game starters—saving templates locally or sharing them via portable zip archives. The export-templates command inspects and installs official Godot export templates, while lapis export-templates explain details the native binary mechanics of how Crystal game libraries load into release runner executables across Windows, Linux, and macOS.

@@ -9,7 +9,7 @@ layout: two-column-layout
 ratio: 2:1
 left:
   type: asciinema
-  title: Terminal — Lapis Command Center & Scaffolding
+  title: Terminal — Lapis Command Center, Diagnostics & Full Project Lifecycle
   cast: casts/lapis_cli_lifecycle.cast
   font_size: '0.80rem'
   speed: 1.0
@@ -22,16 +22,16 @@ left:
   code: |
     # Launch interactive Lapis Command Center dashboard
     $ lapis
-      LAPIS COMMAND CENTER (v0.8.2)
+      LAPIS COMMAND CENTER (v0.0.255)
       Project: void_runner (branch: main)
-      Platform: windows-x64 │ Godot: 4.8.0-custom │ Crystal: v1.15.0
+      Platform: windows-x64 │ Godot: 4.8.0-dev6 │ Crystal: v1.15.0
       Bridge DLL: Compiled [OK] │ Game DLL: Present [OK]
 
     # Single-key action hub: [B]uild, [T]est, [D]octor, [E]ditor, [/] Palette
     > [ S ] Scaffold New Game or Addon (lapis new)
 
     # Scaffolding initializes complete game with embedded templates
-    $ lapis init void_runner --template=3d-action
+    $ lapis new game void_runner --template=3d-action
       [OK] project.godot, shard.yml, src/main.cr, scenes/
 right:
   type: card
@@ -40,7 +40,7 @@ right:
   items:
   - <strong>Interactive Command Center:</strong> Running <code>lapis</code> without arguments opens a real-time dashboard displaying engine health, git branch, and compiler statuses.
   - <strong>Single-Key Action Hub:</strong> Direct hotkey triggers for common developer workflows: <code>[B]</code> Build, <code>[T]</code> Test, <code>[D]</code> Doctor, <code>[E]</code> Editor, <code>[/]</code> Command Palette.
-  - <strong>Zero-Config Scaffolding:</strong> <code>lapis init</code> scaffolds ready-to-run Godot projects with configured <code>shard.yml</code> and <code>project.godot</code> in milliseconds.
+  - <strong>Zero-Config Scaffolding:</strong> <code>lapis new game &lt;name&gt;</code> scaffolds ready-to-run Godot projects with configured <code>shard.yml</code> and <code>project.godot</code> in milliseconds.
   - <strong>Embedded Baked Assets:</strong> CLI embeds starter templates, manifests, and bridge sources via <code>BakedFileSystem</code> for complete offline portability.
 notes: |
-  Developer tooling is the foundation of game programming speed. When run without arguments in an interactive terminal, lapis launches the Lapis Command Center—providing real-time telemetry on engine status, compiler versions, git branch, and bridge DLL states. Developers can trigger instant single-key builds, launch Godot with dynamic shadow hot-reloading, or run tests with a single stroke. Scaffolding new projects with lapis init leverages embedded templates to get playable games running in seconds.
+  Developer tooling is the foundation of game programming speed. When run without arguments in an interactive terminal, lapis launches the Lapis Command Center—providing real-time telemetry on engine status, compiler versions, git branch, and bridge DLL states. Developers can trigger instant single-key builds, launch Godot with dynamic shadow hot-reloading, or run tests with a single stroke. Scaffolding new projects with lapis new leverages embedded templates to get playable games running in seconds.
