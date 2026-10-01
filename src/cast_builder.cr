@@ -836,7 +836,17 @@ module LapisSlides
       dbg_session.emit(0.08_f64, "│ #{C_DIM}0x1400021b9#{C_RESET}  movss xmm0, [rdx]   │   #{C_MAGENTA}return#{C_RESET} this->move_and_slide();           │\r\n")
       dbg_session.emit(0.08_f64, "│ #{C_DIM}0x1400021bd#{C_RESET}  call sym.move_slide │ }                                         │\r\n")
       dbg_session.emit(0.08_f64, "#{C_CYAN}└──────────────────────────────────┴───────────────────────────────────────────┘#{C_RESET}\r\n\r\n")
-      dbg_session.pause(4.5)
+      dbg_session.pause(4.0)
+
+      dbg_session.type_command("lapis decompile bin/game.dll \"Player#_physics_process\" --source", p_dbg, 18.0)
+      dbg_session.emit(0.2_f64, "#{C_CYAN}┌─ Source Code Mapping: Player#_physics_process (0x1400021b0) ─────────────────┐#{C_RESET}\r\n")
+      dbg_session.emit(0.08_f64, "│ #{C_YELLOW}Source Location: src/player.cr:42#{C_RESET}                                             │\r\n")
+      dbg_session.emit(0.08_f64, "│ #{C_DIM}40 |#{C_RESET}   def _physics_process(delta : Float64) : Void                           │\r\n")
+      dbg_session.emit(0.08_f64, "│ #{C_DIM}41 |#{C_RESET}     check_alive!                                                         │\r\n")
+      dbg_session.emit(0.08_f64, "│ #{C_BOLD}#{C_GREEN}=> 42 |     vel = velocity * delta.to_f32                                      #{C_RESET}│\r\n")
+      dbg_session.emit(0.08_f64, "│ #{C_DIM}43 |#{C_RESET}     move_and_slide                                                       │\r\n")
+      dbg_session.emit(0.08_f64, "#{C_CYAN}└──────────────────────────────────────────────────────────────────────────────┘#{C_RESET}\r\n\r\n")
+      dbg_session.pause(4.0)
 
       dbg_session.type_command("lapis run -d", p_dbg, 18.0)
       dbg_session.emit(0.2_f64, "#{C_CYAN}[Debug]#{C_RESET} Launching game under radare2 native debugger...\r\n")
@@ -1286,6 +1296,170 @@ module LapisSlides
       demo5_session.save(File.join(output_dir, "lapis_demo_package.cast"), 86, 19, "Lapis Demo: Release Build & Distribution Packaging")
     end
 
+    # 21. Radare2 Crystal Runtime Inspection (Slide 34g) - ~31.0s
+    def self.build_r2_crystal_cast(output_dir : String)
+      session = Session.new
+      session.clear_screen
+
+      p_dbg = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
+      session.type_command("lapis decompile bin/game.dll --crystal", p_dbg, 18.0)
+
+      session.emit(0.2_f64, "#{C_CYAN}┌─ Crystal Runtime Reflection & Symbol Demangling (cradare2) ──────────────────┐#{C_RESET}\r\n")
+      session.emit(0.08_f64, "│ #{C_BOLD}Target:#{C_RESET} bin/game.dll (x86_64-windows-msvc)    #{C_BOLD}Entry:#{C_RESET} 0x140001080             │\r\n")
+      session.emit(0.08_f64, "│ #{C_BOLD}Runtime:#{C_RESET} Crystal v1.20+ [Execution Contexts]  #{C_BOLD}Boehm GC:#{C_RESET} Active (GC_malloc)   │\r\n")
+      session.emit(0.08_f64, "#{C_CYAN}├──────────────────────────────────────────────────────────────────────────────┤#{C_RESET}\r\n")
+      session.emit(0.08_f64, "│ Discovered Crystal Classes (3 registered nodes):                             │\r\n")
+      session.emit(0.08_f64, "│   • #{C_GREEN}Player < CharacterBody3D#{C_RESET}       (14 methods, 4 exports, 2 signals)        │\r\n")
+      session.emit(0.08_f64, "│   • #{C_GREEN}EnemySpawner < Node3D#{C_RESET}          (8 methods, 3 exports, 1 signal)          │\r\n")
+      session.emit(0.08_f64, "│   • #{C_GREEN}GameHUD < CanvasLayer#{C_RESET}          (11 methods, 6 exports, 3 signals)        │\r\n")
+      session.emit(0.08_f64, "#{C_CYAN}└──────────────────────────────────────────────────────────────────────────────┘#{C_RESET}\r\n\r\n")
+      session.pause(3.5)
+
+      session.type_command("r2 -q0 bin/game.dll", p_dbg, 18.0)
+      session.emit(0.2_f64, "#{C_DIM}[cradare2:memory]#{C_RESET} Direct in-memory inspection of runtime Crystal structures:\r\n")
+      session.pause(0.8)
+      session.emit(0.08_f64, ">> #{C_YELLOW}cradare2.crystal.read_string(0x140040200)#{C_RESET}\r\n")
+      session.emit(0.08_f64, "   #{C_CYAN}[String @ 0x140040200]#{C_RESET} type_id: 1, bytesize: 11, length: 11\r\n")
+      session.emit(0.08_f64, "   Value: #{C_GREEN}\"Void Runner\"#{C_RESET} (UTF-8 buffer @ 0x14004020c)\r\n\r\n")
+      session.pause(2.0)
+
+      session.emit(0.08_f64, ">> #{C_YELLOW}cradare2.crystal.read_array_header(0x140040500)#{C_RESET}\r\n")
+      session.emit(0.08_f64, "   #{C_CYAN}[Array(Int32) @ 0x140040500]#{C_RESET} type_id: 48, size: 4, capacity: 8\r\n")
+      session.emit(0.08_f64, "   Buffer Pointer: 0x140040520 (elements: [100, 250, 500, 1000])\r\n\r\n")
+      session.pause(2.0)
+
+      session.emit(0.08_f64, ">> #{C_YELLOW}cradare2.crystal.read_slice_header(0x140040600)#{C_RESET}\r\n")
+      session.emit(0.08_f64, "   #{C_CYAN}[Slice(UInt8) @ 0x140040600]#{C_RESET} size: 64, read_only: false\r\n")
+      session.emit(0.08_f64, "   Buffer Pointer: 0x140040620 (stack-allocated flat memory)\r\n\r\n")
+      session.pause(2.0)
+
+      session.emit(0.08_f64, ">> #{C_YELLOW}db \"sym.Player#_physics_process:Float64\"#{C_RESET}\r\n")
+      session.emit(0.08_f64, "   #{C_GREEN}✓#{C_RESET} Breakpoint #1 set at Player#_physics_process(Float64) (0x1400021b0)\r\n")
+      session.pause(14.0)
+      session.save(File.join(output_dir, "lapis_r2_crystal.cast"), 86, 22, "Radare2 Crystal Runtime Inspection & In-Memory Structures")
+    end
+
+    # 22. Radare2 Godot Engine Internals (Slide 34h) - ~32.0s
+    def self.build_r2_godot_cast(output_dir : String)
+      session = Session.new
+      session.clear_screen
+
+      p_r2 = "#{C_BOLD}#{C_MAGENTA}[0x140001080]>#{C_RESET} "
+      session.emit(0.1_f64, "#{C_DIM}# Radare2 Godot Engine Dual-Target Plugin Suite#{C_RESET}\r\n")
+      session.type_command("godot detect", p_r2, 18.0)
+
+      session.emit(0.15_f64, "Godot Engine Integration Status:\r\n")
+      session.emit(0.06_f64, "  Engine Core:        #{C_GREEN}libgodot.dll (Godot 4.8.0-custom)#{C_RESET}\r\n")
+      session.emit(0.06_f64, "  GDExtension Bridge: #{C_GREEN}crystal_bridge.dll (API v4.3)#{C_RESET}\r\n")
+      session.emit(0.06_f64, "  Game Logic DLL:     #{C_GREEN}game.dll [ALIVE]#{C_RESET}\r\n")
+      session.emit(0.06_f64, "  Precision Mode:     float64/float32 mixed\r\n\r\n")
+      session.pause(2.5)
+
+      session.type_command("godot object rcx", p_r2, 18.0)
+      session.emit(0.15_f64, "Godot Object @ 0x0000021b3759c2f0:\r\n")
+      session.emit(0.06_f64, "  VTable:       0x00007ffb12340000 (CharacterBody3D::vftable)\r\n")
+      session.emit(0.06_f64, "  Instance ID:  #{C_BOLD}4120894102#{C_RESET} (0x155f9a696) [Monotonic 64-bit]\r\n")
+      session.emit(0.06_f64, "  User Data:    0x0000021b38001000 (Crystal Player instance)\r\n")
+      session.emit(0.06_f64, "  Class Name:   Player < CharacterBody3D\r\n")
+      session.emit(0.06_f64, "  Status:       #{C_BOLD}#{C_GREEN}[ALIVE] Registered in ObjectDB#{C_RESET}\r\n\r\n")
+      session.pause(3.0)
+
+      session.type_command("godot variant rdx", p_r2, 18.0)
+      session.emit(0.15_f64, "Godot Variant @ 0x0000004f210080:\r\n")
+      session.emit(0.06_f64, "  Type:    #{C_CYAN}Vector3 (9)#{C_RESET}\r\n")
+      session.emit(0.06_f64, "  Value:   (12.5, 0.0, -4.2)\r\n")
+      session.emit(0.06_f64, "  Summary: Vector3(x: 12.5, y: 0.0, z: -4.2)\r\n\r\n")
+      session.pause(2.5)
+
+      session.type_command("godot types", p_r2, 18.0)
+      session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} Registered Godot formats: pf.godot_object, pf.godot_variant, pf.godot_vector3\r\n")
+      session.emit(0.08_f64, ">> #{C_YELLOW}pf.godot_vector3 @ 0x0000004f210088#{C_RESET}\r\n")
+      session.emit(0.08_f64, "   0x0000004f210088 = struct godot_vector3 { x: 12.5, y: 0.0, z: -4.2 }\r\n\r\n")
+      session.pause(2.0)
+
+      session.type_command("godot classdb Player", p_r2, 18.0)
+      session.emit(0.15_f64, "Discovered ClassDB Schema (reconstructed without PDBs):\r\n")
+      session.emit(0.06_f64, "  - #{C_GREEN}Player < CharacterBody3D#{C_RESET} (0x140002000)\r\n")
+      session.emit(0.06_f64, "      def #{C_CYAN}_ready#{C_RESET} @ 0x140002100 | def #{C_CYAN}_physics_process#{C_RESET} @ 0x1400021b0\r\n")
+      session.emit(0.06_f64, "      def #{C_CYAN}take_damage#{C_RESET} @ 0x140002340 (args: 1, return: Void)\r\n")
+      session.pause(12.5)
+      session.save(File.join(output_dir, "lapis_r2_godot.cast"), 86, 22, "Radare2 Godot Engine Plugin & ObjectDB Variant Decoders")
+    end
+
+    # 23. Radare2 Lapis Supervisor & Crash Forensics (Slide 34i) - ~32.0s
+    def self.build_r2_lapis_cast(output_dir : String)
+      session = Session.new
+      session.clear_screen
+
+      p_dbg = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
+      session.emit(0.1_f64, "#{C_BOLD}#{C_RED}[CRASH INTERCEPTED] Exception 0xC0000005 (Access Violation) at 0x1400021b4#{C_RESET}\r\n")
+      session.pause(1.5)
+
+      session.type_command("lapis supervisor diagnose", p_dbg, 18.0)
+      session.emit(0.15_f64, "#{C_CYAN}=== Editor Supervisor Crash Diagnosis ===#{C_RESET}\r\n")
+      session.emit(0.06_f64, "Faulting PC:      #{C_BOLD}0x1400021b4#{C_RESET}\r\n")
+      session.emit(0.06_f64, "Faulting Module:  bin/game.dll (offset 0x21b4)\r\n")
+      session.emit(0.06_f64, "Fault Boundary:   #{C_BOLD}#{C_YELLOW}GameCode#{C_RESET} (User Gameplay Logic)\r\n")
+      session.emit(0.06_f64, "Classification:   Dereferencing dead or deallocated pointer\r\n\r\n")
+      session.pause(3.0)
+
+      session.type_command("lapis dead-pointers", p_dbg, 18.0)
+      session.spinner("Scanning CPU registers and active stack frames...", frames_count: 24, delay: 0.08)
+      session.emit(0.15_f64, "\r\n#{C_BOLD}#{C_RED}CRITICAL HAZARD: 1 dead pointer detected in CPU registers!#{C_RESET}\r\n")
+      session.emit(0.06_f64, "  • Register #{C_CYAN}RCX#{C_RESET}: 0x0000021b3759c2f0 (target: Player)\r\n")
+      session.emit(0.06_f64, "  • Instance ID:  #{C_BOLD}4120894102#{C_RESET} (FREED in ObjectDB via queue_free!)\r\n")
+      session.emit(0.06_f64, "  • Fix: #{C_GREEN}Use node.check_alive! or node.alive? before method dispatch#{C_RESET}\r\n\r\n")
+      session.pause(3.5)
+
+      session.type_command("lapis stale-vtables", p_dbg, 18.0)
+      session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} Zero stale vtables detected across all active module boundaries.\r\n")
+      session.emit(0.06_f64, "  All VTables point cleanly to active shadow DLL (game_loaded_14820_172774.dll).\r\n\r\n")
+      session.pause(2.5)
+
+      session.type_command("lapis map src", p_dbg, 18.0)
+      session.emit(0.12_f64, "  #{C_GREEN}✓#{C_RESET} SourceIndexer: Injected 14 nodes, 52 properties, and 18 signals into r2.\r\n")
+      session.pause(14.0)
+      session.save(File.join(output_dir, "lapis_r2_lapis.cast"), 86, 22, "Radare2 Lapis Supervisor & Dead-Pointer Forensics")
+    end
+
+    # 24. Radare2 TUI Debugger Dashboard (Slide 34j) - ~33.0s
+    def self.build_r2_tui_debugger_cast(output_dir : String)
+      session = Session.new
+      session.clear_screen
+
+      p_dbg = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
+      session.type_command("lapis decompile bin/game.dll --tui", p_dbg, 18.0)
+      session.clear_screen(0.05)
+
+      # Draw full double-buffered TUI window
+      session.emit(0.05_f64, "#{C_CYAN}┌─ :: RADARE2 NATIVE DEBUGGER & FORENSICS :: ───────────── [MODE: INTERACTIVE] ─┐#{C_RESET}\r\n")
+      session.emit(0.03_f64, "│ #{C_BOLD}Disassembly (pdf)#{C_RESET}                 │ #{C_BOLD}Pseudo-C (pdc)#{C_RESET}          │ #{C_BOLD}CPU Registers#{C_RESET}     │\r\n")
+      session.emit(0.03_f64, "│ #{C_DIM}0x1400021b0#{C_RESET}  push rbp             │ #{C_BLUE}int64_t#{C_RESET} Player::proc() {│ RAX: #{C_YELLOW}0x140001080#{C_RESET}  │\r\n")
+      session.emit(0.03_f64, "│ #{C_DIM}0x1400021b1#{C_RESET}  mov rbp, rsp         │   #{C_MAGENTA}if#{C_RESET} (!this->alive())   │ RBX: #{C_DIM}0x000000064#{C_RESET}  │\r\n")
+      session.emit(0.03_f64, "│ #{C_GREEN}=>0x1400021b4#{C_RESET} call sym.check_alive │     raise_disposed();   │ RCX: #{C_CYAN}0x21b3759c2f0#{C_RESET}│\r\n")
+      session.emit(0.03_f64, "│ #{C_DIM}0x1400021b9#{C_RESET}  movss xmm0, [rdx]    │   vel = get_vel() * dt; │ RDX: #{C_DIM}0x00004f21008#{C_RESET}│\r\n")
+      session.emit(0.03_f64, "│ #{C_DIM}0x1400021bd#{C_RESET}  call sym.move_slide  │   #{C_MAGENTA}return#{C_RESET} move_slide();  │ RIP: #{C_BOLD}#{C_GREEN}0x1400021b4#{C_RESET}  │\r\n")
+      session.emit(0.03_f64, "│ #{C_DIM}0x1400021c2#{C_RESET}  pop rbp              │ }                       │ RSP: #{C_DIM}0x000000df810#{C_RESET}│\r\n")
+      session.emit(0.03_f64, "│ #{C_DIM}0x1400021c3#{C_RESET}  ret                  │                         │ EFLAGS: #{C_DIM}0x00000246#{C_RESET} │\r\n")
+      session.emit(0.03_f64, "#{C_CYAN}├───────────────────────────────────┴─────────────────────────┴───────────────────┤#{C_RESET}\r\n")
+      session.emit(0.03_f64, "│ Callstack: #0 0x1400021b4 in Player#_physics_process at src/player.cr:42       │\r\n")
+      session.emit(0.03_f64, "│ Memory: 0x21b3759c2f0 │ VTable: 0x7ffb12340000 │ ObjectID: 4120894102 [ALIVE]  │\r\n")
+      session.emit(0.03_f64, "#{C_CYAN}└─ [s: Step │ c: Continue │ r: Registers │ f: Hexdump │ ?: Help │ q: Exit] ───────┘#{C_RESET}\r\n")
+      session.pause(4.0)
+
+      # Simulate stepping
+      session.emit(0.2_f64, "#{C_YELLOW}[Command] Step instruction (F10 / 's') -> RIP advanced to 0x1400021b9#{C_RESET}\r\n")
+      session.pause(3.5)
+
+      # Simulate Crash Auto-Swap
+      session.emit(0.2_f64, "\r\n#{C_BOLD}#{C_RED}┌─ [CRASH] RADARE2 CRASH FORENSICS [AUTO-SWAP ACTIVE] ───────────────────────────┐#{C_RESET}\r\n")
+      session.emit(0.05_f64, "│ #{C_RED}FAULT: 0xC0000005 (ACCESS_VIOLATION) at RIP 0x1400021b4 [game.dll]#{C_RESET}            │\r\n")
+      session.emit(0.05_f64, "│ Boundary: #{C_YELLOW}GameCode#{C_RESET} │ Dereferenced dead Object #4120894102 in RCX                 │\r\n")
+      session.emit(0.05_f64, "#{C_BOLD}#{C_RED}└────────────────────────────────────────────────────────────────────────────────┘#{C_RESET}\r\n")
+      session.pause(21.0)
+      session.save(File.join(output_dir, "lapis_r2_tui_debugger.cast"), 86, 22, "Radare2 Interactive TUI Debugger & Crash Forensics Auto-Swap")
+    end
+
     def self.build_all(output_dir : String)
       Dir.mkdir_p(output_dir)
       build_test_runner_cast(output_dir)
@@ -1308,6 +1482,10 @@ module LapisSlides
       build_demo_scaffold_cast(output_dir)
       build_demo_install_addon_cast(output_dir)
       build_demo_package_cast(output_dir)
+      build_r2_crystal_cast(output_dir)
+      build_r2_godot_cast(output_dir)
+      build_r2_lapis_cast(output_dir)
+      build_r2_tui_debugger_cast(output_dir)
     end
   end
 end

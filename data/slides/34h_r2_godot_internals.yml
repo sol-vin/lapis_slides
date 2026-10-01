@@ -1,0 +1,32 @@
+---
+id: 34h_r2_godot_internals
+title: 'R2 for Godot: ObjectDB, Variant Decoding & ClassDB Reconstruction'
+subtitle: Binary Object Headers, 39 Variant Payloads & Schema Recovery Without PDBs
+badge: ENGINE INTERNALS • GODOT PLUGIN
+badge_color: cyan
+palette: spaces_vista
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — r2 Godot Plugin Suite (godot detect, object, variant)
+  cast: casts/lapis_r2_godot.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+right:
+  type: card
+  title: Godot C-API & Memory Invariants
+  color: cyan
+  items:
+  - <strong>Godot Object Header Decoding:</strong> <code>godot object</code> decodes VTables, monotonic 64-bit ObjectIDs, and verifies alive status directly against Godot's native ObjectDB.
+  - <strong>Full-Spectrum Variant Decoder:</strong> <code>godot variant</code> unpacks all 39 Godot Variant types (Vector3, Color, Transform3D, StringName) directly from register addresses and stack frames.
+  - <strong>PDB-Free ClassDB Reconstruction:</strong> <code>godot classdb</code> scans binary data sections and exported symbols to reconstruct class inheritance and virtual dispatch callbacks without PDBs.
+  - <strong>Radare2 Print Formats (<code>pf.godot_*</code>):</strong> Maps raw memory addresses into structured C/Crystal fields (<code>pf.godot_vector3</code>, <code>pf.godot_transform3d</code>) for instant hex inspection.
+notes: |
+  The custom Godot radare2 plugin equips developers with deep engine introspection. You can query Godot engine integration status, unpack any of the 39 Variant types directly from CPU registers, inspect ObjectDB 64-bit instance IDs to verify alive status, and reconstruct registered ClassDB schemas straight from the compiled game DLL.

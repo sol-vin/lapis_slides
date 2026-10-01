@@ -82,10 +82,14 @@ slides:
 - 33b_cli_editor_launcher
 - 34_debugger_radare2
 - 34c_debug_workflows
+- 34g_r2_crystal_runtime
+- 34h_r2_godot_internals
+- 34i_r2_lapis_supervisor
+- 34j_r2_tui_debugger
+- 34b_r2_test_suite
 - 34d_cli_log_triage
 - 34e_cli_run_monitor
 - 34f_cli_sync_targets
-- 34b_r2_test_suite
 - 36_testing_zero_leak
 - 36b_testing_editor_driver
 - 37_tool_testing_tui

@@ -1,0 +1,32 @@
+---
+id: 34j_r2_tui_debugger
+title: 'R2 Native Debugger TUI: Interactive Disassembly & Crash Forensics'
+subtitle: Double-Buffered Terminal Dashboard, Live Registers & Automated Crash Auto-Swap
+badge: INTERACTIVE DASHBOARD • NATIVE TUI
+badge_color: blue
+palette: spaces_xp_royale
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis decompile --tui (Interactive Radare2 Dashboard)
+  cast: casts/lapis_r2_tui_debugger.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+right:
+  type: card
+  title: Interactive TUI & Forensics Invariants
+  color: blue
+  items:
+  - <strong>Split-Pane Disassembly & Pseudo-C:</strong> Real-time dual display comparing raw machine opcodes (<code>pdf</code>) with structured pseudo-C (<code>pdc</code>) in a double-buffered ANSI dashboard.
+  - <strong>Live 64-Bit Register Tracking:</strong> Continuously monitors CPU registers (<code>RAX</code>, <code>RBX</code>, <code>RCX</code>, <code>RIP</code>, <code>RSP</code>, <code>EFLAGS</code>) with real-time diff highlighting during instruction stepping.
+  - <strong>Automated Crash Auto-Swap:</strong> Instantly transitions to the forensics triage dashboard upon abnormal exit (<code>0xC0000005</code>), displaying the faulting instruction and call stack.
+  - <strong>Zero-Dependency Native Execution:</strong> Runs completely inside the terminal without requiring heavy GUI debuggers, browser bridges, or remote debug servers.
+notes: |
+  The interactive Lapis Debugger TUI brings the full power of radare2 and cradare2 into a fluid, double-buffered terminal interface. Developers can navigate functions, step through assembly side-by-side with pseudo-C, monitor live 64-bit CPU registers, and benefit from automatic crash triage if a hardware exception or memory corruption occurs.

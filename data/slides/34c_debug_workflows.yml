@@ -29,18 +29,21 @@ left:
     │ 0x1400021b9 movss xmm0, [rdx]    │   return this->move_and_slide();          │
     └──────────────────────────────────┴───────────────────────────────────────────┘
 
-    # 2. Launch Godot Editor under radare2 native debugger
-    $ lapis editor -d --log-file=log/editor.log
-    [r2] Process attached (PID 14820). Symbols loaded for game.dll, plugin.dll.
-    [Breakpoint] Hit Player#_physics_process at player.cr:42 (RCX=0x24a1b9)
+    # 2. Crystal source line mapping via debug symbols
+    $ lapis decompile bin/game.dll "Player#_physics_process" --source
+    ┌─ Source Code Mapping: Player#_physics_process (src/player.cr:42) ────────────┐
+    │ => 42 |   vel = velocity * delta.to_f32                                      │
+    │    43 |   move_and_slide                                                     │
+    └──────────────────────────────────────────────────────────────────────────────┘
 right:
   type: card
   title: Triaging 3 Critical Failure Boundaries
   color: amber
   items:
+  - <strong>Crystal Source Code Mapping:</strong> <code>lapis decompile --source</code> reads DWARF symbols to display exact Crystal source file lines and interleaved disassembly (<code>pdls</code>).
   - <strong>Side-by-Side Decompilation:</strong> <code>lapis decompile --side-by-side</code> renders an interactive split view comparing raw machine disassembly and structured pseudo-C.
+  - <strong>Crystal Runtime Inspection:</strong> <code>lapis decompile --crystal</code> discovers all compiled Crystal classes, methods, entrypoints, and Boehm GC allocator symbols.
   - <strong>Native Editor Debugging (<code>lapis editor -d</code>):</strong> Attaches radare2 directly to the running engine with dual log redirection (<code>editor.log</code> vs <code>editor-crystal.log</code>).
   - <strong>ABI & Boundary Forensics:</strong> <code>lapis decompile --verify</code> audits entrypoints, DEP/ASLR hardening, and 64-bit ObjectDB instance IDs without external tooling.
-  - <strong>Zero External Debugger Bloat:</strong> Eliminates multi-gigabyte LLDB/Python stacks in favor of high-performance native disassembly.
 notes: |
-  Lapis provides deep native binary inspection and debugging directly from the terminal. Developers can decompile any Crystal method into side-by-side assembly and structured pseudo-C using lapis decompile --side-by-side. When debugging complex physics or editor tool interactions, lapis editor -d launches Godot under radare2 with isolated dual-channel logging. If an unexpected memory access occurs, automated forensics inspects the 64-bit ObjectDB instance ID and verifies boundary integrity across game code, plugins, and the GDExtension bridge.
+  Lapis provides deep native binary inspection and debugging directly from the terminal. Developers can map compiled functions back to original Crystal source code lines using lapis decompile --source, inspect runtime classes and Boehm GC symbols with --crystal, or decompile methods into side-by-side assembly and pseudo-C using --side-by-side. When debugging complex physics or editor tool interactions, lapis editor -d launches Godot under radare2 with isolated dual-channel logging. If an unexpected memory access occurs, automated forensics inspects the 64-bit ObjectDB instance ID and verifies boundary integrity across game code, plugins, and the GDExtension bridge.
