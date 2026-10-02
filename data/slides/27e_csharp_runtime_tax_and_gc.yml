@@ -1,0 +1,73 @@
+---
+id: 27e_csharp_runtime_tax_and_gc
+title: 'Godot C# vs Lapis: The Runtime VM Tax & GC Stutter'
+subtitle: P/Invoke Marshalling Overhead and Unpredictable GC Frame Drops vs Native LLVM Speed
+badge: LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY
+badge_color: purple
+palette: former_rain
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: Godot C#: P/Invoke Overhead, Boxing & GC Spikes'
+  lang: csharp
+  tag: C# (.NET 8)
+  card_title: C# VM Tax, Boxing & GC Pauses
+  code: |
+    public partial class ParticleSwarm : Node2D
+    {
+        // Heavy allocations in 60fps / 120fps physics loop:
+        public override void _PhysicsProcess(double delta)
+        {
+            for (int i = 0; i < 10_000; i++)
+            {
+                // 1. P/Invoke crossing boundary (C# CLR -> C++ Godot)
+                // 2. Struct marshalling and hidden memory allocations
+                var pos = GetParticlePos(i);
+
+                // 3. LINQ or lambda closures allocate garbage on heap:
+                var nearby = _targets.Where(t => t.DistanceTo(pos) < 50.0f);
+
+                // 4. Variant boxing: wrapping primitives into Godot.Variant
+                // causes thousands of heap allocations per second!
+                // -> Triggers CLR Garbage Collector pauses (15ms-50ms spikes!)
+            }
+        }
+    }
+  points:
+  - <strong>P/Invoke Marshaling Barrier:</strong> Every call between C# and Godot must cross the managed/unmanaged runtime boundary, translating pointers and copying data.
+  - <strong>Boxing &amp; Allocation Churn:</strong> Passing primitives to Godot APIs often boxes values into <code>Godot.Variant</code>, flooding the .NET Gen0/Gen1 heaps with short-lived objects.
+  - <strong>Garbage Collection Stutter:</strong> The .NET CLR garbage collector runs non-deterministically; when a Gen2 collection triggers, frame rates plummet, causing visible micro-stutter.
+  - <strong>Bloated Distribution:</strong> Shipping a C# Godot game requires bundling the entire .NET runtime (~50-100MB+ extra binary footprint).
+crystal:
+  title: ':sparkles: Crystal / Lapis: Native C ABI & Zero-Allocation Loops'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    node ParticleSwarm < Node2D do
+      # Stack-allocated, flat contiguous structs with ZERO heap allocations
+      @positions = Slice(Vector2).new(10_000)
+
+      def _physics_process(delta : Float64)
+        # Direct C ABI: inlined LLVM machine code, ZERO P/Invoke penalty!
+        dt = delta.to_f32
+
+        # SIMD-vectorized contiguous memory access
+        @positions.each_with_index do |pos, i|
+          # Value-type math on the stack: zero allocations, zero GC pressure
+          new_pos = pos + Vector2.new(1.0_f32, 0.5_f32) * dt
+          @positions[i] = new_pos
+        end
+
+        # Boehm GC tuned specifically for native systems:
+        # Hot gameplay loops generate ZERO heap objects -> ZERO frame drops!
+      end
+    end
+  points:
+  - <strong>Direct Native C ABI:</strong> Compiled ahead-of-time directly by LLVM to optimized machine instructions; calls into Godot execute at raw C++ speed with zero P/Invoke overhead.
+  - <strong>Stack-Allocated Value Types:</strong> <code>Vector2</code>, <code>Vector3</code>, <code>Transform3D</code>, and custom structs live directly on the stack or in flat contiguous memory slices.
+  - <strong>Zero-Allocation Hot Loops:</strong> Gameplay and physics processing run with 0 bytes allocated per frame, guaranteeing consistent, stutter-free 120+ FPS.
+  - <strong>Featherweight Footprint:</strong> Standalone game dynamic library is only a few megabytes; no external VM, Mono runtime, or CLR dependencies needed.
+takeaway:
+  badge: NATIVE LLVM THROUGHPUT
+  text: 'Lapis delivers raw C++ performance with Ruby ergonomics: zero P/Invoke boundary latency, zero boxing churn, and zero GC hitching.'
+notes: |
+  Why does C# struggle in high-performance game loops? In Godot C#, every call into engine nodes must traverse the managed-to-unmanaged P/Invoke boundary, adding call overhead and struct copying. Modern C# features like LINQ closures allocate temporary objects on the heap, and passing arguments to Godot variants frequently triggers boxing churn. When the .NET Garbage Collector pauses execution to sweep Gen0, Gen1, or Gen2 heaps, frame times spike by 15ms to 50ms, causing noticeable stutter during critical gameplay moments. Lapis compiles Crystal directly to native machine code via LLVM with a direct C ABI interface to Godot. Structs like Vector2 and Vector3 live on the stack or in flat slices. Hot physics and animation loops allocate exactly 0 bytes on the heap, delivering rock-solid frame pacing with zero GC stutter.

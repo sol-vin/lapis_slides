@@ -73,7 +73,8 @@ module LapisSlides
         str << "        </div>"
       end
 
-      code_notes = slide.raw["code_notes"]?.try(&.as_s) || "Side-by-side comparison: Review the syntax, structure, and ergonomics between GDScript on the left and Crystal on the right before we step into the critique."
+      left_lang_name = (gd_data && gd_data["lang"]?.try(&.as_s) == "csharp") ? "C#" : "GDScript"
+      code_notes = slide.raw["code_notes"]?.try(&.as_s) || "Side-by-side comparison: Review the syntax, structure, and ergonomics between #{left_lang_name} on the left and Crystal on the right before we step into the critique."
       render_section_wrapper(slide, palette, slide_num, total_slides, author, body, code_notes)
     end
 
@@ -114,12 +115,15 @@ module LapisSlides
         # Overlay critique cards positioned over the IDE text boxes
         str << "          <div class=\"ide-notes-overlay\">\n"
 
-        # Left overlay over GDScript IDE
+        # Left overlay over GDScript / C# IDE
         if gd_data && (points = gd_data["points"]?.try(&.as_a))
+          gd_lang = gd_data["lang"]?.try(&.as_s) || "gdscript"
+          default_title = gd_lang == "csharp" ? "C# Friction &amp; Anti-Patterns" : "GDScript Friction &amp; Pitfalls"
+          card_title = gd_data["card_title"]?.try(&.as_s) || default_title
           str << "            <div class=\"overlay-card antipattern\">\n"
           str << "              <div class=\"overlay-card-header\">\n"
           str << "                <div class=\"card-title antipattern\">\n"
-          str << "                  <span>" << LayoutRenderer.render_icon("triangle-exclamation") << " GDScript Friction &amp; Pitfalls</span>\n"
+          str << "                  <span>" << LayoutRenderer.render_icon("triangle-exclamation") << " " << card_title << "</span>\n"
           str << "                </div>\n"
           str << "                <span class=\"badge-pill antipattern\" style=\"font-size: 0.68rem; margin: 0;\">ANTIPATTERN</span>\n"
           str << "              </div>\n"
@@ -183,10 +187,11 @@ module LapisSlides
         str << "- **Subtitle**: " << slide.subtitle << "\n"
 
         if gd_data
-          gd_title = gd_data["title"]?.try(&.as_s) || "GDScript Anti-Pattern"
+          gd_title = gd_data["title"]?.try(&.as_s) || "Anti-Pattern"
           gd_lang = gd_data["lang"]?.try(&.as_s) || "gdscript"
           gd_code = gd_data["code"]?.try(&.as_s) || ""
-          str << "- **GDScript Code Example (`" << gd_title << "`)**:\n"
+          lang_name = gd_lang == "csharp" ? "C#" : "GDScript"
+          str << "- **#{lang_name} Code Example (`" << gd_title << "`)**:\n"
           str << "  ```" << gd_lang << "\n  " << gd_code.strip.gsub("\n", "\n  ") << "\n  ```\n"
         end
 
@@ -218,7 +223,9 @@ module LapisSlides
         str << "- **Subtitle**: " << slide.subtitle << "\n"
 
         if gd_data && (points = gd_data["points"]?.try(&.as_a))
-          str << "- **GDScript Friction & Pitfalls**:\n"
+          gd_lang = gd_data["lang"]?.try(&.as_s) || "gdscript"
+          section_title = gd_lang == "csharp" ? "C# Friction & Anti-Patterns" : "GDScript Friction & Pitfalls"
+          str << "- **#{section_title}**:\n"
           points.each do |p|
             str << "  - " << LayoutRenderer.clean_text(extract_point_text(p)) << "\n"
           end

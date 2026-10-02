@@ -11,6 +11,6 @@ __pycache__/
 sandbox/**/bin/
 sandbox/**/addons/*/bin/
 sandbox/**/log/
+sandbox/**/recordings/
 .godot/
 *.log
-

@@ -1,0 +1,84 @@
+---
+id: 27c_csharp_bloat_vs_crystal_zen
+title: 'Godot C# vs Lapis: Ceremony & Keyword Bloat'
+subtitle: Boilerplate Attributes, Partial Classes, and Delegate Rigmarole vs Declarative Macro DSL
+badge: LANGUAGE SHOOTOUT • C# VS LAPIS
+badge_color: purple
+palette: playbox
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: Godot C#: Mandatory Ceremony & Keyword Bloat'
+  lang: csharp
+  tag: C# (.NET 8)
+  card_title: C# Keyword Bloat & Ceremony
+  code: |
+    using Godot;
+    using System;
+
+    // Mandatory 'partial' modifier required by source generators
+    public partial class PlayerController : CharacterBody3D
+    {
+        // Verbose property ceremony: attribute + public + explicit get/set
+        [Export] public float Speed { get; set; } = 300.0f;
+        [Export] public int MaxHealth { get; set; } = 100;
+
+        // Signal declaration requires separate delegate + EventHandler naming convention
+        [Signal]
+        public delegate void HealthChangedEventHandler(int currentHealth, int maxHealth);
+
+        private int _health;
+
+        public override void _Ready()
+        {
+            _health = MaxHealth;
+        }
+
+        // Heavy boilerplate parameter types and return ceremony
+        public int Heal(int amount)
+        {
+            _health = Math.Clamp(_health + amount, 0, MaxHealth);
+            // String-based signal name via nested generated SignalName class
+            EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
+            return _health;
+        }
+    }
+  points:
+  - <strong>Mandatory Partial Class Boilerplate:</strong> Godot C# forces every node to be declared <code>public partial class</code> to accommodate source generators.
+  - <strong>Signal Delegate Ceremony:</strong> Defining a signal requires declaring a dummy <code>delegate</code> with an <code>EventHandler</code> suffix, multiplying code noise.
+  - <strong>Export Property Verbosity:</strong> Every inspector variable requires <code>[Export] public Type Name { get; set; }</code> auto-property ceremony.
+  - <strong>Signal Name Indirection:</strong> Signal emission relies on generated nested static classes (<code>SignalName.HealthChanged</code>) and boxed argument arrays.
+crystal:
+  title: ':sparkles: Crystal / Lapis: Expressive, Zero-Noise Declarations'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    node PlayerController < CharacterBody3D do
+      # Declarative, elegant macro annotations with direct type inference:
+      @export @speed : Float32 = 300.0_f32
+      @export @max_health : Int32 = 100
+
+      # Clean, native first-class signal definition:
+      signal health_changed(current : Int32, max : Int32)
+
+      def _ready
+        @health = @max_health
+      end
+
+      # Expressive, concise Ruby syntax with zero fluff:
+      def heal(amount : Int32) : Int32
+        @health = (@health + amount).clamp(0, @max_health)
+        # Strongly-typed signal emitter method generated at compile-time!
+        emit_health_changed(@health, @max_health)
+        @health
+      end
+    end
+  points:
+  - <strong>Zero-Ceremony Class Definitions:</strong> Clean <code>node PlayerController &lt; CharacterBody3D</code> blocks without <code>partial</code> hacks or <code>using</code> noise.
+  - <strong>First-Class Signal DSL:</strong> <code>signal name(...)</code> macro automatically synthesizes type-safe <code>emit_name(...)</code> helper methods with compile-time argument checks.
+  - <strong>Direct ClassDB Registration:</strong> Properties annotated with <code>@export</code> register seamlessly into Godot's inspector without getter/setter ceremony.
+  - <strong>Half the Code, Double the Signal:</strong> Delivers pure Ruby elegance with 100% compiled native GDExtension ClassDB integration.
+takeaway:
+  badge: ZERO BOILERPLATE
+  text: Crystal strips away C#'s enterprise ceremony and attribute bloat, delivering clean declarative elegance backed by native GDExtension performance.
+notes: |
+  Comparing Godot C# to Lapis reveals a massive gulf in developer ergonomics. In C#, every single node requires `using Godot; using System;`, `public partial class` boilerplate for source generators, and verbose `[Export] public float Speed { get; set; }` properties. Even worse, declaring a signal in C# requires writing a dummy `delegate` with an `EventHandler` suffix, and emitting it involves string constants like `SignalName.HealthChanged`. In Lapis, you write pure, expressive Crystal: `node PlayerController < CharacterBody3D do`, `@export @speed : Float32 = 300.0_f32`, and `signal health_changed(...)` which automatically synthesizes a strongly-typed `emit_health_changed` method. You write less than half the code with zero attribute clutter.

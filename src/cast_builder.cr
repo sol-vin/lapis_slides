@@ -140,12 +140,9 @@ module LapisSlides
       end
 
       def save(path : String, width : Int32, height : Int32, title : String)
-        if File.exists?(path)
-          content = File.read(path)
-          if content.includes?("[60.") || content.includes?("[59.") || content.includes?("[61.")
-            puts "✓ Preserved high-fidelity cast #{path} (~60s duration)"
-            return
-          end
+        if File.exists?(path) && File.size(path) > 100
+          puts "✓ Preserved genuine recorded cast #{path}"
+          return
         end
 
         # Ensure final frame hold is recorded in event timeline

@@ -4,7 +4,7 @@
   "platform": "Windows (x86_64)",
   "crystal_version": "Crystal 1.21.0",
   "godot_version": "4.8.dev.gh.c971f93e7",
-  "duration_seconds": 8.17,
+  "duration_seconds": 7.87,
   "overall_success": true,
   "failed_phases_count": 0,
   "phases": [
@@ -14,7 +14,7 @@
       "category": "Test",
       "success": true,
       "informational": false,
-      "duration": 7.99,
+      "duration": 7.67,
       "exit_code": 1,
       "error_excerpt": null,
       "log_line_range": null

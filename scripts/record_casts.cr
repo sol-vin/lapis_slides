@@ -30,18 +30,34 @@ require "tui/bench_viewer"
 require "tui/run_monitor"
 require "tui/renderer"
 
-class AsciiCast
-  getter cols : Int32
-  getter rows : Int32
-  getter current_time : Float64 = 0.0
-  getter events : Array(Tuple(Float64, String, String)) = [] of Tuple(Float64, String, String)
+require "opal/asciicast"
 
-  def initialize(@cols : Int32 = 86, @rows : Int32 = 22)
+class AsciiCast
+  getter writer : Opal::Asciicast::Writer
+
+  def initialize(cols : Int32 = 86, rows : Int32 = 22)
+    @writer = Opal::Asciicast::Writer.new(
+      width: cols,
+      height: rows,
+      shell: "lapis",
+      term: "xterm-256color"
+    )
+  end
+
+  def cols : Int32
+    @writer.width
+  end
+
+  def rows : Int32
+    @writer.height
+  end
+
+  def current_time : Float64
+    @writer.elapsed
   end
 
   def append_raw(data : String, delay : Float64 = 0.0)
-    @current_time += delay
-    @events << {@current_time.round(6), "o", data}
+    @writer.write(data, delay)
   end
 
   def type_command(cmd : String, prompt : String = "\e[1;32mian@workstation\e[0m:\e[1;34m~/lapis/void_runner\e[0m$ ", prompt_delay : Float64 = 0.4, char_delay : Float64 = 0.035, post_delay : Float64 = 0.25)
@@ -68,28 +84,12 @@ class AsciiCast
   end
 
   def sleep(duration : Float64)
-    @current_time += duration
+    @writer.pause(duration)
   end
 
   def save(path : String)
-    FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, "w") do |f|
-      header = {
-        "version" => 2,
-        "width" => @cols,
-        "height" => @rows,
-        "timestamp" => 1727760000,
-        "env" => {
-          "SHELL" => "lapis",
-          "TERM" => "xterm-256color"
-        }
-      }
-      f.puts header.to_json
-      @events.each do |ev|
-        f.puts [ev[0], ev[1], ev[2]].to_json
-      end
-    end
-    puts "  [OK] Saved #{path} (#{@events.size} frames, #{@current_time.round(2)}s)"
+    @writer.save(path)
+    puts "  [OK] Saved #{path} (#{@writer.events.size} frames, #{@writer.elapsed.round(2)}s)"
   end
 end
 
@@ -180,38 +180,65 @@ class CliLifecycleCast < BaseCast
       hub.selected_index = 0
       hub.render_to_buffer(buf, cols, rows)
       cast.render_buffer(buf, 0.0, clear: true)
-      cast.sleep(1.2)
+      cast.sleep(1.0)
 
       # Frame 2: Down arrow -> Launch Editor
       hub.selected_index = 1
       buf.clear
       hub.render_to_buffer(buf, cols, rows)
-      cast.render_buffer(buf, 0.6)
+      cast.render_buffer(buf, 0.5)
 
       # Frame 3: Down arrow -> Packaging & Export
       hub.selected_index = 2
       buf.clear
       hub.render_to_buffer(buf, cols, rows)
-      cast.render_buffer(buf, 0.6)
+      cast.render_buffer(buf, 0.5)
 
       # Frame 4: Down arrow -> Radare2 Native Debugger
       hub.selected_index = 3
       buf.clear
       hub.render_to_buffer(buf, cols, rows)
-      cast.render_buffer(buf, 0.7)
+      cast.render_buffer(buf, 0.5)
 
-      # Frame 5: Down arrow -> Toolchain Doctor
+      # Frame 5: Down arrow -> Benchmark Visualizer
+      hub.selected_index = 5
+      buf.clear
+      hub.render_to_buffer(buf, cols, rows)
+      cast.render_buffer(buf, 0.5)
+
+      # Frame 6: Down arrow -> Toolchain Doctor
       hub.selected_index = 8
       buf.clear
       hub.render_to_buffer(buf, cols, rows)
-      cast.render_buffer(buf, 0.8)
+      cast.render_buffer(buf, 0.5)
 
-      # Frame 6: Down arrow -> Synchronize Multi-Targets
-      hub.selected_index = 9
+      # Frame 7: Down arrow -> Clean Build Artifacts
+      hub.selected_index = 10
+      buf.clear
+      hub.render_to_buffer(buf, cols, rows)
+      cast.render_buffer(buf, 0.6)
+
+      # Frame 8: Down arrow -> Generate Documentation
+      hub.selected_index = 11
+      buf.clear
+      hub.render_to_buffer(buf, cols, rows)
+      cast.render_buffer(buf, 0.6)
+
+      # Frame 9: Press Ctrl+R to start screencast recording (badge appears in header!)
+      Opal::Asciicast::VCR.record("recordings/hub_session.cast", width: cols, height: rows, title: "Lapis Terminal Hub")
+      hub.selected_index = 8
+      buf.clear
+      hub.render_to_buffer(buf, cols, rows)
+      cast.render_buffer(buf, 1.2)
+
+      # Frame 10: Press Ctrl+S to capture VCR screenshot
+      Opal::Asciicast::VCR.stop
+      hub.set_status("VCR Screenshot saved to recordings/screenshot_hub_20261001_180000.ansi (Copied to Clipboard)!")
       buf.clear
       hub.render_to_buffer(buf, cols, rows)
       cast.render_buffer(buf, 2.5)
     ensure
+      Opal::Asciicast::VCR.stop if Opal::Asciicast::VCR.recording?
       Dir.cd(orig_dir)
     end
   end
@@ -299,7 +326,7 @@ class ScaffoldWizardCast < BaseCast
       wizard.current_step = Lapis::TUI::NewWizard::Step::SelectTemplate
       wizard.render_to_buffer(buf, cols, rows)
       cast.render_buffer(buf, 0.0, clear: true)
-      cast.sleep(1.2)
+      cast.sleep(1.0)
 
       # Step 2: Enter Details
       wizard.current_step = Lapis::TUI::NewWizard::Step::EnterDetails
@@ -307,19 +334,28 @@ class ScaffoldWizardCast < BaseCast
       wizard.author = "sol-vin"
       buf.clear
       wizard.render_to_buffer(buf, cols, rows)
-      cast.render_buffer(buf, 1.2)
+      cast.render_buffer(buf, 1.0)
 
       # Step 3: Toggle Features
       wizard.current_step = Lapis::TUI::NewWizard::Step::ToggleFeatures
       buf.clear
       wizard.render_to_buffer(buf, cols, rows)
-      cast.render_buffer(buf, 1.2)
+      cast.render_buffer(buf, 1.0)
 
-      # Step 4: Preview & Create
-      wizard.current_step = Lapis::TUI::NewWizard::Step::PreviewAndCreate
+      # Step 4: Modular Addon Selection
+      wizard.current_step = Lapis::TUI::NewWizard::Step::SelectAddons
+      wizard.selected_addons.add("dummy_inventory")
+      wizard.selected_addons.add("dummy_dialogue")
       buf.clear
       wizard.render_to_buffer(buf, cols, rows)
-      cast.render_buffer(buf, 2.8)
+      cast.render_buffer(buf, 1.0)
+
+      # Step 5: Preview & Create
+      wizard.current_step = Lapis::TUI::NewWizard::Step::PreviewAndCreate
+      wizard.selected_template_name = "Standalone Game Starter"
+      buf.clear
+      wizard.render_to_buffer(buf, cols, rows)
+      cast.render_buffer(buf, 2.5)
     ensure
       Dir.cd(orig_dir)
     end
@@ -327,7 +363,7 @@ class ScaffoldWizardCast < BaseCast
 end
 CastRegistry.register(ScaffoldWizardCast.new)
 
-# 5. Slide 30e: Interactive Studio (Color Studio Theme Modal)
+# 5. Slide 30e: Lapis Creative Terminal Tools (lapis color --3d, lapis explore, lapis shaders, lapis docs)
 class InteractiveStudioCast < BaseCast
   def name; "lapis_interactive_studio"; end
   def cols; 86; end
@@ -336,29 +372,59 @@ class InteractiveStudioCast < BaseCast
   def record(cast : AsciiCast)
     renderer = Lapis::TUI::Renderer.new
     state = Lapis::TUI::TestRunState.new
-    state.current_view = Lapis::TUI::ViewMode::ColorStudio
 
-    # Frame 1: Initial Studio View
+    # 1. lapis color --3d: Launch interactive 3D Spatial TrueColor Palette Studio
+    cast.type_command("lapis color --3d", prompt_delay: 0.2)
+    state.current_view = Lapis::TUI::ViewMode::ColorStudio
+    state.use_3d_color_picker = true
+    state.color_picker.color = Opal::Color.hex("#CBA6F7")
     frame1 = renderer.render_to_string(state, cols, rows)
     buf = Opal::UI::Buffer.new(cols, rows)
     buf.put_string(0, 0, frame1)
-    cast.append_raw("\e[2J\e[H" + frame1.gsub(/\r?\n/, "\r\n"), 0.0)
-    cast.sleep(1.2)
+    cast.render_buffer(buf, 0.4, clear: true)
+    cast.sleep(1.5)
 
-    # Frame 2: Switch accent to Blue
-    state.color_picker.color = Opal::Color.hex("#89B4FA")
+    # 2. lapis explore: Launch interactive terminal file dialog & project explorer
+    cast.append_raw("\e[2J\e[H", 0.0)
+    cast.type_command("lapis explore", prompt_delay: 0.1)
+    state.current_view = Lapis::TUI::ViewMode::FileExplorer
     frame2 = renderer.render_to_string(state, cols, rows)
-    cast.append_raw("\e[H" + frame2.gsub(/\r?\n/, "\r\n"), 1.0)
+    buf.clear
+    buf.put_string(0, 0, frame2)
+    cast.render_buffer(buf, 0.4, clear: true)
+    cast.sleep(1.5)
 
-    # Frame 3: Switch accent to Green
-    state.color_picker.color = Opal::Color.hex("#A6E3A1")
+    # 3. lapis shaders: Real-time text shader FX playground (CRT scanlines & Matrix rain)
+    cast.append_raw("\e[2J\e[H", 0.0)
+    cast.type_command("lapis shaders --fx=matrix", prompt_delay: 0.1)
+    state.current_view = Lapis::TUI::ViewMode::ColorStudio
+    state.shader_fx = Lapis::TUI::ShaderFxMode::Matrix
     frame3 = renderer.render_to_string(state, cols, rows)
-    cast.append_raw("\e[H" + frame3.gsub(/\r?\n/, "\r\n"), 1.0)
+    buf.clear
+    buf.put_string(0, 0, frame3)
+    cast.render_buffer(buf, 0.4, clear: true)
+    cast.sleep(1.5)
 
-    # Frame 4: Switch accent to Sol.vin Violet (#CBA6F7)
-    state.color_picker.color = Opal::Color.hex("#CBA6F7")
-    frame4 = renderer.render_to_string(state, cols, rows)
-    cast.append_raw("\e[H" + frame4.gsub(/\r?\n/, "\r\n"), 2.8)
+    # 4. lapis docs: Built-in terminal offline documentation lookup
+    cast.append_raw("\e[2J\e[H", 0.0)
+    cast.type_command("lapis docs lookup gd \"CharacterBody3D.move_and_slide\"", prompt_delay: 0.1)
+    docs_lines = [
+      "\e[1;36m[Lapis Docs]\e[0m Looking up Godot ClassDB symbol: \e[1;33mCharacterBody3D.move_and_slide\e[0m",
+      "",
+      "\e[1;32mbool CharacterBody3D.move_and_slide()\e[0m",
+      "  Moves the body based on \e[36mvelocity\e[0m. If the body collides with another,",
+      "  it will slide along the other body rather than stop immediately.",
+      "",
+      "\e[1;34mCrystal Signature (LibGodot):\e[0m",
+      "  \e[35mdef move_and_slide : Bool\e[0m",
+      "    \e[90m# Direct C ABI virtual call with zero marshalling allocation\e[0m",
+      "    LibGodot.character_body_3d_move_and_slide(to_unsafe)",
+      "  \e[35mend\e[0m",
+      "",
+      "\e[90mPress 'q' or Esc to exit offline doc viewer\e[0m"
+    ]
+    cast.print_lines(docs_lines, line_delay: 0.06)
+    cast.sleep(2.5)
   end
 end
 CastRegistry.register(InteractiveStudioCast.new)
@@ -643,16 +709,39 @@ class R2TuiDebuggerCast < BaseCast
     dbg.disassembly_lines << "0x140001015  48 85 c0          test rax, rax"
     dbg.disassembly_lines << "0x140001018  74 12             jz 0x14000102c"
 
+    dbg.decompiler_lines << "int64_t crystal_bridge_init(void) {"
+    dbg.decompiler_lines << "    int64_t rbx;"
+    dbg.decompiler_lines << "    int64_t rax = sym.init_crystal_runtime();"
+    dbg.decompiler_lines << "    if (rax == 0) return 0;"
+    dbg.decompiler_lines << "    sym.register_godot_classes();"
+    dbg.decompiler_lines << "    return 1;"
+    dbg.decompiler_lines << "}"
+
     buf = Opal::UI::Buffer.new(cols, rows)
+
+    # Frame 1: Disassembly (Tab 1)
+    dbg.active_tab = Lapis::TUI::DebuggerView::Tab::Disassembly
     dbg.render_to_buffer(buf, cols, rows)
     cast.render_buffer(buf, 0.0, clear: true)
-    cast.sleep(1.5)
+    cast.sleep(1.2)
 
-    # Frame 2: Switch to Hex View
+    # Frame 2: Decompiler / Pseudo-C (Tab 2)
+    dbg.active_tab = Lapis::TUI::DebuggerView::Tab::Decompiler
+    buf.clear
+    dbg.render_to_buffer(buf, cols, rows)
+    cast.render_buffer(buf, 1.0)
+
+    # Frame 3: CPU Registers (Tab 4)
+    dbg.active_tab = Lapis::TUI::DebuggerView::Tab::Registers
+    buf.clear
+    dbg.render_to_buffer(buf, cols, rows)
+    cast.render_buffer(buf, 1.0)
+
+    # Frame 4: Hex Memory (Tab 5)
     dbg.active_tab = Lapis::TUI::DebuggerView::Tab::HexMemory
     buf.clear
     dbg.render_to_buffer(buf, cols, rows)
-    cast.render_buffer(buf, 2.8)
+    cast.render_buffer(buf, 2.5)
   end
 end
 CastRegistry.register(R2TuiDebuggerCast.new)
@@ -716,19 +805,36 @@ class BenchmarksTuiCast < BaseCast
   def rows; 22; end
 
   def record(cast : AsciiCast)
-    bench = Lapis::TUI::BenchViewer.new
+    bench_xml = if File.exists?("C:/Users/Ian/Documents/libgodot/benchmarks/reports/benchmarks_latest.xml")
+                  "C:/Users/Ian/Documents/libgodot/benchmarks/reports/benchmarks_latest.xml"
+                else
+                  nil
+                end
+    bench = Lapis::TUI::BenchViewer.new(bench_xml)
     buf = Opal::UI::Buffer.new(cols, rows)
 
     # Frame 1: Language Comparison
     bench.render_to_buffer(buf, cols, rows)
     cast.render_buffer(buf, 0.0, clear: true)
-    cast.sleep(1.5)
+    cast.sleep(1.2)
 
     # Frame 2: Switch to Speedup Overview
     bench.active_tab = Lapis::TUI::BenchViewer::Tab::SpeedupOverview
     buf.clear
     bench.render_to_buffer(buf, cols, rows)
-    cast.render_buffer(buf, 2.8)
+    cast.render_buffer(buf, 1.0)
+
+    # Frame 3: Switch to Category Distribution
+    bench.active_tab = Lapis::TUI::BenchViewer::Tab::CategoryDistribution
+    buf.clear
+    bench.render_to_buffer(buf, cols, rows)
+    cast.render_buffer(buf, 1.0)
+
+    # Frame 4: Switch to MultiRun Trend
+    bench.active_tab = Lapis::TUI::BenchViewer::Tab::MultiRunTrend
+    buf.clear
+    bench.render_to_buffer(buf, cols, rows)
+    cast.render_buffer(buf, 2.5)
   end
 end
 CastRegistry.register(BenchmarksTuiCast.new)
@@ -759,6 +865,10 @@ class TestRunnerTuiCast < BaseCast
     state = Lapis::TUI::TestRunState.new
     state.godot_version = "4.8-dev"
 
+    # Screencast recording active indicator (Opal screen recording subsystem)
+    state.recording = true
+    state.recording_start_time = Time.instant - 4.seconds
+
     p1 = Lapis::TUI::PhaseItem.new("specs", "Phase 1", "Crystal Unit Specs", "Engine")
     p1.status = Lapis::TUI::PhaseStatus::Running
     state.phases << p1
@@ -769,7 +879,7 @@ class TestRunnerTuiCast < BaseCast
     p3 = Lapis::TUI::PhaseItem.new("runtime", "Phase 3", "Runtime Integration Tests", "Game")
     state.phases << p3
 
-    # Frame 1: Running Phase 1
+    # Frame 1: Running Phase 1 (showing ● REC 00:04 indicator)
     state.global_logs << "[Spec] Running SceneTree lifecycle specs (48 examples)..."
     frame1 = renderer.render_to_string(state, cols, rows)
     cast.append_raw("\e[2J\e[H" + frame1.gsub(/\r?\n/, "\r\n"), 0.0)

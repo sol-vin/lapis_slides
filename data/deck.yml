@@ -79,6 +79,9 @@ slides:
 - 26c_concurrency_patterns
 - 27_interop_gdscript_calls_crystal
 - 27b_interop_type_firewall
+- 27c_csharp_bloat_vs_crystal_zen
+- 27d_csharp_nullability_and_leaks
+- 27e_csharp_runtime_tax_and_gc
 - 28_interop_crystal_calls_gdscript_dynamic
 - 29_interop_crystal_calls_gdscript_typed
 - 33_editor_integration
