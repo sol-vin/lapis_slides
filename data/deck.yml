@@ -82,6 +82,11 @@ slides:
 - 27c_csharp_bloat_vs_crystal_zen
 - 27d_csharp_nullability_and_leaks
 - 27e_csharp_runtime_tax_and_gc
+- 27f_csharp_iterators_linq_vs_crystal_blocks
+- 27g_csharp_reflection_vs_crystal_macros
+- 27h_csharp_platform_export_and_hot_reload
+- 27i_csharp_concurrency_and_symbols
+- 27j_csharp_unions_and_pattern_matching
 - 28_interop_crystal_calls_gdscript_dynamic
 - 29_interop_crystal_calls_gdscript_typed
 - 33_editor_integration

@@ -1,0 +1,81 @@
+---
+id: 27j_csharp_unions_and_pattern_matching
+title: 'Godot C# vs Lapis: Type Unions & Pattern Matching'
+subtitle: Unsound Object Casting & Simulated Unions vs Mathematical Union Types
+badge: LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS
+badge_color: purple
+palette: disinherited
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions'
+  lang: csharp
+  tag: C# (.NET 8)
+  card_title: C# Union & Casting Hazards
+  code: |
+    using Godot;
+    using System;
+
+    public partial class CombatResolver : Node
+    {
+        // C# has NO native union types! Returning multiple distinct result types
+        // forces developers into object casting or simulated wrapper structs.
+        public object ResolveHit(Node3D target, float rawDamage)
+        {
+            if (target is ShieldDrone drone)
+            {
+                // Unchecked runtime type checking and downcasting
+                return new ShieldAbsorbed(drone.ShieldPoints, rawDamage * 0.5f);
+            }
+            else if (target is PlayerCharacter player)
+            {
+                return new CriticalDamage(player.ArmorRating, rawDamage * 2.0f);
+            }
+            
+            // Missing cases fail at runtime, not at compile time!
+            return null!; // Dangerous null fallback suppression
+        }
+
+        // Caller must write verbose, non-exhaustive type-switch pattern matching
+        // with runtime casting and zero compiler enforcement if a case is omitted!
+    }
+  points:
+    - "**Absence of Native Union Types:** C# cannot natively express `ShieldAbsorbed | CriticalDamage | Nil`, forcing developers into loose `object` returns, wrapper hierarchies, or third-party libraries."
+    - "**Non-Exhaustive Pattern Matching:** C# switch expressions on general types do not enforce compile-time exhaustiveness; omitting a newly added type silently compiles and fails at runtime."
+    - "**Runtime Type Check & Downcast Tax:** Evaluating `target is ShieldDrone drone` incurs runtime type inspection and pointer downcasting instructions on every evaluation."
+    - "**Wrapper Object Allocation Overhead:** Simulating discriminated unions via records or wrapper structs allocates intermediate objects and incurs boxing."
+crystal:
+  title: ':sparkles: Crystal: Mathematical Union Types & Sound Patterns'
+  lang: crystal
+  tag: Crystal (Lapis)
+  card_title: Crystal Zen Advantages
+  code: |
+    record ShieldAbsorbed, shield_remaining : Float32, mitigated : Float32
+    record CriticalDamage, armor : Float32, final_damage : Float32
+
+    node CombatResolver < Node do
+      # Mathematical union type: Zero wrappers, zero boxing, 100% sound!
+      alias HitResult = ShieldAbsorbed | CriticalDamage | Nil
+
+      def resolve_hit(target : Node3D, raw_damage : Float32) : HitResult
+        case target
+        when ShieldDrone
+          # Compiler automatically narrows 'target' to ShieldDrone!
+          ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
+        when PlayerCharacter
+          # Compiler automatically narrows 'target' to PlayerCharacter!
+          CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
+        else
+          nil
+        end
+      end
+    end
+  points:
+    - "**First-Class Mathematical Union Types:** Types like `ShieldAbsorbed | CriticalDamage | Nil` are native language primitives with zero heap wrappers and zero boxing."
+    - "**Compile-Time Exhaustive Pattern Matching:** The Crystal compiler verifies that all possible union types are handled; omitting a variant triggers a compile-time build error."
+    - "**Automatic Compiler Type Narrowing:** Inside `when ShieldDrone`, the compiler automatically casts and narrows the variable type without unsafe downcasts or manual casts."
+    - "**Value-Type Stack Records:** Small data structures (`record`) are allocated directly on the stack with zero GC allocation."
+takeaway:
+  badge: SOUND TYPE SYSTEM
+  text: 'Crystal provides mathematical union types with compile-time exhaustive pattern matching and zero wrapper allocations.'
+notes: |
+  Handling diverse result types is fundamental to gameplay logic, and C# lacks native mathematical union types. In Godot C#, a method that can return different outcomes (like a shield deflection, a critical hit, or a miss) must return a base `object`, a bulky interface, or use simulated discriminated union packages like `OneOf` which allocate heap wrappers. Even worse, C#'s type switch expressions cannot guarantee compile-time exhaustiveness across arbitrary types, meaning an unhandled case silently defaults to null or throws a runtime exception. In Crystal, union types like `ShieldAbsorbed | CriticalDamage | Nil` are first-class, lightweight, and mathematically sound. The compiler enforces exhaustive pattern matching at compile time and automatically narrows types inside each `when` branch with zero unsafe downcasts and zero GC allocations.
