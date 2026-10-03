@@ -8617,7 +8617,7 @@ end</code></pre>
         </div>
         <div class="slide-body code-comparison-body code-only-mode" style="display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code code-compact" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -8630,35 +8630,45 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-csharp code-compact">public partial class CombatHUD : Control
+            <pre><code class="language-csharp" style="font-size: 0.74rem !important; line-height: 1.25 !important;">public partial class CombatHUD : Control
 {
-    // Bypassed compiler null check with &#39;!&#39;
     [Export] public PlayerController Player { get; set; } = null!;
+    private AudioStreamPlayer _healSFX = null!;
 
     public override void _Ready()
     {
-        // Strong delegate reference: leaks HUD if not manually unsubscribed
+        _healSFX = GetNode&lt;AudioStreamPlayer&gt;(&quot;Audio/HealSFX&quot;);
+
+        // += creates strong GC root holding CombatHUD alive in CLR heap:
         Player.HealthChanged += OnHealthChanged;
+        Player.Died += OnPlayerDied;
     }
 
-    private void OnHealthChanged(int current, int max)
+    private void OnHealthChanged(int cur, int max)
     {
-        // Deceptive check: Player != null is true even after QueueFree()
+        // GHOST CALLBACK: Fires on dead HUD if QueueFree&#39;d without -= unhook!
+        // Player != null is true (wrapper alive), but C++ peer may be freed!
         if (Player != null)
-            GetNode&lt;AudioStreamPlayer&gt;(&quot;Audio/HealSFX&quot;).Play();
+            _healSFX.Play(); // Throws ObjectDisposedException
     }
+
+    private void OnPlayerDied() =&gt; QueueFree();
 
     public override void _ExitTree()
     {
-        // Boilerplate required to prevent ghost leaks
+        // FRAGILE: Must remember every -= or leak memory forever!
+        // If Player died first, Player.HealthChanged crashes unless guarded:
         if (GodotObject.IsInstanceValid(Player))
+        {
             Player.HealthChanged -= OnHealthChanged;
+            Player.Died -= OnPlayerDied;
+        }
     }
 }</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -8671,23 +8681,39 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense">node CombatHUD &lt; Control do
+            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;">node CombatHUD &lt; Control do
   @[Export]
   property player : PlayerController? = nil
+  @heal_sfx : AudioStreamPlayer?
 
   def _ready
-    # Native signal or += operator: self-pruning on node destruction!
-    if player = @player
-      player.health_changed += -&gt;on_health_changed(Int32, Int32)
+    @heal_sfx = self[&quot;Audio/HealSFX&quot;, AudioStreamPlayer]?
+
+    if p = @player
+      # Ergonomic += binds through 64-bit ObjectDB IDs (no GC leak roots):
+      p.health_changed += -&gt;on_health_changed(Int32, Int32)
+      p.died           += -&gt;on_player_died
     end
   end
 
-  private def on_health_changed(current : Int32, max : Int32) : Void
-    # Sound compile-time nil check + ObjectDB tombstone validation
-    if (player = @player) &amp;&amp; player.alive?
-      self[&quot;Audio/HealSFX&quot;, AudioStreamPlayer]?.try(&amp;.play)
+  private def on_health_changed(cur : Int32, max : Int32) : Void
+    # Sound compile-time nil safety + native tombstone validation:
+    if @player.try(&amp;.alive?)
+      @heal_sfx.try(&amp;.play)
     end
   end
+
+  private def on_player_died : Void
+    queue_free
+  end
+
+  # Optional -= manual disconnection with exact same Proc:
+  def unhook(p : PlayerController)
+    p.health_changed -= -&gt;on_health_changed(Int32, Int32)
+    p.died.disconnect_all
+  end
+  # NO _exit_tree boilerplate! When CombatHUD or Player dies,
+  # Lapis automatically prunes dead subscriptions in ObjectDB.
 end</code></pre>
           </div>
           </div>
@@ -8725,7 +8751,7 @@ end</code></pre>
         </div>
         <div class="slide-body code-comparison-body with-overlay-mode" style="position: relative; display: flex; gap: 1rem; align-items: stretch; flex: 1;">
           <div class="col comparison-pane antipattern-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col antipattern-code code-compact" style=" border-color: var(--border-color);">
+          <div class="code-container col antipattern-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -8738,35 +8764,45 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-csharp code-compact">public partial class CombatHUD : Control
+            <pre><code class="language-csharp" style="font-size: 0.74rem !important; line-height: 1.25 !important;">public partial class CombatHUD : Control
 {
-    // Bypassed compiler null check with &#39;!&#39;
     [Export] public PlayerController Player { get; set; } = null!;
+    private AudioStreamPlayer _healSFX = null!;
 
     public override void _Ready()
     {
-        // Strong delegate reference: leaks HUD if not manually unsubscribed
+        _healSFX = GetNode&lt;AudioStreamPlayer&gt;(&quot;Audio/HealSFX&quot;);
+
+        // += creates strong GC root holding CombatHUD alive in CLR heap:
         Player.HealthChanged += OnHealthChanged;
+        Player.Died += OnPlayerDied;
     }
 
-    private void OnHealthChanged(int current, int max)
+    private void OnHealthChanged(int cur, int max)
     {
-        // Deceptive check: Player != null is true even after QueueFree()
+        // GHOST CALLBACK: Fires on dead HUD if QueueFree&#39;d without -= unhook!
+        // Player != null is true (wrapper alive), but C++ peer may be freed!
         if (Player != null)
-            GetNode&lt;AudioStreamPlayer&gt;(&quot;Audio/HealSFX&quot;).Play();
+            _healSFX.Play(); // Throws ObjectDisposedException
     }
+
+    private void OnPlayerDied() =&gt; QueueFree();
 
     public override void _ExitTree()
     {
-        // Boilerplate required to prevent ghost leaks
+        // FRAGILE: Must remember every -= or leak memory forever!
+        // If Player died first, Player.HealthChanged crashes unless guarded:
         if (GodotObject.IsInstanceValid(Player))
+        {
             Player.HealthChanged -= OnHealthChanged;
+            Player.Died -= OnPlayerDied;
+        }
     }
 }</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
-          <div class="code-container col solution-code code-dense" style=" border-color: var(--border-color);">
+          <div class="code-container col solution-code" style=" border-color: var(--border-color);">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -8779,23 +8815,39 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense">node CombatHUD &lt; Control do
+            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;">node CombatHUD &lt; Control do
   @[Export]
   property player : PlayerController? = nil
+  @heal_sfx : AudioStreamPlayer?
 
   def _ready
-    # Native signal or += operator: self-pruning on node destruction!
-    if player = @player
-      player.health_changed += -&gt;on_health_changed(Int32, Int32)
+    @heal_sfx = self[&quot;Audio/HealSFX&quot;, AudioStreamPlayer]?
+
+    if p = @player
+      # Ergonomic += binds through 64-bit ObjectDB IDs (no GC leak roots):
+      p.health_changed += -&gt;on_health_changed(Int32, Int32)
+      p.died           += -&gt;on_player_died
     end
   end
 
-  private def on_health_changed(current : Int32, max : Int32) : Void
-    # Sound compile-time nil check + ObjectDB tombstone validation
-    if (player = @player) &amp;&amp; player.alive?
-      self[&quot;Audio/HealSFX&quot;, AudioStreamPlayer]?.try(&amp;.play)
+  private def on_health_changed(cur : Int32, max : Int32) : Void
+    # Sound compile-time nil safety + native tombstone validation:
+    if @player.try(&amp;.alive?)
+      @heal_sfx.try(&amp;.play)
     end
   end
+
+  private def on_player_died : Void
+    queue_free
+  end
+
+  # Optional -= manual disconnection with exact same Proc:
+  def unhook(p : PlayerController)
+    p.health_changed -= -&gt;on_health_changed(Int32, Int32)
+    p.died.disconnect_all
+  end
+  # NO _exit_tree boilerplate! When CombatHUD or Player dies,
+  # Lapis automatically prunes dead subscriptions in ObjectDB.
 end</code></pre>
           </div>
           </div>
@@ -8808,10 +8860,10 @@ end</code></pre>
                 <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
-                <li><strong>Null-Forgiving Abuse (<code>!</code>):</strong> C#'s nullable reference types are mere compiler annotations; developers routinely use <code>null!</code> to silence warnings, inviting runtime <code>NullReferenceException</code>.</li>
-                <li><strong>Ghost Delegate Memory Leaks:</strong> <code>+=</code> event subscriptions create strong GC roots. If a node is freed without manual <code>-=</code> unhooking in <code>_ExitTree</code>, the dead instance stays alive in RAM, firing phantom callbacks.</li>
-                <li><strong>Tombstone Pointer Trap:</strong> Checking <code>Player != null</code> only checks the managed CLR wrapper. If the native C++ node was freed, dereferencing it throws <code>ObjectDisposedException</code> or causes segfaults.</li>
-                <li><strong>Manual Cleanup Boilerplate:</strong> Requiring explicit unhooking in <code>_ExitTree</code> turns simple UI and gameplay components into fragile, leak-prone maintenance burdens.</li>
+                <li><strong>Null-Forgiving Annotation Lie (<code>!</code>):</strong> C#'s nullable reference types are mere compiler suggestions; developers use <code>null!</code> to silence warnings, inviting runtime <code>NullReferenceException</code>.</li>
+                <li><strong>Ghost Delegate Memory Leaks (<code>+=</code>):</strong> C# <code>+=</code> subscriptions create strong GC roots holding subscriber nodes in memory. If a node is freed without manual <code>-=</code> unhooking, it stays alive in RAM firing ghost callbacks.</li>
+                <li><strong>Tombstone Pointer Trap:</strong> <code>Player != null</code> only checks the managed CLR wrapper. If the native C++ node was freed, invoking methods throws <code>ObjectDisposedException</code> or causes segfaults.</li>
+                <li><strong>Fragile Teardown Boilerplate:</strong> Requiring explicit <code>-=</code> in <code>_ExitTree</code> guarded by <code>GodotObject.IsInstanceValid</code> turns simple UI and gameplay components into error-prone leak hazards.</li>
               </ul>
             </div>
             <div class="overlay-card solution">
@@ -8822,17 +8874,17 @@ end</code></pre>
                 <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
-                <li><strong>True Compile-Time Nil Safety:</strong> Crystal's compiler enforces flow-sensitive typing; variables of type <code>T?</code> cannot be dereferenced without an explicit nil check (<code>if player = @player</code>).</li>
-                <li><strong>Self-Pruning Signal Lifecycle:</strong> Subscriptions via <code>on</code> or <code>+=</code> bind through 64-bit ObjectDB IDs—automatically unhooked when either node dies, eliminating C# delegate memory leaks.</li>
-                <li><strong>Dead-Pointer Armor:</strong> Lapis checks Godot's 64-bit monotonic instance ID via <code>node.alive?</code>, eliminating <code>ObjectDisposedException</code> traps.</li>
-                <li><strong>Subscript Ergonomics:</strong> <code>self["path", T]?</code> returns a typed, nil-safe node reference with safe navigation (<code>try(&.play)</code>).</li>
+                <li><strong>True Compile-Time Nil Safety:</strong> Flow-sensitive typing guarantees <code>T?</code> cannot be dereferenced without an explicit check (<code>if p = @player</code>), eliminating null pointer crashes.</li>
+                <li><strong>Familiar <code>+=</code> & <code>-=</code> Operators:</strong> Connect and disconnect procs directly with beloved operator sugar (<code>sig += -&gt;handler</code> and <code>sig -= -&gt;handler</code>), with zero delegate ceremony.</li>
+                <li><strong>Self-Pruning Lifecycle (Zero Ghost Leaks):</strong> Subscriptions bind through 64-bit ObjectDB IDs—dead targets are automatically unhooked when either node dies, eliminating manual <code>_exit_tree</code> boilerplate.</li>
+                <li><strong>Dead-Pointer Armor:</strong> <code>node.alive?</code> queries Godot's engine tombstone directly, preventing <code>ObjectDisposedException</code> traps.</li>
               </ul>
             </div>
           </div>
         </div>
         <div class="takeaway-banner" style="margin-top: 0.6rem; padding: 0.45rem 0.9rem; background: var(--bg-window); border: 1.5px solid var(--accent-color); border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem;">
           <span class="badge-pill" style="margin-bottom: 0; padding: 0.15rem 0.55rem; font-size: 0.72rem; border-color: var(--accent-color); color: var(--accent-color);">BULLETPROOF HYGIENE</span>
-          <span>Crystal eliminates C# NullReferenceExceptions, delegate memory leaks, and ObjectDisposed traps through sound compile-time nil types and automatic engine lifecycle cleanup.</span>
+          <span>Lapis combines familiar += and -= signal operators with 64-bit ObjectDB lifecycle tracking, eliminating C# delegate ghost leaks, null exceptions, and teardown boilerplate.</span>
         </div>
 
         <div class="slide-footer">
@@ -8841,10 +8893,10 @@ end</code></pre>
           <span>Slide 87 / 154</span>
         </div>
         <aside class="notes">
-          In Godot C#, null safety is an illusion. C#'s nullable reference types are merely compiler warnings that developers routinely bypass with the null-forgiving operator `!`, leading to unexpected NullReferenceExceptions at runtime.
-          Even more dangerous are C# event subscriptions: `Player.HealthChanged += OnHealthChanged` creates a strong GC root on the subscriber. If the HUD is freed in Godot without manual `-=` unhooking in `_ExitTree`, the CLR garbage collector cannot collect it, causing memory leaks and phantom callbacks.
-          Furthermore, checking `Player != null` only checks whether the managed wrapper exists—if the underlying native C++ node was freed, calling methods on it throws `ObjectDisposedException`.
-          In Lapis, Crystal's flow-sensitive type system makes null dereferences a compile-time impossibility. Developers can use intuitive `+=` signal syntax or `on` blocks; subscriptions track Godot's 64-bit ObjectDB IDs and automatically self-prune when either node is destroyed, completely eliminating delegate memory leaks with zero cleanup boilerplate.
+          In Godot C#, null safety and event lifecycles are full of minefields. First, C#'s nullable reference types are merely compiler warnings that developers routinely bypass with `null!`, leading to unexpected NullReferenceExceptions at runtime.
+          Second, C# event subscriptions via `+=` create strong GC roots on the subscriber: `Player.HealthChanged += OnHealthChanged` prevents the CLR garbage collector from freeing CombatHUD even after Godot frees it from the scene tree. This causes "ghost leaks"—the freed HUD continues to live in memory and execute callbacks on dead nodes!
+          Third, checking `Player != null` only checks whether the managed wrapper object exists. If the underlying native C++ node was deleted, dereferencing it throws `ObjectDisposedException`. To clean up, developers must write fragile `_ExitTree()` boilerplate guarded by `GodotObject.IsInstanceValid(Player)` before calling `-=`. If you miss one `-=`, your node leaks forever.
+          In Lapis, Crystal's flow-sensitive type system enforces true compile-time nil safety without fake `!` escapes. You get familiar `+=` and `-=` operator syntax for signals, but subscriptions bind through Godot's 64-bit ObjectDB IDs rather than strong GC roots. If either node is destroyed, Lapis automatically self-prunes dead subscriptions—giving you zero ghost leaks, zero delegate boilerplate, and bulletproof lifecycle hygiene.
         </aside>
       </section>
 
@@ -12489,7 +12541,7 @@ $ lapis log --interactive
                 <div class="window-controls"><span class="code-lang-tag">REPLAY</span></div>
               </div>
               <div class="terminal-body asciinema-body" style="flex: 1; padding: 0.25rem;">
-                <div class="asciinema-player-mount" data-cast-url="casts/lapis_run_monitor.cast" data-cast-src="data:text/plain;base64,eyJ2ZXJzaW9uIjoyLCJ3aWR0aCI6ODYsImhlaWdodCI6MjIsInRpbWVzdGFtcCI6MTcyNzY4MDAwMCwidGl0bGUiOiJMYXBpcyBSdW50aW1lIFBlcmZvcm1hbmNlIE1vbml0b3IiLCJlbnYiOnsiVEVSTSI6Inh0ZXJtLTI1NmNvbG9yIiwiU0hFTEwiOiIvYmluL2Jhc2gifX0KWzAuMDUsIm8iLCJcdTAwMWJbMkpcdTAwMWJbSFx1MDAxYls/MjVoIl0KWzAuMjUsIm8iLCJcdTAwMWJbMW1cdTAwMWJbMzJtZGV2ZWxvcGVyQGxhcGlzLWRldlx1MDAxYlswbTpcdTAwMWJbMzRtfi9wcm9qZWN0cy92b2lkX3J1bm5lclx1MDAxYlswbSQgIl0KWzAuMzEzLCJvIiwibCJdClswLjM3MywibyIsImEiXQpbMC40MjMsIm8iLCJwIl0KWzAuNDg3LCJvIiwiaSJdClswLjUzOSwibyIsInMiXQpbMC41OTEsIm8iLCIgIl0KWzAuNjQ4LCJvIiwiciJdClswLjY5NywibyIsInUiXQpbMC43NiwibyIsIm4iXQpbMC44MjIsIm8iLCIgIl0KWzAuODc5LCJvIiwiLSJdClswLjk0NCwibyIsInAiXQpbMC45OTgsIm8iLCIgIl0KWzEuMDUxLCJvIiwidCJdClsxLjEwOSwibyIsImUiXQpbMS4xNjUsIm8iLCJtIl0KWzEuMjI4LCJvIiwicCJdClsxLjI4OCwibyIsImwiXQpbMS4zMzcsIm8iLCJhIl0KWzEuMzg1LCJvIiwidCJdClsxLjQzOCwibyIsImUiXQpbMS40OTgsIm8iLCIgIl0KWzEuNTU4LCJvIiwiLSJdClsxLjYwNCwibyIsIi0iXQpbMS42NTYsIm8iLCJtIl0KWzEuNzA3LCJvIiwibyJdClsxLjc1NCwibyIsIm4iXQpbMS44MTYsIm8iLCJpIl0KWzEuODcsIm8iLCJ0Il0KWzEuOTE3LCJvIiwibyJdClsxLjk3MywibyIsInIiXQpbMi4yMjMsIm8iLCJcclxuIl0KWzIuNDIzLCJvIiwiXHUwMDFiWzMzbTo6IExBUElTIFJVTlRJTUUgUEVSRk9STUFOQ0UgTU9OSVRPUiA6Olx1MDAxYlswbSDilIIgU3RhdHVzOiBcdTAwMWJbMzJtWyNdIFJVTk5JTkcgKFBJRCA5NDIwKVx1MDAxYlswbVxyXG4iXQpbMi41MDMsIm8iLCJcdTAwMWJbMzZtVGFyZ2V0OiB0ZW1wbGF0ZS9iaW4vZ2FtZS5leGUg4pSCIFVwdGltZTogMDA6MTgg4pSCIEZQUzogNjAuMCDilIIgUkFNOiA0Mi40IE1CIChQZWFrOiA0OC44IE1CKVx1MDAxYlswbVxyXG4iXQpbMi41ODMsIm8iLCJcdTAwMWJbMzZt4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXHUwMDFiWzBtXHJcbiJdClsyLjY2MywibyIsIuKUjOKUgCBGcmFtZSBSYXRlIChGUFMpIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkCDilIzilIAgTWVtb3J5IEFsbG9jYXRpb24gKE1CKSDilIDilIDilIDilIDilIDilIDilIDilIDilJBcclxuIl0KWzIuNzQzLCJvIiwi4pSCIDEyMCDilKQgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiDilIIgMTAwIOKUpCAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUglxyXG4iXQpbMi44MjMsIm8iLCLilIIgIDkwIOKUpCAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCIOKUgiAgNzUg4pSkICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCXHJcbiJdClsyLjkwMywibyIsIuKUgiAgNjAg4pS84pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAIOKUgiDilIIgIDUwIOKUvOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCDilIJcclxuIl0KWzIuOTgzLCJvIiwi4pSCICAzMCDilKQgICAgICAgICAgICAgICAgICAgICAgICAgIOKUgiDilIIgIDI1IOKUpCAgIFx1MDAxYlszNm3iloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloTiloRcdTAwMWJbMG0g4pSCXHJcbiJdClszLjA2MywibyIsIuKUgiAgIDAg4pS04pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAIOKUgiDilIIgICAwIOKUtOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCDilIJcclxuIl0KWzMuMTQzLCJvIiwi4pSCICAgICAxNDoyMDowMCAgICAgICAgICAxNDoyMDozMCDilIIg4pSCICAgICAxNDoyMDowMCAgICAgICAgICAgMTQ6MjA6MzAg4pSCXHJcbiJdClszLjIyMywibyIsIuKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmCDilJTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilJhcclxuIl0KWzMuMzAzLCJvIiwiXHUwMDFiWzM2beKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgFx1MDAxYlswbVxyXG4iXQpbMy4zODMsIm8iLCJEcmF3IENhbGxzOiA0MiDilIIgQWN0aXZlIEZpYmVyczogNCDilIIgQm9laG0gR0MgSGVhcDogNDIuNCBNQiDilIIgRnJhbWUgVGltZTogMTYuNjZtc1xyXG4iXQpbMy41MDMsIm8iLCIgIFx1MDAxYlszNm1DdHJsK0sgLyBLOiBUZXJtaW5hdGUgUHJvY2VzcyDilIIgUjogUmVzdGFydCDilIIgRXNjIC8gUTogRXhpdCBNb25pdG9yXHUwMDFiWzBtXHJcbiJdCls3LjcwMywibyIsIlx1MDAxYlszNW1bVGVsZW1ldHJ5XVx1MDAxYlswbSBDcnlzdGFsIEJvZWhtIEdDIGN5Y2xlICMxIGNvbXBsZXRlZDogUkFNIHJlY2xhaW1lZCA4LjIgTUIgKG5vdzogMzQuMiBNQilcclxuIl0KWzExLjUwMywibyIsIlx1MDAxYlszNm1bTW9uaXRvcl1cdTAwMWJbMG0gSG90a2V5IFtSXSByZWNlaXZlZDogUmVzdGFydGluZyBob3N0IHByb2Nlc3MgdGVtcGxhdGUvYmluL2dhbWUuZXhlLi4uXHJcbiJdClsxMS41NzMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgi1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMS42NDMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgmVx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMS43MTMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKguVx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMS43ODMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKguFx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMS44NTMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgvFx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMS45MjMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgtFx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMS45OTMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgplx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi4wNjMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgp1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi4xMzMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgh1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi4yMDMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgj1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi4yNzMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgi1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi4zNDMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgmVx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi40MTMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKguVx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi40ODMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKguFx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi41NTMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgvFx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi42MjMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgtFx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi42OTMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgplx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi43NjMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgp1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi44MzMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgh1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi45MDMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgj1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMi45NzMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgi1x1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMy4wNDMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKgmVx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMy4xMTMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKguVx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMy4xODMsIm8iLCJcclx1MDAxYlsySyAgXHUwMDFiWzM2beKguFx1MDAxYlswbSBSZWN5Y2xpbmcgcHJvY2VzcyBoYW5kbGUgJiB6ZXJvaW5nIG1lbW9yeS4uLiJdClsxMy4zMzMsIm8iLCIgIFx1MDAxYlszMm3inJRcdTAwMWJbMG0gUHJvY2VzcyByZXN0YXJ0ZWQgY2xlYW5seSBpbiAxODVtcyAobmV3IFBJRDogOTQyOCwgcG9ydCA3Nzc3KVxyXG4iXQpbMTYuNjMzLCJvIiwiXHUwMDFiWzMzbVtNb25pdG9yXVx1MDAxYlswbSBIb3RrZXkgW0tdIHJlY2VpdmVkOiBTZW5kaW5nIGdyYWNlZnVsIHRlcm1pbmF0aW9uIHNpZ25hbCAoU0lHSU5UKS4uLlxyXG4iXQpbMTYuNzgzLCJvIiwiICBcdTAwMWJbMzJt4pyUXHUwMDFiWzBtIFByb2Nlc3MgOTQyOCBjbGVhbmx5IHRlcm1pbmF0ZWQuIFBlYWsgUkFNOiA0OC44IE1CLiAwIG1lbW9yeSBsZWFrcyBkZXRlY3RlZC5cclxuIl0KWzE5LjQ4MywibyIsIlx1MDAxYlsxbVx1MDAxYlszMm1kZXZlbG9wZXJAbGFwaXMtZGV2XHUwMDFiWzBtOlx1MDAxYlszNG1+L3Byb2plY3RzL3ZvaWRfcnVubmVyXHUwMDFiWzBtJCAiXQpbMjcuNDgzLCJvIiwiIl0K" data-speed="1.0" data-loop="true" data-autoplay="true" data-controls="auto" data-theme="monokai" data-cols="86" data-rows="22" data-font-size="0.80rem" style="font-size: 0.80rem !important;">
+                <div class="asciinema-player-mount" data-cast-url="casts/lapis_run_monitor.cast" data-cast-src="data:text/plain;base64,eyJ2ZXJzaW9uIjoyLCJ3aWR0aCI6ODYsImhlaWdodCI6MjIsInRpbWVzdGFtcCI6MTcyNzY4MDAwMCwidGl0bGUiOiJMYXBpcyBSdW50aW1lIFBlcmZvcm1hbmNlIE1vbml0b3IiLCJlbnYiOnsiVEVSTSI6Inh0ZXJtLTI1NmNvbG9yIiwiU0hFTEwiOiIvYmluL2Jhc2gifX0KWzAuMDUsIm8iLCJcdTAwMWJbMkpcdTAwMWJbSFx1MDAxYls/MjVoIl0KWzAuMjUsIm8iLCJcdTAwMWJbMW1cdTAwMWJbMzJtZGV2ZWxvcGVyQGxhcGlzLWRldlx1MDAxYlswbTpcdTAwMWJbMzRtfi9wcm9qZWN0cy92b2lkX3J1bm5lclx1MDAxYlswbSQgIl0KWzAuMzEyLCJvIiwibCJdClswLjM3LCJvIiwiYSJdClswLjQxOCwibyIsInAiXQpbMC40ODMsIm8iLCJpIl0KWzAuNTQyLCJvIiwicyJdClswLjYwNiwibyIsIiAiXQpbMC42NTgsIm8iLCJyIl0KWzAuNzIyLCJvIiwidSJdClswLjc4MywibyIsIm4iXQpbMC44MzYsIm8iLCIgIl0KWzAuODk1LCJvIiwiLSJdClswLjk0LCJvIiwicCJdClswLjk5OCwibyIsIiAiXQpbMS4wNDgsIm8iLCJ0Il0KWzEuMDk3LCJvIiwiZSJdClsxLjE1LCJvIiwibSJdClsxLjIxMSwibyIsInAiXQpbMS4yNzUsIm8iLCJsIl0KWzEuMzMyLCJvIiwiYSJdClsxLjM5MiwibyIsInQiXQpbMS40NTMsIm8iLCJlIl0KWzEuNTA4LCJvIiwiICJdClsxLjU1OSwibyIsIi0iXQpbMS42MjQsIm8iLCItIl0KWzEuNjczLCJvIiwibSJdClsxLjcyMywibyIsIm8iXQpbMS43ODEsIm8iLCJuIl0KWzEuODMzLCJvIiwiaSJdClsxLjg5NCwibyIsInQiXQpbMS45NTIsIm8iLCJvIl0KWzIuMDAxLCJvIiwiciJdClsyLjI1MSwibyIsIlxyXG4iXQpbMi40NTEsIm8iLCJcdTAwMWJbMzNtOjogTEFQSVMgUlVOVElNRSBQRVJGT1JNQU5DRSBNT05JVE9SIDo6XHUwMDFiWzBtIOKUgiBTdGF0dXM6IFx1MDAxYlszMm1bI10gUlVOTklORyAoUElEIDk0MjApXHUwMDFiWzBtXHJcbiJdClsyLjUzMSwibyIsIlx1MDAxYlszNm1UYXJnZXQ6IHRlbXBsYXRlL2Jpbi9nYW1lLmV4ZSDilIIgVXB0aW1lOiAwMDoxOCDilIIgRlBTOiA2MC4wIOKUgiBSQU06IDQyLjQgTUIgKFBlYWs6IDQ4LjggTUIpXHUwMDFiWzBtXHJcbiJdClsyLjYxMSwibyIsIlx1MDAxYlszNm3ilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIBcdTAwMWJbMG1cclxuIl0KWzIuNjkxLCJvIiwi4pSM4pSAIEZyYW1lIFJhdGUgKEZQUykg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSQIOKUjOKUgCBNZW1vcnkgQWxsb2NhdGlvbiAoTUIpIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUkFxyXG4iXQpbMi43NzEsIm8iLCLilIIgMTIwIOKUpCAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCIOKUgiAxMDAg4pSkICAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCXHJcbiJdClsyLjg1MSwibyIsIuKUgiAgOTAg4pSkICAgICAgICAgICAgICAgICAgICAgICAgICDilIIg4pSCICA3NSDilKQgICAgICAgICAgICAgICAgICAgICAgICAgICDilIJcclxuIl0KWzIuOTMxLCJvIiwi4pSCICA2MCDilLzilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAg4pSCIOKUgiAgNTAg4pS84pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAIOKUglxyXG4iXQpbMy4wMTEsIm8iLCLilIIgIDMwIOKUpCAgICAgICAgICAgICAgICAgICAgICAgICAg4pSCIOKUgiAgMjUg4pSkICAgXHUwMDFiWzM2beKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhOKWhFx1MDAxYlswbSDilIJcclxuIl0KWzMuMDkxLCJvIiwi4pSCICAgMCDilLTilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAg4pSCIOKUgiAgIDAg4pS04pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAIOKUglxyXG4iXQpbMy4xNzEsIm8iLCLilIIgICAgIDE0OjIwOjAwICAgICAgICAgIDE0OjIwOjMwIOKUgiDilIIgICAgIDE0OjIwOjAwICAgICAgICAgICAxNDoyMDozMCDilIJcclxuIl0KWzMuMjUxLCJvIiwi4pSU4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSYIOKUlOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUmFxyXG4iXQpbMy4zMzEsIm8iLCJcdTAwMWJbMzZt4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXHUwMDFiWzBtXHJcbiJdClszLjQxMSwibyIsIkRyYXcgQ2FsbHM6IDQyIOKUgiBBY3RpdmUgRmliZXJzOiA0IOKUgiBCb2VobSBHQyBIZWFwOiA0Mi40IE1CIOKUgiBGcmFtZSBUaW1lOiAxNi42Nm1zXHJcbiJdClszLjUzMSwibyIsIiAgXHUwMDFiWzM2bUN0cmwrSyAvIEs6IFRlcm1pbmF0ZSBQcm9jZXNzIOKUgiBSOiBSZXN0YXJ0IOKUgiBFc2MgLyBROiBFeGl0IE1vbml0b3JcdTAwMWJbMG1cclxuIl0KWzcuNzMxLCJvIiwiXHUwMDFiWzM1bVtUZWxlbWV0cnldXHUwMDFiWzBtIENyeXN0YWwgQm9laG0gR0MgY3ljbGUgIzEgY29tcGxldGVkOiBSQU0gcmVjbGFpbWVkIDguMiBNQiAobm93OiAzNC4yIE1CKVxyXG4iXQpbMTEuNTMxLCJvIiwiXHUwMDFiWzM2bVtNb25pdG9yXVx1MDAxYlswbSBIb3RrZXkgW1JdIHJlY2VpdmVkOiBSZXN0YXJ0aW5nIGhvc3QgcHJvY2VzcyB0ZW1wbGF0ZS9iaW4vZ2FtZS5leGUuLi5cclxuIl0KWzExLjYwMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCLXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzExLjY3MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCZXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzExLjc0MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC5XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzExLjgxMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC4XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzExLjg4MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC8XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzExLjk1MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC0XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjAyMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCmXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjA5MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCnXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjE2MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCHXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjIzMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCPXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjMwMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCLXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjM3MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCZXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjQ0MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC5XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjUxMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC4XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjU4MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC8XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjY1MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC0XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjcyMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCmXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjc5MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCnXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjg2MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCHXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEyLjkzMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCPXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEzLjAwMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCLXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEzLjA3MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qCZXHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEzLjE0MSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC5XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEzLjIxMSwibyIsIlxyXHUwMDFiWzJLICBcdTAwMWJbMzZt4qC4XHUwMDFiWzBtIFJlY3ljbGluZyBwcm9jZXNzIGhhbmRsZSAmIHplcm9pbmcgbWVtb3J5Li4uIl0KWzEzLjM2MSwibyIsIiAgXHUwMDFiWzMybeKclFx1MDAxYlswbSBQcm9jZXNzIHJlc3RhcnRlZCBjbGVhbmx5IGluIDE4NW1zIChuZXcgUElEOiA5NDI4LCBwb3J0IDc3NzcpXHJcbiJdClsxNi42NjEsIm8iLCJcdTAwMWJbMzNtW01vbml0b3JdXHUwMDFiWzBtIEhvdGtleSBbS10gcmVjZWl2ZWQ6IFNlbmRpbmcgZ3JhY2VmdWwgdGVybWluYXRpb24gc2lnbmFsIChTSUdJTlQpLi4uXHJcbiJdClsxNi44MTEsIm8iLCIgIFx1MDAxYlszMm3inJRcdTAwMWJbMG0gUHJvY2VzcyA5NDI4IGNsZWFubHkgdGVybWluYXRlZC4gUGVhayBSQU06IDQ4LjggTUIuIDAgbWVtb3J5IGxlYWtzIGRldGVjdGVkLlxyXG4iXQpbMTkuNTExLCJvIiwiXHUwMDFiWzFtXHUwMDFiWzMybWRldmVsb3BlckBsYXBpcy1kZXZcdTAwMWJbMG06XHUwMDFiWzM0bX4vcHJvamVjdHMvdm9pZF9ydW5uZXJcdTAwMWJbMG0kICJdClsyNy41MTEsIm8iLCIiXQo=" data-speed="1.0" data-loop="true" data-autoplay="true" data-controls="auto" data-theme="monokai" data-cols="86" data-rows="22" data-font-size="0.80rem" style="font-size: 0.80rem !important;">
                   <noscript><pre style="font-size: 0.80rem !important;"><code class="language-bash" style="font-size: 0.80rem !important;">$ lapis run -p template --monitor
 :: LAPIS RUNTIME PERFORMANCE MONITOR :: │ Status: [#] RUNNING (PID 9420)
 Target: template/bin/game.exe │ Uptime: 00:18 │ FPS: 60.0 │ RAM: 42.4 MB (Peak: 48.8 MB)
