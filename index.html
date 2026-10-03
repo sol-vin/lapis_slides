@@ -4481,8 +4481,8 @@ func _on_enemy_died(bounty: int) -&gt; void:
     start_game_sequence
   end
 
-  # 2. Dynamic target + signal name with typed block args
-  on enemy, &quot;died&quot; do |bounty|
+  # 2. Typed signal with block arguments — zero strings!
+  on enemy.died do |bounty|
     add_score(bounty)
   end
 
@@ -4576,8 +4576,8 @@ func _on_enemy_died(bounty: int) -&gt; void:
     start_game_sequence
   end
 
-  # 2. Dynamic target + signal name with typed block args
-  on enemy, &quot;died&quot; do |bounty|
+  # 2. Typed signal with block arguments — zero strings!
+  on enemy.died do |bounty|
     add_score(bounty)
   end
 
@@ -4609,8 +4609,8 @@ end</code></pre>
                 <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
-                <li><strong>Declarative <code>on</code> Sugar:</strong> Connects blocks directly to signals (<code>on button.pressed { ... }</code>) with zero single-use handler boilerplate.</li>
-                <li><strong>Flexible Dynamic Overload:</strong> <code>on target, "signal_name" { |args| ... }</code> automatically converts Variant arguments to typed block parameters.</li>
+                <li><strong>Declarative <code>on</code> Sugar:</strong> Connects blocks directly to signals (<code>on start_button.pressed { ... }</code>) with zero single-use handler boilerplate.</li>
+                <li><strong>Pure Typed Signals (No Strings):</strong> <code>on enemy.died { |bounty| ... }</code> provides 100% compile-time signal validation and typed block arguments.</li>
                 <li><strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player.health_changed, 75, 100)</code> verifies argument types and counts at compile time.</li>
                 <li><strong>Zero Allocation Overhead:</strong> Compiles down to direct static dispatch without runtime string lookups or dictionary hashing.</li>
               </ul>
@@ -4628,8 +4628,8 @@ end</code></pre>
           <span>Slide 48 / 154</span>
         </div>
         <aside class="notes">
-          In GDScript, connecting signals is notoriously verbose. For every single button press, trigger zone, or event, you must define a separate named method like _on_start_button_pressed. This litters scripts with tiny single-use methods and disconnects the logic from where the event is wired.
-          Lapis 4.8-dev7 introduces the declarative 'on' macro. You can connect inline closures directly to first-class typed signals like 'on start_button.pressed { start_game }', or connect to dynamic targets with 'on enemy, "died" { |bounty| add_score(bounty) }'. Paired with our type-safe 'emit' macro, signals in Lapis combine Ruby-like zen ergonomics with full LLVM compile-time parameter verification.
+          In GDScript, connecting signals is notoriously verbose. For every single button press, trigger zone, or event, you must define a separate named method like _on_start_button_pressed or pass string callback names to Callable. This litters scripts with tiny single-use methods and disconnects the logic from where the event is wired.
+          Lapis introduces the declarative 'on' macro. You can connect inline closures directly to first-class typed signals like 'on start_button.pressed { start_game }' or 'on enemy.died { |bounty| add_score(bounty) }' with zero string lookups. Paired with our type-safe 'emit' macro, signals in Lapis combine Ruby-like zen ergonomics with full LLVM compile-time parameter verification.
         </aside>
       </section>
 

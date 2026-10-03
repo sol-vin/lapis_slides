@@ -1959,8 +1959,8 @@ This document outlines each slide's exact theme palette, architectural category,
       start_game_sequence
     end
   
-    # 2. Dynamic target + signal name with typed block args
-    on enemy, "died" do |bounty|
+    # 2. Typed signal with block arguments — zero strings!
+    on enemy.died do |bounty|
       add_score(bounty)
     end
   
@@ -1984,13 +1984,13 @@ This document outlines each slide's exact theme palette, architectural category,
   - Callable Verbosity: Dynamic connections require wrapping receivers in Callable(self, "_on_...").
   - Untyped String Emission: emit_signal("...") provides zero compile-time signature verification.
 - **Crystal Zen Advantages**:
-  - Declarative on Sugar: Connects blocks directly to signals (on button.pressed { ... }) with zero single-use handler boilerplate.
-  - Flexible Dynamic Overload: on target, "signal_name" { |args| ... } automatically converts Variant arguments to typed block parameters.
+  - Declarative on Sugar: Connects blocks directly to signals (on start_button.pressed { ... }) with zero single-use handler boilerplate.
+  - Pure Typed Signals (No Strings): on enemy.died { |bounty| ... } provides 100% compile-time signal validation and typed block arguments.
   - Type-Safe emit Macro: emit(player.health_changed, 75, 100) verifies argument types and counts at compile time.
   - Zero Allocation Overhead: Compiles down to direct static dispatch without runtime string lookups or dictionary hashing.
 - **Key Takeaway**: Lapis's on macro eliminates boilerplate handler sprawl, letting you wire reactive gameplay events directly with typed inline closures.
 - **Presenter Script**:
-  > *"In GDScript, connecting signals is notoriously verbose. For every single button press, trigger zone, or event, you must define a separate named method like _on_start_button_pressed. This litters scripts with tiny single-use methods and disconnects the logic from where the event is wired. Lapis 4.8-dev7 introduces the declarative 'on' macro. You can connect inline closures directly to first-class typed signals like 'on start_button.pressed { start_game }', or connect to dynamic targets with 'on enemy, "died" { |bounty| add_score(bounty) }'. Paired with our type-safe 'emit' macro, signals in Lapis combine Ruby-like zen ergonomics with full LLVM compile-time parameter verification."*
+  > *"In GDScript, connecting signals is notoriously verbose. For every single button press, trigger zone, or event, you must define a separate named method like _on_start_button_pressed or pass string callback names to Callable. This litters scripts with tiny single-use methods and disconnects the logic from where the event is wired. Lapis introduces the declarative 'on' macro. You can connect inline closures directly to first-class typed signals like 'on start_button.pressed { start_game }' or 'on enemy.died { |bounty| add_score(bounty) }' with zero string lookups. Paired with our type-safe 'emit' macro, signals in Lapis combine Ruby-like zen ergonomics with full LLVM compile-time parameter verification."*
 
 ---
 ### Slide 49: Iterators: Imperative Loops vs. Functional Zen (Code Comparison)
