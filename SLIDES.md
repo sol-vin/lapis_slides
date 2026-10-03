@@ -3131,57 +3131,49 @@ This document outlines each slide's exact theme palette, architectural category,
   ```csharp
   public partial class CombatHUD : Control
   {
-      // [Export] nodes can be unassigned/null in inspector!
-      [Export] public PlayerController Player { get; set; } = null!; // Bypassed with '!'
-  
-      private AudioStreamPlayer? _sfx;
+      // Bypassed compiler null check with '!'
+      [Export] public PlayerController Player { get; set; } = null!;
   
       public override void _Ready()
       {
-          // Stringly-typed GetNode throws NullReferenceException if node renamed!
-          _sfx = GetNode<AudioStreamPlayer>("Audio/HealSFX");
-  
-          // DANGEROUS: C# event subscription leaks memory if not unhooked!
-          // If HUD is freed, Player still holds strong reference to this delegate!
+          // Strong delegate reference: leaks HUD if not manually unsubscribed
           Player.HealthChanged += OnHealthChanged;
       }
   
       private void OnHealthChanged(int current, int max)
       {
-          // What if Player was QueueFree()'d in C++?
-          // Managed wrapper is alive, but native pointer is DEAD!
-          // -> Throws ObjectDisposedException or crashes native engine!
-          if (Player != null) // Native object check is deceiving in C#!
-              _sfx?.Play();
+          // Deceptive check: Player != null is true even after QueueFree()
+          if (Player != null)
+              GetNode<AudioStreamPlayer>("Audio/HealSFX").Play();
       }
-      // Must remember to implement _ExitTree and -= or leak ghost delegates!
+  
+      public override void _ExitTree()
+      {
+          // Boilerplate required to prevent ghost leaks
+          if (GodotObject.IsInstanceValid(Player))
+              Player.HealthChanged -= OnHealthChanged;
+      }
   }
   ```
 - **Crystal Code Example (`:sparkles: Crystal / Lapis: Strict Nil Safety & Native Signal Lifecycle`)**:
   ```crystal
   node CombatHUD < Control do
-    # Strict compile-time Nil safety: PlayerController? is union (PlayerController | Nil)
-    @export @player : PlayerController? = nil
-    @sfx : AudioStreamPlayer? = nil
+    @[Export]
+    property player : PlayerController? = nil
   
     def _ready
-      # Type-safe node fetching via path operator with nil-safe cast
-      @sfx = (self / "Audio/HealSFX").as?(AudioStreamPlayer)
-  
-      # Safe signal connection via method pointer: zero managed delegate leaks!
-      # Automatically unhooked by Godot when either node is freed
-      if p = @player
-        p.health_changed.connect(->on_health_changed)
+      # Native signal: automatically unhooked when either node is freed
+      if player = @player
+        on player.health_changed, ->on_health_changed(Int32, Int32)
       end
     end
   
-    private def on_health_changed(current = 0, max = 0)
-      # Sound nil-check + native ObjectDB tombstone check via alive?
-      if (p = @player) && p.alive?
-        @sfx.try(&.play)
+    private def on_health_changed(current : Int32, max : Int32) : Void
+      # Sound compile-time nil check + ObjectDB tombstone validation
+      if (player = @player) && player.alive?
+        self["Audio/HealSFX", AudioStreamPlayer]?.try(&.play)
       end
     end
-    # No manual _exit_tree or -= needed: Godot cleans up subscriptions automatically!
   end
   ```
 - **Presenter Script**:
@@ -3195,18 +3187,18 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Title**: Godot C# vs Lapis: Null Minefields & Ghost Leaks
 - **Subtitle**: Unsound Nullable Reference Types, Node Dangling, and Event Handler Memory Leaks
 - **C# Friction & Anti-Patterns**:
-  - Null-Forgiving Abuse (!): C#'s nullable reference types are mere compiler suggestions; developers plaster null! everywhere to silence warnings, inviting runtime NullReferenceException.
-  - Ghost Delegate Memory Leaks: += event subscriptions hold strong GC references. If a node is destroyed without manual -= unhooking in _ExitTree, the dead instance stays alive in RAM, firing phantom callbacks!
-  - Tombstone Pointer Trap: A freed Godot object looks non-null to C#'s garbage collector, throwing ObjectDisposedException or causing hard native segmentation faults on dereference.
-  - Stringly-Typed Lookups: GetNode<T>("path") compiles cleanly even if the scene tree changes or the node is renamed, failing only at runtime.
+  - Null-Forgiving Abuse (!): C#'s nullable reference types are mere compiler annotations; developers routinely use null! to silence warnings, inviting runtime NullReferenceException.
+  - Ghost Delegate Memory Leaks: += event subscriptions create strong GC roots. If a node is freed without manual -= unhooking in _ExitTree, the dead instance stays alive in RAM, firing phantom callbacks.
+  - Tombstone Pointer Trap: Checking Player != null only checks the managed CLR wrapper. If the native C++ node was freed, dereferencing it throws ObjectDisposedException or causes segfaults.
+  - Manual Cleanup Boilerplate: Requiring explicit unhooking in _ExitTree turns simple UI and gameplay components into fragile, leak-prone maintenance burdens.
 - **Crystal Zen Advantages**:
-  - True Compile-Time Nil Safety: Crystal's compiler enforces flow-sensitive typing; variables of type T? cannot be dereferenced without an explicit nil check (if p = @player).
-  - Native Signal Connection via Method Pointer: p.health_changed.connect(->on_health_changed) binds methods with zero managed GC roots. Godot's native engine automatically cleans up connections when either node is freed.
-  - Dead-Pointer Armor: Lapis checks Godot's 64-bit monotonic instance ID via node.alive? and check_alive!, preventing dereferencing freed tombstones.
-  - No Null Suppression Cheats: The compiler does not allow bypassing null checks with exclamation marks; safety is guaranteed end-to-end.
-- **Key Takeaway**: Crystal eliminates the C# NullReferenceException minefield and delegate memory leaks through sound compile-time nil types and native lifecycle tracking.
+  - True Compile-Time Nil Safety: Crystal's compiler enforces flow-sensitive typing; variables of type T? cannot be dereferenced without an explicit nil check (if player = @player).
+  - Native Signal Lifecycle: Connecting via on binds directly to Godot's C++ signal core—automatically unhooked when either node is freed, with zero managed GC roots.
+  - Dead-Pointer Armor: Lapis checks Godot's 64-bit monotonic instance ID via node.alive?, eliminating ObjectDisposedException traps.
+  - Subscript Ergonomics: self["path", T]? returns a typed, nil-safe node reference with safe navigation (try(&.play)).
+- **Key Takeaway**: Crystal eliminates C# NullReferenceExceptions, delegate memory leaks, and ObjectDisposed traps through sound compile-time nil types and automatic engine lifecycle cleanup.
 - **Presenter Script**:
-  > *"In Godot C#, null safety is an illusion. C#'s nullable reference types are merely compiler warnings that can be suppressed with the null-forgiving operator `!`, leading to runtime `NullReferenceException` crashes in production. Even worse, event subscriptions like `Player.HealthChanged += OnHealthChanged` create strong GC roots; if you forget to manually unsubscribe with `-=` in `_ExitTree`, the dead HUD node remains pinned in memory forever, leaking RAM and firing phantom event handlers. Furthermore, checking `Player != null` in C# checks the managed wrapper, not whether Godot's native object has been freed, leading to `ObjectDisposedException`. In Lapis, Crystal's flow-sensitive nil safety makes null dereferences impossible at compile-time. Native signals are cleaned up automatically by Godot's C++ core, and monotonic instance ID tracking via `alive?` prevents dead-pointer crashes."*
+  > *"In Godot C#, null safety is an illusion. C#'s nullable reference types are merely compiler warnings that developers routinely bypass with the null-forgiving operator `!`, leading to unexpected NullReferenceExceptions at runtime. Even more dangerous are C# event subscriptions: `Player.HealthChanged += OnHealthChanged` creates a strong GC root on the subscriber. If the HUD is freed in Godot without manual `-=` unhooking in `_ExitTree`, the CLR garbage collector cannot collect it, causing memory leaks and phantom callbacks. Furthermore, checking `Player != null` only checks whether the managed wrapper exists—if the underlying native C++ node was freed, calling methods on it throws `ObjectDisposedException`. In Lapis, Crystal's flow-sensitive type system makes null dereferences a compile-time impossibility. Native signals bind through Godot's engine lifecycle, automatically disconnecting when either node is destroyed with zero manual cleanup boilerplate."*
 
 ---
 ### Slide 84: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter (Code Comparison)
