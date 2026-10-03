@@ -2146,10 +2146,6 @@ This document outlines each slide's exact theme palette, architectural category,
   match current_action:
       "idle": play_animation("idle")
       "attack": deal_damage() # Hashed string lookup every frame
-  
-  # PROBLEM 4: No Shorthand Method References
-  # Must write full closure or use untyped StringName method dispatch:
-  call(&"on_damage_taken", 15) # Untyped string dispatch
   ```
 - **Crystal Code Example (`:sparkles: Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing`)**:
   ```crystal
@@ -2171,11 +2167,6 @@ This document outlines each slide's exact theme palette, architectural category,
   when :patrol then patrol_route
   when :alert  then engage_combat
   end # Pure integer comparison, 0 heap bytes, 0 GC churn!
-  
-  # SOLUTION 4: Symbol-to-Proc Shorthand
-  # Symbols double as zero-cost method selectors for inlined blocks:
-  names = enemies.map(&.name)       # inlines .name on each item
-  active = enemies.select(&.alive?) # inlines .alive? on each item
   ```
 - **Presenter Script**:
   > *"Examining the code side-by-side: Notice the contrast in structure, verbosity, and safety between the GDScript implementation on the left and the Crystal implementation on the right before we review the specific friction points."*
@@ -2191,15 +2182,13 @@ This document outlines each slide's exact theme palette, architectural category,
   - Silent Null on Typoed Keys: Typoing a dictionary string key (blackboard.get("target_enmy")) returns null without any warning, causing crashes down the line.
   - Silent Typo Bugs in States: String and StringName comparisons never fail at compile time. Misspellings like &"petrol" silently evaluate to false, creating insidious bugs.
   - Hashing & Intern Mutex Churn: Strings require runtime byte comparisons. StringNames require global mutex locking and hash table queries inside Godot's engine pool.
-  - Untyped String Dispatch: Method calls and event tags via StringName lack compiler validation and cannot leverage symbol-to-proc.
 - **Crystal Zen Advantages**:
   - Compile-Time Key Typo Proofing: NamedTuple indexed by symbols catches misspelled keys at compile time (missing key 'target_enmy') with zero runtime lookups.
   - Immediate 32-Bit Integers: Symbols are NOT strings. They are immediate 32-bit integer IDs assigned by the compiler — zero heap allocations, zero GC tracking, zero pointer dereferences.
   - Single-Cycle CPU Comparisons: Evaluating state == :patrol compiles to a single CPU machine instruction (cmp). No string hashing, no string length checks.
-  - Symbol-to-Proc Ergonomics: Symbols double as first-class method callers: &.name and &.alive? eliminate verbose lambda wrappers while remaining fully inlined.
 - **Key Takeaway**: Symbols solve Godot's silent dictionary typos and runtime string hash overhead by turning identifiers into immediate 32-bit integers with compile-time checked keys.
 - **Presenter Script**:
-  > *"Symbols are one of the most beloved features inherited from Ruby and elevated to bare-metal performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two massive problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, strings involve runtime byte comparisons or global intern-table hash lookups. In Crystal, symbols like `:target_enemy` and `:patrol` are not strings at all: they are immediate 32-bit integer IDs resolved at compile time. When used in NamedTuples, accessing a misspelled key is a compile-time error. Comparing two symbols takes a single CPU clock cycle (`cmp`). And with symbol-to-proc (`&.name`), symbols make functional collection pipelines extraordinarily clean."*
+  > *"Symbols are one of the most beloved features inherited from Ruby and elevated to bare-metal performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two massive problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, strings involve runtime byte comparisons or global intern-table hash lookups. In Crystal, symbols like `:target_enemy` and `:patrol` are not strings at all: they are immediate 32-bit integer IDs resolved at compile time. When used in NamedTuples, accessing a misspelled key is a compile-time error. Comparing two symbols takes a single CPU clock cycle (`cmp`) with zero heap allocations and zero GC overhead."*
 
 ---
 ### Slide 55: Nil Safety: Runtime Crashes vs. Compile-Time Proof (Code Comparison)
