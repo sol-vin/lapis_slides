@@ -1,0 +1,61 @@
+---
+id: 03_ruby_frontend
+title: 'So My Front End Can Look Like This'
+subtitle: Natural Prose, Fluent Pipelines & Composable Object Mechanics
+badge: RUBY HERITAGE • CALL-SITE ERGONOMICS
+badge_color: purple
+palette: candy
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: gameplay.rb — Composable Call-Site Usage
+  tag: Ruby
+  lang: ruby
+  font_size: '0.72rem'
+  code: |
+    # The Frontend: Composing objects like natural prose
+
+    # 1. Composing Modular Items & Dynamic Buffs
+    excalibur = Weapon.new("Excalibur", power: 45, element: :holy)
+    war_hymn  = Buff.new("War Hymn") { |p| p.health += 15 }
+
+    # 2. Assembling a Diverse Party Composition
+    party = [
+      Player.new("Arthur", health: 85),
+      Player.new("Gwen",   health: 40),
+      Player.new("Merlin", health: 95)
+    ]
+
+    # 3. Equipping & Composing Behaviors Dynamically
+    hero = party.first
+    hero.equip(excalibur)
+    hero.apply_buff(war_hymn)
+
+    # 4. Fluent Tactical Queries & Emergency Actions
+    hero.heal_party(party.select(&:wounded?), 25)
+
+    # 5. Expressive English-Like Flow & Statement Modifiers
+    puts "Party is combat-ready!" if party.all?(&:alive?)
+    party.reject(&:alive?).each { |fallen| puts "Revive #{fallen.name}!" }
+
+    # 6. Streamlined Team Metrics Without Loops
+    avg_hp = party.sum(&:health) / party.size
+    puts "Average Party Vitality: #{avg_hp}%"
+right:
+  type: card
+  title: Why The Front End Sings
+  color: purple
+  items:
+  - <strong>Prose-Like Call-Site Cadence:</strong> Code reads from left to right like an English script (<code>hero.heal_party(party.select(&:wounded?), 25)</code>).
+  - <strong>Flexible Object Composition:</strong> Entities, weapons, and buffs are composed at runtime without complex factory classes or builder ceremony.
+  - <strong>Closures as Dynamic Modifiers:</strong> Blocks passed to <code>Buff.new { |p| ... }</code> inject runtime behavior without class explosion.
+  - <strong>Higher-Order Enumerable Magic:</strong> <code>all?</code>, <code>reject</code>, <code>sum</code>, and <code>select</code> replace manual loops with crystal-clear queries.
+  - <strong>Statement Modifiers as Qualifiers:</strong> Trailing <code>if party.all?(&:alive?)</code> lets the primary action lead the thought, treating conditions as qualifiers.
+  - <strong>The Direct Precursor to Lapis:</strong> This exact call-site joy is what Lapis brings to Godot engine nodes—combining Ruby's prose with C++ execution speed.
+notes: |
+  And here is the payoff: "So my front end can look like this."
+  Because our backend Player class was written with thoughtful Ruby idioms, the caller—whether a gameplay scripter, quest designer, or UI engineer—gets to write code that reads like natural English prose.
+  Look at how objects are composed: we assemble weapons, dynamic buff closures, and multi-character parties without factories or verbose boilerplate. Tactical actions like healing wounded allies happen via a single chained query: 'party.select(&:wounded?)'.
+  And statement modifiers let us write rules that read like design documents: 'puts "Party is combat-ready!" if party.all?(&:alive?)'.
+  This sublime ergonomics is why developers fell in love with Ruby—and it is the exact experience Lapis delivers natively in Godot with Crystal!

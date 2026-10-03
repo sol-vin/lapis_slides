@@ -9,45 +9,29 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: code
-  title: ruby_gameplay.rb — The Joy of Expressive Syntax
+  title: ruby_philosophy.rb — Developer Happiness First
   tag: Ruby
   lang: ruby
-  font_size: '0.74rem'
+  font_size: '0.80rem'
   code: |
-    # The joy of expressive, human-centric syntax
-    class Player
-      attr_accessor :name, :health, :inventory
+    # Yukihiro "Matz" Matsumoto's Vision (1995)
+    # "Ruby is designed for human cognitive comfort, not machine convenience."
 
-      def initialize(name, health: 100)
-        @name = name
-        @health = health
-        @inventory = []
+    Ruby.manifesto do
+      prioritize :human_happiness, over: :machine_convenience
+      principle  :least_surprise
+      syntax     :natural_english_prose
+
+      empower do
+        first_class_blocks
+        expressive_closures
+        unbounded_dsl_freedom
       end
 
-      def alive?
-        @health > 0
-      end
-
-      # Fluent collection pipelines with blocks & symbol-to-proc
-      def heal_party(companions, amount)
-        companions.select(&:alive?).each do |companion|
-          companion.health = [companion.health + amount, 100].min
-          puts "Healed #{companion.name} to #{companion.health} HP"
-        end
-      end
-
-      # Expressive English-like statement modifiers & shovel operator
-      def equip(item)
-        return unless item.usable?
-        @inventory << item
-        puts "#{@name} equipped #{item.name}!"
-      end
+      goal "Make programmers smile when they write code"
     end
 
-    # Reading like natural prose:
-    hero  = Player.new("Arthur", health: 85)
-    party = [hero, Player.new("Gwen", health: 40)]
-    hero.heal_party(party, 25)
+    puts "Programming should be a joy, not a chore."
 right:
   type: card
   title: Why Ruby Won Developer Hearts
@@ -65,4 +49,4 @@ right:
     interpreter) was too slow for 60/120 FPS physics, frame budgets, and tight loops.
 notes: |
   To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English.
-  Notice how clean this gameplay snippet is: keyword arguments, predicate methods with question marks like alive?, chained Enumerable pipelines with symbol-to-proc, and statement modifiers like 'return unless'. Crucially, Ruby proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive. But for game developers, Ruby's interpreted virtual machine was far too slow to meet the brutal 16-millisecond frame budget demanded by real-time physics and rendering.
+  Matz proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive. Instead, thoughtful language design allows programmers to build clean internal class architectures ("our back end") so that consumer call-sites and gameplay code ("our front end") can read like poetry. But for game developers, Ruby's dynamic interpreted VM was far too slow for real-time physics and 60 FPS budgets.

@@ -13,6 +13,8 @@ slides:
 
 # --- SECTION 2A: Ruby — The Philosophy of Developer Happiness ---
 - 03_ruby_philosophy
+- 03_ruby_backend
+- 03_ruby_frontend
 - 03a_ruby_small_syntax
 - 03b_ruby_syntax_sugar
 - 03c_ruby_closures
