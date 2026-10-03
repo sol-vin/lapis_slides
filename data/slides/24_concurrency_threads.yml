@@ -1,16 +1,15 @@
 ---
 id: 24_concurrency_threads
-title: 'Concurrency: Parallel OS Threads & Workload Offloading'
-subtitle: Utilizing Multi-Core Hardware for Heavy Computation Without Blocking Frame
-  Rates
-badge: CONCURRENCY ARCHITECTURE • OS THREADS
+title: 'Concurrency: Parallel OS Threads & SceneTree Safety'
+subtitle: Utilizing Multi-Core Hardware for Heavy Workloads with Safe Main-Thread Synchronization
+badge: CONCURRENCY ARCHITECTURE • OS THREADS & SAFETY
 badge_color: amber
 palette: entertainment_system
 layout: two-column-layout
 ratio: 3:2
 left:
   type: code
-  title: terrain_worker.cr — Background Multi-Core Worker
+  title: terrain_worker.cr — Background Multi-Core Worker & Safe Dispatch
   tag: Crystal
   lang: crystal
   font_size: '0.82rem'
@@ -21,8 +20,9 @@ left:
       noise = Godot::FastNoiseLite.new
       mesh_data = generate_marching_cubes(noise)
 
-      # 2. Type-safe dispatch directly to Godot's Main Thread:
-      # No string callback names, no single-use handler method sprawl!
+      # 2. SceneTree Safety Invariant:
+      # NEVER mutate live nodes or call add_child directly from worker threads!
+      # 3. Type-safe dispatch directly to Godot's Main Thread:
       Godot.on_main_thread do
         update_surface_mesh(mesh_data)
         @terrain_mesh.visible = true
@@ -30,13 +30,14 @@ left:
     end
 right:
   type: card
-  title: OS Thread Invariants
+  title: OS Thread & SceneTree Safety Invariants
   color: amber
   items:
-  - <strong>True Hardware Parallelism:</strong> <code>Thread.new</code> executes on dedicated OS threads across hardware CPU cores.
-  - <strong>SceneTree Safety Invariant:</strong> NEVER call <code>add_child</code> or mutate live nodes directly from background threads.
-  - <strong>Type-Safe Dispatch (<code>Godot.on_main_thread</code>):</strong> Buffers typed closures directly into Godot's MessageQueue—eliminating stringly <code>call_deferred</code>.
-  - <strong>Zero-Overhead on Main:</strong> If already on the rendering thread, the closure executes immediately without queueing or latency.
+  - <strong>True Hardware Parallelism:</strong> <code>Thread.new</code> executes intensive workloads (marching cubes, pathfinding, simulation) across multi-core CPUs.
+  - <strong>SceneTree Safety Invariant:</strong> Mutating live SceneTree nodes directly from background threads causes race conditions and memory corruption.
+  - <strong>Type-Safe Dispatch (<code>Godot.on_main_thread</code>):</strong> Buffers typed closures directly into Godot's engine <code>MessageQueue</code>—eliminating stringly <code>call_deferred</code>.
+  - <strong>Deterministic Frame Boundaries:</strong> Queued blocks execute safely at the next frame boundary on the main thread, with zero overhead if already on main.
 notes: |
   When your game requires heavy procedural generation, pathfinding, or physics computation, cooperative fibers aren't enough—you need true hardware parallelism. In Lapis, you can spawn OS background threads using Thread.new. Background threads crunch data across all available CPU cores without ever dropping a frame.
-  To apply the results safely, you don't need string-based call_deferred callbacks or method sprawl. Instead, Godot.on_main_thread accepts a type-safe closure, buffering it safely into Godot's engine MessageQueue for deterministic execution at the next frame boundary.
+  However, Godot's internal SceneTree arrays are strictly single-threaded; mutating live nodes or calling add_child from worker threads causes race conditions and crashes.
+  Instead of fragile mutex locks or string-based call_deferred callbacks, Godot.on_main_thread accepts a type-safe closure, buffering it safely into Godot's engine MessageQueue for deterministic execution at the next frame boundary.
