@@ -22,7 +22,7 @@ left:
   code: |
     ╔════════════════════════════════════════════════════════════════════════════════════╗
     ║ LAPIS PERFORMANCE BENCHMARK DASHBOARD                            ALL RUNS [OK]     ║
-    ║ Host: windows-x64 │ Engine: Godot 4.8.0-dev6 │ Crystal: -O3 │ Iterations: 3     ║
+    ║ Host: windows-x64 │ Engine: Godot 4.8.0-dev7 │ Crystal: -O3 │ Iterations: 3     ║
     ║ [██████████████████████████████████████] 100% (8/8 benchmarks • 3 iters)           ║
     ╚════════════════════════════════════════════════════════════════════════════════════╝
     ┌─ BENCHMARKS (8 SUITES) ────────┐ ┌─ LIVE PERFORMANCE & SPEEDUP RATIOS ─────────────┐

@@ -1,0 +1,53 @@
+---
+id: 36c_testing_editor_selenium_driver
+title: "In-Editor Action Driver: 'Selenium for Godot'"
+subtitle: Programmatic DOM Traversal, Synthetic Inputs & Automated Editor Workflows
+badge: QUALITY GATES • EDITOR UI AUTOMATION
+badge_color: cyan
+palette: ranger
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: editor_action_driver_spec.cr — UI Automation Flow
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    require "./spec_helper"
+    require "libgodot/editor/action_driver"
+
+    describe Lapis::Editor::ActionDriver do
+      it "automates toolbar compilation, dock tabs, and editor flows" do
+        driver = Lapis::Editor::ActionDriver.new
+
+        # 1. CSS & XPath style selector engine
+        build_btn = driver.find_control("Button[text='Build Crystal']")
+        search_box = driver.find_control("#SearchFilter")
+
+        # 2. Synthesized input dispatch (mouse & keyboard)
+        driver.click(build_btn.not_nil!)
+        driver.type_text(search_box.not_nil!, "PlayerController")
+        driver.select_tab(driver.find_dock("CrystalPanel").not_nil!, "Logs")
+
+        # 3. High-level editor workflows
+        driver.open_script("res://src/player.cr", line: 42)
+        driver.switch_to_main_screen("Crystal")
+
+        # 4. Asynchronous condition waiting & assertions
+        driver.wait_for_visible(driver.find_control(".BuildSuccessBanner").not_nil!)
+      end
+    end
+right:
+  type: card
+  title: Editor Selenium Capabilities
+  color: cyan
+  items:
+  - <strong>DOM-Style UI Selectors:</strong> Query any editor control via CSS/XPath-like selectors (<code>#id</code>, <code>.Class</code>, <code>Button[text='...']</code>, <code>//Panel</code>).
+  - <strong>Synthetic Input Engine:</strong> Dispatches real Godot input events: <code>click</code>, <code>double_click</code>, <code>right_click</code>, <code>type_text</code>, and <code>select_tab</code>.
+  - <strong>High-Level Workflows:</strong> Built-in primitives for opening scenes (<code>open_scene</code>), jumping to scripts (<code>open_script</code>), switching main screens, and triggering builds.
+  - <strong>Synchronization & Waiters:</strong> <code>wait_for_visible</code> and <code>wait_until</code> eliminate brittle sleep timers during asynchronous dock loading.
+  - <strong>Headless & Visual Testing:</strong> Runs headlessly in CI (<code>EditorDriver.run_editor_action_driver_tests</code>) or inside live visual editor sessions.
+notes: |
+  Building editor plugins, custom inspectors, and gizmos in Godot used to require tedious manual clicking to verify. In Lapis 4.8-dev7, we created the ActionDriver—essentially 'Selenium for the Godot Editor'.
+  ActionDriver lets you traverse the live Godot Editor UI tree using familiar CSS and XPath selectors like 'Button[text="Build Crystal"]' or '#SearchFilter'. It synthesizes real mouse clicks and keyboard typing, drives editor workflows like opening scripts and switching main screens, and provides asynchronous synchronization helpers like wait_for_visible. You can run these tests headlessly in CI pipelines or watch them execute visually inside the editor window.

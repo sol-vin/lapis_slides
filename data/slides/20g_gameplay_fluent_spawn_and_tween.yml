@@ -1,0 +1,50 @@
+---
+id: 20g_gameplay_fluent_spawn_and_tween
+title: 'Gameplay Usability: Fluent Spawning, Signals & Tweens'
+subtitle: Declarative Object Creation, Scene Spawning, and Built-In Juice Animations
+badge: GAMEPLAY • ERGONOMIC DSL
+badge_color: purple
+palette: candy
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: gameplay_dsl.cr — Usability Macros & Tween Builder
+  tag: Crystal
+  lang: crystal
+  font_size: '0.78rem'
+  code: |
+    # 1. Fluent object creation with kwargs & block configuration
+    sprite = create Sprite2D, position: Vector2.new(100, 200) do
+      add_to_group("allies")
+      centered = true
+    end
+
+    # 2. Entity spawning and mounting in a single expression
+    bullet = spawn_child Bullet, under: self, position: gun_muzzle do
+      damage = 45
+    end
+
+    # 3. Declarative signal connection sugar
+    on start_button.pressed { start_game_sequence }
+    on enemy, "died" { |bounty| add_score(bounty) }
+
+    # 4. Instant juice bounce & fluent tween builder
+    coin.punch_scale(factor: 1.3_f32, duration: 0.15)
+
+    player.tween do
+      animate(player, "modulate", Color.new(1, 0, 0, 1), 0.2)
+      delay(0.1)
+      animate(player, "modulate", Color.new(1, 1, 1, 1), 0.2)
+    end
+right:
+  type: card
+  title: Gameplay Ergonomics Invariants
+  color: purple
+  items:
+  - <strong>Fluent <code>create</code> & <code>build</code>:</strong> Construct engine nodes and custom classes with keyword properties and contextual block setters (<code>with self yield self</code>).
+  - <strong>Declarative Spawning:</strong> <code>spawn_node</code>, <code>spawn_child</code>, and <code>create_child</code> instantiate, configure, and mount nodes under parents in one line.
+  - <strong>Declarative <code>on</code> Sugar:</strong> Connect first-class signals and dynamic event strings directly to inline blocks without single-use callbacks.
+  - <strong>Juice & Animation DSL:</strong> <code>punch_scale</code> delivers instant scale rebounds, while <code>Node#tween</code> provides block-based tween building with automatic <code>Variant</code> wrapping.
+notes: |
+  Writing gameplay code shouldn't feel like wrestling an API. In Lapis 4.8-dev7, we added a complete suite of ergonomic gameplay usability macros. The 'create' and 'build' macros let you construct nodes with keyword arguments and block property assignments. Spawning bullets or particle emitters is a one-liner with 'spawn_child Bullet, under: self'. Signal connections become beautiful with 'on button.pressed { ... }'. And for game feel, we added built-in 'punch_scale' for instant impact juice and a fluent 'tween' builder that handles all Variant wrapping behind the scenes.

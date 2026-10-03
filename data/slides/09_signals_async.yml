@@ -14,9 +14,9 @@ left:
   lang: crystal
   font_size: '0.90rem'
   code: |
-    # 1. Connecting engine signals with first-class bound handles
+    # 1. Declarative signal connection sugar with 'on'
     start_btn = self["$UI/StartButton", Godot::Button]
-    start_btn.pressed.connect do
+    on start_btn.pressed do
       start_game_sequence
     end
 
@@ -32,16 +32,18 @@ left:
       game_over_director.trigger_defeat
     end
 
-    # 4. Compile-time validated signal emission
-    emit_health_changed(current: 75, max_health: 100)
+    # 4. Type-safe signal emission sugar
+    emit(health_changed, 75, 100)
+    emit(player_died)
 right:
   type: card
   title: Reactive Gameplay Features
   color: cyan
   items:
-  - <strong>Closure Connections:</strong> Connect any Godot signal with clean Crystal blocks—no string method names or delegate boilerplate.
+  - <strong>Declarative <code>on</code> Sugar:</strong> Connect any Godot signal with clean Crystal blocks—<code>on button.pressed { ... }</code> eliminates single-use handler boilerplate.
   - <strong>Synthesized Signal Helpers:</strong> Declaring <code>signal died</code> auto-generates <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code> with compile-time type verification.
+  - <strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(health_changed, 75, 100)</code> validates parameter types and arity at compile time.
   - <strong>One-Shot Subscriptions:</strong> <code>on_event_once</code> automatically disconnects the callback after the first invocation, preventing stale event leaks.
   - <strong>Decoupled Architecture:</strong> Game systems communicate through strongly-typed events rather than tightly-coupled node references.
 notes: |
-  Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. You can connect signals with idiomatic closures, eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers like on_health_changed and on_player_died_once. Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly.
+  Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. With our 'on' macro, you can connect signals with idiomatic closures—like 'on button.pressed { do_something }'—eliminating single-use handler functions. Declaring a signal with our macro auto-generates type-safe emitter and listener helpers like on_health_changed and on_player_died_once. Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly via the 'emit' macro.

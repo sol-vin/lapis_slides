@@ -12,8 +12,8 @@ left:
   title: Terminal — lapis benchmarks compare html
   code: |
     # Run benchmarks, compare against baseline, and output HTML report
-    $ lapis benchmarks compare html --tag 4.8-dev6 --previous-tag 4.8-dev5
-      [Lapis] Loading baseline: benchmarks/reports/benchmarks_4.8-dev5.xml
+    $ lapis benchmarks compare html --tag 4.8-dev7 --previous-tag 4.8-dev6
+      [Lapis] Loading baseline: benchmarks/reports/benchmarks_4.8-dev6.xml
       [Lapis] Measuring 8 benchmark suites (3 iterations each)...
       ✔ 01. N-Body Physics         : 3.10 ms vs 3.15 ms (+1.6% faster)
       ✔ 02. Perlin Noise           : 2.80 ms vs 2.84 ms (+1.4% faster)
@@ -25,8 +25,8 @@ left:
       ✔ 08. Multiplayer RPC Sync   : 1.80 ms vs 1.95 ms (+7.7% faster)
 
       [PASS] Regression Gate: 0 regressions detected. Mean: +2.6% faster.
-      ✔ Staged HTML Report: benchmarks/reports/comparison_4.8-dev6.html
-      ✔ Staged SVG Visuals: benchmarks/reports/comparison_4.8-dev6.svg
+      ✔ Staged HTML Report: benchmarks/reports/comparison_4.8-dev7.html
+      ✔ Staged SVG Visuals: benchmarks/reports/comparison_4.8-dev7.svg
       ✔ Appended Run to   : benchmarks/history.xml (Run ID #42)
 right:
   type: card

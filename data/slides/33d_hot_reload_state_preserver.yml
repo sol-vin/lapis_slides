@@ -1,0 +1,46 @@
+---
+id: 33d_hot_reload_state_preserver
+title: 'Hot-Reload State Preserver: 6-Phase Transactional Protocol'
+subtitle: Preserving Live Scene State, Schema Drift Reconciliation & Zero Dead Pointers
+badge: RELOAD ARCHITECTURE • STATE PRESERVATION
+badge_color: amber
+palette: game_station_2
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: state_preserver.cr — 6-Phase Transactional Pipeline
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # Lapis::Editor::StatePreserver: 6-Phase Reload Architecture
+    # Guarantees zero crashes and zero dead pointers during live DLL swaps
+
+    # Phase 1: Pre-flight validation & recursive node discovery
+    # Phase 2: Snapshot live node properties into Engine metadata quarantine
+    StatePreserver.snapshot_edited_scene # => 12 nodes, 84 properties
+
+    # Phase 3: Shadow DLL swap & GDExtension re-registration
+    # Phase 4: Schema drift reconciliation (handles added/removed fields)
+
+    # Phase 5: Two-pass silent hydration with blocked signals
+    StatePreserver.restore_edited_scene do |node, snap|
+      node.set_block_signals(true)
+      apply_properties(node, snap)
+      node.set_block_signals(false)
+    end
+
+    # Phase 6: Post-reload lifecycle hook (_on_hot_reloaded)
+right:
+  type: card
+  title: Zero-Loss Hot Reload Invariants
+  color: amber
+  items:
+  - <strong>6-Phase Transactional Architecture:</strong> Pre-flight discovery, JSON quarantine serialization, shadow DLL swap, schema reconciliation, silent hydration, and verification.
+  - <strong>Schema Drift Reconciliation:</strong> Coerces numeric widening (<code>Int</code> &rarr; <code>Float</code>), discards obsolete fields, and seeds defaults for newly added <code>@[Export]</code> properties without crashes.
+  - <strong>Two-Pass Silent Hydration:</strong> Signals are temporarily blocked during property re-population, preventing spurious cascade triggers or audio glitches.
+  - <strong>Lifecycle Hook (<code>_on_hot_reloaded</code>):</strong> Nodes implement <code>_on_hot_reloaded</code> to re-bind cached sub-objects or refresh procedural textures.
+notes: |
+  A major problem with C++ and GDExtension live reloading is that reloading the library usually resets all inspector values back to their defaults, or worse, crashes with dangling pointers to deleted vtables.
+  Lapis 4.8-dev7 implements the StatePreserver: a 6-phase transactional reloading protocol. Before reloading, it recursively snapshots all active node properties into Engine metadata quarantine. After the new DLL is swapped in, it reconciles schema drift—handling added, deleted, or type-widened fields cleanly. It then silently hydrates values with signals blocked, and notifies nodes via '_on_hot_reloaded', preserving level designer edits perfectly across reloads.

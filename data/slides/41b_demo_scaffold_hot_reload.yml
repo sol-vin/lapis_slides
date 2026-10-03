@@ -26,7 +26,7 @@ left:
 
     # Step 2: Open project in official Godot Editor
     $ lapis editor
-    [OK] Godot 4.8-dev6 launched (GDExtension bridge loaded)
+    [OK] Godot 4.8-dev7 launched (GDExtension bridge loaded)
 
     # Step 3: Edit code in IDE & press F5 in Godot
     [EditorPlugin] F5 rebuild triggered: compiling bin/game.dll...

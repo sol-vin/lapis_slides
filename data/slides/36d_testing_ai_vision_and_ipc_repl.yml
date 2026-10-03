@@ -1,0 +1,45 @@
+---
+id: 36d_testing_ai_vision_and_ipc_repl
+title: 'Editor Driver: AI Vision Manifest & Remote IPC'
+subtitle: Set-of-Marks AI Manifests, Localhost TCP IPC Server & Terminal REPL
+badge: AUTOMATION • AI VISION & REMOTE IPC
+badge_color: purple
+palette: digital_guy
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — lapis driver vision & lapis driver repl
+  font_size: '0.74rem'
+  code: |
+    $ lapis driver vision --output reports/ai_vision
+    [ActionDriver] Capturing full editor viewport: screenshot_raw.png
+    [ActionDriver] Discovered 28 interactive controls (Buttons, LineEdits, Tabs)
+    [ActionDriver] Cropped element: reports/ai_vision/elements/1_button_build.png
+    [ActionDriver] Cropped element: reports/ai_vision/elements/2_lineedit_filter.png
+    [ActionDriver] AI Vision Manifest generated: ui_manifest.json (28 elements)
+
+    $ lapis driver repl
+    === Lapis Action Driver Interactive REPL ===
+    Connecting to Godot Editor on 127.0.0.1:9095...
+    Connected successfully! Type 'help' for commands, 'exit' to quit.
+
+    lapis-driver> click "Build"
+    [Success] Clicked 'BuildCrystalToolbarButton'
+    lapis-driver> type "#FilterBox" "EnemyBoss"
+    [Success] Typed text into 'FilterBox'
+    lapis-driver> screen "Script"
+    [Success] Switched main screen to Script
+right:
+  type: card
+  title: Multimodal AI & Remote Control Invariants
+  color: purple
+  items:
+  - <strong>Set-of-Marks AI Vision:</strong> <code>driver.capture_ai_manifest</code> extracts individual interactive controls into isolated PNG crops and generates <code>ui_manifest.json</code> with exact pixel bounding boxes.
+  - <strong>Multimodal LLM Grounding:</strong> AI agents can inspect visual UI manifests to locate buttons, evaluate UI layout bugs, and plan interaction sequences.
+  - <strong>Embedded TCP IPC Server:</strong> <code>Lapis::Editor::DriverServer</code> listens on localhost port <code>9095</code>, exposing remote JSON-RPC endpoints (<code>click</code>, <code>type</code>, <code>vision</code>, <code>dom</code>).
+  - <strong>Interactive CLI REPL:</strong> <code>lapis driver repl</code> provides an interactive terminal shell to drive the live running Godot editor in real time.
+  - <strong>Opal TUI Dashboard:</strong> Dedicated interactive terminal interface in Lapis Hub (<code>[A] Action Driver Controller</code>) with split-screen DOM explorer and live log traces.
+notes: |
+  Beyond traditional spec testing, Lapis 4.8-dev7 enables external automation and AI agent control of the Godot Editor. The ActionDriver includes an embedded TCP server listening on port 9095, letting you control the editor via 'lapis driver' or an interactive terminal REPL.
+  Even more groundbreaking is our AI Vision subsystem: running 'lapis driver vision' generates a Set-of-Marks visual manifest. It captures a viewport screenshot, crops every interactive widget into an isolated PNG, and writes a structured 'ui_manifest.json' with exact bounding box coordinates and control classes. Multimodal AI agents can read this manifest, perceive the editor state visually, and execute automated workflows with zero human intervention.

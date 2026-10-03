@@ -23,7 +23,7 @@ left:
     # 1. Two-Way Binding: Engine Metadata & 824 Typed Classes
     $ lapis bind engine --dump
     [ClassDB:Reflection] Querying Godot engine GDExtension interface...
-      [OK] Dumped extension_api.json (Godot 4.8.0-dev6, 6.2 MB)
+      [OK] Dumped extension_api.json (Godot 4.8.0-dev7, 6.4 MB)
       [OK] Parsed 824 classes, 1,418 enums, 4,912 method signatures
       [OK] Generated src/libgodot/generated/ in 1.18s! 0 errors.
 

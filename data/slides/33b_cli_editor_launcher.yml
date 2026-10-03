@@ -24,7 +24,7 @@ left:
     :: LAPIS EDITOR SUPERVISOR & LIVE LOG WATCHER ::      Project: void_runner
     ──────────────────────────────────────────────────────────────────────────
     ┌─ Process Status ────────┐ Log Stream [Auto-Scroll: ON] (148 lines)
-    │ State:      [RUNNING]   │ [GODOT] Godot Engine v4.8.0-dev6
+    │ State:      [RUNNING]   │ [GODOT] Godot Engine v4.8.0-dev7
     │ PID:        18420       │ [LAPIS] Initialized Crystal bridge DLL
     │ Uptime:     42s         │ [GAME] Player initialized: CharacterBody3D
     │ Reloads:    3           │ [GAME] Emitted signal: health_changed (100)

@@ -1,0 +1,65 @@
+---
+id: 20f_resource_preload_and_load_dsl
+title: 'Resource Loading: The Preload (>) & Load (>>) Operators'
+subtitle: Cached Scene Instantiation, Dynamic Typed Fetching & Thread-Safe PreloadCache
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: cross_cube
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Two-Step Preload & Untyped Load'
+  lang: gdscript
+  tag: GDScript
+  font_size: '0.80rem'
+  code: |
+    func spawn_entities() -> void:
+        # Pitfall 1: Preload returns generic PackedScene;
+        # requires manual instantiate() + runtime casting
+        const PlayerScene = preload("res://scenes/player.tscn")
+        var player = PlayerScene.instantiate() as Player
+        if not player:
+            push_error("Failed cast to Player")
+        add_child(player)
+
+        # Pitfall 2: Dynamic load returns untyped Resource;
+        # no caching, no type parameters, silent null failures
+        var theme = load("res://assets/theme.tres") as Theme
+        var enemy_scene = load("res://scenes/enemy.tscn")
+        var enemy = enemy_scene.instantiate() as Enemy
+  points:
+  - <strong>Two-Step Instantiation:</strong> Requires calling <code>preload(...)</code>, storing a <code>PackedScene</code>, and calling <code>.instantiate()</code> separately.
+  - <strong>Unsafe Runtime Casting:</strong> Untyped <code>Resource</code> return requires <code>as Player</code> casting that fails silently if types diverge.
+  - <strong>No Built-In Preload Cache:</strong> Dynamic <code>load()</code> hits the filesystem repeatedly unless developers hand-roll custom caching dictionaries.
+crystal:
+  title: ':sparkles: Crystal: Ergonomic Preload (>) & Load (>>)'
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.80rem'
+  code: |
+    def spawn_entities : Void
+      # 1. Cached Preload Operator (>):
+      # Preloads PackedScene, instantiates & returns typed Player!
+      player = "res://scenes/player.tscn" > Player
+      add_child(player)
+
+      # Cached resource preloading:
+      theme = "res://assets/theme.tres" > Theme
+
+      # 2. Dynamic Runtime Load Operator (>>):
+      # Bypasses cache; instantiates typed node dynamically
+      boss = "res://scenes/boss.tscn" >> BossEnemy
+
+      # 3. Thread-safe PreloadCache with direct helper:
+      cfg = Godot.preload("res://data/combat.tres", as: CombatConfig)
+    end
+  points:
+  - <strong>Single-Operator Scene Instantiation:</strong> <code>&quot;path&quot; &gt; Player</code> preloads <code>PackedScene</code>, instantiates it, and casts to <code>Player</code> in one expression.
+  - <strong>Clear Semantics:</strong> <code>&gt;</code> denotes thread-safe cached preload from <code>PreloadCache</code>; <code>&gt;&gt;</code> denotes dynamic runtime streaming load.
+  - <strong>Concrete Static Typing:</strong> Returns concrete typed wrapper classes directly without manual <code>.as(T)</code> runtime casting.
+  - <strong>Thread-Safe Cache:</strong> <code>PreloadCache</code> uses mutex synchronization to eliminate race conditions in multi-threaded loading.
+takeaway:
+  badge: ASSET ERGONOMICS
+  text: Lapis operators (>) and (>>) turn multi-step asset preloading, scene instantiation, and typed casting into expressive single-line expressions.
+notes: |
+  Every Godot developer knows the repetitive ceremony of loading scenes: const Scene = preload(...), then var instance = Scene.instantiate() as Type. It's multi-step, untyped, and clutters gameplay scripts.
+  In Lapis 4.8-dev7, we introduced the preload (>) and load (>>) operators on String. When targeting a Node type, "res://player.tscn" > Player automatically preloads the PackedScene, instantiates it, and returns a statically typed Player node. When targeting a Resource, it retrieves or caches the resource in thread-safe PreloadCache. And if you need dynamic runtime loading without caching, >> streams the asset directly.

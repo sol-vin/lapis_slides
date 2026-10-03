@@ -1,7 +1,7 @@
 ---
 id: 43_future_roadmap
 title: The Future of Native Scripting in Godot
-subtitle: 'Roadmap Ahead: Hot-Reload Improvements, Mobile Support, and Community Shards'
+subtitle: 'Roadmap Ahead: Mobile & Wasm Targets, Multimodal AI Testing, and Community Shards'
 badge: CONCLUSION • LOOKING AHEAD
 badge_color: purple
 palette: former_rain
@@ -13,13 +13,13 @@ left:
   color: purple
   items:
   - <strong>Mobile & WebAssembly Targets:</strong> Compiling Lapis games to Android,
-    iOS, and WebAssembly via Emscripten.
-  - <strong>Crystalline LSP Deep Integration:</strong> Semantic jump-to-definition,
-    symbol renaming, and doc hover inside Godot's CodeEdit.
-  - <strong>Live In-Memory State Migration:</strong> Preserving field values across
-    hot-reloads during active gameplay sessions.
+    iOS, and WebAssembly via Emscripten and cross-compilation toolchains.
+  - <strong>Multimodal AI Testing Pipelines:</strong> Autonomous game QA using Set-of-Marks
+    ActionDriver manifests and vision LLM feedback loops.
   - <strong>Curated Game Shards Registry:</strong> Community repository of game-ready
-    Crystal shards (behavior trees, voxel engines, shaders).
+    Crystal shards (behavior trees, voxel engines, procedural generation).
+  - <strong>Distributed Server Clustering:</strong> High-throughput headless server
+    clusters with deterministic fiber tick synchronization.
 right:
   type: card
   title: Join the Revolution
@@ -33,6 +33,7 @@ right:
     to experience the next generation of Godot scripting.
 notes: 'Thank you all for listening! We believe Lapis represents the future of native
   scripting in Godot: the raw machine speed and type safety of C++ combined with the
-  joy, clarity, and ergonomics of Ruby. The project is open source and ready for you
-  to try today. Check out our repository on GitHub, join our Discord, and start building
-  high-performance Godot games in Crystal!'
+  joy, clarity, and ergonomics of Ruby. With 4.8-dev7, we have delivered real-time editor
+  diagnostics, transactional hot-reloading, and comprehensive in-editor UI automation.
+  The project is open source and ready for you to try today. Check out our repository on
+  GitHub, join our Discord, and start building high-performance Godot games in Crystal!'

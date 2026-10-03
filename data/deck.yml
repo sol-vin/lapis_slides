@@ -57,8 +57,11 @@ slides:
 - 20c_node_context_tilde_operator
 - 20d_gmodule_mixins
 - 20e_gmodule_composition_and_lifecycle
+- 20f_resource_preload_and_load_dsl
+- 20g_gameplay_fluent_spawn_and_tween
 - 08_effortless_access
 - 09_signals_async
+- 09b_antipattern_signals_on
 - 11_antipattern_iterators
 - 11b_antipattern_anon_functions
 - 11c_antipattern_symbols
@@ -68,6 +71,7 @@ slides:
 - 15_antipattern_structs
 - 16_antipattern_dead_pointers
 - 17_antipattern_async_signals
+- 17b_timer_dsl_and_handles
 - 23_concurrency_fibers
 - 24_concurrency_threads
 - 25_antipattern_channels
@@ -90,6 +94,8 @@ slides:
 - 28_interop_crystal_calls_gdscript_dynamic
 - 29_interop_crystal_calls_gdscript_typed
 - 33_editor_integration
+- 33c_in_editor_validator_and_lsp
+- 33d_hot_reload_state_preserver
 - 30_cli_lifecycle
 - 30b_cli_fuzzy_palette
 - 30c_cli_doctor
@@ -118,6 +124,8 @@ slides:
 - 34f_cli_sync_targets
 - 36_testing_zero_leak
 - 36b_testing_editor_driver
+- 36c_testing_editor_selenium_driver
+- 36d_testing_ai_vision_and_ipc_repl
 - 37_tool_testing_tui
 - 35_benchmarks
 - 35d_multilang_benchmarks

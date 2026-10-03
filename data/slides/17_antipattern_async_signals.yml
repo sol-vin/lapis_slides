@@ -41,15 +41,15 @@ crystal:
       # 2. Dead-pointer aware: fiber checks #alive? each frame slice
       # Aborts safely if boss was freed instead of hanging silently!
 
-      # 3. Connect signals with clean Crystal closures/blocks:
-      start_button.pressed.connect do
+      # 3. Declarative 'on' macro with clean closures:
+      on start_button.pressed do
         launch_match_sequence
       end
     end
   points:
   - <strong>First-Class Signal Handles:</strong> <code>await(boss.died)</code> provides compile-time signal validation.
   - <strong>Built-In Timeout Guards:</strong> Optional <code>timeout_sec: 10.0</code> guarantees coroutines never leak or hang.
-  - <strong>Direct Block Closures:</strong> Connect signals directly with inline blocks; no clutter of single-use handler methods.
+  - <strong>Declarative <code>on</code> Macro:</strong> Connect signals directly with inline blocks (<code>on button.pressed</code>); no clutter of single-use handler methods.
 takeaway:
   badge: SAFE ASYNCHRONY
   text: Lapis signal awaiting features automatic timeout guards and dead-pointer checks, keeping coroutines safe and responsive.

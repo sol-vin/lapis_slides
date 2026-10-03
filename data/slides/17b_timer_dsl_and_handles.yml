@@ -1,0 +1,70 @@
+---
+id: 17b_timer_dsl_and_handles
+title: 'Gameplay Timers: Cancellable Coroutines & Timer Handles'
+subtitle: Non-Blocking Intervals, Node-Scoped Lifecycle & Testable Time Stepping
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: amber
+palette: spaces_95
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Dangling Timers & Node Leaks'
+  lang: gdscript
+  tag: GDScript
+  font_size: '0.80rem'
+  code: |
+    func setup_gameplay_timers() -> void:
+        # Pitfall 1: Manual Timer node boilerplate
+        var timer = Timer.new()
+        timer.wait_time = 1.0
+        timer.autostart = true
+        timer.timeout.connect(_on_pulse)
+        add_child(timer) # Must remember to free on death!
+
+        # Pitfall 2: SceneTreeTimer cannot be cancelled or paused!
+        # If this node is freed before 2.0s, the callback still fires
+        # on a dead instance or crashes with null reference!
+        get_tree().create_timer(2.0).timeout.connect(func():
+            play_sfx()
+        )
+
+        # Pitfall 3: Cannot fast-forward time in headless unit tests
+  points:
+  - <strong>Node Sprawl:</strong> Creating intervals requires spawning extra <code>Timer</code> nodes in the scene tree and manually wiring signals.
+  - <strong>Dangling Callbacks:</strong> <code>SceneTreeTimer</code> continues ticking even if the target node is destroyed, causing crashes on freed instances.
+  - <strong>Uncancellable:</strong> One-shot engine timers cannot be cancelled, paused, or reset once scheduled.
+crystal:
+  title: ':sparkles: Crystal: Scoped Timers & Cancellable Handles'
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.80rem'
+  code: |
+    def setup_gameplay_timers : Void
+      # 1. Non-blocking recurring timer with TimerHandle
+      handle = every(1.second) do |h|
+        pulse_fx
+        h.cancel if game_over?
+      end
+
+      # 2. Node-scoped delay: auto-cancels if node is destroyed!
+      node.after(500.milliseconds) do
+        play_sfx # Guaranteed safe: won't run on dead pointer
+      end
+
+      # 3. Full lifecycle control: pause, resume, reset
+      handle.pause
+      handle.resume
+
+      # 4. Deterministic headless testing: step time forward!
+      handle.advance(1.0) # Instant tick in tests without sleep!
+    end
+  points:
+  - <strong>Non-Blocking DSL:</strong> <code>every(1.second)</code> and <code>after(500.ms)</code> run cooperatively on Crystal fibers without thread stalls.
+  - <strong>Node Lifecycle Scoped:</strong> <code>node.every</code> and <code>node.after</code> validate <code>#alive?</code> on each tick, auto-aborting if the node is freed.
+  - <strong>First-Class TimerHandle:</strong> Full control with <code>cancel</code>, <code>stop</code>, <code>pause</code>, <code>resume</code>, and <code>reset</code>.
+  - <strong>Deterministic Unit Testing:</strong> <code>handle.advance(delta)</code> steps elapsed time forward instantly in headless specs with zero sleep delays.
+takeaway:
+  badge: LIFECYCLE-SAFE TIMERS
+  text: Lapis combines non-blocking coroutine timers with automatic node-lifecycle safety and deterministic time-stepping for unit tests.
+notes: |
+  Handling time in game engines is notoriously error-prone. In GDScript, you either have to spawn physical Timer nodes into the scene tree, or use get_tree().create_timer(). But SceneTreeTimer cannot be paused or cancelled, and if the node that scheduled it is destroyed, the timer fires anyway on a dead object, leading to crashes or leaked state.
+  Lapis 4.8-dev7 solves this with our non-blocking Timer DSL. Methods like 'every' and 'after' accept Time::Span literals (1.second, 500.milliseconds) and return a first-class TimerHandle. When attached to a node, the timer automatically disconnects if the node is deleted. Even better, in unit tests, you can call 'handle.advance(1.0)' to step time forward deterministically without having to sleep in your test runner.

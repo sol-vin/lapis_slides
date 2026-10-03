@@ -1,7 +1,7 @@
 ---
 id: 30e_cli_interactive_studio
-title: 'Creative Terminal Tools: 3D Palette, Explorer & Shaders'
-subtitle: 'Opal-Powered Terminal UX: lapis color, lapis explore & lapis shaders'
+title: 'Creative Terminal Tools: Explorer, Driver REPL & TUI Hub'
+subtitle: 'Opal-Powered Terminal UX: lapis explore, lapis driver & lapis cli'
 badge: TOOLCHAIN • OPAL CREATIVE TOOLS
 badge_color: purple
 palette: game_sprocket
@@ -9,7 +9,7 @@ layout: two-column-layout
 ratio: 2:1
 left:
   type: asciinema
-  title: Terminal — Opal Creative Terminal Tools (Color Studio, Explorer, Shaders)
+  title: Terminal — Opal Creative Terminal Tools (Explorer, Driver REPL, TUI Hub)
   cast: casts/lapis_interactive_studio.cast
   font_size: '0.80rem'
   speed: 1.0
@@ -24,9 +24,9 @@ right:
   title: Creative Terminal Toolset
   color: purple
   items:
-  - <strong>3D TrueColor Palette Studio (<code>lapis color --3d</code>):</strong> Interactive 3D spatial color picker rendering rotating RGB cubes, spheres, circles, and squares in 24-bit ANSI terminal color.
   - <strong>Interactive Project Explorer (<code>lapis explore</code>):</strong> Full-keyboard terminal file browser with arrow-key navigation, type icons, metadata inspection, and instant selection.
-  - <strong>Text Shader FX Playground (<code>lapis shaders</code>):</strong> Real-time CRT scanlines, phosphor glow, curvature warp, and matrix digital rain rendered directly into the terminal buffer with zero GC allocation.
-  - <strong>Interactive Docs Browser (<code>lapis docs tui</code>):</strong> Full-screen split-pane TUI search and guide browser for rapid offline API lookups during gameplay coding.
+  - <strong>Action Driver REPL (<code>lapis driver repl</code>):</strong> Live interactive terminal automation shell driving live Godot editor controls, DOM inspection, and AI vision captures.
+  - <strong>Double-Buffered Terminal Hub (<code>lapis cli</code>):</strong> Central full-screen command dashboard with quick keys (<code>[A]</code> Driver, <code>[B]</code> Package, <code>[L]</code> Logs), floating fuzzy palette (<code>~</code>), and live telemetry.
+  - <strong>Built-In VCR Recording (<code>Ctrl+R</code> / <code>Ctrl+S</code>):</strong> Capture high-fidelity ANSI terminal screencasts (<code>.cast</code>) and instant syntax-colored HTML/ANSI screenshots with zero external dependencies.
 notes: |
-  Lapis integrates deeply with Opal to bring graphical workstation ergonomics into the terminal. With lapis color --3d, developers can interactively rotate a 3D color cube to select precise TrueColor palettes without opening an external graphics suite. lapis explore provides an instant terminal file dialog with fuzzy filtering, while lapis shaders turns the console into a real-time text FX playground with CRT scanline simulation. Coupled with lapis docs tui, you have a complete developer command center right inside your shell.
+  Lapis integrates deeply with Opal to bring graphical workstation ergonomics directly into the terminal. With lapis explore, developers get an instant interactive file dialog with fuzzy filtering and keyboard navigation. With lapis driver repl, you have an interactive automation REPL that dispatches synthetic input into the live running Godot editor. And with the unified lapis cli hub, developers can navigate all tools, trigger VCR screencasts with Ctrl+R, and capture clipboard screenshots with Ctrl+S—a complete developer command center right inside your shell.
