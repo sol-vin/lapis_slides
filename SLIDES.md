@@ -1505,7 +1505,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Doc Comment Harvesting: Comments automatically populate Godot F1 Help.
   - Expressive Ruby-like Code: Clean blocks, closures, and pattern matching.
 - **Self-Hosted Editor Integration [IN-EDITOR TOOLING]**:
-  - Self-Hosted Like Crystal: Editor integration is written *in Crystal*.
+  - Self-Hosted Like Crystal: Editor integration is written in Crystal.
   - Script Parity: Attach and create .cr scripts via Godot's UI.
   - Instant F5 Hot-Reload: Shadow DLL reloading with zero editor restarts.
   - CodeEdit Highlighting: Pure Crystal tokenizer embedded in the editor.
@@ -3788,17 +3788,17 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Title**: First-Class Godot Editor Integration
 - **Subtitle**: Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync
 - **In-Editor Feature Highlights**:
-  - Native Script Creation Dialog: Select 'Crystal (*.cr)' directly from Godot's Attach Node Script dialog.
+  - Native Script Creation Dialog: Select Crystal (*.cr) directly from Godot's Attach Node Script dialog.
   - Pure Crystal Tokenizer: Embedded syntax highlighter in Godot's CodeEdit with keywords, strings, comments, and symbols.
   - Instant Hot-Reloading: Pressing F5 triggers automatic recompilation and shadow DLL reload.
-  - Live In-Editor @tool Execution: Custom nodes execute inside the editor viewport in real time.
+  - Live In-Editor @[Tool] Execution: Custom nodes execute inside the editor viewport in real time.
   - Harvested XML Documentation: Regular Crystal doc comments appear automatically in Godot's F1 Help viewer.
 - **Why It Changes the Game**:
   - No External IDE Required: You can write and edit Crystal code directly inside Godot's built-in code editor.
   - Seamless Level Design: Level designers adjust exported Crystal properties in the Inspector and see real-time updates.
   - Zero GDExtension Friction: Feels just as integrated as GDScript and C#, not like an unwieldy foreign extension.
 - **Presenter Script**:
-  > *"A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @tool scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help."*
+  > *"A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @[Tool] scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help."*
 
 ---
 ### Slide 100: In-Editor Diagnostics: Real-Time Static Validator & LSP

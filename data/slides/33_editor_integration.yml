@@ -12,29 +12,18 @@ left:
   title: In-Editor Feature Highlights
   color: cyan
   items:
-  - <strong>Native Script Creation Dialog:</strong> Select 'Crystal (*.cr)' directly
-    from Godot's Attach Node Script dialog.
-  - <strong>Pure Crystal Tokenizer:</strong> Embedded syntax highlighter in Godot's
-    <code>CodeEdit</code> with keywords, strings, comments, and symbols.
-  - <strong>Instant Hot-Reloading:</strong> Pressing <code>F5</code> triggers automatic
-    recompilation and shadow DLL reload.
-  - <strong>Live In-Editor @tool Execution:</strong> Custom nodes execute inside the
-    editor viewport in real time.
-  - <strong>Harvested XML Documentation:</strong> Regular Crystal doc comments appear
-    automatically in Godot's F1 Help viewer.
+  - <strong>Native Script Creation Dialog:</strong> Select <code>Crystal (*.cr)</code> directly from Godot's Attach Node Script dialog.
+  - <strong>Pure Crystal Tokenizer:</strong> Embedded syntax highlighter in Godot's <code>CodeEdit</code> with keywords, strings, comments, and symbols.
+  - <strong>Instant Hot-Reloading:</strong> Pressing <code>F5</code> triggers automatic recompilation and shadow DLL reload.
+  - <strong>Live In-Editor @[Tool] Execution:</strong> Custom nodes execute inside the editor viewport in real time.
+  - <strong>Harvested XML Documentation:</strong> Regular Crystal doc comments appear automatically in Godot's <code>F1</code> Help viewer.
 right:
   type: card
   title: Why It Changes the Game
   color: cyan
   items:
-  - <strong>No External IDE Required:</strong> You can write and edit Crystal code
-    directly inside Godot's built-in code editor.
-  - <strong>Seamless Level Design:</strong> Level designers adjust exported Crystal
-    properties in the Inspector and see real-time updates.
-  - <strong>Zero GDExtension Friction:</strong> Feels just as integrated as GDScript
-    and C#, not like an unwieldy foreign extension.
-notes: A common complaint with third-party language bindings is that they feel bolted-on.
-  In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from
-  the native dialog, edit them in Godot's built-in script editor with syntax highlighting,
-  run @tool scripts in the 3D viewport, and read harvested doc comments directly in
-  Godot's F1 Help.
+  - <strong>No External IDE Required:</strong> You can write and edit Crystal code directly inside Godot's built-in code editor.
+  - <strong>Seamless Level Design:</strong> Level designers adjust exported Crystal properties in the Inspector and see real-time updates.
+  - <strong>Zero GDExtension Friction:</strong> Feels just as integrated as GDScript and C#, not like an unwieldy foreign extension.
+notes: |
+  A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @[Tool] scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help.

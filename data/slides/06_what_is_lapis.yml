@@ -40,7 +40,7 @@ cards:
     color: blue
     badge: IN-EDITOR TOOLING
     items:
-      - "<strong>Self-Hosted Like Crystal:</strong> Editor integration is written *in Crystal*."
+      - "<strong>Self-Hosted Like Crystal:</strong> Editor integration is written <em>in Crystal</em>."
       - "<strong>Script Parity:</strong> Attach and create <code>.cr</code> scripts via Godot's UI."
       - "<strong>Instant F5 Hot-Reload:</strong> Shadow DLL reloading with zero editor restarts."
       - "<strong>CodeEdit Highlighting:</strong> Pure Crystal tokenizer embedded in the editor."
