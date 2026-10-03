@@ -3593,7 +3593,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;">node PlayerController &lt; CharacterBody2D do
+            <pre><code class="language-crystal" style="font-size: 0.76rem !important; line-height: 1.25 !important;">node PlayerController &lt; CharacterBody2D do
   # 1. Declarative onready node caching (GDScript @onready parity):
   onready camera, Camera2D, &quot;CameraRig/Camera2D&quot;
   onready hud, CanvasLayer, &quot;%PlayerHUD&quot;
@@ -3608,8 +3608,9 @@ end</code></pre>
     bar = self % ProgressBar
 
     # 4. Type-safe subscript indexers ([] and []?):
-    sprite = self[Sprite2D]                 # Class-based lookup
+    sprite  = self[Sprite2D]                     # Class-based lookup
     blaster = self[&quot;$Weapons/Blaster&quot;, Node3D]? # Explicit $ path
+    unique  = self[&quot;%UniqueNode&quot;, UniqueNode]    # Scene unique % lookup
   end
 end</code></pre>
           </div>
@@ -3624,7 +3625,7 @@ end</code></pre>
               <li><strong>Path Traversal with <code>/</code> &amp; <code>.as(T)</code>:</strong> Traverse hierarchies with strings or classes; pair with <code>.as(Camera2D)</code> for instant, explicit compile-time typing.</li>
               <li><strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>self % ProgressBar</code> or <code>(self % "HUD").as(CanvasLayer)</code>.</li>
               <li><strong>Typed Indexers (<code>self["path", T]</code>):</strong> Reads naturally as path first, then type: <code>self["WeaponMount", Marker2D]</code> (or safe <code>[]?</code> returning <code>T?</code>).</li>
-              <li><strong>Full <code>$</code> &amp; <code>%</code> Prefix Support in Subscripts:</strong> <code>self[]</code> and <code>self[]?</code> handle <code>"$"</code> and <code>"%"</code> prefixes natively.</li>
+              <li><strong>Full <code>$</code> &amp; <code>%</code> Subscript Support:</strong> <code>self["$Weapons/Blaster", Node3D]</code> and <code>self["%UniqueNode", UniqueNode]</code> handle <code>$</code> and <code>%</code> prefixes natively.</li>
             </ul>
           </div>
           </div>

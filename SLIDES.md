@@ -1584,8 +1584,9 @@ This document outlines each slide's exact theme palette, architectural category,
       bar = self % ProgressBar
   
       # 4. Type-safe subscript indexers ([] and []?):
-      sprite = self[Sprite2D]                 # Class-based lookup
+      sprite  = self[Sprite2D]                     # Class-based lookup
       blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
+      unique  = self["%UniqueNode", UniqueNode]    # Scene unique % lookup
     end
   end
   ```
@@ -1594,7 +1595,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Path Traversal with / & .as(T): Traverse hierarchies with strings or classes; pair with .as(Camera2D) for instant, explicit compile-time typing.
   - Scene Unique Nodes with % & .as(T): GDScript %Node parity! Query unique nodes with self % ProgressBar or (self % "HUD").as(CanvasLayer).
   - Typed Indexers (self["path", T]): Reads naturally as path first, then type: self["WeaponMount", Marker2D] (or safe []? returning T?).
-  - Full $ & % Prefix Support in Subscripts: self[] and self[]? handle "$" and "%" prefixes natively.
+  - Full $ & % Subscript Support: self["$Weapons/Blaster", Node3D] and self["%UniqueNode", UniqueNode] handle $ and % prefixes natively.
 - **Presenter Script**:
   > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. The slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes. Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate."*
 
