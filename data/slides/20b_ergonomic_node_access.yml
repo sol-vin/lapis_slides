@@ -1,7 +1,7 @@
 ---
 id: 20b_ergonomic_node_access
-title: 'Node Ergonomics: Operators /, %, and []'
-subtitle: Path Traversal (/), Scene Unique Nodes (%), and Typed Subscripts ([])
+title: 'Node Ergonomics: onready, Operators /, %, and []'
+subtitle: Lazy Child Caching (onready), Hierarchy Traversal (/), Unique Nodes (%), and Typed Subscripts ([])
 badge: LAPIS DSL • OPERATOR ERGONOMICS
 badge_color: cyan
 palette: monokai
@@ -12,25 +12,24 @@ left:
   title: operator_node_retrieval.cr
   tag: Crystal
   lang: crystal
-  font_size: '0.80rem'
+  font_size: '0.78rem'
   code: |
     node PlayerController < CharacterBody2D do
+      # 1. Declarative onready node caching (GDScript @onready parity):
+      onready camera, Camera2D, "CameraRig/Camera2D"
+      onready hud, CanvasLayer, "%PlayerHUD"
+      onready weapon : Weapon = ~"WeaponMount/Sword"
+
       def _ready : Void
-        # 1. Path traversal with / and .as(T):
-        camera = (self / "CameraRig/Camera2D").as(Camera2D)
+        # 2. Path traversal with / and .as(T):
         mount = self / "Visuals" / Marker2D
         cam_up = camera / ".."
 
-        # 2. Scene Unique Nodes with % and .as(T):
-        hud = (self % "PlayerHUD").as(CanvasLayer)
+        # 3. Scene Unique Nodes with %:
         bar = self % ProgressBar
 
-        # 3. Type-safe subscript indexers ([] and []?):
+        # 4. Type-safe subscript indexers ([] and []?):
         sprite = self[Sprite2D]                 # Class-based lookup
-        weapon = self["WeaponMount", Marker2D]? # Path, Class order!
-
-        # 4. Supports $ and % path prefixes in [] and []?:
-        hud_bar = self["%PlayerHUD", CanvasLayer]   # Unique node via %
         blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
       end
     end
@@ -39,12 +38,12 @@ right:
   title: Type-Safe Operators & Indexers
   color: cyan
   items:
+    - '<strong>Declarative <code>onready</code> Macro:</strong> <code>onready camera, Camera2D, "path"</code> lazily caches, types, and validates child nodes during <code>_ready</code> with zero boilerplate.'
     - '<strong>Path Traversal with <code>/</code> &amp; <code>.as(T)</code>:</strong> Traverse hierarchies with strings or classes; pair with <code>.as(Camera2D)</code> for instant, explicit compile-time typing.'
-    - '<strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>(self % "HUD").as(CanvasLayer)</code> or typed <code>self % ProgressBar</code>.'
+    - '<strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>self % ProgressBar</code> or <code>(self % "HUD").as(CanvasLayer)</code>.'
     - '<strong>Typed Indexers (<code>self["path", T]</code>):</strong> Reads naturally as path first, then type: <code>self["WeaponMount", Marker2D]</code> (or safe <code>[]?</code> returning <code>T?</code>).'
-    - '<strong>Full <code>$</code> &amp; <code>%</code> Prefix Support in Subscripts:</strong> <code>self[]</code> and <code>self[]?</code> handle <code>"$"</code> and <code>"%"</code> prefixes natively (e.g. <code>self["%HUD", CanvasLayer]</code>).'
-    - '<strong>Upward Navigation (<code>..</code>):</strong> Traverse parent hierarchies with <code>node / ".."</code> without breaking out of chained operator expressions.'
+    - '<strong>Full <code>$</code> &amp; <code>%</code> Prefix Support in Subscripts:</strong> <code>self[]</code> and <code>self[]?</code> handle <code>"$"</code> and <code>"%"</code> prefixes natively.'
 notes: |
-  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics.
-  Our slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 100% parity with GDScript's scene-unique nodes.
-  Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate. Both self[] and self[]? natively handle leading '$' and '%' prefixes, allowing expressions like self["%PlayerHUD", CanvasLayer] or safe queries like self["$Weapons/Blaster", Node3D]?.
+  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics.
+  Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. The slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes.
+  Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate.

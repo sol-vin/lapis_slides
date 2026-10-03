@@ -1,0 +1,54 @@
+---
+id: 20g_gameplay_fluent_spawn
+title: 'Gameplay Usability: Fluent Creation & Spawning'
+subtitle: Declarative Object Construction, Scene Tree Mounting, and Non-Blocking Timers
+badge: GAMEPLAY • ERGONOMIC DSL
+badge_color: purple
+palette: candy
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: gameplay_dsl.cr — Fluent Spawning & Timers
+  tag: Crystal
+  lang: crystal
+  font_size: '0.78rem'
+  code: |
+    # 1. Fluent object creation with kwargs & block configuration
+    sprite = create Sprite2D, position: Vector2.new(100, 200) do
+      add_to_group("allies")
+      centered = true
+    end
+
+    # Direct block instantiation without boilerplate setters:
+    item = CustomGameItem.new do
+      item_name = "Excalibur"
+      durability = 100
+    end
+
+    # 2. Entity spawning and mounting in a single expression:
+    bullet = spawn_child Bullet, under: self, position: gun_muzzle do
+      damage = 45
+    end
+
+    # 3. PackedScene instantiation sugar:
+    enemy = instantiate "res://scenes/enemy.tscn", as: Enemy, under: self do
+      speed = 12.0_f32
+    end
+
+    # 4. Non-blocking scene tree timers:
+    after(2.5.seconds) { enemy.activate_shield! }
+    every(1.0.seconds) { regenerate_health }
+right:
+  type: card
+  title: Gameplay Ergonomics Invariants
+  color: purple
+  items:
+    - '<strong>Fluent <code>create</code> & <code>build</code>:</strong> Construct engine nodes and custom classes with keyword properties and contextual block setters (<code>with self yield self</code>).'
+    - '<strong>Direct Block Instantiation:</strong> <code>SomeClass.new do ... end</code> rewrites property assignments into typed setters with zero local variable shadowing.'
+    - '<strong>Declarative Spawning:</strong> <code>spawn_node</code>, <code>spawn_child</code>, and <code>create_child</code> instantiate, configure, and mount nodes under parents in one line.'
+    - '<strong>PackedScene Sugar:</strong> <code>instantiate(path, as: Type, under: parent)</code> loads, instantiates, and sets up scenes with typed blocks.'
+    - '<strong>Non-Blocking Timers:</strong> <code>after(sec)</code> and <code>every(interval)</code> provide SceneTree-backed delays and tickers without blocking the engine loop.'
+notes: |
+  Writing gameplay code shouldn't feel like wrestling an API. In Lapis, we provide a complete suite of ergonomic gameplay usability macros. The 'create' and 'build' macros let you construct nodes with keyword arguments and block property assignments. Furthermore, custom classes support direct block instantiation via 'SomeClass.new do ... end', letting you set properties naturally without repeating instance variables.
+  Spawning entities is a clean one-liner with 'spawn_child Bullet, under: self', and packed scenes unpack effortlessly with 'instantiate'. For non-blocking delays and intervals, 'after' and 'every' tie directly into Godot's SceneTree timers without freezing the main thread.

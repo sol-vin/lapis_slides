@@ -3526,7 +3526,7 @@ end</code></pre>
       </section>
 
       <!-- ===================================================================
-           SLIDE 38: Monokai (Node Ergonomics: Operators /, %, and [])
+           SLIDE 38: Monokai (Node Ergonomics: onready, Operators /, %, and [])
            =================================================================== -->
       <section data-background-color="#272822"
                data-palette-name="Monokai"
@@ -3541,8 +3541,8 @@ end</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill cyan">LAPIS DSL • OPERATOR ERGONOMICS</span>
-            <h2 class="slide-title">Node Ergonomics: Operators /, %, and []</h2>
-            <p class="slide-subtitle">Path Traversal (/), Scene Unique Nodes (%), and Typed Subscripts ([])</p>
+            <h2 class="slide-title">Node Ergonomics: onready, Operators /, %, and []</h2>
+            <p class="slide-subtitle">Lazy Child Caching (onready), Hierarchy Traversal (/), Unique Nodes (%), and Typed Subscripts ([])</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
@@ -3560,23 +3560,22 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.80rem !important; line-height: 1.25 !important;">node PlayerController &lt; CharacterBody2D do
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;">node PlayerController &lt; CharacterBody2D do
+  # 1. Declarative onready node caching (GDScript @onready parity):
+  onready camera, Camera2D, &quot;CameraRig/Camera2D&quot;
+  onready hud, CanvasLayer, &quot;%PlayerHUD&quot;
+  onready weapon : Weapon = ~&quot;WeaponMount/Sword&quot;
+
   def _ready : Void
-    # 1. Path traversal with / and .as(T):
-    camera = (self / &quot;CameraRig/Camera2D&quot;).as(Camera2D)
+    # 2. Path traversal with / and .as(T):
     mount = self / &quot;Visuals&quot; / Marker2D
     cam_up = camera / &quot;..&quot;
 
-    # 2. Scene Unique Nodes with % and .as(T):
-    hud = (self % &quot;PlayerHUD&quot;).as(CanvasLayer)
+    # 3. Scene Unique Nodes with %:
     bar = self % ProgressBar
 
-    # 3. Type-safe subscript indexers ([] and []?):
+    # 4. Type-safe subscript indexers ([] and []?):
     sprite = self[Sprite2D]                 # Class-based lookup
-    weapon = self[&quot;WeaponMount&quot;, Marker2D]? # Path, Class order!
-
-    # 4. Supports $ and % path prefixes in [] and []?:
-    hud_bar = self[&quot;%PlayerHUD&quot;, CanvasLayer]   # Unique node via %
     blaster = self[&quot;$Weapons/Blaster&quot;, Node3D]? # Explicit $ path
   end
 end</code></pre>
@@ -3588,11 +3587,11 @@ end</code></pre>
               <span>Type-Safe Operators &amp; Indexers</span>
             </div>
             <ul class="card-list">
+              <li><strong>Declarative <code>onready</code> Macro:</strong> <code>onready camera, Camera2D, "path"</code> lazily caches, types, and validates child nodes during <code>_ready</code> with zero boilerplate.</li>
               <li><strong>Path Traversal with <code>/</code> &amp; <code>.as(T)</code>:</strong> Traverse hierarchies with strings or classes; pair with <code>.as(Camera2D)</code> for instant, explicit compile-time typing.</li>
-              <li><strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>(self % "HUD").as(CanvasLayer)</code> or typed <code>self % ProgressBar</code>.</li>
+              <li><strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>self % ProgressBar</code> or <code>(self % "HUD").as(CanvasLayer)</code>.</li>
               <li><strong>Typed Indexers (<code>self["path", T]</code>):</strong> Reads naturally as path first, then type: <code>self["WeaponMount", Marker2D]</code> (or safe <code>[]?</code> returning <code>T?</code>).</li>
-              <li><strong>Full <code>$</code> &amp; <code>%</code> Prefix Support in Subscripts:</strong> <code>self[]</code> and <code>self[]?</code> handle <code>"$"</code> and <code>"%"</code> prefixes natively (e.g. <code>self["%HUD", CanvasLayer]</code>).</li>
-              <li><strong>Upward Navigation (<code>..</code>):</strong> Traverse parent hierarchies with <code>node / ".."</code> without breaking out of chained operator expressions.</li>
+              <li><strong>Full <code>$</code> &amp; <code>%</code> Prefix Support in Subscripts:</strong> <code>self[]</code> and <code>self[]?</code> handle <code>"$"</code> and <code>"%"</code> prefixes natively.</li>
             </ul>
           </div>
           </div>
@@ -3603,9 +3602,9 @@ end</code></pre>
           <span>Slide 38 / 152</span>
         </div>
         <aside class="notes">
-          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics.
-          Our slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 100% parity with GDScript's scene-unique nodes.
-          Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate. Both self[] and self[]? natively handle leading '$' and '%' prefixes, allowing expressions like self["%PlayerHUD", CanvasLayer] or safe queries like self["$Weapons/Blaster", Node3D]?.
+          One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics.
+          Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. The slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes.
+          Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate.
         </aside>
       </section>
 
@@ -3920,7 +3919,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-gdscript" style="font-size: 0.80rem !important; line-height: 1.25 !important;">func spawn_entities() -&gt; void:
+            <pre><code class="language-gdscript" style="font-size: 0.78rem !important; line-height: 1.25 !important;">func spawn_entities() -&gt; void:
     # Pitfall 1: Preload returns generic PackedScene;
     # requires manual instantiate() + runtime casting
     const PlayerScene = preload(&quot;res://scenes/player.tscn&quot;)
@@ -3932,8 +3931,10 @@ end</code></pre>
     # Pitfall 2: Dynamic load returns untyped Resource;
     # no caching, no type parameters, silent null failures
     var theme = load(&quot;res://assets/theme.tres&quot;) as Theme
-    var enemy_scene = load(&quot;res://scenes/enemy.tscn&quot;)
-    var enemy = enemy_scene.instantiate() as Enemy</code></pre>
+    var sound = load(&quot;res://audio/jump.wav&quot;) as AudioStreamWAV
+    var comp_scene = load(&quot;res://scenes/companion.tscn&quot;) as PackedScene
+    var companion = comp_scene.instantiate() as Companion
+    add_child(companion)</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
@@ -3944,27 +3945,30 @@ end</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Ergonomic Preload (&gt;) &amp; Load (&gt;&gt;)</span>
+              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Ergonomic Preload (&gt;), Load (&gt;&gt;) &amp; load_as</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal (Lapis)</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.80rem !important; line-height: 1.25 !important;">def spawn_entities : Void
-  # 1. Cached Preload Operator (&gt;):
-  # Preloads PackedScene, instantiates &amp; returns typed Player!
-  player = &quot;res://scenes/player.tscn&quot; &gt; Player
-  add_child(player)
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;">def spawn_entities : Void
+  # 1. Operators: Preload (&gt;) &amp; Dynamic Load (&gt;&gt;)
+  player = &quot;res://scenes/player.tscn&quot; &gt; Player      # Preloads, instantiates &amp; types!
+  theme = &quot;res://assets/theme.tres&quot; &gt; Theme         # Cached resource preload
+  boss = &quot;res://scenes/boss.tscn&quot; &gt;&gt; BossEnemy      # Dynamic runtime load
 
-  # Cached resource preloading:
-  theme = &quot;res://assets/theme.tres&quot; &gt; Theme
+  # 2. Idiomatic Godot.load &amp; Godot.load_as Methods:
+  # Strongly-typed scene loading &amp; instantiation:
+  scene = Godot.load_as(Godot::PackedScene, &quot;res://scenes/companion.tscn&quot;)
+  companion = scene.instantiate_as(Companion)
+  add_child(companion)
 
-  # 2. Dynamic Runtime Load Operator (&gt;&gt;):
-  # Bypasses cache; instantiates typed node dynamically
-  boss = &quot;res://scenes/boss.tscn&quot; &gt;&gt; BossEnemy
+  # Direct typed resource loading (Type or as: Type):
+  sound = Godot.load(&quot;res://audio/jump.wav&quot;, AudioStreamWAV)
+  combat = Godot.load(&quot;res://data/combat.tres&quot;, as: CombatConfig)
 
   # 3. Thread-safe PreloadCache with direct helper:
-  cfg = Godot.preload(&quot;res://data/combat.tres&quot;, as: CombatConfig)
+  level_data = Godot.preload(&quot;res://data/level1.tres&quot;, as: LevelData)
 end</code></pre>
           </div>
           </div>
@@ -4015,7 +4019,7 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-gdscript" style="font-size: 0.80rem !important; line-height: 1.25 !important;">func spawn_entities() -&gt; void:
+            <pre><code class="language-gdscript" style="font-size: 0.78rem !important; line-height: 1.25 !important;">func spawn_entities() -&gt; void:
     # Pitfall 1: Preload returns generic PackedScene;
     # requires manual instantiate() + runtime casting
     const PlayerScene = preload(&quot;res://scenes/player.tscn&quot;)
@@ -4027,8 +4031,10 @@ end</code></pre>
     # Pitfall 2: Dynamic load returns untyped Resource;
     # no caching, no type parameters, silent null failures
     var theme = load(&quot;res://assets/theme.tres&quot;) as Theme
-    var enemy_scene = load(&quot;res://scenes/enemy.tscn&quot;)
-    var enemy = enemy_scene.instantiate() as Enemy</code></pre>
+    var sound = load(&quot;res://audio/jump.wav&quot;) as AudioStreamWAV
+    var comp_scene = load(&quot;res://scenes/companion.tscn&quot;) as PackedScene
+    var companion = comp_scene.instantiate() as Companion
+    add_child(companion)</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
@@ -4039,27 +4045,30 @@ end</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Ergonomic Preload (&gt;) &amp; Load (&gt;&gt;)</span>
+              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Ergonomic Preload (&gt;), Load (&gt;&gt;) &amp; load_as</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal (Lapis)</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.80rem !important; line-height: 1.25 !important;">def spawn_entities : Void
-  # 1. Cached Preload Operator (&gt;):
-  # Preloads PackedScene, instantiates &amp; returns typed Player!
-  player = &quot;res://scenes/player.tscn&quot; &gt; Player
-  add_child(player)
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;">def spawn_entities : Void
+  # 1. Operators: Preload (&gt;) &amp; Dynamic Load (&gt;&gt;)
+  player = &quot;res://scenes/player.tscn&quot; &gt; Player      # Preloads, instantiates &amp; types!
+  theme = &quot;res://assets/theme.tres&quot; &gt; Theme         # Cached resource preload
+  boss = &quot;res://scenes/boss.tscn&quot; &gt;&gt; BossEnemy      # Dynamic runtime load
 
-  # Cached resource preloading:
-  theme = &quot;res://assets/theme.tres&quot; &gt; Theme
+  # 2. Idiomatic Godot.load &amp; Godot.load_as Methods:
+  # Strongly-typed scene loading &amp; instantiation:
+  scene = Godot.load_as(Godot::PackedScene, &quot;res://scenes/companion.tscn&quot;)
+  companion = scene.instantiate_as(Companion)
+  add_child(companion)
 
-  # 2. Dynamic Runtime Load Operator (&gt;&gt;):
-  # Bypasses cache; instantiates typed node dynamically
-  boss = &quot;res://scenes/boss.tscn&quot; &gt;&gt; BossEnemy
+  # Direct typed resource loading (Type or as: Type):
+  sound = Godot.load(&quot;res://audio/jump.wav&quot;, AudioStreamWAV)
+  combat = Godot.load(&quot;res://data/combat.tres&quot;, as: CombatConfig)
 
   # 3. Thread-safe PreloadCache with direct helper:
-  cfg = Godot.preload(&quot;res://data/combat.tres&quot;, as: CombatConfig)
+  level_data = Godot.preload(&quot;res://data/level1.tres&quot;, as: LevelData)
 end</code></pre>
           </div>
           </div>
@@ -4085,17 +4094,17 @@ end</code></pre>
                 <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
-                <li><strong>Single-Operator Scene Instantiation:</strong> <code>&quot;path&quot; &gt; Player</code> preloads <code>PackedScene</code>, instantiates it, and casts to <code>Player</code> in one expression.</li>
-                <li><strong>Clear Semantics:</strong> <code>&gt;</code> denotes thread-safe cached preload from <code>PreloadCache</code>; <code>&gt;&gt;</code> denotes dynamic runtime streaming load.</li>
-                <li><strong>Concrete Static Typing:</strong> Returns concrete typed wrapper classes directly without manual <code>.as(T)</code> runtime casting.</li>
-                <li><strong>Thread-Safe Cache:</strong> <code>PreloadCache</code> uses mutex synchronization to eliminate race conditions in multi-threaded loading.</li>
+                <li><strong>Concise Operators (<code>&gt;</code> &amp; <code>&gt;&gt;</code>):</strong> <code>&quot;path&quot; &gt; Player</code> preloads <code>PackedScene</code>, instantiates it, and casts in one line; <code>&gt;&gt;</code> streams dynamically without caching.</li>
+                <li><strong>Idiomatic <code>load_as</code> &amp; <code>load</code>:</strong> <code>Godot.load_as(PackedScene, path)</code> and <code>Godot.load(path, AudioStreamWAV)</code> return concrete typed instances without manual casting.</li>
+                <li><strong>Typed Scene Instantiation:</strong> <code>scene.instantiate_as(Companion)</code> unpacks scenes directly into concrete Crystal node classes.</li>
+                <li><strong>Thread-Safe Cache:</strong> <code>PreloadCache</code> and <code>Godot.preload(..., as T)</code> use mutex synchronization to prevent race conditions during background loading.</li>
               </ul>
             </div>
           </div>
         </div>
         <div class="takeaway-banner" style="margin-top: 0.6rem; padding: 0.45rem 0.9rem; background: var(--bg-window); border: 1.5px solid var(--accent-color); border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem;">
           <span class="badge-pill" style="margin-bottom: 0; padding: 0.15rem 0.55rem; font-size: 0.72rem; border-color: var(--accent-color); color: var(--accent-color);">ASSET ERGONOMICS</span>
-          <span>Lapis operators (>) and (>>) turn multi-step asset preloading, scene instantiation, and typed casting into expressive single-line expressions.</span>
+          <span>Lapis operators (>) and (>>) alongside load_as and preload turn asset loading, scene instantiation, and typed casting into expressive single-line expressions.</span>
         </div>
 
         <div class="slide-footer">
@@ -4105,19 +4114,20 @@ end</code></pre>
         </div>
         <aside class="notes">
           Every Godot developer knows the repetitive ceremony of loading scenes: const Scene = preload(...), then var instance = Scene.instantiate() as Type. It's multi-step, untyped, and clutters gameplay scripts.
-          In Lapis 4.8-dev7, we introduced the preload (>) and load (>>) operators on String. When targeting a Node type, "res://player.tscn" > Player automatically preloads the PackedScene, instantiates it, and returns a statically typed Player node. When targeting a Resource, it retrieves or caches the resource in thread-safe PreloadCache. And if you need dynamic runtime loading without caching, >> streams the asset directly.
+          In Lapis, we provide both expressive operators and idiomatic typed methods. With the preload (>) and load (>>) operators on String, "res://player.tscn" > Player preloads the PackedScene, instantiates it, and returns a statically typed Player node in a single expression. When targeting a Resource, it retrieves or caches the resource in thread-safe PreloadCache.
+          For explicit method calls, Godot.load_as(PackedScene, path) and scene.instantiate_as(Companion) construct typed scenes cleanly, while Godot.load(path, AudioStreamWAV) and Godot.preload(path, as: CombatConfig) eliminate runtime casting completely.
         </aside>
       </section>
 
       <!-- ===================================================================
-           SLIDE 44: Candy (Gameplay Usability: Fluent Spawning, Signals & Tweens)
+           SLIDE 44: Candy (Gameplay Usability: Fluent Creation & Spawning)
            =================================================================== -->
       <section data-background-color="#fdf0f8"
                data-palette-name="Candy"
                data-palette-cube="#4a2c58"
                data-palette-cube-hover="#d84b9b"
-               class="solvin-slide candy slide-20g_gameplay_fluent_spawn_and_tween"
-               data-slide-id="20g_gameplay_fluent_spawn_and_tween"
+               class="solvin-slide candy slide-20g_gameplay_fluent_spawn"
+               data-slide-id="20g_gameplay_fluent_spawn"
                style="--bg-color: #fdf0f8; --bg-window: #ffffff; --text-color: #4a2c58; --text-dim: #8c6899; --link-color: #d84b9b; --border-color: #e5a8d8; --border-active: #d84b9b; --accent-color: #b8388c; --accent-secondary: #d84b9b; --accent-tertiary: #b8388c; --accent-quaternary: #e5a8d8; --shadow-color: #d6b2dc; --cube: #4a2c58; --cube-hover: #d84b9b; --emoji-filter: url(#emoji-filter-candy); ">
         <div class="palette-corner-badge" title="Theme: Candy">
           <span class="palette-corner-dot"></span> PALETTE: Candy
@@ -4125,8 +4135,8 @@ end</code></pre>
         <div class="slide-header" style="">
           <div>
             <span class="badge-pill purple">GAMEPLAY • ERGONOMIC DSL</span>
-            <h2 class="slide-title">Gameplay Usability: Fluent Spawning, Signals &amp; Tweens</h2>
-            <p class="slide-subtitle">Declarative Object Creation, Scene Spawning, and Built-In Juice Animations</p>
+            <h2 class="slide-title">Gameplay Usability: Fluent Creation &amp; Spawning</h2>
+            <p class="slide-subtitle">Declarative Object Construction, Scene Tree Mounting, and Non-Blocking Timers</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
@@ -4138,7 +4148,7 @@ end</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title">gameplay_dsl.cr — Usability Macros &amp; Tween Builder</span>
+              <span class="code-title">gameplay_dsl.cr — Fluent Spawning &amp; Timers</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
@@ -4150,35 +4160,38 @@ sprite = create Sprite2D, position: Vector2.new(100, 200) do
   centered = true
 end
 
-# 2. Entity spawning and mounting in a single expression
+# Direct block instantiation without boilerplate setters:
+item = CustomGameItem.new do
+  item_name = &quot;Excalibur&quot;
+  durability = 100
+end
+
+# 2. Entity spawning and mounting in a single expression:
 bullet = spawn_child Bullet, under: self, position: gun_muzzle do
   damage = 45
 end
 
-# 3. Declarative signal connection sugar
-on start_button.pressed { start_game_sequence }
-on enemy, &quot;died&quot; { |bounty| add_score(bounty) }
+# 3. PackedScene instantiation sugar:
+enemy = instantiate &quot;res://scenes/enemy.tscn&quot;, as: Enemy, under: self do
+  speed = 12.0_f32
+end
 
-# 4. Instant juice bounce &amp; fluent tween builder
-coin.punch_scale(factor: 1.3_f32, duration: 0.15)
-
-player.tween do
-  animate(player, &quot;modulate&quot;, Color.new(1, 0, 0, 1), 0.2)
-  delay(0.1)
-  animate(player, &quot;modulate&quot;, Color.new(1, 1, 1, 1), 0.2)
-end</code></pre>
+# 4. Non-blocking scene tree timers:
+after(2.5.seconds) { enemy.activate_shield! }
+every(1.0.seconds) { regenerate_health }</code></pre>
           </div>
           </div>
           <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
+          <div class="card purple col compact">
             <div class="card-title purple">
               <span>Gameplay Ergonomics Invariants</span>
             </div>
             <ul class="card-list">
               <li><strong>Fluent <code>create</code> & <code>build</code>:</strong> Construct engine nodes and custom classes with keyword properties and contextual block setters (<code>with self yield self</code>).</li>
+              <li><strong>Direct Block Instantiation:</strong> <code>SomeClass.new do ... end</code> rewrites property assignments into typed setters with zero local variable shadowing.</li>
               <li><strong>Declarative Spawning:</strong> <code>spawn_node</code>, <code>spawn_child</code>, and <code>create_child</code> instantiate, configure, and mount nodes under parents in one line.</li>
-              <li><strong>Declarative <code>on</code> Sugar:</strong> Connect first-class signals and dynamic event strings directly to inline blocks without single-use callbacks.</li>
-              <li><strong>Juice & Animation DSL:</strong> <code>punch_scale</code> delivers instant scale rebounds, while <code>Node#tween</code> provides block-based tween building with automatic <code>Variant</code> wrapping.</li>
+              <li><strong>PackedScene Sugar:</strong> <code>instantiate(path, as: Type, under: parent)</code> loads, instantiates, and sets up scenes with typed blocks.</li>
+              <li><strong>Non-Blocking Timers:</strong> <code>after(sec)</code> and <code>every(interval)</code> provide SceneTree-backed delays and tickers without blocking the engine loop.</li>
             </ul>
           </div>
           </div>
@@ -4189,32 +4202,33 @@ end</code></pre>
           <span>Slide 44 / 152</span>
         </div>
         <aside class="notes">
-          Writing gameplay code shouldn't feel like wrestling an API. In Lapis 4.8-dev7, we added a complete suite of ergonomic gameplay usability macros. The 'create' and 'build' macros let you construct nodes with keyword arguments and block property assignments. Spawning bullets or particle emitters is a one-liner with 'spawn_child Bullet, under: self'. Signal connections become beautiful with 'on button.pressed { ... }'. And for game feel, we added built-in 'punch_scale' for instant impact juice and a fluent 'tween' builder that handles all Variant wrapping behind the scenes.
+          Writing gameplay code shouldn't feel like wrestling an API. In Lapis, we provide a complete suite of ergonomic gameplay usability macros. The 'create' and 'build' macros let you construct nodes with keyword arguments and block property assignments. Furthermore, custom classes support direct block instantiation via 'SomeClass.new do ... end', letting you set properties naturally without repeating instance variables.
+          Spawning entities is a clean one-liner with 'spawn_child Bullet, under: self', and packed scenes unpack effortlessly with 'instantiate'. For non-blocking delays and intervals, 'after' and 'every' tie directly into Godot's SceneTree timers without freezing the main thread.
         </aside>
       </section>
 
       <!-- ===================================================================
-           SLIDE 45: Spaces 7 (Effortless Access: Nodes, Scenes & Properties)
+           SLIDE 45: Spaces 7 (Game Feel & Juice: Fluent Tweens & Rebounds)
            =================================================================== -->
       <section data-background-color="#dce8f5"
                data-palette-name="Spaces 7"
                data-palette-cube="#1a2b3c"
                data-palette-cube-hover="#00a0e9"
-               class="solvin-slide spaces_7 slide-08_effortless_access"
-               data-slide-id="08_effortless_access"
+               class="solvin-slide spaces_7 slide-20h_gameplay_tweens_and_juice"
+               data-slide-id="20h_gameplay_tweens_and_juice"
                style="--bg-color: #dce8f5; --bg-window: #ffffff; --text-color: #1a2b3c; --text-dim: #5a7086; --link-color: #0066cc; --border-color: #3385d6; --border-active: #00a0e9; --accent-color: #0066cc; --accent-secondary: #00a0e9; --accent-tertiary: #3385d6; --accent-quaternary: #0066cc; --shadow-color: #abcced; --cube: #1a2b3c; --cube-hover: #00a0e9; --emoji-filter: url(#emoji-filter-spaces_7); ">
         <div class="palette-corner-badge" title="Theme: Spaces 7">
           <span class="palette-corner-dot"></span> PALETTE: Spaces 7
         </div>
         <div class="slide-header" style="">
           <div>
-            <span class="badge-pill cyan">CRYSTAL ERGONOMICS • GAMEPLAY SCRIPTING</span>
-            <h2 class="slide-title">Effortless Access: Nodes, Scenes &amp; Properties</h2>
-            <p class="slide-subtitle">Clean, Strongly-Typed Object Access Without Casting or Null Crashes</p>
+            <span class="badge-pill cyan">ANIMATION &amp; JUICE • GAME FEEL</span>
+            <h2 class="slide-title">Game Feel &amp; Juice: Fluent Tweens &amp; Rebounds</h2>
+            <p class="slide-subtitle">Chainable TweenBuilder, Instant Punch Animations, and Zero-Overhead Variant Wrapping</p>
           </div>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="col-3" style="display: flex; flex-direction: column; gap: 0.8rem;">
           <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
@@ -4222,46 +4236,45 @@ end</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title">gameplay_controller.cr — Typed Scene &amp; Node Resolution</span>
+              <span class="code-title">tween_and_juice.cr — Fluent Animation DSL</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal" style="font-size: 0.75rem !important; line-height: 1.25 !important;"># 1. Operators /, %, and bare ~ / ~? for node resolution:
-camera = self / &quot;CameraRig&quot; / Camera3D
-health_bar = self % ProgressBar
-sprite = ~Sprite2D           # Strict lookup &amp; up-cast (like self[T])
+            <pre><code class="language-crystal" style="font-size: 0.78rem !important; line-height: 1.25 !important;"># 1. Instant game-feel punch scale for hits &amp; collectibles
+coin.punch_scale(factor: 1.35_f32, duration: 0.15)
+jump_button.punch_scale(factor: 0.9_f32, duration: 0.1)
 
-# 2. Safe navigation with nilable ~Class? (returns T?):
-if hud = ~HUD?               # Safe lookup &amp; up-cast (like self[T]?)
-  hud.update_health(current_health)
+# 2. Fluent block-based Tween builder:
+player.tween do
+  animate(player, &quot;modulate:a&quot;, 0.0, 0.25)
+  delay(0.1)
+  animate(player, &quot;modulate:a&quot;, 1.0, 0.25)
 end
 
-# 3. Strongly typed child retrieval with onready macro:
-onready weapon : Weapon = ~(&quot;WeaponMount/Sword&quot;).as(Weapon)
+# 3. Direct property tweening with native time units:
+boss.tween_to(boss, &quot;position:y&quot;, 150.0, 0.4.seconds)
 
-# 4. Typed scene loading &amp; dynamic instantiation:
-packed = Godot.load_as(Godot::PackedScene, &quot;res://scenes/companion.tscn&quot;)
-companion = packed.instantiate_as(Companion)
-add_child(companion)
+# 4. Chained tween with cooperative async fiber await:
+tw = banner.tween
+  .animate(banner, &quot;position&quot;, target_pos, 0.5.seconds)
+  .animate(banner, &quot;modulate&quot;, Color.new(1, 1, 1, 1), 0.3.seconds)
 
-# 5. Declarative property exports with inspector hints:
-@[ExportRange(50.0..500.0, 10.0)]
-property move_speed : Float32 = 250.0_f32</code></pre>
+await(tw.finished)
+Godot.print(&quot;Banner entrance sequence completed!&quot;)</code></pre>
           </div>
           </div>
-          <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col compact">
+          <div class="col-2" style="display: flex; flex-direction: column; gap: 0.8rem;">
+          <div class="card cyan col">
             <div class="card-title cyan">
-              <span>Why It&#39;s Effortless</span>
+              <span>Animation &amp; Juice Invariants</span>
             </div>
             <ul class="card-list">
-              <li><strong>Operators <code>/</code>, <code>%</code> & <code>~</code> / <code>~?</code>:</strong> Chained paths (<code>self / "Camera"</code>), unique nodes (<code>self % ProgressBar</code>), and strict (<code>~Sprite2D</code>) or safe (<code>~HUD?</code>) up-casting.</li>
-              <li><strong>Declarative onready Macro:</strong> <code>onready weapon : Weapon = ~("...").as(Weapon)</code> binds nodes safely during <code>_ready</code>.</li>
-              <li><strong>Compile-Time Nil Safety:</strong> <code>~HUD?</code> and <code>self[path, HUD]?</code> return <code>HUD?</code>; Crystal forces flow-sensitive checks.</li>
-              <li><strong>Typed Scene Instantiation:</strong> <code>Godot.load_as(PackedScene, path)</code> and <code>scene.instantiate_as(T)</code> construct typed scenes cleanly.</li>
-              <li><strong>Declarative Export Hints:</strong> <code>@[ExportRange]</code> exposes typed properties to the Inspector with custom editor sliders and ranges.</li>
+              <li><strong>Instant Impact Rebounds:</strong> <code>punch_scale</code> delivers immediate visual feedback for hits, pickups, and UI buttons without boilerplate tweens.</li>
+              <li><strong>Fluent <code>Node#tween</code> Builder:</strong> Chainable animation steps (<code>animate</code>, <code>delay</code>) with automatic <code>Variant</code> wrapping for Colors, Vectors, and Floats.</li>
+              <li><strong>Natural Time Units:</strong> Accepts native Crystal duration syntax (<code>0.5.seconds</code>, <code>250.milliseconds</code>) alongside raw Float64 seconds.</li>
+              <li><strong>Cooperative Fiber Await:</strong> <code>await(tween.finished)</code> cooperatively awaits animation completion on the scene tree without halting the engine main loop.</li>
             </ul>
           </div>
           </div>
@@ -4272,7 +4285,9 @@ property move_speed : Float32 = 250.0_f32</code></pre>
           <span>Slide 45 / 152</span>
         </div>
         <aside class="notes">
-          In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible.
+          Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in code often involves repetitive boilerplate: create_tween(), manual tween_property calls, and awkward Variant boxing.
+          In Lapis, we made juice effortless. A single call to 'coin.punch_scale' triggers an immediate, elastic scale rebound that makes collectibles pop.
+          For multi-step sequences, 'Node#tween' provides a fluent builder block with 'animate' and 'delay', wrapping primitive types and engine math objects into Variants automatically. You can pass Crystal's native duration syntax like 0.5.seconds, and cooperatively await completion using 'await(tween.finished)' without freezing the engine loop.
         </aside>
       </section>
 

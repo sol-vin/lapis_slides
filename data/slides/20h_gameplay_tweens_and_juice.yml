@@ -1,0 +1,50 @@
+---
+id: 20h_gameplay_tweens_and_juice
+title: 'Game Feel & Juice: Fluent Tweens & Rebounds'
+subtitle: Chainable TweenBuilder, Instant Punch Animations, and Zero-Overhead Variant Wrapping
+badge: ANIMATION & JUICE • GAME FEEL
+badge_color: cyan
+palette: spaces_7
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: tween_and_juice.cr — Fluent Animation DSL
+  tag: Crystal
+  lang: crystal
+  font_size: '0.78rem'
+  code: |
+    # 1. Instant game-feel punch scale for hits & collectibles
+    coin.punch_scale(factor: 1.35_f32, duration: 0.15)
+    jump_button.punch_scale(factor: 0.9_f32, duration: 0.1)
+
+    # 2. Fluent block-based Tween builder:
+    player.tween do
+      animate(player, "modulate:a", 0.0, 0.25)
+      delay(0.1)
+      animate(player, "modulate:a", 1.0, 0.25)
+    end
+
+    # 3. Direct property tweening with native time units:
+    boss.tween_to(boss, "position:y", 150.0, 0.4.seconds)
+
+    # 4. Chained tween with cooperative async fiber await:
+    tw = banner.tween
+      .animate(banner, "position", target_pos, 0.5.seconds)
+      .animate(banner, "modulate", Color.new(1, 1, 1, 1), 0.3.seconds)
+
+    await(tw.finished)
+    Godot.print("Banner entrance sequence completed!")
+right:
+  type: card
+  title: Animation & Juice Invariants
+  color: cyan
+  items:
+    - '<strong>Instant Impact Rebounds:</strong> <code>punch_scale</code> delivers immediate visual feedback for hits, pickups, and UI buttons without boilerplate tweens.'
+    - '<strong>Fluent <code>Node#tween</code> Builder:</strong> Chainable animation steps (<code>animate</code>, <code>delay</code>) with automatic <code>Variant</code> wrapping for Colors, Vectors, and Floats.'
+    - '<strong>Natural Time Units:</strong> Accepts native Crystal duration syntax (<code>0.5.seconds</code>, <code>250.milliseconds</code>) alongside raw Float64 seconds.'
+    - '<strong>Cooperative Fiber Await:</strong> <code>await(tween.finished)</code> cooperatively awaits animation completion on the scene tree without halting the engine main loop.'
+notes: |
+  Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in code often involves repetitive boilerplate: create_tween(), manual tween_property calls, and awkward Variant boxing.
+  In Lapis, we made juice effortless. A single call to 'coin.punch_scale' triggers an immediate, elastic scale rebound that makes collectibles pop.
+  For multi-step sequences, 'Node#tween' provides a fluent builder block with 'animate' and 'delay', wrapping primitive types and engine math objects into Variants automatically. You can pass Crystal's native duration syntax like 0.5.seconds, and cooperatively await completion using 'await(tween.finished)' without freezing the engine loop.

@@ -60,8 +60,8 @@ slides:
 - 20d_gmodule_mixins
 - 20e_gmodule_composition_and_lifecycle
 - 20f_resource_preload_and_load_dsl
-- 20g_gameplay_fluent_spawn_and_tween
-- 08_effortless_access
+- 20g_gameplay_fluent_spawn
+- 20h_gameplay_tweens_and_juice
 - 09_signals_async
 - 09b_antipattern_signals_on
 - 11_antipattern_iterators

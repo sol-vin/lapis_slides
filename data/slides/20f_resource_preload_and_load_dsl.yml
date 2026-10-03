@@ -10,7 +10,7 @@ gdscript:
   title: ':circle-xmark: GDScript: Two-Step Preload & Untyped Load'
   lang: gdscript
   tag: GDScript
-  font_size: '0.80rem'
+  font_size: '0.78rem'
   code: |
     func spawn_entities() -> void:
         # Pitfall 1: Preload returns generic PackedScene;
@@ -24,42 +24,48 @@ gdscript:
         # Pitfall 2: Dynamic load returns untyped Resource;
         # no caching, no type parameters, silent null failures
         var theme = load("res://assets/theme.tres") as Theme
-        var enemy_scene = load("res://scenes/enemy.tscn")
-        var enemy = enemy_scene.instantiate() as Enemy
+        var sound = load("res://audio/jump.wav") as AudioStreamWAV
+        var comp_scene = load("res://scenes/companion.tscn") as PackedScene
+        var companion = comp_scene.instantiate() as Companion
+        add_child(companion)
   points:
   - <strong>Two-Step Instantiation:</strong> Requires calling <code>preload(...)</code>, storing a <code>PackedScene</code>, and calling <code>.instantiate()</code> separately.
   - <strong>Unsafe Runtime Casting:</strong> Untyped <code>Resource</code> return requires <code>as Player</code> casting that fails silently if types diverge.
   - <strong>No Built-In Preload Cache:</strong> Dynamic <code>load()</code> hits the filesystem repeatedly unless developers hand-roll custom caching dictionaries.
 crystal:
-  title: ':sparkles: Crystal: Ergonomic Preload (>) & Load (>>)'
+  title: ':sparkles: Crystal: Ergonomic Preload (>), Load (>>) & load_as'
   lang: crystal
   tag: Crystal (Lapis)
-  font_size: '0.80rem'
+  font_size: '0.78rem'
   code: |
     def spawn_entities : Void
-      # 1. Cached Preload Operator (>):
-      # Preloads PackedScene, instantiates & returns typed Player!
-      player = "res://scenes/player.tscn" > Player
-      add_child(player)
+      # 1. Operators: Preload (>) & Dynamic Load (>>)
+      player = "res://scenes/player.tscn" > Player      # Preloads, instantiates & types!
+      theme = "res://assets/theme.tres" > Theme         # Cached resource preload
+      boss = "res://scenes/boss.tscn" >> BossEnemy      # Dynamic runtime load
 
-      # Cached resource preloading:
-      theme = "res://assets/theme.tres" > Theme
+      # 2. Idiomatic Godot.load & Godot.load_as Methods:
+      # Strongly-typed scene loading & instantiation:
+      scene = Godot.load_as(Godot::PackedScene, "res://scenes/companion.tscn")
+      companion = scene.instantiate_as(Companion)
+      add_child(companion)
 
-      # 2. Dynamic Runtime Load Operator (>>):
-      # Bypasses cache; instantiates typed node dynamically
-      boss = "res://scenes/boss.tscn" >> BossEnemy
+      # Direct typed resource loading (Type or as: Type):
+      sound = Godot.load("res://audio/jump.wav", AudioStreamWAV)
+      combat = Godot.load("res://data/combat.tres", as: CombatConfig)
 
       # 3. Thread-safe PreloadCache with direct helper:
-      cfg = Godot.preload("res://data/combat.tres", as: CombatConfig)
+      level_data = Godot.preload("res://data/level1.tres", as: LevelData)
     end
   points:
-  - <strong>Single-Operator Scene Instantiation:</strong> <code>&quot;path&quot; &gt; Player</code> preloads <code>PackedScene</code>, instantiates it, and casts to <code>Player</code> in one expression.
-  - <strong>Clear Semantics:</strong> <code>&gt;</code> denotes thread-safe cached preload from <code>PreloadCache</code>; <code>&gt;&gt;</code> denotes dynamic runtime streaming load.
-  - <strong>Concrete Static Typing:</strong> Returns concrete typed wrapper classes directly without manual <code>.as(T)</code> runtime casting.
-  - <strong>Thread-Safe Cache:</strong> <code>PreloadCache</code> uses mutex synchronization to eliminate race conditions in multi-threaded loading.
+  - <strong>Concise Operators (<code>&gt;</code> &amp; <code>&gt;&gt;</code>):</strong> <code>&quot;path&quot; &gt; Player</code> preloads <code>PackedScene</code>, instantiates it, and casts in one line; <code>&gt;&gt;</code> streams dynamically without caching.
+  - <strong>Idiomatic <code>load_as</code> &amp; <code>load</code>:</strong> <code>Godot.load_as(PackedScene, path)</code> and <code>Godot.load(path, AudioStreamWAV)</code> return concrete typed instances without manual casting.
+  - <strong>Typed Scene Instantiation:</strong> <code>scene.instantiate_as(Companion)</code> unpacks scenes directly into concrete Crystal node classes.
+  - <strong>Thread-Safe Cache:</strong> <code>PreloadCache</code> and <code>Godot.preload(..., as: T)</code> use mutex synchronization to prevent race conditions during background loading.
 takeaway:
   badge: ASSET ERGONOMICS
-  text: Lapis operators (>) and (>>) turn multi-step asset preloading, scene instantiation, and typed casting into expressive single-line expressions.
+  text: Lapis operators (>) and (>>) alongside load_as and preload turn asset loading, scene instantiation, and typed casting into expressive single-line expressions.
 notes: |
   Every Godot developer knows the repetitive ceremony of loading scenes: const Scene = preload(...), then var instance = Scene.instantiate() as Type. It's multi-step, untyped, and clutters gameplay scripts.
-  In Lapis 4.8-dev7, we introduced the preload (>) and load (>>) operators on String. When targeting a Node type, "res://player.tscn" > Player automatically preloads the PackedScene, instantiates it, and returns a statically typed Player node. When targeting a Resource, it retrieves or caches the resource in thread-safe PreloadCache. And if you need dynamic runtime loading without caching, >> streams the asset directly.
+  In Lapis, we provide both expressive operators and idiomatic typed methods. With the preload (>) and load (>>) operators on String, "res://player.tscn" > Player preloads the PackedScene, instantiates it, and returns a statically typed Player node in a single expression. When targeting a Resource, it retrieves or caches the resource in thread-safe PreloadCache.
+  For explicit method calls, Godot.load_as(PackedScene, path) and scene.instantiate_as(Companion) construct typed scenes cleanly, while Godot.load(path, AudioStreamWAV) and Godot.preload(path, as: CombatConfig) eliminate runtime casting completely.

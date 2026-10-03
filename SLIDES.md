@@ -1529,42 +1529,41 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Here is what authoring a Godot node actually looks like in Lapis. Notice how clean, concise, and declarative it is. You write node Player < CharacterBody3D, declare exported properties with ranges, define typed signals, and write your lifecycle methods. Regular comments above properties are harvested at compile time into Godot's in-editor tooltips. It eliminates over 70% of the boilerplate required by C++ or Rust."*
 
 ---
-### Slide 38: Node Ergonomics: Operators /, %, and []
+### Slide 38: Node Ergonomics: onready, Operators /, %, and []
 - **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
 - **Category Badge**: `LAPIS DSL • OPERATOR ERGONOMICS`
-- **Title**: Node Ergonomics: Operators /, %, and []
-- **Subtitle**: Path Traversal (/), Scene Unique Nodes (%), and Typed Subscripts ([])
+- **Title**: Node Ergonomics: onready, Operators /, %, and []
+- **Subtitle**: Lazy Child Caching (onready), Hierarchy Traversal (/), Unique Nodes (%), and Typed Subscripts ([])
 - **Code Example (`operator_node_retrieval.cr`)**:
   ```crystal
   node PlayerController < CharacterBody2D do
+    # 1. Declarative onready node caching (GDScript @onready parity):
+    onready camera, Camera2D, "CameraRig/Camera2D"
+    onready hud, CanvasLayer, "%PlayerHUD"
+    onready weapon : Weapon = ~"WeaponMount/Sword"
+  
     def _ready : Void
-      # 1. Path traversal with / and .as(T):
-      camera = (self / "CameraRig/Camera2D").as(Camera2D)
+      # 2. Path traversal with / and .as(T):
       mount = self / "Visuals" / Marker2D
       cam_up = camera / ".."
   
-      # 2. Scene Unique Nodes with % and .as(T):
-      hud = (self % "PlayerHUD").as(CanvasLayer)
+      # 3. Scene Unique Nodes with %:
       bar = self % ProgressBar
   
-      # 3. Type-safe subscript indexers ([] and []?):
+      # 4. Type-safe subscript indexers ([] and []?):
       sprite = self[Sprite2D]                 # Class-based lookup
-      weapon = self["WeaponMount", Marker2D]? # Path, Class order!
-  
-      # 4. Supports $ and % path prefixes in [] and []?:
-      hud_bar = self["%PlayerHUD", CanvasLayer]   # Unique node via %
       blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
     end
   end
   ```
 - **Type-Safe Operators & Indexers**:
+  - Declarative onready Macro: onready camera, Camera2D, "path" lazily caches, types, and validates child nodes during _ready with zero boilerplate.
   - Path Traversal with / & .as(T): Traverse hierarchies with strings or classes; pair with .as(Camera2D) for instant, explicit compile-time typing.
-  - Scene Unique Nodes with % & .as(T): GDScript %Node parity! Query unique nodes with (self % "HUD").as(CanvasLayer) or typed self % ProgressBar.
+  - Scene Unique Nodes with % & .as(T): GDScript %Node parity! Query unique nodes with self % ProgressBar or (self % "HUD").as(CanvasLayer).
   - Typed Indexers (self["path", T]): Reads naturally as path first, then type: self["WeaponMount", Marker2D] (or safe []? returning T?).
-  - Full $ & % Prefix Support in Subscripts: self[] and self[]? handle "$" and "%" prefixes natively (e.g. self["%HUD", CanvasLayer]).
-  - Upward Navigation (..): Traverse parent hierarchies with node / ".." without breaking out of chained operator expressions.
+  - Full $ & % Prefix Support in Subscripts: self[] and self[]? handle "$" and "%" prefixes natively.
 - **Presenter Script**:
-  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use $Node or %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 100% parity with GDScript's scene-unique nodes. Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate. Both self[] and self[]? natively handle leading '$' and '%' prefixes, allowing expressions like self["%PlayerHUD", CanvasLayer] or safe queries like self["$Weapons/Blaster", Node3D]?."*
+  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. The slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes. Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate."*
 
 ---
 ### Slide 39: Bare Scene Ergonomics: The Unary ~ Operator
@@ -1724,26 +1723,31 @@ This document outlines each slide's exact theme palette, architectural category,
       # Pitfall 2: Dynamic load returns untyped Resource;
       # no caching, no type parameters, silent null failures
       var theme = load("res://assets/theme.tres") as Theme
-      var enemy_scene = load("res://scenes/enemy.tscn")
-      var enemy = enemy_scene.instantiate() as Enemy
+      var sound = load("res://audio/jump.wav") as AudioStreamWAV
+      var comp_scene = load("res://scenes/companion.tscn") as PackedScene
+      var companion = comp_scene.instantiate() as Companion
+      add_child(companion)
   ```
-- **Crystal Code Example (`:sparkles: Crystal: Ergonomic Preload (>) & Load (>>)`)**:
+- **Crystal Code Example (`:sparkles: Crystal: Ergonomic Preload (>), Load (>>) & load_as`)**:
   ```crystal
   def spawn_entities : Void
-    # 1. Cached Preload Operator (>):
-    # Preloads PackedScene, instantiates & returns typed Player!
-    player = "res://scenes/player.tscn" > Player
-    add_child(player)
+    # 1. Operators: Preload (>) & Dynamic Load (>>)
+    player = "res://scenes/player.tscn" > Player      # Preloads, instantiates & types!
+    theme = "res://assets/theme.tres" > Theme         # Cached resource preload
+    boss = "res://scenes/boss.tscn" >> BossEnemy      # Dynamic runtime load
   
-    # Cached resource preloading:
-    theme = "res://assets/theme.tres" > Theme
+    # 2. Idiomatic Godot.load & Godot.load_as Methods:
+    # Strongly-typed scene loading & instantiation:
+    scene = Godot.load_as(Godot::PackedScene, "res://scenes/companion.tscn")
+    companion = scene.instantiate_as(Companion)
+    add_child(companion)
   
-    # 2. Dynamic Runtime Load Operator (>>):
-    # Bypasses cache; instantiates typed node dynamically
-    boss = "res://scenes/boss.tscn" >> BossEnemy
+    # Direct typed resource loading (Type or as: Type):
+    sound = Godot.load("res://audio/jump.wav", AudioStreamWAV)
+    combat = Godot.load("res://data/combat.tres", as: CombatConfig)
   
     # 3. Thread-safe PreloadCache with direct helper:
-    cfg = Godot.preload("res://data/combat.tres", as: CombatConfig)
+    level_data = Godot.preload("res://data/level1.tres", as: LevelData)
   end
   ```
 - **Presenter Script**:
@@ -1761,21 +1765,21 @@ This document outlines each slide's exact theme palette, architectural category,
   - Unsafe Runtime Casting: Untyped Resource return requires as Player casting that fails silently if types diverge.
   - No Built-In Preload Cache: Dynamic load() hits the filesystem repeatedly unless developers hand-roll custom caching dictionaries.
 - **Crystal Zen Advantages**:
-  - Single-Operator Scene Instantiation: "path" > Player preloads PackedScene, instantiates it, and casts to Player in one expression.
-  - Clear Semantics: > denotes thread-safe cached preload from PreloadCache; >> denotes dynamic runtime streaming load.
-  - Concrete Static Typing: Returns concrete typed wrapper classes directly without manual .as(T) runtime casting.
-  - Thread-Safe Cache: PreloadCache uses mutex synchronization to eliminate race conditions in multi-threaded loading.
-- **Key Takeaway**: Lapis operators (>) and (>>) turn multi-step asset preloading, scene instantiation, and typed casting into expressive single-line expressions.
+  - Concise Operators (> & >>): "path" > Player preloads PackedScene, instantiates it, and casts in one line; >> streams dynamically without caching.
+  - Idiomatic load_as & load: Godot.load_as(PackedScene, path) and Godot.load(path, AudioStreamWAV) return concrete typed instances without manual casting.
+  - Typed Scene Instantiation: scene.instantiate_as(Companion) unpacks scenes directly into concrete Crystal node classes.
+  - Thread-Safe Cache: PreloadCache and Godot.preload(..., as T) use mutex synchronization to prevent race conditions during background loading.
+- **Key Takeaway**: Lapis operators (>) and (>>) alongside load_as and preload turn asset loading, scene instantiation, and typed casting into expressive single-line expressions.
 - **Presenter Script**:
-  > *"Every Godot developer knows the repetitive ceremony of loading scenes: const Scene = preload(...), then var instance = Scene.instantiate() as Type. It's multi-step, untyped, and clutters gameplay scripts. In Lapis 4.8-dev7, we introduced the preload (>) and load (>>) operators on String. When targeting a Node type, "res://player.tscn" > Player automatically preloads the PackedScene, instantiates it, and returns a statically typed Player node. When targeting a Resource, it retrieves or caches the resource in thread-safe PreloadCache. And if you need dynamic runtime loading without caching, >> streams the asset directly."*
+  > *"Every Godot developer knows the repetitive ceremony of loading scenes: const Scene = preload(...), then var instance = Scene.instantiate() as Type. It's multi-step, untyped, and clutters gameplay scripts. In Lapis, we provide both expressive operators and idiomatic typed methods. With the preload (>) and load (>>) operators on String, "res://player.tscn" > Player preloads the PackedScene, instantiates it, and returns a statically typed Player node in a single expression. When targeting a Resource, it retrieves or caches the resource in thread-safe PreloadCache. For explicit method calls, Godot.load_as(PackedScene, path) and scene.instantiate_as(Companion) construct typed scenes cleanly, while Godot.load(path, AudioStreamWAV) and Godot.preload(path, as: CombatConfig) eliminate runtime casting completely."*
 
 ---
-### Slide 44: Gameplay Usability: Fluent Spawning, Signals & Tweens
+### Slide 44: Gameplay Usability: Fluent Creation & Spawning
 - **Sol.vin Theme Palette**: `candy` (Candy) [BG: `#fdf0f8` | Window: `#ffffff` | Text: `#4a2c58` | Accent: `#b8388c`]
 - **Category Badge**: `GAMEPLAY • ERGONOMIC DSL`
-- **Title**: Gameplay Usability: Fluent Spawning, Signals & Tweens
-- **Subtitle**: Declarative Object Creation, Scene Spawning, and Built-In Juice Animations
-- **Code Example (`gameplay_dsl.cr — Usability Macros & Tween Builder`)**:
+- **Title**: Gameplay Usability: Fluent Creation & Spawning
+- **Subtitle**: Declarative Object Construction, Scene Tree Mounting, and Non-Blocking Timers
+- **Code Example (`gameplay_dsl.cr — Fluent Spawning & Timers`)**:
   ```crystal
   # 1. Fluent object creation with kwargs & block configuration
   sprite = create Sprite2D, position: Vector2.new(100, 200) do
@@ -1783,70 +1787,72 @@ This document outlines each slide's exact theme palette, architectural category,
     centered = true
   end
   
-  # 2. Entity spawning and mounting in a single expression
+  # Direct block instantiation without boilerplate setters:
+  item = CustomGameItem.new do
+    item_name = "Excalibur"
+    durability = 100
+  end
+  
+  # 2. Entity spawning and mounting in a single expression:
   bullet = spawn_child Bullet, under: self, position: gun_muzzle do
     damage = 45
   end
   
-  # 3. Declarative signal connection sugar
-  on start_button.pressed { start_game_sequence }
-  on enemy, "died" { |bounty| add_score(bounty) }
-  
-  # 4. Instant juice bounce & fluent tween builder
-  coin.punch_scale(factor: 1.3_f32, duration: 0.15)
-  
-  player.tween do
-    animate(player, "modulate", Color.new(1, 0, 0, 1), 0.2)
-    delay(0.1)
-    animate(player, "modulate", Color.new(1, 1, 1, 1), 0.2)
+  # 3. PackedScene instantiation sugar:
+  enemy = instantiate "res://scenes/enemy.tscn", as: Enemy, under: self do
+    speed = 12.0_f32
   end
+  
+  # 4. Non-blocking scene tree timers:
+  after(2.5.seconds) { enemy.activate_shield! }
+  every(1.0.seconds) { regenerate_health }
   ```
 - **Gameplay Ergonomics Invariants**:
   - Fluent create & build: Construct engine nodes and custom classes with keyword properties and contextual block setters (with self yield self).
+  - Direct Block Instantiation: SomeClass.new do ... end rewrites property assignments into typed setters with zero local variable shadowing.
   - Declarative Spawning: spawn_node, spawn_child, and create_child instantiate, configure, and mount nodes under parents in one line.
-  - Declarative on Sugar: Connect first-class signals and dynamic event strings directly to inline blocks without single-use callbacks.
-  - Juice & Animation DSL: punch_scale delivers instant scale rebounds, while Node#tween provides block-based tween building with automatic Variant wrapping.
+  - PackedScene Sugar: instantiate(path, as: Type, under: parent) loads, instantiates, and sets up scenes with typed blocks.
+  - Non-Blocking Timers: after(sec) and every(interval) provide SceneTree-backed delays and tickers without blocking the engine loop.
 - **Presenter Script**:
-  > *"Writing gameplay code shouldn't feel like wrestling an API. In Lapis 4.8-dev7, we added a complete suite of ergonomic gameplay usability macros. The 'create' and 'build' macros let you construct nodes with keyword arguments and block property assignments. Spawning bullets or particle emitters is a one-liner with 'spawn_child Bullet, under: self'. Signal connections become beautiful with 'on button.pressed { ... }'. And for game feel, we added built-in 'punch_scale' for instant impact juice and a fluent 'tween' builder that handles all Variant wrapping behind the scenes."*
+  > *"Writing gameplay code shouldn't feel like wrestling an API. In Lapis, we provide a complete suite of ergonomic gameplay usability macros. The 'create' and 'build' macros let you construct nodes with keyword arguments and block property assignments. Furthermore, custom classes support direct block instantiation via 'SomeClass.new do ... end', letting you set properties naturally without repeating instance variables. Spawning entities is a clean one-liner with 'spawn_child Bullet, under: self', and packed scenes unpack effortlessly with 'instantiate'. For non-blocking delays and intervals, 'after' and 'every' tie directly into Godot's SceneTree timers without freezing the main thread."*
 
 ---
-### Slide 45: Effortless Access: Nodes, Scenes & Properties
+### Slide 45: Game Feel & Juice: Fluent Tweens & Rebounds
 - **Sol.vin Theme Palette**: `spaces_7` (Spaces 7) [BG: `#dce8f5` | Window: `#ffffff` | Text: `#1a2b3c` | Accent: `#0066cc`]
-- **Category Badge**: `CRYSTAL ERGONOMICS • GAMEPLAY SCRIPTING`
-- **Title**: Effortless Access: Nodes, Scenes & Properties
-- **Subtitle**: Clean, Strongly-Typed Object Access Without Casting or Null Crashes
-- **Code Example (`gameplay_controller.cr — Typed Scene & Node Resolution`)**:
+- **Category Badge**: `ANIMATION & JUICE • GAME FEEL`
+- **Title**: Game Feel & Juice: Fluent Tweens & Rebounds
+- **Subtitle**: Chainable TweenBuilder, Instant Punch Animations, and Zero-Overhead Variant Wrapping
+- **Code Example (`tween_and_juice.cr — Fluent Animation DSL`)**:
   ```crystal
-  # 1. Operators /, %, and bare ~ / ~? for node resolution:
-  camera = self / "CameraRig" / Camera3D
-  health_bar = self % ProgressBar
-  sprite = ~Sprite2D           # Strict lookup & up-cast (like self[T])
+  # 1. Instant game-feel punch scale for hits & collectibles
+  coin.punch_scale(factor: 1.35_f32, duration: 0.15)
+  jump_button.punch_scale(factor: 0.9_f32, duration: 0.1)
   
-  # 2. Safe navigation with nilable ~Class? (returns T?):
-  if hud = ~HUD?               # Safe lookup & up-cast (like self[T]?)
-    hud.update_health(current_health)
+  # 2. Fluent block-based Tween builder:
+  player.tween do
+    animate(player, "modulate:a", 0.0, 0.25)
+    delay(0.1)
+    animate(player, "modulate:a", 1.0, 0.25)
   end
   
-  # 3. Strongly typed child retrieval with onready macro:
-  onready weapon : Weapon = ~("WeaponMount/Sword").as(Weapon)
+  # 3. Direct property tweening with native time units:
+  boss.tween_to(boss, "position:y", 150.0, 0.4.seconds)
   
-  # 4. Typed scene loading & dynamic instantiation:
-  packed = Godot.load_as(Godot::PackedScene, "res://scenes/companion.tscn")
-  companion = packed.instantiate_as(Companion)
-  add_child(companion)
+  # 4. Chained tween with cooperative async fiber await:
+  tw = banner.tween
+    .animate(banner, "position", target_pos, 0.5.seconds)
+    .animate(banner, "modulate", Color.new(1, 1, 1, 1), 0.3.seconds)
   
-  # 5. Declarative property exports with inspector hints:
-  @[ExportRange(50.0..500.0, 10.0)]
-  property move_speed : Float32 = 250.0_f32
+  await(tw.finished)
+  Godot.print("Banner entrance sequence completed!")
   ```
-- **Why It's Effortless**:
-  - Operators /, % & ~ / ~?: Chained paths (self / "Camera"), unique nodes (self % ProgressBar), and strict (~Sprite2D) or safe (~HUD?) up-casting.
-  - Declarative onready Macro: onready weapon : Weapon = ~("...").as(Weapon) binds nodes safely during _ready.
-  - Compile-Time Nil Safety: ~HUD? and self[path, HUD]? return HUD?; Crystal forces flow-sensitive checks.
-  - Typed Scene Instantiation: Godot.load_as(PackedScene, path) and scene.instantiate_as(T) construct typed scenes cleanly.
-  - Declarative Export Hints: @[ExportRange] exposes typed properties to the Inspector with custom editor sliders and ranges.
+- **Animation & Juice Invariants**:
+  - Instant Impact Rebounds: punch_scale delivers immediate visual feedback for hits, pickups, and UI buttons without boilerplate tweens.
+  - Fluent Node#tween Builder: Chainable animation steps (animate, delay) with automatic Variant wrapping for Colors, Vectors, and Floats.
+  - Natural Time Units: Accepts native Crystal duration syntax (0.5.seconds, 250.milliseconds) alongside raw Float64 seconds.
+  - Cooperative Fiber Await: await(tween.finished) cooperatively awaits animation completion on the scene tree without halting the engine main loop.
 - **Presenter Script**:
-  > *"In many game frameworks, accessing nodes and properties is fraught with friction: manual casting boilerplate, runtime null panics, and brittle string lookups. In Lapis, accessing scene elements is effortless and strongly typed. You can traverse paths naturally with the slash operator, query scene unique nodes with the percent operator, or resolve nodes directly using the unary tilde operator (~Sprite2D). With our onready macro and safe indexers like self["$UI/HUDLayer", HUD]?, Crystal's compiler enforces flow-sensitive nil checks, making null pointer dereference crashes impossible."*
+  > *"Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in code often involves repetitive boilerplate: create_tween(), manual tween_property calls, and awkward Variant boxing. In Lapis, we made juice effortless. A single call to 'coin.punch_scale' triggers an immediate, elastic scale rebound that makes collectibles pop. For multi-step sequences, 'Node#tween' provides a fluent builder block with 'animate' and 'delay', wrapping primitive types and engine math objects into Variants automatically. You can pass Crystal's native duration syntax like 0.5.seconds, and cooperatively await completion using 'await(tween.finished)' without freezing the engine loop."*
 
 ---
 ### Slide 46: Signals & Events: Reactive Zen Ergonomics
