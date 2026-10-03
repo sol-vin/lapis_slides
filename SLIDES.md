@@ -2742,26 +2742,25 @@ This document outlines each slide's exact theme palette, architectural category,
   ```crystal
   # Offload heavy procedural generation to native OS thread
   worker_thread = Thread.new do
-    # Heavy CPU computation across hardware cores
+    # 1. Heavy multi-core CPU crunching runs off the main thread:
     noise = Godot::FastNoiseLite.new
     mesh_data = generate_marching_cubes(noise)
   
-    # Notify main thread via thread-safe deferred dispatch
-    call_deferred("on_terrain_ready", mesh_data)
-  end
-  
-  def on_terrain_ready(data : MeshData) : Void
-    # Dispatched safely on Godot main thread
-    update_surface_mesh(data)
+    # 2. Type-safe dispatch directly to Godot's Main Thread:
+    # No string callback names, no single-use handler method sprawl!
+    Godot.on_main_thread do
+      update_surface_mesh(mesh_data)
+      @terrain_mesh.visible = true
+    end
   end
   ```
 - **OS Thread Invariants**:
-  - True Hardware Parallelism: Thread.new executes on dedicated OS threads across CPU cores.
-  - SceneTree Safety Invariant: NEVER call add_child, remove_child, or queue_free from an OS thread.
-  - Cross-Thread Dispatch via call_deferred: Push completed results back to the main thread via Godot's thread-safe MessageQueue.
-  - Thread Sleep Rules: Use Crystal::System::Thread.sleep for true OS thread sleeps.
+  - True Hardware Parallelism: Thread.new executes on dedicated OS threads across hardware CPU cores.
+  - SceneTree Safety Invariant: NEVER call add_child or mutate live nodes directly from background threads.
+  - Type-Safe Dispatch (Godot.on_main_thread): Buffers typed closures directly into Godot's MessageQueue—eliminating stringly call_deferred.
+  - Zero-Overhead on Main: If already on the rendering thread, the closure executes immediately without queueing or latency.
 - **Presenter Script**:
-  > *"When your game requires heavy procedural generation, pathfinding, or physics computation, cooperative fibers aren't enough—you need true hardware parallelism. In Lapis, you can spawn OS background threads using Thread.new. Background threads crunch data across all available CPU cores without ever dropping a frame, and send results back via call_deferred."*
+  > *"When your game requires heavy procedural generation, pathfinding, or physics computation, cooperative fibers aren't enough—you need true hardware parallelism. In Lapis, you can spawn OS background threads using Thread.new. Background threads crunch data across all available CPU cores without ever dropping a frame. To apply the results safely, you don't need string-based call_deferred callbacks or method sprawl. Instead, Godot.on_main_thread accepts a type-safe closure, buffering it safely into Godot's engine MessageQueue for deterministic execution at the next frame boundary."*
 
 ---
 ### Slide 73: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels (Code Comparison)

@@ -7202,19 +7202,18 @@ end</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Offload heavy procedural generation to native OS thread
+            <pre><code class="language-crystal" style="font-size: 0.82rem !important; line-height: 1.25 !important;"># Offload heavy procedural generation to native OS thread
 worker_thread = Thread.new do
-  # Heavy CPU computation across hardware cores
+  # 1. Heavy multi-core CPU crunching runs off the main thread:
   noise = Godot::FastNoiseLite.new
   mesh_data = generate_marching_cubes(noise)
 
-  # Notify main thread via thread-safe deferred dispatch
-  call_deferred(&quot;on_terrain_ready&quot;, mesh_data)
-end
-
-def on_terrain_ready(data : MeshData) : Void
-  # Dispatched safely on Godot main thread
-  update_surface_mesh(data)
+  # 2. Type-safe dispatch directly to Godot&#39;s Main Thread:
+  # No string callback names, no single-use handler method sprawl!
+  Godot.on_main_thread do
+    update_surface_mesh(mesh_data)
+    @terrain_mesh.visible = true
+  end
 end</code></pre>
           </div>
           </div>
@@ -7224,10 +7223,10 @@ end</code></pre>
               <span>OS Thread Invariants</span>
             </div>
             <ul class="card-list">
-              <li><strong>True Hardware Parallelism:</strong> <code>Thread.new</code> executes on dedicated OS threads across CPU cores.</li>
-              <li><strong>SceneTree Safety Invariant:</strong> NEVER call <code>add_child</code>, <code>remove_child</code>, or <code>queue_free</code> from an OS thread.</li>
-              <li><strong>Cross-Thread Dispatch via call_deferred:</strong> Push completed results back to the main thread via Godot's thread-safe MessageQueue.</li>
-              <li><strong>Thread Sleep Rules:</strong> Use <code>Crystal::System::Thread.sleep</code> for true OS thread sleeps.</li>
+              <li><strong>True Hardware Parallelism:</strong> <code>Thread.new</code> executes on dedicated OS threads across hardware CPU cores.</li>
+              <li><strong>SceneTree Safety Invariant:</strong> NEVER call <code>add_child</code> or mutate live nodes directly from background threads.</li>
+              <li><strong>Type-Safe Dispatch (<code>Godot.on_main_thread</code>):</strong> Buffers typed closures directly into Godot's MessageQueue—eliminating stringly <code>call_deferred</code>.</li>
+              <li><strong>Zero-Overhead on Main:</strong> If already on the rendering thread, the closure executes immediately without queueing or latency.</li>
             </ul>
           </div>
           </div>
@@ -7238,7 +7237,8 @@ end</code></pre>
           <span>Slide 72 / 154</span>
         </div>
         <aside class="notes">
-          When your game requires heavy procedural generation, pathfinding, or physics computation, cooperative fibers aren't enough—you need true hardware parallelism. In Lapis, you can spawn OS background threads using Thread.new. Background threads crunch data across all available CPU cores without ever dropping a frame, and send results back via call_deferred.
+          When your game requires heavy procedural generation, pathfinding, or physics computation, cooperative fibers aren't enough—you need true hardware parallelism. In Lapis, you can spawn OS background threads using Thread.new. Background threads crunch data across all available CPU cores without ever dropping a frame.
+          To apply the results safely, you don't need string-based call_deferred callbacks or method sprawl. Instead, Godot.on_main_thread accepts a type-safe closure, buffering it safely into Godot's engine MessageQueue for deterministic execution at the next frame boundary.
         </aside>
       </section>
 
