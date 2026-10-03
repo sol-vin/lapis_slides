@@ -3359,7 +3359,7 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Sol.vin Theme Palette**: `cross_cube_360` (CrossCube 360) [BG: `#e4e8ec` | Window: `#ffffff` | Text: `#1e242b` | Accent: `#7fba00`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks
-- **Subtitle**: Web/WASM Exclusion and AssemblyLoadContext Leaks vs LLVM Native Portability
+- **Subtitle**: AssemblyLoadContext Zombie Leaks & Runtime Bloat vs Native LLVM Portability
 - **C# Code Example (`:circle-xmark: Godot C#: Platform Lockout & Zombie Assemblies`)**:
   ```csharp
   using Godot;
@@ -3367,18 +3367,16 @@ This document outlines each slide's exact theme palette, architectural category,
   
   public partial class AudioManager : Node
   {
-      // Static events prevent AssemblyLoadContext from unloading
+      // Static event retains AssemblyLoadContext in RAM
       public static event Action? OnSoundEffectPlayed;
   
       public override void _Ready()
       {
-          // Unreleased listener pins assembly in RAM as a 'zombie' ALC
+          // Unreleased listener pins assembly as a 'zombie' ALC
           OnSoundEffectPlayed += HandleSound;
       }
   
       private void HandleSound() => GD.Print("Playing SFX");
-  
-      // Pitfalls: No Web/WASM export in Godot 4; requires 60MB+ .NET runtime
   }
   ```
 - **Crystal Code Example (`:sparkles: Crystal: LLVM Native Portability & Clean Hot-Reload`)**:
@@ -3390,8 +3388,6 @@ This document outlines each slide's exact theme palette, architectural category,
     def play_sfx(sound_name : String) : Nil
       emit(sound_effect_played)
     end
-  
-    # Direct LLVM AOT: Web/WASM export ready & clean OS DLL hot-reload (4-8MB)
   end
   ```
 - **Presenter Script**:
@@ -3403,20 +3399,20 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Sol.vin Theme Palette**: `cross_cube_360` (CrossCube 360) [BG: `#e4e8ec` | Window: `#ffffff` | Text: `#1e242b` | Accent: `#7fba00`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks
-- **Subtitle**: Web/WASM Exclusion and AssemblyLoadContext Leaks vs LLVM Native Portability
+- **Subtitle**: AssemblyLoadContext Zombie Leaks & Runtime Bloat vs Native LLVM Portability
 - **C# Friction & Anti-Patterns**:
-  - Web/WASM Export Lockout: Godot 4 C# cannot export games to the Web (HTML5/WASM) without unsupported experimental workarounds, locking developers out of game jams and browser gaming.
-  - AssemblyLoadContext Zombie Leaks: Hot-reloading scripts in the Godot editor relies on .NET ALC; lingering static events or threads pin assemblies in RAM forever, forcing constant editor restarts.
-  - Massive Runtime Payload: Distributing a Godot C# game requires packaging 60MB+ of .NET CLR virtual machine binaries, managed DLLs, and JIT/GC support libraries.
-  - Double-Build Toolchain Tax: Running a C# project requires installing a matching .NET SDK, maintaining .csproj/.sln XML files, and waiting for MSBuild on every play press.
+  - AssemblyLoadContext Zombie Leaks: Hot-reloading in the editor relies on .NET ALC; lingering static events or threads pin assemblies in RAM, breaking debugger breakpoints and causing editor instability.
+  - Platform Overhead & Lockout: Godot 4 C# lacks seamless out-of-the-box Web export and incurs heavy runtime overhead on mobile, requiring complex Ahead-Of-Time (AOT) toolchain workarounds.
+  - Massive Runtime Payload: Shipping a C# game requires packaging 60MB+ of .NET CLR virtual machine binaries, managed assemblies, and JIT/GC runtime dependencies.
+  - Double-Build Toolchain Tax: Developing in C# requires managing external .NET SDKs, .csproj XML configurations, and waiting for MSBuild on every editor play press.
 - **Crystal Zen Advantages**:
-  - Full WebAssembly & Native Target Support: Crystal compiles directly via LLVM to Windows, Linux, macOS, ARM64, and WebAssembly (wasm32) with zero VM overhead.
-  - Deterministic Dynamic Library Unloading: GDExtension shared libraries (.dll / .so) unload cleanly via standard OS primitives (FreeLibrary / dlclose) with zero zombie leaks.
-  - Ultra-Lean Distribution Footprint: Crystal binaries package as lean 4-8MB native shared libraries with zero external runtime or virtual machine dependencies.
-  - Single-Toolchain Simplicity: The Lapis CLI and Crystal compiler handle dependencies, builds, testing, and hot-reload without MSBuild XML soup or SDK version churn.
-- **Key Takeaway**: Crystal delivers true cross-platform native compilation—including WebAssembly—with clean OS hot-reloading and zero runtime baggage.
+  - LLVM Native Platform Targets: Compiles directly to bare-metal native machine code for Windows, Linux, macOS, and ARM64 via LLVM—with WebAssembly (WASM) actively in progress (WIP).
+  - Clean Dynamic Library Unloading: GDExtension shared libraries (.dll / .so / .dylib) reload cleanly at the OS level (FreeLibrary / dlclose) without ALC zombie leaks.
+  - Ultra-Lean Distribution Footprint: Ships as lean 4–8MB native shared libraries with zero external virtual machine or runtime dependencies.
+  - Unified Single-CLI Toolchain: The lapis CLI manages compilation, bindings, testing, and hot-reload in one integrated command without MSBuild or SDK churn.
+- **Key Takeaway**: Crystal provides lean, native LLVM compilation and clean dynamic reloading across platforms—with zero VM bloat and WebAssembly support actively in progress.
 - **Presenter Script**:
-  > *"A shocking truth about Godot 4 C# is that it completely breaks Web/HTML5 export. Because of .NET runtime limitations, Godot 4 cannot reliably export C# to WebAssembly out of the box, locking developers out of game jams, itch.io web previews, and browser distribution. Furthermore, in the editor, C# hot-reload relies on .NET AssemblyLoadContexts. A single forgotten static event subscription or background task prevents the ALC from unloading, leaving 'zombie' assemblies in RAM until breakpoints fail and the editor crashes. In Lapis, Crystal compiles directly via LLVM to native platforms and WASM. There is no 60MB CLR to distribute, and GDExtension libraries reload cleanly at the OS level without ghost memory leaks."*
+  > *"Platform distribution and developer workflow reveal major architectural differences between C# and Lapis. In Godot 4 C#, in-editor hot-reloading relies on .NET AssemblyLoadContexts. A single lingering static event subscription or background thread prevents an assembly from unloading, leaving 'zombie' assemblies in RAM until breakpoints fail and the editor becomes unstable. Furthermore, distributing a C# game requires bundling over 60MB of .NET CLR virtual machine binaries, managed DLLs, and runtime support. Web export remains a notorious sticking point for Godot 4 C#, requiring cumbersome workarounds. In Lapis, Crystal compiles directly to native machine code via LLVM for desktop and mobile platforms with clean OS-level shared library unloading (FreeLibrary/dlclose). The entire compiled extension is only 4 to 8 MB with zero VM payload. While WASM support for Crystal is currently a work in progress on our roadmap, Lapis already delivers seamless, native performance across major platforms without MSBuild ceremony or GC runtime baggage."*
 
 ---
 ### Slide 90: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups (Code Comparison)
