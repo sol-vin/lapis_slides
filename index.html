@@ -5988,7 +5988,7 @@ end</code></pre>
           <div>
             <span class="badge-pill cyan">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
             <h2 class="slide-title">Value Types: GC Thrashing vs. Stack Structs</h2>
-            <p class="slide-subtitle">RefCounted Objects vs. Cache-Friendly Stack Structs</p>
+            <p class="slide-subtitle">RefCounted Heap Pointers vs. Contiguous Cache-Friendly Structs</p>
           </div>
           <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">CODE VIEW</span>
         </div>
@@ -6001,23 +6001,31 @@ end</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-circle-xmark" viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: Heap RefCounted &amp; Untyped Dictionaries</span>
+              <span class="code-title"><svg class="fa-icon fa-circle-xmark" viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: 10,000 Heap RefCounted Allocations &amp; Pointer Chasing</span>
               <div class="window-controls">
                 <span class="code-lang-tag">GDScript</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># Lightweight gameplay data requires heap allocation via RefCounted
-class_name DamagePacket extends RefCounted:
-    var amount: int
-    var element: int
-    var critical: bool
-    func _init(amt: int, elem: int, crit: bool):
-        amount = amt; element = elem; critical = crit
+            <pre><code class="language-gdscript" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># The GDScript Trap: Every custom data packet is a heap RefCounted
+class_name CombatEvent extends RefCounted:
+    var damage: float; var element: int; var crit: bool
+    func _init(d: float, e: int, c: bool):
+        damage = d; element = e; crit = c
 
-# Or untyped dictionaries with GC churn and no autocomplete:
-var hit_info = {&quot;amount&quot;: 50, &quot;element&quot;: &quot;FIRE&quot;, &quot;crit&quot;: true}
-apply_damage(hit_info[&quot;ammount&quot;]) # TYPO: returns null silently!</code></pre>
+# In a bullet-hell, horde survivor, or particle simulation:
+var events: Array[CombatEvent] = []
+
+func process_combat_batch(enemies: Array[Node3D]) -&gt; void:
+    for e in enemies:
+        # 10,000 separate heap mallocs + atomic refcount updates:
+        events.append(CombatEvent.new(45.0, 1, true))
+
+    # Cache disaster: Array of 10,000 pointers scattered across RAM
+    for evt in events:
+        apply_damage(evt.damage) # 10,000 pointer chases -&gt; L1 misses!
+
+    events.clear() # Mass deallocation triggers GC/allocator stutters!</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane" style="display: flex; flex-direction: column; flex: 1;">
@@ -6028,25 +6036,33 @@ apply_damage(hit_info[&quot;ammount&quot;]) # TYPO: returns null silently!</code
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Stack-Allocated Value Structs</span>
+              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: CPU Register Value Passing &amp; Flat Contiguous Buffers</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal (Lapis)</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Stack-allocated value struct: ZERO heap allocations, flat memory layout!
-struct DamagePacket
-  getter amount : Int32
+            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># Stack-allocated value type: exactly 12 bytes, 0 pointer indirection!
+struct CombatEvent
+  getter damage : Float32
   getter element : ElementType
   getter? critical : Bool
 
-  def initialize(@amount, @element, @critical = false)
-  end
+  def initialize(@damage, @element, @critical = false); end
 end
 
-# Pass by value with full type safety and compiler autocomplete:
-packet = DamagePacket.new(50, ElementType::Fire, critical: true)
-apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
+# 1. Ephemeral event passed via CPU registers/stack — 0 heap bytes!
+def apply_damage(event : CombatEvent) : Void
+  total = event.critical? ? event.damage * 2.0_f32 : event.damage
+  @health -= total # Pure inlined math, 0 pointers, 0 GC tracking
+end
+
+# 2. 10,000 structs inlined into ONE flat 120 KB buffer:
+events = Array(CombatEvent).new(10_000)
+10_000.times { events &lt;&lt; CombatEvent.new(45.0_f32, ElementType::Fire, true) }
+
+# 3. 100% L1 cache line saturation &amp; SIMD auto-vectorization:
+events.each { |evt| apply_damage(evt) } # Linear memory sweep</code></pre>
           </div>
           </div>
         </div>
@@ -6077,7 +6093,7 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
           <div>
             <span class="badge-pill cyan">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
             <h2 class="slide-title">Value Types: GC Thrashing vs. Stack Structs</h2>
-            <p class="slide-subtitle">RefCounted Objects vs. Cache-Friendly Stack Structs</p>
+            <p class="slide-subtitle">RefCounted Heap Pointers vs. Contiguous Cache-Friendly Structs</p>
           </div>
           <span class="badge-pill" style="font-size: 0.72rem; margin: 0;">ANALYSIS &amp; CRITIQUE</span>
         </div>
@@ -6090,23 +6106,31 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-circle-xmark" viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: Heap RefCounted &amp; Untyped Dictionaries</span>
+              <span class="code-title"><svg class="fa-icon fa-circle-xmark" viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: 10,000 Heap RefCounted Allocations &amp; Pointer Chasing</span>
               <div class="window-controls">
                 <span class="code-lang-tag">GDScript</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-gdscript"># Lightweight gameplay data requires heap allocation via RefCounted
-class_name DamagePacket extends RefCounted:
-    var amount: int
-    var element: int
-    var critical: bool
-    func _init(amt: int, elem: int, crit: bool):
-        amount = amt; element = elem; critical = crit
+            <pre><code class="language-gdscript" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># The GDScript Trap: Every custom data packet is a heap RefCounted
+class_name CombatEvent extends RefCounted:
+    var damage: float; var element: int; var crit: bool
+    func _init(d: float, e: int, c: bool):
+        damage = d; element = e; crit = c
 
-# Or untyped dictionaries with GC churn and no autocomplete:
-var hit_info = {&quot;amount&quot;: 50, &quot;element&quot;: &quot;FIRE&quot;, &quot;crit&quot;: true}
-apply_damage(hit_info[&quot;ammount&quot;]) # TYPO: returns null silently!</code></pre>
+# In a bullet-hell, horde survivor, or particle simulation:
+var events: Array[CombatEvent] = []
+
+func process_combat_batch(enemies: Array[Node3D]) -&gt; void:
+    for e in enemies:
+        # 10,000 separate heap mallocs + atomic refcount updates:
+        events.append(CombatEvent.new(45.0, 1, true))
+
+    # Cache disaster: Array of 10,000 pointers scattered across RAM
+    for evt in events:
+        apply_damage(evt.damage) # 10,000 pointer chases -&gt; L1 misses!
+
+    events.clear() # Mass deallocation triggers GC/allocator stutters!</code></pre>
           </div>
           </div>
           <div class="col comparison-pane solution-pane dimmed-code" style="display: flex; flex-direction: column; flex: 1;">
@@ -6117,25 +6141,33 @@ apply_damage(hit_info[&quot;ammount&quot;]) # TYPO: returns null silently!</code
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Stack-Allocated Value Structs</span>
+              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: CPU Register Value Passing &amp; Flat Contiguous Buffers</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal (Lapis)</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal"># Stack-allocated value struct: ZERO heap allocations, flat memory layout!
-struct DamagePacket
-  getter amount : Int32
+            <pre><code class="language-crystal" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># Stack-allocated value type: exactly 12 bytes, 0 pointer indirection!
+struct CombatEvent
+  getter damage : Float32
   getter element : ElementType
   getter? critical : Bool
 
-  def initialize(@amount, @element, @critical = false)
-  end
+  def initialize(@damage, @element, @critical = false); end
 end
 
-# Pass by value with full type safety and compiler autocomplete:
-packet = DamagePacket.new(50, ElementType::Fire, critical: true)
-apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
+# 1. Ephemeral event passed via CPU registers/stack — 0 heap bytes!
+def apply_damage(event : CombatEvent) : Void
+  total = event.critical? ? event.damage * 2.0_f32 : event.damage
+  @health -= total # Pure inlined math, 0 pointers, 0 GC tracking
+end
+
+# 2. 10,000 structs inlined into ONE flat 120 KB buffer:
+events = Array(CombatEvent).new(10_000)
+10_000.times { events &lt;&lt; CombatEvent.new(45.0_f32, ElementType::Fire, true) }
+
+# 3. 100% L1 cache line saturation &amp; SIMD auto-vectorization:
+events.each { |evt| apply_damage(evt) } # Linear memory sweep</code></pre>
           </div>
           </div>
           <div class="ide-notes-overlay">
@@ -6147,9 +6179,9 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
                 <span class="badge-pill antipattern" style="font-size: 0.68rem; margin: 0;">ANTIPATTERN</span>
               </div>
               <ul class="card-list">
-                <li><strong>Heap Allocations for Tiny Data:</strong> Every data packet extends <code>RefCounted</code>, triggering individual heap allocations.</li>
-                <li><strong>Untyped Dictionaries:</strong> High memory overhead, zero editor autocomplete, and silent failure on key typos.</li>
-                <li><strong>Heavy GC Churn:</strong> Thousands of combat packets in action games cause noticeable garbage collection hitches.</li>
+                <li><strong>Heap Thrashing for Ephemeral Data:</strong> 10,000 events require 10,000 separate <code>malloc</code> calls and atomic refcount modifications.</li>
+                <li><strong>Pointer Indirection & Cache Misses:</strong> <code>Array[CombatEvent]</code> stores 64-bit pointers scattered across RAM, thrashing CPU L1/L2 cache lines.</li>
+                <li><strong>Deallocation Frame Stutters:</strong> Destroying thousands of <code>RefCounted</code> instances per frame spikes frame times and causes GC micro-freezes.</li>
               </ul>
             </div>
             <div class="overlay-card solution">
@@ -6160,16 +6192,16 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
                 <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
-                <li><strong>Zero Heap Allocations:</strong> Stack-allocated <code>struct</code> has zero allocation cost and zero GC overhead.</li>
-                <li><strong>Cache-Line Friendly:</strong> Stored contiguously in CPU cache lines, maximizing hardware memory bandwidth.</li>
-                <li><strong>Immutable Value Semantics:</strong> Passing structs by value prevents unintended mutations across disparate game systems.</li>
+                <li><strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> by value copies it directly in CPU registers or on the stack with 0 heap allocations and 0 GC tracking.</li>
+                <li><strong>Contiguous Cache Line Saturation:</strong> <code>Array(CombatEvent)</code> embeds raw structs inline. 10,000 items fit in a single 120 KB buffer with zero pointer indirection.</li>
+                <li><strong>Hardware SIMD Vectorization:</strong> Flat contiguous struct memory allows LLVM to vectorize loops and saturate memory bandwidth at bare-metal speed.</li>
               </ul>
             </div>
           </div>
         </div>
         <div class="takeaway-banner" style="margin-top: 0.6rem; padding: 0.45rem 0.9rem; background: var(--bg-window); border: 1.5px solid var(--accent-color); border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem;">
-          <span class="badge-pill" style="margin-bottom: 0; padding: 0.15rem 0.55rem; font-size: 0.72rem; border-color: var(--accent-color); color: var(--accent-color);">SYSTEMS SPEED • OBJECT CLEANLINESS</span>
-          <span>Stack structs provide the memory performance of C with the clean object-oriented syntax of Ruby.</span>
+          <span class="badge-pill" style="margin-bottom: 0; padding: 0.15rem 0.55rem; font-size: 0.72rem; border-color: var(--accent-color); color: var(--accent-color);">SYSTEMS SPEED • CACHE LOCALITY</span>
+          <span>Stack-allocated structs eliminate thousands of heap allocations per frame, delivering bare-metal C cache locality with elegant object syntax.</span>
         </div>
 
         <div class="slide-footer">
@@ -6178,7 +6210,8 @@ apply_damage(packet) # packet.typo -&gt; COMPILER ERROR!</code></pre>
           <span>Slide 62 / 154</span>
         </div>
         <aside class="notes">
-          In fast-paced games—bullet hells, ARPGs, particle systems—allocating tiny objects on the heap is a death sentence for performance. In GDScript, custom data structures must extend RefCounted or use untyped dictionaries. Both create heap pressure and GC churn. In Crystal, you can declare value structs: stack-allocated, contiguous in memory, and passed by value. You get zero heap allocations, zero GC pauses, and complete compile-time type safety.
+          In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types must extend RefCounted. When you spawn 10,000 projectiles or process 10,000 combat events, Godot must perform 10,000 individual heap allocations and atomic refcount updates. An array of these objects is just an array of pointer addresses scattered randomly across memory, causing massive L1 cache miss penalties on every frame. When they die, mass deallocation causes micro-stutters.
+          In Crystal, structs are first-class value types. Passing a CombatEvent to a method passes it directly in CPU registers or on the stack with zero heap allocations. Even better, an Array(CombatEvent) stores the 12-byte structs contiguously in a single flat memory block. 10,000 events take just 120 KB of contiguous RAM, maximizing CPU cache line efficiency and allowing LLVM to auto-vectorize loops with zero GC overhead.
         </aside>
       </section>
 
