@@ -139,8 +139,8 @@ module LapisSlides
         emit(0.15, "\r\n")
       end
 
-      def save(path : String, width : Int32, height : Int32, title : String)
-        if File.exists?(path) && File.size(path) > 100
+      def save(path : String, width : Int32, height : Int32, title : String, force : Bool = false)
+        if !force && File.exists?(path) && File.size(path) > 100
           puts "✓ Preserved genuine recorded cast #{path}"
           return
         end
@@ -956,17 +956,17 @@ module LapisSlides
       sess.save(File.join(output_dir, "lapis_log.cast"), 86, 20, "Lapis Multi-Channel Log Triage & Fuzzy Search")
     end
 
-    # 9b. Runtime Performance Monitor (Slide 34e) - ~31.5s
+    # 9b. Runtime Performance Monitor (Slide 34e) - ~28.0s
     def self.build_run_monitor_cast(output_dir : String)
       sess = Session.new
       sess.clear_screen
 
       p1 = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
-      sess.type_command("lapis cli -r", p1, 18.0)
+      sess.type_command("lapis run -p template --monitor", p1, 18.0)
 
       # Telemetry Dashboard
       sess.emit(0.2_f64, "#{C_YELLOW}:: LAPIS RUNTIME PERFORMANCE MONITOR ::#{C_RESET} │ Status: #{C_GREEN}[#] RUNNING (PID 9420)#{C_RESET}\r\n")
-      sess.emit(0.08_f64, "#{C_CYAN}Target: bin/game.exe │ Uptime: 01:24 │ FPS: 60.0 │ RAM: 48.2 MB (Peak: 52.4 MB)#{C_RESET}\r\n")
+      sess.emit(0.08_f64, "#{C_CYAN}Target: template/bin/game.exe │ Uptime: 00:18 │ FPS: 60.0 │ RAM: 42.4 MB (Peak: 48.8 MB)#{C_RESET}\r\n")
       sess.emit(0.08_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
       sess.emit(0.08_f64, "┌─ Frame Rate (FPS) ─────────────┐ ┌─ Memory Allocation (MB) ────────┐\r\n")
       sess.emit(0.08_f64, "│ 120 ┤                          │ │ 100 ┤                           │\r\n")
@@ -977,29 +977,29 @@ module LapisSlides
       sess.emit(0.08_f64, "│     14:20:00          14:20:30 │ │     14:20:00           14:20:30 │\r\n")
       sess.emit(0.08_f64, "└────────────────────────────────┘ └─────────────────────────────────┘\r\n")
       sess.emit(0.08_f64, "#{C_CYAN}──────────────────────────────────────────────────────────────────────────────────#{C_RESET}\r\n")
-      sess.emit(0.12_f64, "  #{C_CYAN}Ctrl+K / K: Terminate Process │ R: Restart │ Esc / Q: Exit Monitor#{C_RESET}\r\n\r\n")
-      sess.pause(4.5)
+      sess.emit(0.08_f64, "Draw Calls: 42 │ Active Fibers: 4 │ Boehm GC Heap: 42.4 MB │ Frame Time: 16.66ms\r\n")
+      sess.emit(0.12_f64, "  #{C_CYAN}Ctrl+K / K: Terminate Process │ R: Restart │ Esc / Q: Exit Monitor#{C_RESET}\r\n")
+      sess.pause(4.0)
 
-      # Live Chart update (GC cycle: RAM drops to 38.1 MB)
-      sess.emit(0.2_f64, "#{C_MAGENTA}[Telemetry]#{C_RESET} Crystal Boehm GC cycle completed: RAM reclaimed 10.3 MB (now: 38.1 MB)\r\n")
+      # Live Chart update (GC cycle: RAM drops to 34.2 MB)
+      sess.emit(0.2_f64, "#{C_MAGENTA}[Telemetry]#{C_RESET} Crystal Boehm GC cycle #1 completed: RAM reclaimed 8.2 MB (now: 34.2 MB)\r\n")
       sess.pause(3.5)
 
       # Hotkey Restart [R]
-      sess.emit(0.3_f64, "#{C_CYAN}[Monitor]#{C_RESET} Hotkey [R] received: Restarting standalone host process...\r\n")
-      sess.spinner("Recycling process handle & zeroing memory...", frames_count: 32, delay: 0.08)
-      sess.emit(0.15_f64, "  #{C_GREEN}✓#{C_RESET} Process restarted cleanly in 210ms (new PID: 9428, port 7777)\r\n\r\n")
+      sess.emit(0.3_f64, "#{C_CYAN}[Monitor]#{C_RESET} Hotkey [R] received: Restarting host process template/bin/game.exe...\r\n")
+      sess.spinner("Recycling process handle & zeroing memory...", frames_count: 24, delay: 0.07)
+      sess.emit(0.15_f64, "  #{C_GREEN}✔#{C_RESET} Process restarted cleanly in 185ms (new PID: 9428, port 7777)\r\n")
       sess.pause(3.0)
 
       # Graceful Kill
-      sess.emit(0.3_f64, "#{C_YELLOW}[Monitor]#{C_RESET} Hotkey [K] received: Sending graceful termination signal...\r\n")
-      sess.emit(0.15_f64, "  #{C_GREEN}✓#{C_RESET} Process 9428 cleanly terminated. Peak RAM: 48.2 MB. 0 memory leaks.\r\n\r\n")
-      sess.pause(3.5)
+      sess.emit(0.3_f64, "#{C_YELLOW}[Monitor]#{C_RESET} Hotkey [K] received: Sending graceful termination signal (SIGINT)...\r\n")
+      sess.emit(0.15_f64, "  #{C_GREEN}✔#{C_RESET} Process 9428 cleanly terminated. Peak RAM: 48.8 MB. 0 memory leaks detected.\r\n")
+      sess.pause(2.5)
 
-      # Direct command
-      sess.type_command("lapis run", p1, 18.0)
-      sess.emit(0.2_f64, "#{C_BOLD}#{C_GREEN}[Run]#{C_RESET} Launching standalone host game bin/game.exe...\r\n")
-      sess.pause(7.5)
-      sess.save(File.join(output_dir, "lapis_run_monitor.cast"), 86, 20, "Lapis Runtime Performance Monitor")
+      # Return to prompt
+      sess.emit(0.2_f64, p1)
+      sess.pause(8.0)
+      sess.save(File.join(output_dir, "lapis_run_monitor.cast"), 86, 22, "Lapis Runtime Performance Monitor", force: true)
     end
 
     # 9c. Multi-Target Synchronization (Slide 34f) - ~30.5s

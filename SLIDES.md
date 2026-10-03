@@ -4597,11 +4597,11 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Category Badge**: `RUNTIME TELEMETRY • LAPIS CLI`
 - **Title**: CLI: Game Runtime Performance Monitor
 - **Subtitle**: Live Rolling FPS/RAM Telemetry Graphs & Graceful Process Supervision
-- **Terminal Replay (`Terminal — lapis cli -r & lapis run`)**:
+- **Terminal Replay (`Terminal — lapis run -p template --monitor`)**:
   ```bash
-  $ lapis cli -r
+  $ lapis run -p template --monitor
   :: LAPIS RUNTIME PERFORMANCE MONITOR :: │ Status: [#] RUNNING (PID 9420)
-  Target: bin/game.exe │ Uptime: 01:24 │ FPS: 60.0 │ RAM: 48.2 MB (Peak: 52.4 MB)
+  Target: template/bin/game.exe │ Uptime: 00:18 │ FPS: 60.0 │ RAM: 42.4 MB (Peak: 48.8 MB)
   ──────────────────────────────────────────────────────────────────────────
   ┌─ Frame Rate (FPS) ─────────────┐ ┌─ Memory Allocation (MB) ────────┐
   │ 120 ┤                          │ │ 100 ┤                           │
@@ -4612,15 +4612,16 @@ This document outlines each slide's exact theme palette, architectural category,
   │     14:20:00          14:20:30 │ │     14:20:00           14:20:30 │
   └────────────────────────────────┘ └─────────────────────────────────┘
   ──────────────────────────────────────────────────────────────────────────
+  Draw Calls: 42 │ Active Fibers: 4 │ Boehm GC Heap: 42.4 MB │ Frame Time: 16.66ms
   Ctrl+K / K: Terminate Process │ R: Restart │ Esc / Q: Exit Monitor
   ```
 - **Real-Time Gameplay Telemetry**:
-  - Dual Rolling Line Graphs (lapis cli -r): Real-time ASCII graphs plot frame rate (FPS) and heap memory allocation (MB) side-by-side with 500ms sampling granularity.
-  - Engine Process Supervision: Continuously monitors host binary execution, detecting PID changes, unhandled exceptions, and clean exit codes.
+  - Dual Rolling Line Graphs (lapis run -p template --monitor): Real-time ASCII graphs plot frame rate (FPS) and heap memory allocation (MB) side-by-side with 500ms sampling granularity.
+  - Template & Multi-Target Supervision: Targets projects seamlessly via -p template, continuously monitoring host binary execution, PID changes, and exit codes.
   - Graceful Process Termination: Pressing Ctrl+K issues clean OS termination signals, allowing Godot scenes and native C++ resources to unregister safely.
   - Sub-Millisecond Overhead: Telemetry collection runs in an isolated non-blocking background fiber, ensuring zero impact on gameplay physics or render frame pacing.
 - **Presenter Script**:
-  > *"Profiling runtime performance shouldn't require attaching bulky external profilers that alter frame timing. The Lapis Runtime Performance Monitor (lapis cli -r) launches the game executable and displays real-time rolling graphs of frame rate stability and heap memory allocation right in the terminal. If performance drops or memory balloons, developers can spot regressions instantly and terminate runaway processes gracefully with a single hotkey."*
+  > *"Profiling runtime performance shouldn't require attaching bulky external profilers that alter frame timing. The Lapis Runtime Performance Monitor (`lapis run -p template --monitor`) launches the game executable directly from the template folder and displays real-time rolling graphs of frame rate stability and heap memory allocation right in the terminal. If performance drops or memory balloons, developers can spot regressions instantly, restart with [R], or terminate runaway processes gracefully with [K]."*
 
 ---
 ### Slide 126: CLI: Multi-Target Workspace Synchronization

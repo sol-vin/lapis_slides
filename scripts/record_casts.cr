@@ -610,7 +610,7 @@ class RunMonitorCast < BaseCast
   def rows; 22; end
 
   def record(cast : AsciiCast)
-    monitor = Lapis::TUI::RunMonitor.new
+    monitor = Lapis::TUI::RunMonitor.new("sandbox/void_runner/template")
     buf = Opal::UI::Buffer.new(cols, rows)
 
     # Frame 1
