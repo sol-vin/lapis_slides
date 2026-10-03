@@ -5369,21 +5369,22 @@ end # Pure integer comparison, 0 heap bytes, 0 GC churn!</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Flow-Sensitive Compile-Time Checks</span>
+              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Flow-Sensitive Compile-Time Checks &amp; Subscripts</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal (Lapis)</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
             <pre><code class="language-crystal">def attack_target(target : Godot::Node) : Void
-  # weapon is Weapon? (Union type: Weapon | Nil). Compiler forces checking!
-  if weapon = target.get_node_as?(Weapon, &quot;EquippedWeapon&quot;)
-    weapon.slash(45) # Compiler narrows type to Weapon!
+  # target[..., T]? returns Weapon? (Weapon | Nil) — compiler enforces handling:
+  if weapon = target[&quot;EquippedWeapon&quot;, Weapon]?
+    weapon.slash(45) # Flow-sensitive typing narrows Weapon? to Weapon!
   end
 
   # Or concise safe navigation with .try:
-  target.get_node_as?(Weapon, &quot;EquippedWeapon&quot;).try(&amp;.slash(45))
+  target[&quot;EquippedWeapon&quot;, Weapon]?.try(&amp;.slash(45))
 
+  # Strict target[&quot;...&quot;, T] raises immediately if missing — zero silent bugs!
   # Monotonic 64-bit ID check (#check_alive!) prevents dead-pointer segfaults
 end</code></pre>
           </div>
@@ -5455,21 +5456,22 @@ end</code></pre>
                 <span class="terminal-dot dot-2" title="Minimize"></span>
                 <span class="terminal-dot dot-3" title="Maximize"></span>
               </div>
-              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Flow-Sensitive Compile-Time Checks</span>
+              <span class="code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Flow-Sensitive Compile-Time Checks &amp; Subscripts</span>
               <div class="window-controls">
                 <span class="code-lang-tag">Crystal (Lapis)</span>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
             <pre><code class="language-crystal">def attack_target(target : Godot::Node) : Void
-  # weapon is Weapon? (Union type: Weapon | Nil). Compiler forces checking!
-  if weapon = target.get_node_as?(Weapon, &quot;EquippedWeapon&quot;)
-    weapon.slash(45) # Compiler narrows type to Weapon!
+  # target[..., T]? returns Weapon? (Weapon | Nil) — compiler enforces handling:
+  if weapon = target[&quot;EquippedWeapon&quot;, Weapon]?
+    weapon.slash(45) # Flow-sensitive typing narrows Weapon? to Weapon!
   end
 
   # Or concise safe navigation with .try:
-  target.get_node_as?(Weapon, &quot;EquippedWeapon&quot;).try(&amp;.slash(45))
+  target[&quot;EquippedWeapon&quot;, Weapon]?.try(&amp;.slash(45))
 
+  # Strict target[&quot;...&quot;, T] raises immediately if missing — zero silent bugs!
   # Monotonic 64-bit ID check (#check_alive!) prevents dead-pointer segfaults
 end</code></pre>
           </div>
@@ -5496,8 +5498,9 @@ end</code></pre>
                 <span class="badge-pill solution" style="font-size: 0.68rem; margin: 0;">SOLUTION</span>
               </div>
               <ul class="card-list">
-                <li><strong>Non-Nil by Default:</strong> <code>Weapon</code> cannot be nil; only <code>Weapon?</code> explicitly allows nil.</li>
-                <li><strong>Flow-Sensitive Typing:</strong> Compiler automatically narrows <code>Weapon?</code> to <code>Weapon</code> inside <code>if weapon = ...</code>.</li>
+                <li><strong>Non-Nil by Default:</strong> <code>Weapon</code> cannot be nil; only <code>Weapon?</code> explicitly permits nil.</li>
+                <li><strong>Ergonomic Subscripts (<code>[]?</code>):</strong> <code>target["path", T]?</code> returns typed <code>T?</code>, forcing compile-time nil branching with zero manual casting.</li>
+                <li><strong>Flow-Sensitive Narrowing:</strong> Compiler automatically narrows <code>Weapon?</code> to non-nil <code>Weapon</code> inside <code>if weapon = ...</code>.</li>
                 <li><strong>Automatic ObjectDB Verification:</strong> Lapis calls <code>#check_alive!</code> before every dispatch, guaranteeing memory safety.</li>
               </ul>
             </div>

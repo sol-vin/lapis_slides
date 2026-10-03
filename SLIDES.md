@@ -2209,17 +2209,18 @@ This document outlines each slide's exact theme palette, architectural category,
       if is_instance_valid(weapon):
           weapon.slash(45)
   ```
-- **Crystal Code Example (`:sparkles: Crystal: Flow-Sensitive Compile-Time Checks`)**:
+- **Crystal Code Example (`:sparkles: Crystal: Flow-Sensitive Compile-Time Checks & Subscripts`)**:
   ```crystal
   def attack_target(target : Godot::Node) : Void
-    # weapon is Weapon? (Union type: Weapon | Nil). Compiler forces checking!
-    if weapon = target.get_node_as?(Weapon, "EquippedWeapon")
-      weapon.slash(45) # Compiler narrows type to Weapon!
+    # target[..., T]? returns Weapon? (Weapon | Nil) — compiler enforces handling:
+    if weapon = target["EquippedWeapon", Weapon]?
+      weapon.slash(45) # Flow-sensitive typing narrows Weapon? to Weapon!
     end
   
     # Or concise safe navigation with .try:
-    target.get_node_as?(Weapon, "EquippedWeapon").try(&.slash(45))
+    target["EquippedWeapon", Weapon]?.try(&.slash(45))
   
+    # Strict target["...", T] raises immediately if missing — zero silent bugs!
     # Monotonic 64-bit ID check (#check_alive!) prevents dead-pointer segfaults
   end
   ```
@@ -2238,8 +2239,9 @@ This document outlines each slide's exact theme palette, architectural category,
   - Duck-Typing Roulette: Errors only surface when players execute specific actions in-game.
   - Dead Pointer Segfaults: Freed C++ nodes leave dangling pointers, risking fatal engine crashes.
 - **Crystal Zen Advantages**:
-  - Non-Nil by Default: Weapon cannot be nil; only Weapon? explicitly allows nil.
-  - Flow-Sensitive Typing: Compiler automatically narrows Weapon? to Weapon inside if weapon = ....
+  - Non-Nil by Default: Weapon cannot be nil; only Weapon? explicitly permits nil.
+  - Ergonomic Subscripts ([]?): target["path", T]? returns typed T?, forcing compile-time nil branching with zero manual casting.
+  - Flow-Sensitive Narrowing: Compiler automatically narrows Weapon? to non-nil Weapon inside if weapon = ....
   - Automatic ObjectDB Verification: Lapis calls #check_alive! before every dispatch, guaranteeing memory safety.
 - **Key Takeaway**: Crystal's static type system mathematically proves nil safety at compile time, eliminating null dereferences before launching.
 - **Presenter Script**:
