@@ -71,6 +71,7 @@ slides:
 - 13_antipattern_pattern_matching
 - 14_antipattern_macros
 - 15_antipattern_structs
+- 27b_interop_type_firewall
 - 16_antipattern_dead_pointers
 - 17_antipattern_async_signals
 - 17b_timer_dsl_and_handles
@@ -83,8 +84,6 @@ slides:
 - 26b_multiplayer_rpc
 - 26f_testing_multiplayer
 - 26c_concurrency_patterns
-- 27_interop_gdscript_calls_crystal
-- 27b_interop_type_firewall
 - 27c_csharp_bloat_vs_crystal_zen
 - 27d_csharp_nullability_and_leaks
 - 27e_csharp_runtime_tax_and_gc
@@ -93,6 +92,7 @@ slides:
 - 27h_csharp_platform_export_and_hot_reload
 - 27i_csharp_concurrency_and_symbols
 - 27j_csharp_unions_and_pattern_matching
+- 27_interop_gdscript_calls_crystal
 - 28_interop_crystal_calls_gdscript_dynamic
 - 29_interop_crystal_calls_gdscript_typed
 - 33_editor_integration

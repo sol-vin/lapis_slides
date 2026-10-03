@@ -2414,7 +2414,64 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In fast-paced games—bullet hells, ARPGs, particle systems—allocating tiny objects on the heap is a death sentence for performance. In GDScript, custom data structures must extend RefCounted or use untyped dictionaries. Both create heap pressure and GC churn. In Crystal, you can declare value structs: stack-allocated, contiguous in memory, and passed by value. You get zero heap allocations, zero GC pauses, and complete compile-time type safety."*
 
 ---
-### Slide 63: Memory Safety: Dangling Pointers vs. Protection (Code Comparison)
+### Slide 63: Type Firewall: Crystal Enforces Strict Safety on GDScript (Code Comparison)
+- **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
+- **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CODE VIEW`
+- **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
+- **Subtitle**: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
+- **GDScript Code Example (`:circle-xmark: GDScript: Duck-Typing & Malformed Arguments`)**:
+  ```gdscript
+  # GDScript is dynamic: data from JSON, RPCs, or UI may be untyped
+  func _on_potion_consumed(data: Variant) -> void:
+      # A bug passes a String instead of an Int:
+      player.heal("some bad string")
+  
+      # In standard unverified C++ bindings:
+      # -> Silent memory corruption or bizarre garbage values!
+      # In Lapis:
+      # -> Godot engine boundary immediately intercepts & halts:
+      # "Invalid call. Argument 1 (String) cannot be converted to int."
+  ```
+- **Crystal Code Example (`:sparkles: Crystal: Strongly-Typed ClassDB Registration`)**:
+  ```crystal
+  node Player < CharacterBody3D do
+    # Lapis registers exact parameter type (INT) in ClassDB:
+    def heal(amount : Int32) : Int32
+      @health += amount
+      emit(health_changed, @health)
+      @health
+    end
+  end
+  
+  # THE LAPIS TYPE FIREWALL:
+  # 1. GDExtension validates types before invoking native code
+  # 2. Strict Variant unboxing: TypeCastError on mismatch
+  # 3. Crystal method is NEVER executed with malformed data!
+  ```
+- **Presenter Script**:
+  > *"Examining the code side-by-side: Notice the contrast in structure, verbosity, and safety between the GDScript implementation on the left and the Crystal implementation on the right before we review the specific friction points."*
+
+---
+
+### Slide 64: Type Firewall: Crystal Enforces Strict Safety on GDScript (Analysis & Critique)
+- **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
+- **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CRITIQUE`
+- **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
+- **Subtitle**: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
+- **GDScript Friction & Pitfalls**:
+  - Duck-Typing Pitfall: Dynamic dictionaries and RPC packets can easily pass strings where numbers are expected.
+  - Memory Corruption Risk: Untyped native bindings risk severe memory corruption on illegal type reinterpretation.
+  - Perimeter Interception: Lapis ensures the Godot engine catches malformed calls at the boundary before execution.
+- **Crystal Zen Advantages**:
+  - ClassDB Type Metadata: Method signatures register with exact GDExtension Variant types (INT, FLOAT).
+  - GDExtension Perimeter Guard: The engine validates argument types before method dispatch occurs.
+  - Guaranteed Internal Invariants: Inside Crystal, amount is guaranteed to be a valid Int32 with zero runtime checks.
+- **Key Takeaway**: Crystal acts as a strongly-typed shield for your game, preventing untyped GDScript and RPC inputs from polluting core logic.
+- **Presenter Script**:
+  > *"What happens when dynamic GDScript tries to pass bad data into your Crystal code? If someone calls `player.heal("some bad string")`, in naive C++ bindings that might cause memory corruption or bizarre behavior. But Lapis automatically registers exact parameter types directly into Godot's ClassDB. The GDExtension layer validates the arguments before the method is ever called, rejecting malformed calls with an explicit engine error. Crystal acts as a strongly-typed firewall protecting your game's integrity."*
+
+---
+### Slide 65: Memory Safety: Dangling Pointers vs. Protection (Code Comparison)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Memory Safety: Dangling Pointers vs. Protection
@@ -2456,7 +2513,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 64: Memory Safety: Dangling Pointers vs. Protection (Analysis & Critique)
+### Slide 66: Memory Safety: Dangling Pointers vs. Protection (Analysis & Critique)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Memory Safety: Dangling Pointers vs. Protection
@@ -2474,7 +2531,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If your code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully."*
 
 ---
-### Slide 65: Signals & Async: String Awaits vs. Typed Handles (Code Comparison)
+### Slide 67: Signals & Async: String Awaits vs. Typed Handles (Code Comparison)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Signals & Async: String Awaits vs. Typed Handles
@@ -2516,7 +2573,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 66: Signals & Async: String Awaits vs. Typed Handles (Analysis & Critique)
+### Slide 68: Signals & Async: String Awaits vs. Typed Handles (Analysis & Critique)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Signals & Async: String Awaits vs. Typed Handles
@@ -2534,7 +2591,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports built-in timeouts: await(boss.died, timeout_sec: 10.0). Furthermore, because Lapis fibers check instance liveness on every frame tick, if the target object is destroyed, the fiber safely aborts with DisposedObjectError rather than hanging silently."*
 
 ---
-### Slide 67: Gameplay Timers: Cancellable Coroutines & Timer Handles (Code Comparison)
+### Slide 69: Gameplay Timers: Cancellable Coroutines & Timer Handles (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_95` (Spaces 95) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Gameplay Timers: Cancellable Coroutines & Timer Handles
@@ -2585,7 +2642,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 68: Gameplay Timers: Cancellable Coroutines & Timer Handles (Analysis & Critique)
+### Slide 70: Gameplay Timers: Cancellable Coroutines & Timer Handles (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_95` (Spaces 95) [BG: `#f0f4f4` | Window: `#c0c0c0` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Gameplay Timers: Cancellable Coroutines & Timer Handles
@@ -2604,7 +2661,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Handling time in game engines is notoriously error-prone. In GDScript, you either have to spawn physical Timer nodes into the scene tree, or use get_tree().create_timer(). But SceneTreeTimer cannot be paused or cancelled, and if the node that scheduled it is destroyed, the timer fires anyway on a dead object, leading to crashes or leaked state. Lapis 4.8-dev7 solves this with our non-blocking Timer DSL. Methods like 'every' and 'after' accept Time::Span literals (1.second, 500.milliseconds) and return a first-class TimerHandle. When attached to a node, the timer automatically disconnects if the node is deleted. Even better, in unit tests, you can call 'handle.advance(1.0)' to step time forward deterministically without having to sleep in your test runner."*
 
 ---
-### Slide 69: Concurrency: Lightweight Fibers & Signal Awaiting
+### Slide 71: Concurrency: Lightweight Fibers & Signal Awaiting
 - **Sol.vin Theme Palette**: `pastel` (Pastel) [BG: `#f7f5ff` | Window: `#ffffff` | Text: `#2d2738` | Accent: `#9b5de5`]
 - **Category Badge**: `CONCURRENCY ARCHITECTURE • FIBERS`
 - **Title**: Concurrency: Lightweight Fibers & Signal Awaiting
@@ -2638,7 +2695,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Godot's scene tree is fundamentally single-threaded. Lapis provides lightweight, cooperative fibers for orchestrating asynchronous gameplay sequences—dialogue, cutscenes, scripted events—directly on the main thread. Because fibers run cooperatively, you can modify nodes, add children, and change transforms with zero mutex overhead."*
 
 ---
-### Slide 70: Concurrency: Parallel OS Threads & Workload Offloading
+### Slide 72: Concurrency: Parallel OS Threads & Workload Offloading
 - **Sol.vin Theme Palette**: `entertainment_system` (Entertainment System) [BG: `#e8e8ec` | Window: `#d8d8dc` | Text: `#101012` | Accent: `#c80018`]
 - **Category Badge**: `CONCURRENCY ARCHITECTURE • OS THREADS`
 - **Title**: Concurrency: Parallel OS Threads & Workload Offloading
@@ -2669,7 +2726,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"When your game requires heavy procedural generation, pathfinding, or physics computation, cooperative fibers aren't enough—you need true hardware parallelism. In Lapis, you can spawn OS background threads using Thread.new. Background threads crunch data across all available CPU cores without ever dropping a frame, and send results back via call_deferred."*
 
 ---
-### Slide 71: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels (Code Comparison)
+### Slide 73: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels (Code Comparison)
 - **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CODE VIEW`
 - **Title**: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels
@@ -2716,7 +2773,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 72: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels (Analysis & Critique)
+### Slide 74: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels (Analysis & Critique)
 - **Sol.vin Theme Palette**: `spaces_97` (Spaces 97) [BG: `#f0f4f8` | Window: `#d4d0c8` | Text: `#000000` | Accent: `#000080`]
 - **Category Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION • CRITIQUE`
 - **Title**: Concurrency: Mutex Deadlocks vs. Lock-Free Actor Channels
@@ -2734,7 +2791,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In GDScript, concurrent programming is fraught with peril. Developers use Mutex objects, and if a background thread accidentally touches a node in the SceneTree, Godot's internal child arrays corrupt, causing an immediate engine crash. In Crystal, we leverage the Actor pattern using Channel(T). Background worker threads crunch heavy procedural calculations and send immutable data structures through a buffered channel. On the main thread, _process non-blockingly drains the channel using a select block and safely mounts nodes to the scene tree. Zero mutexes, zero deadlocks, zero crashes."*
 
 ---
-### Slide 73: Concurrency: SceneTree Thread Safety & Auto-Deferral
+### Slide 75: Concurrency: SceneTree Thread Safety & Auto-Deferral
 - **Sol.vin Theme Palette**: `disinherited` (Samuel) [BG: `#16120e` | Window: `#281f18` | Text: `#faf4e1` | Accent: `#f2a81d`]
 - **Category Badge**: `CONCURRENCY ARCHITECTURE • SCENETREE`
 - **Title**: Concurrency: SceneTree Thread Safety & Auto-Deferral
@@ -2765,7 +2822,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Godot's MessageQueue is the bedrock of cross-thread safety. In Lapis, call_deferred allows any background worker thread to schedule method executions on the main thread safely. This prevents race conditions in Godot's internal node arrays and ensures that game state transitions happen deterministically at frame boundaries."*
 
 ---
-### Slide 74: Thread & Scope Policies
+### Slide 76: Thread & Scope Policies
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `CONCURRENCY SAFETY • THREAD AFFINITY`
 - **Title**: Thread & Scope Policies
@@ -2804,7 +2861,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis provides a configurable ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled for zero-cost release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread—such as procedurally generated dungeon rooms or terrain meshes—while strictly guarding the live scene tree."*
 
 ---
-### Slide 75: Main-Thread Dispatch
+### Slide 77: Main-Thread Dispatch
 - **Sol.vin Theme Palette**: `spaces_vista` (Spaces Vista) [BG: `#141c24` | Window: `#1f2b37` | Text: `#f0f4f8` | Accent: `#00c3ff`]
 - **Category Badge**: `THREAD SYNCHRONIZATION • ENGINE QUEUE`
 - **Title**: Main-Thread Dispatch
@@ -2841,7 +2898,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Once background workers finish crunching procedural geometry or pathfinding off-thread, how do we safely bring those nodes into the active game world? That's where Godot.on_main_thread comes in. When called from a background thread, it safely buffers the closure into a thread-safe mutex queue that gets drained deterministically at the next frame boundary by Godot's main loop. If you call it while already on the main thread, it executes immediately with zero overhead. There are no deadlocks, no manual lock management, and no fragile string-based callback names—just clean, type-safe closures executing safely on the rendering thread."*
 
 ---
-### Slide 76: Multiplayer: Authoritative RPCs & Lockstep Sync
+### Slide 78: Multiplayer: Authoritative RPCs & Lockstep Sync
 - **Sol.vin Theme Palette**: `playtoy` (PlayToy) [BG: `#8bac0f` | Window: `#9bbc0f` | Text: `#0f380f` | Accent: `#0f380f`]
 - **Category Badge**: `MULTIPLAYER ARCHITECTURE • NETWORKING`
 - **Title**: Multiplayer: Authoritative RPCs & Lockstep Sync
@@ -2883,7 +2940,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Building multiplayer games in Godot is notoriously tricky when dealing with dynamic RPC signatures and state desynchronization. In Lapis, multiplayer is a first-class citizen. You annotate methods with @[RPC]—declaring replication modes, peer permissions, and transfer modes (reliable, unreliable, or ordered) directly on native Crystal methods. The compiler validates method signatures at build time. For dedicated servers, you compile to Mode B (headless standalone LibGodot host), delivering blazing-fast physics simulation with zero editor or UI overhead. And with cradare2 integration, you can set hardware watchpoints on packet buffers to catch network desyncs in lockstep!"*
 
 ---
-### Slide 77: Multiplayer Testing: Lapis::Multiplayer::Harness
+### Slide 79: Multiplayer Testing: Lapis::Multiplayer::Harness
 - **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
 - **Category Badge**: `MULTIPLAYER • SIMULATION HARNESS`
 - **Title**: Multiplayer Testing: Lapis::Multiplayer::Harness
@@ -2926,7 +2983,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Testing multiplayer networking in game engines is notoriously painful. Running multiple editor instances or launching background processes leads to port collisions, timing jitter, and flaky CI tests. Lapis completely solves this with Lapis::Multiplayer::Harness. The multiplayer_test macro spins up a full multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers. Using harness.step_frames(n), you step network packets, physics ticks, and SceneTree lifecycles synchronously and deterministically. You can pump virtual input actions like send_action(:attack) and dispatch RPCs. Furthermore, harness.spy acts as an embedded Wireshark packet inspector. You can assert that specific RPCs were delivered (spy.assert_rpc_sent), verify reliable vs unreliable delivery, enforce strict bandwidth caps (spy.assert_max_bandwidth), and even trigger native crash forensics if an anomaly occurs!"*
 
 ---
-### Slide 78: Crystal Concurrency Patterns in Games
+### Slide 80: Crystal Concurrency Patterns in Games
 - **Sol.vin Theme Palette**: `m64` (M64) [BG: `#232328` | Window: `#32323a` | Text: `#d0d0d8` | Accent: `#f0c018`]
 - **Category Badge**: `ADVANCED CONCURRENCY • GAME PATTERNS`
 - **Title**: Crystal Concurrency Patterns in Games
@@ -2971,105 +3028,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees. Heavy tasks like A* pathfinding, voxel generation, and AI simulations run on dedicated OS worker threads (Thread.new). They communicate with the game through buffered channels. On the main thread, _process non-blockingly drains completed results using a select block and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks! Meanwhile, cooperative gameplay fibers handle non-blocking asynchronous state machines using await without ever blocking the engine frame loop."*
 
 ---
-### Slide 79: Interoperability: GDScript Calling Crystal
-- **Sol.vin Theme Palette**: `spaces_7` (Spaces 7) [BG: `#dce8f5` | Window: `#ffffff` | Text: `#1a2b3c` | Accent: `#0066cc`]
-- **Category Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
-- **Title**: Interoperability: GDScript Calling Crystal
-- **Subtitle**: Seamless Integration with GDScript Gameplay Teams and Asset Store Addons
-- **Code Example (`player.cr — Exported Crystal Node`)**:
-  ```crystal
-  node Player < CharacterBody3D do
-    @[Export]
-    property speed : Float32 = 7.0_f32
-  
-    property health : Int32 = 100
-  
-    signal health_changed(current : Int32)
-  
-    def heal(amount : Int32) : Int32
-      @health += amount
-      emit(health_changed, @health)
-      @health
-    end
-  end
-  ```
-- **Code Example (`ui_controller.gd — GDScript Consumer`)**:
-  ```gdscript
-  extends Control
-  
-  @onready var player: Player = $Player
-  
-  func _on_heal_pressed() -> void:
-      # Calls Crystal method directly with autocompletion!
-      var new_hp = player.heal(25)
-      $HPLabel.text = "HP: %d" % new_hp
-  
-  func _ready() -> void:
-      # Connects to Crystal signal seamlessly
-      player.health_changed.connect(_on_hp_changed)
-  ```
-- **Presenter Script**:
-  > *"You don't have to rewrite your entire game in Crystal to use Lapis. Lapis nodes register directly with Godot's ClassDB. That means GDScript developers on your team can instantiate Crystal nodes, call Crystal methods, inspect exported properties, and connect to Crystal signals with complete native editor autocomplete."*
-
----
-### Slide 80: Type Firewall: Crystal Enforces Strict Safety on GDScript (Code Comparison)
-- **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
-- **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CODE VIEW`
-- **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
-- **Subtitle**: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
-- **GDScript Code Example (`:circle-xmark: GDScript: Duck-Typing & Malformed Arguments`)**:
-  ```gdscript
-  # GDScript is dynamic: data from JSON, RPCs, or UI may be untyped
-  func _on_potion_consumed(data: Variant) -> void:
-      # A bug passes a String instead of an Int:
-      player.heal("some bad string")
-  
-      # In standard unverified C++ bindings:
-      # -> Silent memory corruption or bizarre garbage values!
-      # In Lapis:
-      # -> Godot engine boundary immediately intercepts & halts:
-      # "Invalid call. Argument 1 (String) cannot be converted to int."
-  ```
-- **Crystal Code Example (`:sparkles: Crystal: Strongly-Typed ClassDB Registration`)**:
-  ```crystal
-  node Player < CharacterBody3D do
-    # Lapis registers exact parameter type (INT) in ClassDB:
-    def heal(amount : Int32) : Int32
-      @health += amount
-      emit(health_changed, @health)
-      @health
-    end
-  end
-  
-  # THE LAPIS TYPE FIREWALL:
-  # 1. GDExtension validates types before invoking native code
-  # 2. Strict Variant unboxing: TypeCastError on mismatch
-  # 3. Crystal method is NEVER executed with malformed data!
-  ```
-- **Presenter Script**:
-  > *"Examining the code side-by-side: Notice the contrast in structure, verbosity, and safety between the GDScript implementation on the left and the Crystal implementation on the right before we review the specific friction points."*
-
----
-
-### Slide 81: Type Firewall: Crystal Enforces Strict Safety on GDScript (Analysis & Critique)
-- **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
-- **Category Badge**: `INTEROPERABILITY • TYPE FIREWALL • CRITIQUE`
-- **Title**: Type Firewall: Crystal Enforces Strict Safety on GDScript
-- **Subtitle**: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
-- **GDScript Friction & Pitfalls**:
-  - Duck-Typing Pitfall: Dynamic dictionaries and RPC packets can easily pass strings where numbers are expected.
-  - Memory Corruption Risk: Untyped native bindings risk severe memory corruption on illegal type reinterpretation.
-  - Perimeter Interception: Lapis ensures the Godot engine catches malformed calls at the boundary before execution.
-- **Crystal Zen Advantages**:
-  - ClassDB Type Metadata: Method signatures register with exact GDExtension Variant types (INT, FLOAT).
-  - GDExtension Perimeter Guard: The engine validates argument types before method dispatch occurs.
-  - Guaranteed Internal Invariants: Inside Crystal, amount is guaranteed to be a valid Int32 with zero runtime checks.
-- **Key Takeaway**: Crystal acts as a strongly-typed shield for your game, preventing untyped GDScript and RPC inputs from polluting core logic.
-- **Presenter Script**:
-  > *"What happens when dynamic GDScript tries to pass bad data into your Crystal code? If someone calls `player.heal("some bad string")`, in naive C++ bindings that might cause memory corruption or bizarre behavior. But Lapis automatically registers exact parameter types directly into Godot's ClassDB. The GDExtension layer validates the arguments before the method is ever called, rejecting malformed calls with an explicit engine error. Crystal acts as a strongly-typed firewall protecting your game's integrity."*
-
----
-### Slide 82: Godot C# vs Lapis: Ceremony & Keyword Bloat (Code Comparison)
+### Slide 81: Godot C# vs Lapis: Ceremony & Keyword Bloat (Code Comparison)
 - **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Ceremony & Keyword Bloat
@@ -3135,7 +3094,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 83: Godot C# vs Lapis: Ceremony & Keyword Bloat (Analysis & Critique)
+### Slide 82: Godot C# vs Lapis: Ceremony & Keyword Bloat (Analysis & Critique)
 - **Sol.vin Theme Palette**: `playbox` (Playbox) [BG: `#2d224b` | Window: `#563f91` | Text: `#ffffff` | Accent: `#ef4444`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Ceremony & Keyword Bloat
@@ -3155,7 +3114,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Comparing Godot C# to Lapis reveals a massive gulf in developer ergonomics. In C#, every single node requires `using Godot; using System;`, `public partial class` boilerplate for source generators, and verbose `[Export] public float Speed { get; set; }` properties. Even worse, declaring a signal in C# requires writing a dummy `delegate` with an `EventHandler` suffix, and emitting it involves string constants like `SignalName.HealthChanged`. In Lapis, you write pure, expressive Crystal: `node PlayerController < CharacterBody3D do`, `@export @speed : Float32 = 300.0_f32`, and `signal health_changed(...)` which automatically synthesizes a strongly-typed `emit_health_changed` method. You write less than half the code with zero attribute clutter."*
 
 ---
-### Slide 84: Godot C# vs Lapis: Null Minefields & Ghost Leaks (Code Comparison)
+### Slide 83: Godot C# vs Lapis: Null Minefields & Ghost Leaks (Code Comparison)
 - **Sol.vin Theme Palette**: `digital_guy` (DigitalGuy) [BG: `#000000` | Window: `#110000` | Text: `#ff0000` | Accent: `#ff0000`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • SAFETY & HYGIENE • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Null Minefields & Ghost Leaks
@@ -3219,7 +3178,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 85: Godot C# vs Lapis: Null Minefields & Ghost Leaks (Analysis & Critique)
+### Slide 84: Godot C# vs Lapis: Null Minefields & Ghost Leaks (Analysis & Critique)
 - **Sol.vin Theme Palette**: `digital_guy` (DigitalGuy) [BG: `#000000` | Window: `#110000` | Text: `#ff0000` | Accent: `#ff0000`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • SAFETY & HYGIENE • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Null Minefields & Ghost Leaks
@@ -3239,7 +3198,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In Godot C#, null safety is an illusion. C#'s nullable reference types are merely compiler warnings that can be suppressed with the null-forgiving operator `!`, leading to runtime `NullReferenceException` crashes in production. Even worse, event subscriptions like `Player.HealthChanged += OnHealthChanged` create strong GC roots; if you forget to manually unsubscribe with `-=` in `_ExitTree`, the dead HUD node remains pinned in memory forever, leaking RAM and firing phantom event handlers. Furthermore, checking `Player != null` in C# checks the managed wrapper, not whether Godot's native object has been freed, leading to `ObjectDisposedException`. In Lapis, Crystal's flow-sensitive nil safety makes null dereferences impossible at compile-time. Native signals are cleaned up automatically by Godot's C++ core, and monotonic instance ID tracking via `alive?` prevents dead-pointer crashes."*
 
 ---
-### Slide 86: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter (Code Comparison)
+### Slide 85: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter (Code Comparison)
 - **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY • CODE VIEW`
 - **Title**: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter
@@ -3294,7 +3253,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 87: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter (Analysis & Critique)
+### Slide 86: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter (Analysis & Critique)
 - **Sol.vin Theme Palette**: `former_rain` (The Former Rain) [BG: `#1b1726` | Window: `#261e34` | Text: `#e8ddf5` | Accent: `#d896ff`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY • CRITIQUE`
 - **Title**: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter
@@ -3314,7 +3273,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Why does C# struggle in high-performance game loops? In Godot C#, every call into engine nodes must traverse the managed-to-unmanaged P/Invoke boundary, adding call overhead and struct copying. Modern C# features like LINQ closures allocate temporary objects on the heap, and passing arguments to Godot variants frequently triggers boxing churn. When the .NET Garbage Collector pauses execution to sweep Gen0, Gen1, or Gen2 heaps, frame times spike by 15ms to 50ms, causing noticeable stutter during critical gameplay moments. Lapis compiles Crystal directly to native machine code via LLVM with a direct C ABI interface to Godot. Structs like Vector2 and Vector3 live on the stack or in flat slices. Hot physics and animation loops allocate exactly 0 bytes on the heap, delivering rock-solid frame pacing with zero GC stutter."*
 
 ---
-### Slide 88: Godot C# vs Lapis: Iterators & Collection Anti-Patterns (Code Comparison)
+### Slide 87: Godot C# vs Lapis: Iterators & Collection Anti-Patterns (Code Comparison)
 - **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • COLLECTIONS & ITERATION • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Iterators & Collection Anti-Patterns
@@ -3368,7 +3327,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 89: Godot C# vs Lapis: Iterators & Collection Anti-Patterns (Analysis & Critique)
+### Slide 88: Godot C# vs Lapis: Iterators & Collection Anti-Patterns (Analysis & Critique)
 - **Sol.vin Theme Palette**: `monokai` (Monokai) [BG: `#272822` | Window: `#1e1f1c` | Text: `#f8f8f2` | Accent: `#fd971f`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • COLLECTIONS & ITERATION • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Iterators & Collection Anti-Patterns
@@ -3388,7 +3347,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In game development, collection iteration inside the frame loop is where high-level languages often fall apart. In Godot C#, idiomatic LINQ code looks clean, but under the hood it is an allocation catastrophe: `.Where()` allocates a `Func<T, bool>` closure, `.OfType()` allocates an iterator state machine, and `.ToList()` allocates a dynamic array. In a 60 FPS physics loop, this generates thousands of short-lived objects per second, directly triggering .NET GC pauses. In Lapis, Crystal blocks are inlined by LLVM directly into the caller's stack frame. There is no heap-allocated closure, no `IEnumerator` object, and zero GC pressure. You get expressive Ruby-style collection pipelines running at full native C++ speed."*
 
 ---
-### Slide 90: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection (Code Comparison)
+### Slide 89: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection (Code Comparison)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection
@@ -3448,7 +3407,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 91: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection (Analysis & Critique)
+### Slide 90: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection (Analysis & Critique)
 - **Sol.vin Theme Palette**: `game_station_2` (GameStation2) [BG: `#090a10` | Window: `#121520` | Text: `#e0e6f0` | Accent: `#0072ce`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection
@@ -3468,7 +3427,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"In C#, developers are trapped in an uncomfortable dilemma: either use `System.Reflection` at runtime—which is painfully slow, boxes every primitive argument, and crashes when NativeAOT trimming strips metadata—or write a Roslyn Source Generator. But Roslyn generators require an entire separate C# analyzer project, complex syntax tree parsing, and fragile MSBuild plumbing that constantly causes IDE red squiggles. In Crystal, macros are a first-class language feature. You write expressive metaprogramming logic directly inside your codebase using Crystal syntax. Macros inspect types, loop over properties, and generate type-safe dispatchers at compile time, leaving behind zero runtime reflection tables and zero boxing."*
 
 ---
-### Slide 92: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks (Code Comparison)
+### Slide 91: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks (Code Comparison)
 - **Sol.vin Theme Palette**: `cross_cube_360` (CrossCube 360) [BG: `#e4e8ec` | Window: `#ffffff` | Text: `#1e242b` | Accent: `#7fba00`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks
@@ -3520,7 +3479,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 93: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks (Analysis & Critique)
+### Slide 92: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks (Analysis & Critique)
 - **Sol.vin Theme Palette**: `cross_cube_360` (CrossCube 360) [BG: `#e4e8ec` | Window: `#ffffff` | Text: `#1e242b` | Accent: `#7fba00`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks
@@ -3540,7 +3499,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"A shocking truth about Godot 4 C# is that it completely breaks Web/HTML5 export. Because of .NET runtime limitations, Godot 4 cannot reliably export C# to WebAssembly out of the box, locking developers out of game jams, itch.io web previews, and browser distribution. Furthermore, in the editor, C# hot-reload relies on .NET AssemblyLoadContexts. A single forgotten static event subscription or background task prevents the ALC from unloading, leaving 'zombie' assemblies in RAM until breakpoints fail and the editor crashes. In Lapis, Crystal compiles directly via LLVM to native platforms and WASM. There is no 60MB CLR to distribute, and GDExtension libraries reload cleanly at the OS level without ghost memory leaks."*
 
 ---
-### Slide 94: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups (Code Comparison)
+### Slide 93: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups (Code Comparison)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups
@@ -3603,7 +3562,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 95: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups (Analysis & Critique)
+### Slide 94: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups (Analysis & Critique)
 - **Sol.vin Theme Palette**: `aperture` (Aperture) [BG: `#1f232a` | Window: `#262a33` | Text: `#ffee55` | Accent: `#ffcc00`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups
@@ -3623,7 +3582,7 @@ This document outlines each slide's exact theme palette, architectural category,
   > *"Handling concurrency and identifiers in Godot C# is notoriously fraught. In C#, every `async Task` allocates a task state machine on the heap, and if a signal handler uses `async void`, an unhandled exception will crash the entire game executable with no recovery. Furthermore, accessing Godot nodes from background tasks causes race conditions, forcing developers into clunky `Callable.From(...).CallDeferred()` boilerplate. In identifiers, C# relies on runtime string lookups unless you declare static `StringName` constants everywhere. In Lapis, Crystal uses microscopic cooperative fibers (`spawn`) and typed CSP channels (`Channel(T)`) for deterministic, thread-safe background work. And symbols like `:network_synced` are interned integers evaluated at compile time with zero string allocation."*
 
 ---
-### Slide 96: Godot C# vs Lapis: Type Unions & Pattern Matching (Code Comparison)
+### Slide 95: Godot C# vs Lapis: Type Unions & Pattern Matching (Code Comparison)
 - **Sol.vin Theme Palette**: `disinherited` (Samuel) [BG: `#16120e` | Window: `#281f18` | Text: `#faf4e1` | Accent: `#f2a81d`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS • CODE VIEW`
 - **Title**: Godot C# vs Lapis: Type Unions & Pattern Matching
@@ -3685,7 +3644,7 @@ This document outlines each slide's exact theme palette, architectural category,
 
 ---
 
-### Slide 97: Godot C# vs Lapis: Type Unions & Pattern Matching (Analysis & Critique)
+### Slide 96: Godot C# vs Lapis: Type Unions & Pattern Matching (Analysis & Critique)
 - **Sol.vin Theme Palette**: `disinherited` (Samuel) [BG: `#16120e` | Window: `#281f18` | Text: `#faf4e1` | Accent: `#f2a81d`]
 - **Category Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS • CRITIQUE`
 - **Title**: Godot C# vs Lapis: Type Unions & Pattern Matching
@@ -3703,6 +3662,47 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Key Takeaway**: Crystal provides mathematical union types with compile-time exhaustive pattern matching and zero wrapper allocations.
 - **Presenter Script**:
   > *"Handling diverse result types is fundamental to gameplay logic, and C# lacks native mathematical union types. In Godot C#, a method that can return different outcomes (like a shield deflection, a critical hit, or a miss) must return a base `object`, a bulky interface, or use simulated discriminated union packages like `OneOf` which allocate heap wrappers. Even worse, C#'s type switch expressions cannot guarantee compile-time exhaustiveness across arbitrary types, meaning an unhandled case silently defaults to null or throws a runtime exception. In Crystal, union types like `ShieldAbsorbed | CriticalDamage | Nil` are first-class, lightweight, and mathematically sound. The compiler enforces exhaustive pattern matching at compile time and automatically narrows types inside each `when` branch with zero unsafe downcasts and zero GC allocations."*
+
+---
+### Slide 97: Interoperability: GDScript Calling Crystal
+- **Sol.vin Theme Palette**: `spaces_7` (Spaces 7) [BG: `#dce8f5` | Window: `#ffffff` | Text: `#1a2b3c` | Accent: `#0066cc`]
+- **Category Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
+- **Title**: Interoperability: GDScript Calling Crystal
+- **Subtitle**: Seamless Integration with GDScript Gameplay Teams and Asset Store Addons
+- **Code Example (`player.cr — Exported Crystal Node`)**:
+  ```crystal
+  node Player < CharacterBody3D do
+    @[Export]
+    property speed : Float32 = 7.0_f32
+  
+    property health : Int32 = 100
+  
+    signal health_changed(current : Int32)
+  
+    def heal(amount : Int32) : Int32
+      @health += amount
+      emit(health_changed, @health)
+      @health
+    end
+  end
+  ```
+- **Code Example (`ui_controller.gd — GDScript Consumer`)**:
+  ```gdscript
+  extends Control
+  
+  @onready var player: Player = $Player
+  
+  func _on_heal_pressed() -> void:
+      # Calls Crystal method directly with autocompletion!
+      var new_hp = player.heal(25)
+      $HPLabel.text = "HP: %d" % new_hp
+  
+  func _ready() -> void:
+      # Connects to Crystal signal seamlessly
+      player.health_changed.connect(_on_hp_changed)
+  ```
+- **Presenter Script**:
+  > *"You don't have to rewrite your entire game in Crystal to use Lapis. Lapis nodes register directly with Godot's ClassDB. That means GDScript developers on your team can instantiate Crystal nodes, call Crystal methods, inspect exported properties, and connect to Crystal signals with complete native editor autocomplete."*
 
 ---
 ### Slide 98: Crystal Calling GDScript: Dynamic Dispatch
