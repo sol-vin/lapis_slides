@@ -51,13 +51,14 @@ crystal:
     # 3. Instant frequency Hash via Enumerable#tally:
     counts = inventory.tally(&.category) # => Hash(String, Int32) in 1 pass!
 
-    # 4. First-class block connection: zero Callable overhead!
-    timer.timeout.connect { on_tick(1) }
+    # 4. Declarative signal sugar with 'on': zero Callable overhead!
+    on timer.timeout { on_tick(1) }
 
     # 5. Composable pipelines chain without intermediate arrays
     active_names = enemies.reject(&.dead?).map(&.name.upcase)
   points:
   - <strong>Zero-Alloc Block Inlining:</strong> Crystal blocks are inlined directly into native machine code by LLVM — zero heap allocations, zero closure overhead!
+  - <strong>Declarative <code>on</code> Sugar:</strong> <code>on timer.timeout { ... }</code> connects inline blocks directly to engine signals without <code>Callable</code> allocations.
   - <strong>Clean Block Syntax:</strong> Curly braces <code>{ |x| ... }</code> and symbol-to-proc <code>(&.property)</code> eliminate clutter while keeping full static type inference.
   - <strong>50+ Rich Enumerators:</strong> <code>sort_by!</code>, <code>select</code>, <code>reject</code>, <code>tally</code>, and <code>chunk</code> compose seamlessly into readable data pipelines.
 takeaway:

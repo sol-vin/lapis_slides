@@ -54,7 +54,7 @@ crystal:
       case {health, state}
       when {..0, .dead?} then nil # already dead
       when {..0, _}      then die!
-      when {..20, _}     then emit_low_health_warning
+      when {..20, _}     then emit(low_health_warning)
       end
     end
   points:

@@ -1503,6 +1503,7 @@ This document outlines each slide's exact theme palette, architectural category,
     @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
     property speed : Float32 = 7.0_f32
   
+    property health : Int32 = 100
     # Maximum hit points
     @[Export(range: 10..500, step: 10)]
     property max_health : Int32 = 100
@@ -1510,12 +1511,14 @@ This document outlines each slide's exact theme palette, architectural category,
     signal health_changed(current : Int32, max_health : Int32)
     signal died
   
-    def _ready : Void
-      Godot.print("Player initialized: #{name}")
+    def take_damage(amount : Int32) : Void
+      @health = Math.max(0, @health - amount)
+      emit(health_changed, @health, @max_health)
+      emit(died) if @health == 0
     end
   
-    def _physics_process(delta : Float64) : Void
-      # Fixed-rate physics step
+    def _ready : Void
+      Godot.print("Player initialized: #{name}")
     end
   end
   ```
@@ -2059,8 +2062,8 @@ This document outlines each slide's exact theme palette, architectural category,
   # 3. Instant frequency Hash via Enumerable#tally:
   counts = inventory.tally(&.category) # => Hash(String, Int32) in 1 pass!
   
-  # 4. First-class block connection: zero Callable overhead!
-  timer.timeout.connect { on_tick(1) }
+  # 4. Declarative signal sugar with 'on': zero Callable overhead!
+  on timer.timeout { on_tick(1) }
   
   # 5. Composable pipelines chain without intermediate arrays
   active_names = enemies.reject(&.dead?).map(&.name.upcase)
@@ -2081,6 +2084,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Chaining & Intermediate Arrays: Chaining operations like filter and map creates intermediate temporary arrays, multiplying memory pressure.
 - **Crystal Zen Advantages**:
   - Zero-Alloc Block Inlining: Crystal blocks are inlined directly into native machine code by LLVM — zero heap allocations, zero closure overhead!
+  - Declarative on Sugar: on timer.timeout { ... } connects inline blocks directly to engine signals without Callable allocations.
   - Clean Block Syntax: Curly braces { |x| ... } and symbol-to-proc (&.property) eliminate clutter while keeping full static type inference.
   - 50+ Rich Enumerators: sort_by!, select, reject, tally, and chunk compose seamlessly into readable data pipelines.
 - **Key Takeaway**: Crystal blocks eliminate Callable heap allocations through LLVM inlining, giving you expressive functional pipelines with C-level execution speed.
@@ -2266,7 +2270,7 @@ This document outlines each slide's exact theme palette, architectural category,
     case {health, state}
     when {..0, .dead?} then nil # already dead
     when {..0, _}      then die!
-    when {..20, _}     then emit_low_health_warning
+    when {..20, _}     then emit(low_health_warning)
     end
   end
   ```
@@ -2325,8 +2329,8 @@ This document outlines each slide's exact theme palette, architectural category,
   
   def take_damage(dmg : Int32) : Void
     # Compile-time checked: typos or wrong arg types fail during compilation!
-    emit_player_hit(dmg, self)
-    # Also auto-generates: on_player_hit { |dmg, src| ... }
+    emit(player_hit, dmg, self)
+    # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
   end
   ```
 - **Presenter Script**:
@@ -2345,7 +2349,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - No Parameter Validation: Emit calls cannot verify argument counts or types at compile time.
 - **Crystal Zen Advantages**:
   - Declarative Annotations: @[Export] extracts doc comments and ranges directly into Godot Inspector.
-  - Synthesized Methods: signal died generates typed emit_died, on_died, and on_died_once.
+  - Type-Safe emit Macro: emit(player_hit, dmg, self) validates argument types and arity at compile time.
   - Zero Runtime Reflection: Metaprogramming executes at compile time; runtime cost is exactly zero.
 - **Key Takeaway**: Crystal AST macros execute at compile time, eliminating runtime reflection and catching API mismatches instantly.
 - **Presenter Script**:
@@ -2820,7 +2824,7 @@ This document outlines each slide's exact theme palette, architectural category,
   
       # Update UI & signal listeners on the render loop:
       @minimap.reveal_room(room_node.name)
-      emit_room_loaded(room_node)
+      emit(room_loaded, room_node)
     end
   end
   
@@ -2984,7 +2988,7 @@ This document outlines each slide's exact theme palette, architectural category,
   
     def heal(amount : Int32) : Int32
       @health += amount
-      emit_health_changed(@health)
+      emit(health_changed, @health)
       @health
     end
   end
@@ -3032,7 +3036,7 @@ This document outlines each slide's exact theme palette, architectural category,
     # Lapis registers exact parameter type (INT) in ClassDB:
     def heal(amount : Int32) : Int32
       @health += amount
-      emit_health_changed(@health)
+      emit(health_changed, @health)
       @health
     end
   end
@@ -3120,8 +3124,8 @@ This document outlines each slide's exact theme palette, architectural category,
     # Expressive, concise Ruby syntax with zero fluff:
     def heal(amount : Int32) : Int32
       @health = (@health + amount).clamp(0, @max_health)
-      # Strongly-typed signal emitter method generated at compile-time!
-      emit_health_changed(@health, @max_health)
+      # Strongly-typed signal emission verified at compile-time!
+      emit(health_changed, @health, @max_health)
       @health
     end
   end
@@ -3143,7 +3147,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Signal Name Indirection: Signal emission relies on generated nested static classes (SignalName.HealthChanged) and boxed argument arrays.
 - **Crystal Zen Advantages**:
   - Zero-Ceremony Class Definitions: Clean node PlayerController < CharacterBody3D blocks without partial hacks or using noise.
-  - First-Class Signal DSL: signal name(...) macro automatically synthesizes type-safe emit_name(...) helper methods with compile-time argument checks.
+  - First-Class Signal DSL: signal name(...) macro automatically enables type-safe emit(name, ...) with compile-time argument checks.
   - Direct ClassDB Registration: Properties annotated with @export register seamlessly into Godot's inspector without getter/setter ceremony.
   - Half the Code, Double the Signal: Delivers pure Ruby elegance with 100% compiled native GDExtension ClassDB integration.
 - **Key Takeaway**: Crystal strips away C#'s enterprise ceremony and attribute bloat, delivering clean declarative elegance backed by native GDExtension performance.
@@ -3197,17 +3201,15 @@ This document outlines each slide's exact theme palette, architectural category,
       # Type-safe node fetching via path operator with nil-safe cast
       @sfx = (self / "Audio/HealSFX").as?(AudioStreamPlayer)
   
-      # GDExtension native signal connection: zero managed delegate leaks!
+      # Declarative 'on' signal sugar: zero managed delegate leaks!
       # Automatically disconnected when either node is freed by Godot ObjectDB
       if p = @player
-        p.health_changed.connect(->on_health_changed(Int32, Int32))
-      end
-    end
-  
-    def on_health_changed(current : Int32, max : Int32)
-      # Dead-pointer guard: verified alive in ObjectDB before invocation!
-      if (sfx = @sfx) && sfx.alive?
-        sfx.play
+        on p.health_changed do |current, max|
+          # Dead-pointer guard: verified alive in ObjectDB before invocation!
+          if (sfx = @sfx) && sfx.alive?
+            sfx.play
+          end
+        end
       end
     end
   end
@@ -3229,7 +3231,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Stringly-Typed Lookups: GetNode<T>("path") compiles cleanly even if the scene tree changes or the node is renamed, failing only at runtime.
 - **Crystal Zen Advantages**:
   - True Compile-Time Nil Safety: Crystal's compiler enforces flow-sensitive typing; variables of type T? cannot be dereferenced without an explicit nil check (if p = @player).
-  - Zero Ghost Delegate Leaks: Native GDExtension signals are managed by Godot's C++ core; when a node is freed, connections are cleaned up automatically without manual unhooking.
+  - Declarative on Sugar: on p.health_changed { ... } binds closures directly with zero ghost delegate leaks or manual unhooking ceremony.
   - Dead-Pointer Armor: Lapis checks Godot's 64-bit monotonic instance ID via node.alive? and check_alive!, preventing dereferencing freed tombstones.
   - No Null Suppression Cheats: The compiler does not allow bypassing null checks with exclamation marks; safety is guaranteed end-to-end.
 - **Key Takeaway**: Crystal eliminates the C# NullReferenceException minefield and delegate memory leaks through sound compile-time nil types and native lifecycle tracking.
@@ -3507,7 +3509,7 @@ This document outlines each slide's exact theme palette, architectural category,
   
     def play_sfx(sound_name : String) : Nil
       # Native signal dispatch with automatic listener lifetime tracking
-      emit_sound_effect_played
+      emit(sound_effect_played)
     end
   
     # Direct compilation via LLVM: No MSBuild, no .csproj files, no SDK mismatches!
@@ -3811,7 +3813,7 @@ This document outlines each slide's exact theme palette, architectural category,
   
     def take_damage(amount : Int32) : Void
       if amount > 100
-        emit_signal("staggered")
+        emit(staggered)
       # ⚠️ Gutter Squiggle (Line 8): Missing 'end' for 'if' block
     end
   end
@@ -5176,8 +5178,8 @@ This document outlines each slide's exact theme palette, architectural category,
       # Direct typed child lookup via ~Class:
       hp_bar = ~ProgressBar
   
-      # Type-safe signal connection inherited from Damageable:
-      health_changed.connect do |cur, max|
+      # Declarative signal connection sugar with 'on':
+      on health_changed do |cur, max|
         hp_bar.value = (cur.to_f / max) * 100.0
       end
     end
@@ -5187,7 +5189,7 @@ This document outlines each slide's exact theme palette, architectural category,
   - Live Inspector Sliders: @[Export] properties immediately render native drag sliders and range constraints in Godot Inspector.
   - Bare ~ Resolution: ~("CameraBoom/Camera3D").as(Camera3D) resolves and types nested scene nodes via NodeContext.
   - Typed Child Lookup (~Class): ~ProgressBar queries child nodes by class name and returns a concrete, typed reference.
-  - Type-Safe Signals: Declared signals synthesize compile-time checked connection helpers and auto-complete parameters.
+  - Declarative on Sugar: on health_changed do |cur, max| binds typed signals with zero boilerplate.
 - **Presenter Script**:
   > *"In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. For child nodes, we use our clean unary tilde (~) ergonomics: 'onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)' caches the camera automatically, while '~ProgressBar' looks up the UI node with zero boilerplate. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database."*
 

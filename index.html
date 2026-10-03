@@ -3483,6 +3483,7 @@ node Player &lt; CharacterBody3D do
   @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
   property speed : Float32 = 7.0_f32
 
+  property health : Int32 = 100
   # Maximum hit points
   @[Export(range: 10..500, step: 10)]
   property max_health : Int32 = 100
@@ -3490,12 +3491,14 @@ node Player &lt; CharacterBody3D do
   signal health_changed(current : Int32, max_health : Int32)
   signal died
 
-  def _ready : Void
-    Godot.print(&quot;Player initialized: #{name}&quot;)
+  def take_damage(amount : Int32) : Void
+    @health = Math.max(0, @health - amount)
+    emit(health_changed, @health, @max_health)
+    emit(died) if @health == 0
   end
 
-  def _physics_process(delta : Float64) : Void
-    # Fixed-rate physics step
+  def _ready : Void
+    Godot.print(&quot;Player initialized: #{name}&quot;)
   end
 end</code></pre>
           </div>
@@ -4896,8 +4899,8 @@ ready_items = inventory.select { |i| i.durability &gt; 0 &amp;&amp; !i.broken }
 # 3. Instant frequency Hash via Enumerable#tally:
 counts = inventory.tally(&amp;.category) # =&gt; Hash(String, Int32) in 1 pass!
 
-# 4. First-class block connection: zero Callable overhead!
-timer.timeout.connect { on_tick(1) }
+# 4. Declarative signal sugar with &#39;on&#39;: zero Callable overhead!
+on timer.timeout { on_tick(1) }
 
 # 5. Composable pipelines chain without intermediate arrays
 active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
@@ -4996,8 +4999,8 @@ ready_items = inventory.select { |i| i.durability &gt; 0 &amp;&amp; !i.broken }
 # 3. Instant frequency Hash via Enumerable#tally:
 counts = inventory.tally(&amp;.category) # =&gt; Hash(String, Int32) in 1 pass!
 
-# 4. First-class block connection: zero Callable overhead!
-timer.timeout.connect { on_tick(1) }
+# 4. Declarative signal sugar with &#39;on&#39;: zero Callable overhead!
+on timer.timeout { on_tick(1) }
 
 # 5. Composable pipelines chain without intermediate arrays
 active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
@@ -5026,6 +5029,7 @@ active_names = enemies.reject(&amp;.dead?).map(&amp;.name.upcase)</code></pre>
               </div>
               <ul class="card-list">
                 <li><strong>Zero-Alloc Block Inlining:</strong> Crystal blocks are inlined directly into native machine code by LLVM — zero heap allocations, zero closure overhead!</li>
+                <li><strong>Declarative <code>on</code> Sugar:</strong> <code>on timer.timeout { ... }</code> connects inline blocks directly to engine signals without <code>Callable</code> allocations.</li>
                 <li><strong>Clean Block Syntax:</strong> Curly braces <code>{ |x| ... }</code> and symbol-to-proc <code>(&.property)</code> eliminate clutter while keeping full static type inference.</li>
                 <li><strong>50+ Rich Enumerators:</strong> <code>sort_by!</code>, <code>select</code>, <code>reject</code>, <code>tally</code>, and <code>chunk</code> compose seamlessly into readable data pipelines.</li>
               </ul>
@@ -5589,7 +5593,7 @@ def handle_state(state : State, health : Int32) : Void
   case {health, state}
   when {..0, .dead?} then nil # already dead
   when {..0, _}      then die!
-  when {..20, _}     then emit_low_health_warning
+  when {..20, _}     then emit(low_health_warning)
   end
 end</code></pre>
           </div>
@@ -5691,7 +5695,7 @@ def handle_state(state : State, health : Int32) : Void
   case {health, state}
   when {..0, .dead?} then nil # already dead
   when {..0, _}      then die!
-  when {..20, _}     then emit_low_health_warning
+  when {..20, _}     then emit(low_health_warning)
   end
 end</code></pre>
           </div>
@@ -5814,8 +5818,8 @@ signal player_hit(damage : Int32, source : Player)
 
 def take_damage(dmg : Int32) : Void
   # Compile-time checked: typos or wrong arg types fail during compilation!
-  emit_player_hit(dmg, self)
-  # Also auto-generates: on_player_hit { |dmg, src| ... }
+  emit(player_hit, dmg, self)
+  # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
 end</code></pre>
           </div>
           </div>
@@ -5904,8 +5908,8 @@ signal player_hit(damage : Int32, source : Player)
 
 def take_damage(dmg : Int32) : Void
   # Compile-time checked: typos or wrong arg types fail during compilation!
-  emit_player_hit(dmg, self)
-  # Also auto-generates: on_player_hit { |dmg, src| ... }
+  emit(player_hit, dmg, self)
+  # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
 end</code></pre>
           </div>
           </div>
@@ -5932,7 +5936,7 @@ end</code></pre>
               </div>
               <ul class="card-list">
                 <li><strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc comments and ranges directly into Godot Inspector.</li>
-                <li><strong>Synthesized Methods:</strong> <code>signal died</code> generates typed <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code>.</li>
+                <li><strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player_hit, dmg, self)</code> validates argument types and arity at compile time.</li>
                 <li><strong>Zero Runtime Reflection:</strong> Metaprogramming executes at compile time; runtime cost is exactly zero.</li>
               </ul>
             </div>
@@ -7413,7 +7417,7 @@ Thread.new do
 
     # Update UI &amp; signal listeners on the render loop:
     @minimap.reveal_room(room_node.name)
-    emit_room_loaded(room_node)
+    emit(room_loaded, room_node)
   end
 end
 
@@ -7763,7 +7767,7 @@ end</code></pre>
 
   def heal(amount : Int32) : Int32
     @health += amount
-    emit_health_changed(@health)
+    emit(health_changed, @health)
     @health
   end
 end</code></pre>
@@ -7874,7 +7878,7 @@ func _on_potion_consumed(data: Variant) -&gt; void:
   # Lapis registers exact parameter type (INT) in ClassDB:
   def heal(amount : Int32) : Int32
     @health += amount
-    emit_health_changed(@health)
+    emit(health_changed, @health)
     @health
   end
 end
@@ -7962,7 +7966,7 @@ func _on_potion_consumed(data: Variant) -&gt; void:
   # Lapis registers exact parameter type (INT) in ClassDB:
   def heal(amount : Int32) : Int32
     @health += amount
-    emit_health_changed(@health)
+    emit(health_changed, @health)
     @health
   end
 end
@@ -8114,8 +8118,8 @@ public partial class PlayerController : CharacterBody3D
   # Expressive, concise Ruby syntax with zero fluff:
   def heal(amount : Int32) : Int32
     @health = (@health + amount).clamp(0, @max_health)
-    # Strongly-typed signal emitter method generated at compile-time!
-    emit_health_changed(@health, @max_health)
+    # Strongly-typed signal emission verified at compile-time!
+    emit(health_changed, @health, @max_health)
     @health
   end
 end</code></pre>
@@ -8229,8 +8233,8 @@ public partial class PlayerController : CharacterBody3D
   # Expressive, concise Ruby syntax with zero fluff:
   def heal(amount : Int32) : Int32
     @health = (@health + amount).clamp(0, @max_health)
-    # Strongly-typed signal emitter method generated at compile-time!
-    emit_health_changed(@health, @max_health)
+    # Strongly-typed signal emission verified at compile-time!
+    emit(health_changed, @health, @max_health)
     @health
   end
 end</code></pre>
@@ -8260,7 +8264,7 @@ end</code></pre>
               </div>
               <ul class="card-list">
                 <li><strong>Zero-Ceremony Class Definitions:</strong> Clean <code>node PlayerController &lt; CharacterBody3D</code> blocks without <code>partial</code> hacks or <code>using</code> noise.</li>
-                <li><strong>First-Class Signal DSL:</strong> <code>signal name(...)</code> macro automatically synthesizes type-safe <code>emit_name(...)</code> helper methods with compile-time argument checks.</li>
+                <li><strong>First-Class Signal DSL:</strong> <code>signal name(...)</code> macro automatically enables type-safe <code>emit(name, ...)</code> with compile-time argument checks.</li>
                 <li><strong>Direct ClassDB Registration:</strong> Properties annotated with <code>@export</code> register seamlessly into Godot's inspector without getter/setter ceremony.</li>
                 <li><strong>Half the Code, Double the Signal:</strong> Delivers pure Ruby elegance with 100% compiled native GDExtension ClassDB integration.</li>
               </ul>
@@ -8370,17 +8374,15 @@ end</code></pre>
     # Type-safe node fetching via path operator with nil-safe cast
     @sfx = (self / &quot;Audio/HealSFX&quot;).as?(AudioStreamPlayer)
 
-    # GDExtension native signal connection: zero managed delegate leaks!
+    # Declarative &#39;on&#39; signal sugar: zero managed delegate leaks!
     # Automatically disconnected when either node is freed by Godot ObjectDB
     if p = @player
-      p.health_changed.connect(-&gt;on_health_changed(Int32, Int32))
-    end
-  end
-
-  def on_health_changed(current : Int32, max : Int32)
-    # Dead-pointer guard: verified alive in ObjectDB before invocation!
-    if (sfx = @sfx) &amp;&amp; sfx.alive?
-      sfx.play
+      on p.health_changed do |current, max|
+        # Dead-pointer guard: verified alive in ObjectDB before invocation!
+        if (sfx = @sfx) &amp;&amp; sfx.alive?
+          sfx.play
+        end
+      end
     end
   end
 end</code></pre>
@@ -8485,17 +8487,15 @@ end</code></pre>
     # Type-safe node fetching via path operator with nil-safe cast
     @sfx = (self / &quot;Audio/HealSFX&quot;).as?(AudioStreamPlayer)
 
-    # GDExtension native signal connection: zero managed delegate leaks!
+    # Declarative &#39;on&#39; signal sugar: zero managed delegate leaks!
     # Automatically disconnected when either node is freed by Godot ObjectDB
     if p = @player
-      p.health_changed.connect(-&gt;on_health_changed(Int32, Int32))
-    end
-  end
-
-  def on_health_changed(current : Int32, max : Int32)
-    # Dead-pointer guard: verified alive in ObjectDB before invocation!
-    if (sfx = @sfx) &amp;&amp; sfx.alive?
-      sfx.play
+      on p.health_changed do |current, max|
+        # Dead-pointer guard: verified alive in ObjectDB before invocation!
+        if (sfx = @sfx) &amp;&amp; sfx.alive?
+          sfx.play
+        end
+      end
     end
   end
 end</code></pre>
@@ -8525,7 +8525,7 @@ end</code></pre>
               </div>
               <ul class="card-list">
                 <li><strong>True Compile-Time Nil Safety:</strong> Crystal's compiler enforces flow-sensitive typing; variables of type <code>T?</code> cannot be dereferenced without an explicit nil check (<code>if p = @player</code>).</li>
-                <li><strong>Zero Ghost Delegate Leaks:</strong> Native GDExtension signals are managed by Godot's C++ core; when a node is freed, connections are cleaned up automatically without manual unhooking.</li>
+                <li><strong>Declarative <code>on</code> Sugar:</strong> <code>on p.health_changed { ... }</code> binds closures directly with zero ghost delegate leaks or manual unhooking ceremony.</li>
                 <li><strong>Dead-Pointer Armor:</strong> Lapis checks Godot's 64-bit monotonic instance ID via <code>node.alive?</code> and <code>check_alive!</code>, preventing dereferencing freed tombstones.</li>
                 <li><strong>No Null Suppression Cheats:</strong> The compiler does not allow bypassing null checks with exclamation marks; safety is guaranteed end-to-end.</li>
               </ul>
@@ -9367,7 +9367,7 @@ public partial class AudioManager : Node
 
   def play_sfx(sound_name : String) : Nil
     # Native signal dispatch with automatic listener lifetime tracking
-    emit_sound_effect_played
+    emit(sound_effect_played)
   end
 
   # Direct compilation via LLVM: No MSBuild, no .csproj files, no SDK mismatches!
@@ -9468,7 +9468,7 @@ public partial class AudioManager : Node
 
   def play_sfx(sound_name : String) : Nil
     # Native signal dispatch with automatic listener lifetime tracking
-    emit_sound_effect_played
+    emit(sound_effect_played)
   end
 
   # Direct compilation via LLVM: No MSBuild, no .csproj files, no SDK mismatches!
@@ -10300,7 +10300,7 @@ node EnemyBoss &lt; CharacterBody3D do
 
   def take_damage(amount : Int32) : Void
     if amount &gt; 100
-      emit_signal(&quot;staggered&quot;)
+      emit(staggered)
     # ⚠️ Gutter Squiggle (Line 8): Missing &#39;end&#39; for &#39;if&#39; block
   end
 end
@@ -13992,8 +13992,8 @@ node PlayerController &lt; CharacterBody3D do
     # Direct typed child lookup via ~Class:
     hp_bar = ~ProgressBar
 
-    # Type-safe signal connection inherited from Damageable:
-    health_changed.connect do |cur, max|
+    # Declarative signal connection sugar with &#39;on&#39;:
+    on health_changed do |cur, max|
       hp_bar.value = (cur.to_f / max) * 100.0
     end
   end
@@ -14009,7 +14009,7 @@ end</code></pre>
               <li><strong>Live Inspector Sliders:</strong> <code>@[Export]</code> properties immediately render native drag sliders and range constraints in Godot Inspector.</li>
               <li><strong>Bare ~ Resolution:</strong> <code>~("CameraBoom/Camera3D").as(Camera3D)</code> resolves and types nested scene nodes via <code>NodeContext</code>.</li>
               <li><strong>Typed Child Lookup (<code>~Class</code>):</strong> <code>~ProgressBar</code> queries child nodes by class name and returns a concrete, typed reference.</li>
-              <li><strong>Type-Safe Signals:</strong> Declared signals synthesize compile-time checked connection helpers and auto-complete parameters.</li>
+              <li><strong>Declarative <code>on</code> Sugar:</strong> <code>on health_changed do |cur, max|</code> binds typed signals with zero boilerplate.</li>
             </ul>
           </div>
           </div>

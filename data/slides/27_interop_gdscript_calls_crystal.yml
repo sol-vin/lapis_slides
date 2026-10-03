@@ -23,7 +23,7 @@ left:
 
       def heal(amount : Int32) : Int32
         @health += amount
-        emit_health_changed(@health)
+        emit(health_changed, @health)
         @health
       end
     end

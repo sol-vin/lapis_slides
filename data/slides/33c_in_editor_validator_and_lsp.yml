@@ -22,7 +22,7 @@ left:
 
       def take_damage(amount : Int32) : Void
         if amount > 100
-          emit_signal("staggered")
+          emit(staggered)
         # ⚠️ Gutter Squiggle (Line 8): Missing 'end' for 'if' block
       end
     end

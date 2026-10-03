@@ -45,14 +45,14 @@ crystal:
 
     def take_damage(dmg : Int32) : Void
       # Compile-time checked: typos or wrong arg types fail during compilation!
-      emit_player_hit(dmg, self)
-      # Also auto-generates: on_player_hit { |dmg, src| ... }
+      emit(player_hit, dmg, self)
+      # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
     end
   points:
   - <strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc
     comments and ranges directly into Godot Inspector.
-  - <strong>Synthesized Methods:</strong> <code>signal died</code> generates typed
-    <code>emit_died</code>, <code>on_died</code>, and <code>on_died_once</code>.
+  - <strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player_hit, dmg, self)</code> validates
+    argument types and arity at compile time.
   - <strong>Zero Runtime Reflection:</strong> Metaprogramming executes at compile
     time; runtime cost is exactly zero.
 takeaway:

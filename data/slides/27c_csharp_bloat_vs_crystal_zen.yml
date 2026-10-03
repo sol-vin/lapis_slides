@@ -67,14 +67,14 @@ crystal:
       # Expressive, concise Ruby syntax with zero fluff:
       def heal(amount : Int32) : Int32
         @health = (@health + amount).clamp(0, @max_health)
-        # Strongly-typed signal emitter method generated at compile-time!
-        emit_health_changed(@health, @max_health)
+        # Strongly-typed signal emission verified at compile-time!
+        emit(health_changed, @health, @max_health)
         @health
       end
     end
   points:
   - <strong>Zero-Ceremony Class Definitions:</strong> Clean <code>node PlayerController &lt; CharacterBody3D</code> blocks without <code>partial</code> hacks or <code>using</code> noise.
-  - <strong>First-Class Signal DSL:</strong> <code>signal name(...)</code> macro automatically synthesizes type-safe <code>emit_name(...)</code> helper methods with compile-time argument checks.
+  - <strong>First-Class Signal DSL:</strong> <code>signal name(...)</code> macro automatically enables type-safe <code>emit(name, ...)</code> with compile-time argument checks.
   - <strong>Direct ClassDB Registration:</strong> Properties annotated with <code>@export</code> register seamlessly into Godot's inspector without getter/setter ceremony.
   - <strong>Half the Code, Double the Signal:</strong> Delivers pure Ruby elegance with 100% compiled native GDExtension ClassDB integration.
 takeaway:

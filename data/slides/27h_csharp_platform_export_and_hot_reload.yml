@@ -54,7 +54,7 @@ crystal:
 
       def play_sfx(sound_name : String) : Nil
         # Native signal dispatch with automatic listener lifetime tracking
-        emit_sound_effect_played
+        emit(sound_effect_played)
       end
 
       # Direct compilation via LLVM: No MSBuild, no .csproj files, no SDK mismatches!

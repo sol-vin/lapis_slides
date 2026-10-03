@@ -26,7 +26,7 @@ left:
 
         # Update UI & signal listeners on the render loop:
         @minimap.reveal_room(room_node.name)
-        emit_room_loaded(room_node)
+        emit(room_loaded, room_node)
       end
     end
 

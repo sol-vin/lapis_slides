@@ -22,6 +22,7 @@ left:
       @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
       property speed : Float32 = 7.0_f32
 
+      property health : Int32 = 100
       # Maximum hit points
       @[Export(range: 10..500, step: 10)]
       property max_health : Int32 = 100
@@ -29,12 +30,14 @@ left:
       signal health_changed(current : Int32, max_health : Int32)
       signal died
 
-      def _ready : Void
-        Godot.print("Player initialized: #{name}")
+      def take_damage(amount : Int32) : Void
+        @health = Math.max(0, @health - amount)
+        emit(health_changed, @health, @max_health)
+        emit(died) if @health == 0
       end
 
-      def _physics_process(delta : Float64) : Void
-        # Fixed-rate physics step
+      def _ready : Void
+        Godot.print("Player initialized: #{name}")
       end
     end
 right:
