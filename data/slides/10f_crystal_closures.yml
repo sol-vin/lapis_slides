@@ -12,6 +12,7 @@ left:
   title: closures_and_procs.cr — Zero-Cost First-Class Functions
   tag: Crystal
   lang: crystal
+  font_size: '0.72rem'
   code: |
     # 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
     def measure(label : String)
@@ -27,13 +28,24 @@ left:
     damage_calc = ->(base : Int32) { (base * scale).to_i }
     # Statically typed as Proc(Int32, Int32) with captured 'scale'
 
-    # 3. Non-Capturing Procs = Bare C Function Pointers!
+    # 3. Method-to-Proc Cleanliness (->some_method):
+    # Turn any existing method into a typed Proc with '->':
+    def double(x : Int32) : Int32; x * 2; end
+    double_fn = ->double(Int32)
+    [1, 2, 3].map(&->double(Int32)) # Inlined method-as-block! => [2, 4, 6]
+
+    # Bound method pointer on an instance:
+    boss = Boss.new
+    on_roar = ->boss.roar            # Typed 0-arg callback
+    button.on_click(&on_roar)        # Bound directly to event listener
+
+    # 4. Non-Capturing Procs = Bare C Function Pointers!
     # Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
     bridge_cb = ->(target_id : UInt64, event : Int32) do
       Godot::Bridge.dispatch_event(target_id, event)
     end
 
-    # 4. Symbol-to-Proc shorthand for iterator pipelines:
+    # 5. Symbol-to-Proc shorthand for iterator pipelines:
     enemies.select(&.alive?).map(&.health)
 right:
   type: card
@@ -41,7 +53,8 @@ right:
   color: cyan
   items:
     - '<strong>Ephemeral Blocks (<code>yield</code>):</strong> Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.'
-    - '<strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code>. Explicit parameter and return types (e.g. <code>Proc(Int32, Int32)</code>) with strict compile-time arity.'
+    - '<strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code> with strict compile-time parameter and return checking.'
+    - '<strong>Method-to-Proc (<code>-&gt;some_method</code>):</strong> Turn any method into a typed Proc instantly without lambda wrapper boilerplate: <code>-&gt;double(Int32)</code> or bound to an instance <code>-&gt;boss.roar</code>, passed via <code>&amp;</code>.'
     - '<strong>Non-Capturing Procs = C Pointers:</strong> When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.'
     - '<strong>Symbol-to-Proc Shorthand:</strong> <code>&amp;.alive?</code> and <code>&amp;.health</code> transform symbols into inlined block invocations with zero lambda boilerplate.'
 notes: |

@@ -365,7 +365,7 @@
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-ruby" style="font-size: 0.80rem !important; line-height: 1.25 !important;"># Yukihiro &quot;Matz&quot; Matsumoto&#39;s Vision (1995)
+            <pre><code class="language-ruby" style="font-size: 0.74rem !important; line-height: 1.25 !important;"># Yukihiro &quot;Matz&quot; Matsumoto&#39;s Vision (1995)
 # &quot;Ruby is designed for human cognitive comfort, not machine convenience.&quot;
 
 Ruby.manifesto do
@@ -374,9 +374,20 @@ Ruby.manifesto do
   syntax     :natural_english_prose
 
   empower do
-    first_class_blocks
-    expressive_closures
-    unbounded_dsl_freedom
+    first_class_blocks { just_like_magic }
+    expressive_closures.each do |easy, inputs|
+      makes easy.code
+      inputs.handled! { |input| nicely?(input) }
+    end
+    unbounded_dsl_freedom do
+      make the future bright
+      introduce new syntax
+
+      5.times do
+        still use (ruby / crystal) syntax
+        domain_specific_languages.powered_up!
+      end
+    end
   end
 
   goal &quot;Make programmers smile when they write code&quot;
@@ -812,7 +823,7 @@ puts v3[:x]        # Sugar for: v3.[](:x) =&gt; 15</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -825,7 +836,7 @@ puts v3[:x]        # Sugar for: v3.[](:x) =&gt; 15</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-ruby code-dense"># 1. Blocks &amp; Yield: Lightweight, zero-allocation closures
+            <pre><code class="language-ruby" style="font-size: 0.70rem !important; line-height: 1.25 !important;"># 1. Blocks &amp; Yield: Lightweight, zero-allocation closures
 def benchmark
   t0 = Time.now
   yield # Passes control directly to caller&#39;s ephemeral block
@@ -838,19 +849,25 @@ p = Proc.new { |x, y| puts &quot;Proc args: #{x.inspect}, #{y.inspect}&quot; }
 p.call(42) # Permissive arity: y defaults to nil, no error!
 
 l = -&gt;(x, y) { puts &quot;Lambda sum: #{x + y}&quot; }
-# l.call(42) # Strict arity: raises ArgumentError!
-l.call(10, 20)
+l.call(10, 20) # Strict arity: raises ArgumentError if mismatch!
 
-# 3. The &#39;&amp;&#39; Bridge: Converting between Blocks and Procs
-def transform_all(list, &amp;block) # &amp; captures block as Proc
-  list.map(&amp;block)              # &amp; unpacks Proc back to block
+# 3. Method-to-Callable: Turning Methods into Procs / Lambdas
+def double(n) = n * 2
+
+# In Ruby: method(:name) or clean forwarder -&gt;(n) { double(n) }
+double_fn = method(:double)     # Reified Method object
+lambda_fn = -&gt;(n) { double(n) } # Clean lambda wrapper
+
+# 4. The &#39;&amp;&#39; Bridge: Passing Callables into Block Positions
+def transform_all(list, &amp;block)
+  list.map(&amp;block) # &amp; unpacks Proc/Method back to block
 end
-double = -&gt;(n) { n * 2 }
-puts transform_all([1, 2, 3], &amp;double) # =&gt; [2, 4, 6]</code></pre>
+transform_all([1, 2, 3], &amp;double_fn) # =&gt; [2, 4, 6]
+transform_all([1, 2, 3], &amp;lambda_fn) # =&gt; [2, 4, 6]</code></pre>
           </div>
           </div>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card purple col">
+          <div class="card purple col compact">
             <div class="card-title purple">
               <span>Closures &amp; First-Class Function Mechanics</span>
             </div>
@@ -858,6 +875,7 @@ puts transform_all([1, 2, 3], &amp;double) # =&gt; [2, 4, 6]</code></pre>
               <li><strong>Blocks & Yield (Ephemeral):</strong> Blocks (<code>do..end</code> or <code>{..}</code>) are passed implicitly to methods and invoked with <code>yield</code>, avoiding heap object allocation overhead.</li>
               <li><strong>Procs (Permissive Objects):</strong> Created via <code>Proc.new</code>. Treats arguments permissively (missing become <code>nil</code>) and a <code>return</code> exits the enclosing method scope.</li>
               <li><strong>Lambdas (Strict Anonymous Methods):</strong> Created via <code>-&gt;(x) { ... }</code>. Enforces exact argument counts (raises <code>ArgumentError</code>) and <code>return</code> exits only the lambda.</li>
+              <li><strong>Method-to-Callable Cleanliness:</strong> Turn methods into first-class callables via <code>method(:name)</code> or clean lambda forwarders (<code>-&gt;(x) { name(x) }</code>).</li>
               <li><strong>The Ampersand Bridge (<code>&amp;</code>):</strong> Converts ephemeral blocks into reified Procs in method signatures (<code>&amp;blk</code>), and unpacks Procs back into blocks for method calls (<code>&amp;proc</code>).</li>
             </ul>
           </div>
@@ -2695,7 +2713,7 @@ grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap</code></pre>
         </div>
         <div class="slide-body" style="display: flex; gap: 1.2rem; align-items: stretch; flex: 1;">
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="code-container col code-dense" style="">
+          <div class="code-container col" style="">
             <div class="code-header">
               <div class="terminal-dots">
                 <span class="terminal-dot dot-1" title="Close"></span>
@@ -2708,7 +2726,7 @@ grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap</code></pre>
                 <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
               </div>
             </div>
-            <pre><code class="language-crystal code-dense"># 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
+            <pre><code class="language-crystal" style="font-size: 0.72rem !important; line-height: 1.25 !important;"># 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
 def measure(label : String)
   t0 = Time.monotonic
   yield # Passes control directly to block with 0 allocation
@@ -2722,24 +2740,36 @@ scale = 1.5_f32
 damage_calc = -&gt;(base : Int32) { (base * scale).to_i }
 # Statically typed as Proc(Int32, Int32) with captured &#39;scale&#39;
 
-# 3. Non-Capturing Procs = Bare C Function Pointers!
+# 3. Method-to-Proc Cleanliness (-&gt;some_method):
+# Turn any existing method into a typed Proc with &#39;-&gt;&#39;:
+def double(x : Int32) : Int32; x * 2; end
+double_fn = -&gt;double(Int32)
+[1, 2, 3].map(&amp;-&gt;double(Int32)) # Inlined method-as-block! =&gt; [2, 4, 6]
+
+# Bound method pointer on an instance:
+boss = Boss.new
+on_roar = -&gt;boss.roar            # Typed 0-arg callback
+button.on_click(&amp;on_roar)        # Bound directly to event listener
+
+# 4. Non-Capturing Procs = Bare C Function Pointers!
 # Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
 bridge_cb = -&gt;(target_id : UInt64, event : Int32) do
   Godot::Bridge.dispatch_event(target_id, event)
 end
 
-# 4. Symbol-to-Proc shorthand for iterator pipelines:
+# 5. Symbol-to-Proc shorthand for iterator pipelines:
 enemies.select(&amp;.alive?).map(&amp;.health)</code></pre>
           </div>
           </div>
           <div class="col" style="display: flex; flex-direction: column; gap: 0.8rem;">
-          <div class="card cyan col">
+          <div class="card cyan col compact">
             <div class="card-title cyan">
               <span>The Spectrum of Zero-Cost Closures</span>
             </div>
             <ul class="card-list">
               <li><strong>Ephemeral Blocks (<code>yield</code>):</strong> Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.</li>
-              <li><strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code>. Explicit parameter and return types (e.g. <code>Proc(Int32, Int32)</code>) with strict compile-time arity.</li>
+              <li><strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code> with strict compile-time parameter and return checking.</li>
+              <li><strong>Method-to-Proc (<code>-&gt;some_method</code>):</strong> Turn any method into a typed Proc instantly without lambda wrapper boilerplate: <code>-&gt;double(Int32)</code> or bound to an instance <code>-&gt;boss.roar</code>, passed via <code>&amp;</code>.</li>
               <li><strong>Non-Capturing Procs = C Pointers:</strong> When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.</li>
               <li><strong>Symbol-to-Proc Shorthand:</strong> <code>&amp;.alive?</code> and <code>&amp;.health</code> transform symbols into inlined block invocations with zero lambda boilerplate.</li>
             </ul>

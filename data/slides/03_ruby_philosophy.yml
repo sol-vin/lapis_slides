@@ -12,7 +12,7 @@ left:
   title: ruby_philosophy.rb — Developer Happiness First
   tag: Ruby
   lang: ruby
-  font_size: '0.80rem'
+  font_size: '0.74rem'
   code: |
     # Yukihiro "Matz" Matsumoto's Vision (1995)
     # "Ruby is designed for human cognitive comfort, not machine convenience."
@@ -23,9 +23,20 @@ left:
       syntax     :natural_english_prose
 
       empower do
-        first_class_blocks
-        expressive_closures
-        unbounded_dsl_freedom
+        first_class_blocks { just_like_magic }
+        expressive_closures.each do |easy, inputs|
+          makes easy.code
+          inputs.handled! { |input| nicely?(input) }
+        end
+        unbounded_dsl_freedom do
+          make the future bright
+          introduce new syntax
+
+          5.times do
+            still use (ruby / crystal) syntax
+            domain_specific_languages.powered_up!
+          end
+        end
       end
 
       goal "Make programmers smile when they write code"

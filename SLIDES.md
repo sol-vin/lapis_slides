@@ -64,9 +64,20 @@ This document outlines each slide's exact theme palette, architectural category,
     syntax     :natural_english_prose
   
     empower do
-      first_class_blocks
-      expressive_closures
-      unbounded_dsl_freedom
+      first_class_blocks { just_like_magic }
+      expressive_closures.each do |easy, inputs|
+        makes easy.code
+        inputs.handled! { |input| nicely?(input) }
+      end
+      unbounded_dsl_freedom do
+        make the future bright
+        introduce new syntax
+  
+        5.times do
+          still use (ruby / crystal) syntax
+          domain_specific_languages.powered_up!
+        end
+      end
     end
   
     goal "Make programmers smile when they write code"
@@ -298,20 +309,27 @@ This document outlines each slide's exact theme palette, architectural category,
   p.call(42) # Permissive arity: y defaults to nil, no error!
   
   l = ->(x, y) { puts "Lambda sum: #{x + y}" }
-  # l.call(42) # Strict arity: raises ArgumentError!
-  l.call(10, 20)
+  l.call(10, 20) # Strict arity: raises ArgumentError if mismatch!
   
-  # 3. The '&' Bridge: Converting between Blocks and Procs
-  def transform_all(list, &block) # & captures block as Proc
-    list.map(&block)              # & unpacks Proc back to block
+  # 3. Method-to-Callable: Turning Methods into Procs / Lambdas
+  def double(n) = n * 2
+  
+  # In Ruby: method(:name) or clean forwarder ->(n) { double(n) }
+  double_fn = method(:double)     # Reified Method object
+  lambda_fn = ->(n) { double(n) } # Clean lambda wrapper
+  
+  # 4. The '&' Bridge: Passing Callables into Block Positions
+  def transform_all(list, &block)
+    list.map(&block) # & unpacks Proc/Method back to block
   end
-  double = ->(n) { n * 2 }
-  puts transform_all([1, 2, 3], &double) # => [2, 4, 6]
+  transform_all([1, 2, 3], &double_fn) # => [2, 4, 6]
+  transform_all([1, 2, 3], &lambda_fn) # => [2, 4, 6]
   ```
 - **Closures & First-Class Function Mechanics**:
   - Blocks & Yield (Ephemeral): Blocks (do..end or {..}) are passed implicitly to methods and invoked with yield, avoiding heap object allocation overhead.
   - Procs (Permissive Objects): Created via Proc.new. Treats arguments permissively (missing become nil) and a return exits the enclosing method scope.
   - Lambdas (Strict Anonymous Methods): Created via ->(x) { ... }. Enforces exact argument counts (raises ArgumentError) and return exits only the lambda.
+  - Method-to-Callable Cleanliness: Turn methods into first-class callables via method(:name) or clean lambda forwarders (->(x) { name(x) }).
   - The Ampersand Bridge (&): Converts ephemeral blocks into reified Procs in method signatures (&blk), and unpacks Procs back into blocks for method calls (&proc).
 - **Presenter Script**:
   > *"Closures are the beating heart of Ruby and Crystal. Ruby provides three distinct tiers of closures. At the lightest level are blocks—ephemeral code chunks passed implicitly and triggered with yield. They power iteration and resource-scoping patterns without allocating heap objects. When you need closures as first-class citizens that you can store in variables or pass around, you have Procs and Lambdas. Procs are lenient: they don't care if you pass too few or too many arguments, and returning from a Proc returns from the enclosing method. Lambdas, on the other hand, behave like true anonymous methods: they strictly enforce parameter counts and their return statements only exit the lambda itself. The ampersand operator acts as the bidirectional bridge between blocks and Procs. Crystal preserves this exact block-and-proc elegance, while adding compile-time static types and LLVM optimization."*
@@ -1151,18 +1169,30 @@ This document outlines each slide's exact theme palette, architectural category,
   damage_calc = ->(base : Int32) { (base * scale).to_i }
   # Statically typed as Proc(Int32, Int32) with captured 'scale'
   
-  # 3. Non-Capturing Procs = Bare C Function Pointers!
+  # 3. Method-to-Proc Cleanliness (->some_method):
+  # Turn any existing method into a typed Proc with '->':
+  def double(x : Int32) : Int32; x * 2; end
+  double_fn = ->double(Int32)
+  [1, 2, 3].map(&->double(Int32)) # Inlined method-as-block! => [2, 4, 6]
+  
+  # Bound method pointer on an instance:
+  boss = Boss.new
+  on_roar = ->boss.roar            # Typed 0-arg callback
+  button.on_click(&on_roar)        # Bound directly to event listener
+  
+  # 4. Non-Capturing Procs = Bare C Function Pointers!
   # Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
   bridge_cb = ->(target_id : UInt64, event : Int32) do
     Godot::Bridge.dispatch_event(target_id, event)
   end
   
-  # 4. Symbol-to-Proc shorthand for iterator pipelines:
+  # 5. Symbol-to-Proc shorthand for iterator pipelines:
   enemies.select(&.alive?).map(&.health)
   ```
 - **The Spectrum of Zero-Cost Closures**:
   - Ephemeral Blocks (yield): Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.
-  - Statically Typed Proc Objects: Created via ->(x : T) { ... } or Proc.new. Explicit parameter and return types (e.g. Proc(Int32, Int32)) with strict compile-time arity.
+  - Statically Typed Proc Objects: Created via ->(x : T) { ... } or Proc.new with strict compile-time parameter and return checking.
+  - Method-to-Proc (->some_method): Turn any method into a typed Proc instantly without lambda wrapper boilerplate: ->double(Int32) or bound to an instance ->boss.roar, passed via &.
   - Non-Capturing Procs = C Pointers: When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.
   - Symbol-to-Proc Shorthand: &.alive? and &.health transform symbols into inlined block invocations with zero lambda boilerplate.
 - **Presenter Script**:
