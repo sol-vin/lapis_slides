@@ -1,7 +1,7 @@
 ---
 id: 27e_csharp_runtime_tax_and_gc
 title: 'Godot C# vs Lapis: The Runtime VM Tax & GC Stutter'
-subtitle: P/Invoke Marshalling Overhead and Unpredictable GC Frame Drops vs Native LLVM Speed
+subtitle: P/Invoke Marshalling Overhead, LINQ Allocation Churn, and GC Frame Drops vs Native LLVM Speed
 badge: LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY
 badge_color: purple
 palette: former_rain
@@ -20,58 +20,55 @@ gdscript:
         {
             var origin = GlobalPosition; // P/Invoke across managed boundary
 
-            // 1. LINQ allocates closures & enumerators on heap EVERY physics frame:
+            // LINQ allocates closures, enumerators, and list buffers on heap every frame
             var inRange = _targets
                 .Where(t => t.GlobalPosition.DistanceTo(origin) < 400.0f)
                 .OrderBy(t => t.GlobalPosition.DistanceSquaredTo(origin))
-                .ToList(); // ⚠️ Heap allocation: List<T> + display class + enumerator
+                .ToList();
 
-            // 2. Variant boxing & dynamic dispatch:
+            // Variant array allocation & dynamic dispatch boxes floats and vectors
             foreach (var target in inRange)
-            {
-                // Allocates Variant array for arguments, boxing float & Vector2:
                 target.Call("take_damage", 35.0f, origin);
-            }
-            // Result: Floods .NET Gen0/Gen1 heap -> GC pauses drop frames (15ms-50ms spikes!)
+
+            // Floods .NET Gen0/Gen1 nursery -> GC sweeps cause 15ms-50ms frame drops
         }
     }
   points:
-  - <strong>P/Invoke Boundary Overhead:</strong> Reading <code>GlobalPosition</code> and calling engine APIs repeatedly crosses the managed CLR to unmanaged C++ boundary, incurring marshalling latency.
-  - <strong>Heap Allocation Churn in Hot Loops:</strong> Idiomatic C# features like LINQ (<code>.Where()</code>, <code>.OrderBy()</code>, lambdas) allocate delegate closures, display classes, and enumerator objects on the heap 60 to 120 times every second.
-  - <strong>Variant Boxing &amp; Reflection:</strong> Calling <code>target.Call(...)</code> dynamically boxes value types into temporary <code>Godot.Variant</code> arrays, flooding the .NET Gen0/Gen1 nursery.
-  - <strong>GC Frame Spikes &amp; Micro-Stutter:</strong> When the CLR Garbage Collector pauses execution to sweep the nursery, frame times spike by 15ms–50ms, causing visible frame drops during intensive combat.
+  - <strong>P/Invoke Boundary Overhead:</strong> Reading engine properties and calling C++ nodes repeatedly crosses the managed CLR boundary, incurring marshalling latency.
+  - <strong>LINQ Closure & Enumerator Churn:</strong> Idiomatic operators (<code>Where</code>, <code>OrderBy</code>) instantiate delegate display classes, heap enumerators, and buffer arrays 60–120 times every second.
+  - <strong>Variant Boxing & Dynamic Dispatch:</strong> Calling <code>target.Call(...)</code> dynamically boxes value arguments into temporary <code>Godot.Variant</code> arrays, flooding Gen0/Gen1 nursery heaps.
+  - <strong>Unpredictable GC Stutter:</strong> When the .NET runtime sweeps the nursery, frame times spike by 15ms–50ms, causing visible frame drops in intensive gameplay.
 crystal:
   title: ':sparkles: Crystal / Lapis: Native C ABI & Zero-Allocation Loops'
   lang: crystal
   tag: Crystal (Lapis)
+  card_title: Lapis Native Speed & Zero Allocations
   code: |
     node CombatRadar < Node2D do
       @targets = Array(Enemy).new
 
       def _physics_process(delta : Float64)
-        # 1. Direct C ABI: inlined machine code, ZERO P/Invoke crossing penalty
-        origin = global_position
+        origin = global_position # Direct C ABI: zero P/Invoke overhead
 
-        # 2. Inlined blocks: Crystal blocks compile to stack loops with ZERO heap allocations!
+        # Inlined blocks: LLVM inlines pipeline directly on stack (0 heap allocations)
         @targets
           .select! { |t| t.global_position.distance_to(origin) < 400.0_f32 }
           .sort_by! { |t| t.global_position.distance_squared_to(origin) }
           .each do |target|
-            # 3. Direct typed dispatch: direct function call, ZERO Variant boxing!
-            target.take_damage(35.0_f32, origin)
+            target.take_damage(35.0_f32, origin) # Direct typed dispatch: zero boxing
           end
 
-        # Result: 0 bytes allocated per frame -> Pure native speed with ZERO GC hitching!
+        # 0 bytes allocated per frame -> Pure native speed with zero GC hitching
       end
     end
   points:
-  - <strong>Direct Native C ABI:</strong> Compiled ahead-of-time by LLVM directly to native machine code; engine property reads and methods execute at raw C++ speed with zero P/Invoke overhead.
-  - <strong>Zero-Allocation Inlined Blocks:</strong> Chained Enumerable pipelines (<code>select!</code>, <code>sort_by!</code>, <code>each</code>) are inlined by the compiler directly onto the stack—allocating zero heap closure objects.
-  - <strong>Static Typed Method Dispatch:</strong> <code>target.take_damage(35.0_f32, origin)</code> invokes direct function pointers without <code>Variant</code> boxing, dictionary lookups, or reflection overhead.
-  - <strong>Zero-Allocation Physics Loop:</strong> The entire physics update allocates exactly 0 bytes on the heap, ensuring deterministic, silky-smooth 120+ FPS frame pacing.
+  - <strong>Direct Native C ABI:</strong> Ahead-of-time compiled by LLVM directly to native machine code; engine property reads execute at raw C++ speed with zero marshalling overhead.
+  - <strong>Zero-Cost Inlined Blocks:</strong> Chained Enumerable pipelines (<code>select!</code>, <code>sort_by!</code>, <code>each</code>) are inlined by the compiler directly onto the stack—allocating zero heap closure objects.
+  - <strong>Static Typed Method Dispatch:</strong> <code>target.take_damage(35.0_f32, origin)</code> invokes direct function pointers without <code>Variant</code> boxing or dynamic lookups.
+  - <strong>Zero-Allocation Physics Loop:</strong> The entire physics update allocates exactly 0 bytes on the heap, guaranteeing silky-smooth 120+ FPS frame pacing.
 takeaway:
   badge: NATIVE LLVM THROUGHPUT
-  text: 'Lapis delivers raw C++ performance with Ruby ergonomics: zero P/Invoke boundary latency, zero boxing churn, and zero GC hitching.'
+  text: 'Lapis delivers raw C++ performance with Ruby ergonomics: zero P/Invoke boundary latency, zero LINQ closure churn, and zero GC hitching.'
 notes: |
   Why does C# struggle in high-performance gameplay loops? In Godot C#, every call into engine nodes must traverse the managed-to-unmanaged P/Invoke boundary, adding call overhead and struct copying. Even worse, standard C# idioms like LINQ closures allocate temporary objects on the heap every single frame, while dynamic method calls box arguments into Godot Variant arrays. When the .NET Garbage Collector pauses execution to sweep Gen0 and Gen1 heaps, frame times spike by 15ms to 50ms, causing noticeable hitching right in the middle of combat.
   In Lapis, Crystal compiles directly to bare-metal machine code via LLVM with a direct C ABI interface to Godot. Crystal's higher-order blocks (select!, sort_by!, each) are completely inlined on the stack with zero heap closures, and methods dispatch directly without Variant boxing. Hot physics and combat loops allocate exactly 0 bytes on the heap, delivering rock-solid 120+ FPS frame pacing with zero GC stutter.
