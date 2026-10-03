@@ -48,6 +48,33 @@ right:
   speed: 1.0
   loop: true
   autoplay: true
+  controls: auto
+  code: |
+    # 1. Discover registered gameplay benchmarks & groups
+    $ lapis benchmarks -l
+    Registered Benchmarks in ~/lapis/template/benchmarks:
+      PathfindingCrowd   [Group: Engine ] A* routing (5,000 active agents)
+      ProceduralDungeon  [Custom: Compute] BSP room partitioning & corridors
+      ParticleBatchSim   [Custom: Compute] 20,000 Verlet integration steps
+
+    # 2. Run benchmark group with AVX2 SIMD & comparative latency table
+    $ lapis benchmarks run -g PathfindingCrowd --chart --html
+    [Benchmarks:Build] Compiling harness with AVX2 SIMD (-O3 -s)...
+      ✔ Harness compiled in 0.88s (SIMD vectorization active)
+    Benchmark Results: PathfindingCrowd (5,000 Agents)
+    ┌──────────────────────────┬─────────────┬──────────────┬───────────┐
+    │ Implementation           │ Median Time │ Throughput   │ Speedup   │
+    ├──────────────────────────┼─────────────┼──────────────┼───────────┤
+    │ Crystal (SIMD AVX2)      │     0.82 ms │ 6,097 agt/fr │ 15.4x 🚀  │
+    │ GDScript (Baseline)      │    12.63 ms │   395 agt/fr │ 1.0x (ref)│
+    └──────────────────────────┴─────────────┴──────────────┴───────────┘
+
+    # 3. Terminal horizontal bar chart visualization
+    $ lapis benchmarks run -c compute --chart
+    📊 Speedup Factor (x) - Higher is Faster:
+    ParticleBatchSim    [██████████████████████████████████████████] 18.0x
+    ProceduralDungeon   [██████████████████████████████████████    ] 17.0x
+    PathfindingCrowd    [████████████████████████████████          ] 15.4x
 notes: |
   Benchmarking shouldn't just be an internal engine tool—it's built right into Lapis for your own game projects. Using Lapis::Benchmark, you can profile intensive gameplay algorithms like procedural dungeon generation or crowd pathfinding with microsecond precision.
   You can define comparison groups to test your Crystal implementation directly against an existing GDScript prototype and export visual SVG charts and HTML reports via 'lapis benchmarks'.

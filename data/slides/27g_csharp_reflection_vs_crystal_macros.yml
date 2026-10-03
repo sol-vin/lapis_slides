@@ -38,10 +38,10 @@ gdscript:
         // complex Roslyn AST trees, and constant IDE red-squiggles and rebuild lag.
     }
   points:
-    - "**Slow Runtime Reflection Overhead:** `Type.GetMethod()` and `method.Invoke()` are 10-100x slower than direct calls, performing dynamic string table lookups on every invocation."
-    - "**Variant & Object Boxing Penalties:** Passing arguments through `MethodInfo.Invoke` forces primitive types (`int`, `float`, `Vector3`) to be boxed into heap objects."
-    - "**NativeAOT & Trimming Hazard:** Modern .NET NativeAOT trims away unused reflection metadata at build time unless decorated with complex `[DynamicallyAccessedMembers]` attributes."
-    - "**Roslyn Generator Tooling Tax:** Metaprogramming requires a separate analyzer project, MSBuild plumbing, and fragile Roslyn AST APIs that frequently desync in IDEs."
+  - <strong>Slow Runtime Reflection Overhead:</strong> <code>Type.GetMethod()</code> and <code>method.Invoke()</code> are 10-100x slower than direct calls, performing dynamic string table lookups on every invocation.
+  - <strong>Variant &amp; Object Boxing Penalties:</strong> Passing arguments through <code>MethodInfo.Invoke</code> forces primitive types (<code>int</code>, <code>float</code>, <code>Vector3</code>) to be boxed into heap objects.
+  - <strong>NativeAOT &amp; Trimming Hazard:</strong> Modern .NET NativeAOT trims away unused reflection metadata at build time unless decorated with complex <code>[DynamicallyAccessedMembers]</code> attributes.
+  - <strong>Roslyn Generator Tooling Tax:</strong> Metaprogramming requires a separate analyzer project, MSBuild plumbing, and fragile Roslyn AST APIs that frequently desync in IDEs.
 crystal:
   title: ':sparkles: Crystal: First-Class Compile-Time AST Macros'
   lang: crystal
@@ -68,10 +68,10 @@ crystal:
       generate_rpc_dispatcher sync_transform, player_spawn, player_hit
     end
   points:
-    - "**First-Class Language Macros:** AST macros are built directly into the Crystal language with zero separate projects, analyzers, or MSBuild setup."
-    - "**Deep Compile-Time Introspection:** Direct access to `{{ @type.instance_vars }}`, `{{ @type.methods }}`, and annotations during compilation."
-    - "**Zero Runtime Reflection Cost:** Macro expansions generate pure static C ABI jump tables, serialization logic, and GDExtension vtable bindings with zero reflection overhead."
-    - "**Whole-Program Type Inference:** 100% native AOT compilation with no runtime reflection tables, no metadata stripping hazards, and no boxing."
+  - <strong>First-Class Language Macros:</strong> AST macros are built directly into the Crystal language with zero separate projects, analyzers, or MSBuild setup.
+  - <strong>Deep Compile-Time Introspection:</strong> Direct access to <code>{{ @type.instance_vars }}</code>, <code>{{ @type.methods }}</code>, and annotations during compilation.
+  - <strong>Zero Runtime Reflection Cost:</strong> Macro expansions generate pure static C ABI jump tables, serialization logic, and GDExtension vtable bindings with zero reflection overhead.
+  - <strong>Whole-Program Type Inference:</strong> 100% native AOT compilation with no runtime reflection tables, no metadata stripping hazards, and no boxing.
 takeaway:
   badge: ZERO-COST CODEGEN
   text: 'Crystal macros bring full compile-time metaprogramming and reflection without the tooling agony or runtime reflection tax of C#.'

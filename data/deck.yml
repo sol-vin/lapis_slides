@@ -92,6 +92,7 @@ slides:
 - 27h_csharp_platform_export_and_hot_reload
 - 27i_csharp_concurrency_and_symbols
 - 27j_csharp_unions_and_pattern_matching
+- 27k_csharp_unit_testing_vs_crystal_spec
 - 27_interop_gdscript_calls_crystal
 - 28_interop_crystal_calls_gdscript_dynamic
 - 29_interop_crystal_calls_gdscript_typed
@@ -102,12 +103,12 @@ slides:
 - 30b_cli_fuzzy_palette
 - 30c_cli_doctor
 - 30d_cli_scaffold_wizard
-- 30e_cli_interactive_studio
 - 30f_cli_clean_and_upgrade
 - 31_cli_codegen
 - 31b_cli_package_portable
 - 31c_cli_templates_and_export
 - 31d_cli_docs_system
+- 31dd_cli_docs_action
 - 31e_cli_ide_tooling
 - 32_package_management
 - 33b_cli_editor_launcher

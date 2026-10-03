@@ -436,8 +436,8 @@ class BindCast < BaseCast
   def rows; 22; end
 
   def record(cast : AsciiCast)
-    cast.type_command("lapis bind project", prompt_delay: 0.2)
-    lines = ProcessHelper.run_lapis(["bind", "project"], chdir: "sandbox/void_runner", cols: cols, rows: rows)
+    cast.type_command("lapis bind project", prompt: "\e[1;32mian@workstation\e[0m:\e[1;34m~/lapis/template\e[0m$ ", prompt_delay: 0.2)
+    lines = ProcessHelper.run_lapis(["bind", "project"], chdir: "template", cols: cols, rows: rows)
     cast.print_lines(lines, line_delay: 0.08)
     cast.sleep(3.0)
   end
@@ -541,6 +541,18 @@ class EditorLauncherCast < BaseCast
   end
 end
 CastRegistry.register(EditorLauncherCast.new)
+
+# Slide 31dd: Lapis Docs CLI & Interactive TUI Explorer
+class DocsCliTuiCast < BaseCast
+  def name; "lapis_docs_cli_tui"; end
+  def cols; 86; end
+  def rows; 22; end
+
+  def record(cast : AsciiCast)
+    Process.run("python", ["scripts/record_docs_cast.py"])
+  end
+end
+CastRegistry.register(DocsCliTuiCast.new)
 
 # 10. Slide 34c: Debug Workflows (Crash Forensics)
 class DebugWorkflowsCast < BaseCast
@@ -646,10 +658,7 @@ class R2CrystalCast < BaseCast
   def rows; 22; end
 
   def record(cast : AsciiCast)
-    cast.type_command("lapis decompile bin/crystal_bridge.dll --crystal", prompt_delay: 0.2)
-    lines = ProcessHelper.run_lapis(["decompile", "bin/crystal_bridge.dll", "--crystal"], chdir: "sandbox/void_runner", cols: cols, rows: rows)
-    cast.print_lines(lines, line_delay: 0.08)
-    cast.sleep(3.0)
+    Process.run("python", ["scripts/record_r2_crystal_cast.py"])
   end
 end
 CastRegistry.register(R2CrystalCast.new)
@@ -661,12 +670,7 @@ class R2GodotCast < BaseCast
   def rows; 22; end
 
   def record(cast : AsciiCast)
-    cast.type_command("lapis decompile bin/game.dll --godot", prompt_delay: 0.2)
-    raw_lines = ProcessHelper.run_lapis(["decompile", "C:/Users/Ian/Documents/libgodot/bin/game.dll", "--godot"], chdir: "sandbox/void_runner", cols: cols, rows: rows)
-    # Take first 15 lines to fit terminal comfortably
-    display_lines = raw_lines.first(16)
-    cast.print_lines(display_lines, line_delay: 0.08)
-    cast.sleep(3.0)
+    Process.run("python", ["scripts/record_r2_godot_cast.py"])
   end
 end
 CastRegistry.register(R2GodotCast.new)
@@ -790,10 +794,7 @@ class CustomBenchmarksCast < BaseCast
   def rows; 22; end
 
   def record(cast : AsciiCast)
-    cast.type_command("lapis benchmarks -l", prompt_delay: 0.2)
-    lines = ProcessHelper.run_lapis(["benchmarks", "-l"], chdir: "sandbox/void_runner", cols: cols, rows: rows)
-    cast.print_lines(lines, line_delay: 0.08)
-    cast.sleep(3.0)
+    Process.run("python", ["scripts/record_custom_benchmarks_cast.py"])
   end
 end
 CastRegistry.register(CustomBenchmarksCast.new)

@@ -10,6 +10,7 @@ gdscript:
   title: ':circle-xmark: Godot C#: LINQ Allocations & State Machine Rigmarole'
   lang: csharp
   tag: C# (.NET 8)
+  font_size: '0.68rem'
   card_title: C# LINQ & Iterator Anti-Patterns
   code: |
     using Godot;
@@ -37,10 +38,10 @@ gdscript:
         }
     }
   points:
-    - "**Hidden Heap Allocations in Hot Loops:** LINQ convenience operators (`Where`, `Select`, `OrderBy`) instantiate delegate closures (`Func<T, bool>`) and display classes on the managed heap every invocation."
-    - "**IEnumerator State Machine Rigmarole:** Custom iterators and LINQ operators generate hidden nested classes with `switch(state)` state machines and heap allocations per call."
-    - "**Virtual Interface Dispatch Overhead:** Iterating via `IEnumerable<T>` forces virtual `.MoveNext()` and `.Current` calls every step, defeating CPU branch prediction and loop vectorization."
-    - "**Interop Collection Boxing:** Converting Godot's loosely-typed `Array` via `.OfType<T>()` incurs runtime type-check penalties and boxed Variant conversions."
+  - <strong>Hidden Heap Allocations in Hot Loops:</strong> LINQ convenience operators (<code>Where</code>, <code>Select</code>, <code>OrderBy</code>) instantiate delegate closures (<code>Func&lt;T, bool&gt;</code>) and display classes on the managed heap every invocation.
+  - <strong>IEnumerator State Machine Rigmarole:</strong> Custom iterators and LINQ operators generate hidden nested classes with <code>switch(state)</code> state machines and heap allocations per call.
+  - <strong>Virtual Interface Dispatch Overhead:</strong> Iterating via <code>IEnumerable&lt;T&gt;</code> forces virtual <code>.MoveNext()</code> and <code>.Current</code> calls every step, defeating CPU branch prediction and loop vectorization.
+  - <strong>Interop Collection Boxing:</strong> Converting Godot's loosely-typed <code>Array</code> via <code>.OfType&lt;T&gt;()</code> incurs runtime type-check penalties and boxed Variant conversions.
 crystal:
   title: ':sparkles: Crystal: Zero-Cost Inlined Blocks & Pure Value Iterators'
   lang: crystal
@@ -62,10 +63,10 @@ crystal:
       end
     end
   points:
-    - "**Inlined Blocks with Zero Allocation:** Crystal blocks (`each`, `select`, `map`) are inlined directly at the callsite by LLVM with zero heap allocations, zero closures, and zero GC churn."
-    - "**Safe for 60/144 FPS Game Loops:** Filter, sort, and transform collections inside `_physics_process` without allocating a single byte on the heap."
-    - "**Value-Type Iterator Pipelines:** First-class `Iterator(T)` allows lazy, composable chaining with stack allocation and full compiler optimizations."
-    - "**Direct Native Collection Access:** Direct typed traversal over node children (`children(as: Enemy)`) without boxing or reflection."
+  - <strong>Inlined Blocks with Zero Allocation:</strong> Crystal blocks (<code>each</code>, <code>select</code>, <code>map</code>) are inlined directly at the callsite by LLVM with zero heap allocations, zero closures, and zero GC churn.
+  - <strong>Safe for 60/144 FPS Game Loops:</strong> Filter, sort, and transform collections inside <code>_physics_process</code> without allocating a single byte on the heap.
+  - <strong>Value-Type Iterator Pipelines:</strong> First-class <code>Iterator(T)</code> allows lazy, composable chaining with stack allocation and full compiler optimizations.
+  - <strong>Direct Native Collection Access:</strong> Direct typed traversal over node children (<code>children(as: Enemy)</code>) without boxing or reflection.
 takeaway:
   badge: ZERO GC CHURN
   text: 'Crystal transforms collection processing from C#s LINQ allocation minefield into zero-cost inlined LLVM machine code.'

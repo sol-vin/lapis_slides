@@ -17,28 +17,24 @@ gdscript:
 
     public partial class AudioManager : Node
     {
-        // 1. WEB EXPORT LOCKOUT: Godot 4 C# cannot export to Web/WASM out-of-the-box!
-        // 2. MONSTER RUNTIME: Shipping games requires 60MB+ .NET CLR runtime payload
-        // 3. HOT-RELOAD ALC LEAK: Any static event listener prevents AssemblyLoadContext unloading
+        // Static events prevent AssemblyLoadContext from unloading
         public static event Action? OnSoundEffectPlayed;
 
         public override void _Ready()
         {
-            // If any node forgets to unsubscribe (-=), the entire assembly remains
-            // pinned in memory as a 'zombie' ALC, breaking editor hot-reload!
+            // Unreleased listener pins assembly in RAM as a 'zombie' ALC
             OnSoundEffectPlayed += HandleSound;
         }
 
         private void HandleSound() => GD.Print("Playing SFX");
-        
-        // Result: Editor memory skyrockets, breakpoints stop hitting,
-        // and developers must restart the Godot editor every 15 minutes.
+
+        // Pitfalls: No Web/WASM export in Godot 4; requires 60MB+ .NET runtime
     }
   points:
-    - "**Web/WASM Export Lockout:** Godot 4 C# cannot export games to the Web (HTML5/WASM) without unsupported experimental workarounds, locking developers out of game jams and browser gaming."
-    - "**AssemblyLoadContext Zombie Leaks:** Hot-reloading scripts in the Godot editor relies on .NET ALC; lingering static events or threads pin assemblies in RAM forever, forcing constant editor restarts."
-    - "**Massive Runtime Payload:** Distributing a Godot C# game requires packaging 60MB+ of .NET CLR virtual machine binaries, managed DLLs, and JIT/GC support libraries."
-    - "**Double-Build Toolchain Tax:** Running a C# project requires installing a matching .NET SDK, maintaining `.csproj`/`.sln` XML files, and waiting for MSBuild on every play press."
+  - <strong>Web/WASM Export Lockout:</strong> Godot 4 C# cannot export games to the Web (HTML5/WASM) without unsupported experimental workarounds, locking developers out of game jams and browser gaming.
+  - <strong>AssemblyLoadContext Zombie Leaks:</strong> Hot-reloading scripts in the Godot editor relies on .NET ALC; lingering static events or threads pin assemblies in RAM forever, forcing constant editor restarts.
+  - <strong>Massive Runtime Payload:</strong> Distributing a Godot C# game requires packaging 60MB+ of .NET CLR virtual machine binaries, managed DLLs, and JIT/GC support libraries.
+  - <strong>Double-Build Toolchain Tax:</strong> Running a C# project requires installing a matching .NET SDK, maintaining <code>.csproj</code>/<code>.sln</code> XML files, and waiting for MSBuild on every play press.
 crystal:
   title: ':sparkles: Crystal: LLVM Native Portability & Clean Hot-Reload'
   lang: crystal
@@ -46,24 +42,20 @@ crystal:
   card_title: Crystal Zen Advantages
   code: |
     node AudioManager < Node do
-      # 1. UNIVERSAL EXPORT: Crystal compiles to Windows, Linux, macOS, ARM64 & WebAssembly!
-      # 2. ZERO RUNTIME BLOAT: Lean GDExtension shared library (4-8MB, zero VM payload)
-      # 3. CLEAN HOT-RELOAD: Pure OS dynamic library unloading without zombie memory leaks
-      
+      # Native signal with automatic lifecycle cleanup in ObjectDB
       signal sound_effect_played
 
       def play_sfx(sound_name : String) : Nil
-        # Native signal dispatch with automatic listener lifetime tracking
         emit(sound_effect_played)
       end
 
-      # Direct compilation via LLVM: No MSBuild, no .csproj files, no SDK mismatches!
+      # Direct LLVM AOT: Web/WASM export ready & clean OS DLL hot-reload (4-8MB)
     end
   points:
-    - "**Full WebAssembly & Native Target Support:** Crystal compiles directly via LLVM to Windows, Linux, macOS, ARM64, and WebAssembly (`wasm32`) with zero VM overhead."
-    - "**Deterministic Dynamic Library Unloading:** GDExtension shared libraries (`.dll` / `.so`) unload cleanly via standard OS primitives (`FreeLibrary` / `dlclose`) with zero zombie leaks."
-    - "**Ultra-Lean Distribution Footprint:** Crystal binaries package as lean 4-8MB native shared libraries with zero external runtime or virtual machine dependencies."
-    - "**Single-Toolchain Simplicity:** The Lapis CLI and Crystal compiler handle dependencies, builds, testing, and hot-reload without MSBuild XML soup or SDK version churn."
+  - <strong>Full WebAssembly &amp; Native Target Support:</strong> Crystal compiles directly via LLVM to Windows, Linux, macOS, ARM64, and WebAssembly (<code>wasm32</code>) with zero VM overhead.
+  - <strong>Deterministic Dynamic Library Unloading:</strong> GDExtension shared libraries (<code>.dll</code> / <code>.so</code>) unload cleanly via standard OS primitives (<code>FreeLibrary</code> / <code>dlclose</code>) with zero zombie leaks.
+  - <strong>Ultra-Lean Distribution Footprint:</strong> Crystal binaries package as lean 4-8MB native shared libraries with zero external runtime or virtual machine dependencies.
+  - <strong>Single-Toolchain Simplicity:</strong> The Lapis CLI and Crystal compiler handle dependencies, builds, testing, and hot-reload without MSBuild XML soup or SDK version churn.
 takeaway:
   badge: UNIVERSAL PORTABILITY
   text: 'Crystal delivers true cross-platform native compilation—including WebAssembly—with clean OS hot-reloading and zero runtime baggage.'

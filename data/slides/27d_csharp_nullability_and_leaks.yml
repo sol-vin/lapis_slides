@@ -58,21 +58,24 @@ crystal:
         # Type-safe node fetching via path operator with nil-safe cast
         @sfx = (self / "Audio/HealSFX").as?(AudioStreamPlayer)
 
-        # Declarative 'on' signal sugar: zero managed delegate leaks!
-        # Automatically disconnected when either node is freed by Godot ObjectDB
+        # Safe signal connection via method pointer: zero managed delegate leaks!
+        # Automatically unhooked by Godot when either node is freed
         if p = @player
-          on p.health_changed do |current, max|
-            # Dead-pointer guard: verified alive in ObjectDB before invocation!
-            if (sfx = @sfx) && sfx.alive?
-              sfx.play
-            end
-          end
+          p.health_changed.connect(->on_health_changed)
         end
       end
+
+      private def on_health_changed(current = 0, max = 0)
+        # Sound nil-check + native ObjectDB tombstone check via alive?
+        if (p = @player) && p.alive?
+          @sfx.try(&.play)
+        end
+      end
+      # No manual _exit_tree or -= needed: Godot cleans up subscriptions automatically!
     end
   points:
   - <strong>True Compile-Time Nil Safety:</strong> Crystal's compiler enforces flow-sensitive typing; variables of type <code>T?</code> cannot be dereferenced without an explicit nil check (<code>if p = @player</code>).
-  - <strong>Declarative <code>on</code> Sugar:</strong> <code>on p.health_changed { ... }</code> binds closures directly with zero ghost delegate leaks or manual unhooking ceremony.
+  - <strong>Native Signal Connection via Method Pointer:</strong> <code>p.health_changed.connect(->on_health_changed)</code> binds methods with zero managed GC roots. Godot's native engine automatically cleans up connections when either node is freed.
   - <strong>Dead-Pointer Armor:</strong> Lapis checks Godot's 64-bit monotonic instance ID via <code>node.alive?</code> and <code>check_alive!</code>, preventing dereferencing freed tombstones.
   - <strong>No Null Suppression Cheats:</strong> The compiler does not allow bypassing null checks with exclamation marks; safety is guaranteed end-to-end.
 takeaway:

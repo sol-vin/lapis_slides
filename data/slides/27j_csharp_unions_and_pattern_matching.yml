@@ -17,8 +17,7 @@ gdscript:
 
     public partial class CombatResolver : Node
     {
-        // C# has NO native union types! Returning multiple distinct result types
-        // forces developers into object casting or simulated wrapper structs.
+        // C# lacks native union types; forces loose object returns
         public object ResolveHit(Node3D target, float rawDamage)
         {
             if (target is ShieldDrone drone)
@@ -30,19 +29,16 @@ gdscript:
             {
                 return new CriticalDamage(player.ArmorRating, rawDamage * 2.0f);
             }
-            
-            // Missing cases fail at runtime, not at compile time!
-            return null!; // Dangerous null fallback suppression
-        }
 
-        // Caller must write verbose, non-exhaustive type-switch pattern matching
-        // with runtime casting and zero compiler enforcement if a case is omitted!
+            // Non-exhaustive: unhandled types silently fail at runtime
+            return null!;
+        }
     }
   points:
-    - "**Absence of Native Union Types:** C# cannot natively express `ShieldAbsorbed | CriticalDamage | Nil`, forcing developers into loose `object` returns, wrapper hierarchies, or third-party libraries."
-    - "**Non-Exhaustive Pattern Matching:** C# switch expressions on general types do not enforce compile-time exhaustiveness; omitting a newly added type silently compiles and fails at runtime."
-    - "**Runtime Type Check & Downcast Tax:** Evaluating `target is ShieldDrone drone` incurs runtime type inspection and pointer downcasting instructions on every evaluation."
-    - "**Wrapper Object Allocation Overhead:** Simulating discriminated unions via records or wrapper structs allocates intermediate objects and incurs boxing."
+  - <strong>Absence of Native Union Types:</strong> C# cannot natively express <code>ShieldAbsorbed | CriticalDamage | Nil</code>, forcing developers into loose <code>object</code> returns, wrapper hierarchies, or third-party libraries.
+  - <strong>Non-Exhaustive Pattern Matching:</strong> C# switch expressions on general types do not enforce compile-time exhaustiveness; omitting a newly added type silently compiles and fails at runtime.
+  - <strong>Runtime Type Check &amp; Downcast Tax:</strong> Evaluating <code>target is ShieldDrone drone</code> incurs runtime type inspection and pointer downcasting instructions on every evaluation.
+  - <strong>Wrapper Object Allocation Overhead:</strong> Simulating discriminated unions via records or wrapper structs allocates intermediate objects and incurs boxing.
 crystal:
   title: ':sparkles: Crystal: Mathematical Union Types & Sound Patterns'
   lang: crystal
@@ -53,16 +49,15 @@ crystal:
     record CriticalDamage, armor : Float32, final_damage : Float32
 
     node CombatResolver < Node do
-      # Mathematical union type: Zero wrappers, zero boxing, 100% sound!
+      # Native mathematical union: zero wrappers, zero boxing
       alias HitResult = ShieldAbsorbed | CriticalDamage | Nil
 
       def resolve_hit(target : Node3D, raw_damage : Float32) : HitResult
         case target
         when ShieldDrone
-          # Compiler automatically narrows 'target' to ShieldDrone!
+          # Compiler automatically narrows target to ShieldDrone
           ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
         when PlayerCharacter
-          # Compiler automatically narrows 'target' to PlayerCharacter!
           CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
         else
           nil
@@ -70,10 +65,10 @@ crystal:
       end
     end
   points:
-    - "**First-Class Mathematical Union Types:** Types like `ShieldAbsorbed | CriticalDamage | Nil` are native language primitives with zero heap wrappers and zero boxing."
-    - "**Compile-Time Exhaustive Pattern Matching:** The Crystal compiler verifies that all possible union types are handled; omitting a variant triggers a compile-time build error."
-    - "**Automatic Compiler Type Narrowing:** Inside `when ShieldDrone`, the compiler automatically casts and narrows the variable type without unsafe downcasts or manual casts."
-    - "**Value-Type Stack Records:** Small data structures (`record`) are allocated directly on the stack with zero GC allocation."
+  - <strong>First-Class Mathematical Union Types:</strong> Types like <code>ShieldAbsorbed | CriticalDamage | Nil</code> are native language primitives with zero heap wrappers and zero boxing.
+  - <strong>Compile-Time Exhaustive Pattern Matching:</strong> The Crystal compiler verifies that all possible union types are handled; omitting a variant triggers a compile-time build error.
+  - <strong>Automatic Compiler Type Narrowing:</strong> Inside <code>when ShieldDrone</code>, the compiler automatically casts and narrows the variable type without unsafe downcasts or manual casts.
+  - <strong>Value-Type Stack Records:</strong> Small data structures (<code>record</code>) are allocated directly on the stack with zero GC allocation.
 takeaway:
   badge: SOUND TYPE SYSTEM
   text: 'Crystal provides mathematical union types with compile-time exhaustive pattern matching and zero wrapper allocations.'

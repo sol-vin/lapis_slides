@@ -1516,15 +1516,29 @@ module LapisSlides
       session.clear_screen
 
       p = "#{C_BOLD}#{C_GREEN}developer@lapis-dev#{C_RESET}:#{C_BLUE}~/projects/void_runner#{C_RESET}$ "
-      session.type_command("lapis color --3d", p, 18.0)
+      session.type_command("lapis explore src/", p, 18.0)
       session.pause(2.0)
-      session.type_command("lapis explore", p, 18.0)
+      session.type_command("lapis driver repl", p, 18.0)
       session.pause(2.0)
-      session.type_command("lapis shaders", p, 18.0)
-      session.pause(2.0)
-      session.type_command("lapis docs tui", p, 18.0)
+      session.type_command("lapis cli", p, 18.0)
       session.pause(5.0)
-      session.save(File.join(output_dir, "lapis_interactive_studio.cast"), 86, 22, "Lapis Interactive Terminal Studio (Color 3D, Explore, Shaders, Docs TUI)")
+      session.save(File.join(output_dir, "lapis_interactive_studio.cast"), 86, 22, "Lapis Interactive Terminal Studio (Explore, Driver REPL, TUI Hub)")
+    end
+
+    def self.build_docs_cli_tui_cast(output_dir : String)
+      session = Session.new
+      session.clear_screen
+
+      p = "#{C_BOLD}#{C_GREEN}ian@workstation#{C_RESET}:#{C_BLUE}~/lapis/template#{C_RESET}$ "
+      session.type_command("lapis docs lookup gd \"CharacterBody3D.move_and_slide\"", p, 20.0)
+      session.pause(2.2)
+      session.type_command("lapis docs lookup stdlib \"Channel\"", p, 20.0)
+      session.pause(2.2)
+      session.type_command("lapis docs search \"concurrency\"", p, 20.0)
+      session.pause(2.2)
+      session.type_command("lapis docs tui", p, 20.0)
+      session.pause(10.0)
+      session.save(File.join(output_dir, "lapis_docs_cli_tui.cast"), 86, 22, "Lapis Docs CLI & Interactive TUI Explorer")
     end
 
     def self.build_all(output_dir : String)
@@ -1554,6 +1568,7 @@ module LapisSlides
       build_r2_lapis_cast(output_dir)
       build_r2_tui_debugger_cast(output_dir)
       build_interactive_studio_cast(output_dir)
+      build_docs_cli_tui_cast(output_dir)
     end
   end
 end

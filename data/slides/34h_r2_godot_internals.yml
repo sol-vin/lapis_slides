@@ -19,6 +19,36 @@ left:
   theme: monokai
   cols: 86
   rows: 22
+  code: |
+    # 1. Inspect engine integration & discovered project ClassDB nodes
+    $ lapis decompile bin/game.dll --godot
+    ╭─ Godot Engine Integration Status ───────────────────────╮
+    │ Engine Core:        [✓] Godot 4.8.0-dev7 (Double Prec)  │
+    │ GDExtension Bridge: [✓] crystal_bridge.dll              │
+    │ Game Logic DLL:     [✓] game.dll [ALIVE • Hot-Reload]   │
+    ╰─────────────────────────────────────────────────────────╯
+    Discovered ClassDB Classes (6 custom project nodes):
+      • Player < CharacterBody3D (0x180b6accc)
+          def _physics_process @ 0x1400021b0 | def take_damage @ 0x1400024f0
+      • CombatRadar < Node2D (0x180b6b53c)
+          def _draw @ 0x140003100 | def scan_targets @ 0x1400032e0
+      • Inventory < RefCounted (0x180b6b55c)
+      • EnemySpawner < Node3D (0x180b6c35c)
+      • GameHUD < CanvasLayer (0x180b6d6dc)
+
+    # 2. Decode ObjectDB headers, instance IDs & alive status
+    [0x140001080]> godot object rcx
+    Godot Object @ 0x0000021b3759c2f0:
+      VTable:       0x00007ffb12340000 (CharacterBody3D::vftable)
+      Instance ID:  4120894102 [Monotonic 64-bit]
+      Class Name:   Player < CharacterBody3D
+      Status:       [ALIVE] Registered in ObjectDB
+
+    # 3. Full-spectrum Variant unpacking & print formats
+    [0x140001080]> godot variant rdx
+    Godot Variant @ 0x0000004f210080:
+      Type:    Transform3D (5)
+      Value:   Basis((1, 0, 0), (0, 1, 0), (0, 0, 1)), Origin(12.5, 4.0, -8.2)
 right:
   type: card
   title: Godot C-API & Memory Invariants

@@ -19,6 +19,33 @@ left:
   theme: monokai
   cols: 86
   rows: 22
+  code: |
+    # 1. Decode Crystal gameplay binary, classes & GC roots
+    $ lapis decompile bin/game.dll --crystal
+    ╭─ Crystal Runtime Inspection: game.dll ──────────────────╮
+    │ Crystal Binary:   [✓] DETECTED    Classes: 42  GC: 18   │
+    │ Main Entrypoint:  *Crystal::main (0x140001080)          │
+    │ Discovered Crystal Classes:                             │
+    │   • Player < CharacterBody3D (14 methods, 4 exports)    │
+    │   • CombatRadar < Node2D (8 methods, 3 exports)         │
+    │   • Inventory < RefCounted (11 methods, 6 exports)      │
+    ╰─────────────────────────────────────────────────────────╯
+
+    # 2. Side-by-side x86_64 disassembly & pseudo-C with AST demangling
+    $ lapis decompile bin/game.dll "Player#_physics_process" --side-by-side
+    // [AST Demangled] Player#_physics_process(delta : Float64) : Nil
+    0x1400021b0  55        push rbp   │ void Player::_physics_process(f64 d)
+    0x1400021b8  f20f1005  movsd xmm0 │     this->apply_gravity(d);
+    0x1400021c5  e8460100  call slide │     bool hit = this->move_and_slide();
+
+    # 3. Direct in-memory structure decoding via cradare2
+    $ r2 -q0 bin/game.dll
+    >> cradare2.crystal.read_string(0x140040200)
+       [String @ 0x140040200] type_id: 1, bytesize: 15, value: "res://main.tscn"
+    >> cradare2.crystal.read_array_header(0x140040500)
+       [Array(Vector3)] type_id: 84, size: 8, capacity: 16 [Zero-Alloc Heap]
+    >> db "sym.Player#_physics_process:Float64"
+       ✔ Breakpoint #1 set at Player#_physics_process(Float64)
 right:
   type: card
   title: Crystal Binary & Memory Invariants
