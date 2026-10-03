@@ -1,15 +1,15 @@
 ---
 id: 26f_testing_multiplayer
-title: 'Multiplayer Testing: Lapis::Multiplayer::Harness'
-subtitle: Deterministic Multi-Client Simulation, Virtual Input Pumping & Packet Auditing
-badge: MULTIPLAYER • SIMULATION HARNESS
+title: 'Multiplayer Testing & Lockstep Network Debugging'
+subtitle: Deterministic Multi-Client Simulation, Cooperative Breakpoint Lockstep & Wireshark-Style Packet Auditing
+badge: MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING
 badge_color: purple
 palette: playbox
 layout: two-column-layout
 ratio: 1:1
 left:
   type: code
-  title: test_multiplayer_simulation.cr — Multi-Client Harness
+  title: test_multiplayer_simulation.cr — Multi-Client Harness & Lockstep Test
   tag: Crystal
   lang: crystal
   font_size: '0.80rem'
@@ -31,19 +31,20 @@ left:
       harness.step_frames(3)
       assert_eq server_hero.health, 65
 
-      # 4. Wireshark-style Spy packet auditing
+      # 4. Wireshark-style Spy packet auditing (< 10 KB/s budget)
       spy = harness.spy
       spy.assert_rpc_sent(from: 2, to: 1, method: :apply_damage)
-      spy.assert_max_bandwidth(10240.0) # < 10 KB/s budget
+      spy.assert_max_bandwidth(10240.0)
 
-      # 5. Native forensics snapshot on network anomalies
+      # 5. Cooperative lockstep debugging & native r2 forensics
+      # Breakpoints freeze peers cooperatively without socket timeouts!
       if spy.latency_ms > 50.0
         spy.capture_r2_forensics!("Latency Spike", 0x140001000_u64)
       end
     end
 right:
   type: asciinema
-  title: lapis test spec/suites/test_multiplayer.cr — Simulation Harness
+  title: Terminal — lapis test spec/suites/test_multiplayer.cr (Lockstep Network Capture)
   cast: casts/lapis_multiplayer_test.cast
   font_size: '0.80rem'
   cols: 86
@@ -52,7 +53,9 @@ right:
   loop: true
   autoplay: true
 notes: |
-  Testing multiplayer networking in game engines is notoriously painful. Running multiple editor instances or launching background processes leads to port collisions, timing jitter, and flaky CI tests.
-  Lapis completely solves this with Lapis::Multiplayer::Harness. The multiplayer_test macro spins up a full multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.
+  Testing and debugging multiplayer networking in game engines is notoriously difficult. Running multiple editor instances leads to port collisions and flaky CI, while hitting a breakpoint during development usually triggers network socket timeout disconnects.
+  Lapis completely solves both challenges with Lapis::Multiplayer::Harness and cooperative lockstep debugging.
+  The multiplayer_test macro spins up a full headless multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.
   Using harness.step_frames(n), you step network packets, physics ticks, and SceneTree lifecycles synchronously and deterministically. You can pump virtual input actions like send_action(:attack) and dispatch RPCs.
-  Furthermore, harness.spy acts as an embedded Wireshark packet inspector. You can assert that specific RPCs were delivered (spy.assert_rpc_sent), verify reliable vs unreliable delivery, enforce strict bandwidth caps (spy.assert_max_bandwidth), and even trigger native crash forensics if an anomaly occurs!
+  When a breakpoint or r2 inspection occurs on the host, connected clients pause in cooperative lockstep, preserving network state without socket drops.
+  Furthermore, harness.spy acts as an embedded Wireshark packet inspector. You can assert that specific RPCs were delivered (spy.assert_rpc_sent), inject network latency variance and packet loss to verify delta reconciliation, enforce strict bandwidth caps (spy.assert_max_bandwidth), and capture native r2 forensics snapshots when anomalies occur!

@@ -118,7 +118,6 @@ slides:
 - 34h_r2_godot_internals
 - 34i_r2_lapis_supervisor
 - 34j_r2_tui_debugger
-- 34l_multiplayer_debugger
 - 34m_binary_analysis_audit
 - 34b_r2_test_suite
 - 34d_cli_log_triage
