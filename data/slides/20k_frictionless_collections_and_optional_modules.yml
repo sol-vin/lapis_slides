@@ -1,0 +1,60 @@
+---
+id: 20k_frictionless_collections_and_optional_modules
+title: 'Frictionless Collections & Standalone Modules: math & fsm'
+subtitle: Symbol-Keyed Dictionaries, Nested Digging, Vector Math & Zero-Allocation State Machines
+badge: COLLECTIONS & MODULES • LAPIS EXTENSIONS
+badge_color: green
+palette: game_sprocket
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: collections_and_modules.cr — Dictionaries, Math & FSM
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # 1. Frictionless Godot::Dictionary with kwargs & Symbol keys:
+    dict = Godot::Dictionary.new(health: 100, speed: 7.5_f32, name: "Hero")
+    dict[:score] = 500
+    hp = dict.get(:health, as: Int32, default: 0)
+
+    # Nested digging across Variant dictionaries:
+    damage = dict.dig?(:stats, :attack, :base, as: Int32)
+
+    # 2. Fluent GodotArray filtering & bounds safety:
+    enemies = area.get_overlapping_bodies.filter_as(Enemy)
+    target = enemies.sample # Bounds-safe random pick
+
+    # 3. Standalone Math Helpers:
+    require "lapis/math"
+    current_speed = current_speed.approach(target_speed, delta * 10)
+    angle = 90.degrees
+    scatter_dir = Vector2.random_dir
+    spawn_pos = Vector3.random_in_sphere(radius: 5.0)
+
+    # 4. Zero-Allocation Compile-Time State Machine:
+    require "lapis/fsm"
+    fsm :state, initial: :idle do
+      state :idle do
+        enter { play_anim("idle") }
+        update { |dt| transition_to :chase if player_seen? }
+      end
+      state :chase do
+        enter { play_anim("run") }
+      end
+    end
+right:
+  type: card
+  title: Zero-Friction Engine Tooling
+  color: green
+  items:
+    - '<strong>Frictionless Engine Dictionaries:</strong> <code>Godot::Dictionary.new(**kwargs)</code> allows keyword initialization, transparent Symbol key indexing (<code>dict[:key]</code>), and generic typed getters.'
+    - '<strong>Nested Dictionary Drilling:</strong> <code>dict.dig?(:stats, :attack, :base, as: Int32)</code> navigates nested Variant dictionaries safely without intermediate nil checks.'
+    - '<strong>Typed Array Filtering &amp; Sampling:</strong> <code>GodotArray#filter_as(T)</code> downcasts elements to <code>Array(T)</code>; paired with <code>sample</code>, <code>first?</code>, <code>last?</code>, and negative indexing (<code>arr[-1]</code>).'
+    - '<strong>Modular Math Extensions (<code>lapis/math</code>):</strong> <code>Number#approach</code> for non-overshooting interpolation, <code>Number#degrees</code>/<code>radians</code>, and <code>Vector2/Vector3.random_dir</code>.'
+    - '<strong>Zero-Allocation State Machines (<code>lapis/fsm</code>):</strong> Compile-time FSM DSL generating inlined lifecycle hooks and jump-table transitions with zero runtime heap churn.'
+notes: |
+  Handling engine collections and gameplay utilities in native bindings often requires frustrating boilerplate. In Lapis, Godot::Dictionary feels like a native Crystal Hash: it can be initialized with keyword arguments, indexed transparently with Symbols, and queried with safe typed getters. Furthermore, dict.dig? lets you drill down through nested dictionaries without defensive nil checks at every level.
+  GodotArray is equally ergonomic, providing typed filtering with filter_as(Enemy) and bounds-safe utilities like sample and negative indexing.
+  Finally, Lapis provides optional standalone modules that can be included anywhere: 'require "lapis/math"' provides essential gameplay mathematics like non-overshooting value approach and uniform spherical random vectors, while 'require "lapis/fsm"' delivers an ultra-fast, zero-allocation finite state machine DSL.

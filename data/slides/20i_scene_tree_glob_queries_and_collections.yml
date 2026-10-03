@@ -1,0 +1,54 @@
+---
+id: 20i_scene_tree_glob_queries_and_collections
+title: 'Scene Tree Glob Queries & Batch Collections'
+subtitle: Wildcard Navigation (*, **), Streaming Iteration & Vectorized Node Operations
+badge: SCENE TREE • GLOB NAVIGATION
+badge_color: cyan
+palette: cross_cube
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: scene_tree_globs.cr — Wildcards & Vectorized Collections
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    node CombatArena < Node2D do
+      def _ready : Void
+        # 1. Single-tier wildcard glob query (*):
+        hitboxes = self.get_nodes("Enemies/*/Hitbox", Area2D)
+
+        # 2. Recursive globstar query (**):
+        spawns = self.get_nodes("Spawns/**", Marker2D)
+
+        # 3. Streaming non-allocating iteration:
+        self.each_node("Enemies/*", Enemy) do |enemy|
+          enemy.alert!
+        end
+
+        # 4. Upward hierarchy & family traversal:
+        boss = self.ancestor(BossController)
+        next_wp = self.next_sibling?(Waypoint)
+
+        # 5. Vectorized batch operations on Array(Node):
+        hitboxes.show_all
+        hitboxes.add_to_group_all("active_targets")
+        hitboxes.call_all("flash_warning", 0.5)
+        old_bullets.queue_free_all
+      end
+    end
+right:
+  type: card
+  title: Ergonomic Hierarchy Query Engine
+  color: cyan
+  items:
+    - '<strong>Wildcard &amp; Globstar Matching:</strong> <code>get_nodes</code> supports single-level <code>*</code> (e.g. <code>Enemies/*/Hitbox</code>) and recursive globstars <code>**</code> (e.g. <code>Spawns/**</code>).'
+    - '<strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> and <code>each_descendant(Type)</code> traverse subtrees without creating intermediate array allocations.'
+    - '<strong>Subscript Glob Routing:</strong> <code>self["Enemies/*/Hitbox", Area2D]?</code> transparently routes wildcards through <code>first_node?</code> with safe downcasting.'
+    - '<strong>Family Traversal:</strong> Upward navigation with <code>ancestor(T)</code>, <code>topmost_parent</code>, and <code>scene_root</code>; horizontal navigation with <code>previous_sibling?</code> and <code>next_sibling?</code>.'
+    - '<strong>Vectorized Collection Operations:</strong> Batch methods on <code>Array(Node)</code>: <code>queue_free_all</code>, <code>destroy_all</code>, <code>reparent_all</code>, <code>call_all</code>, <code>set_all</code>, <code>show_all</code>, and <code>hide_all</code>.'
+notes: |
+  Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on engine groups.
+  Lapis introduces a full scene tree glob query engine. Using intuitive shell-like patterns, you can query immediate wildcards like 'get_nodes("Enemies/*/Hitbox", Area2D)' or recursive globstars like 'get_nodes("Spawns/**", Marker2D)'. For high-frequency game loops, 'each_node' streams matching descendants directly through a block with zero intermediate heap allocations.
+  Even better, Lapis extends Crystal's Array(Node) with vectorized batch operations: with methods like 'hitboxes.show_all', 'call_all("flash_warning")', and 'old_bullets.queue_free_all', entire swathes of nodes can be manipulated in clean, expressive one-liners.
