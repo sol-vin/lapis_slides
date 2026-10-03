@@ -9884,7 +9884,7 @@ end</code></pre>
                 <li><strong>Built-In Zero-Config BDD Runner:</strong> Crystal includes a blazing-fast, RSpec-inspired testing framework (<code>crystal spec</code>) standard in the compiler with zero NuGet packages.</li>
                 <li><strong>Headless Pure Unit Testing:</strong> Test gameplay logic, combat math, and node state directly in memory in sub-milliseconds without booting the Godot engine process.</li>
                 <li><strong>Synchronous First-Class Signals:</strong> Signals connect directly with closures (<code>player.health_changed.connect { ... }</code>), enabling immediate assertion verification.</li>
-                <li><strong>Automatic Memory Management:</strong> Boehm GC handles test object allocations automatically, with zero dangling C++ pointers or manual <code>QueueFree</code> boilerplate.</li>
+                <li><strong>Automatic Memory & Lifecycle Management:</strong> Boehm GC reclaims test objects automatically, while Lapis's test harness and dead-pointer safety eliminate dangling C++ pointers and manual <code>queue_free</code> teardown boilerplate.</li>
               </ul>
             </div>
           </div>
@@ -9900,7 +9900,8 @@ end</code></pre>
           <span>Slide 95 / 150</span>
         </div>
         <aside class="notes">
-          Unit testing in Godot C# is notoriously cumbersome because node classes inherit from GodotObject, tightly coupling them to Godot's unmanaged C++ ObjectDB. Instantiating a C# node outside a running Godot instance throws native exceptions, forcing developers to set up heavy third-party harnesses like GdUnit4 and boot a headless Godot process for every test run. Testing signals further requires asynchronous event listeners and frame-stepping loops (`await ToSignal`). In stark contrast, Lapis nodes in Crystal are pure, decoupled classes that can be instantiated and exercised directly in memory. Crystal includes a high-performance BDD test framework (`crystal spec`) in the standard compiler toolchain, allowing combat formulas, state machines, and synchronous signal emissions to be verified in sub-milliseconds with zero external dependencies and zero native leak risks.
+          Unit testing in Godot C# is notoriously cumbersome because node classes inherit from GodotObject, tightly coupling them to Godot's unmanaged C++ ObjectDB. Instantiating a C# node outside a running Godot instance throws native exceptions, forcing developers to set up heavy third-party harnesses like GdUnit4 and boot a headless Godot process for every test run. Testing signals further requires asynchronous event listeners and frame-stepping loops (`await ToSignal`).
+          In stark contrast, Lapis nodes in Crystal are pure, decoupled classes that can be instantiated and exercised directly in memory. Crystal includes a high-performance BDD test framework (`crystal spec`) in the standard compiler toolchain, allowing combat formulas, state machines, and synchronous signal emissions to be verified in sub-milliseconds with zero external dependencies. Boehm GC reclaims test objects automatically, while Lapis's test harness and dead-pointer safety eliminate dangling C++ pointers and manual queue_free teardown boilerplate.
         </aside>
       </section>
 
