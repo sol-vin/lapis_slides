@@ -1,0 +1,27 @@
+---
+id: 37b_act4_architecture_intro
+title: "The Bridge Architecture"
+subtitle: "5-Layer GDExtension Architecture, ClassDB Generators & Turnkey Distribution"
+act: "ACT IV • CHAPTER 12"
+badge: "ACT IV • CHAPTER 12"
+badge_color: "blue"
+palette: "cross_cube_360"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "5-Layer Architecture"
+    desc: "From the raw C API and Variant bridge up to high-level macros and user gameplay scripts"
+    icon: "layers"
+    color: "cyan"
+  - title: "Dual Compilation Modes"
+    desc: "Seamlessly switch between Mode A (Rapid Dynamic Extension) and Mode B (Statically Linked Binary)"
+    icon: "rotate-right"
+    color: "purple"
+  - title: "Turnkey Multi-Platform Dist"
+    desc: "Single-command artifact bundling for Windows, Linux, macOS, iOS, and WebAssembly"
+    icon: "rocket"
+    color: "emerald"
+notes: |
+  Before we jump into our live demo, let's step back and look at the architectural blueprint.
+  How does all of this fit together under the hood?
+  In Chapter 12, we inspect the 5-layer GDExtension bridge architecture that makes Lapis possible, explore our dual compilation modes—Mode A for rapid hot-reloading versus Mode B for production release binaries—and review our turnkey cross-platform packaging pipeline.

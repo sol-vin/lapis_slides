@@ -1,0 +1,86 @@
+---
+id: 27k_csharp_unit_testing_vs_crystal_spec
+title: 'Godot C# vs Lapis: Unit Testing & Engine Decoupling'
+subtitle: Heavy Headless Harnesses & Native Mocks vs Sub-Millisecond Crystal Spec
+badge: LANGUAGE SHOOTOUT • TESTING & ISOLATION
+badge_color: purple
+palette: playbox
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps'
+  lang: csharp
+  tag: C# (.NET 8 + GdUnit4)
+  card_title: C# Testing Friction
+  font_size: '0.68rem'
+  code: |
+    using Godot;
+    using GdUnit4;
+    using System.Threading.Tasks;
+
+    [TestSuite]
+    public class PlayerCombatTests
+    {
+        [TestCase]
+        public async Task TestShieldMitigation()
+        {
+            // Requires Godot engine scene runner; new Player() crashes in ObjectDB
+            var player = ISceneRunner.Load("res://Player.tscn")
+                                    .Instantiate<Player>();
+
+            player.EquipShield(50f);
+            player.TakeDamage(20f);
+
+            // Awkward untyped signal awaiter in C# requiring engine ticks
+            var args = await player.ToSignal(player, Player.SignalName.HealthChanged);
+            float hp = (float)args[0];
+
+            Assertions.AssertThat(player.Health).IsEqual(100f);
+            Assertions.AssertThat(player.Shield).IsEqual(30f);
+            Assertions.AssertThat(hp).IsEqual(100f);
+
+            player.QueueFree(); // Manual cleanup of unmanaged C++ handle
+        }
+    }
+  points:
+  - <strong>Engine Lifecycle Coupling:</strong> Godot C# nodes depend on C++ ObjectDB bindings; standard <code>dotnet test</code> throws <code>NullReferenceException</code> or native crashes unless run inside headless Godot.
+  - <strong>Heavy External Test Harnesses:</strong> Requires third-party runners like GdUnit4 or WAT, loading scene packs and booting engine subsystems just to test pure gameplay logic.
+  - <strong>Untyped Asynchronous Signal Testing:</strong> <code>await player.ToSignal(...)</code> returns loosely typed <code>Variant[]</code> arrays requiring manual runtime casts.
+  - <strong>Unmanaged Cleanup &amp; Leak Risks:</strong> Instantiated test nodes must be manually disposed via <code>QueueFree()</code> to prevent native C++ engine memory leaks across test suites.
+crystal:
+  title: ':sparkles: Crystal: Built-In Spec Runner & Millisecond Isolation'
+  lang: crystal
+  tag: Crystal (crystal spec)
+  card_title: Crystal Spec Zen
+  font_size: '0.68rem'
+  code: |
+    require "spec"
+    require "../src/entities/player"
+
+    # Standard Crystal BDD spec: runs in milliseconds without booting Godot
+    describe Player do
+      it "mitigates damage through shield and emits health_changed" do
+        # Direct, instant node instantiation in memory
+        player = Player.new
+        player.equip_shield(50.0_f32)
+
+        # First-class typed signal await: zero engine boot, zero external harnesses
+        spawn { player.take_damage(20.0_f32) }
+        hp, max = player.health_changed.await
+
+        # Pure, fast assertions without editor boot overhead
+        player.health.should eq(100.0_f32)
+        player.shield.should eq(30.0_f32)
+        hp.should eq(100.0_f32)
+      end
+    end
+  points:
+  - <strong>Built-In Zero-Config BDD Runner:</strong> Crystal includes a blazing-fast, RSpec-inspired testing framework (<code>crystal spec</code>) standard in the compiler with zero NuGet packages.
+  - <strong>Fast Isolated Testing:</strong> Test gameplay logic, combat math, and component state directly in memory without launching heavy editor test runners.
+  - <strong>Typed Signal Awaiting:</strong> <code>hp, max = player.health_changed.await</code> awaits cooperative signals with full compile-time type destructuring—no untyped <code>Variant[]</code> casting.
+  - <strong>Clean Fixture Teardown:</strong> Pure models are managed by Boehm GC, while Lapis test fixtures automate clean teardown of engine-backed nodes.
+takeaway:
+  badge: FAST TEST RUNNER
+  text: 'Crystal specs run in milliseconds via built-in crystal spec without configuring external plugins, complex mock frameworks, or manual signal polling.'
+notes: |
+  Unit testing in Godot C# often requires setting up third-party harnesses like GdUnit4, booting headless Godot, and wrestling with loosely-typed `Variant[]` arrays when awaiting signals (`await ToSignal`).
+  In Lapis, gameplay logic, combat formulas, and decoupled components can be exercised directly using Crystal's built-in `crystal spec` runner without booting the Godot editor GUI. When testing nodes requiring engine subsystems, Lapis's headless test runner executes specs swiftly, providing typed signal awaiting and deterministic fixture teardown without external NuGet dependencies.

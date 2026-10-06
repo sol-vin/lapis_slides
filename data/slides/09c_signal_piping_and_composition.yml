@@ -1,0 +1,83 @@
+---
+id: 09c_signal_piping_and_composition
+title: 'Signals: Strict (>) & Loose (>>) Reactive Piping'
+subtitle: Compile-Time Verified Pipeline, Automatic Arity Trimming & Polymorphic Type Filtering
+badge: REACTIVE ARCHITECTURE • SIGNAL PIPELINES
+badge_color: purple
+palette: playbox
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Manual Signal Forwarding Boilerplate'
+  lang: gdscript
+  tag: GDScript
+  card_title: GDScript Forwarding Friction
+  font_size: '0.74rem'
+  code: |
+    func _ready() -> void:
+        # 1. Boilerplate intermediate methods for 1:1 signal forwarding
+        $Player.level_up.connect(_on_player_level_up)
+        
+        # 2. Verbose lambdas for arity trimming (3 args -> 2 args)
+        $Player.action_performed.connect(func(tag, intensity, _priority):
+            $HUD.on_notify.emit(tag, intensity)
+        )
+        
+        # 3. Manual lambda for event trigger (dropping all 3 args)
+        $Player.action_performed.connect(func(_a, _b, _c):
+            $HUD.on_any_action.emit()
+        )
+        
+        # 4. Manual polymorphic type checking and downcasting
+        $Area.body_entered.connect(func(body):
+            if body is Enemy:
+                enemy_detected.emit(body)
+        )
+
+    func _on_player_level_up(new_lvl: int) -> void:
+        $HUD.on_level_changed.emit(new_lvl)
+  points:
+  - <strong>Forwarding Ceremony:</strong> Forwarding a signal from a child component to an outer system requires writing dummy intermediary handler methods.
+  - <strong>Arity & Conversion Glue:</strong> Adapting a signal with extra arguments or mismatched numeric types requires allocating anonymous lambda wrappers.
+  - <strong>Manual Polymorphic Filtering:</strong> Filtering collision events to specific types requires runtime <code>if body is Type:</code> inspection and manual re-emission.
+  - <strong>Fragile Disconnection:</strong> Lambda connections are anonymous and cannot be cleanly disconnected without caching the <code>Callable</code> reference.
+crystal:
+  title: ':sparkles: Crystal: Strict (>) & Loose (>>) Signal Piping'
+  lang: crystal
+  tag: Crystal (Lapis)
+  card_title: Lapis Reactive Signal Piping
+  font_size: '0.74rem'
+  code: |
+    def _ready : Void
+      # 1. Strict Pipe (>): Compile-time verified signature match
+      player.level_up > hud.on_level_changed
+
+      # 2. Loose Pipe (>>): Automatic arity trimming & numeric conversion
+      # Drops priority (Int32), converts intensity Float64 -> Float32:
+      player.action_performed >> hud.on_notify
+
+      # 3. Loose Pipe (>>): Arity trimming to 0-arguments
+      # Drops all 3 arguments and triggers event trigger:
+      player.action_performed >> hud.on_any_action
+
+      # 4. Loose Pipe (>>): Polymorphic type filtering & auto-downcasting
+      # Silently ignores non-Enemy nodes; passes downcasted Enemy!
+      area.body_entered >> self.enemy_detected
+
+      # 5. Clean, explicit unpiping via subscription handle:
+      sub = (player.tapped >> hud.on_any_action)
+      sub.disconnect
+    end
+  points:
+  - <strong>Strict Pipe (<code>&gt;</code>):</strong> <code>source &gt; target</code> establishes a direct compile-time verified signal pipeline with zero intermediate methods.
+  - <strong>Loose Pipe (<code>&gt;&gt;</code>):</strong> Automatically trims unused trailing arguments and performs safe numeric conversions (e.g. <code>Float64</code> to <code>Float32</code>).
+  - <strong>Polymorphic Type Filtering:</strong> <code>area.body_entered &gt;&gt; self.enemy_detected</code> silently ignores non-matching nodes and automatically downcasts matching instances.
+  - <strong>First-Class Subscription Lifecycle:</strong> Returns a concrete <code>SignalSubscription</code> handle for clean, deterministic unpiping via <code>sub.disconnect</code> without managing raw strings.
+takeaway:
+  badge: REACTIVE ZEN
+  text: Lapis signal piping operators (> and >>) eliminate boilerplate forwarding handlers, lambda wrappers, and manual type guards in favor of expressive reactive streams.
+notes: |
+  Signal forwarding and event composition are fundamental to decoupled game architecture. In GDScript, forwarding a signal requires writing single-use methods like '_on_player_level_up' or allocating anonymous lambdas. Adapting signals with different argument counts or filtering collision events to specific enemy classes requires repetitive 'if body is Enemy:' boilerplate.
+  Lapis introduces first-class signal piping operators:
+  Strict piping with '>' establishes a direct pipeline between two signals whose signatures match at compile time.
+  Loose piping with '>>' provides incredible gameplay flexibility: it automatically trims trailing arguments (allowing a 3-argument signal to trigger a 2-argument or 0-argument signal), converts numeric types like Float64 to Float32, and performs polymorphic type filtering. For example, 'area.body_entered >> self.enemy_detected' silently filters out walls or players, passing only instances of Enemy to the receiver automatically downcast!
+  Piping returns a standard SignalSubscription handle, making unpiping as simple as 'sub.disconnect'.

@@ -1,0 +1,45 @@
+---
+id: 34f_cli_sync_targets
+title: 'CLI: Multi-Target Workspace Synchronization'
+subtitle: Automated Binary Fan-Out, DLL Synchronization & Topological Addon Resolution
+badge: WORKSPACE SYNC • LAPIS CLI
+badge_color: magenta
+palette: creation
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis cli -s & lapis sync
+  cast: casts/lapis_sync_targets.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    $ lapis sync
+    [Sync] Synchronizing multi-target workspace binaries & manifests...
+    ┌───────────────────────┬────────────┬──────────┬───────────────────────┐
+    │ Target Workspace      │ Bridge DLL │ Game DLL │ Dependencies Synced   │
+    ├───────────────────────┼────────────┼──────────┼───────────────────────┤
+    │ root (Host Game)      │ 2.4 MB [OK]   │ 4.1 MB [OK] │ gc.dll, libgodot.dll  │
+    │ test/bin (Test Suite) │ 2.4 MB [OK]   │ 3.8 MB [OK] │ gc.dll, libgodot.dll  │
+    │ template/bin (Game)   │ 2.4 MB [OK]   │ 2.1 MB [OK] │ gc.dll, libgodot.dll  │
+    │ examples/basic_demo   │ 2.4 MB [OK]   │ 3.2 MB [OK] │ gc.dll, libgodot.dll  │
+    └───────────────────────┴────────────┴──────────┴───────────────────────┘
+    [Sync:DAG] Topologically sorted 4 addon manifests (0 cyclic dependencies)
+    [Sync:OK] 4 workspace targets fully synchronized in 340ms (0 files locked)
+right:
+  type: card
+  title: Automated Multi-Target Fan-Out
+  color: magenta
+  items:
+  - <strong>Multi-Consumer Binary Fan-Out:</strong> Compiling core libraries automatically fans out updated bridge DLLs, runtime dependencies, and symbols across all consumers.
+  - <strong>Windows File-Locking Prevention:</strong> Timestamp-aware synchronization checks file signatures and handles locked shadow copies without failing the build pipeline.
+  - <strong>Topological Addon DAG Sorting:</strong> Automatically resolves inter-addon dependency graphs, ensuring load orders in <code>extension_list.cfg</code> match required initialization sequences.
+  - <strong>Poison Protection:</strong> Scans target directories to prevent rogue copies of host <code>libgodot.dll</code> from corrupting isolated addon ClassDB registries.
+notes: |
+  In large multi-project repositories with core engine bindings, test runners, template starters, and showcase demos, keeping shared DLLs and extension manifests in sync is critical. lapis sync eliminates manual copying by analyzing the workspace dependency graph, updating all target directories in parallel, and resolving addon initialization order using topological sort. It even respects Windows file-locking rules, ensuring open editors never break ongoing compilation workflows.

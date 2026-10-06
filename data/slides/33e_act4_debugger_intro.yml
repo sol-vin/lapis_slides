@@ -1,0 +1,28 @@
+---
+id: 33e_act4_debugger_intro
+title: "Low-Level Binary Forensics"
+subtitle: "radare2 Native Debugger, Stale VTables, ObjectDB Memory Inspection & Crash Autopsies"
+act: "ACT IV • CHAPTER 09"
+badge: "ACT IV • CHAPTER 09"
+badge_color: "coral"
+palette: "cross_cube"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "radare2 Engine Bridge"
+    desc: "Direct integration with r2 for lightning-fast binary disassembly and symbol resolution"
+    icon: "microscope"
+    color: "coral"
+  - title: "Gutter Breakpoints in Godot"
+    desc: "Setting native hardware breakpoints inside the Godot editor panel and stepping via TUI"
+    icon: "pause"
+    color: "cyan"
+  - title: "Automated Crash Autopsies"
+    desc: "Instant dead-pointer detection, ObjectDB reconstruction, and stale VTable diagnostics"
+    icon: "triangle-exclamation"
+    color: "amber"
+notes: |
+  Every systems engineer knows that when games crash with access violations or segmentation faults, high-level tools are useless. You need binary truth.
+  In Chapter 9, we dive into Low-Level Forensics and Native Debugging.
+  Drawing from my background in reverse engineering and vulnerability research, we integrated the radare2 reverse-engineering framework directly into Lapis.
+  We'll see how r2 inspects running game memory, disassembles native Crystal routines, maps Godot ObjectDB instances, and automatically isolates dead pointers and stale VTables during hot reload.

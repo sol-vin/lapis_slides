@@ -1,0 +1,53 @@
+---
+id: 20m_spatial_audio_and_navigation
+title: 'Gameplay Architecture: Context-Aware Audio & Spatial Queries'
+subtitle: Compile-Time play_sound Macro, Self-Pruning Root Players & Relative Spatial Helpers
+badge: GAMEPLAY • AUDIO & SPATIAL DSL
+badge_color: cyan
+palette: spaces_8
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: audio_and_spatial.cr — Audio Macro & Spatial DSL
+  tag: Crystal (Lapis)
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # 1. Context-Aware 2D Sound (spawns AudioStreamPlayer2D at global_position):
+    play_sound "res://audio/laser.wav", pitch_scale: 1.2_f32
+
+    # 2. Context-Aware 3D Sound (spawns AudioStreamPlayer3D at global_position):
+    # Attaches to scene root: audio survives even if caller is queue_freed!
+    play_sound "res://audio/explosion.wav", at: enemy.global_position do
+      max_distance = 250.0_f32
+    end
+
+    # 3. Direct Node-to-Node Relative Spatial Navigation:
+    dist  = distance_to(player)          # 2D & 3D distance
+    dir   = direction_to(player)         # Unit vector pointing to target
+    angle = angle_to_point(player)       # 2D orientation angle
+
+    # 4. Continuous Input Vector & Axis Queries via Input Singleton:
+    move_dir = Godot::Input.get_vector(:move_left, :move_right, :move_up, :move_down)
+    steer_ax = Godot::Input.axis(:steer_left, :steer_right)
+
+    # 5. Direct CanvasItem Visual FX & Procedural Math:
+    self.alpha = 0.65_f32                # Direct modulate alpha property!
+    spark_col  = Color.hex("#ffaa00")    # Hex color constructor
+    spread_dir = Vector2.from_angle(angle) + Vector2.random_direction * 0.2
+right:
+  type: card
+  title: Audio, Spatial & Math Invariants
+  color: cyan
+  items:
+    - '<strong>Context-Aware <code>play_sound</code> Macro:</strong> Automatically creates <code>AudioStreamPlayer2D</code> in 2D nodes, <code>AudioStreamPlayer3D</code> in 3D nodes, and non-spatial players in UI nodes.'
+    - '<strong>Root-Mounted Audio Lifecycle:</strong> Spawns audio players under the active scene root with <code>finished.once { queue_free }</code>, so one-shot sound effects never cut off when emitters die.'
+    - '<strong>Node-Relative Spatial Queries:</strong> <code>distance_to(target)</code>, <code>direction_to(target)</code>, and <code>angle_to_point(target)</code> eliminate repetitive global coordinate math.'
+    - '<strong>Continuous Input Vector Queries:</strong> <code>Godot::Input.get_vector</code> and <code>axis</code> map action symbols directly to normalized directions via the engine singleton.'
+    - '<strong>CanvasItem <code>alpha</code> &amp; Procedural Math:</strong> Directly get and set <code>node.alpha</code> without color reconstruction, paired with <code>Vector2.from_angle</code> and <code>Color.hex</code>.'
+notes: |
+  Playing audio and navigating spatial relationships are everyday tasks in game development that typically suffer from annoying engine friction.
+  First, the 'death sound cutoff' bug: in standard Godot, if an enemy dies and calls 'queue_free()', an attached AudioStreamPlayer2D is immediately destroyed with it, abruptly cutting off the audio clip. Lapis solves this with the context-aware 'play_sound' macro. It inspects the caller at compile time—spawning an AudioStreamPlayer2D in 2D scenes, AudioStreamPlayer3D in 3D scenes, or standard AudioStreamPlayer in UI controls—and mounts the player to the active scene root. It plays the sound, listens for 'finished.once', and queues itself for destruction automatically.
+  Second, spatial queries between nodes no longer require verbose global_position unpacking: 'distance_to(target)', 'direction_to(target)', and 'angle_to_point(target)' work directly between node instances.
+  Finally, CanvasItem now features a direct 'alpha' getter/setter property for quick opacity fades, complemented by procedural vector constructors like 'Vector2.from_angle' and 'Color.hex'.

@@ -1,0 +1,59 @@
+---
+id: 26c_concurrency_patterns
+title: 'Crystal Concurrency Patterns in Games'
+subtitle: Background Worker Actors, Cooperative Fibers, and Lock-Free Message Passing
+badge: ADVANCED CONCURRENCY • GAME PATTERNS
+badge_color: purple
+palette: m64
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: Background Actor Worker Pattern
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.78rem'
+  code: |
+    # Off-thread worker actor with buffered channels
+    class NavmeshWorker
+      getter requests = Channel(PathReq).new(capacity: 64)
+      getter results  = Channel(PathRes).new(capacity: 64)
+
+      def start : Void
+        Thread.new do
+          loop do
+            req = @requests.receive
+            # Heavy A* pathfinding runs off the main thread!
+            path = compute_astar_path(req.from, req.to)
+            @results.send(PathRes.new(req.id, path))
+          end
+        end
+      end
+    end
+
+    # Main thread drains non-blockingly during _process
+    def _process(delta : Float64) : Void
+      loop do
+        select
+        when res = @nav_worker.results.receive
+          apply_path(res.id, res.path) # SceneTree safe!
+        else
+          break # Channel empty, continue frame loop
+        end
+      end
+      Fiber.yield # Cooperatively yield to spawned Crystal fibers
+    end
+right:
+  type: card
+  title: Concurrency Invariants & Architecture
+  color: purple
+  items:
+  - "<strong>SceneTree Affinity Invariant:</strong> SceneTree modifications (<code>add_child</code>, transforms) must stay on the main thread; violations raise <code>ThreadAffinityError</code>."
+  - "<strong>Buffered Channel Actors:</strong> Offload heavy pathfinding, procedural generation, and AI to OS threads (<code>Thread.new</code>) via buffered <code>Channel(T).new(cap)</code>."
+  - "<strong>Cooperative Gameplay Fibers:</strong> Non-blocking <code>spawn</code> fibers yield in <code>_process</code> via <code>await(timer)</code> or <code>await(signal)</code> without stalling engine frames."
+  - "<strong>Zero-Lock Message Passing:</strong> Background threads pass immutable Crystal structs, eliminating mutex contention, cache invalidation, and deadlocks."
+notes: |
+  Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees.
+  Heavy tasks like A* pathfinding, voxel generation, and AI simulations run on dedicated OS worker threads (Thread.new). They communicate with the game through buffered channels.
+  On the main thread, _process non-blockingly drains completed results using a select block and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks!
+  Meanwhile, cooperative gameplay fibers handle non-blocking asynchronous state machines using await without ever blocking the engine frame loop.

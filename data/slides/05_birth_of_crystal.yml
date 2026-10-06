@@ -1,0 +1,69 @@
+---
+id: 05_birth_of_crystal
+title: 'The Birth of Crystal'
+subtitle: Fast as C, Slick as Ruby • Native LLVM Speed
+badge: COMPILER REVOLUTION • CRYSTAL ORIGINS
+badge_color: cyan
+palette: spaces_98
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: crystal_origins.cr — Clean Syntax, Native Machine Code
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # Clean Ruby ergonomics — Ahead-of-Time LLVM Compiled
+    class Player
+      property name : String
+      property health : Int32
+      property inventory : Array(String)
+
+      # Shorthand constructor with default parameters:
+      def initialize(@name : String, @health : Int32 = 100)
+        @inventory = [] of String
+      end
+
+      # Concise predicate method:
+      def alive? : Bool
+        @health > 0
+      end
+
+      # Inlined block traversal: Enumerable blocks compile to tight loops
+      def heal_party(companions : Enumerable(Player), amount : Int32) : Void
+        companions.each do |companion|
+          next unless companion.alive?
+          companion.health = (companion.health + amount).clamp(0, 100)
+          puts "Healed #{companion.name} to #{companion.health} HP"
+        end
+      end
+
+      # Flow-sensitive nil safety: String? requires explicit compiler checks
+      def inspect_equipped : String?
+        @inventory.first?
+      end
+    end
+
+    # 1. Global type inference: zero redundant type declarations
+    hero  = Player.new("Arthur", 85)
+    party = [hero, Player.new("Gwen", 40)]
+    hero.heal_party(party, 25)
+
+    # 2. Flow typing proves non-nil without runtime null dereferences
+    if item = hero.inspect_equipped
+      puts "Equipped: #{item.upcase}" # Compiler knows item is String!
+    end
+right:
+  type: card
+  title: The Compiler Synthesis
+  color: cyan
+  items:
+  - <strong>Designed from Day One for Types:</strong> Crystal wasn't a dynamic language patched with types; it was built from scratch as a statically typed language.
+  - <strong>Global Type Inference:</strong> You rarely write type annotations for local variables. The compiler analyzes the entire program flow and infers concrete types.
+  - '<strong>LLVM Native Backend:</strong> Crystal emits LLVM IR, benefiting from decades of optimization: autovectorization, link-time optimization (LTO), and register allocation.'
+  - <strong>Static Nil Safety:</strong> Null pointer dereferences are caught at compile time. <code>T</code> cannot be nil; only <code>T?</code> can, forcing explicit compiler-checked handling.
+  - <strong>Direct C ABI Interop:</strong> Seamless bindings to native C libraries without JNI or FFI marshalling penalties.
+notes: |
+  In 2011, Ary Borenszweig and the Crystal core team set out to solve this exact dilemma. Instead of bolting types onto a dynamic runtime, they built a new language from the ground up: syntax as slick and human as Ruby, but statically typed with a global flow-sensitive type inference engine and an LLVM native compiler backend.
+  Notice how closely this mirrors the Ruby heritage we saw earlier: shorthand property declarations, predicates, statement modifiers, and block iterators. But every single operation is resolved statically at compile time—the Enumerable blocks inline into tight machine loops, types are inferred globally, and nil dereferences are caught before runtime.

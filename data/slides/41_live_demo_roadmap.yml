@@ -1,0 +1,79 @@
+---
+id: 41_live_demo_roadmap
+title: 'Live Demonstration: End-to-End Workflow'
+subtitle: From Zero-Config Bootstrapping & Live Node Editing to Full-Scale Architecture & Standalone Release
+badge: LIVE DEMONSTRATION • 4-STEP WORKFLOW
+badge_color: cyan
+palette: spaces_10
+layout: demo-roadmap-layout
+steps:
+  - phase: 'STEP 1 • BOOTSTRAP'
+    title: 'Scaffold & Supervise'
+    cmd: |
+      $ lapis new game my_game
+      $ lapis cli -e
+      # [OK] Scaffolds project.godot & shard.yml
+      # [OK] Boots Editor Supervisor & log stream
+    items:
+      - 'Zero-config project bootstrapping in milliseconds'
+      - 'Launches persistent Editor Supervisor dock'
+      - 'Real-time engine telemetry & live log stream'
+      - 'Godot editor boots with GDExtension bridge loaded'
+    highlight: ':bolt: Turnkey Bootstrapping'
+
+  - phase: 'STEP 2 • FAST LOOP'
+    title: 'Editing Nodes (60s Loop)'
+    code: |
+      node Player < CharacterBody3D do
+        @[Export]
+        property speed : Float32 = 14.0_f32
+
+        def _physics_process(delta : Float64)
+          velocity.x = speed
+          move_and_slide
+        end
+      end
+    lang: crystal
+    items:
+      - 'Declarative Ruby-like gameplay DSL'
+      - 'Live inspector properties with typed range hints'
+      - 'Sub-second recompilation & shadow DLL reload'
+      - 'Instant turnaround: edit and run live in 60s'
+    highlight: ':gem: Sub-Second Hot Reload'
+
+  - phase: 'STEP 3 • ARCHITECTURE'
+    title: 'Full Game Architecture'
+    cmd: |
+      # Load rich multi-system showcase:
+      # (Remaking Soulantern in Crystal)
+      $ lapis run --showcase
+      # Multi-scene tree, shaders, dynamic lights, AI
+    items:
+      - 'Deep multi-node scene composition & entity systems'
+      - 'Soulantern remake showcase in pure Crystal'
+      - 'Procedural shaders, particle FX & spatial audio'
+      - 'Bare-metal performance with zero GC stutter'
+    highlight: ':gamepad: Full-Scale Architecture'
+
+  - phase: 'STEP 4 • DISTRIBUTION'
+    title: 'Standalone Packaging'
+    cmd: |
+      $ lapis package game --release \
+        --portable --embed-pck
+      # [OK] Appended PCK into GDPC binary footer
+      # [OK] Staged runtime DLLs (gc.dll, bridge.dll)
+      # -> bin/my_game_portable.exe
+    items:
+      - 'Aggressive LLVM dead-code elimination & -O3'
+      - 'Embeds PCK directly into binary footer'
+      - 'Bundles Boehm GC & runtime dependencies'
+      - 'Single-file zero-dependency portable game showcase'
+    highlight: ':rocket: Ship-Ready Distribution'
+summary: ':bullseye: <strong>Live Demo Mission:</strong> From zero-config bootstrapping with <code>lapis new</code> and <code>lapis cli -e</code>, through rapid 60s node editing and a full game showcase, to shipping a standalone portable executable.'
+notes: |
+  Welcome to our unified live demonstration!
+  In this session, we walk through the four key milestones of the complete Lapis development lifecycle:
+  In Step 1, we scaffold a brand new project using 'lapis new game my_game' and immediately launch the persistent Editor Supervisor with 'lapis cli -e' to monitor engine health and stream logs in real time.
+  In Step 2, we dive into gameplay code: authoring a player character using our declarative node DSL, exporting typed inspector properties, and demonstrating our sub-second shadow DLL hot-reload—taking you through an edit-and-run cycle live in 60 seconds.
+  In Step 3, we open a production-scale showcase—remaking the acclaimed Soulantern project in pure Crystal—illustrating complex multi-node scenes, procedural shaders, dynamic lighting, and AI running with zero garbage collection spikes.
+  In Step 4, we run 'lapis package game --release --portable --embed-pck', bundling our game into a single, self-contained standalone executable ready to ship directly to Steam, itch.io, or LAN distribution!

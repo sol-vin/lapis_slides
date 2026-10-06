@@ -1,0 +1,58 @@
+---
+id: 14c_macro_finished_introspection
+title: 'Deferred Synthesis: macro finished'
+subtitle: 'Exhaustive AST Introspection Without Runtime Reflection'
+badge: METAPROGRAMMING • DEFERRED AST
+badge_color: purple
+palette: creation
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: deferred_introspection.cr — Complete Type Reflection
+  tag: Crystal
+  lang: crystal
+  font_size: '0.85rem'
+  code: |
+    # macro finished: Defers execution until the type is fully parsed
+    abstract class NetworkSync
+      macro inherited
+        # Wait until all properties, methods, and files are parsed:
+        macro finished
+          # 1. Exhaustive compile-time instance variable reflection:
+          def serialize_network_state(io : IO) : Void
+            {% for ivar in @type.instance_vars %}
+              io.write_bytes(@{{ivar.name}})
+            {% end %}
+          end
+
+          # 2. Annotation inspection (e.g. @[Replicated], @[Export]):
+          def field_count : Int32
+            {{ @type.instance_vars.size }}
+          end
+        end
+      end
+    end
+
+    class Character < NetworkSync
+      property position_x : Float32 = 0.0_f32
+      property position_y : Float32 = 0.0_f32
+      property health     : Int32   = 100
+    end
+    # => Compiler automatically synthesizes serialize_network_state()!
+right:
+  type: card
+  title: The Power of Deferred Introspection
+  color: amber
+  items:
+    - '<strong>The Open-Class Challenge:</strong> Because Crystal classes can be reopened across multiple files, the compiler cannot know all instance variables while parsing the class header.'
+    - '<strong>Deferred Execution:</strong> <code>macro finished</code> pauses macro expansion until the compiler has parsed every reopen, field, and method in the class.'
+    - '<strong>Static Type Reflection:</strong> Macro variables like <code>@type.instance_vars</code>, <code>@type.methods</code>, and <code>@type.annotations</code> allow complete type inspection.'
+    - '<strong>Boilerplate Annihilation:</strong> Powers Lapis''s automated Godot <code>ClassDB</code> registration, <code>@[Export]</code> hints, and binary save/RPC serialization.'
+    - '<strong>Zero Reflection Overhead:</strong> Generates direct, unrolled field serialization methods at compile time—avoiding runtime reflection lookups, string field names, and dynamic boxing.'
+notes: |
+  In dynamic languages like Ruby, you can inspect instance variables and methods at any time at runtime using reflection. But how do you do compile-time reflection in a statically typed language where classes are open and spread across multiple source files?
+  If you inspect @type.instance_vars at the top of a class, the compiler hasn't parsed the rest of the file yet, let alone other files reopening the class!
+  Crystal solves this with 'macro finished'. This special hook tells the compiler: 'Pause! Wait until every file, reopen, and method in this type has been completely parsed by the frontend, then run this macro.'
+  Inside macro finished, you have exhaustive, authoritative knowledge of the entire type: all instance variables, their types, all methods, and all annotations.
+  In Lapis, this is the secret weapon: macro finished inspects your node classes, discovers every @[Export] property and signal, and synthesizes complete Godot ClassDB bindings and binary serializers before emitting LLVM IR. You get all the automation of reflection with 100% bare-metal performance.

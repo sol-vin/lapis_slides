@@ -1,0 +1,190 @@
+---
+title: Lapis for Crystal
+subtitle: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
+author: sol.vin
+theme: theme.css
+resolution:
+  width: 1280
+  height: 720
+slides:
+# ==============================================================================
+# ACT I: ETHOS & THE VISION
+# ==============================================================================
+- 01_hero
+- 02_whoami
+- 02a_warning
+
+# ==============================================================================
+# ACT II: THE RUBY HERITAGE & THE SCALE WALL
+# ==============================================================================
+- 02b_act2_ruby_intro
+- 03_ruby_philosophy
+- 03_ruby_backend
+- 03_ruby_frontend
+- 03a_ruby_small_syntax
+- 03b_ruby_syntax_sugar
+- 03c_ruby_closures
+- 03d_ruby_context_exec
+- 03h_ruby_oddities_intro
+- 03i_ruby_implicit_returns
+- 03j_ruby_if_assignment
+- 03k_ruby_statement_modifiers
+- 03l_ruby_predicate_and_bang
+- 03m_ruby_missing_for_loop
+- 03e_ruby_monkey_patching
+- 03g_ruby_runtime_metaprogramming
+- 03f_ruby_dynamic_dispatch
+- 04_sorbet_dilemma
+
+# ==============================================================================
+# ACT III: CRYSTAL — THE COMPILED SYNTHESIS
+# ==============================================================================
+- 04b_act3_crystal_intro
+- 07_why_crystal_video
+- 21_boilerplate_elimination
+- 22_feature_matrix
+- 05_birth_of_crystal
+- 05b_crystal_type_system
+- 10_expressive_ergonomics
+- 10b_ruby_parity_in_crystal
+- 10d_crystal_modules
+- 10e_crystal_monkey_patching
+- 10f_crystal_closures
+- 10c_static_metaprogramming_tradeoffs
+- 14b_crystal_macro_hooks
+- 14c_macro_finished_introspection
+- 19_macro_serialization
+- 18_macro_state_machines
+- 18b_macro_fsm_implementation
+
+# ==============================================================================
+# ACT IV: THE LAPIS GODOT ENGINE MASTERCLASS
+# ==============================================================================
+
+# --- Chapter 4.1: The Gameplay DSL & Scene Ergonomics ---
+- 05c_act4_lapis_intro
+- 06_what_is_lapis
+- 20_node_dsl
+- 20b_ergonomic_node_access
+- 20c_node_context_tilde_operator
+- 20d_gmodule_mixins
+- 20e_gmodule_composition_and_lifecycle
+- 20f_resource_preload_and_load_dsl
+- 20g_gameplay_fluent_spawn
+- 20h_gameplay_tweens_and_juice
+- 20i_scene_tree_glob_queries_and_collections
+- 20j_direct_space_physics_queries
+- 20l_expression_pattern_matching
+- 20m_spatial_audio_and_navigation
+- 20n_gameplay_patterns_fsm_and_pool
+- 20o_fluent_raycast_and_tree_operators
+- 20p_autoload_singletons
+
+# --- Chapter 4.2: Reactive Signals, Events & Async ---
+- 09a_act4_signals_intro
+- 09_signals_async
+- 09b_antipattern_signals_on
+- 09c_signal_piping_and_composition
+
+# --- Chapter 4.3: The GDScript Face-Off: Antipatterns vs. Crystal Zen ---
+- 10g_act4_antipatterns_intro
+- 11_antipattern_iterators
+- 11b_antipattern_anon_functions
+- 11c_antipattern_symbols
+- 12_antipattern_nil_safety
+- 13_antipattern_pattern_matching
+- 14_antipattern_macros
+- 15_antipattern_structs
+- 27b_interop_type_firewall
+- 16_antipattern_dead_pointers
+- 17_antipattern_async_signals
+- 17b_timer_dsl_and_handles
+
+# --- Chapter 4.4: Fearless Concurrency & Lockstep Multiplayer ---
+- 22b_act4_concurrency_intro
+- 23_concurrency_fibers
+- 24_concurrency_threads
+- 25_antipattern_channels
+- 26d_thread_safety_policies
+- 26e_main_thread_dispatch
+- 26b_multiplayer_rpc
+- 26f_testing_multiplayer
+- 26c_concurrency_patterns
+
+# --- Chapter 4.5: The C# (.NET) Shootout ---
+- 27b_act4_csharp_intro
+- 27c_csharp_bloat_vs_crystal_zen
+- 27d_csharp_nullability_and_leaks
+- 27e_csharp_runtime_tax_and_gc
+- 27g_csharp_reflection_vs_crystal_macros
+- 27h_csharp_platform_export_and_hot_reload
+- 27i_csharp_concurrency_and_symbols
+- 27j_csharp_unions_and_pattern_matching
+- 27k_csharp_unit_testing_vs_crystal_spec
+
+# --- Chapter 4.6: Zero-Friction Interoperability ---
+- 26g_act4_interop_intro
+- 27_interop_gdscript_calls_crystal
+- 28_interop_crystal_calls_gdscript_dynamic
+- 29_interop_crystal_calls_gdscript_typed
+
+# --- Chapter 4.7: Inside the Godot Editor ---
+- 32b_act4_editor_intro
+- 33_editor_integration
+- 33c_in_editor_validator_and_lsp
+- 33d_hot_reload_state_preserver
+
+# --- Chapter 4.8: The Lapis CLI Command Center ---
+- 29b_act4_cli_intro
+- 30_cli_lifecycle
+- 30c_cli_doctor
+- 31_cli_codegen
+- 32_package_management
+
+# --- Chapter 4.9: Low-Level Binary Forensics ---
+- 33e_act4_debugger_intro
+- 34_debugger_radare2
+- 34c_debug_workflows
+- 34k_in_editor_debugger
+- 34g_r2_crystal_runtime
+- 34h_r2_godot_internals
+- 34i_r2_lapis_supervisor
+- 34j_r2_tui_debugger
+- 34m_binary_analysis_audit
+- 34b_r2_test_suite
+- 34d_cli_log_triage
+- 34e_cli_run_monitor
+- 34f_cli_sync_targets
+
+# --- Chapter 4.10: Mission-Critical Testing ---
+- 35h_act4_testing_intro
+- 36_testing_zero_leak
+- 36b_testing_editor_driver
+- 36c_testing_editor_selenium_driver
+- 36d_testing_ai_vision_and_ipc_repl
+- 36e_behavioral_scenario_testing
+- 37_tool_testing_tui
+
+# --- Chapter 4.11: The Hard Numbers (Benchmarks & Shootouts) ---
+- 34n_act4_benchmarks_intro
+- 35_benchmarks
+- 35d_multilang_benchmarks
+- 35e_native_shootout
+- 35f_interop_benchmarks
+- 35b_custom_benchmarks
+- 35c_benchmark_tui
+- 35g_benchmark_reports_ci
+
+# --- Chapter 4.12: The Bridge Architecture & Distribution ---
+- 37b_act4_architecture_intro
+- 38_architecture_layers
+- 39_dual_modes
+- 40_packaging_dist
+
+# ==============================================================================
+# ACT V: LIVE DEMONSTRATION & THE ROAD AHEAD
+# ==============================================================================
+- 40b_act5_demo_intro
+- 41_live_demo_roadmap
+- 43_future_roadmap
+- 44_thanks_closing

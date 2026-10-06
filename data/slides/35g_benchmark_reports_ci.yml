@@ -1,0 +1,41 @@
+---
+id: 35g_benchmark_reports_ci
+title: 'Benchmark Reports & CI Regression Tracking'
+subtitle: Interactive HTML Generation, SVG Charts & Version History Progression
+badge: BENCHMARKS • CI & REPORTING
+badge_color: cyan
+palette: spaces_vista
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — lapis benchmarks compare html
+  code: |
+    # Run benchmarks, compare against baseline, and output HTML report
+    $ lapis benchmarks compare html --tag 4.8-dev7 --previous-tag 4.8-dev6
+      [Lapis] Loading baseline: benchmarks/reports/benchmarks_4.8-dev6.xml
+      [Lapis] Measuring 8 benchmark suites (3 iterations each)...
+      ✔ 01. N-Body Physics         : 3.10 ms vs 3.15 ms (+1.6% faster)
+      ✔ 02. Perlin Noise           : 2.80 ms vs 2.84 ms (+1.4% faster)
+      ✔ 03. A* Pathing             : 4.20 ms vs 4.31 ms (+2.6% faster)
+      ✔ 04. Raycast Octree         : 5.10 ms vs 5.12 ms (within noise)
+      ✔ 05. Matrix 4x4 SIMD        : 1.40 ms vs 1.42 ms (within noise)
+      ✔ 06. Procedural Dungeon     : 3.90 ms vs 4.05 ms (+3.7% faster)
+      ✔ 07. Particle Sim           : 2.10 ms vs 2.15 ms (+2.3% faster)
+      ✔ 08. Multiplayer RPC Sync   : 1.80 ms vs 1.95 ms (+7.7% faster)
+
+      [PASS] Regression Gate: 0 regressions detected. Mean: +2.6% faster.
+      ✔ Staged HTML Report: benchmarks/reports/comparison_4.8-dev7.html
+      ✔ Staged SVG Visuals: benchmarks/reports/comparison_4.8-dev7.svg
+      ✔ Appended Run to   : benchmarks/history.xml (Run ID #42)
+right:
+  type: card
+  title: Continuous Benchmarking & Reporting
+  color: cyan
+  items:
+  - <strong>Interactive HTML Reports:</strong> Generates self-contained, responsive HTML benchmark dashboards with interactive filters, search, and iteration timelines.
+  - <strong>Vector SVG Comparison Charts:</strong> Simultaneously renders crisp, resolution-independent SVG bar charts suitable for direct embedding in docs or presentations.
+  - <strong>XML Historical Progression:</strong> Stores structured benchmark results in an XML history log (<code>history.xml</code>) to track performance across commits and engine upgrades.
+  - <strong>Automated CI Performance Gating:</strong> Enforces automated thresholds in GitHub Actions (fails build if throughput drops > 5%), preventing silent gameplay regressions.
+notes: |
+  Performance benchmarking is not a one-time exercise; it requires continuous verification. With lapis benchmarks compare html, developers and CI pipelines automatically track execution times across Godot releases. The tool produces interactive HTML reports, embeds vector SVG charts, and updates an XML history database. If a pull request causes a performance regression beyond 5%, the automated CI gate immediately flags the issue before it reaches production.

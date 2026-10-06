@@ -1,0 +1,68 @@
+---
+id: 13_antipattern_pattern_matching
+title: 'Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking'
+subtitle: Untyped Enums & Brittle Matches vs. Strongly-Typed Enums & Tuple Patterns
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: spaces_10
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Non-Exhaustive Match & Untyped Enums'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    enum State { IDLE, RUN, ATTACK, DEAD }
+
+    func handle_state(state: State, health: int) -> void:
+        # Non-exhaustive match: silent bug if variant is added!
+        match state:
+            State.IDLE:
+                play_anim("idle")
+            State.RUN:
+                play_anim("run")
+            # Forgot State.ATTACK & State.DEAD! Fails silently.
+
+        # Multi-variable condition: ugly nested ifs
+        if health <= 0 and state != State.DEAD:
+            die()
+  points:
+  - <strong>Raw Integer Decay:</strong> Enums decay to raw integers; no type safety when passing invalid integers.
+  - <strong>Silent Match Failures:</strong> Adding an enum variant leaves existing <code>match</code> statements silently broken.
+  - <strong>Nested If Ladders:</strong> Evaluating multiple state variables requires brittle, nested condition trees.
+crystal:
+  title: ':sparkles: Crystal: Exhaustive Case & Tuple Patterns'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    enum State
+      Idle
+      Run
+      Attack
+      Dead
+    end
+
+    def handle_state(state : State, health : Int32) : Void
+      # Compiler enforces exhaustiveness across all variants:
+      case state
+      when .idle?   then play_anim("idle")
+      when .run?    then play_anim("run")
+      when .attack? then play_anim("attack")
+      when .dead?   then play_anim("death")
+      end
+
+      # Tuple pattern matching in a single clean expression:
+      case {health, state}
+      when {..0, .dead?} then nil # already dead
+      when {..0, _}      then die!
+      when {..20, _}     then emit(low_health_warning)
+      end
+    end
+  points:
+  - <strong>Strongly-Typed Enums:</strong> Auto-synthesized query methods like <code>.idle?</code>, <code>.run?</code>, and <code>.dead?</code>.
+  - <strong>Compiler-Enforced Exhaustiveness:</strong> Missing an enum case is a hard compile-time error.
+  - <strong>Multi-Dimensional Matching:</strong> Match on tuples (<code>case {health, state}</code>) with ranges (<code>..0</code>) and wildcards (<code>_</code>).
+takeaway:
+  badge: CORRECT BY CONSTRUCTION
+  text: Crystal makes illegal states unrepresentable and turns runtime logic oversights into helpful compiler hints.
+notes: |
+  State machines are fundamental to gameplay. In GDScript, enums are essentially integers under the hood, and the match statement does not check for exhaustiveness. If you add a new state like 'STUNNED' to your enum, your existing code will silently ignore it without warning. In Crystal, enums are strongly typed, and the compiler strictly enforces exhaustive case statements. If you forget to handle a state, the compiler immediately halts with a helpful error. Plus, tuple pattern matching allows evaluating multi-variable state transitions cleanly in a single expression.

@@ -1,0 +1,50 @@
+---
+id: 31b_cli_package_portable
+title: 'Packaging & Portable Games: lapis package'
+subtitle: Turnkey Standalone Binaries, Embedded PCK Footers & Zero-Dependency Zips
+badge: CLI • PACKAGING & PORTABLE DEPLOYS
+badge_color: teal
+palette: spaces_2000
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis package --portable
+  cast: casts/lapis_package.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Package turnkey playable standalone game
+    $ lapis package game --release -p my_game -n VoidRunner
+    [PackageGame] Generating standalone project pack: VoidRunner.pck...
+      [OK] Exported PCK archive via Godot headless
+      [OK] Staged crystal_bridge.dll, gc.dll, pcre2-8.dll, iconv-2.dll
+      [OK] Auto-generated .godot/extension_list.cfg manifest
+
+    # 2. Package zero-dependency portable binary (embedded PCK footer)
+    $ lapis package game --portable --embed-pck --release
+    [PackageGame] Embedding PCK directly into binary footer (GDPC magic)...
+      [OK] Appended 42.8 MB PCK data + 12-byte GDPC trailer
+      [OK] Generated portable executable: bin/VoidRunner_portable.exe
+      [OK] Created standalone archive: bin/VoidRunner-portable.zip
+
+    # 3. Direct portable shorthand & custom output targets
+    $ lapis package portable -t dist/v1.0.0
+      [OK] Ready to upload to Steam, itch.io, or LAN distribution!
+right:
+  type: card
+  title: Portable Packaging Invariants
+  color: teal
+  items:
+    - '<strong>Embedded PCK Binary (GDPC Magic):</strong> Injects the Godot PCK packfile directly into the executable using Godot''s 12-byte <code>GDPC</code> trailer. Players launch a single, unified <code>.exe</code> without external loose packfiles.'
+    - '<strong>Turnkey Dependency Staging:</strong> Automatically collects and stages all required runtime shared libraries (<code>crystal_bridge.dll</code>, <code>gc.dll</code>, <code>pcre2-8.dll</code>) and GDExtension manifests with zero manual file hunting.'
+    - '<strong>Zero-Toolchain Portable Zips:</strong> Strips foreign binaries, removes temporary caches and PDBs, and zips a self-contained, drop-in folder ready for Steam, itch.io, or offline flash-drive play.'
+    - '<strong>Flexible Target & Platform Matrix:</strong> Supports cross-directory targets (<code>-p &lt;path&gt;</code>), custom release names (<code>-n &lt;name&gt;</code>), and target platforms (<code>windows</code>, <code>linux</code>, <code>macos</code>, <code>android</code>).'
+notes: |
+  Distributing a Godot game with native GDExtension libraries is traditionally tricky: you need the engine runner, the PCK packfile, GDExtension manifests, and every required C-runtime DLL like Boehm GC and the bridge. lapis package solves this in a single command. With lapis package game --portable, Lapis exports the game PCK, bundles all runtime dependencies, and even embeds the PCK directly into the executable binary using Godot's GDPC footer format. The result is a clean, portable executable or ready-to-ship zip archive that players can run anywhere—no installers, no missing DLL errors, and zero friction for Steam or itch.io releases.

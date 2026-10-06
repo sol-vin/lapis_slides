@@ -1,0 +1,39 @@
+---
+id: 36d_testing_ai_vision_and_ipc_repl
+title: 'Automated CI/CD Quality Gates: Headless Test Execution'
+subtitle: Headless Engine Verification, Fast Regression Suites & Clean CI Pipelines
+badge: QUALITY GATES • CONTINUOUS INTEGRATION
+badge_color: emerald
+palette: digital_guy
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: terminal
+  title: Terminal — lapis test --headless & CI Build
+  font_size: '0.74rem'
+  code: |
+    $ lapis test --headless --verbose
+    ╭─ Lapis Test Runner (Headless LibGodot) ────────────────╮
+    │ Suites: 12 passed, 0 failed   Specs: 84 total          │
+    │ Total Duration: 1.24s         ObjectDB Delta: 0 leaks   │
+    ╰─────────────────────────────────────────────────────────╯
+    [✓] PlayerCombatSpec: 8 passed (48ms)
+    [✓] NavigationMeshSpec: 12 passed (110ms)
+    [✓] NetworkSerializationSpec: 16 passed (32ms)
+    [✓] SceneTreeLifecycleSpec: 14 passed (65ms)
+
+    $ lapis build --mode standalone --release
+    Compiling bin/game.dll (LLVM 18.1.8, release optimizations)...
+    [✓] Build finished in 4.8s. Artifacts saved to bin/.
+right:
+  type: card
+  title: CI/CD Pipeline Invariants
+  color: emerald
+  items:
+  - <strong>Headless Engine Execution:</strong> Runs full Crystal specs and SceneTree integration tests in headless mode without requiring a GPU display server.
+  - <strong>Deterministic Quality Gates:</strong> Fails CI builds immediately on uncaught exceptions, assertion failures, or ObjectDB instance leaks.
+  - <strong>Multi-Platform Matrix:</strong> Compiles and tests natively across Windows, Linux, and macOS runners using standard CLI commands.
+  - <strong>Fast Feedback Loop:</strong> Ahead-of-time compilation and in-memory test execution complete entire test suites in seconds.
+  - <strong>Structured Test Artifacts:</strong> Generates JUnit XML, markdown reports, and binary size breakdowns directly for CI artifact archiving.
+notes: |
+  Testing in game development is often neglected in CI/CD pipelines due to heavy engine dependencies and lack of headless execution support. Lapis integrates headless testing directly into the standard CLI workflow via lapis test --headless. The runner boots Godot in headless mode, executes all Crystal specs, checks for ObjectDB memory leaks, and outputs structured test results. This allows teams to enforce strict quality gates in GitHub Actions or GitLab CI, catching regressions, memory leaks, and compilation errors automatically on every pull request.

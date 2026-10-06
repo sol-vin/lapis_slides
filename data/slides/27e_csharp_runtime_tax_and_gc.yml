@@ -1,0 +1,73 @@
+---
+id: 27e_csharp_runtime_tax_and_gc
+title: 'Godot C# vs Lapis: The Runtime VM Tax & GC Stutter'
+subtitle: P/Invoke Marshalling Overhead, LINQ Allocation Churn, and GC Frame Drops vs Native LLVM Speed
+badge: LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY
+badge_color: purple
+palette: former_rain
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: Godot C#: P/Invoke Overhead, Boxing & GC Spikes'
+  lang: csharp
+  tag: C# (.NET 8)
+  card_title: C# VM Tax, Boxing & GC Pauses
+  code: |
+    public partial class CombatRadar : Node2D
+    {
+        private List<Enemy> _targets = new();
+
+        public override void _PhysicsProcess(double delta)
+        {
+            var origin = GlobalPosition; // P/Invoke across managed boundary
+
+            // LINQ allocates closures, enumerators, and list buffers on heap every frame
+            var inRange = _targets
+                .Where(t => t.GlobalPosition.DistanceTo(origin) < 400.0f)
+                .OrderBy(t => t.GlobalPosition.DistanceSquaredTo(origin))
+                .ToList();
+
+            // Variant array allocation & dynamic dispatch boxes floats and vectors
+            foreach (var target in inRange)
+                target.Call("take_damage", 35.0f, origin);
+
+            // Floods .NET Gen0/Gen1 nursery -> GC sweeps can cause transient frame hitching
+        }
+    }
+  points:
+  - <strong>P/Invoke Boundary Overhead:</strong> Reading engine properties and calling C++ nodes repeatedly crosses the managed CLR boundary, incurring marshalling latency.
+  - <strong>LINQ Closure & Enumerator Churn:</strong> Idiomatic operators (<code>Where</code>, <code>OrderBy</code>) instantiate delegate display classes, heap enumerators, and buffer arrays repeatedly in the frame loop.
+  - <strong>Variant Boxing & Dynamic Dispatch:</strong> Using dynamic calls or non-generic collections boxes value arguments into temporary arrays, increasing nursery GC pressure.
+  - <strong>Garbage Collector Pauses:</strong> Frequent Gen0/Gen1 nursery sweeps introduce frame-time jitter during combat and physics updates.
+crystal:
+  title: ':sparkles: Crystal / Lapis: Native C ABI & Inlined Stack Traversal'
+  lang: crystal
+  tag: Crystal (Lapis)
+  card_title: Lapis Native Speed & Stack Iteration
+  code: |
+    node CombatRadar < Node2D do
+      @targets = Array(Enemy).new
+
+      def _physics_process(delta : Float64)
+        origin = global_position # Direct C ABI: zero P/Invoke overhead
+        range_sq = 400.0_f32 * 400.0_f32
+
+        # Inlined loop: stack iteration with zero heap closures
+        @targets.each do |target|
+          next if target.global_position.distance_squared_to(origin) > range_sq
+          target.take_damage(35.0_f32, origin) # Direct typed dispatch: zero boxing
+        end
+
+        # Stack iteration avoids GC churn in the hot physics loop
+      end
+    end
+  points:
+  - <strong>Direct Native C ABI:</strong> Ahead-of-time compiled by LLVM directly to native machine code; engine property reads execute at raw C++ speed with zero marshalling overhead.
+  - <strong>Inlined Iteration:</strong> Crystal's <code>each</code> block is inlined by LLVM directly on the stack—allocating zero heap closure objects.
+  - <strong>Static Typed Method Dispatch:</strong> <code>target.take_damage(35.0_f32, origin)</code> invokes direct function pointers without <code>Variant</code> boxing or dynamic lookups.
+  - <strong>Minimal Heap Churn:</strong> The inlined traversal allocates zero heap objects, maintaining smooth, deterministic frame pacing.
+takeaway:
+  badge: NATIVE LLVM THROUGHPUT
+  text: 'Lapis combines compiled C-ABI speed with Ruby ergonomics: minimal marshalling overhead, inlined stack traversal, and reduced garbage collection pressure.'
+notes: |
+  Why does C# struggle in high-performance gameplay loops when idiomatic code is used? In Godot C#, calls into engine nodes traverse the managed-to-unmanaged P/Invoke boundary, adding call overhead and struct copying. Standard C# idioms like LINQ closures allocate temporary objects on the heap every single frame, while dynamic method calls box arguments into Godot Variant arrays. When the .NET Garbage Collector pauses execution to sweep Gen0 and Gen1 nursery heaps, frame times can spike and cause frame pacing hitching during intensive action.
+  In Lapis, Crystal compiles directly to bare-metal machine code via LLVM with a direct C ABI interface to Godot. Crystal's higher-order blocks (like each) are inlined on the stack with zero heap closures, and methods dispatch statically without Variant boxing. Hot physics and combat loops can iterate purely on the stack without generating garbage, keeping frame pacing smooth and consistent.

@@ -1,0 +1,28 @@
+---
+id: 02b_act2_ruby_intro
+title: "The Ruby Heritage"
+subtitle: "Developer Happiness, Cognitive Comfort & The Dynamic Scale Wall"
+act: "ACT II • THE HERITAGE"
+badge: "ACT II • THE ROOTS"
+badge_color: "purple"
+palette: "super_es"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "Human Happiness First"
+    desc: "Optimizing for cognitive comfort rather than machine convenience"
+    icon: "gem"
+    color: "purple"
+  - title: "Syntax That Sings"
+    desc: "First-class blocks, natural English prose, and expressive closures"
+    icon: "sparkles"
+    color: "cyan"
+  - title: "The Dynamic Scale Wall"
+    desc: "Runtime type surprises, VM overhead, and the limits of Sorbet"
+    icon: "triangle-exclamation"
+    color: "coral"
+notes: |
+  Now that you know who I am and why I'm obsessed with low-level systems and developer ergonomics, let's step back in time.
+  To understand why Crystal exists—and why Lapis is designed the way it is—we have to start with Ruby.
+  Ruby fundamentally proved that syntax can optimize for human happiness. But as projects scale into multi-threaded game loops, dynamic languages hit an unyielding performance and type-safety wall.
+  In this act, we'll examine both the genius of Ruby and the dilemma that demanded a compiled successor.

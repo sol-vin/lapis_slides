@@ -1,0 +1,51 @@
+---
+id: 34b_r2_test_suite
+title: 'Radare2 in the Test Suite: Automated Binary Forensics & CI'
+subtitle: How Lapis Tests Itself Using r2 for Binary Hardening, Symbol Hygiene & Multiplayer Lockstep
+badge: QUALITY GATES • R2 TEST SUITE
+badge_color: cyan
+palette: spaces_10
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: r2_forensics_spec.cr — Headless r2 Test Suite
+  tag: Crystal
+  lang: crystal
+  font_size: '0.94rem'
+  code: |
+    require "spec_helper"
+
+    describe "Lapis Binary Forensics via radare2" do
+      driver = Godot::Debugger::RadareDriver.new
+
+      it "verifies ASLR & DEP/NX binary hardening" do
+        flags = driver.audit_hardening("bin/game.dll")
+        flags.aslr?.should be_true
+        flags.dep_nx?.should be_true
+      end
+
+      it "verifies clean exported symbol tables" do
+        leaks = driver.scan_unwanted_exports("bin/game.dll")
+        leaks.should be_empty
+      end
+
+      it "verifies cooperative multiplayer lockstep" do
+        server = Godot::Debugger::RadareDriver.new
+        client = Godot::Debugger::RadareDriver.new
+        client.break_at("player.cr", 42)
+        server.paused?.should be_true
+      end
+    end
+right:
+  type: card
+  title: How We Test Lapis with r2
+  color: cyan
+  items:
+  - <strong>Binary Hardening Audit:</strong> <code>r2_hardening_spec</code> verifies ASLR, DEP/NX, and SafeSEH flags on every compiled DLL in automated CI.
+  - <strong>Strict Symbol Hygiene:</strong> <code>r2_symbol_audit_spec</code> scans export tables to ensure internal Boehm GC or bridge symbols do not collide with third-party addons.
+  - <strong>GC Safety & Pointer Alignment:</strong> <code>r2_gc_safety_spec</code> inspects machine registers to verify heap pointers and write barrier invariants during execution.
+  - <strong>Automated Breakpoints & Stepping:</strong> Headless tests programmatically set source-line breakpoints (<code>dbl</code>) and single-step frames (<code>ds</code>) via <code>RadareDriver</code>.
+  - <strong>Multiplayer Lockstep CI:</strong> <code>test_debugger_isolation</code> runs server and client processes headlessly, verifying that pausing one instance suspends peers without heartbeat disconnects.
+notes: |
+  We don't just use radare2 for interactive debugging; we use it to test Lapis itself. In our automated test suite, RadareDriver audits compiled game binaries in CI to verify binary hardening like DEP and ASLR, validates that internal Boehm GC or C++ bridge symbols do not leak into the global namespace, and validates pointer alignment. It even drives headless multiplayer lockstep tests, ensuring that pausing a client cooperatively suspends peer instances without triggering network heartbeat timeouts.

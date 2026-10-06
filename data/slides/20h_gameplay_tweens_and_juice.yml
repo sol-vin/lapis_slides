@@ -1,0 +1,51 @@
+---
+id: 20h_gameplay_tweens_and_juice
+title: 'Game Feel & Juice: Fluent Tweens & Animation'
+subtitle: Fluent Chain & Parallel Pipelines, Compile-Time Checked tween, and Cooperative Await
+badge: ANIMATION & JUICE • GAME FEEL
+badge_color: cyan
+palette: spaces_7
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: tween_and_juice.cr — Fluent Animation DSL
+  tag: Crystal
+  lang: crystal
+  font_size: '0.73rem'
+  code: |
+    # 1. Fluent Chain & Parallel Pipeline DSL:
+    tw = tween(hero) do
+      animate(:position, from: Vector2.ZERO, to: target_pos, in: 0.4.seconds)
+        .trans(:cubic).ease(:out)
+        .chain.animate(modulate, from: Color::RED, to: Color::BLUE, in: 0.3.seconds)
+        .parallel.animate(scale, to: Vector2.new(1.2, 1.2), in: 0.3.seconds)
+        .chain.animate(modulate.a, to: 0.0, in: 0.25.seconds)
+    end
+
+    await(tw.finished)
+    Godot.print("Hero entrance sequence completed!")
+
+    # 2. Compile-Time Type-Checked Single Property Macro:
+    # Statically catches typos like boss.positiom.y at compile time!
+    tween(boss.position.y, to: 150.0, in: 0.4.seconds)
+
+    # 3. Compact Target-Omitted Sugar:
+    coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)
+right:
+  type: card
+  title: Animation & Juice Invariants
+  color: cyan
+  items:
+    - '<strong>Fluent Pipeline Chaining:</strong> <code>tween(item) do animate(...).chain.animate(...).parallel.animate(...) end</code> chains sequential and concurrent steps seamlessly with symbol easing (<code>:cubic</code>, <code>:out</code>).'
+    - '<strong>Compile-Time Checked <code>tween</code> Macro:</strong> <code>tween(boss.position.y, to: 150.0, in: 0.4.seconds)</code> statically validates property access at compile time, eliminating runtime typos.'
+    - '<strong>Real Sub-Properties &amp; Multi-Symbol Paths:</strong> Animate transparency directly via <code>modulate.a</code> (maps to engine <code>modulate:a</code>) or sub-properties (<code>:position, :y</code>) with compile-time type verification.'
+    - '<strong>Native <code>Time::Span</code> Durations:</strong> Pass idiomatic Crystal time units (<code>0.4.seconds</code>, <code>150.milliseconds</code>) across all tweening and interval methods.'
+    - '<strong>Cooperative Fiber Await:</strong> <code>await(tw.finished)</code> cooperatively awaits animation completion on the scene tree without halting the engine main loop.'
+notes: |
+  Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in GDScript often involves fragmented method calls and error-prone strings like "position:y".
+  Lapis introduces an expressive fluent animation DSL:
+  First, 'tween(item) do animate(...).chain.animate(...).parallel.animate(...) end' creates fluent, readable sequential and concurrent animation pipelines with symbol easing (':cubic', ':out').
+  Second, compile-time type-checked single-property tweens: writing 'tween(boss.position.y, to: 150.0, in: 0.4.seconds)' statically verifies that 'position.y' exists on 'boss' during compilation!
+  Third, 'coin.tween_to' omits the redundant target argument and supports multi-symbol paths like ':position, :y' with zero string allocations.
+  Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds') and cooperative fiber awaiting via 'await(tw.finished)', animation code is concise, fast, and completely type-safe.

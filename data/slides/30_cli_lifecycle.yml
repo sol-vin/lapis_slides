@@ -1,0 +1,48 @@
+---
+id: 30_cli_lifecycle
+title: 'CLI: Command Center & Scaffolding Hub'
+subtitle: Interactive Dashboard, Opal Fuzzy Palette, Typo Recovery & Turnkey Init
+badge: TOOLCHAIN • THE LAPIS CLI
+badge_color: cyan
+palette: spaces_95
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — Lapis Command Center, Fuzzy Palette & Project Scaffolding
+  cast: casts/lapis_cli_lifecycle.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Interactive Command Center Dashboard
+    $ lapis
+      LAPIS COMMAND CENTER (v0.0.255)
+      Project: void_runner (branch: main)
+      Platform: windows-x64 │ Godot: 4.8.0 │ Crystal: v1.15.0
+      Bridge DLL: Compiled [OK] │ Game DLL: Present [OK]
+      Hotkeys: [B]uild  [T]est  [D]octor  [E]ditor  [/] Palette
+
+    # 2. Spotlight Command Palette & Levenshtein Typo Recovery
+    $ lapis docotr -> [ERROR] Unknown 'docotr' -> Did you mean 'doctor'?
+    ? Search Command: scaf
+    > lapis new game my_game --template=3d-action
+
+    # 3. Turnkey Scaffolding in Milliseconds
+    [OK] Bootstrapped project.godot, shard.yml, src/main.cr, scenes/
+right:
+  type: card
+  title: Command Center & Scaffolding Invariants
+  color: cyan
+  items:
+  - <strong>Interactive Command Center:</strong> Running <code>lapis</code> without arguments opens a real-time dashboard displaying engine health, git branch, and compiler statuses with hotkey triggers.
+  - <strong>Spotlight Palette & Typo Recovery:</strong> Opal-powered fuzzy search across all 30+ subcommands with Levenshtein distance typo suggestions and native shell autocompletion.
+  - <strong>Turnkey Project Scaffolding:</strong> <code>lapis new game &lt;name&gt;</code> scaffolds ready-to-run Godot projects with configured <code>shard.yml</code> and <code>project.godot</code> in milliseconds.
+  - <strong>Embedded Baked Assets:</strong> CLI embeds starter templates, manifests, and bridge sources via <code>BakedFileSystem</code> for complete offline portability.
+notes: |
+  Developer tooling is the foundation of game programming speed. When run without arguments, lapis launches the Lapis Command Center—providing real-time telemetry on engine status, compiler versions, git branch, and bridge DLL states. Developers can trigger instant single-key actions, fuzzy-search through all 30+ commands using the built-in Opal spotlight palette, and recover from mistyped commands via Levenshtein suggestions. Scaffolding new projects with lapis new leverages embedded templates to get playable games running in seconds.

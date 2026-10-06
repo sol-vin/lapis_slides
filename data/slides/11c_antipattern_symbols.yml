@@ -1,0 +1,67 @@
+---
+id: 11c_antipattern_symbols
+title: 'Symbols: String Churn vs. 32-Bit IDs'
+subtitle: Runtime String Lookups vs. Compile-Time 32-Bit Enums
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: spaces_vista
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    # PROBLEM 1: Dictionary String Keys — Silent Null on Typos
+    var blackboard: Dictionary = {}
+    blackboard["target_enemy"] = player_node
+    # Typo in key silently returns null, causing downstream crash:
+    var target = blackboard.get("target_enmy") # => null!
+    target.take_damage(10) # Runtime Crash: Invalid call on base Nil
+
+    # PROBLEM 2: State Machine String Hashing & Typo Blindspots
+    var state: StringName = &"patrol"
+    if state == &"petrol": # Typo compiles silently! Logic fails at runtime.
+        refuel_vehicle()
+
+    # PROBLEM 3: Frame-by-Frame String Comparison & Intern Table Locks
+    match current_action:
+        "idle": play_animation("idle")
+        "attack": deal_damage() # Hashed string lookup every frame
+
+  points:
+  - '<strong>Silent Null on Typoed Keys:</strong> Typoing a dictionary string key (<code>blackboard.get("target_enmy")</code>) returns <code>null</code> without any warning, causing crashes down the line.'
+  - '<strong>Silent Typo Bugs in States:</strong> String and StringName comparisons never fail at compile time. Misspellings like <code>&"petrol"</code> silently evaluate to <code>false</code>, creating insidious bugs.'
+  - '<strong>StringName Creation Cost:</strong> StringNames require global intern table hashing upon creation; typoed StringNames still fail silently at runtime.'
+crystal:
+  title: ':sparkles: Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    # SOLUTION 1: Godot::Dictionary & NamedTuple Symbol Key Indexing
+    dict = Godot::Dictionary.new(target: player_node, score: 500)
+    dict[:score] = 750                             # Native Symbol key indexing!
+    dmg = dict.dig?(:stats, :attack, as: Int32)    # Safe nested digging!
+
+    # SOLUTION 2: 32-Bit Immediate Integer (cmp eax, imm32) — Value Types
+    # Symbols are NOT strings: they are immediate 32-bit compiler IDs:
+    state = :patrol
+    if state == :patrol # Single machine instruction (1 CPU cycle)
+      move_to_waypoint
+    end
+
+    # SOLUTION 3: Direct Integer Matching (Zero String Hashing)
+    case state
+    when :idle   then play_animation("idle")
+    when :patrol then patrol_route
+    when :alert  then engage_combat
+    end # Direct integer comparison, 0 heap bytes!
+  points:
+  - '<strong>Frictionless Engine Dictionaries:</strong> <code>Godot::Dictionary.new(**kwargs)</code> and <code>dict[:key]</code> bring transparent Symbol key access and nested <code>dig?</code> to engine collections.'
+  - '<strong>Immediate 32-Bit Integers:</strong> In Crystal, symbols are NOT strings. They are immediate 32-bit integer IDs assigned by the compiler — zero heap allocations, zero GC tracking, zero pointer dereferences.'
+  - '<strong>Single-Cycle CPU Comparisons:</strong> Evaluating <code>state == :patrol</code> compiles to a single CPU machine instruction (<code>cmp</code>). No string hashing, no string length checks.'
+takeaway:
+  badge: 32-BIT IMMUTABLE IDENTITY • IMMEDIATE INTEGERS
+  text: Symbols solve Godot's silent dictionary typos and runtime string hash overhead by turning identifiers into immediate 32-bit integers with compile-time checked keys.
+notes: |
+  Symbols are one of the most beloved features inherited from Ruby and elevated to native performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, string creation involves intern table hashing.
+  In Crystal, symbols like `:target_enemy` and `:patrol` are immediate 32-bit integer IDs resolved at compile time. In pure Crystal code, comparing symbols takes a single CPU clock cycle (`cmp`) with zero heap allocations. When bridging into Godot collections, Lapis maps symbols directly to Godot's StringName or integer keys, giving you clean keyword syntax with full compile-time sanity.

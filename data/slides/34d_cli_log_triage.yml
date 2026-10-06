@@ -1,0 +1,52 @@
+---
+id: 34d_cli_log_triage
+title: 'CLI: Multi-Channel Log Triage & Fuzzy Search'
+subtitle: Real-Time Channel Demuxing, Live ANSI Highlighting & Interactive Log Inspection
+badge: SYSTEMS DIAGNOSTICS • LOG TRIAGE
+badge_color: cyan
+palette: spaces_xp
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis log --interactive
+  cast: casts/lapis_log.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Multi-channel streaming with demangled trace multiplexing
+    $ lapis log tail all -f
+    [10:32:01.104] [GODOT]   Server initialized on port 7777
+    [10:32:01.118] [CRYSTAL] GC heap initialized (Boehm v8.2.6)
+    [10:32:01.125] [GAME]    Player spawned: Player<CharacterBody3D#1482>
+    [10:32:01.210] [CRYSTAL] Signal: health_changed(current: 95, max: 100)
+
+    # 2. Interactive fuzzy search & context preview across 2,800+ lines
+    $ lapis log --interactive
+    ┌─ Log Inspector: all (2,841 lines) ───────────────────────────────┐
+    │ Filter: health                                                    │
+    │ > [10:32:01.210] [CRYSTAL] Signal: health_changed(current: 95)    │
+    │   [10:32:01.450] [GAME]    HealthPickup collected by player       │
+    ├─ Context Preview (Line 412) ──────────────────────────────────────┤
+    │ 410: [10:32:01.205] [GAME] Damage received: 5 dmg from Hazard     │
+    │ 411: [10:32:01.208] [CRYSTAL] Player#take_damage: hp now 95       │
+    │ 412: [10:32:01.210] [CRYSTAL] Signal: health_changed(current: 95) │
+    │ 413: [10:32:01.212] [GODOT] UI HealthBar updated: value = 95%     │
+    └───────────────────────────────────────────────────────────────────┘
+right:
+  type: card
+  title: Structured Multi-Stream Log Architecture
+  color: cyan
+  items:
+  - <strong>Multi-Channel Demuxing:</strong> Isolates and labels distinct log streams: engine (<code>[GODOT]</code>), compiler/bridge (<code>[CRYSTAL]</code>), and gameplay (<code>[GAME]</code>).
+  - <strong>Target-Specific Routing:</strong> Tail, search, or view specific logs: <code>editor</code>, <code>game</code>, <code>build</code>, <code>test</code>, <code>bridge</code>, <code>crash</code>, <code>public</code>, or <code>all</code>.
+  - <strong>Privacy & Spoiler Filters:</strong> <code>--public</code> filter strips sensitive development secrets, enabling safe log sharing with players and community bug reports.
+  - <strong>Crash Snapshot Bundling:</strong> <code>lapis log export --zip</code> packages logs, backtraces, and memory snapshots into a timestamped bundle for triage.
+notes: |
+  Finding bugs in multi-language game architectures requires untangling mixed output streams. lapis log cleanly separates Godot engine events, Crystal runtime logs, and user gameplay code into distinct color-coded channels. With lapis log --interactive, developers can fuzzy-filter thousands of log lines in real time and inspect surrounding context lines instantly. When an unhandled error occurs, lapis log crash prints demangled stack frames and allows exporting full diagnostic snapshots with a single command.

@@ -1,0 +1,54 @@
+---
+id: 27b_interop_type_firewall
+title: 'Type Firewall: Crystal Enforces Strict Safety on GDScript'
+subtitle: Rejecting Malformed Dynamic Invocations at the GDExtension Boundary Before Execution
+badge: INTEROPERABILITY • TYPE FIREWALL
+badge_color: purple
+palette: former_rain
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Duck-Typing & Malformed Arguments'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    # GDScript is dynamic: data from JSON, RPCs, or UI may be untyped
+    func _on_potion_consumed(data: Variant) -> void:
+        # A bug passes a String instead of an Int:
+        player.heal("some bad string")
+
+        # In standard unverified C++ bindings:
+        # -> Silent memory corruption or bizarre garbage values!
+        # In Lapis:
+        # -> Godot engine boundary immediately intercepts & halts:
+        # "Invalid call. Argument 1 (String) cannot be converted to int."
+  points:
+  - <strong>Duck-Typing Pitfall:</strong> Dynamic dictionaries and RPC packets can easily pass strings where numbers are expected.
+  - <strong>Memory Corruption Risk:</strong> Untyped native bindings risk severe memory corruption on illegal type reinterpretation.
+  - <strong>Perimeter Interception:</strong> Lapis ensures the Godot engine catches malformed calls at the boundary before execution.
+crystal:
+  title: ':sparkles: Crystal: Strongly-Typed ClassDB Registration'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    node Player < CharacterBody3D do
+      # Lapis registers exact parameter type (INT) in ClassDB:
+      def heal(amount : Int32) : Int32
+        @health += amount
+        emit(health_changed, @health)
+        @health
+      end
+    end
+
+    # THE LAPIS TYPE FIREWALL:
+    # 1. GDExtension validates types before invoking native code
+    # 2. Strict Variant unboxing: TypeCastError on mismatch
+    # 3. Crystal method is NEVER executed with malformed data!
+  points:
+  - <strong>ClassDB Type Metadata:</strong> Method signatures register with exact GDExtension Variant types (<code>INT</code>, <code>FLOAT</code>).
+  - <strong>GDExtension Perimeter Guard:</strong> The engine validates argument types before method dispatch occurs.
+  - <strong>Guaranteed Internal Invariants:</strong> Inside Crystal, <code>amount</code> is guaranteed to be a valid <code>Int32</code> with zero runtime checks.
+takeaway:
+  badge: STRICT TYPE FIREWALL
+  text: Crystal acts as a strongly-typed shield for your game, preventing untyped GDScript and RPC inputs from polluting core logic.
+notes: |
+  What happens when dynamic GDScript tries to pass bad data into your Crystal code? If someone calls `player.heal("some bad string")`, in naive C++ bindings that might cause memory corruption or bizarre behavior. But Lapis automatically registers exact parameter types directly into Godot's ClassDB. The GDExtension layer validates the arguments before the method is ever called, rejecting malformed calls with an explicit engine error. Crystal acts as a strongly-typed firewall protecting your game's integrity.

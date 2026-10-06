@@ -1,0 +1,52 @@
+---
+id: 36c_testing_editor_selenium_driver
+title: "In-Editor Action Driver: UI Automation & Synthetic Input"
+subtitle: SceneTree Control Queries, Synthesized Input Events & Editor Workflow Automation
+badge: QUALITY GATES • UI AUTOMATION
+badge_color: cyan
+palette: ranger
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: editor_action_driver_spec.cr — UI Automation Flow
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    require "./spec_helper"
+    require "lapis/editor/action_driver"
+
+    describe Lapis::Editor::ActionDriver do
+      it "automates toolbar compilation, dock tabs, and editor flows" do
+        driver = Lapis::Editor::ActionDriver.new
+
+        # 1. Type-safe SceneTree control queries
+        build_btn = driver.find_button(text: "Build Crystal")
+        search_box = driver.find_node(LineEdit, name: "SearchFilter")
+
+        # 2. Synthesized input event dispatch (mouse & keyboard)
+        driver.click(build_btn.not_nil!)
+        driver.type_text(search_box.not_nil!, "PlayerController")
+        driver.select_tab(driver.find_dock("CrystalPanel").not_nil!, "Logs")
+
+        # 3. High-level editor workflows
+        driver.open_script("res://src/player.cr", line: 42)
+        driver.switch_main_screen("Crystal")
+
+        # 4. Asynchronous state synchronization & assertions
+        driver.wait_until(timeout_sec: 5.0) { driver.has_node?("BuildSuccessBanner") }
+      end
+    end
+right:
+  type: card
+  title: Editor Automation Capabilities
+  color: cyan
+  items:
+  - <strong>Control Tree Queries:</strong> Query live editor controls via typed methods and recursive traversal (<code>find_button</code>, <code>find_node(T)</code>, <code>find_dock</code>).
+  - <strong>Synthetic Input Engine:</strong> Dispatches native Godot input events: <code>click</code>, <code>double_click</code>, <code>right_click</code>, <code>type_text</code>, and <code>select_tab</code>.
+  - <strong>Workflow Automation:</strong> Automates opening scenes (<code>open_scene</code>), jumping to scripts (<code>open_script</code>), and switching main screen viewports.
+  - <strong>Asynchronous Waiters:</strong> <code>wait_until</code> and <code>wait_for_condition</code> eliminate brittle frame sleeps during asynchronous compilation and dock initialization.
+  - <strong>Headless & Visual Testing:</strong> Runs headlessly in CI suites or visibly within interactive editor sessions for rapid debugging.
+notes: |
+  Building editor plugins, custom inspectors, and dock tools in Godot previously required tedious manual validation. The ActionDriver provides automated UI interaction for Godot editor tools. Instead of relying on manual clicks, ActionDriver queries the active editor SceneTree for Control nodes like buttons, line edits, and tab containers. It synthesizes native Godot InputEvents for mouse clicks and keystrokes, exercises editor workflows like opening scripts and switching tabs, and synchronizes asynchronously with wait_until helpers. Tests can run headlessly in CI or visually in the editor.

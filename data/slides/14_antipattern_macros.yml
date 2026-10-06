@@ -1,0 +1,67 @@
+---
+id: 14_antipattern_macros
+title: 'Metaprogramming: Strings vs. AST Macros'
+subtitle: String Dictionaries & Manual Wiring vs. Typed AST Macros
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: amber
+palette: spaces_xp_royale
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Dictionary Sprawl & String Signals'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    # Manual dictionary definitions for editor export hints
+    func _get_property_list() -> Array[Dictionary]:
+        return [{
+            "name": "move_speed",
+            "type": TYPE_FLOAT,
+            "hint": PROPERTY_HINT_RANGE,
+            "hint_string": "10.0,500.0,5.0"
+        }]
+
+    # Manual signal emissions with loose string names and untyped arguments
+    signal player_hit(damage, source)
+    func take_damage(dmg: int) -> void:
+        emit_signal("player_hit", dmg, self) # Typo in "player_hit" fails at runtime!
+  points:
+  - <strong>Stringly-Typed Dictionaries:</strong> Requires constructing complex property
+    dictionaries in <code>_get_property_list()</code>.
+  - <strong>Brittle String Signals:</strong> Typo in signal name string fails silently
+    or crashes at runtime.
+  - <strong>No Parameter Validation:</strong> Emit calls cannot verify argument counts
+    or types at compile time.
+crystal:
+  title: ':sparkles: Crystal: Compile-Time AST Macro Synthesis'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    # Declarative compile-time annotations publish directly to Godot ClassDB
+    @[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
+    property move_speed : Float32 = 150.0_f32
+
+    # Type-safe signal definition synthesizes emit and listener helpers:
+    signal player_hit(damage : Int32, source : Player)
+
+    def take_damage(dmg : Int32) : Void
+      # Compile-time checked: typos or wrong arg types fail during compilation!
+      emit(player_hit, dmg, self)
+      # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
+    end
+  points:
+  - <strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc
+    comments and ranges directly into Godot Inspector.
+  - <strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player_hit, dmg, self)</code> validates
+    argument types and arity at compile time.
+  - <strong>Zero Runtime Reflection:</strong> Metaprogramming executes at compile
+    time; runtime cost is exactly zero.
+takeaway:
+  badge: ZERO-REFLECTION METAPROGRAMMING
+  text: Crystal AST macros execute at compile time, eliminating runtime reflection
+    and catching API mismatches instantly.
+notes: 'Metaprogramming in GDScript often means writing string dictionaries in _get_property_list,
+  maintaining loose string names for signals, and relying on runtime reflection. In
+  Lapis, we use Crystal''s compile-time AST macros. When you declare an export or
+  a signal, the macro generates first-class, strongly-typed signal accessors: player_hit.emit,
+  player_hit.connect, and full ClassDB property registrations. Any typos or argument type
+  mismatches are caught immediately by the compiler.'

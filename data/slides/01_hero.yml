@@ -1,0 +1,19 @@
+---
+id: 01_hero
+title: Lapis for Crystal
+subtitle: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
+badge: HIGH-PERFORMANCE GAMEPLAY TOOLCHAIN
+badge_color: cyan
+palette: spaces_xp_royale
+layout: intro-layout
+cube_size: 310
+author: Ian Rash
+author_alias: sol.vin
+author_role: Creator of Lapis • Systems Engineer, Security Researcher & Game Developer
+repo: github.com/sol-vin/lapis
+pills:
+  - ':bolt: LLVM Native C-Speed'
+  - ':gem: Ruby-Like Zen DSL'
+  - ':gamepad: First-Class Godot 4.8+'
+  - '<code>github.com/sol-vin/lapis</code>'
+notes: 'Welcome everyone! Today I''m thrilled to present Lapis: the high-performance Crystal language bindings and developer toolchain for Godot Engine 4.8+. In this presentation, we''ll explore why Crystal is uniquely suited for game development, how Lapis eliminates the massive boilerplate associated with C++ and Rust, its first-class integration directly inside the Godot editor, and how it delivers bare-metal performance with zen metaprogramming and expressive DSL ergonomics.'

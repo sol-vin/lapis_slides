@@ -1,0 +1,57 @@
+---
+id: 03i_ruby_implicit_returns
+title: 'Implicit Returns: The Last Evaluated Expression'
+subtitle: Expression-Oriented Design, Functional Flow & High-Signal Early Returns
+badge: RUBY QUIRKS • EXPRESSION RETURNS
+badge_color: blue
+palette: amigo
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: implicit_returns.rb — Expressions Over Rituals
+  tag: Ruby
+  lang: ruby
+  font_size: '0.74rem'
+  code: |
+    # 1. Methods return their last evaluated expression:
+    def calculate_damage(base_power, defense)
+      multiplier = critical_hit? ? 2.0 : 1.0
+      [base_power * multiplier - defense, 1].max # No "return" needed!
+    end
+
+    # 2. Blocks in pipelines return values effortlessly:
+    healed_party = party.map do |player|
+      player.heal(25) # Return value of heal() becomes mapped element!
+    end
+
+    # 3. Branching returns naturally from whichever branch ran:
+    def player_rank(score)
+      if score >= 10_000
+        :grandmaster
+      elsif score >= 5_000
+        :diamond
+      else
+        :challenger
+      end # Entire if returns the resulting symbol to the caller!
+    end
+
+    # 4. Explicit "return" is reserved strictly for early bailouts:
+    def process_turn(actor)
+      return unless actor.alive? # High-signal guard clause!
+      actor.take_action
+    end
+right:
+  type: card
+  title: Why Outsiders Hesitate vs Why It's Brilliant
+  color: blue
+  items:
+    - '<strong>The Outsider''s Worry:</strong> In C, Java, and Python, developers are trained that omitting <code>return</code> means the routine is <code>void</code> or returns <code>None</code>. Seeing no return looks like an accidental omission.'
+    - '<strong>Expression-Oriented Semantics:</strong> Routines evaluate naturally to their resulting value rather than requiring procedural return statements. Mandating a <code>return</code> keyword on every single function is ritualistic syntax noise.'
+    - '<strong>Crucial for Blocks & Closures:</strong> Functional pipelines (<code>map</code>, <code>select</code>) rely on implicit returns. In Ruby, writing an explicit <code>return</code> inside a block aborts the <em>enclosing method</em>, not just the block!'
+    - '<strong>High-Signal Guard Clauses:</strong> Because ordinary returns are implicit, an explicit <code>return</code> stands out vividly on code review as an intentional early bailout (<code>return if dead?</code>).'
+    - '<strong>Crystal Flow Typing:</strong> Crystal infers the static union type across all branch exit expressions at compile time—delivering functional elegance with zero runtime dispatch cost.'
+notes: |
+  In traditional imperative programming languages like C, Java, or Python, every function that computes a value must conclude with the keyword 'return'. If you omit it in C, your code might return garbage; if you omit it in Python, it returns None. When developers from those ecosystems look at Ruby, they instinctively think: 'Wait, did you forget to write return?'
+  In Ruby, methods, blocks, and conditionals naturally evaluate to the result of their last executed expression. In expression-oriented languages, code computes values directly—aligning with functional programming principles.
+  More importantly, implicit returns are essential for blocks. In collection operations like party.map, the block returns the last expression automatically. If you were forced to write 'return', it would trigger a non-local jump and exit the entire enclosing method! Furthermore, because standard method exits never use 'return', whenever an explicit 'return' does appear—like 'return unless actor.alive?'—it immediately screams out as a high-priority guard clause. Crystal preserves this exact expression-based model, computing static union types at compile time with zero LLVM overhead.

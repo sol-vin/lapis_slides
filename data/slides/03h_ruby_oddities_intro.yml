@@ -1,0 +1,33 @@
+---
+id: 03h_ruby_oddities_intro
+title: 'The Ruby "Oddities"'
+subtitle: Why Outsiders Scratch Their Heads & Insiders Rejoice
+badge: RUBY HERITAGE • UNCONVENTIONAL ERGONOMICS
+badge_color: purple
+palette: aperture
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: card
+  title: 'The Outsider Dilemma: "That Looks Wrong!"'
+  color: amber
+  items:
+    - '<strong>Where is the <code>return</code> statement?</strong> Programmers from C, Java, and Python assume omitting return implies a void function or a forgotten value.'
+    - '<strong>Assigning an <code>if</code> statement?</strong> Writing <code>val = if cond</code> looks like an illegal syntax error or a broken ternary operator.'
+    - '<strong>Why is <code>if</code> at the end of the line?</strong> Prefix-trained brains flinch when control flow conditions appear after the action has already been written.'
+    - '<strong>Punctuation inside method names?</strong> In C-family languages, <code>?</code> and <code>!</code> are reserved operators for optionals and negations, not valid identifier characters.'
+    - '<strong>Where is the <code>for</code> loop?</strong> Developers search in vain for traditional loops, baffled to find people calling methods on numbers (<code>5.times</code>).'
+    - '<strong>Re-opening classes from other files?</strong> To Java and C++ developers, modifying existing classes violates the sacred law of closed compilation units.'
+right:
+  type: card
+  title: 'The Linguistic Insight: Designing for Human Minds'
+  color: emerald
+  items:
+    - '<strong>None of These Are Flaws:</strong> Yukihiro Matsumoto designed Ruby around human psychology, conversational linguistics, and mental flow—not CPU instruction pipelines.'
+    - '<strong>Expression Completeness:</strong> Treating language blocks as expressions eliminates mutable dummy state and temporal coupling bugs.'
+    - '<strong>Action-First Prioritization:</strong> Conversational word order puts the primary intent up front, keeping secondary guardrails unobtrusive.'
+    - '<strong>High-Signal Visual Flares:</strong> <code>?</code> asks pure questions; <code>!</code> screams destructive in-place mutation or exception danger.'
+    - '<strong>The Crystal Miracle:</strong> Crystal adopted every single one of these human-centric oddities—while compiling them straight to bare-metal LLVM machine code.'
+notes: |
+  When programmers coming from C, C++, Java, C#, Go, or Python first encounter Ruby code, they often experience intense cognitive dissonance. The syntax doesn't look like the traditional C-family algol-derived languages they grew up with. Where are the return statements? Why is someone assigning an if statement to a variable? Why is there an 'if' tacked onto the end of a line after the function call? How can a method have a question mark or exclamation mark in its name? And how can you possibly re-open a standard library class and add methods to it?
+  To an outsider, these conventions look like lawless chaos. But to experienced Rubyists, they are the secret sauce of developer happiness. None of these are accidents or sloppy language design—they are intentional, human-centered ergonomic choices grounded in linguistics and expression-oriented programming. In this section, we'll demystify each of these famous 'oddities' and explain why they make code cleaner, more readable, and less error-prone. And most importantly, we will see how Crystal took these exact ergonomic oddities and proved they can run at native C++ execution speeds.

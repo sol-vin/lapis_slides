@@ -1,0 +1,29 @@
+---
+id: 07_why_crystal_video
+title: Why Crystal?
+subtitle: 'Addressing the #1 Question: Why Not Rust, C++, C#, or GDScript?'
+badge: WHY CRYSTAL • THE ULTIMATE QUESTION
+badge_color: purple
+palette: fruit_osx
+layout: media-layout
+media:
+  type: video
+  src: crystalmeme.mp4
+  title: Language Selection & Pragmatic Trade-Offs
+  tag: Video (31s)
+  caption:
+    speaker: 'Yukihiro Matsumoto:'
+    quote: Computers are not very smart. They don't understand human language, so we have to tell them what to do in a language that both humans and computers can understand.
+card:
+  title: 'Engineering Trade-Offs: Beyond the Hype'
+  color: purple
+  items:
+  - <strong>Why Not Rust?</strong> Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.
+  - <strong>Why Not C++?</strong> Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded <code>0xC0000005</code> segfaults.
+  - <strong>Why Not GDScript?</strong> Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).
+  - <strong>Why Not C#?</strong> Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.
+  - <strong>The Crystal Sweet Spot:</strong> Bare-metal LLVM machine code, whole-program type inference, Ruby-like expressive syntax, and <em>pure developer joy!</em>
+notes: |
+  When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?'
+  Beyond tribal preferences, there is a profound engineering reality here. Rust's ownership model fights Godot's cyclic SceneTree graphs; C++ suffers from header sprawl and catastrophic segfaults; GDScript hits severe throughput bottlenecks in tight loops; and C# brings runtime overhead with GC frame spikes.
+  Crystal provides the rare sweet spot: raw LLVM machine speed and static nil safety paired with the expressive, human-first ergonomics of Ruby.

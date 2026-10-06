@@ -1,0 +1,49 @@
+---
+id: 23_concurrency_fibers
+title: 'Concurrency: Lightweight Fibers & Signal Awaiting'
+subtitle: Cooperative Multitasking on Godot's Main Thread Without Thread-Safety Hazards
+badge: CONCURRENCY ARCHITECTURE • FIBERS
+badge_color: cyan
+palette: pastel
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: dialogue_cutscene.cr — Cooperative Gameplay Fibers
+  tag: Crystal
+  lang: crystal
+  code: |
+    # Spawn lightweight cooperative fiber on main thread
+    spawn do
+      dialogue_box.typewrite("A storm is approaching...")
+      await(dialogue_box.finished)
+
+      await(1.5.seconds) # Non-blocking delay
+      camera.screen_shake(intensity: 0.8)
+      lightning.trigger_flash
+
+      await(lightning.flash_completed)
+      dialogue_box.typewrite("We must take shelter!")
+    end
+
+    def _process(delta : Float64) : Void
+      # Yield cooperative slice to spawned fibers
+      Fiber.yield
+    end
+right:
+  type: card
+  title: Fiber Concurrency Invariants
+  color: cyan
+  items:
+  - <strong>Cooperative Scheduling:</strong> Fibers execute on the OS main thread;
+    zero mutexes or locks required for SceneTree operations.
+  - <strong>Yielding in _process:</strong> Call <code>Fiber.yield</code> in <code>_process</code>
+    to ensure fibers advance with frame ticks.
+  - <strong>No Blocking sleep in Fibers:</strong> Never call blocking <code>sleep</code>
+    inside a fiber; use <code>await(duration.seconds)</code> instead.
+  - <strong>Dead-Pointer Protection:</strong> Awaiting fibers validate <code>#alive?</code>
+    on each tick, preventing hangs on freed nodes.
+notes: Godot's scene tree is fundamentally single-threaded. Lapis provides lightweight,
+  cooperative fibers for orchestrating asynchronous gameplay sequences—dialogue, cutscenes,
+  scripted events—directly on the main thread. Because fibers run cooperatively, you
+  can modify nodes, add children, and change transforms with zero mutex overhead.

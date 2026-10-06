@@ -1,0 +1,53 @@
+---
+id: 09_signals_async
+title: 'Signals & Events: Reactive Zen Ergonomics'
+subtitle: Declarative Signal Connections, First-Class Signal Emission, and Decoupled Systems
+badge: CRYSTAL ERGONOMICS • SIGNALS & EVENTS
+badge_color: cyan
+palette: spaces_vista
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: reactive_events.cr — Type-Safe Signal Subscriptions
+  tag: Crystal
+  lang: crystal
+  font_size: '0.78rem'
+  code: |
+    # 1. Declarative signal connection sugar with 'on' or 'connect':
+    start_btn = self["$UI/StartButton", Godot::Button]
+    on start_btn.pressed do
+      start_game_sequence
+    end
+
+    # 2. Declaring custom typed signals with parameters:
+    signal health_changed(current : Int32, max_health : Int32)
+    signal player_died
+
+    # 3. First-class signal subscriptions, one-shot, and operators:
+    health_changed.connect do |curr, max|
+      hud.update_health_bar(curr, max)
+    end
+    player_died.once do
+      game_over_director.trigger_defeat
+    end
+    player_died += ->on_player_died
+
+    # 4. First-class signal emission on signal accessors:
+    health_changed.emit(75, 100)
+    emit(health_changed, 75, 100) # macro sugar
+    player_died.emit
+right:
+  type: card
+  title: Reactive Gameplay Features
+  color: cyan
+  items:
+  - <strong>Declarative <code>on</code> &amp; <code>connect</code>:</strong> Connect signals with clean Crystal blocks—<code>on button.pressed { ... }</code> eliminates single-use handler boilerplate.
+  - <strong>First-Class Signal Accessors:</strong> Signals are typed objects; <code>health_changed.emit(75, 100)</code> and <code>health_changed.connect</code> provide zero namespace pollution.
+  - <strong>Compound Operators (<code>+=</code> / <code>-=</code>):</strong> Ergonomically bind and unbind procs with <code>+=</code> and <code>-=</code>, backed by automatic 64-bit ObjectDB self-pruning.
+  - <strong>One-Shot Subscriptions:</strong> <code>signal.once { ... }</code> automatically unhooks after the first invocation, preventing stale event leaks.
+  - <strong>Decoupled Architecture:</strong> Game systems communicate through strongly-typed events rather than tightly-coupled node references.
+notes: |
+  Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. With our 'on' macro and 'connect' blocks, you can wire up signals with idiomatic closures—eliminating single-use handler functions.
+  Signals are first-class typed accessors: 'health_changed.emit(75, 100)', 'player_died.once', and compound operators 'player_died += ->on_player_died' prevent method namespace pollution and collisions.
+  Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly with zero runtime reflection overhead.

@@ -1,0 +1,16 @@
+bin/
+*.exe
+*.dll
+*.zip
+*.pdb
+*.uid
+*.import
+scratch/
+slide_*.png
+__pycache__/
+sandbox/**/bin/
+sandbox/**/addons/*/bin/
+sandbox/**/log/
+sandbox/**/recordings/
+.godot/
+*.log

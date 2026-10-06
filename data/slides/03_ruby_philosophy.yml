@@ -1,0 +1,63 @@
+---
+id: 03_ruby_philosophy
+title: 'The Ruby Heritage'
+subtitle: Developer Happiness, Small Syntax & Expressive Human Reach
+badge: HISTORICAL CONTEXT • THE RUBY HERITAGE
+badge_color: purple
+palette: super_es
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: ruby_philosophy.rb — Developer Happiness First
+  tag: Ruby
+  lang: ruby
+  font_size: '0.74rem'
+  code: |
+    # Yukihiro "Matz" Matsumoto's Vision (1995)
+    # "Ruby is designed for human cognitive comfort, not machine convenience."
+
+    Ruby.manifesto do
+      prioritize :human_happiness, over: :machine_convenience
+      principle  :least_surprise
+      syntax     :natural_english_prose
+
+      empower do
+        first_class_blocks { just_like_magic }
+        expressive_closures.each do |easy, inputs|
+          makes easy.code
+          inputs.handled! { |input| nicely?(input) }
+        end
+        unbounded_dsl_freedom do
+          make the future bright
+          introduce new syntax
+
+          5.times do
+            still use (ruby / crystal) syntax
+            domain_specific_languages.powered_up!
+          end
+        end
+      end
+
+      goal "Make programmers smile when they write code"
+    end
+
+    puts "Programming should be a joy, not a chore."
+right:
+  type: card
+  title: Why Ruby Won Developer Hearts
+  color: purple
+  items:
+  - <strong>Developer Happiness as Primary Goal:</strong> Yukihiro 'Matz' Matsumoto
+    designed Ruby to prioritize human cognitive comfort over machine convenience.
+  - <strong>Small Syntax, Massive Reach:</strong> A minimal grammatical surface area
+    that bends to almost any domain—turning simple method calls and blocks into DSLs without language bloat.
+  - <strong>First-Class Blocks & Closures:</strong> Chaining Enumerable methods (<code>select(&:alive?)</code>)
+    turned data manipulation into an expressive, natural English flow.
+  - <strong>Principle of Least Surprise (POLS):</strong> Statement modifiers (<code>return unless</code>) and
+    predicates (<code>alive?</code>) feel intuitive and minimize cognitive friction.
+  - <strong>The Downside in Game Tech:</strong> Dynamic method dispatch (YARV byte
+    interpreter) was too slow for 60/120 FPS physics, frame budgets, and tight loops.
+notes: |
+  To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English.
+  Matz proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive. Instead, thoughtful language design allows programmers to build clean internal class architectures ("our back end") so that consumer call-sites and gameplay code ("our front end") can read like poetry. But for game developers, Ruby's dynamic interpreted VM was far too slow for real-time physics and 60 FPS budgets.

@@ -1,0 +1,27 @@
+---
+id: 27b_act4_csharp_intro
+title: "The C# (.NET) Shootout"
+subtitle: "Escaping Keyword Ceremony, Null Minefields, Platform Lockout & The Runtime VM Tax"
+act: "ACT IV • CHAPTER 05"
+badge: "ACT IV • CHAPTER 05"
+badge_color: "amber"
+palette: "aperture"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "The Keyword Tax"
+    desc: "public partial class Player : CharacterBody3D vs. clean, expressive Lapis macros"
+    icon: "xmark"
+    color: "coral"
+  - title: "The GC Stutter Hazard"
+    desc: "Unpredictable garbage collector sweeps dropping frames during high-action moments"
+    icon: "triangle-exclamation"
+    color: "amber"
+  - title: "Bare-Metal Zen"
+    desc: "Native binary compilation, zero VM dependency, and full iOS/Web/Console export freedom"
+    icon: "gem"
+    color: "emerald"
+notes: |
+  Many Godot developers turn to C# when GDScript becomes too slow or too fragile. But C# in Godot comes with a heavy price tag: keyword ceremony, reflection boilerplate, and the perpetual dread of garbage collector pauses during gameplay.
+  In Chapter 5, we put Godot C# head-to-head against Lapis.
+  Over the next 8 comparative slides, we'll evaluate keyword bloat, nullability minefields, runtime memory footprints, hot reload leaks, and unit testing friction—showing why Crystal provides a radically cleaner compiled alternative.

@@ -1,0 +1,58 @@
+---
+id: 20e_gmodule_composition_and_lifecycle
+title: 'Advanced gmodule: Composition, Hooks & Contracts'
+subtitle: Composed Module Inheritance, Cooperative Lifecycle Chaining & Abstract Contracts
+badge: LAPIS ARCHITECTURE • TRAIT COMPOSITION
+badge_color: purple
+palette: monokai
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: composed_traits.cr — Inheritance & Cooperative Hooks
+  tag: Crystal
+  lang: crystal
+  font_size: '0.80rem'
+  code: |
+    # 1. Composed Module Inheritance (Module < Module)
+    gmodule Combatant < Damageable do
+      signal attack_landed(target : String, damage : Int32)
+      @[Export]
+      property attack_power : Int32 = 25
+      def attack(target : String) : Void
+        emit(attack_landed, target, attack_power)
+      end
+    end
+
+    # 2. Cooperative Engine Lifecycle Hooks
+    gmodule AutoRegen do
+      include Damageable
+      @[Export]
+      property regen_rate : Float32 = 2.0_f32
+      def _process(delta : Float64) : Void
+        super # Chains through all mixed-in modules!
+        heal((regen_rate * delta).to_i32)
+      end
+    end
+
+    # 3. Composed Node with Multiple Traits
+    node BossMonster < CharacterBody3D do
+      include Combatant # Inherits Combatant + Damageable!
+      include AutoRegen # Autonomous frame regeneration
+    end
+right:
+  type: card
+  title: Architectural Rigor & Safety
+  color: purple
+  compact: true
+  items:
+    - '<strong>Composed Inheritance:</strong> Traits inherit traits (<code>gmodule A &lt; B</code>), inheriting all properties and signals.'
+    - '<strong>Cooperative Chaining:</strong> Calling <code>super</code> in <code>_process</code> chains lifecycle hooks across all mixed-in traits.'
+    - '<strong>Abstract Contracts:</strong> <code>abstract def</code> enforces required node implementations at compile time.'
+    - '<strong>Diamond-Free:</strong> Linearized mixin semantics eliminate C++ virtual diamond ambiguities cleanly.'
+    - '<strong>Autonomous Traits:</strong> Traits like <code>AutoRegen</code> manage per-frame updates with zero child node cost.'
+notes: |
+  gmodule goes far beyond simple flat mixins—it unlocks a complete, robust trait architecture for game engines.
+  First, gmodule supports composed inheritance: writing 'gmodule Combatant < Damageable' means Combatant inherits all exported properties, typed signals, and methods from Damageable. When BossMonster includes Combatant, it gets health, defense, attack power, and all corresponding signals in one shot.
+  Second, gmodule solves the dreaded lifecycle callback problem. Traditional component architectures struggle with multiple systems needing _process or _physics_process. With gmodule, calling super in _process ensures every included trait's frame logic executes in predictable method-resolution order without dropping callbacks.
+  And third, using Crystal's native abstract def inside a gmodule creates hard compile-time interface contracts. If a node includes Interactable but forgets to implement on_interact, the compiler refuses to build. It delivers total architectural safety with zero virtual call overhead.

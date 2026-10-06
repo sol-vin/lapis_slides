@@ -1,0 +1,57 @@
+---
+id: 20c_node_context_tilde_operator
+title: 'Bare Scene Ergonomics: The Unary ~ Operator'
+subtitle: Context-Aware Node Resolution via NodeContext and Bare ~ Syntax
+badge: LAPIS DSL • CONTEXT-AWARE ERGONOMICS
+badge_color: purple
+palette: playbox
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: bare_node_context_access.cr
+  tag: Crystal
+  lang: crystal
+  code: |
+    node PlayerController < CharacterBody2D do
+      def _ready : Void
+        # 1. Bare String & NodePath via active context:
+        camera = ~"$CameraRig/Camera2D" # => Node (or NodeNotFoundError)
+        hud_bar = ~"%PlayerHUD" # => Node (or NodeNotFoundError)
+        inventory = ~"%Inventory".as Inventory # => Inventory (or NodeNotFoundError)
+        backpack = ~"$Back/Backpack".as(Backpack) # => Backpack (or NodeNotFoundError)
+        item = ~"%Inventory/HeldItem".as? Item  # => Item or nil (or NodeNotFoundError)
+        
+        # 2. Strict ~Class: Resolves & casts up (like self[T]):
+        sprite = ~Sprite2D           # Searches tree, up-casts, raises if nil
+        weapon = ~Weapon             # Up-casts derived Sword/Bow to Weapon
+
+        # 3. Safe ~Class?: Nilable lookup & up-cast (like self[T]?):
+        if shield = ~Shield?         # Returns Shield? or nil (no raise!)
+          shield.absorb_hit(10)
+        end
+
+        # 4. Identity & chaining:
+        current = ~self              # Returns self
+      end
+
+      # 5. External blocks scope via with_context:
+      def inspect_target(target : Node) : Void
+        target.with_context do
+          mesh = ~MeshInstance3D?    # Safe lookup on target
+        end
+      end
+    end
+right:
+  type: card
+  title: How NodeContext & ~ Work
+  color: purple
+  compact: true
+  items:
+    - '<strong>Active Lifecycle Context:</strong> Every Godot callback (<code>_ready</code>, <code>_process</code>, <code>_input</code>) automatically scopes <code>NodeContext.current = self</code>.'
+    - '<strong>Strict <code>~Class</code> (Up-Casting):</strong> Resolves and up-casts matching nodes across the hierarchy. Parity with <code>self[T]</code>; raises if missing.'
+    - '<strong>Safe Nilable <code>~Class?</code>:</strong> Returns <code>T?</code> without raising when optional nodes are absent. 1:1 parity with <code>self[T]?</code>.'
+    - '<strong>Bare Path Lookup (<code>~String</code>):</strong> <code>~"$CameraRig/Camera2D"</code> resolves relative to current context with zero <code>self.</code> boilerplate.'
+    - '<strong>Negligible Context Overhead (~0.4 ns):</strong> Backed by thread-local pointer tracking (<code>@[ThreadLocal] NodeContext.current</code>), adding negligible overhead over explicit <code>self</code>.'
+notes: |
+  In GDScript, accessing nodes is often concise because of $Node syntax, but it's untyped and requires runtime casting. In Lapis, we introduced the unary tilde operator (~) backed by an active NodeContext. Every Godot lifecycle callback—such as _ready, _process, _physics_process, and _input—automatically scopes NodeContext.current to the executing node using thread-local storage. This allows bare expressions like ~"$CameraRig/Camera2D" or ~"%PlayerHUD" to resolve directly without an explicit self receiver. Even better, you can invoke the unary tilde directly on a class type like ~Sprite2D or ~ProgressBar, which resolves the named child and casts it to that concrete Crystal class with zero boilerplate. Reading the thread-local context pointer takes ~0.4 nanoseconds, adding practically zero overhead over passing self explicitly.

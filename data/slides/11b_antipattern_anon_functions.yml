@@ -1,0 +1,68 @@
+---
+id: 11b_antipattern_anon_functions
+title: 'Anonymous Functions: Callable Churn vs. Inlining'
+subtitle: GDScript Callable Overhead vs. Crystal Inlined Blocks
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: purple
+palette: super_es
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Verbose Lambdas, Callable Allocations & Churn'
+  lang: gdscript
+  tag: GDScript
+  font_size: '0.80rem'
+  code: |
+    # 1. Custom sort allocates heap Callable object
+    inventory.sort_custom(func(a, b): return a.weight < b.weight)
+
+    # 2. Filtering allocates closure environment per invocation
+    var ready_items = inventory.filter(func(item):
+        return item.durability > 0 and not item.broken
+    )
+
+    # 3. Frequency tally: manual loop + Dictionary churn
+    var counts: Dictionary = {}
+    for item in inventory:
+        var cat = item.category
+        counts[cat] = counts.get(cat, 0) + 1
+
+    # 4. Signal / Timer: requires full func(): syntax & heap capture
+    timer.timeout.connect(func(): on_tick(1))
+
+    # 5. Pipeline chaining creates intermediate array allocations
+    var active_names: Array[String] = []
+    for e in enemies:
+        if not e.is_dead: active_names.append(e.name.to_upper())
+  points:
+  - <strong>Heap-Allocated Callables:</strong> Every anonymous <code>func(...)</code> lambda instantiates a native Godot <code>Callable</code> heap object with refcount tracking.
+  - <strong>Clunky Lambda Syntax:</strong> No compact block syntax or symbol-to-proc; even simple 1-line predicates require full function signature boilerplate.
+  - <strong>Chaining & Intermediate Arrays:</strong> Chaining operations like <code>filter</code> and <code>map</code> creates intermediate temporary arrays, multiplying memory pressure.
+crystal:
+  title: ':sparkles: Crystal: Inlined Blocks, Rich Enumerators & Zero Lambda Churn'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    # 1. Block sort inlines comparison directly without closure objects
+    inventory.sort_by!(&.weight)
+
+    # 2. Clean block filter with static type inference
+    ready_items = inventory.select { |i| i.durability > 0 && !i.broken }
+
+    # 3. Instant frequency Hash via Enumerable#tally:
+    counts = inventory.tally(&.category) # => Hash(String, Int32) in 1 pass!
+
+    # 4. Declarative signal sugar with 'on': typed listener binding
+    on timer.timeout { on_tick(1) }
+
+    # 5. Composable lazy pipelines stream without intermediate arrays
+    active_names = enemies.each.reject(&.dead?).map(&.name.upcase).to_a
+  points:
+  - <strong>Inlined Block Execution:</strong> Crystal blocks passed to <code>yield</code> are inlined directly by LLVM into native loops without allocating heap closure objects.
+  - <strong>Declarative <code>on</code> Sugar:</strong> <code>on timer.timeout { ... }</code> generates typed signal handlers with automatic listener lifecycle management.
+  - <strong>Clean Block Syntax:</strong> Curly braces <code>{ |x| ... }</code> and symbol-to-proc <code>(&.property)</code> eliminate clutter while keeping full static type inference.
+  - <strong>50+ Rich Enumerators:</strong> <code>sort_by!</code>, <code>select</code>, <code>reject</code>, <code>tally</code>, and <code>chunk</code> compose seamlessly into readable data pipelines.
+takeaway:
+  badge: BLOCK INLINING • MINIMAL HEAP CHURN
+  text: Crystal blocks eliminate lambda closure allocations through LLVM inlining, giving you expressive functional pipelines with C-level execution speed.
+notes: |
+  In GDScript, lambdas and callbacks are first-class Callable objects allocated on the engine heap. Whenever you pass `func(a, b): return a.weight < b.weight` or filter an array, Godot allocates and refcounts a Callable instance, and chaining filters creates intermediate arrays. In Crystal, blocks passed to yield are not heap-allocated objects: the Crystal compiler and LLVM inline block bodies directly into the caller's machine code loop. Writing `inventory.sort_by!(&.weight)` or `inventory.select { |i| i.durability > 0 }` compiles down to tight native loops with zero delegate or closure overhead.

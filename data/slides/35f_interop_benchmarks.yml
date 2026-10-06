@@ -1,0 +1,56 @@
+---
+id: 35f_interop_benchmarks
+title: 'Interop & FFI Benchmarks: Nanosecond Boundary Analysis'
+subtitle: Quantifying GDExtension C-ABI Crossing, Variant Boxing & Typed Dispatch
+badge: BENCHMARKS • INTEROP & FFI
+badge_color: cyan
+palette: spaces_11
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: barchart
+  title: GDExtension Boundary Invocation Latency
+  badge: LOWER IS BETTER
+  unit: ns
+  benchmarks:
+    - name: Direct C-ABI Function Pointer Call
+      speedup: 133.1x vs Dynamic
+      bars:
+        - platform: Dynamic Object#call
+          lang: gdscript
+          val: 186.4
+        - platform: Variant Boxing / Unboxing
+          lang: csharp
+          val: 14.2
+        - platform: Typed GDExtension Method
+          lang: cpp
+          val: 4.8
+        - platform: Lapis Direct C-ABI Pointer
+          lang: crystal
+          val: 1.4
+    - name: Native Vector3 Math & Transform Update
+      speedup: 18.2x vs Variant
+      bars:
+        - platform: Variant Dynamic Dispatch
+          lang: gdscript
+          val: 74.6
+        - platform: P/Invoke Marshalling
+          lang: csharp
+          val: 16.8
+        - platform: GDExtension Call
+          lang: cpp
+          val: 4.9
+        - platform: Lapis Inline AVX2 SIMD
+          lang: crystal
+          val: 4.1
+right:
+  type: card
+  title: High-Throughput Interop Invariants
+  color: cyan
+  items:
+  - <strong>Cached ptrcall Function Pointers:</strong> Lapis binds engine methods via cached GDExtension method binds and direct function pointers, bypassing dynamic <code>Variant</code> string lookups.
+  - <strong>Direct Value Passing in Hot Loops:</strong> Native value types (<code>Vector2</code>, <code>Vector3</code>, <code>Transform3D</code>, <code>Color</code>) reside on the stack and pass by pointer without Variant boxing.
+  - <strong>Two-Way Typed Bindings:</strong> Both engine methods and custom GDScript project nodes receive static compile-time wrappers, eliminating runtime string method lookup.
+  - <strong>High Call Throughput:</strong> Games can execute high-frequency boundary-crossing queries (transforms, physics steps, raycasts) without CPU frame hitching.
+notes: |
+  A common bottleneck in multi-language game development is foreign function interface (FFI) overhead. In this benchmark, we measured the nanosecond-level cost of crossing the Godot GDExtension boundary. When using dynamic Variant method calls, each invocation costs roughly 186 nanoseconds due to string hashing and Variant packing. Lapis generates direct C-ABI ptrcall wrappers, reducing call latency to roughly 1.4 nanoseconds—matching pure C++ and letting you execute high-frequency engine queries without FFI bottlenecks.

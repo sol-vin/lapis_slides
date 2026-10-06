@@ -1,0 +1,29 @@
+{
+  "title": "Lapis Test Suite — void_runner Status Report",
+  "profile": "Engine Core",
+  "platform": "Windows (x86_64)",
+  "crystal_version": "Crystal 1.21.0",
+  "godot_version": "4.8.dev.gh.c971f93e7",
+  "duration_seconds": 7.87,
+  "overall_success": true,
+  "failed_phases_count": 0,
+  "phases": [
+    {
+      "tag": "[TEST:TOOL_NODES]",
+      "name": "Headless In-Editor Tests (void_runner)",
+      "category": "Test",
+      "success": true,
+      "informational": false,
+      "duration": 7.67,
+      "exit_code": 1,
+      "error_excerpt": null,
+      "log_line_range": null
+    }
+  ],
+  "runtime_summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0
+  },
+  "artifacts": []
+}

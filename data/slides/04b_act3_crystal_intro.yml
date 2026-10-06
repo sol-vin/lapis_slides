@@ -1,0 +1,27 @@
+---
+id: 04b_act3_crystal_intro
+title: "Crystal: The Compiled Solution"
+subtitle: "Native Machine Speed, Whole-Program Type Inference & Macro Metaprogramming"
+act: "ACT III • THE SYNTHESIS"
+badge: "ACT III • THE SYNTHESIS"
+badge_color: "purple"
+palette: "fruit_osx"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "Raw LLVM Performance"
+    desc: "Compiled directly to native C-speed machine code with zero VM tax"
+    icon: "bolt"
+    color: "purple"
+  - title: "Compile-Time Nil Safety"
+    desc: "Whole-program type inference that eliminates null dereference crashes"
+    icon: "shield-check"
+    color: "emerald"
+  - title: "AST Macro Metaprogramming"
+    desc: "Code generating code during compilation with zero runtime penalty"
+    icon: "wand-magic-sparkles"
+    color: "cyan"
+notes: |
+  We've seen the agony of dynamic typing and VM overhead. Now, enter the breakthrough: Crystal.
+  What if you didn't have to compromise? What if you could have the exact elegance, joy, and beauty of Ruby, but compiled down to bare-metal LLVM machine code that runs side-by-side with C and C++?
+  In Act III, we'll see why Crystal is uniquely engineered for real-time systems, how its whole-program type inference works, and how its compile-time AST macros eliminate thousands of lines of boilerplate.

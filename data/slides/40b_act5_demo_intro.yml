@@ -1,0 +1,27 @@
+---
+id: 40b_act5_demo_intro
+title: "Live Demonstration & Roadmap"
+subtitle: "Zero-Config Scaffolding, 60s Node Iteration, Full Architecture & Standalone Release"
+act: "ACT V • THE GRAND FINALE"
+badge: "ACT V • THE GRAND FINALE"
+badge_color: "cyan"
+palette: "spaces_xp_royale"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "Scaffold & Supervise"
+    desc: "Bootstrapping with lapis new and launching the persistent Editor Supervisor dock (lapis cli -e)"
+    icon: "terminal"
+    color: "cyan"
+  - title: "60-Second Node Iteration"
+    desc: "Declarative Ruby-like gameplay DSL with sub-second shadow DLL hot-reload and zero file locks"
+    icon: "bolt"
+    color: "purple"
+  - title: "Showcase & Distribution"
+    desc: "Full Soulantern architecture and single-command standalone portable release packaging"
+    icon: "rocket"
+    color: "emerald"
+notes: |
+  We've covered the history, the language design, the benchmarks, and the low-level debugging forensics.
+  Now it's time to see it all in action.
+  In our final act, we go hands-on with a unified 4-step live demonstration: scaffolding a brand new project, authoring gameplay mechanics in a 60-second hot reload loop, inspecting a full Soulantern game architecture, compiling a standalone portable package, and charting the future roadmap for Lapis and Godot.

@@ -1,0 +1,30 @@
+---
+id: 34_debugger_radare2
+title: 'Native Debugging: radare2 vs. LLDB'
+subtitle: Eliminating Toolchain Bloat & Symbol Desyncs
+badge: SYSTEMS DIAGNOSTICS • RADARE2
+badge_color: blue
+palette: game_station_2
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: card
+  title: Why LLDB Was Removed — The Fat Debugger Trap
+  color: blue
+  items:
+  - <strong>Gigabyte Toolchain Bloat:</strong> Bundled 2GB+ of Clang/LLVM runtime binaries and Python dependencies, destroying lean developer onboarding.
+  - <strong>Windows DWARF vs. PDB Desyncs:</strong> Struggled with MinGW DWARF and MSVC symbol table format differences, causing lost breakpoints and blank backtraces.
+  - <strong>Fragile Python Environment Binding:</strong> LLDB plugin scripts demanded exact host Python version matches, breaking constantly across OS updates.
+  - <strong>Zero Headless CI Automation:</strong> Inability to script lightweight headless crash triage, stack frame decoding, and memory dump forensics in CI pipelines.
+right:
+  type: card
+  title: In-Editor & Out-of-Editor Debugging via CLI
+  color: cyan
+  items:
+  - <strong>In-Editor Debugging (<code>lapis editor -d</code>):</strong> Opens Godot Editor with r2 attached; real-time pseudo-C decompiler tab (<code>pdc</code>), assembly tab (<code>pdf</code>), 64-bit register tracking, and multiplayer cooperative lockstep.
+  - <strong>Out-of-Editor Plugin Debugging (<code>lapis run -d</code>):</strong> Run standalone games and isolated plugin DLLs under r2 with zero editor overhead—catching hard crashes instantly.
+  - <strong>CLI Decompiler & Source Mapper (<code>lapis decompile</code>):</strong> Statically decompile Crystal methods to pseudo-C, side-by-side assembly (<code>pdca</code>), or map directly to original Crystal source lines (<code>cl</code> / <code>pdls</code>) without running the game.
+  - <strong>Hardware Memory Watchpoints:</strong> <code>rw &lt;addr&gt;</code> breaks CPU execution instantly at the exact machine instruction performing illegal writes (catching <code>0xC0000005</code>).
+  - <strong>Automated Crash Forensics:</strong> <code>PluginForensics</code> classifies crash boundaries (GameCode, LapisPlugin, GDExtensionBridge) and reads 64-bit ObjectDB IDs.
+notes: |
+  We completely removed LLDB from Lapis. LLDB was a 2GB+ bloat monster with fragile host Python dependencies and Windows PDB/DWARF symbol desyncs. In its place, Lapis standardizes on radare2 (r2) and our cradare2 bindings. Developers get seamless debugging both in and out of the editor: lapis editor -d embeds live pseudo-C decompilation and multiplayer lockstep debugging into Godot, while lapis run -d and lapis decompile let you debug standalone games, inspect compiled machine code, and set hardware memory watchpoints from the terminal.

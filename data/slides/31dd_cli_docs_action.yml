@@ -1,0 +1,55 @@
+---
+id: 31dd_cli_docs_action
+title: 'Documentation in Action: CLI & Interactive TUI'
+subtitle: Multi-Context Queries, Full-Text Search & Split-Pane Terminal Reader
+badge: TOOLCHAIN • DOCS IN ACTION
+badge_color: purple
+palette: game_sprocket
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — Lapis Docs CLI & Interactive TUI Explorer
+  cast: casts/lapis_docs_cli_tui.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Multi-context lookups (Godot ClassDB, stdlib, guides)
+    $ lapis docs lookup gd "CharacterBody3D.move_and_slide"
+    [Godot 4.x Engine API] CharacterBody3D.move_and_slide
+      Inheritance: PhysicsBody3D < CollisionObject3D
+      SIGNATURE: func move_and_slide() -> bool
+
+    $ lapis docs lookup stdlib "Channel"
+    [Crystal Core Standard Library] Channel(T)
+      SIGNATURE: class Channel(T)
+      DESCRIPTION: Concurrent communication conduit between fibers.
+
+    # 2. Tokenized full-text search across documentation sets
+    $ lapis docs search "concurrency"
+    === Documentation Search Results for 'concurrency' (6 matches) ===
+      [GUIDE] guide:concurrency:A_FIBERS_AND_COOPERATIVE_AWAIT
+      [GUIDE] guide:concurrency:B_OS_THREADS_AND_CHANNELS
+      [STD]   Channel(T) — Concurrent communication conduit
+
+    # 3. Interactive Split-Pane TUI Explorer with live search & scrolling
+    $ lapis docs tui
+      [ 1: All ] [ 2: Godot ] [ 3: Crystal ] [ 4: Guides ] [ 5: Stdlib ]
+      Search: [/] | PgUp/PgDn: Scroll Doc | Esc/Q: Exit
+right:
+  type: card
+  title: Interactive Docs Invariants
+  color: purple
+  items:
+  - <strong>Multi-Context CLI Lookups:</strong> Immediate terminal signatures for Godot ClassDB (<code>gd</code>), Crystal project nodes (<code>crystal</code>), architectural guides (<code>guide</code>), and Crystal stdlib (<code>stdlib</code>).
+  - <strong>Rapid Full-Text Indexing:</strong> <code>lapis docs search &lt;term&gt;</code> indexes across thousands of API endpoints, methods, and markdown guides in milliseconds without launching a browser.
+  - <strong>Double-Buffered Split-Pane TUI:</strong> <code>lapis docs tui</code> launches an Opal terminal reader featuring live symbol filtering, syntax-highlighted code blocks, and docstring scrolling (<code>PgUp</code>/<code>PgDn</code>).
+  - <strong>Context Switching & Fuzzy Filters:</strong> Jump instantly between documentation realms with numeric hotkeys (<code>1-5</code>) or initiate in-TUI regex searches with <code>/</code>.
+notes: |
+  The Lapis documentation workflow is designed for developers who never want to break concentration by context-switching into an external web browser. Running lapis docs lookup gives instant signatures and inheritance trees directly in your shell. For deeper investigations, lapis docs tui opens a full-screen, double-buffered terminal documentation browser with live fuzzy search, numeric context filtering (Godot, Crystal, Guides, Stdlib), and smooth page-up/down scrolling over rich architectural explanations and code snippets.

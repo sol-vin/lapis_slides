@@ -1,0 +1,61 @@
+---
+id: 10f_crystal_closures
+title: 'Blocks, Procs & Lambdas: Inlined Closures'
+subtitle: Ephemeral Inlined Blocks, Typed Reified Procs & C-Function Pointer Interop
+badge: CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS
+badge_color: cyan
+palette: aperture
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: closures_and_procs.cr — Inlined Blocks & Typed Procs
+  tag: Crystal
+  lang: crystal
+  font_size: '0.72rem'
+  code: |
+    # 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
+    def measure(label : String)
+      t0 = Time.monotonic
+      yield # Passes control directly to block with 0 allocation
+      elapsed = (Time.monotonic - t0).total_milliseconds
+      puts "#{label}: #{elapsed}ms"
+    end
+    measure("Physics Tick") { run_simulation }
+
+    # 2. First-Class Procs: Reified objects with strict types
+    scale = 1.5_f32
+    damage_calc = ->(base : Int32) { (base * scale).to_i }
+    # Statically typed as Proc(Int32, Int32) with captured 'scale'
+
+    # 3. Method-to-Proc Cleanliness (->some_method):
+    # Turn any existing method into a typed Proc with '->':
+    def double(x : Int32) : Int32; x * 2; end
+    double_fn = ->double(Int32)
+    [1, 2, 3].map(&->double(Int32)) # Inlined method-as-block! => [2, 4, 6]
+
+    # Bound method pointer on an instance:
+    boss = Boss.new
+    on_roar = ->boss.roar            # Typed 0-arg callback
+    button.on_click(&on_roar)        # Bound directly to event listener
+
+    # 4. Non-Capturing Procs = Bare C Function Pointers!
+    # Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
+    bridge_cb = ->(target_id : UInt64, event : Int32) do
+      Godot::Bridge.dispatch_event(target_id, event)
+    end
+
+    # 5. Symbol-to-Proc shorthand for iterator pipelines:
+    enemies.select(&.alive?).map(&.health)
+right:
+  type: card
+  title: 'The Spectrum of Crystal Closures: From Inlined Blocks to Typed Procs'
+  color: cyan
+  items:
+    - '<strong>Ephemeral Blocks (<code>yield</code>):</strong> Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.'
+    - '<strong>Statically Typed <code>Proc</code> Objects:</strong> Created via <code>-&gt;(x : T) { ... }</code> or <code>Proc.new</code> with strict compile-time parameter and return checking.'
+    - '<strong>Method-to-Proc (<code>-&gt;some_method</code>):</strong> Turn any method into a typed Proc instantly without lambda wrapper boilerplate: <code>-&gt;double(Int32)</code> or bound to an instance <code>-&gt;boss.roar</code>, passed via <code>&amp;</code>.'
+    - '<strong>Non-Capturing Procs = C Pointers:</strong> When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.'
+    - '<strong>Symbol-to-Proc Shorthand:</strong> <code>&amp;.alive?</code> and <code>&amp;.health</code> transform symbols into inlined block invocations with zero lambda boilerplate.'
+notes: |
+  Closures are one of the most expressive parts of modern languages. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs that capture outer scope variables allocate a closure context on the heap, but are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead.

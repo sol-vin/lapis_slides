@@ -1,0 +1,63 @@
+---
+id: 25_antipattern_channels
+title: 'Concurrency: Mutex Deadlocks vs. CSP Actor Channels'
+subtitle: Manual Locking & SceneTree Hazards vs. Background Workers & Non-Blocking Drain
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: spaces_97
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Mutex Locking & SceneTree Hazard'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    var thread: Thread
+    var mutex: Mutex
+    func _ready():
+        thread = Thread.new(); mutex = Mutex.new()
+        thread.start(_worker_task)
+
+    func _worker_task():
+        var data = generate_terrain()
+        mutex.lock()
+        # DANGER: Modifying SceneTree off main thread violates thread safety!
+        get_parent().add_child(data)
+        # CRASH: Native C++ child array corruption
+        mutex.unlock()
+  points:
+  - <strong>Manual Mutex Locking:</strong> Prone to race conditions, priority inversions, and deadlocks.
+  - <strong>SceneTree Thread Invariants:</strong> Mutating nodes from background threads corrupts Godot's internal structures.
+  - <strong>Ad-Hoc Synchronization:</strong> Requires hand-rolled locking and boilerplate thread checks.
+crystal:
+  title: ':sparkles: Crystal: Buffered Actor Channels'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    # Background worker thread with typed, buffered Actor Channel
+    @channel = Channel(TerrainMesh).new(capacity: 32)
+    Thread.new do
+      mesh = generate_terrain_mesh
+      @channel.send(mesh) # Thread-safe actor channel dispatch
+    end
+
+    def _process(delta : Float64) : Void
+      # Non-blocking select drain on the main thread:
+      loop do
+        select
+        when mesh = @channel.receive
+          add_child(mesh) # Safely mounted on the main thread
+        else
+          break # Channel empty, continue frame loop
+        end
+      end
+      Fiber.yield # Cooperatively yield to spawned Crystal fibers
+    end
+  points:
+  - <strong>Communicating Sequential Processes:</strong> Typed <code>Channel(T)</code> encapsulates thread synchronization without manual lock orchestration.
+  - <strong>Non-Blocking Frame Drain:</strong> Main thread drains channel via <code>select ... else break</code>, keeping SceneTree mutations on the main thread.
+  - <strong>Architectural Safety:</strong> Heavy compute stays strictly isolated from the rendering loop.
+takeaway:
+  badge: ACTOR PATTERN CONCURRENCY
+  text: Crystal's actor channels provide clean CSP multi-threading without manual mutex juggling or SceneTree hazards.
+notes: |
+  In GDScript, multithreaded code often requires manual Mutex orchestration. If a worker thread modifies SceneTree nodes directly, Godot's thread invariants are violated. In Crystal, we leverage CSP via Channel(T). Worker threads handle heavy computation and send results through a buffered channel. On the main thread, _process drains the channel non-blockingly using a select block and safely mounts nodes. Declarative concurrency without manual lock gymnastics.

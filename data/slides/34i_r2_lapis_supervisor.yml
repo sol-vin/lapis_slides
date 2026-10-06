@@ -1,0 +1,32 @@
+---
+id: 34i_r2_lapis_supervisor
+title: 'R2 for Lapis: Editor Supervisor, Stale VTables & Dead-Pointer Forensics'
+subtitle: Mode 1 Fault Boundary Isolation, Register Scanning & Shadow DLL Validation
+badge: HOT RELOAD FORENSICS • LAPIS SUPERVISOR
+badge_color: green
+palette: spaces_2000
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis supervisor & Dead-Pointer Forensics
+  cast: casts/lapis_r2_lapis.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+right:
+  type: card
+  title: Supervisor & Hot Reload Invariants
+  color: green
+  items:
+  - <strong>Mode 1 Fault Boundary Isolation:</strong> <code>lapis supervisor diagnose</code> classifies crash instruction pointers across 6 architectural boundaries (GameCode, Plugin, Bridge, Core, BoehmGC, CRT).
+  - <strong>Dead-Pointer Register Scanner:</strong> <code>lapis dead-pointers</code> validates monotonic instance IDs in registers (<code>RCX</code>, <code>RDX</code>, <code>RDI</code>), immediately detecting dereferences of freed nodes.
+  - <strong>Stale VTable Verification:</strong> <code>lapis stale-vtables</code> audits loaded objects to ensure no VTable pointers target unmapped previous shadow DLLs after dynamic hot reloading.
+  - <strong>Static DSL Source Indexer:</strong> <code>lapis map</code> scans Crystal source files for <code>node</code>, <code>property</code>, and <code>signal</code> definitions, injecting typed symbols and comments into radare2 flags.
+notes: |
+  Lapis Mode 1 Supervisor and forensics tools solve the hardest problems in native game engine development. When a segfault occurs, the supervisor immediately pinpoints the architectural layer responsible—distinguishing game logic bugs from engine or bridge faults. Meanwhile, dead-pointer scanning catches freed Godot nodes and stale-vtable verification helps ensure clean hot reload cycles.

@@ -1,0 +1,27 @@
+---
+id: 10g_act4_antipatterns_intro
+title: "The GDScript Antipattern Face-Off"
+subtitle: "10 Structural Traps: Iterators, Closures, Nil Hazards, Dead Pointers & AST Macros"
+act: "ACT IV • CHAPTER 03"
+badge: "ACT IV • CHAPTER 03"
+badge_color: "coral"
+palette: "monokai"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "GC Allocation Churn"
+    desc: "Manual imperative loops and dynamic Callables generating heap garbage"
+    icon: "triangle-exclamation"
+    color: "coral"
+  - title: "Dangling Pointers & Nil"
+    desc: "Silent null crashes vs. compile-time invariants and dead-pointer guards"
+    icon: "shield-halved"
+    color: "amber"
+  - title: "The Crystal Zen Remedy"
+    desc: "Inlined LLVM functional pipelines, stack structs, and exhaustive matches"
+    icon: "sparkles"
+    color: "emerald"
+notes: |
+  We arrive at one of the most critical segments of the presentation: The GDScript Face-Off.
+  We love Godot, but GDScript was created for quick scripting, not massive, high-throughput systems. When projects grow to 50,000 lines, teams run head-first into 10 fundamental architectural traps.
+  In this chapter, we go through 10 concrete, side-by-side comparisons: from loop allocation churn and untyped lambda overhead to dangling dead pointers and runtime nil crashes—contrasting the anti-pattern with Lapis's clean Crystal solution.

@@ -1,0 +1,70 @@
+---
+id: 09b_antipattern_signals_on
+title: 'Signals & Callables: String Handlers vs. The on Macro'
+subtitle: Verbose Named Callback Methods vs. Declarative Inline Closures & Type-Safe emit
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: spaces_vista
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Method Sprawl & Callable Boilerplate'
+  lang: gdscript
+  tag: GDScript
+  font_size: '0.82rem'
+  code: |
+    func _ready() -> void:
+        # Pitfall 1: Clunky named method wiring for every interaction
+        $StartButton.pressed.connect(_on_start_button_pressed)
+        
+        # Pitfall 2: Verbose Callable wrapping for dynamic callbacks
+        $Enemy.connect("died", Callable(self, "_on_enemy_died"))
+        
+        # Pitfall 3: Stringly-typed emit lacks compile-time argument checks
+        emit_signal("health_changed", 75, 100)
+
+    func _on_start_button_pressed() -> void:
+        start_game_sequence()
+
+    func _on_enemy_died(bounty: int) -> void:
+        add_score(bounty)
+  points:
+  - <strong>Method Sprawl:</strong> Every connected signal requires creating a separate single-use handler function (<code>_on_button_pressed</code>).
+  - <strong>Callable Verbosity:</strong> Dynamic connections require wrapping receivers in <code>Callable(self, "_on_...")</code>.
+  - <strong>Untyped String Emission:</strong> <code>emit_signal("...")</code> provides zero compile-time signature verification.
+crystal:
+  title: ':sparkles: Crystal: Declarative on Macro, Type Filters & Operators'
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.80rem'
+  code: |
+    def _ready : Void
+      # 1. Declarative 'on' with first-class typed signal
+      on start_button.pressed do
+        start_game_sequence
+      end
+
+      # 2. Positional type-filtering & auto-downcasting (zero .as(T)!)
+      on area.body_entered, Player do |player|
+        player.collect_coin
+      end
+
+      # 3. Compound assignment operators (+= and -=) with typed Procs
+      start_button.pressed += ->start_game_sequence
+      start_button.pressed -= ->start_game_sequence
+
+      # 4. Type-safe emission & mass disconnection
+      emit(player.health_changed, 75, 100)
+      start_button.pressed.disconnect_all
+    end
+  points:
+  - <strong>Declarative <code>on</code> Sugar:</strong> Connects blocks directly to signals (<code>on start_button.pressed { ... }</code>) with zero single-use handler boilerplate.
+  - <strong>Positional Type Filtering:</strong> <code>on area.body_entered, Player do |player|</code> filters signal arguments by concrete class and automatically downcasts.
+  - <strong>Compound Operators (<code>+=</code> / <code>-=</code>):</strong> Connect and disconnect typed Procs or method pointers directly; self-pruning via 64-bit ObjectDB IDs prevents memory leaks.
+  - <strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player.health_changed, 75, 100)</code> verifies argument types and counts at compile time with zero string hashing.
+takeaway:
+  badge: DECLARATIVE ERGONOMICS & OPERATORS
+  text: Lapis's on macro and += operators eliminate boilerplate handler sprawl, letting you wire reactive gameplay events directly with typed closures, positional filtering, and auto-downcasting.
+notes: |
+  In GDScript, connecting signals is notoriously verbose. For every single button press, trigger zone, or event, you must define a separate named method like _on_start_button_pressed or pass string callback names to Callable.
+  Lapis introduces the declarative 'on' macro and compound operators. You can connect inline closures directly to first-class typed signals, or use positional type-filtering like 'on area.body_entered, Player do |player|' which filters out non-player bodies and passes an automatically downcasted Player instance with zero manual casting.
+  Furthermore, Lapis supports C#-style compound assignment operators: 'button.pressed += ->start_game'. Unlike C# where event delegates cause notorious memory leaks, Lapis subscriptions track 64-bit ObjectDB instance IDs and self-prune automatically when targets are freed. Paired with our type-safe 'emit' macro and 'disconnect_all', reactive gameplay in Lapis combines Ruby-like zen ergonomics with full LLVM compile-time verification.

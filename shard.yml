@@ -1,0 +1,17 @@
+name: lapis_slides
+version: 0.1.0
+
+authors:
+  - sol.vin
+
+description: |
+  Sol.vin themed slide deck generator for Lapis for Crystal presentation.
+  Converts YAML slide models into interactive Reveal.js presentations.
+
+targets:
+  slide_builder:
+    main: src/builder.cr
+  slide_server:
+    main: src/server.cr
+
+license: MIT

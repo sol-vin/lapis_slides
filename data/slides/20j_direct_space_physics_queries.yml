@@ -1,0 +1,68 @@
+---
+id: 20j_direct_space_physics_queries
+title: 'Direct Space Physics: Zero-Boilerplate Raycasting'
+subtitle: One-Line Spatial Queries, Strongly-Typed Hits & Safe Collider Downcasting
+badge: PHYSICS • DIRECT SPACE QUERIES
+badge_color: amber
+palette: spaces_vista
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Manual RayQuery Setup & Untyped Dictionaries'
+  lang: gdscript
+  tag: GDScript
+  font_size: '0.80rem'
+  code: |
+    func check_line_of_sight(target_pos: Vector2) -> void:
+        # Pitfall: 12 lines of ceremony to cast a single ray
+        var space = get_world_2d().direct_space_state
+        var query = PhysicsRayQueryParameters2D.create(
+            global_position, target_pos
+        )
+        query.collision_mask = 0b0001
+        query.collide_with_areas = false
+        query.collide_with_bodies = true
+
+        var result: Dictionary = space.intersect_ray(query)
+        if not result.is_empty():
+            var point: Vector2 = result["position"]
+            var normal: Vector2 = result["normal"]
+            var collider = result["collider"]
+            if collider is Enemy:
+                collider.take_damage(25)
+  points:
+    - '<strong>Manual Query Allocation:</strong> Requires allocating <code>PhysicsRayQueryParameters2D</code> objects for every single raycast.'
+    - '<strong>Untyped Dictionary Unpacking:</strong> <code>intersect_ray</code> returns an untyped Variant dictionary, requiring manual string key lookups.'
+    - '<strong>Runtime Type Casting:</strong> Colliders must be manually checked with <code>is Enemy</code>, prone to null errors if destroyed mid-frame.'
+crystal:
+  title: ':sparkles: Crystal: One-Line Queries & Strongly-Typed PhysicsHit'
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.80rem'
+  code: |
+    def check_line_of_sight(target_pos : Vector2) : Void
+      # 1. One-line direct space raycast query:
+      if hit = raycast_to(target_pos, mask: 0b0001)
+        spawn_sparks(hit.point, hit.normal)
+
+        # 2. Sound downcasting with automatic alive? guard:
+        if enemy = hit.collider.as?(Enemy)
+          enemy.take_damage(25)
+        end
+      end
+
+      # 3. Directional raycast query:
+      if wall = raycast(Vector2::RIGHT, distance: 50.0)
+        slide_along_wall(wall.normal)
+      end
+    end
+  points:
+    - '<strong>One-Line Spatial Queries:</strong> <code>raycast_to</code> and <code>raycast</code> acquire the space state and query physics in a single call.'
+    - '<strong>Strongly-Typed Hit Structs:</strong> Returns <code>PhysicsHit2D</code> / <code>PhysicsHit3D</code> value types with typed <code>point</code>, <code>normal</code>, and <code>rid</code>.'
+    - '<strong>Alive-Safe Collider Downcasting:</strong> <code>hit.collider</code> validates <code>#alive?</code> automatically, allowing safe downcasting via <code>hit.collider.as?(Enemy)</code> with zero dangling pointer risks.'
+    - '<strong>Eliminates Variant Dictionary Churn:</strong> Unpacks raycast hits directly into stack PhysicsHit value structs, bypassing Godot''s intermediate Variant Dictionary allocations.'
+takeaway:
+  badge: ZERO-BOILERPLATE RAYCASTING
+  text: Lapis collapses Godot's multi-step raycasting ceremony into safe, one-line space queries returning strongly typed hit structs.
+notes: |
+  Performing raycasts in Godot has historically been cumbersome. You either attach physical RayCast2D/3D nodes in the editor—which adds scene tree bloat—or write over a dozen lines of boilerplate: acquiring get_world_2d().direct_space_state, allocating PhysicsRayQueryParameters2D, executing intersect_ray, and unpacking an untyped Variant dictionary with string keys.
+  Lapis completely revolutionizes physics queries with direct space raycasting. Methods like 'raycast_to(target_pos)' and 'raycast(dir, distance)' run on Node2D and Node3D in a single line, returning strongly-typed PhysicsHit2D or PhysicsHit3D value structs. You can immediately access hit.point and hit.normal, and call 'if enemy = hit.collider.as?(Enemy)' to safely validate survival and downcast to concrete game types in one go.

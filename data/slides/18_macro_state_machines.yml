@@ -1,0 +1,63 @@
+---
+id: 18_macro_state_machines
+title: 'Where Macros Shine: Declarative State Machines'
+subtitle: Zero-Boilerplate State Transitions with Compile-Time Verification
+badge: AST METAPROGRAMMING • ARCHITECTURE
+badge_color: purple
+palette: super_es
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: enemy_fsm.cr — Declarative DSL & Gameplay Usage
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # 1. Declare states & transitions with macro DSL
+    fsm BossState do
+      state Patrol, initial: true do
+        before { start_patrol_path }
+        on :see_player, transition_to: Chase
+        after { alert_nearby_allies }
+      end
+
+      state Chase do
+        before { play_animation("run") }
+        on :in_attack_range, transition_to: Attack
+        on :lost_player,     transition_to: Patrol
+      end
+
+      state Attack do
+        before { play_sound("roar") }
+        on :attack_finished, transition_to: Patrol
+        after { reset_hitbox }
+      end
+    end
+
+    # 2. Actual runtime gameplay usage
+    fsm = BossStateMachine.new
+
+    def _physics_process(delta : Float64) : Void
+      if distance_to(player) < 15.0
+        fsm.trigger(:see_player) # -> Chase (runs before/after hooks!)
+      end
+
+      case fsm.current_state
+      when .patrol? then move_along_path(delta)
+      when .chase?  then navigate_to(player, delta)
+      when .attack? then execute_slam_attack
+      end
+    end
+right:
+  type: card
+  title: What the Macro Generates
+  color: purple
+  items:
+  - <strong>Typed Enum & Handlers:</strong> Generates concrete <code>enum BossState</code> with type-checked transition methods.
+  - <strong>Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> Entry (<code>before</code>) and exit (<code>after</code>) hooks are inlined directly into native state transition branches.
+  - <strong>Static Method Dispatch:</strong> Transitions compile to direct branch checks or enum <code>case</code> dispatches; zero lambda allocations or dictionary lookups.
+  - <strong>Official Standalone Module:</strong> Available as <code>require "lapis/fsm"</code> for zero-dependency inclusion across gameplay nodes.
+notes: |
+  State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document.
+  Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct branch dispatches with zero reflection overhead. Packaged as the official standalone module `require "lapis/fsm"`, developers get expressive state management with minimal runtime overhead.

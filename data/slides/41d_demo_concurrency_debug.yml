@@ -1,0 +1,44 @@
+---
+id: 41d_demo_concurrency_debug
+title: 'Demo 6: Concurrency & Debugging'
+subtitle: Background Workers, on_main_thread, Leak Verification & radare2
+badge: 'LIVE DEMO • PART 6: SYSTEMS RIGOR'
+badge_color: amber
+palette: game_station_2
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: procedural_streamer_and_debug.cr
+  tag: Crystal
+  lang: crystal
+  code: |
+    # 1. Background worker threads offload heavy math:
+    Thread.new do
+      room = generate_dungeon_room(seed: 42) # Detached orphan
+
+      # 2. Main-thread queue dispatches safely at frame tick:
+      Godot.on_main_thread do
+        @world.add_child(room) # Mounts hierarchy safely on main thread
+      end
+    end
+
+    # 3. Deterministic leak verification in test suite:
+    Lapis::Test.assert_no_leak do
+      100.times { run_room_spawn_cycle }
+    end
+    # Verified 0 leaked ObjectDB nodes across test cycles!
+
+    # 4. Instant native breakpoint triage via radare2:
+    # $ lapis run -d => Breaks at illegal memory access
+right:
+  type: card
+  title: Systems Rigor & Crash Forensics
+  color: amber
+  items:
+    - '<strong>ThreadAffinity Concurrency Guard:</strong> ThreadPolicy intercepts illegal off-thread SceneTree mutations before native C++ crashes occur.'
+    - '<strong>Serialized Main Dispatch:</strong> <code>Godot.on_main_thread</code> buffers closures into a queue drained deterministically at frame start.'
+    - '<strong>Deterministic Leak Verification:</strong> <code>assert_no_leak</code> leverages Godot <code>Performance</code> monitors to verify 0 leaked ObjectDB nodes.'
+    - '<strong>In-Editor radare2 Debugging:</strong> Gutter breakpoints in Godot Editor trigger live r2 inspection with symbol classification and register forensics.'
+notes: |
+  In Part 3 of our demo, we demonstrate low-level systems rigor. First, we launch a background OS thread that generates complex procedural geometry off-thread. This worker can assemble detached orphan trees across CPU cores. When ready, Godot.on_main_thread queues the block to be drained deterministically at the next frame boundary, mounting the room safely on the main thread. Next, we run our test suite: Lapis::Test.assert_no_leak exercises 100 spawn cycles, queries Godot's native Performance monitors, and verifies zero object leaks. Finally, if any crash or bug ever occurs, lapis run -d drops us directly into radare2 for native machine code disassembly and register forensics.

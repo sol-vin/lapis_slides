@@ -1,0 +1,47 @@
+---
+id: 34c_debug_workflows
+title: 'Native Debugging & Side-by-Side Decompilation'
+subtitle: Live Breakpoints, Side-by-Side Pseudo-C Decompiler & GDExtension ABI Verification
+badge: SYSTEMS DIAGNOSTICS • CLI & FORENSICS
+badge_color: purple
+palette: aperture
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis editor -d & Runtime Crash Forensics
+  cast: casts/lapis_debug_workflows.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Launch Godot Editor under radare2 supervisor
+    $ lapis editor --debug -p template --quit-after=12
+      [r2] Attaching to target PID 14208 (godot.windows.editor.x86_64.exe)
+      [r2] Binding Gutter Breakpoints from src/player_controller.cr:24...
+      [r2 BREAKPOINT HIT] Process 14208 paused at src/player_controller.cr:24
+      [0x14001a449]> dr rip rcx
+      rip = 0x00007ff6a481a449 │ rcx = 0x000001a43b2e9040 (PlayerController)
+
+    # 2. Standalone Runtime Monitor & Crash Forensics
+    $ lapis run -d --monitor -p template
+      [FPS: 60 │ RAM: 48.6 MB │ Fibers: 3 active]
+      CRASH DETECTED: EXCEPTION_ACCESS_VIOLATION (0xC0000005)
+      Boundary: [GameCode] │ Stack: src/my_node.cr:42 in 'MyNode#on_enemy_hit'
+right:
+  type: card
+  title: Triaging Critical Failure Boundaries
+  color: amber
+  items:
+  - <strong>Crystal Source Code Mapping:</strong> <code>lapis decompile --source</code> reads DWARF symbols to display exact Crystal source file lines and interleaved disassembly (<code>pdls</code>).
+  - <strong>Side-by-Side Decompilation:</strong> <code>lapis decompile --side-by-side</code> renders an interactive split view comparing raw machine disassembly and structured pseudo-C.
+  - <strong>Crystal Runtime Inspection:</strong> <code>lapis decompile --crystal</code> discovers all compiled Crystal classes, methods, entrypoints, and Boehm GC allocator symbols.
+  - <strong>Native Editor Debugging (<code>lapis editor -d</code>):</strong> Attaches radare2 directly to the running engine with dual log redirection (<code>editor.log</code> vs <code>editor-crystal.log</code>).
+  - <strong>Automated Boundary Forensics:</strong> Intercepts hardware exceptions (<code>0xC0000005</code>), classifies boundary fault (GameCode vs Bridge), and dumps full thread backtraces.
+notes: |
+  Lapis provides deep native binary inspection and debugging directly from the terminal. Developers can map compiled functions back to original Crystal source code lines using lapis decompile --source, inspect runtime classes and Boehm GC symbols with --crystal, or decompile methods into side-by-side assembly and pseudo-C using --side-by-side. When debugging complex physics or editor tool interactions, lapis editor -d launches Godot under radare2 with isolated dual-channel logging. If an unexpected memory access occurs, automated forensics inspects the 64-bit ObjectDB instance ID and verifies boundary integrity across game code, plugins, and the GDExtension bridge.

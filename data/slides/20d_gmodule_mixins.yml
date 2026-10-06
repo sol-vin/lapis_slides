@@ -1,0 +1,65 @@
+---
+id: 20d_gmodule_mixins
+title: 'Modular Traits: The gmodule Macro'
+subtitle: Reusable Gameplay Mixins with Godot ClassDB & Inspector Parity
+badge: LAPIS DSL • MODULAR MIXINS
+badge_color: cyan
+palette: bring_me_hope
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: damageable_trait.cr — First-Class Godot Mixin
+  tag: Crystal
+  lang: crystal
+  font_size: '0.80rem'
+  code: |
+    # Reusable gameplay trait with full engine reflection
+    gmodule Damageable do
+      signal health_changed(current : Int32, max_health : Int32)
+      signal died
+
+      @[Export(range: 0..500)]
+      property health : Int32 = 100
+      @[Export]
+      property max_health : Int32 = 100
+
+      @[ExportToolButton("Reset Stats")]
+      def reset_stats : Void
+        self.health = self.max_health
+      end
+
+      def heal(amount : Int32) : Void
+        self.health = Math.min(self.max_health, self.health + amount)
+        emit(health_changed, self.health, self.max_health)
+      end
+
+      def take_damage(amount : Int32) : Void
+        self.health = Math.max(0, self.health - amount)
+        emit(health_changed, self.health, self.max_health)
+        emit(died) if self.health == 0
+      end
+    end
+
+    # Custom node mixing in Damageable trait
+    node HeroCharacter < CharacterBody2D do
+      include Damageable
+      def _ready : Void
+        Godot.print("Hero ready: #{health}/#{max_health} HP")
+      end
+    end
+right:
+  type: card
+  title: Why gmodule Beats Raw Modules
+  color: cyan
+  compact: true
+  items:
+    - '<strong>The Raw Module Gap:</strong> Standard modules inline methods, but cannot register Godot properties or signals.'
+    - '<strong>ClassDB Registration:</strong> <code>macro node</code> inspects <code>gmodule</code> traits and flattens exports into ClassDB.'
+    - '<strong>Full Inspector Parity:</strong> Export ranges, defaults, and <code>@[ExportToolButton]</code> render as native properties.'
+    - '<strong>Zero SceneTree Overhead:</strong> Mixins incur zero child node allocations and zero scene traversal cost.'
+    - '<strong>Cross-Branch Reuse:</strong> Share identical combat logic across <code>CharacterBody2D</code>, <code>RigidBody3D</code>, or <code>Area2D</code>.'
+notes: |
+  While Crystal has always supported mixin modules, integrating them into Godot presents a unique architectural challenge: Godot requires classes, properties, and signals to be explicitly registered in its reflection database, ClassDB. If you write a standard Crystal module, its methods compile into the class, but Godot's Inspector has no idea the properties exist, and signals cannot be wired up in the engine!
+  To solve this, Lapis introduces the gmodule macro. Inside a gmodule, you declare @[Export] properties with ranges, typed signals, and even interactive @[ExportToolButton] actions. When your node writes 'include Damageable', the compiler introspects all included gmodules and flattens their properties and signals into the node's ClassDB registry entry.
+  In the Godot editor, health, max_health, defense, and the 'Reset Health & Stats' button appear in the Inspector just like native properties, yet you have zero SceneTree traversal overhead and zero heap component allocations!

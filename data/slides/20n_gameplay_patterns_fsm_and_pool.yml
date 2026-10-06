@@ -1,0 +1,66 @@
+---
+id: 20n_gameplay_patterns_fsm_and_pool
+title: 'Gameplay Architecture: FSM, Signal Bus & Object Pooling'
+subtitle: 'Value-Type Union FSM, Decoupled Signal Bus & High-Throughput Node Pools'
+badge: GAMEPLAY • DESIGN PATTERNS
+badge_color: green
+palette: playbox
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: gameplay_patterns.cr — Optional Lapis Patterns
+  tag: Crystal (Lapis)
+  lang: crystal
+  font_size: '0.73rem'
+  code: |
+    # 1. Value-Type Union FSM (record states):
+    require "lapis/fsm"
+    record Idle; record Walk, speed : Float32
+    alias PlayerState = Idle | Walk
+
+    fsm PlayerState, initial: Idle.new do
+      on_enter Walk do |w|
+        Godot.print("Started walking at #{w.speed} m/s")
+      end
+      on_exit Walk do
+        Godot.print("Stopped walking")
+      end
+    end
+
+    # 2. Type-Safe Decoupled Signal Bus (lazy singleton):
+    require "lapis/signal_bus"
+    signal_bus GameEvents do
+      signal score_changed(points : Int32)
+      signal boss_defeated(name : String, loot_id : Int32)
+    end
+    GameEvents.score_changed.connect { |pts| update_hud(pts) }
+    GameEvents.score_changed.emit(500)
+
+    # 3. High-Throughput Dead-Pointer Safe Node Pool:
+    require "lapis/pool"
+    node_pool BulletPool, node_type: Bullet, initial: 32, max: 128
+    bullet = pool.acquire { |b| b.fire_at(target) }
+    pool.release(bullet) # Resets parent, hides, stops process
+
+    # 4. Typed Resource Cards with Deep Cloning:
+    resource_card SpellCard < Resource do
+      @[Export] property damage : Int32 = 50
+    end
+    card = spell.clone_card # Concrete type preserved!
+right:
+  type: card
+  title: Modular Gameplay Patterns
+  color: green
+  items:
+    - '<strong>Strictly Optional Modules:</strong> <code>require "lapis/fsm"</code>, <code>signal_bus</code>, and <code>pool</code> (or bundle via <code>patterns.cr</code>) ensure zero prelude bloat in standard games.'
+    - '<strong>Value-Type Union FSM:</strong> State transitions between Crystal value records (<code>Idle | Walk</code>) avoid allocating heap state objects; lifecycle hooks are resolved at compile time.'
+    - '<strong>Decoupled Signal Bus vs. @[Autoload]:</strong> <code>signal_bus Name</code> declares static event hubs with test-isolation reset (<code>reset_bus!</code>), complementing persistent <code>@[Autoload]</code> engine singletons.'
+    - '<strong>High-Throughput Node Pooling:</strong> <code>Lapis::Pool(T)</code> manages node recycling with automatic pre-warming, tree unparenting, and dead-pointer lifecycle verification.'
+    - '<strong>Deep Resource Card Cloning:</strong> <code>resource_card</code> macro provides <code>clone_card</code> for runtime card and item mutation while retaining concrete static typing.'
+notes: |
+  Writing clean, scalable gameplay logic requires robust design patterns that don't sacrifice native performance. In Lapis, we provide high-level gameplay patterns as strictly optional requires, keeping the core prelude featherlight.
+  First, our State Machine macro supports value-type record unions (Idle | Walk) with compile-time lifecycle hooks. Because struct unions live on the stack or inline in the host object, state transitions avoid allocating heap state objects.
+  Second, the 'signal_bus' macro establishes typed, decoupled event buses with lazy singleton instantiation. Subsystems and UI can listen to global gameplay events without tight coupling, and tests can call 'reset_bus!' between runs. For persistent systems that require SceneTree lifecycles or GDScript interop, Lapis pairs this with @[Autoload] singletons.
+  Third, 'node_pool' eliminates frame drops from instantiating rapid projectiles or particle nodes, caching and resetting nodes with dead-pointer validation.
+  Finally, 'resource_card' pairs with 'clone_card' to offer deep-duplicated game cards and item data while retaining concrete Crystal types.

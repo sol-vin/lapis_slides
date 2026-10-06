@@ -1,0 +1,60 @@
+---
+id: 11_antipattern_iterators
+title: 'Iterators: Imperative Loops vs. Functional Zen'
+subtitle: Manual Imperative Loops vs. Composable Enumerable Pipelines
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: cyan
+palette: spaces_xp_royale
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Imperative Loops & Array Mutation'
+  lang: gdscript
+  tag: GDScript
+  font_size: '0.90rem'
+  code: |
+    # Manual loop, intermediate array allocations, verbose checks
+    var active_targets: Array[String] = []
+    for node in get_tree().get_nodes_in_group("enemies"):
+        if node is Enemy and node.is_alive():
+            active_targets.append(node.unit_name.to_upper())
+
+    # Imperative predicate search with early exit flag
+    var has_boss: bool = false
+    for name in active_targets:
+        if name.begins_with("BOSS_"):
+            has_boss = true
+            break
+  points:
+  - <strong>Manual Accumulation:</strong> Allocates intermediate heap arrays and manually appends elements one-by-one.
+  - <strong>Missing Functional Primitives:</strong> Lacks standard pipeline operations (<code>map</code>, <code>select</code>, <code>reject</code>, <code>tally</code>, <code>chunk</code>).
+  - <strong>Boilerplate Flags:</strong> Requires manual <code>for</code> loops and break statements for simple boolean queries like <code>any?</code>.
+crystal:
+  title: ':sparkles: Crystal: Zen Enumerable Chaining'
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.90rem'
+  code: |
+    # Expressive, type-safe Enumerable transformation:
+    active_targets : Array(String) =
+      group(:enemies)
+        .to_a(as: Enemy)
+        .select(&.alive?)
+        .map(&.unit_name.upcase)
+
+    # Chaining preserves exact static types:
+    has_boss : Bool =
+      active_targets.any?(&.starts_with?("BOSS_"))
+
+    enemy_types : Hash(String, Int32) =
+      active_targets.tally # Frequency Hash!
+  points:
+  - <strong>Fluent Group Extraction:</strong> <code>group(:enemies).to_a(as: Enemy)</code> directly fetches and casts nodes into typed wrappers with fluent querying.
+  - <strong>Strict Type Propagation:</strong> Flow-sensitive inference tracks types across every chain step (<code>Enemy</code> &rarr; <code>String</code>).
+  - <strong>Typed Output Chaining:</strong> Downstream methods like <code>any?</code> (<code>Bool</code>) and <code>tally</code> (<code>Hash(String, Int32)</code>) are fully compile-time checked.
+  - <strong>High-Level Functional Composition:</strong> Expressive Enumerable chains transform collections with complete compile-time type verification.
+takeaway:
+  badge: CLEAN CODE INVARIANT
+  text: Crystal's Enumerable module transforms clunky, bug-prone loops into clean, readable, self-documenting data pipelines.
+notes: |
+  One of the most noticeable daily friction points in GDScript is the lack of rich, composable functional iterators and type-safe transformations. In GDScript, transforming an array of nodes requires allocating an untyped array, writing manual for-loops, checking types with 'is Enemy' at runtime, and managing boolean flags for simple queries like 'any?'.
+  In Crystal, collections are powered by the Enumerable module with complete static type inference: with 'group(:enemies).to_a(as: Enemy)' we fetch and cast nodes into typed collections, filter by predicates (.select(&.alive?)), and transform output types (.map(&.unit_name.upcase)) from Array(Node) to Array(Enemy) to Array(String). Downstream calls like .any? and .tally are statically typed with zero runtime reflection. When zero-allocation performance is critical in hot loops, Crystal developers can use in-place methods like select! or iterate directly with each blocks without allocating intermediate collections.

@@ -1,0 +1,61 @@
+---
+id: 12_antipattern_nil_safety
+title: 'Nil Safety: Runtime Crashes vs. Compile-Time Enforcement'
+subtitle: 'Eliminating Godot''s #1 Runtime Exception: ''Invalid call on base Nil'''
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: amber
+palette: aperture
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Runtime Null Dereference'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    func attack_target(target: Node) -> void:
+        # Compiles fine! But crashes during gameplay if weapon is missing or freed
+        var weapon = target.get_node_or_null("EquippedWeapon")
+        weapon.slash(45)
+        # CRASH: Invalid call to function 'slash' in base 'Nil'.
+        # Or worse: ACCESS_VIOLATION if native C++ node was freed!
+
+        # Forces developers to litter code with defensive guards:
+        if is_instance_valid(weapon):
+            weapon.slash(45)
+  points:
+  - <strong>Nullable by Default:</strong> Variables are nullable without compiler
+    enforcement or warnings.
+  - <strong>Duck-Typing Roulette:</strong> Errors only surface when players execute
+    specific actions in-game.
+  - <strong>Dead Pointer Segfaults:</strong> Freed C++ nodes leave dangling pointers,
+    risking fatal engine crashes.
+crystal:
+  title: ':sparkles: Crystal: Flow-Sensitive Compile-Time Checks & Subscripts'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    def attack_target(target : Godot::Node) : Void
+      # target[..., T]? returns Weapon? (Weapon | Nil) — compiler enforces handling:
+      if weapon = target["EquippedWeapon", Weapon]?
+        weapon.slash(45) # Flow-sensitive typing narrows Weapon? to Weapon!
+      end
+
+      # Or concise safe navigation with .try:
+      target["EquippedWeapon", Weapon]?.try(&.slash(45))
+
+      # Strict target["...", T] raises immediately if missing — zero silent bugs!
+      # Monotonic 64-bit ID check (#check_alive!) prevents dead-pointer segfaults
+    end
+  points:
+  - <strong>Non-Nil by Default:</strong> <code>Weapon</code> cannot be nil; only <code>Weapon?</code> explicitly permits nil.
+  - <strong>Ergonomic Subscripts (<code>[]?</code>):</strong> <code>target["path", T]?</code> returns typed <code>T?</code>, forcing compile-time nil branching with zero manual casting.
+  - <strong>Flow-Sensitive Narrowing:</strong> Compiler automatically narrows <code>Weapon?</code> to non-nil <code>Weapon</code> inside <code>if weapon = ...</code>.
+  - <strong>Automatic ObjectDB Verification:</strong> Lapis calls <code>#check_alive!</code> before every dispatch, guarding against dead-pointer crashes.
+takeaway:
+  badge: COMPILE-TIME NIL SAFETY
+  text: Crystal's static type system enforces nil safety at compile time,
+    eliminating null dereferences before launching.
+notes: In GDScript, every developer has experienced the dreaded 'Invalid call to function
+  on base Nil' crash, or worse, a hard engine crash when dereferencing an object that
+  was freed in C++. In Crystal, Nil is a distinct type, and types are non-nil by default.
+  If a node lookup might return nil, its type is Weapon | Nil. The Crystal compiler
+  will refuse to compile your game until it verifies that you've handled the nil case.

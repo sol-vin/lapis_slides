@@ -1,0 +1,55 @@
+---
+id: 26b_multiplayer_rpc
+title: 'Multiplayer: Authoritative RPCs & Lockstep Sync'
+subtitle: High-Level Networking with Compile-Time @[RPC] Macros and Struct Serialization
+badge: MULTIPLAYER ARCHITECTURE • NETWORKING
+badge_color: cyan
+palette: playtoy
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: Crystal Multiplayer Node with @[RPC]
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.80rem'
+  code: |
+    node NetworkPlayer < CharacterBody3D do
+      @[Export]
+      property player_id : Int32 = 1
+
+      # Authoritative RPC for state replication
+      @[RPC(mode: :any_peer, call_local: true, transfer_mode: :unreliable_ordered)]
+      def sync_transform(pos : Vector3, rot : Basis) : Void
+        if multiplayer.is_server
+          self.global_position = pos
+          self.global_transform.basis = rot
+          # Re-broadcast validated state to clients
+          rpc("sync_transform", pos, rot)
+        else
+          # Client-side prediction & interpolation
+          self.global_position = global_position.lerp(pos, 0.25)
+        end
+      end
+
+      # Reliable server-side validated gameplay action
+      @[RPC(mode: :any_peer, transfer_mode: :reliable)]
+      def request_fire_weapon(dir : Vector3) : Void
+        return unless multiplayer.is_server
+        spawn_projectile(dir)
+      end
+    end
+right:
+  type: card
+  title: High-Level Replication & Protocol Safety
+  color: cyan
+  items:
+  - "<strong>Declarative @[RPC] Macros:</strong> Configure authority (<code>:any_peer</code>, <code>:authority</code>), transfer channels, and reliability with compile-time AST checking."
+  - "<strong>Authoritative Server Pattern:</strong> High-performance server-side physics validation; runs headlessly in Mode B with zero rendering overhead."
+  - "<strong>Compact Struct Payloads:</strong> Pack packet payloads into immutable Crystal structs for low-bandwidth, low-latency UDP streams with minimal allocation overhead."
+  - "<strong>cradare2 Network Lockstep:</strong> Live radare2 packet tracing and hardware watchpoints to catch multiplayer state desyncs instantly."
+notes: |
+  Building multiplayer games in Godot is notoriously tricky when dealing with dynamic RPC signatures and state desynchronization.
+  In Lapis, multiplayer is a first-class citizen. You annotate methods with @[RPC]—declaring replication modes, peer permissions, and transfer modes (reliable, unreliable, or ordered) directly on native Crystal methods.
+  The compiler validates method signatures at build time. For dedicated servers, you compile to Mode B (headless standalone LibGodot host), delivering blazing-fast physics simulation with zero editor or UI overhead.
+  And with cradare2 integration, you can set hardware watchpoints on packet buffers to catch network desyncs in lockstep!

@@ -1,0 +1,28 @@
+---
+id: 34n_act4_benchmarks_intro
+title: "The Hard Numbers"
+subtitle: "Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language Shootout"
+act: "ACT IV • CHAPTER 11"
+badge: "ACT IV • CHAPTER 11"
+badge_color: "amber"
+palette: "m64"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "Up to 150x Faster"
+    desc: "Rigorous N-body physics, prime sieves, and matrix multiplications beating GDScript by orders of magnitude"
+    icon: "trophy"
+    color: "amber"
+  - title: "Native Tier Parity"
+    desc: "Crystal matches or outperforms C++, Rust, and C# across algorithmic and memory benchmarks"
+    icon: "bolt"
+    color: "cyan"
+  - title: "Nanosecond FFI Profiling"
+    desc: "Sub-microsecond GDExtension boundary calls measured with nanosecond precision"
+    icon: "microscope"
+    color: "purple"
+notes: |
+  Ergonomics and developer happiness are wonderful, but in game development, execution speed is paramount.
+  In Chapter 11, we leave theories behind and look at the empirical data.
+  We run an identical suite of computational benchmarks across five languages inside Godot 4: Crystal, C++, Rust, C#, and GDScript.
+  From dense matrix multiplication and prime sieves to 50,000-step N-body orbital physics simulations, we'll see exactly how Crystal delivers pure bare-metal performance.

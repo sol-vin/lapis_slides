@@ -1,0 +1,50 @@
+---
+id: 31_cli_codegen
+title: 'CLI: 2-Way Bindings & Codegen'
+subtitle: Engine Reflection, Project GDScript Wrappers & ABI Verification
+badge: TOOLCHAIN • 2-WAY CODEGEN
+badge_color: amber
+palette: amigo
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — 2-Way Bindings & ABI Verification
+  cast: casts/lapis_bind.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Two-Way Binding: Engine Metadata & 824 Typed Classes
+    $ lapis bind engine --dump
+    [ClassDB:Reflection] Querying Godot engine GDExtension interface...
+      [OK] Dumped extension_api.json (Godot 4.8.0-dev7, 6.4 MB)
+      [OK] Parsed 824 classes, 1,418 enums, 4,912 method signatures
+      [OK] Generated src/libgodot/generated/ in 1.18s! 0 errors.
+
+    # 2. Two-Way Binding: Project GDScript Node Inspector & Wrapper Generator
+    $ lapis bind project
+    [Project:Nodes] Scanning project for custom class_name GDScript nodes...
+      [OK] Discovered 12 custom GDScript classes (Inventory, QuestManager, DialogTree)
+      [OK] Generated typed Crystal wrappers in src/generated/project_nodes/
+
+    # 3. Audit GDExtension ABI exports & memory boundary health
+    $ lapis decompile bin/crystal_bridge.dll --verify
+      [OK] Entrypoint verified: godot_gdextension_entry (x86_64 ABI)
+      [OK] Hardening: ASLR & DEP/NX verified • 0 boundary faults
+right:
+  type: card
+  title: Two-Way Automation Invariants
+  color: amber
+  items:
+  - <strong>Engine API Generator (<code>lapis bind engine</code>):</strong> Extracts Godot's <code>extension_api.json</code> and synthesizes 824 typed Crystal classes and 1,418 enums in 1.18s with direct ptrcalls.
+  - <strong>Project Node Generator (<code>lapis bind project</code>):</strong> Inspects custom GDScript <code>class_name</code> nodes in your project and generates strongly typed Crystal wrappers automatically.
+  - <strong>Side-by-Side Decompiler (<code>lapis decompile</code>):</strong> Renders split views comparing raw machine disassembly (<code>pdf</code>) and structured pseudo-C (<code>pdc</code>) with Crystal source line mapping.
+  - <strong>GDExtension ABI Verification:</strong> <code>lapis decompile --verify</code> audits entrypoints, DEP/ASLR hardening, and 64-bit ObjectDB memory boundaries without external tooling.
+notes: |
+  Lapis provides full two-way code generation between Godot and Crystal. With lapis bind engine --dump, the CLI extracts Godot's extension_api.json and synthesizes complete, type-safe Crystal wrappers for all 824 engine classes. Even more powerfully, lapis bind project scans your Godot project for custom GDScript nodes using class_name and generates typed Crystal wrapper classes—allowing Crystal code to seamlessly invoke custom GDScript gameplay systems with full compile-time autocomplete and zero stringly-typed dispatch.

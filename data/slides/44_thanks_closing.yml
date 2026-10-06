@@ -1,0 +1,45 @@
+---
+id: 44_thanks_closing
+title: 'THANKS FOR WATCHING!'
+subtitle: Fast Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
+badge: PROJECT WRAP-UP • THANK YOU
+badge_color: amber
+palette: m64
+layout: closing-layout
+cube_size: 420
+cards:
+  - title: 'Lapis & sol.vin'
+    badge: 'SOL.VIN'
+    icon: globe
+    color: cyan
+    link: 'sol.vin • github.com/sol-vin/lapis'
+    desc: 'Interactive 3D showcases, architecture guides, and open source repository.'
+
+  - title: 'Crystal Language'
+    badge: 'CRYSTAL-LANG'
+    icon: gem
+    color: amber
+    link: 'crystal-lang.org'
+    desc: 'Official Crystal website, language reference, standard library docs, and blog.'
+
+  - title: 'Play Solo Oasis (SO:UP)'
+    badge: 'PLAY IN BROWSER'
+    icon: gamepad
+    color: purple
+    link: 'soup.sol.vin'
+    desc: 'Play Solo Oasis: Unlimited Places live in your browser (not made with Lapis).'
+
+  - title: 'Crystal Community'
+    badge: 'DISCORD'
+    icon: comment-dots
+    color: green
+    link: 'discord.gg/YS7YvQy'
+    desc: 'Join the official Crystal language Discord community for help, gamedev, and chat.'
+
+quickstart: 'git clone https://github.com/sol-vin/lapis && cd lapis && make setup-dev && make all'
+signature: 'Engineered with :gem: by sol.vin for the Crystal & Godot Communities'
+notes: |
+  Thank you so much for your time and attention today!
+  Lapis brings together the absolute best of both worlds: the expressive joy and rapid iteration of Ruby, paired with the uncompromising bare-metal performance and type safety of compiled LLVM Crystal.
+  Learn more about Crystal at crystal-lang.org, join the official Crystal Discord at discord.gg/YS7YvQy, play Solo Oasis: Unlimited Places at soup.sol.vin, and explore Lapis on GitHub at sol-vin/lapis.
+  Let's build incredible games together.

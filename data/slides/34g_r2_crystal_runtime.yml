@@ -1,0 +1,59 @@
+---
+id: 34g_r2_crystal_runtime
+title: 'R2 for Crystal: Runtime Inspection & Memory Layouts'
+subtitle: Demangled Symbols, In-Memory Object Layouts & Buffer Allocation Validation
+badge: SYSTEMS DIAGNOSTICS • CRYSTAL RUNTIME
+badge_color: purple
+palette: playbox
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis decompile --crystal & Memory Inspection
+  cast: casts/lapis_r2_crystal.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Decode Crystal gameplay binary, classes & GC roots
+    $ lapis decompile bin/game.dll --crystal
+    ╭─ Crystal Runtime Inspection: game.dll ──────────────────╮
+    │ Crystal Binary:   [✓] DETECTED    Classes: 42  GC: 18   │
+    │ Main Entrypoint:  *Crystal::main (0x140001080)          │
+    │ Discovered Crystal Classes:                             │
+    │   • Player < CharacterBody3D (14 methods, 4 exports)    │
+    │   • CombatRadar < Node2D (8 methods, 3 exports)         │
+    │   • Inventory < RefCounted (11 methods, 6 exports)      │
+    ╰─────────────────────────────────────────────────────────╯
+
+    # 2. Side-by-side x86_64 disassembly & pseudo-C with AST demangling
+    $ lapis decompile bin/game.dll "Player#_physics_process" --side-by-side
+    // [AST Demangled] Player#_physics_process(delta : Float64) : Nil
+    0x1400021b0  55        push rbp   │ void Player::_physics_process(f64 d)
+    0x1400021b8  f20f1005  movsd xmm0 │     this->apply_gravity(d);
+    0x1400021c5  e8460100  call slide │     bool hit = this->move_and_slide();
+
+    # 3. Direct in-memory structure decoding via cradare2
+    $ r2 -q0 bin/game.dll
+    >> cradare2.crystal.read_string(0x140040200)
+       [String @ 0x140040200] type_id: 1, bytesize: 15, value: "res://main.tscn"
+    >> cradare2.crystal.read_array_header(0x140040500)
+       [Array(Vector3)] type_id: 84, size: 8, capacity: 16 [Contiguous Buffer]
+    >> db "sym.Player#_physics_process:Float64"
+       ✔ Breakpoint #1 set at Player#_physics_process(Float64)
+right:
+  type: card
+  title: Crystal Binary & Memory Invariants
+  color: purple
+  items:
+  - <strong>Crystal AST Demangling:</strong> Automatically translates mangled compiler symbols into clean Crystal method signatures (<code>Player#_physics_process:Float64</code>) for source-line breakpoints.
+  - <strong>In-Memory String Layouts:</strong> Inspects runtime Crystal String structures at raw memory addresses (validating <code>type_id</code>, <code>bytesize</code>, <code>length</code>, and UTF-8 buffer bytes).
+  - <strong>Array & Slice Header Decoding:</strong> Directly reads dynamic Array capacity vs size and Slice pointers to verify memory preallocation and avoid heap reallocations during tight physics loops.
+  - <strong>Runtime Class Hierarchy:</strong> Discovers all compiled Crystal classes, methods, entrypoints, and Boehm GC allocator symbols directly from PE/ELF binaries without external symbol servers.
+notes: |
+  Lapis pairs with cradare2 to deliver first-class native reverse engineering and live debugging for the Crystal runtime. Developers can inspect Crystal classes, demangle method symbols for setting breakpoints, and examine the precise in-memory byte layout of Crystal Strings, Arrays, and Slices. This makes it straightforward to verify allocation invariants and diagnose subtle memory corruptions directly in the terminal.

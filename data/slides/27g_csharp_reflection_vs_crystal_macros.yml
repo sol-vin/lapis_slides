@@ -1,0 +1,79 @@
+---
+id: 27g_csharp_reflection_vs_crystal_macros
+title: 'Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection'
+subtitle: Heavy Roslyn Generators & Fragile Runtime Reflection vs Native AST Macros
+badge: LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN
+badge_color: purple
+palette: game_station_2
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: Godot C#: Runtime Reflection & Roslyn Complexity'
+  lang: csharp
+  tag: C# (.NET 8)
+  card_title: C# Reflection & Generator Misery
+  code: |
+    using Godot;
+    using System;
+    using System.Reflection;
+
+    public partial class NetworkSync : Node
+    {
+        // Runtime reflection: 100x slower, boxed arguments, and stripped by AOT!
+        public void DispatchRPC(string methodName, params object[] args)
+        {
+            // Dynamic method lookup across reflection metadata tables
+            MethodInfo? method = GetType().GetMethod(
+                methodName, 
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic
+            );
+
+            if (method == null) throw new MissingMethodException(methodName);
+
+            // Allocates object[] array and boxes primitive value types into heap objects
+            method.Invoke(this, args); // Boxing tax on every incoming packet!
+        }
+
+        // Roslyn Source Generator Alternative:
+        // Requires separate .csproj analyzer, Microsoft.CodeAnalysis dependencies,
+        // complex Roslyn AST trees, and constant IDE red-squiggles and rebuild lag.
+    }
+  points:
+  - <strong>Slow Runtime Reflection Overhead:</strong> <code>Type.GetMethod()</code> and <code>method.Invoke()</code> are 10-100x slower than direct calls, performing dynamic string table lookups on every invocation.
+  - <strong>Variant &amp; Object Boxing Penalties:</strong> Passing arguments through <code>MethodInfo.Invoke</code> forces primitive types (<code>int</code>, <code>float</code>, <code>Vector3</code>) to be boxed into heap objects.
+  - <strong>NativeAOT &amp; Trimming Hazard:</strong> Modern .NET NativeAOT trims away unused reflection metadata at build time unless decorated with complex <code>[DynamicallyAccessedMembers]</code> attributes.
+  - <strong>Roslyn Generator Tooling Tax:</strong> Metaprogramming requires a separate analyzer project, MSBuild plumbing, and fragile Roslyn AST APIs that frequently desync in IDEs.
+crystal:
+  title: ':sparkles: Crystal: First-Class Compile-Time AST Macros'
+  lang: crystal
+  tag: Crystal (Lapis)
+  card_title: Crystal Zen Advantages
+  code: |
+    node NetworkSync < Node do
+      # Built-in compile-time AST macros inspect types without runtime reflection tables
+      macro generate_rpc_dispatcher(*methods)
+        def dispatch_rpc(action : String, packet : Packet) : Nil
+          case action
+          {% for method in methods %}
+          when {{ method.stringify }}
+            # Direct static dispatch with compile-time type-checked arguments!
+            {{ method.id }}(packet.read_{{ method.id }}_payload)
+          {% end %}
+          else
+            raise "Unknown RPC action: #{action}"
+          end
+        end
+      end
+
+      # Expands into static pattern matching during compilation
+      generate_rpc_dispatcher sync_transform, player_spawn, player_hit
+    end
+  points:
+  - <strong>First-Class Language Macros:</strong> AST macros are built directly into the Crystal language with zero separate projects, analyzers, or MSBuild setup.
+  - <strong>Deep Compile-Time Introspection:</strong> Direct access to <code>{{ @type.instance_vars }}</code>, <code>{{ @type.methods }}</code>, and annotations during compilation.
+  - <strong>Zero Runtime Reflection Cost:</strong> Macro expansions generate static dispatch branches, serialization logic, and GDExtension bindings with zero runtime reflection overhead.
+  - <strong>Whole-Program Type Inference:</strong> Native AOT compilation with no runtime reflection tables, no metadata stripping hazards, and no boxing.
+takeaway:
+  badge: COMPILE-TIME METAPROGRAMMING
+  text: 'Crystal macros bring full compile-time metaprogramming and reflection without the tooling agony or runtime reflection tax of C#.'
+notes: |
+  In C#, developers are trapped in an uncomfortable dilemma: either use `System.Reflection` at runtime—which is painfully slow, boxes every primitive argument, and crashes when NativeAOT trimming strips metadata—or write a Roslyn Source Generator. But Roslyn generators require an entire separate C# analyzer project, complex syntax tree parsing, and fragile MSBuild plumbing that constantly causes IDE red squiggles. In Crystal, macros are a first-class language feature. You write expressive metaprogramming logic directly inside your codebase using Crystal syntax. Macros inspect types, loop over properties, and generate type-safe dispatchers at compile time, leaving behind zero runtime reflection tables and zero boxing.

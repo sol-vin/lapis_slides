@@ -1,0 +1,47 @@
+---
+id: 32_package_management
+title: 'Addon & Shard Package Management'
+subtitle: Dual-Mode Installation, Poison Traps & Shard Auto-Healing
+badge: ECOSYSTEM • PACKAGE MANAGEMENT
+badge_color: purple
+palette: spaces_2000
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis addon install & lapis shard
+  cast: casts/lapis_addon_install.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    # 1. Dual-Mode Addon Installation (GDExtension + Shard + 2-Way Bindings)
+    $ lapis addon install github:sol-vin/combat_system@v1.2 --release --shard --bind
+    [Install:Addon] Resolving GitHub release asset for windows-x86_64...
+      [OK] Downloaded combat_system-windows.zip (Precompiled Binary)
+      [OK] Verified entrypoint & ASLR/DEP hardening
+      [OK] Staged crystal_bridge.dll, gc.dll, pcre2-8.dll (BakedFileSystem)
+      [OK] Purged invalid host libgodot.dll (poison protection)
+      [OK] Added shard dependency to shard.yml
+      [OK] Generated typed Crystal bindings for CombatSystem nodes
+
+    # 2. Shard Dependency Management & Auto-Healing
+    $ lapis install shard github:sol-vin/crshader ~> 0.1.0
+      [OK] Resolved semver requirement '~> 0.1.0'
+      [OK] Auto-healed dependency overrides in shard.override.yml
+right:
+  type: card
+  title: Dual-Mode Packaging Invariants
+  color: purple
+  items:
+  - <strong>Dual-Mode Installation:</strong> <code>lapis addon install</code> manages GDExtension plugins, while <code>lapis install shard</code> manages Crystal library dependencies with semantic version matching.
+  - <strong>Automatic 2-Way Binding (<code>--bind</code>):</strong> When installing an addon, <code>--bind</code> automatically scans its custom nodes and generates typed Crystal wrapper classes.
+  - <strong>Automated Shard Healing (<code>shard.override.yml</code>):</strong> Automatically writes and maintains override manifests to resolve ambiguous dependency sources and local paths without editing git-tracked files.
+  - <strong>Poison Protection & DLL Staging:</strong> Automatically stages required C-runtime DLLs (<code>gc.dll</code>, <code>bridge.dll</code>) and purges illegal host <code>libgodot.dll</code> copies to prevent fatal ClassDB crashes.
+notes: |
+  Distributing compiled native addons in Godot is notoriously error-prone: addons require runtime DLLs like Boehm GC and the C++ bridge that standard Godot doesn't manage. Lapis provides complete dual-mode package management. With lapis addon install --shard --bind, Lapis stages precompiled GDExtension binaries, auto-enables the plugin in project.godot, links it into shard.yml, and generates typed Crystal wrappers for its custom nodes in one seamless step. If version conflicts arise across multiple addons, Lapis auto-heals dependencies using shard.override.yml to maintain deterministic builds.

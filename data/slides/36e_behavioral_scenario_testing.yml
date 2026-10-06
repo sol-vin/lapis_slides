@@ -1,0 +1,68 @@
+---
+id: 36e_behavioral_scenario_testing
+title: 'Testing Framework: Behavioral Scenarios & Determinism'
+subtitle: 'Multi-Step Integration Scenarios, Negative Signal Guards & Stability Verification'
+badge: QUALITY GATES • SCENARIO TESTING
+badge_color: cyan
+palette: aperture
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: combat_scenario_spec.cr — Scenario Testing DSL
+  tag: Crystal (Lapis)
+  lang: crystal
+  font_size: '0.73rem'
+  code: |
+    include Lapis::Test
+
+    test_suite "Combat Behavioral Scenarios" do
+      test "multi-phase boss encounter" do |root|
+        scenario(root, "boss phase transitions") do
+          step "spawn boss and settle physics" do
+            boss = arena.spawn(BossEnemy) { self.health = 500 }
+            assert_alive boss
+            assert_settled boss, frames: 10, max_velocity: 0.1
+          end
+
+          step "take non-lethal damage without death signal" do
+            # Asserts signal is NEVER emitted during block:
+            assert_no_signal(boss, "died", timeout_sec: 0.5) do
+              boss.take_damage(100)
+            end
+            assert_eq boss.health, 400
+          end
+
+          step "verify scene hierarchy structure" do
+            assert_child_count arena, 2
+            assert_has_child arena, boss
+            assert_node_path_exists arena, "BossEnemy"
+          end
+
+          step "verify memory stability across repeated cycles" do
+            assert_memory_stable(cycles: 10) do
+              5.times do
+                node = Godot.create(Node2D)
+                arena.add_child(node)
+                node.queue_free
+              end
+            end
+          end
+        end
+      end
+    end
+right:
+  type: card
+  title: High-Level Scenario Verification
+  color: cyan
+  items:
+    - '<strong>Multi-Step <code>scenario</code> Runner:</strong> Organizes complex integration tests into sequential, named <code>step</code> blocks with granular logging and isolated failure diagnostics.'
+    - '<strong>Deterministic Physics Settling:</strong> <code>assert_settled</code> steps the engine cooperatively until rigid body linear velocity falls below the target threshold.'
+    - '<strong>Negative Signal Invariants:</strong> <code>assert_no_signal</code> verifies that forbidden events (like untimely entity death or invalid RPCs) are never fired during state changes.'
+    - '<strong>Scene Hierarchy Assertions:</strong> <code>assert_child_count</code>, <code>assert_has_child</code>, and <code>assert_node_path_exists</code> validate tree topology directly.'
+    - '<strong>Iterative Memory Stability:</strong> <code>assert_memory_stable(cycles: N)</code> verifies that repetitive game loops cause zero net growth in native Godot ObjectDB allocations.'
+notes: |
+  Unit tests are vital, but complex game mechanics require end-to-end behavioral verification across multiple frames and state transitions. Lapis introduces the 'scenario' testing DSL to make integration testing intuitive and thorough.
+  Within a 'scenario' block, developers divide gameplay sequences into distinct, readable 'step' directives. Each step executes in sequence, providing clear console breadcrumbs when debugging test failures.
+  The apparatus provides specialized engine assertions: 'assert_settled' advances simulation frames until dynamic bodies come to a complete rest; 'assert_no_signal' verifies that illegal signals do not fire during intermediate actions; and 'assert_memory_stable' confirms that repeated gameplay cycles (such as spawning and queue_freeing particles) return ObjectDB counts to exact parity.
+  Scene hierarchy queries like 'assert_has_child' and 'assert_node_path_exists' complete the quality gate, ensuring your scene tree remains structurally sound.

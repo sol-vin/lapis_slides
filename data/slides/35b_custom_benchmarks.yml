@@ -1,0 +1,81 @@
+---
+id: 35b_custom_benchmarks
+title: 'Authoring Custom Benchmarks: Lapis::Benchmark'
+subtitle: In-Engine Microbenchmarking DSL, Multi-Target Comparisons & Automated HTML Reports
+badge: PERFORMANCE • CUSTOM BENCHMARKING
+badge_color: cyan
+palette: spaces_11
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: custom_benchmark.cr — Lapis::Benchmark DSL
+  tag: Crystal
+  lang: crystal
+  font_size: '0.80rem'
+  code: |
+    require "lapis/benchmark"
+
+    # 1. Register standalone gameplay benchmark with metrics
+    Lapis::Benchmark.register("ProceduralDungeon", category: :compute) do |iter|
+      dungeon = DungeonGenerator.new(rooms: 50, corridors: 120)
+      dungeon.generate!
+      Lapis::Benchmark.report_metric("rooms_per_sec", 50.0 / dungeon.elapsed_sec)
+    end
+
+    # 2. Side-by-side comparison group against GDScript baseline
+    Lapis::Benchmark.group "PathfindingCrowd" do |g|
+      g.description "A* routing throughput across 5,000 active agents"
+      g.category :engine
+
+      # High-performance Crystal implementation
+      g.benchmark("Crystal") do
+        crowd = CrowdSim.new(agent_count: 5_000)
+        crowd.step_navigation(delta: 0.016)
+      end
+
+      # Compare directly against GDScript script equivalent
+      g.target "GDScript", "scripts/crowd_sim.gd", :gdscript
+      g.baseline "Crystal"
+    end
+right:
+  type: asciinema
+  title: lapis benchmarks run — CLI Execution & HTML Report
+  cast: casts/lapis_custom_benchmarks.cast
+  font_size: '0.80rem'
+  cols: 86
+  rows: 22
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  code: |
+    # 1. Discover registered gameplay benchmarks & groups
+    $ lapis benchmarks -l
+    Registered Benchmarks in ~/lapis/template/benchmarks:
+      PathfindingCrowd   [Group: Engine ] A* routing (5,000 active agents)
+      ProceduralDungeon  [Custom: Compute] BSP room partitioning & corridors
+      ParticleBatchSim   [Custom: Compute] 20,000 Verlet integration steps
+
+    # 2. Run benchmark group with AVX2 SIMD & comparative latency table
+    $ lapis benchmarks run -g PathfindingCrowd --chart --html
+    [Benchmarks:Build] Compiling harness with AVX2 SIMD (-O3 -s)...
+      ✔ Harness compiled in 0.88s (SIMD vectorization active)
+    Benchmark Results: PathfindingCrowd (5,000 Agents)
+    ┌──────────────────────────┬─────────────┬──────────────┬───────────┐
+    │ Implementation           │ Median Time │ Throughput   │ Speedup   │
+    ├──────────────────────────┼─────────────┼──────────────┼───────────┤
+    │ Crystal (SIMD AVX2)      │     0.82 ms │ 6,097 agt/fr │ 15.4x 🚀  │
+    │ GDScript (Baseline)      │    12.63 ms │   395 agt/fr │ 1.0x (ref)│
+    └──────────────────────────┴─────────────┴──────────────┴───────────┘
+
+    # 3. Terminal horizontal bar chart visualization
+    $ lapis benchmarks run -c compute --chart
+    📊 Speedup Factor (x) - Higher is Faster:
+    ParticleBatchSim    [██████████████████████████████████████████] 18.0x
+    ProceduralDungeon   [██████████████████████████████████████    ] 17.0x
+    PathfindingCrowd    [████████████████████████████████          ] 15.4x
+notes: |
+  Benchmarking shouldn't just be an internal engine tool—it's built right into Lapis for your own game projects. Using Lapis::Benchmark, you can profile intensive gameplay algorithms like procedural dungeon generation or crowd pathfinding with microsecond precision.
+  You can define comparison groups to test your Crystal implementation directly against an existing GDScript prototype and export visual SVG charts and HTML reports via 'lapis benchmarks'.
+  On the right, you can see 'lapis benchmarks run --group PathfindingCrowd --chart --html' executing: it compiles with AVX2 SIMD optimizations, warms up the JIT, runs the iterations with a live progress bar, and outputs a comparative latency table showing a 15.4x speedup over GDScript, saving both an SVG chart and an interactive HTML report!

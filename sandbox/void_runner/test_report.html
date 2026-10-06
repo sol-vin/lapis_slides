@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lapis Test Suite — void_runner Status Report - Engine Core</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #0d1117; color: #c9d1d9; margin: 0; padding: 24px; line-height: 1.5; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1, h2, h3 { color: #f0f6fc; margin-top: 24px; margin-bottom: 12px; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; text-transform: uppercase; background: rgba(63, 185, 80, 0.15); color: #3fb950; border: 1px solid #3fb950; }
+    .profile-pill { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 12px; background: #21262d; color: #58a6ff; border: 1px solid #30363d; margin-left: 8px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; }
+    .card-title { font-size: 12px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px; }
+    .card-value { font-size: 18px; font-weight: 600; color: #f0f6fc; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; background: #161b22; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+    th { background: #21262d; color: #f0f6fc; text-align: left; padding: 10px 14px; font-size: 13px; border-bottom: 1px solid #30363d; }
+    td { padding: 10px 14px; border-bottom: 1px solid #21262d; font-size: 13px; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: rgba(56, 139, 253, 0.04); }
+    .tag { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #79c0ff; }
+    .pass { color: #3fb950; font-weight: 600; }
+    .fail { color: #f85149; font-weight: 600; }
+    .info { color: #d29922; font-weight: 600; }
+    details { background: #161b22; border: 1px solid #30363d; border-radius: 6px; margin-bottom: 12px; padding: 12px; }
+    summary { cursor: pointer; font-weight: 600; color: #f0f6fc; outline: none; }
+    pre { background: #0d1117; padding: 12px; border-radius: 6px; overflow-x: auto; font-size: 12px; border: 1px solid #30363d; color: #f0883e; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Lapis Test Suite — void_runner Status Report <span class="profile-pill">Engine Core</span></h1>
+    <div class="grid">
+      <div class="card"><div class="card-title">Overall Status</div><div class="card-value"><span class="badge">ALL PHASES PASSED</span></div></div>
+      <div class="card"><div class="card-title">Platform</div><div class="card-value">Windows (x86_64)</div></div>
+      <div class="card"><div class="card-title">Godot Engine</div><div class="card-value">4.8.dev.gh.c971f93e7</div></div>
+      <div class="card"><div class="card-title">Crystal</div><div class="card-value">Crystal 1.21.0</div></div>
+      <div class="card"><div class="card-title">Duration</div><div class="card-value">7.87s</div></div>
+    </div>
+    <h2>📊 Phase Progression & Trace Matrix</h2>
+    <table>
+      <thead><tr><th>Status</th><th>Phase Tag</th><th>Phase Name</th><th>Category</th><th>Duration</th><th>Exit Code</th></tr></thead>
+      <tbody>
+        <tr><td class="pass">✓ PASS</td><td class="tag">[TEST:TOOL_NODES]</td><td>Headless In-Editor Tests (void_runner)</td><td>Test</td><td>7.67s</td><td>1</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

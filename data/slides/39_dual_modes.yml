@@ -1,0 +1,59 @@
+---
+id: 39_dual_modes
+title: 'Dual Modes: Mode A vs. Mode B'
+subtitle: Seamless In-Editor GDExtension Development Paired with Lean Standalone Shipping
+badge: ARCHITECTURE • DUAL EXECUTION MODES
+badge_color: amber
+palette: fos
+layout: dual-mode-layout
+banner: '<strong>Self-Hosted Tooling:</strong> Just like the Crystal compiler is self-hosted in Crystal, Lapis&apos;s Godot editor integration plugin, syntax highlighting, and tooling docks are authored 100% in Crystal.'
+modes:
+  - id: mode_a
+    title: 'Mode A: GDExtension In-Editor'
+    badge: 'DEVELOPMENT & TOOLING'
+    flow: 'godot.exe :arrow-right: crystal_bridge.dll :arrow-right: game.dll'
+    color: cyan
+    specs:
+      - label: 'Host Process'
+        value: 'Godot Engine executable (<code>godot.exe</code>)'
+        icon: gamepad
+      - label: 'Bridge Loader'
+        value: 'C++ GDExtension loader (<code>bin/crystal_bridge.dll</code>)'
+        icon: plug
+      - label: 'Hot Reloading'
+        value: 'Automatic F5 timestamped shadow DLL loading'
+        icon: bolt
+      - label: 'Editor Plugin'
+        value: 'Self-hosted Crystal plugin (<code>crystal_integration</code>)'
+        icon: screwdriver-wrench
+      - label: 'Primary Use'
+        value: 'Rapid development, level design, <code>@[Tool]</code> scripts'
+        icon: bullseye
+    desc: 'Godot owns the main process while Lapis shadow-loads compiled gameplay DLLs on the fly, unlocking instant iteration with zero Windows file-lock hangs.'
+  - id: mode_b
+    title: 'Mode B: Standalone LibGodot Host'
+    badge: 'PRODUCTION & SERVERS'
+    flow: 'bin/game.exe :arrow-right: libgodot.dll'
+    color: amber
+    specs:
+      - label: 'Host Process'
+        value: 'Pure native Crystal executable (<code>bin/game.exe</code>)'
+        icon: rocket
+      - label: 'Engine Runtime'
+        value: 'Direct dynamic link to <code>bin/libgodot.dll</code>'
+        icon: box-archive
+      - label: 'GC Runtime'
+        value: 'Native Crystal CRT initialization (Boehm GC)'
+        icon: brain
+      - label: 'Footprint'
+        value: 'Zero editor bloat, instant boot, minimal memory usage'
+        icon: feather
+      - label: 'Primary Use'
+        value: 'Commercial shipping, dedicated servers, headless CI'
+        icon: bullseye
+    desc: 'Crystal owns the process entry point and pumps the engine loop natively, stripping away all editor overhead for high-performance production distribution.'
+summary: ':lightbulb: <strong>Zero-Compromise Workflow:</strong> Enjoy Godot&apos;s full visual editor suite during development, then package a lean, standalone Crystal binary for deployment.'
+notes: |
+  Lapis supports two distinct execution paradigms tailored for developer joy and production performance.
+  During development, you run in Mode A: Godot acts as the host, loading our self-hosted Crystal editor plugin and C++ bridge. Thanks to our Windows shadow DLL mechanism, pressing F5 hot-reloads game logic instantly without restarting the editor.
+  When you are ready to ship, you switch to Mode B: a pure Crystal native executable that embeds LibGodot directly. It boots in milliseconds, has zero editor bloat, and provides the ultimate performance for players and dedicated servers.

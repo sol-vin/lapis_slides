@@ -1,0 +1,46 @@
+---
+id: 30d_cli_scaffold_wizard
+title: 'CLI: Project & Addon Scaffolding Wizard'
+subtitle: Interactive TUI Wizard, Template Selection & Instant Engine Scaffolding
+badge: SCAFFOLDING • LAPIS CLI
+badge_color: cyan
+palette: spaces_95
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis cli -n & lapis scaffold
+  cast: casts/lapis_scaffold_wizard.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    $ lapis cli -n
+    :: LAPIS PROJECT & ADDON SCAFFOLDING WIZARD ::
+    Create standalone games, redistributable GDExtension addons, or showcase examples
+    ──────────────────────────────────────────────────────────────────────────
+    Step 1: Select Project Type
+      [*] [GAME] Standalone Game Project
+          A complete Godot game project with Crystal gameplay nodes, scenes, and main loop.
+      [ ] [ADDON] Redistributable GDExtension Addon
+          Reusable extension package with export plugin, manifests, and shard specs.
+      [ ] [EXAMPLE] Showcase Example
+          Self-contained demo showcasing features and patterns.
+    ──────────────────────────────────────────────────────────────────────────
+    Tab / ↑↓: Navigate Fields │ Enter: Next │ F: Choose Folder │ Esc: Exit Wizard
+right:
+  type: card
+  title: Turnkey Architecture Scaffolding
+  color: cyan
+  items:
+  - <strong>Interactive Guided Wizard (<code>lapis cli -n</code>):</strong> Interactive step-by-step configurator walks developers through project type selection, metadata specification, directory picking, and instant validation.
+  - <strong>Direct Scriptable Scaffolding:</strong> CLI commands (<code>lapis scaffold game &lt;name&gt;</code>, <code>lapis scaffold addon &lt;name&gt;</code>) allow instant zero-interaction scaffolding for CI pipelines and scripts.
+  - <strong>Turnkey Project Layout:</strong> Generates complete, runnable architectures including <code>project.godot</code>, <code>shard.yml</code>, <code>src/main.cr</code>, default scenes, scripts, and build tasks.
+  - <strong>Addon Isolation Safety:</strong> Automatically structures addons with isolated <code>.gdextension</code> manifests, ClassDB namespace protection, and packaging configurations.
+notes: |
+  Starting a new project shouldn't require copy-pasting boilerplate or manually configuring build scripts. The Lapis CLI provides both a guided interactive wizard (lapis cli -n) and direct command-line scaffolding (lapis scaffold). Whether creating a full-featured standalone game, a redistributable GDExtension addon, or a self-contained showcase example, Lapis generates a clean, turnkey project structure with pre-configured Crystal shards, engine manifests, and automated hot-reloading hooks ready for development.

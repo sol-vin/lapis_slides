@@ -1,0 +1,58 @@
+---
+id: 20i_scene_tree_glob_queries_and_collections
+title: 'Scene Tree Glob Queries & Streaming Iteration'
+subtitle: Wildcard Navigation (*, **), Receiver Scoping & Block Shorthand
+badge: SCENE TREE • GLOB NAVIGATION
+badge_color: cyan
+palette: cross_cube
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: scene_tree_globs.cr — Wildcards & Streaming Queries
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    node CombatArena < Node2D do
+      def _ready : Void
+        # 1. Single-tier wildcard glob query (*):
+        hitboxes = self.get_nodes("Enemies/*/Hitbox", Area2D)
+
+        # 2. Recursive globstar query (**):
+        spawns = self.get_nodes("Spawns/**", Marker2D)
+
+        # 3. Streaming receiver-scoped iteration (self is yielded node):
+        self.each_node("Enemies/*", Enemy) do
+          alert! # Direct method call on Enemy!
+        end
+
+        # 4. Ancestor lookup operator (<<) & typed queries:
+        player = self << Player           # Strict lookup (returns Player or raises)
+        boss   = self << BossController?  # Safe nilable lookup (returns BossController?)
+
+        # 5. Fluent GroupQuery DSL:
+        group(:enemies).each(as: Enemy) { |e| e.alert! }
+        boss = group(:boss).first(as: Boss)
+        group(:enemies).call("alert", global_position)
+
+        # 6. Direct streaming cleanup and manipulation:
+        self.each_node("Bullets/*", &.queue_free)
+        self.each_node("Hitboxes/*", &.show)
+      end
+    end
+right:
+  type: card
+  title: Ergonomic Hierarchy Query Engine
+  color: cyan
+  items:
+    - '<strong>Wildcard &amp; Globstar Matching:</strong> <code>get_nodes</code> supports single-level <code>*</code> (e.g. <code>Enemies/*/Hitbox</code>) and recursive globstars <code>**</code> (e.g. <code>Spawns/**</code>).'
+    - '<strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> and <code>each_descendant(Type)</code> traverse subtrees without creating intermediate array allocations.'
+    - '<strong>Ancestor Traversal Operator (<code>&lt;&lt;</code>):</strong> <code>node &lt;&lt; Class</code> performs strict non-nil upward hierarchy search; <code>node &lt;&lt; Class?</code> returns safe nilable match.'
+    - '<strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides chainable <code>.each(as: Type)</code>, <code>.to_a(as: Type)</code>, <code>.first</code>, <code>.first!</code>, and broadcast <code>.call</code>.'
+    - '<strong>Receiver Scoping &amp; Block Shorthands:</strong> <code>each_node</code> yields via <code>with node yield node</code>, supporting receiver-scoped blocks (<code>do alert! end</code>), block parameters (<code>do |e|</code>), and symbol-to-proc shorthands (<code>&amp;.queue_free</code>).'
+notes: |
+  Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
+  Lapis introduces a full scene tree query engine: First, intuitive shell-like patterns query immediate wildcards like 'get_nodes("Enemies/*/Hitbox", Area2D)' or recursive globstars like 'get_nodes("Spawns/**", Marker2D)'.
+  Second, upward hierarchy lookup is effortless with the ancestor operator: writing 'self << Player' strictly climbs parent nodes to find the player, while 'self << BossController?' performs safe nilable lookup.
+  Third, our fluent 'group(:enemies)' DSL provides typed iteration with '.each(as: Enemy)', '.first(as: Boss)', and broadcast '.call'. For high-frequency loops, 'each_node' streams matching descendants directly through inlined blocks without allocating intermediate collections.

@@ -1,0 +1,57 @@
+---
+id: 17_antipattern_async_signals
+title: 'Signals & Async: String Awaits vs. Typed Handles'
+subtitle: Non-Blocking Coroutines, Timeout Guards & Dead-Pointer Checks
+badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge_color: amber
+palette: aperture
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Unsafe Await & Leaked Coroutines'
+  lang: gdscript
+  tag: GDScript
+  code: |
+    func start_boss_cinematic() -> void:
+        # Pitfall 1: Target freed -> coroutine hangs FOREVER!
+        # If boss is despawned or scene reloaded, this line NEVER resumes:
+        await boss.died 
+        show_victory_screen()
+
+        # Pitfall 2: No timeouts -> must build manual Timer nodes:
+        var timer = get_tree().create_timer(10.0)
+        # Racing timer vs signal requires convoluted boolean flag gymnastics!
+
+        # Pitfall 3: String typo in connection crashes at runtime:
+        $StartButton.pressed.connect(_on_strt_pressed)
+  points:
+  - <strong>Infinite Hang Risk:</strong> <code>await boss.died</code> hangs indefinitely if the target node is freed before emitting.
+  - <strong>No Built-In Timeouts:</strong> Adding timeouts requires manual timer nodes and complex cleanup logic.
+  - <strong>Boilerplate Handlers:</strong> Connecting signals requires authoring separate named handler functions.
+crystal:
+  title: ':sparkles: Crystal: First-Class Signal Handles & Timeouts'
+  lang: crystal
+  tag: Crystal (Lapis)
+  code: |
+    def start_boss_cinematic : Void
+      # 1. Type-safe await with built-in timeout guard:
+      # Automatically races signal against 10s timer; zero boilerplate!
+      await(boss.died, timeout_sec: 10.0)
+      show_victory_screen
+
+      # 2. Dead-pointer aware: fiber checks #alive? each frame slice
+      # Aborts safely if boss was freed instead of hanging silently!
+
+      # 3. Declarative 'on' macro with clean closures:
+      on start_button.pressed do
+        launch_match_sequence
+      end
+    end
+  points:
+  - <strong>First-Class Signal Handles:</strong> <code>await(boss.died)</code> provides compile-time signal validation.
+  - <strong>Built-In Timeout Guards:</strong> Optional <code>timeout_sec: 10.0</code> prevents coroutines from leaking or hanging indefinitely.
+  - <strong>Declarative <code>on</code> Macro:</strong> Connect signals directly with inline blocks (<code>on button.pressed</code>); no clutter of single-use handler methods.
+takeaway:
+  badge: SAFE ASYNCHRONY
+  text: Lapis signal awaiting features automatic timeout guards and dead-pointer checks, keeping coroutines safe and responsive.
+notes: |
+  Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports built-in timeouts: await(boss.died, timeout_sec: 10.0). Furthermore, because Lapis fibers check instance liveness on every frame tick, if the target object is destroyed, the fiber safely aborts with DisposedObjectError rather than hanging silently.

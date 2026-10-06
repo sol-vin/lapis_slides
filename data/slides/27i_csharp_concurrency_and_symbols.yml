@@ -1,0 +1,79 @@
+---
+id: 27i_csharp_concurrency_and_symbols
+title: 'Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups'
+subtitle: Task Heap Churn, async void Process Crashes, and String Lookups vs Fibers & Symbols
+badge: LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY
+badge_color: purple
+palette: aperture
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: Godot C#: Task Allocations, async void, and String Soup'
+  lang: csharp
+  tag: C# (.NET 8)
+  card_title: C# Concurrency & String Traps
+  code: |
+    using Godot;
+    using System;
+    using System.Threading.Tasks;
+
+    public partial class NetworkEntity : Node3D
+    {
+        // async void: unhandled exceptions crash the entire process
+        public async void OnNetworkPacketReceived(byte[] data)
+        {
+            // String lookups incur runtime hashing overhead
+            if (!IsInGroup("network_synced")) return;
+
+            // Task.Run allocates state machine on managed heap
+            await Task.Run(() => ProcessPacketPayload(data));
+
+            // Must marshal back to main thread or crash SceneTree
+            Callable.From(() => GlobalPosition = Vector3.Zero).CallDeferred();
+        }
+
+        private void ProcessPacketPayload(byte[] data) { /* ... */ }
+    }
+  points:
+  - <strong>Task Heap Allocation Overhead:</strong> Every <code>async Task</code> invocation allocates a <code>Task</code> reference object and state machine on the managed heap, degrading game loop performance.
+  - <strong>Async Void Crash Hazard:</strong> Exceptions thrown inside <code>async void</code> event handlers bypass try/catch blocks and directly crash the entire game process.
+  - <strong>SceneTree Threading Hazards:</strong> Godot's SceneTree is strictly single-threaded; calling engine APIs from background threads triggers race conditions and fatal crashes.
+  - <strong>Stringly-Typed Group &amp; Action Lookups:</strong> Looking up groups (<code>IsInGroup("enemies")</code>) and actions requires runtime string hashing unless boilerplate <code>StringName</code> constants are declared.
+crystal:
+  title: ':sparkles: Crystal: Lightweight Fibers & Compile-Time Symbols'
+  lang: crystal
+  tag: Crystal (Lapis)
+  card_title: Crystal Zen Advantages
+  code: |
+    node NetworkEntity < Node3D do
+      @packet_channel = Channel(Bytes).new(32)
+
+      def _ready : Nil
+        # Lightweight fiber: runs cooperatively on the stack
+        spawn do
+          loop do
+            packet = @packet_channel.receive
+            process_payload(packet)
+          end
+        end
+      end
+
+      def _process(delta : Float64) : Void
+        Fiber.yield # Cooperatively yield to spawned Crystal fibers
+      end
+
+      def on_network_packet_received(data : Bytes) : Nil
+        # Symbol comparison is an instantaneous integer check
+        return unless in_group?(:network_synced)
+        @packet_channel.send(data)
+      end
+    end
+  points:
+  - <strong>Microscopic Fiber Concurrency:</strong> Crystal's <code>spawn</code> creates lightweight cooperative fibers with stack allocation, executing concurrent tasks with negligible memory overhead.
+  - <strong>Thread-Safe CSP Channels:</strong> <code>Channel(T)</code> delivers clean, lock-free message passing between background worker fibers and the main game thread without race conditions.
+  - <strong>First-Class Compile-Time Symbols:</strong> Identifiers like <code>:network_synced</code> and <code>:jump</code> are interned at compile time as lightweight integers, eliminating string allocations and hashing.
+  - <strong>Robust Error Containment:</strong> Fiber exceptions are isolated and reported with full backtraces without taking down the engine or crashing the game process.
+takeaway:
+  badge: CONCURRENCY & SPEED
+  text: 'Crystal replaces C#s heavy Task heap allocations and string soup with lightweight stack fibers and compile-time integer symbols.'
+notes: |
+  Handling concurrency and identifiers in Godot C# is notoriously fraught. In C#, every `async Task` allocates a task state machine on the heap, and if a signal handler uses `async void`, an unhandled exception will crash the entire game executable with no recovery. Furthermore, accessing Godot nodes from background tasks causes race conditions, forcing developers into clunky `Callable.From(...).CallDeferred()` boilerplate. In identifiers, C# relies on runtime string lookups unless you declare static `StringName` constants everywhere. In Lapis, Crystal uses microscopic cooperative fibers (`spawn`) and typed CSP channels (`Channel(T)`) for deterministic, thread-safe background work. And symbols like `:network_synced` are interned integers evaluated at compile time with zero string allocation.

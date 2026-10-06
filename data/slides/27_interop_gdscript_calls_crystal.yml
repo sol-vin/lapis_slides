@@ -1,0 +1,54 @@
+---
+id: 27_interop_gdscript_calls_crystal
+title: 'Interoperability: GDScript Calling Crystal'
+subtitle: Seamless Integration with GDScript Gameplay Teams and Asset Store Addons
+badge: INTEROPERABILITY • GDSCRIPT TO CRYSTAL
+badge_color: cyan
+palette: spaces_7
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: player.cr — Exported Crystal Node
+  tag: Crystal
+  lang: crystal
+  code: |
+    node Player < CharacterBody3D do
+      @[Export]
+      property speed : Float32 = 7.0_f32
+
+      property health : Int32 = 100
+
+      signal health_changed(current : Int32)
+
+      def heal(amount : Int32) : Int32
+        @health += amount
+        emit(health_changed, @health)
+        @health
+      end
+    end
+right:
+  type: code
+  title: ui_controller.gd — GDScript Consumer
+  tag: GDScript
+  lang: gdscript
+  code: |
+    extends Control
+
+    @onready var player: Player = $Player
+
+    func _on_heal_pressed() -> void:
+        # Calls Crystal method directly with autocompletion!
+        var new_hp = player.heal(25)
+        $HPLabel.text = "HP: %d" % new_hp
+
+    func _ready() -> void:
+        # Connects to Crystal signal seamlessly
+        player.health_changed.connect(_on_hp_changed)
+
+    func _on_hp_changed(current: int) -> void:
+        $HPLabel.text = "HP: %d" % current
+notes: You don't have to rewrite your entire game in Crystal to use Lapis. Lapis nodes
+  register directly with Godot's ClassDB. That means GDScript developers on your team
+  can instantiate Crystal nodes, call Crystal methods, inspect exported properties,
+  and connect to Crystal signals with complete native editor autocomplete.

@@ -1,0 +1,27 @@
+---
+id: 29b_act4_cli_intro
+title: "The Lapis CLI Command Center"
+subtitle: "Interactive Terminal Hub, Zero-Friction Diagnostics, 2-Way Reflection & Package Management"
+act: "ACT IV • CHAPTER 08"
+badge: "ACT IV • CHAPTER 08"
+badge_color: "purple"
+palette: "playbox"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: "Interactive Hub & Scaffolding"
+    desc: "Real-time Command Center telemetry, Opal fuzzy palette, typo recovery, and turnkey bootstrapping"
+    icon: "terminal"
+    color: "cyan"
+  - title: "lapis doctor Diagnostics"
+    desc: "Automated toolchain health audit checking Crystal, LLVM, Godot, runtime DLLs, and fiber barriers"
+    icon: "stethoscope"
+    color: "emerald"
+  - title: "Two-Way Codegen Engine"
+    desc: "Synthesizing 824 typed ClassDB classes and generating Crystal wrappers for custom GDScript nodes"
+    icon: "wand-magic-sparkles"
+    color: "purple"
+notes: |
+  Now let's step out of the engine GUI and into the terminal.
+  The Lapis CLI toolchain was designed from day one to eliminate setup friction and put raw native power at your fingertips.
+  In Chapter 8, we explore our unified terminal command center: interactive TUI telemetry and turnkey scaffolding, automated 'lapis doctor' diagnostics, two-way ClassDB code generation, and our dual-mode package management ecosystem.

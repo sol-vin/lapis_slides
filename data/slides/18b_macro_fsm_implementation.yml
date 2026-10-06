@@ -1,0 +1,81 @@
+---
+id: 18b_macro_fsm_implementation
+title: 'Behind the DSL: The FSM AST Macro'
+subtitle: How Crystal's Compile-Time AST Rewriting Synthesizes Enums, Typed Dispatchers & Lifecycle Hooks
+badge: AST METAPROGRAMMING • UNDER THE HOOD
+badge_color: amber
+palette: super_es
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: fsm_macro.cr — AST Rewriting Engine
+  tag: Crystal
+  lang: crystal
+  font_size: '0.68rem'
+  code: |
+    # Compile-Time AST Macro: parses block into enums, hooks & static dispatchers
+    macro fsm(name, &block)
+      # 1. Synthesize typed Enum for all declared states:
+      enum {{name.id}}
+        {% for call in block.body.expressions %}
+          {% if call.name == "state" %} {{call.args[0].id}} {% end %}
+        {% end %}
+      end
+
+      # 2. Synthesize StateMachine with static dispatch:
+      class {{name.id}}Machine
+        {% first_state = block.body.expressions.find(&.name.== "state").args[0] %}
+        getter current_state : {{name.id}} = {{name.id}}::{{first_state.id}}
+
+        # 3. Flattens nested DSL calls into flat case branches:
+        def trigger(event : Symbol) : Void
+          case @current_state
+          {% for state in block.body.expressions %}
+            when .{{state.args[0].id.underscore}}?
+              {% for call in state.block.body.expressions %}
+                {% if call.name == "on" %}
+                  if event == {{call.args[0]}}
+                    return transition_to({{name.id}}::{{call.named_args[:transition_to]}})
+                  end
+                {% end %}
+              {% end %}
+          {% end %}
+          end
+        end
+
+        # 4. Inlines 'before' (exit) & 'after' (enter) lifecycle hooks:
+        private def transition_to(target : {{name.id}}) : Void
+          case @current_state
+          {% for s in block.body.expressions %}
+            when .{{s.args[0].id.underscore}}?
+              {% for c in s.block.body.expressions %}
+                {% if c.name == "before" %} {{c.block.body}} {% end %}
+              {% end %}
+          {% end %}
+          end
+
+          @current_state = target
+
+          case target
+          {% for s in block.body.expressions %}
+            when .{{s.args[0].id.underscore}}?
+              {% for c in s.block.body.expressions %}
+                {% if c.name == "after" %} {{c.block.body}} {% end %}
+              {% end %}
+          {% end %}
+          end
+        end
+      end
+    end
+right:
+  type: card
+  title: Compile-Time Metaprogramming Invariants
+  color: amber
+  items:
+  - "<strong>Inlined Lifecycle Hooks (<code>before</code> & <code>after</code>):</strong> The macro extracts <code>before</code> (pre-transition) and <code>after</code> (post-transition) blocks and inlines them directly into native <code>case</code> branches — zero lambda overhead, zero virtual dispatches!"
+  - "<strong>Compile-Time AST Traversal:</strong> Unlike Ruby's <code>method_missing</code> or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation."
+  - "<strong>Synthesizes Concrete Types:</strong> The macro generates real <code>enum BossState</code> variants (<code>Patrol</code>, <code>Chase</code>), giving developers full compiler autocomplete and exhaustiveness checks."
+  - "<strong>Static Branch Dispatch:</strong> <code>trigger(:event)</code> expands into compile-time <code>case</code> branches — eliminating runtime reflection, dictionary lookups, and heap-allocated state objects."
+notes: |
+  This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with structured native machine execution.

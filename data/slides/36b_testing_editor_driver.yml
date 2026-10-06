@@ -1,0 +1,55 @@
+---
+id: 36b_testing_editor_driver
+title: 'Editor Testing: Lapis::Test::EditorDriver'
+subtitle: Headless In-Editor Automation, @tool In-Process Verification & Live Reload Stress-Testing
+badge: TOOLING • HEADLESS EDITOR TESTING
+badge_color: cyan
+palette: spaces_xp_royale
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: editor_driver_spec.cr — Headless In-Editor Driver
+  tag: Crystal
+  lang: crystal
+  font_size: '0.80rem'
+  code: |
+    require "./spec_helper"
+
+    describe Lapis::Test::EditorDriver do
+      # 1. Headless in-editor tool test execution
+      it "verifies @tool nodes and inspector buttons in headless editor" do
+        # Launches: godot --headless --editor --audio-driver Dummy
+        res = Lapis::Test::EditorDriver.run_tool_tests(
+          project: ".",
+          quit_frames: 300
+        )
+        res.passed?.should be_true
+        res.output.should contain("ToolTester2D: @tool _ready verified")
+        res.output.should contain("ExportToolButton 'Reset Stats' executed")
+      end
+
+      # 2. Live GDExtension reload stress-testing
+      it "executes continuous shadow DLL hot reload cycles without leaks" do
+        res = Lapis::Test::EditorDriver.run_editor_reload_tests(
+          project: ".",
+          cycles: 3
+        )
+        res.passed?.should be_true
+        res.output.should contain("Reload cycle 3/3 succeeded (0 file locks)")
+      end
+    end
+right:
+  type: asciinema
+  title: lapis test spec/editor_driver_spec.cr — Headless Driver & Reload Cycles
+  cast: casts/lapis_editor_driver.cast
+  font_size: '0.80rem'
+  cols: 86
+  rows: 22
+  speed: 1.0
+  loop: true
+  autoplay: true
+notes: |
+  Building editor plugins, custom gizmos, and @tool scripts usually requires tedious manual testing inside the Godot GUI. Lapis changes this with Lapis::Test::EditorDriver, an automated testing harness for the Godot editor itself.
+  EditorDriver launches Godot headlessly with '--headless --editor --audio-driver Dummy --rendering-driver opengl3', mounts your project's custom tools, and executes real in-editor logic. It verifies that @tool nodes initialize correctly in the editor, and even simulates clicking @[ExportToolButton] actions programmatically.
+  Furthermore, EditorDriver provides 'run_editor_reload_tests', which compiles and reloads the GDExtension multiple times while the editor is running. This automated stress test validates that our Windows shadow DLL mechanism prevents file locks, and verifies that dead pointers or memory leaks are caught during live reloads.

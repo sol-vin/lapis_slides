@@ -1,0 +1,47 @@
+---
+id: 41c_demo_gameplay_dsl
+title: 'Demo 2: Live Node Authoring'
+subtitle: Writing Gameplay with ~, onready, @Export Sliders & Typed Signals
+badge: 'LIVE DEMO • PART 2: GAMEPLAY DSL'
+badge_color: purple
+palette: playbox
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: src/nodes/player_controller.cr
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # src/nodes/player_controller.cr
+    node PlayerController < CharacterBody3D do
+      include Damageable # Reusable health, defense & signals!
+
+      @[Export(range: 1.0_f32..25.0_f32, step: 0.5_f32)]
+      property speed : Float32 = 8.0_f32
+
+      # Strongly typed onready caching with bare ~:
+      onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)
+
+      def _ready : Void
+        # Direct typed child lookup via ~Class:
+        hp_bar = ~ProgressBar
+
+        # Declarative signal connection sugar with 'on':
+        on health_changed do |cur, max|
+          hp_bar.value = (cur.to_f / max) * 100.0
+        end
+      end
+    end
+right:
+  type: card
+  title: In-Editor Reactivity & DSL Power
+  color: purple
+  items:
+    - '<strong>Live Inspector Sliders:</strong> <code>@[Export]</code> properties immediately render native drag sliders and range constraints in Godot Inspector.'
+    - '<strong>Bare ~ Resolution:</strong> <code>~("CameraBoom/Camera3D").as(Camera3D)</code> resolves and types nested scene nodes via <code>NodeContext</code>.'
+    - '<strong>Typed Child Lookup (<code>~Class</code>):</strong> <code>~ProgressBar</code> queries child nodes by class name and returns a concrete, typed reference.'
+    - '<strong>Declarative <code>on</code> Sugar:</strong> <code>on health_changed do |cur, max|</code> binds typed signals with zero boilerplate.'
+notes: |
+  In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. For child nodes, we use our clean unary tilde (~) ergonomics: 'onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)' caches the camera automatically, while '~ProgressBar' looks up the UI node with zero boilerplate. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database.

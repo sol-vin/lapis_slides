@@ -1,0 +1,47 @@
+---
+id: 33b_cli_editor_launcher
+title: 'CLI: Persistent Editor Supervisor & Log Watcher'
+subtitle: Dual-Pane Engine Supervision, Process Health & Real-Time Hot-Reloading
+badge: SUPERVISOR • LAPIS CLI
+badge_color: yellow
+palette: aperture
+layout: two-column-layout
+ratio: 2:1
+left:
+  type: asciinema
+  title: Terminal — lapis cli -e & lapis editor
+  cast: casts/lapis_editor_launcher.cast
+  font_size: '0.80rem'
+  speed: 1.0
+  loop: true
+  autoplay: true
+  controls: auto
+  theme: monokai
+  cols: 86
+  rows: 22
+  code: |
+    $ lapis cli -e
+    :: LAPIS EDITOR SUPERVISOR & LIVE LOG WATCHER ::      Project: void_runner
+    ──────────────────────────────────────────────────────────────────────────
+    ┌─ Process Status ────────┐ Log Stream [Auto-Scroll: ON] (148 lines)
+    │ State:      [RUNNING]   │ [GODOT] Godot Engine v4.8.0-dev7
+    │ PID:        18420       │ [LAPIS] Initialized Crystal bridge DLL
+    │ Uptime:     42s         │ [GAME] Player initialized: CharacterBody3D
+    │ Reloads:    3           │ [GAME] Emitted signal: health_changed (100)
+    ├─ Quick Actions ─────────┤ [LAPIS] Recompiling game.dll on F5 save...
+    │ [ R ] Build & Reload    │ [LAPIS] Shadow copy loaded: game_18420_1048.dll
+    │ [ K ] Graceful Kill     │ [GAME] Reload complete in 184ms
+    │ [ C ] Clear Log Stream  │ [GODOT] Scene re-instantiated successfully
+    ──────────────────────────────────────────────────────────────────────────
+    R: Recompile & Reload │ K: Kill Editor │ Space: Scroll Lock │ Esc: Return
+right:
+  type: card
+  title: Persistent Engine Supervision
+  color: yellow
+  items:
+  - <strong>Persistent Supervisor (<code>lapis cli -e</code>):</strong> Runs alongside the Godot Editor in a dedicated terminal pane, monitoring engine process health and capturing crash diagnostics.
+  - <strong>Performance Monitoring (<code>--monitor</code>):</strong> <code>lapis run --monitor</code> or <code>lapis editor --monitor</code> renders real-time FPS sparklines and RAM usage graphs in your console.
+  - <strong>Debugger Attachment (<code>--debug</code> / <code>--r2</code>):</strong> Attaches radare2 directly to the editor or game process for live breakpoint stepping and symbol resolution.
+  - <strong>Headless Automation (<code>-q &lt;sec&gt;</code>):</strong> <code>--quit-after=N</code> enables timed CI and integration test runs that auto-terminate cleanly with full exit code reporting.
+notes: |
+  Developing native GDExtensions requires deep visibility into what the engine is doing while the editor is running. The Lapis Editor Supervisor (lapis cli -e) keeps a persistent terminal window open that monitors the Godot Editor process, captures all engine and runtime output, and displays live process metrics. Developers can trigger hot-recompilation on demand, attach radare2 with --debug, monitor real-time FPS/RAM graphs with --monitor, or script headless runs with --quit-after.

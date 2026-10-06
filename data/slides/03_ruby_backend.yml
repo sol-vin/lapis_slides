@@ -1,0 +1,71 @@
+---
+id: 03_ruby_backend
+title: 'My Back End Looks Like This'
+subtitle: Clean Class Encapsulation, State Guards & Expressive Internal Pipelines
+badge: RUBY HERITAGE • BACKEND CLASS ARCHITECTURE
+badge_color: purple
+palette: super_es
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: player.rb — The Class Definition
+  tag: Ruby
+  lang: ruby
+  font_size: '0.74rem'
+  code: |
+    # The Backend: Encapsulating state, rules & internal pipelines
+    class Player
+      attr_accessor :name, :health, :inventory, :buffs
+
+      def initialize(name, health: 100)
+        @name      = name
+        @health    = health
+        @inventory = []
+        @buffs     = []
+      end
+
+      # Predicates keep state queries clean and self-documenting
+      def alive?
+        @health > 0
+      end
+
+      def wounded?
+        alive? && @health < 100
+      end
+
+      # Fluent collection pipelines with blocks & symbol-to-proc
+      def heal_party(companions, amount)
+        companions.select(&:alive?).each do |companion|
+          companion.health = [companion.health + amount, 100].min
+          puts "Healed #{companion.name} to #{companion.health} HP"
+        end
+      end
+
+      # Guard clauses with statement modifiers keep methods flat
+      def equip(item)
+        return unless item.usable?
+        @inventory << item
+        puts "#{@name} equipped #{item.name}!"
+      end
+
+      # Behavioral composition via closures & modular buffs
+      def apply_buff(buff)
+        @buffs << buff
+        buff.apply(self)
+      end
+    end
+right:
+  type: card
+  title: Anatomy of a Joyful Backend Class
+  color: purple
+  items:
+  - <strong>Zero-Boilerplate Property Access:</strong> <code>attr_accessor</code> generates getters and setters without verbose Java-style accessors.
+  - <strong>Self-Documenting Predicates:</strong> One-line predicate methods (<code>alive?</code>, <code>wounded?</code>) eliminate raw comparison logic across the codebase.
+  - <strong>Guard Clauses Over Nested Conditionals:</strong> Statement modifiers (<code>return unless item.usable?</code>) keep the main method execution path flat and readable.
+  - <strong>Symbol-to-Proc Collection Pipelines:</strong> Internal methods leverage <code>select(&:alive?)</code> and <code>each</code> to express intent without index-tracking loops.
+  - <strong>Open Composition over Rigid Inheritance:</strong> Dynamic arrays (<code>@inventory</code>, <code>@buffs</code>) accept any object adhering to the expected duck-typed protocol.
+notes: |
+  This is the first half of the famous equation: "My back end looks like this, so my front end can look like that."
+  Notice how much expressive power is packed into this simple Player class without any ceremony. We don't have getters and setters bloating the file—attr_accessor creates them dynamically. We don't have deeply nested if-statements—single-line guard clauses like 'return unless item.usable?' keep execution paths flat.
+  Methods like heal_party don't manage loop counters or check bounds manually; they chain higher-order Enumerable methods with symbol-to-proc. And by supporting modular collections like inventory and buffs, the class embraces composition over rigid inheritance hierarchies.

@@ -1,0 +1,54 @@
+---
+id: 19_macro_serialization
+title: 'Macros: Zero-Reflection Serialization'
+subtitle: Compile-Time JSON and YAML Code Generation with Zero Runtime Overhead
+badge: AST METAPROGRAMMING • ARCHITECTURE
+badge_color: purple
+palette: spaces_97
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: save_game_state.cr — Serialization Without Reflection
+  tag: Crystal
+  lang: crystal
+  font_size: '0.94rem'
+  code: |
+    require "json"
+
+    # Structs and classes serialize with a single macro inclusion
+    struct PlayerSaveData
+      include JSON::Serializable
+
+      property player_name : String
+      property level : Int32
+      property health : Float32
+      property inventory_items : Array(String)
+      property position_checkpoint : Godot::Vector3
+    end
+
+    # 1. Serializing to JSON string: direct bytecode generation
+    data = PlayerSaveData.new(...)
+    json_str = data.to_json
+
+    # 2. Deserializing from JSON: type-safe, strict validation
+    loaded_data = PlayerSaveData.from_json(json_str)
+right:
+  type: card
+  title: Why It Beats GDScript & C# Serialization
+  color: purple
+  items:
+  - <strong>Zero Runtime Reflection:</strong> Serialization code is synthesized by
+    macros at compile time; no reflection API overhead.
+  - <strong>Strict Schema Validation:</strong> Missing required fields or mismatched
+    types raise clear parse errors rather than corrupting save state.
+  - <strong>Built-in Format Support:</strong> First-class standard library support
+    for JSON, YAML, and binary formats.
+  - <strong>Engine Agnostic Data Structures:</strong> Save models exist as pure Crystal
+    data structures independent of Godot node hierarchies.
+notes: |
+  Save systems and network state serialization often suffer from runtime reflection
+  overhead and fragile dictionary mapping in GDScript and C#. In Crystal, adding JSON::Serializable
+  to a struct generates complete, high-speed serialization and deserialization code
+  at compile time. It validates schemas strictly, serializes directly into buffers,
+  and requires zero manual dictionary mapping.

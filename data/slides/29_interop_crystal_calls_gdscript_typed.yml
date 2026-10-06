@@ -1,0 +1,53 @@
+---
+id: 29_interop_crystal_calls_gdscript_typed
+title: 'Crystal Calling GDScript: Strongly-Typed Bindings'
+subtitle: Automatic Strongly-Typed Proxies for GDScript Classes Generated via Lapis CLI
+badge: INTEROPERABILITY • AUTOMATIC TYPED BINDINGS
+badge_color: cyan
+palette: spaces_7
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: quest_controller.cr — Automatic Strongly-Typed GDScript Invocation
+  tag: Crystal
+  lang: crystal
+  font_size: '0.80rem'
+  code: |
+    # 1. GDScript defines: class_name DialogueSystem extends Node
+    # 2. 'lapis bind project' automatically synthesizes typed bindings:
+    require "project_nodes/dialogue_system"
+
+    node QuestController < Node do
+      # Type-safe node injection: compiler knows it is DialogueSystem
+      @[OnReady("%DialogueManager")]
+      getter dialogue : DialogueSystem
+
+      def trigger_dialogue(line_id : Int32) : Bool
+        # Direct typed method call: NO .call(), NO strings, NO Variant casts!
+        success = dialogue.show_dialogue(speaker: "Elder", line_id: line_id)
+
+        # Direct typed property accessor: NO .get() or .set()!
+        dialogue.dialogue_speed = 1.5_f32
+
+        # Strongly-typed native signal subscription:
+        on dialogue.line_completed do |speaker, text|
+          display_subtitles(speaker, text)
+        end
+
+        success
+      end
+    end
+right:
+  type: card
+  title: Automatic Typed Binding Architecture
+  color: cyan
+  items:
+  - <strong>Zero Manual Boilerplate:</strong> <code>lapis bind project</code> inspects GDScript ASTs and automatically synthesizes strongly-typed Crystal wrappers.
+  - <strong>Eliminates Dynamic <code>.call()</code>:</strong> Invokes GDScript methods as native Crystal functions—eliminating stringly <code>.call()</code>, <code>.get()</code>, and Variant casts.
+  - <strong>Compile-Time Signature Verification:</strong> Crystal's compiler statically checks parameter types, argument counts, and return types before running.
+  - <strong>First-Class IDE Autocomplete:</strong> Full parameter hinting, type inference, and jump-to-definition across the GDScript-Crystal boundary in VS Code and Crystalline.
+notes: |
+  In the previous slide, we explored dynamic dispatch using .call, .get, and .set with Variant reflection. But in production projects with established GDScript subsystems, you never want manual dynamic calls or hand-written wrappers.
+  Lapis provides fully automatic strongly-typed bindings via `lapis bind project`. The CLI automatically inspects custom GDScript files declaring a `class_name` and synthesizes complete, type-safe Crystal wrappers into `src/generated/project_nodes/`.
+  In Crystal, you simply require the generated module and call methods natively—like `dialogue.show_dialogue(speaker: "Elder", line_id: 42)`. There is zero `.call()`, zero string method names, and zero manual Variant casting. If a GDScript method signature changes or you pass the wrong type, Crystal's compiler catches it at build time. You get full IDE autocomplete, type-safe signals, and seamless two-way interop with zero boilerplate.
