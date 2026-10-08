@@ -31,27 +31,31 @@ gdscript:
   - <strong>Fatal Engine Segfault:</strong> Dereferencing dead unmanaged pointers crashes immediately with <code>0xC0000005 ACCESS_VIOLATION</code>.
   - <strong>Defensive Clutter:</strong> Developers must litter code with <code>is_instance_valid</code> guards across every single scene access.
 crystal:
-  title: ':sparkles: Crystal: Monotonic 64-Bit ObjectDB Verification'
+  title: ':sparkles: Crystal: Monotonic 64-Bit ObjectDB Verification & Dead-Pointer Armor'
   lang: crystal
   tag: Crystal (Lapis)
   code: |
     property target : Enemy?
 
     def cast_spell(spell : Spell) : Void
-      # 1. Monotonic 64-bit Instance ID Check:
-      # Validates instance against ObjectDB before dispatch!
+      # 1. Dead-Pointer Safe try? Invocation:
+      # Evaluates block ONLY if target is alive in ObjectDB; returns nil if freed!
+      @target.try?(&.take_damage(spell.power)) || find_next_target
+
+      # 2. Or Direct Dispatch Protected by Monotonic ID Check:
+      # Checks ObjectDB before dispatch; raises catchable DisposedObjectError!
       if enemy = @target
-        enemy.take_damage(spell.power) 
-        # Safely raises Godot::DisposedObjectError if freed!
+        enemy.take_damage(spell.power)
       end
     rescue ex : Godot::DisposedObjectError
-      # 2. Fully catchable! Retarget gracefully, ZERO crashes!
+      # Fully catchable! Retarget gracefully, ZERO crashes!
       find_next_target
     end
   points:
-  - <strong>Monotonic 64-Bit Instance IDs:</strong> ObjectDB IDs never collide with recycled heap addresses.
+  - <strong>Dead-Pointer Armor with <code>try?</code>:</strong> <code>@target.try?(&amp;.take_damage(...))</code> inspects ObjectDB survival, executing only on living nodes and returning <code>nil</code> on freed targets.
+  - <strong>Monotonic 64-Bit Instance IDs:</strong> Godot ObjectDB IDs never collide with recycled heap addresses.
   - "<strong>Automatic #check_alive!:</strong> Lapis validates instance liveness before every method dispatch automatically."
-  - <strong>Catchable Exceptions:</strong> Accessing freed objects raises a catchable <code>DisposedObjectError</code> instead of segfaulting.
+  - <strong>Catchable Exceptions:</strong> Direct access on freed objects raises a catchable <code>DisposedObjectError</code> instead of segfaulting.
 takeaway:
   badge: DEFENSIVE POINTER ARMOR
   text: Lapis checks Godot's 64-bit ObjectDB instance IDs before dispatch, converting native dead-pointer segfaults into catchable DisposedObjectError exceptions.
