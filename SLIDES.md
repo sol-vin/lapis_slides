@@ -3755,10 +3755,8 @@ This document outlines each slide's exact theme palette, architectural category,
     end
   
     private def on_health_changed(cur : Int32, max : Int32) : Void
-      # Sound compile-time nil safety + native dead-pointer armor:
-      if sfx = @heal_sfx
-        sfx.play if sfx.alive? # Zero ObjectDisposedException crashes!
-      end
+      # Sound nil safety + dead-pointer armor: respects both nil and freed nodes!
+      @heal_sfx.try?(&.play) # Zero ObjectDisposedException crashes!
     end
   
     # ZERO _exit_tree boilerplate! When CombatHUD or Player dies,
@@ -3781,13 +3779,13 @@ This document outlines each slide's exact theme palette, architectural category,
   - Managed Delegate GC Leaks (+=): C# += events create strong managed references. If a UI or enemy node is removed from the scene tree without manual -=, the CLR keeps it alive in RAM forever.
   - Fragile Teardown in _ExitTree: Unsubscribing in _ExitTree is required but hazardous: if the emitter died first, unhooking throws an exception unless defensive IsInstanceValid guards are written.
 - **Crystal Zen Advantages**:
-  - True Compile-Time Flow Typing: Crystal’s compiler proves T? cannot be dereferenced without an explicit check (if sfx = @heal_sfx), eliminating null pointer exceptions at compile time.
+  - Dead-Pointer Armor (try?): sfx.try?(&.play) safely inspects both nil and Godot ObjectDB instance survival, eliminating C# ObjectDisposedException traps in a single expression.
   - Familiar += & -= Operators: Connect procs directly with concise operator sugar (sig += ->handler), providing C#-style ergonomics without managed delegate memory leaks.
   - Self-Pruning ObjectDB Subscriptions: Signal subscriptions track 64-bit Godot ObjectDB monotonic IDs; when either node is freed, the connection dissolves automatically without manual _exit_tree boilerplate.
-  - Dead-Pointer Armor: node.alive? queries Godot’s native memory table directly, preventing ObjectDisposedException traps when accessing transient scene entities.
+  - Defensive Lifecycles: node.alive? and node.try? query Godot’s native ObjectDB table directly, safeguarding accesses to transient scene entities.
 - **Key Takeaway**: Lapis solves the dual-lifetime problem: familiar += signal syntax with 64-bit ObjectDB auto-pruning eliminates C# ?. ObjectDisposedExceptions and managed delegate leaks.
 - **Presenter Script**:
-  > *"A common critique of Godot C# is its dual-lifetime architecture (.NET CLR Garbage Collector vs Godot C++ ObjectDB). First, Godot C# does provide 'GodotObject.IsInstanceValid()' and overrides 'operator ==', but C#'s idiomatic null-conditional operator '?.' bypasses custom operators at the IL bytecode level. Calling 'enemy?.TakeDamage()' on an object whose C++ peer was freed evaluates as non-null in the CLR, throwing a runtime 'System.ObjectDisposedException'! Developers must defensively wrap calls in 'GodotObject.IsInstanceValid(obj)'. Second, C# event subscriptions via '+=' create strong managed references on the subscriber. If a HUD or enemy is freed via 'QueueFree()', the CLR cannot collect it because the emitter still holds a delegate reference. To avoid leaking memory forever, developers must write fragile '_ExitTree()' teardowns guarded by 'IsInstanceValid()'. In Lapis, Crystal's flow-sensitive type system enforces true compile-time nil safety without runtime traps. You get familiar '+=' operator syntax for signals, but subscriptions bind through Godot's 64-bit ObjectDB IDs rather than strong GC roots. When either node is destroyed, Lapis automatically self-prunes dead subscriptions—giving you zero ghost leaks, zero delegate boilerplate, and clean lifecycle hygiene."*
+  > *"A common critique of Godot C# is its dual-lifetime architecture (.NET CLR Garbage Collector vs Godot C++ ObjectDB). First, Godot C# does provide 'GodotObject.IsInstanceValid()' and overrides 'operator ==', but C#'s idiomatic null-conditional operator '?.' bypasses custom operators at the IL bytecode level. Calling 'enemy?.TakeDamage()' on an object whose C++ peer was freed evaluates as non-null in the CLR, throwing a runtime 'System.ObjectDisposedException'! Developers must defensively wrap calls in 'GodotObject.IsInstanceValid(obj)'. Second, C# event subscriptions via '+=' create strong managed references on the subscriber. If a HUD or enemy is freed via 'QueueFree()', the CLR cannot collect it because the emitter still holds a delegate reference. To avoid leaking memory forever, developers must write fragile '_ExitTree()' teardowns guarded by 'IsInstanceValid()'. In Lapis, '@heal_sfx.try?(&.play)' or 'sfx.try?(&.play)' respects both nil and Godot's ObjectDB instance lifecycle—executing the block only when the node is alive, and safely returning nil if the node was freed or unassigned. Signal subscriptions bind through Godot's 64-bit ObjectDB IDs rather than strong GC roots, automatically self-pruning dead subscriptions for zero ghost leaks, zero delegate boilerplate, and clean lifecycle hygiene."*
 
 ---
 ### Slide 102: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter (Code Comparison)
