@@ -33,7 +33,7 @@ left:
         sprite  = self[Sprite2D]                     # Class-based lookup
         blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
         unique  = self["%UniqueNode", UniqueNode]    # Scene unique % lookup
-        hitbox  = self["Enemies/*/Hitbox", Area2D]?  # Wildcard glob routing!
+        hitbox  = self["Enemies/*/Hitbox", Area2D]?  # Wildcard glob (returns nil if empty)!
       end
     end
 right:
@@ -45,8 +45,8 @@ right:
     - '<strong>Path Traversal with <code>/</code> &amp; <code>.as(T)</code>:</strong> Traverse hierarchies with strings or classes; pair with <code>.as(Camera2D)</code> for instant, explicit compile-time typing.'
     - '<strong>Scene Unique Nodes with <code>%</code> &amp; <code>.as(T)</code>:</strong> GDScript <code>%Node</code> parity! Query unique nodes with <code>self % ProgressBar</code> or <code>(self % "HUD").as(CanvasLayer)</code>.'
     - '<strong>Typed Indexers & Wildcard Routing:</strong> <code>self["path", T]</code> supports paths, unique names (<code>%</code>), and wildcard glob patterns (<code>"Enemies/*/Hitbox"</code>).'
-    - '<strong>Safe Downcasting (<code>[]?</code>):</strong> <code>self["path", T]?</code> returns <code>T?</code>, validating instance survival without throwing on missing or freed targets.'
+    - '<strong>Safe Downcasting &amp; Nilable Wildcards (<code>[]?</code>):</strong> <code>self["path", T]?</code> returns <code>T?</code> (or <code>nil</code> if no match exists), validating instance survival without throwing on missing or freed targets.'
 notes: |
   One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics.
   Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. The slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes.
-  Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate.
+  Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate. Wildcard glob queries with []? return nil if no matches are found, making nil-checking intuitive and effortless.

@@ -1646,7 +1646,7 @@ This document outlines each slide's exact theme palette, architectural category,
       sprite  = self[Sprite2D]                     # Class-based lookup
       blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
       unique  = self["%UniqueNode", UniqueNode]    # Scene unique % lookup
-      hitbox  = self["Enemies/*/Hitbox", Area2D]?  # Wildcard glob routing!
+      hitbox  = self["Enemies/*/Hitbox", Area2D]?  # Wildcard glob (returns nil if empty)!
     end
   end
   ```
@@ -1655,9 +1655,9 @@ This document outlines each slide's exact theme palette, architectural category,
   - Path Traversal with / & .as(T): Traverse hierarchies with strings or classes; pair with .as(Camera2D) for instant, explicit compile-time typing.
   - Scene Unique Nodes with % & .as(T): GDScript %Node parity! Query unique nodes with self % ProgressBar or (self % "HUD").as(CanvasLayer).
   - Typed Indexers & Wildcard Routing: self["path", T] supports paths, unique names (%), and wildcard glob patterns ("Enemies/*/Hitbox").
-  - Safe Downcasting ([]?): self["path", T]? returns T?, validating instance survival without throwing on missing or freed targets.
+  - Safe Downcasting & Nilable Wildcards ([]?): self["path", T]? returns T? (or nil if no match exists), validating instance survival without throwing on missing or freed targets.
 - **Presenter Script**:
-  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. The slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes. Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate."*
+  > *"One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class operator ergonomics. Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. The slash operator (/) accepts Strings and Class types, working seamlessly with Crystal's native .as(Class). The percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes. Furthermore, our typed subscript indexers—self[] and self[]?—use the intuitive path-first signature: self["NodePath", SomeClass], returning a strongly-typed instance with zero casting boilerplate. Wildcard glob queries with []? return nil if no matches are found, making nil-checking intuitive and effortless."*
 
 ---
 ### Slide 43: Bare Scene Ergonomics: The Unary ~ Operator
@@ -1926,13 +1926,17 @@ This document outlines each slide's exact theme palette, architectural category,
 - **Subtitle**: Fluent Chain & Parallel Pipelines, Compile-Time Checked tween, and Cooperative Await
 - **Code Example (`tween_and_juice.cr — Fluent Animation DSL`)**:
   ```crystal
-  # 1. Fluent Chain & Parallel Pipeline DSL:
+  # 1. Statement-Based Tween Pipeline DSL:
   tw = tween(hero) do
-    animate(:position, from: Vector2.ZERO, to: target_pos, in: 0.4.seconds)
-      .trans(:cubic).ease(:out)
-      .chain.animate(modulate, from: Color::RED, to: Color::BLUE, in: 0.3.seconds)
-      .parallel.animate(scale, to: Vector2.new(1.2, 1.2), in: 0.3.seconds)
-      .chain.animate(modulate.a, to: 0.0, in: 0.25.seconds)
+    animate(position, to: Vector2.new(120, 80), in: 4.seconds)
+    chain()
+    animate(modulate, from: Color::RED, to: Color::BLUE, in: 0.3.seconds)
+    parallel()
+    ease(Ease.Out)
+    trans(Trans.Cubic)
+    animate(scale, to: Vector2.new(1.2, 1.2), in: 0.3.seconds)
+    chain()
+    animate(modulate.a, to: 0.0, in: 0.25.seconds)
   end
   
   await(tw.finished)
@@ -1946,13 +1950,14 @@ This document outlines each slide's exact theme palette, architectural category,
   coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)
   ```
 - **Animation & Juice Invariants**:
-  - Fluent Pipeline Chaining: tween(item) do animate(...).chain.animate(...).parallel.animate(...) end chains sequential and concurrent steps seamlessly with symbol easing (:cubic, :out).
+  - Statement-Based Tween Pipelines: tween(item) do animate(...); chain(); parallel(); ease(Ease.Out) end automatically peels apart block statements into a unified execution pipeline.
+  - Strict Identifier Type Safety: Targets use typed property identifiers (animate(position), animate(modulate.a)), eliminating runtime typos and strictly rejecting symbols/strings.
+  - First-Class Ease & Trans Enums: Clean constants like Ease.Out and Trans.Cubic (or Ease::Out) with automatic type-safe method forwarding.
   - Compile-Time Checked tween Macro: tween(boss.position.y, to: 150.0, in: 0.4.seconds) statically validates property access at compile time, eliminating runtime typos.
-  - Real Sub-Properties & Multi-Symbol Paths: Animate transparency directly via modulate.a (maps to engine modulate:a) or sub-properties (:position, :y) with compile-time type verification.
-  - Native Time::Span Durations: Pass idiomatic Crystal time units (0.4.seconds, 150.milliseconds) across all tweening and interval methods.
-  - Cooperative Fiber Await: await(tw.finished) cooperatively awaits animation completion on the scene tree without halting the engine main loop.
+  - Real Sub-Properties & Direct Alpha: Animate transparency directly via modulate.a (maps to engine modulate:a) or alpha with compile-time type verification.
+  - Native Time::Span Durations & Cooperative Await: Pass idiomatic Crystal time units (0.4.seconds, 150.milliseconds); await completion via await(tw.finished) without blocking the engine loop.
 - **Presenter Script**:
-  > *"Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in GDScript often involves fragmented method calls and error-prone strings like "position:y". Lapis introduces an expressive fluent animation DSL: First, 'tween(item) do animate(...).chain.animate(...).parallel.animate(...) end' creates fluent, readable sequential and concurrent animation pipelines with symbol easing (':cubic', ':out'). Second, compile-time type-checked single-property tweens: writing 'tween(boss.position.y, to: 150.0, in: 0.4.seconds)' statically verifies that 'position.y' exists on 'boss' during compilation! Third, 'coin.tween_to' omits the redundant target argument and supports multi-symbol paths like ':position, :y' with zero string allocations. Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds') and cooperative fiber awaiting via 'await(tw.finished)', animation code is concise, fast, and completely type-safe."*
+  > *"Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in GDScript often involves fragmented method calls and error-prone strings like "position:y". Lapis introduces an expressive statement-based animation DSL: First, 'tween(item) do animate(...); chain(); parallel(); ease(Ease.Out) end' peels apart expressions in the block, automatically turning individual calls into a continuous, high-performance tween pipeline. Second, property targets require real identifiers instead of symbols, statically verifying that the property exists and matches the target value type at compile time! Third, first-class Ease and Trans enums ('Ease.Out', 'Trans.Cubic') provide intuitive autocomplete and runtime forwarding. Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds') and cooperative fiber awaiting via 'await(tw.finished)', animation code is concise, fast, and completely type-safe."*
 
 ---
 ### Slide 50: Scene Tree Glob Queries & Streaming Iteration
@@ -1965,7 +1970,8 @@ This document outlines each slide's exact theme palette, architectural category,
   node CombatArena < Node2D do
     def _ready : Void
       # 1. Single-tier wildcard glob query (*):
-      hitboxes = self.get_nodes("Enemies/*/Hitbox", Area2D)
+      hitboxes = self["Enemies/*/Hitbox", Array(Area2D)]? # Safe: returns nil if empty!
+      targets  = self.get_nodes("Enemies/*/Hitbox", Area2D)
   
       # 2. Recursive globstar query (**):
       spawns = self.get_nodes("Spawns/**", Marker2D)
@@ -1991,7 +1997,7 @@ This document outlines each slide's exact theme palette, architectural category,
   end
   ```
 - **Ergonomic Hierarchy Query Engine**:
-  - Wildcard & Globstar Matching: get_nodes supports single-level * (e.g. Enemies/*/Hitbox) and recursive globstars ** (e.g. Spawns/**).
+  - Wildcard & Globstar Matching: get_nodes and []? support single-level * (e.g. Enemies/*/Hitbox), recursive globstars **, and returning nil when empty.
   - Streaming Iteration: each_node(pattern, Type) and each_descendant(Type) traverse subtrees without creating intermediate array allocations.
   - Ancestor Traversal Operator (<<): node << Class performs strict non-nil upward hierarchy search; node << Class? returns safe nilable match.
   - Fluent GroupQuery DSL: group(:name) provides chainable .each(as: Type), .to_a(as: Type), .first, .first!, and broadcast .call.

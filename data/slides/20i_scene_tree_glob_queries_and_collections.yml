@@ -17,7 +17,8 @@ left:
     node CombatArena < Node2D do
       def _ready : Void
         # 1. Single-tier wildcard glob query (*):
-        hitboxes = self.get_nodes("Enemies/*/Hitbox", Area2D)
+        hitboxes = self["Enemies/*/Hitbox", Array(Area2D)]? # Safe: returns nil if empty!
+        targets  = self.get_nodes("Enemies/*/Hitbox", Area2D)
 
         # 2. Recursive globstar query (**):
         spawns = self.get_nodes("Spawns/**", Marker2D)
@@ -46,7 +47,7 @@ right:
   title: Ergonomic Hierarchy Query Engine
   color: cyan
   items:
-    - '<strong>Wildcard &amp; Globstar Matching:</strong> <code>get_nodes</code> supports single-level <code>*</code> (e.g. <code>Enemies/*/Hitbox</code>) and recursive globstars <code>**</code> (e.g. <code>Spawns/**</code>).'
+    - '<strong>Wildcard &amp; Globstar Matching:</strong> <code>get_nodes</code> and <code>[]?</code> support single-level <code>*</code> (e.g. <code>Enemies/*/Hitbox</code>), recursive globstars <code>**</code>, and returning <code>nil</code> when empty.'
     - '<strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> and <code>each_descendant(Type)</code> traverse subtrees without creating intermediate array allocations.'
     - '<strong>Ancestor Traversal Operator (<code>&lt;&lt;</code>):</strong> <code>node &lt;&lt; Class</code> performs strict non-nil upward hierarchy search; <code>node &lt;&lt; Class?</code> returns safe nilable match.'
     - '<strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides chainable <code>.each(as: Type)</code>, <code>.to_a(as: Type)</code>, <code>.first</code>, <code>.first!</code>, and broadcast <code>.call</code>.'
