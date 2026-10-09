@@ -76,12 +76,12 @@ slides:
 - 20_node_dsl
 - 20b_ergonomic_node_access
 - 20c_node_context_tilde_operator
+- 20i_scene_tree_glob_queries_and_collections
 - 20d_gmodule_mixins
 - 20e_gmodule_composition_and_lifecycle
 - 20f_resource_preload_and_load_dsl
 - 20g_gameplay_fluent_spawn
 - 20h_gameplay_tweens_and_juice
-- 20i_scene_tree_glob_queries_and_collections
 - 20j_direct_space_physics_queries
 - 20l_expression_pattern_matching
 - 20m_spatial_audio_and_navigation

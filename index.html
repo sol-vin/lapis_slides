@@ -3498,7 +3498,94 @@ end</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 39: Bluebie (Modular Traits: The gmodule Macro) -->
+      <!-- Slide 39: CrossCube (Scene Tree Glob Queries & Streaming Iteration) -->
+      <section class="slide solvin-slide cross_cube" data-layout="two-column-layout" data-palette="cross_cube" data-background-color="#121412" data-palette-name="CrossCube" data-palette-cube="#e2ece2" data-palette-cube-hover="#00ff2b" data-slide-id="20i_scene_tree_glob_queries_and_collections" id="slide-20i_scene_tree_glob_queries_and_collections">
+        <div class="palette-corner-badge" title="Theme: CrossCube">
+          <span class="palette-corner-dot"></span> PALETTE: CrossCube
+        </div>
+        <div class="slide-container">
+          <header class="slide-header">
+            <div class="slide-meta">
+              <span class="badge badge-pill cyan" data-color="cyan">SCENE TREE • GLOB NAVIGATION</span>
+            </div>
+            <h2 class="slide-title">Scene Tree Glob Queries &amp; Streaming Iteration</h2>
+            <p class="slide-subtitle">Wildcard Navigation (*, **), Receiver Scoping &amp; Block Shorthand</p>
+          </header>
+          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
+            <div class="column col" data-slot="left">
+            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
+              <div class="window-header code-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-1 red" title="Close"></span>
+                  <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
+                  <span class="terminal-dot dot-3 green" title="Maximize"></span>
+                </div>
+                <span class="window-title code-title">scene_tree_globs.cr — Wildcards &amp; Streaming Queries</span>
+                <div class="window-controls">
+                  <span class="lang-tag code-lang-tag">Crystal</span>
+                  <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
+                </div>
+              </div>
+              <pre><code class="language-crystal code-compact">node CombatArena &lt; Node2D do
+  def _ready : Void
+    # 1. Multi-node wildcard glob query (*) &amp; get_nodes:
+    hitboxes = self * {&quot;Enemies/*/Hitbox&quot;, Area2D}
+    targets  = self.get_nodes(&quot;Enemies/*/Hitbox&quot;, Area2D)
+
+    # 2. Recursive globstar query (**):
+    spawns = self.get_nodes(&quot;Spawns/**&quot;, Marker2D)
+
+    # 3. Streaming receiver-scoped iteration (self is yielded node):
+    self.each_node(&quot;Enemies/*&quot;, Enemy) do
+      alert! # Direct method call on Enemy!
+    end
+
+    # 4. Ancestor lookup operator (&lt;&lt;) &amp; typed queries:
+    player = self &lt;&lt; Player          # Strict lookup (Player or raises)
+    boss   = self &lt;&lt; BossController? # Safe nilable lookup (BossController?)
+
+    # 5. Fluent GroupQuery DSL:
+    group(:enemies).each(as: Enemy) { |e| e.alert! }
+    boss = group(:boss).first(as: Boss)
+    group(:enemies).call(&quot;alert&quot;, global_position)
+
+    # 6. Direct streaming cleanup and manipulation:
+    self.each_node(&quot;Bullets/*&quot;, &amp;.queue_free)
+    self.each_node(&quot;Hitboxes/*&quot;, &amp;.show)
+  end
+end</code></pre>
+            </div>
+            </div>
+            <div class="column col" data-slot="right">
+            <div class="card col cyan compact" data-color="cyan" data-density="compact">
+              <div class="card-header card-title cyan">
+                <span>Ergonomic Hierarchy Query Engine</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Wildcard &amp; Globstar Queries (<code>*</code>):</strong> <code>self * {"pattern", Type}</code> and <code>get_nodes</code> support single-level <code>*</code> and recursive globstars <code>**</code>, returning <code>Array(T)</code>.</li>
+                <li><strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> and <code>each_descendant(Type)</code> traverse subtrees without creating intermediate array allocations.</li>
+                <li><strong>Ancestor Traversal Operator (<code>&lt;&lt;</code>):</strong> <code>node &lt;&lt; Class</code> performs strict non-nil upward hierarchy search; <code>node &lt;&lt; Class?</code> returns safe nilable match.</li>
+                <li><strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides chainable <code>.each(as: Type)</code>, <code>.to_a(as: Type)</code>, <code>.first</code>, <code>.first!</code>, and broadcast <code>.call</code>.</li>
+                <li><strong>Receiver Scoping &amp; Block Shorthands:</strong> <code>each_node</code> yields via <code>with node yield node</code>, supporting receiver-scoped blocks (<code>do alert! end</code>), block parameters (<code>do |e|</code>), and symbol-to-proc shorthands (<code>&amp;.queue_free</code>).</li>
+              </ul>
+            </div>
+            </div>
+          </div>
+          <footer class="slide-footer">
+            <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
+            <span class="footer-center">sol.vin (CrossCube)</span>
+            <span class="footer-right">Slide 39 / 158</span>
+          </footer>
+        </div>
+        <aside class="notes">
+          Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
+          Lapis introduces a full scene tree query engine: First, intuitive shell-like patterns query immediate wildcards like 'get_nodes("Enemies/*/Hitbox", Area2D)' or recursive globstars like 'get_nodes("Spawns/**", Marker2D)'.
+          Second, upward hierarchy lookup is effortless with the ancestor operator: writing 'self << Player' strictly climbs parent nodes to find the player, while 'self << BossController?' performs safe nilable lookup.
+          Third, our fluent 'group(:enemies)' DSL provides typed iteration with '.each(as: Enemy)', '.first(as: Boss)', and broadcast '.call'. For high-frequency loops, 'each_node' streams matching descendants directly through inlined blocks without allocating intermediate collections.
+        </aside>
+      </section>
+
+      <!-- Slide 40: Bluebie (Modular Traits: The gmodule Macro) -->
       <section class="slide solvin-slide bring_me_hope" data-layout="two-column-layout" data-palette="bring_me_hope" data-background-color="#002b55" data-palette-name="Bluebie" data-palette-cube="#00c8ff" data-palette-cube-hover="#00e5ff" data-slide-id="20d_gmodule_mixins" id="slide-20d_gmodule_mixins">
         <div class="palette-corner-badge" title="Theme: Bluebie">
           <span class="palette-corner-dot"></span> PALETTE: Bluebie
@@ -3580,7 +3667,7 @@ end</code></pre>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
             <span class="footer-center">sol.vin (Bluebie)</span>
-            <span class="footer-right">Slide 39 / 158</span>
+            <span class="footer-right">Slide 40 / 158</span>
           </footer>
         </div>
         <aside class="notes">
@@ -3590,7 +3677,7 @@ end</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 40: Monokai (Advanced gmodule: Composition, Hooks & Contracts) -->
+      <!-- Slide 41: Monokai (Advanced gmodule: Composition, Hooks & Contracts) -->
       <section class="slide solvin-slide monokai" data-layout="two-column-layout" data-palette="monokai" data-background-color="#272822" data-palette-name="Monokai" data-palette-cube="#f8f8f2" data-palette-cube-hover="#f92672" data-slide-id="20e_gmodule_composition_and_lifecycle" id="slide-20e_gmodule_composition_and_lifecycle">
         <div class="palette-corner-badge" title="Theme: Monokai">
           <span class="palette-corner-dot"></span> PALETTE: Monokai
@@ -3664,7 +3751,7 @@ end</code></pre>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
             <span class="footer-center">sol.vin (Monokai)</span>
-            <span class="footer-right">Slide 40 / 158</span>
+            <span class="footer-right">Slide 41 / 158</span>
           </footer>
         </div>
         <aside class="notes">
@@ -3675,7 +3762,7 @@ end</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 41: CrossCube (Resource Loading: The Preload (>) & Load (>>) Operators) -->
+      <!-- Slide 42: CrossCube (Resource Loading: The Preload (>) & Load (>>) Operators) -->
       <section class="slide solvin-slide cross_cube" data-layout="code-comparison-layout" data-palette="cross_cube" data-background-color="#121412" data-palette-name="CrossCube" data-palette-cube="#e2ece2" data-palette-cube-hover="#00ff2b" data-slide-id="20f_resource_preload_and_load_dsl" id="slide-20f_resource_preload_and_load_dsl">
         <div class="palette-corner-badge" title="Theme: CrossCube">
           <span class="palette-corner-dot"></span> PALETTE: CrossCube
@@ -3761,7 +3848,7 @@ end</code></pre>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
             <span class="footer-center">sol.vin (CrossCube)</span>
-            <span class="footer-right">Slide 41 / 158</span>
+            <span class="footer-right">Slide 42 / 158</span>
           </footer>
         </div>
         <aside class="notes">
@@ -3771,7 +3858,7 @@ end</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 42: CrossCube (Resource Loading: The Preload (>) & Load (>>) Operators) -->
+      <!-- Slide 43: CrossCube (Resource Loading: The Preload (>) & Load (>>) Operators) -->
       <section class="slide solvin-slide cross_cube" data-layout="code-comparison-layout" data-palette="cross_cube" data-background-color="#121412" data-palette-name="CrossCube" data-palette-cube="#e2ece2" data-palette-cube-hover="#00ff2b" data-slide-id="20f_resource_preload_and_load_dsl-critique" id="slide-20f_resource_preload_and_load_dsl-critique">
         <div class="palette-corner-badge" title="Theme: CrossCube">
           <span class="palette-corner-dot"></span> PALETTE: CrossCube
@@ -3821,7 +3908,7 @@ end</code></pre>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
             <span class="footer-center">sol.vin (CrossCube)</span>
-            <span class="footer-right">Slide 42 / 158</span>
+            <span class="footer-right">Slide 43 / 158</span>
           </footer>
         </div>
         <aside class="notes">
@@ -3831,7 +3918,7 @@ end</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 43: Candy (Gameplay Usability: Fluent Creation & Spawning) -->
+      <!-- Slide 44: Candy (Gameplay Usability: Fluent Creation & Spawning) -->
       <section class="slide solvin-slide candy" data-layout="two-column-layout" data-palette="candy" data-background-color="#fdf0f8" data-palette-name="Candy" data-palette-cube="#4a2c58" data-palette-cube-hover="#d84b9b" data-slide-id="20g_gameplay_fluent_spawn" id="slide-20g_gameplay_fluent_spawn">
         <div class="palette-corner-badge" title="Theme: Candy">
           <span class="palette-corner-dot"></span> PALETTE: Candy
@@ -3907,7 +3994,7 @@ change_scene!(&quot;res://scenes/level2.tscn&quot;)</code></pre>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
             <span class="footer-center">sol.vin (Candy)</span>
-            <span class="footer-right">Slide 43 / 158</span>
+            <span class="footer-right">Slide 44 / 158</span>
           </footer>
         </div>
         <aside class="notes">
@@ -3917,7 +4004,7 @@ change_scene!(&quot;res://scenes/level2.tscn&quot;)</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 44: Spaces 7 (Game Feel & Juice: Fluent Tweens & Animation) -->
+      <!-- Slide 45: Spaces 7 (Game Feel & Juice: Fluent Tweens & Animation) -->
       <section class="slide solvin-slide spaces_7" data-layout="two-column-layout" data-palette="spaces_7" data-background-color="#dce8f5" data-palette-name="Spaces 7" data-palette-cube="#1a2b3c" data-palette-cube-hover="#00a0e9" data-slide-id="20h_gameplay_tweens_and_juice" id="slide-20h_gameplay_tweens_and_juice">
         <div class="palette-corner-badge" title="Theme: Spaces 7">
           <span class="palette-corner-dot"></span> PALETTE: Spaces 7
@@ -3988,7 +4075,7 @@ coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)</code></pre>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
             <span class="footer-center">sol.vin (Spaces 7)</span>
-            <span class="footer-right">Slide 44 / 158</span>
+            <span class="footer-right">Slide 45 / 158</span>
           </footer>
         </div>
         <aside class="notes">
@@ -3998,93 +4085,6 @@ coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)</code></pre>
           Second, property targets require real identifiers instead of symbols, statically verifying that the property exists and matches the target value type at compile time!
           Third, first-class Ease and Trans enums ('Ease.Out', 'Trans.Cubic') provide intuitive autocomplete and runtime forwarding.
           Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds') and cooperative fiber awaiting via 'await(tw.finished)', animation code is concise, fast, and completely type-safe.
-        </aside>
-      </section>
-
-      <!-- Slide 45: CrossCube (Scene Tree Glob Queries & Streaming Iteration) -->
-      <section class="slide solvin-slide cross_cube" data-layout="two-column-layout" data-palette="cross_cube" data-background-color="#121412" data-palette-name="CrossCube" data-palette-cube="#e2ece2" data-palette-cube-hover="#00ff2b" data-slide-id="20i_scene_tree_glob_queries_and_collections" id="slide-20i_scene_tree_glob_queries_and_collections">
-        <div class="palette-corner-badge" title="Theme: CrossCube">
-          <span class="palette-corner-dot"></span> PALETTE: CrossCube
-        </div>
-        <div class="slide-container">
-          <header class="slide-header">
-            <div class="slide-meta">
-              <span class="badge badge-pill cyan" data-color="cyan">SCENE TREE • GLOB NAVIGATION</span>
-            </div>
-            <h2 class="slide-title">Scene Tree Glob Queries &amp; Streaming Iteration</h2>
-            <p class="slide-subtitle">Wildcard Navigation (*, **), Receiver Scoping &amp; Block Shorthand</p>
-          </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
-            <div class="column col" data-slot="left">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
-              <div class="window-header code-header">
-                <div class="terminal-dots">
-                  <span class="terminal-dot dot-1 red" title="Close"></span>
-                  <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
-                  <span class="terminal-dot dot-3 green" title="Maximize"></span>
-                </div>
-                <span class="window-title code-title">scene_tree_globs.cr — Wildcards &amp; Streaming Queries</span>
-                <div class="window-controls">
-                  <span class="lang-tag code-lang-tag">Crystal</span>
-                  <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
-                </div>
-              </div>
-              <pre><code class="language-crystal code-compact">node CombatArena &lt; Node2D do
-  def _ready : Void
-    # 1. Multi-node wildcard glob query (*) &amp; get_nodes:
-    hitboxes = self * {&quot;Enemies/*/Hitbox&quot;, Area2D}
-    targets  = self.get_nodes(&quot;Enemies/*/Hitbox&quot;, Area2D)
-
-    # 2. Recursive globstar query (**):
-    spawns = self.get_nodes(&quot;Spawns/**&quot;, Marker2D)
-
-    # 3. Streaming receiver-scoped iteration (self is yielded node):
-    self.each_node(&quot;Enemies/*&quot;, Enemy) do
-      alert! # Direct method call on Enemy!
-    end
-
-    # 4. Ancestor lookup operator (&lt;&lt;) &amp; typed queries:
-    player = self &lt;&lt; Player          # Strict lookup (Player or raises)
-    boss   = self &lt;&lt; BossController? # Safe nilable lookup (BossController?)
-
-    # 5. Fluent GroupQuery DSL:
-    group(:enemies).each(as: Enemy) { |e| e.alert! }
-    boss = group(:boss).first(as: Boss)
-    group(:enemies).call(&quot;alert&quot;, global_position)
-
-    # 6. Direct streaming cleanup and manipulation:
-    self.each_node(&quot;Bullets/*&quot;, &amp;.queue_free)
-    self.each_node(&quot;Hitboxes/*&quot;, &amp;.show)
-  end
-end</code></pre>
-            </div>
-            </div>
-            <div class="column col" data-slot="right">
-            <div class="card col cyan compact" data-color="cyan" data-density="compact">
-              <div class="card-header card-title cyan">
-                <span>Ergonomic Hierarchy Query Engine</span>
-              </div>
-              <ul class="card-list">
-                <li><strong>Wildcard &amp; Globstar Queries (<code>*</code>):</strong> <code>self * {"pattern", Type}</code> and <code>get_nodes</code> support single-level <code>*</code> and recursive globstars <code>**</code>, returning <code>Array(T)</code>.</li>
-                <li><strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> and <code>each_descendant(Type)</code> traverse subtrees without creating intermediate array allocations.</li>
-                <li><strong>Ancestor Traversal Operator (<code>&lt;&lt;</code>):</strong> <code>node &lt;&lt; Class</code> performs strict non-nil upward hierarchy search; <code>node &lt;&lt; Class?</code> returns safe nilable match.</li>
-                <li><strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides chainable <code>.each(as: Type)</code>, <code>.to_a(as: Type)</code>, <code>.first</code>, <code>.first!</code>, and broadcast <code>.call</code>.</li>
-                <li><strong>Receiver Scoping &amp; Block Shorthands:</strong> <code>each_node</code> yields via <code>with node yield node</code>, supporting receiver-scoped blocks (<code>do alert! end</code>), block parameters (<code>do |e|</code>), and symbol-to-proc shorthands (<code>&amp;.queue_free</code>).</li>
-              </ul>
-            </div>
-            </div>
-          </div>
-          <footer class="slide-footer">
-            <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
-            <span class="footer-center">sol.vin (CrossCube)</span>
-            <span class="footer-right">Slide 45 / 158</span>
-          </footer>
-        </div>
-        <aside class="notes">
-          Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
-          Lapis introduces a full scene tree query engine: First, intuitive shell-like patterns query immediate wildcards like 'get_nodes("Enemies/*/Hitbox", Area2D)' or recursive globstars like 'get_nodes("Spawns/**", Marker2D)'.
-          Second, upward hierarchy lookup is effortless with the ancestor operator: writing 'self << Player' strictly climbs parent nodes to find the player, while 'self << BossController?' performs safe nilable lookup.
-          Third, our fluent 'group(:enemies)' DSL provides typed iteration with '.each(as: Enemy)', '.first(as: Boss)', and broadcast '.call'. For high-frequency loops, 'each_node' streams matching descendants directly through inlined blocks without allocating intermediate collections.
         </aside>
       </section>
 

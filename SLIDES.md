@@ -1481,7 +1481,58 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 39: Modular Traits: The gmodule Macro
+### Slide 39: Scene Tree Glob Queries & Streaming Iteration
+- **Theme Palette**: `cross_cube` (CrossCube)
+- **Badge**: `SCENE TREE • GLOB NAVIGATION`
+- **Title**: Scene Tree Glob Queries & Streaming Iteration
+- **Subtitle**: Wildcard Navigation (*, **), Receiver Scoping & Block Shorthand
+- **Code (scene_tree_globs.cr — Wildcards & Streaming Queries)**:
+  ```crystal
+  node CombatArena < Node2D do
+    def _ready : Void
+      # 1. Multi-node wildcard glob query (*) & get_nodes:
+      hitboxes = self * {"Enemies/*/Hitbox", Area2D}
+      targets  = self.get_nodes("Enemies/*/Hitbox", Area2D)
+  
+      # 2. Recursive globstar query (**):
+      spawns = self.get_nodes("Spawns/**", Marker2D)
+  
+      # 3. Streaming receiver-scoped iteration (self is yielded node):
+      self.each_node("Enemies/*", Enemy) do
+        alert! # Direct method call on Enemy!
+      end
+  
+      # 4. Ancestor lookup operator (<<) & typed queries:
+      player = self << Player          # Strict lookup (Player or raises)
+      boss   = self << BossController? # Safe nilable lookup (BossController?)
+  
+      # 5. Fluent GroupQuery DSL:
+      group(:enemies).each(as: Enemy) { |e| e.alert! }
+      boss = group(:boss).first(as: Boss)
+      group(:enemies).call("alert", global_position)
+  
+      # 6. Direct streaming cleanup and manipulation:
+      self.each_node("Bullets/*", &.queue_free)
+      self.each_node("Hitboxes/*", &.show)
+    end
+  end
+  ```
+- **Ergonomic Hierarchy Query Engine**:
+  - Wildcard & Globstar Queries (*): self * {"pattern", Type} and get_nodes support single-level * and recursive globstars **, returning Array(T).
+  - Streaming Iteration: each_node(pattern, Type) and each_descendant(Type) traverse subtrees without creating intermediate array allocations.
+  - Ancestor Traversal Operator (<<): node << Class performs strict non-nil upward hierarchy search; node << Class? returns safe nilable match.
+  - Fluent GroupQuery DSL: group(:name) provides chainable .each(as: Type), .to_a(as: Type), .first, .first!, and broadcast .call.
+  - Receiver Scoping & Block Shorthands: each_node yields via with node yield node, supporting receiver-scoped blocks (do alert! end), block parameters (do |e|), and symbol-to-proc shorthands (&.queue_free).
+
+**Presenter Notes**:
+> Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
+> Lapis introduces a full scene tree query engine: First, intuitive shell-like patterns query immediate wildcards like 'get_nodes("Enemies/*/Hitbox", Area2D)' or recursive globstars like 'get_nodes("Spawns/**", Marker2D)'.
+> Second, upward hierarchy lookup is effortless with the ancestor operator: writing 'self << Player' strictly climbs parent nodes to find the player, while 'self << BossController?' performs safe nilable lookup.
+> Third, our fluent 'group(:enemies)' DSL provides typed iteration with '.each(as: Enemy)', '.first(as: Boss)', and broadcast '.call'. For high-frequency loops, 'each_node' streams matching descendants directly through inlined blocks without allocating intermediate collections.
+
+---
+
+### Slide 40: Modular Traits: The gmodule Macro
 - **Theme Palette**: `bring_me_hope` (Bluebie)
 - **Badge**: `LAPIS DSL • MODULAR MIXINS`
 - **Title**: Modular Traits: The gmodule Macro
@@ -1537,7 +1588,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 40: Advanced gmodule: Composition, Hooks & Contracts
+### Slide 41: Advanced gmodule: Composition, Hooks & Contracts
 - **Theme Palette**: `monokai` (Monokai)
 - **Badge**: `LAPIS ARCHITECTURE • TRAIT COMPOSITION`
 - **Title**: Advanced gmodule: Composition, Hooks & Contracts
@@ -1586,7 +1637,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 41: Resource Loading: The Preload (>) & Load (>>) Operators [Step 1: Code]
+### Slide 42: Resource Loading: The Preload (>) & Load (>>) Operators [Step 1: Code]
 - **Palette**: `cross_cube` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Two-Step Preload & Untyped Load**:
   ```gdscript
@@ -1632,7 +1683,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 42: Resource Loading: The Preload (>) & Load (>>) Operators [Step 2: Analysis & Critique]
+### Slide 43: Resource Loading: The Preload (>) & Load (>>) Operators [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Two-Step Instantiation: Requires calling preload(...), storing a PackedScene, and calling .instantiate() separately.
   - Unsafe Runtime Casting: Untyped Resource return requires as Player casting that fails silently if types diverge.
@@ -1651,7 +1702,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 43: Gameplay Usability: Fluent Creation & Spawning
+### Slide 44: Gameplay Usability: Fluent Creation & Spawning
 - **Theme Palette**: `candy` (Candy)
 - **Badge**: `GAMEPLAY • ERGONOMIC DSL`
 - **Title**: Gameplay Usability: Fluent Creation & Spawning
@@ -1701,7 +1752,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 44: Game Feel & Juice: Fluent Tweens & Animation
+### Slide 45: Game Feel & Juice: Fluent Tweens & Animation
 - **Theme Palette**: `spaces_7` (Spaces 7)
 - **Badge**: `ANIMATION & JUICE • GAME FEEL`
 - **Title**: Game Feel & Juice: Fluent Tweens & Animation
@@ -1746,57 +1797,6 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 > Second, property targets require real identifiers instead of symbols, statically verifying that the property exists and matches the target value type at compile time!
 > Third, first-class Ease and Trans enums ('Ease.Out', 'Trans.Cubic') provide intuitive autocomplete and runtime forwarding.
 > Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds') and cooperative fiber awaiting via 'await(tw.finished)', animation code is concise, fast, and completely type-safe.
-
----
-
-### Slide 45: Scene Tree Glob Queries & Streaming Iteration
-- **Theme Palette**: `cross_cube` (CrossCube)
-- **Badge**: `SCENE TREE • GLOB NAVIGATION`
-- **Title**: Scene Tree Glob Queries & Streaming Iteration
-- **Subtitle**: Wildcard Navigation (*, **), Receiver Scoping & Block Shorthand
-- **Code (scene_tree_globs.cr — Wildcards & Streaming Queries)**:
-  ```crystal
-  node CombatArena < Node2D do
-    def _ready : Void
-      # 1. Multi-node wildcard glob query (*) & get_nodes:
-      hitboxes = self * {"Enemies/*/Hitbox", Area2D}
-      targets  = self.get_nodes("Enemies/*/Hitbox", Area2D)
-  
-      # 2. Recursive globstar query (**):
-      spawns = self.get_nodes("Spawns/**", Marker2D)
-  
-      # 3. Streaming receiver-scoped iteration (self is yielded node):
-      self.each_node("Enemies/*", Enemy) do
-        alert! # Direct method call on Enemy!
-      end
-  
-      # 4. Ancestor lookup operator (<<) & typed queries:
-      player = self << Player          # Strict lookup (Player or raises)
-      boss   = self << BossController? # Safe nilable lookup (BossController?)
-  
-      # 5. Fluent GroupQuery DSL:
-      group(:enemies).each(as: Enemy) { |e| e.alert! }
-      boss = group(:boss).first(as: Boss)
-      group(:enemies).call("alert", global_position)
-  
-      # 6. Direct streaming cleanup and manipulation:
-      self.each_node("Bullets/*", &.queue_free)
-      self.each_node("Hitboxes/*", &.show)
-    end
-  end
-  ```
-- **Ergonomic Hierarchy Query Engine**:
-  - Wildcard & Globstar Queries (*): self * {"pattern", Type} and get_nodes support single-level * and recursive globstars **, returning Array(T).
-  - Streaming Iteration: each_node(pattern, Type) and each_descendant(Type) traverse subtrees without creating intermediate array allocations.
-  - Ancestor Traversal Operator (<<): node << Class performs strict non-nil upward hierarchy search; node << Class? returns safe nilable match.
-  - Fluent GroupQuery DSL: group(:name) provides chainable .each(as: Type), .to_a(as: Type), .first, .first!, and broadcast .call.
-  - Receiver Scoping & Block Shorthands: each_node yields via with node yield node, supporting receiver-scoped blocks (do alert! end), block parameters (do |e|), and symbol-to-proc shorthands (&.queue_free).
-
-**Presenter Notes**:
-> Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
-> Lapis introduces a full scene tree query engine: First, intuitive shell-like patterns query immediate wildcards like 'get_nodes("Enemies/*/Hitbox", Area2D)' or recursive globstars like 'get_nodes("Spawns/**", Marker2D)'.
-> Second, upward hierarchy lookup is effortless with the ancestor operator: writing 'self << Player' strictly climbs parent nodes to find the player, while 'self << BossController?' performs safe nilable lookup.
-> Third, our fluent 'group(:enemies)' DSL provides typed iteration with '.each(as: Enemy)', '.first(as: Boss)', and broadcast '.call'. For high-frequency loops, 'each_node' streams matching descendants directly through inlined blocks without allocating intermediate collections.
 
 ---
 
