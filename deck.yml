@@ -152,6 +152,7 @@ slides:
 - 29b_act4_cli_intro
 - 30_cli_lifecycle
 - 30c_cli_doctor
+- 30f_cli_clean_and_upgrade
 - 31_cli_codegen
 - 32_package_management
 

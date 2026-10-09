@@ -6,7 +6,7 @@ badge: PRODUCTION • PACKAGING & DISTRIBUTION
 badge_color: purple
 palette: spaces_xp_royale
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: terminal
   title: Terminal — make package-release

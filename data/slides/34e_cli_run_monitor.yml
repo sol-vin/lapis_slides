@@ -6,7 +6,7 @@ badge: RUNTIME TELEMETRY • LAPIS CLI
 badge_color: green
 palette: fruit_osx
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — lapis run -p template --monitor

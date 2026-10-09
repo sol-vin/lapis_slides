@@ -6,7 +6,7 @@ badge: SUPERVISOR • LAPIS CLI
 badge_color: yellow
 palette: aperture
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — lapis cli -e & lapis editor

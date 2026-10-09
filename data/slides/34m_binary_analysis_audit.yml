@@ -5,38 +5,31 @@ subtitle: Static & Dynamic Analysis, Section Budgets & Visual Metrics Charts
 badge: SYSTEMS DIAGNOSTICS • BINARY AUDITOR
 badge_color: cyan
 palette: aperture
-layout: two-column-layout
-ratio: 1:1
-left:
-  type: terminal
-  title: Terminal — lapis analyze --chart & --budget-check
-  code: |
-    # Run binary metrics chart audit
-    $ lapis analyze bin/game.dll --chart
-      === Lapis: Binary Analysis & Hardening Auditor ===
-      Target: bin/game.dll (PE32+ executable, x86-64, MSVC)
-      Size  : 474 KB (Clean Ahead-of-Time Native Binary)
-
-      Section Breakdown:
-      .text  [████████████████████████████████] 312 KB (65.8%)
-      .rdata [████████████                    ] 118 KB (24.9%)
-      .data  [████                            ]  36 KB ( 7.6%)
-      .pdata [█                               ]   8 KB ( 1.7%)
-
-    # Enforce section size budget in CI pipeline
-    $ lapis analyze bin/game.dll --budget-check
-      ✔ .text section (312 KB) within budget (< 500 KB)
-      ✔ .data section (36 KB) within budget (< 100 KB)
-      ✔ 0 unstripped debug symbols detected in release build
-      [PASS] Binary passed all hardening and size budget checks!
-right:
-  type: card
-  title: Binary Auditor Capabilities
-  color: cyan
-  items:
-  - <strong>Deep Static & Dynamic Analysis:</strong> Inspects PE/ELF/Mach-O headers, section alignments, export tables, and basic block graphs using radare2.
-  - <strong>Visual Terminal Metrics Charts:</strong> <code>lapis analyze --chart</code> renders visual ASCII/ANSI distribution bars for <code>.text</code>, <code>.rdata</code>, and <code>.data</code> sections.
-  - <strong>Automated Size Budget Enforcement:</strong> <code>--budget-check</code> acts as a strict CI gate, failing automated builds if binary size or section bloat exceeds defined thresholds.
-  - <strong>Security & Strip Verification:</strong> Detects unstripped debug symbols, validates entry point invariants, and verifies compiler hardening flags (ASLR, DEP, SafeSEH).
+layout: stats
+metrics:
+  - value: "474 KB"
+    label: "Total Standalone DLL Size"
+    delta: "AOT COMPILED"
+    color: cyan
+    icon: file-zipper
+    desc: "Complete self-contained GDExtension game logic binary with zero VM overhead"
+  - value: "312 KB"
+    label: ".text Native Instructions"
+    delta: "65.8% OF BINARY"
+    color: emerald
+    icon: microchip
+    desc: "Direct x86_64 machine instructions optimized by LLVM with SIMD autovectorization"
+  - value: "118 KB"
+    label: ".rdata Read-Only Data"
+    delta: "24.9% OF BINARY"
+    color: purple
+    icon: database
+    desc: "Type descriptors, vtables, and immutable engine string constants"
+  - value: "0"
+    label: "Unstripped Debug Symbols"
+    delta: "100% STRIPPED"
+    color: green
+    icon: shield-check
+    desc: "Release build passes all ASLR, DEP/NX, and automated size budget gates"
 notes: |
   Game developers need to guard against binary bloat and security regressions before shipping. With lapis analyze, developers gain deep insight into compiled DLLs and executables. The tool renders visual section charts directly in your terminal, audits basic block metrics, and allows you to enforce strict section size budgets in CI using lapis analyze --budget-check—ensuring zero unexpected dependency bloat in release builds.

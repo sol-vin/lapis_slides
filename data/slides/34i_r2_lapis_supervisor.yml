@@ -6,7 +6,7 @@ badge: HOT RELOAD FORENSICS • LAPIS SUPERVISOR
 badge_color: green
 palette: spaces_2000
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — lapis supervisor & Dead-Pointer Forensics

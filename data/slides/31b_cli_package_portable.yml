@@ -6,7 +6,7 @@ badge: CLI • PACKAGING & PORTABLE DEPLOYS
 badge_color: teal
 palette: spaces_2000
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — lapis package --portable

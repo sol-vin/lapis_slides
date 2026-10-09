@@ -1,7 +1,7 @@
 # Lapis for Crystal — Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
 
 Author: sol.vin
-Theme: `sol.vin` | Total Slides: 162
+Theme: `sol.vin` | Total Slides: 163
 
 ---
 
@@ -4469,37 +4469,13 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol
-- **Theme Palette**: `game_station_2` (GameStation2)
-- **Badge**: `RELOAD ARCHITECTURE • STATE PRESERVATION`
-- **Title**: Hot-Reload State Preserver: 6-Phase Transactional Protocol
-- **Subtitle**: Preserving Live Scene State, Schema Drift Reconciliation & Zero Dead Pointers
-- **Code (state_preserver.cr — 6-Phase Transactional Pipeline)**:
-  ```crystal
-  # Lapis::Editor::StatePreserver: 6-Phase Reload Architecture
-  # Protects live scene state and prevents dead-pointer faults during live DLL swaps
-  
-  # Phase 1: Pre-flight validation & recursive node discovery
-  # Phase 2: Snapshot live node properties into Engine metadata quarantine
-  StatePreserver.snapshot_edited_scene # => 12 nodes, 84 properties
-  
-  # Phase 3: Shadow DLL swap & GDExtension re-registration
-  # Phase 4: Schema drift reconciliation (handles added/removed fields)
-  
-  # Phase 5: Two-pass silent hydration with blocked signals
-  StatePreserver.restore_edited_scene do |node, snap|
-    node.set_block_signals(true)
-    apply_properties(node, snap)
-    node.set_block_signals(false)
-  end
-  
-  # Phase 6: Post-reload lifecycle hook (_on_hot_reloaded)
-  ```
-- **Zero-Loss Hot Reload Invariants**:
-  - 6-Phase Transactional Architecture: Pre-flight discovery, JSON quarantine serialization, shadow DLL swap, schema reconciliation, silent hydration, and verification.
-  - Schema Drift Reconciliation: Coerces numeric widening (Int &rarr; Float), discards obsolete fields, and seeds defaults for newly added @[Export] properties without crashes.
-  - Two-Pass Silent Hydration: Signals are temporarily blocked during property re-population, preventing spurious cascade triggers or audio glitches.
-  - Lifecycle Hook (_on_hot_reloaded): Nodes implement _on_hot_reloaded to re-bind cached sub-objects or refresh procedural textures.
+### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Process Flow / Pipeline]
+01. **Pre-Flight**: Recursive node discovery & pre-reload sanity checks
+02. **Snapshot**: Quarantine live node properties into Engine metadata
+03. **DLL Swap**: Unlink old shadow DLL & re-register GDExtension
+04. **Reconcile**: Reconcile schema drift & coerce type widening
+05. **Hydration**: Two-pass silent hydration with blocked signals
+06. **Verified**: Invoke _on_hot_reloaded & verify dead pointers
 
 **Presenter Notes**:
 > A major problem with C++ and GDExtension live reloading is that reloading the library usually resets all inspector values back to their defaults, or worse, crashes with dangling pointers to deleted vtables.
@@ -4556,7 +4532,28 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 125: CLI: 2-Way Bindings & Codegen
+### Slide 125: Workspace Hygiene & Project Upgrade: clean & upgrade [Dual-Mode]
+**Overview**: Workspace Hygiene & Evolution: Lapis provides integrated commands to keep developer directories clean of locked shadow binaries and keep project dependencies current.
+
+- **Workspace Hygiene (lapis clean)**:
+  - *Flow*: `lapis clean --shadows :arrow-right: Purge locked DLLs :arrow-right: Reclaim Disk Space`
+  - Shadow Pruning: Purges locked <code>*_loaded_*.dll/pdb</code> files without closing Godot
+  - Dry-Run Preview: <code>--dry-run</code> previews candidates and disk space before deletion
+  - Deep Clean: <code>--all</code> removes build binaries, docs, and engine caches
+  - Runtime Safety: Preserves foundational DLLs (<code>gc.dll</code>, <code>pcre2-8.dll</code>)
+- **Project Upgrade Manager (lapis upgrade)**:
+  - *Flow*: `lapis upgrade :arrow-right: Heal Shards :arrow-right: Sync GDExtension Manifests`
+  - Engine Migration: Upgrades project to latest Lapis engine and GDExtension bindings
+  - Shard Auto-Healing: Maintains <code>shard.override.yml</code> to resolve ambiguous versions
+  - API Validation: Refreshes <code>extension_api.json</code> and validates schemas
+  - Safe Preview: <code>--dry-run</code> previews schema diffs before writing changes
+
+**Presenter Notes**:
+> Cleanliness and project longevity are core to the Lapis developer experience. On Windows, hot-reloading native DLLs inside running game engines often leaves locked shadow files on disk. lapis clean --shadows immediately reclaims disk space by pruning orphaned loaded binaries without requiring you to close the Godot Editor. Meanwhile, lapis upgrade solves the long-term maintenance headache: it automatically migrates engine bindings, updates GDExtension manifests, and heals shard dependencies in-place so existing games stay current with zero friction.
+
+---
+
+### Slide 126: CLI: 2-Way Bindings & Codegen
 - **Theme Palette**: `amigo` (Amigo)
 - **Badge**: `TOOLCHAIN • 2-WAY CODEGEN`
 - **Title**: CLI: 2-Way Bindings & Codegen
@@ -4573,7 +4570,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 126: Addon & Shard Package Management
+### Slide 127: Addon & Shard Package Management
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `ECOSYSTEM • PACKAGE MANAGEMENT`
 - **Title**: Addon & Shard Package Management
@@ -4590,7 +4587,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 127: Low-Level Binary Forensics (ACT IV • CHAPTER 09)
+### Slide 128: Low-Level Binary Forensics (ACT IV • CHAPTER 09)
 - **Title**: Low-Level Binary Forensics
 - **Subtitle**: radare2 Native Debugger, Stale VTables, ObjectDB Memory Inspection & Crash Autopsies
 - **Chapter Highlights**:
@@ -4606,7 +4603,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 128: Native Debugging: radare2 vs. LLDB
+### Slide 129: Native Debugging: radare2 vs. LLDB
 - **Theme Palette**: `game_station_2` (GameStation2)
 - **Badge**: `SYSTEMS DIAGNOSTICS • RADARE2`
 - **Title**: Native Debugging: radare2 vs. LLDB
@@ -4628,7 +4625,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 129: Native Debugging & Side-by-Side Decompilation
+### Slide 130: Native Debugging & Side-by-Side Decompilation
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `SYSTEMS DIAGNOSTICS • CLI & FORENSICS`
 - **Title**: Native Debugging & Side-by-Side Decompilation
@@ -4646,7 +4643,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 130: In-Editor Debugging: Gutter Breakpoints & Godot radare2 Panel
+### Slide 131: In-Editor Debugging: Gutter Breakpoints & Godot radare2 Panel
 - **Theme Palette**: `game_station_2` (GameStation2)
 - **Badge**: `SYSTEMS DIAGNOSTICS • IN-EDITOR DEBUGGER`
 - **Title**: In-Editor Debugging: Gutter Breakpoints & Godot radare2 Panel
@@ -4680,7 +4677,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 131: R2 for Crystal: Runtime Inspection & Memory Layouts
+### Slide 132: R2 for Crystal: Runtime Inspection & Memory Layouts
 - **Theme Palette**: `playbox` (Playbox)
 - **Badge**: `SYSTEMS DIAGNOSTICS • CRYSTAL RUNTIME`
 - **Title**: R2 for Crystal: Runtime Inspection & Memory Layouts
@@ -4697,7 +4694,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 132: R2 for Godot: ObjectDB, Variant Decoding & ClassDB Reconstruction
+### Slide 133: R2 for Godot: ObjectDB, Variant Decoding & ClassDB Reconstruction
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `ENGINE INTERNALS • GODOT PLUGIN`
 - **Title**: R2 for Godot: ObjectDB, Variant Decoding & ClassDB Reconstruction
@@ -4714,7 +4711,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 133: R2 for Lapis: Editor Supervisor, Stale VTables & Dead-Pointer Forensics
+### Slide 134: R2 for Lapis: Editor Supervisor, Stale VTables & Dead-Pointer Forensics
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `HOT RELOAD FORENSICS • LAPIS SUPERVISOR`
 - **Title**: R2 for Lapis: Editor Supervisor, Stale VTables & Dead-Pointer Forensics
@@ -4731,7 +4728,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 134: R2 Native Debugger TUI: 7-Tab Studio & Crash Forensics
+### Slide 135: R2 Native Debugger TUI: 7-Tab Studio & Crash Forensics
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `INTERACTIVE DASHBOARD • NATIVE TUI`
 - **Title**: R2 Native Debugger TUI: 7-Tab Studio & Crash Forensics
@@ -4748,44 +4745,18 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 135: Binary Security & Hardening Audit: lapis analyze
-- **Theme Palette**: `aperture` (Aperture)
-- **Badge**: `SYSTEMS DIAGNOSTICS • BINARY AUDITOR`
-- **Title**: Binary Security & Hardening Audit: lapis analyze
-- **Subtitle**: Static & Dynamic Analysis, Section Budgets & Visual Metrics Charts
-- **Terminal (Terminal — lapis analyze --chart & --budget-check)**:
-  ```bash
-  # Run binary metrics chart audit
-  $ lapis analyze bin/game.dll --chart
-    === Lapis: Binary Analysis & Hardening Auditor ===
-    Target: bin/game.dll (PE32+ executable, x86-64, MSVC)
-    Size  : 474 KB (Clean Ahead-of-Time Native Binary)
-  
-    Section Breakdown:
-    .text  [████████████████████████████████] 312 KB (65.8%)
-    .rdata [████████████                    ] 118 KB (24.9%)
-    .data  [████                            ]  36 KB ( 7.6%)
-    .pdata [█                               ]   8 KB ( 1.7%)
-  
-  # Enforce section size budget in CI pipeline
-  $ lapis analyze bin/game.dll --budget-check
-    ✔ .text section (312 KB) within budget (< 500 KB)
-    ✔ .data section (36 KB) within budget (< 100 KB)
-    ✔ 0 unstripped debug symbols detected in release build
-    [PASS] Binary passed all hardening and size budget checks!
-  ```
-- **Binary Auditor Capabilities**:
-  - Deep Static & Dynamic Analysis: Inspects PE/ELF/Mach-O headers, section alignments, export tables, and basic block graphs using radare2.
-  - Visual Terminal Metrics Charts: lapis analyze --chart renders visual ASCII/ANSI distribution bars for .text, .rdata, and .data sections.
-  - Automated Size Budget Enforcement: --budget-check acts as a strict CI gate, failing automated builds if binary size or section bloat exceeds defined thresholds.
-  - Security & Strip Verification: Detects unstripped debug symbols, validates entry point invariants, and verifies compiler hardening flags (ASLR, DEP, SafeSEH).
+### Slide 136: Binary Security & Hardening Audit: lapis analyze [Stats / KPI]
+- **474 KB** — Total Standalone DLL Size (AOT COMPILED): Complete self-contained GDExtension game logic binary with zero VM overhead
+- **312 KB** — .text Native Instructions (65.8% OF BINARY): Direct x86_64 machine instructions optimized by LLVM with SIMD autovectorization
+- **118 KB** — .rdata Read-Only Data (24.9% OF BINARY): Type descriptors, vtables, and immutable engine string constants
+- **0** — Unstripped Debug Symbols (100% STRIPPED): Release build passes all ASLR, DEP/NX, and automated size budget gates
 
 **Presenter Notes**:
 > Game developers need to guard against binary bloat and security regressions before shipping. With lapis analyze, developers gain deep insight into compiled DLLs and executables. The tool renders visual section charts directly in your terminal, audits basic block metrics, and allows you to enforce strict section size budgets in CI using lapis analyze --budget-check—ensuring zero unexpected dependency bloat in release builds.
 
 ---
 
-### Slide 136: Radare2 in the Test Suite: Automated Binary Forensics & CI
+### Slide 137: Radare2 in the Test Suite: Automated Binary Forensics & CI
 - **Theme Palette**: `spaces_10` (Spaces 10)
 - **Badge**: `QUALITY GATES • R2 TEST SUITE`
 - **Title**: Radare2 in the Test Suite: Automated Binary Forensics & CI
@@ -4828,7 +4799,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 137: CLI: Multi-Channel Log Triage & Fuzzy Search
+### Slide 138: CLI: Multi-Channel Log Triage & Fuzzy Search
 - **Theme Palette**: `spaces_xp` (Spaces XP)
 - **Badge**: `SYSTEMS DIAGNOSTICS • LOG TRIAGE`
 - **Title**: CLI: Multi-Channel Log Triage & Fuzzy Search
@@ -4845,7 +4816,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 138: CLI: Game Runtime Performance Monitor
+### Slide 139: CLI: Game Runtime Performance Monitor
 - **Theme Palette**: `fruit_osx` (Fruit OSX)
 - **Badge**: `RUNTIME TELEMETRY • LAPIS CLI`
 - **Title**: CLI: Game Runtime Performance Monitor
@@ -4862,7 +4833,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 139: CLI: Multi-Target Workspace Synchronization
+### Slide 140: CLI: Multi-Target Workspace Synchronization
 - **Theme Palette**: `creation` (Creation)
 - **Badge**: `WORKSPACE SYNC • LAPIS CLI`
 - **Title**: CLI: Multi-Target Workspace Synchronization
@@ -4879,7 +4850,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 140: Mission-Critical Testing (ACT IV • CHAPTER 10)
+### Slide 141: Mission-Critical Testing (ACT IV • CHAPTER 10)
 - **Title**: Mission-Critical Testing
 - **Subtitle**: Deterministic Leak Verification, In-Editor Automation & Headless CI Suites
 - **Chapter Highlights**:
@@ -4894,7 +4865,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 141: Testing Framework: Writing Tests & Leak Verification
+### Slide 142: Testing Framework: Writing Tests & Leak Verification
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • LEAK VERIFICATION`
 - **Title**: Testing Framework: Writing Tests & Leak Verification
@@ -4944,7 +4915,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 142: Editor Testing: Lapis::Test::EditorDriver
+### Slide 143: Editor Testing: Lapis::Test::EditorDriver
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `TOOLING • HEADLESS EDITOR TESTING`
 - **Title**: Editor Testing: Lapis::Test::EditorDriver
@@ -4986,7 +4957,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 143: In-Editor Action Driver: UI Automation & Synthetic Input
+### Slide 144: In-Editor Action Driver: UI Automation & Synthetic Input
 - **Theme Palette**: `ranger` (Ranger)
 - **Badge**: `QUALITY GATES • UI AUTOMATION`
 - **Title**: In-Editor Action Driver: UI Automation & Synthetic Input
@@ -5030,7 +5001,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 144: Automated CI/CD Quality Gates: Headless Test Execution
+### Slide 145: Automated CI/CD Quality Gates: Headless Test Execution
 - **Theme Palette**: `digital_guy` (DigitalGuy)
 - **Badge**: `QUALITY GATES • CONTINUOUS INTEGRATION`
 - **Title**: Automated CI/CD Quality Gates: Headless Test Execution
@@ -5063,7 +5034,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 145: Testing Framework: Behavioral Scenarios & Determinism
+### Slide 146: Testing Framework: Behavioral Scenarios & Determinism
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `QUALITY GATES • SCENARIO TESTING`
 - **Title**: Testing Framework: Behavioral Scenarios & Determinism
@@ -5123,7 +5094,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 146: In-Editor Tool Testing & Standalone TUI Runner
+### Slide 147: In-Editor Tool Testing & Standalone TUI Runner
 - **Theme Palette**: `spaces_31` (Spaces 3.1)
 - **Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
@@ -5140,7 +5111,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 147: The Hard Numbers (ACT IV • CHAPTER 11)
+### Slide 148: The Hard Numbers (ACT IV • CHAPTER 11)
 - **Title**: The Hard Numbers
 - **Subtitle**: Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language Shootout
 - **Chapter Highlights**:
@@ -5156,7 +5127,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 148: Quantitative Benchmarks: Crystal vs GDScript
+### Slide 149: Quantitative Benchmarks: Crystal vs GDScript
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
@@ -5173,7 +5144,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 149: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
+### Slide 150: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `BENCHMARKS • MULTI-LANGUAGE`
 - **Title**: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
@@ -5191,7 +5162,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 150: Native Tier Shootout: Crystal vs C++, Rust & C#
+### Slide 151: Native Tier Shootout: Crystal vs C++, Rust & C#
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `BENCHMARKS • NATIVE TIER`
 - **Title**: Native Tier Shootout: Crystal vs C++, Rust & C#
@@ -5209,7 +5180,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 151: Interop & FFI Benchmarks: Nanosecond Boundary Analysis
+### Slide 152: Interop & FFI Benchmarks: Nanosecond Boundary Analysis
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `BENCHMARKS • INTEROP & FFI`
 - **Title**: Interop & FFI Benchmarks: Nanosecond Boundary Analysis
@@ -5226,7 +5197,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 152: Authoring Custom Benchmarks: Lapis::Benchmark
+### Slide 153: Authoring Custom Benchmarks: Lapis::Benchmark
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `PERFORMANCE • CUSTOM BENCHMARKING`
 - **Title**: Authoring Custom Benchmarks: Lapis::Benchmark
@@ -5267,7 +5238,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 153: Automated Benchmark TUI: lapis benchmarks
+### Slide 154: Automated Benchmark TUI: lapis benchmarks
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `PERFORMANCE • BENCHMARK TUI`
 - **Title**: Automated Benchmark TUI: lapis benchmarks
@@ -5284,7 +5255,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 154: Benchmark Reports & CI Regression Tracking
+### Slide 155: Benchmark Reports & CI Regression Tracking
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `BENCHMARKS • CI & REPORTING`
 - **Title**: Benchmark Reports & CI Regression Tracking
@@ -5320,7 +5291,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 155: The Bridge Architecture (ACT IV • CHAPTER 12)
+### Slide 156: The Bridge Architecture (ACT IV • CHAPTER 12)
 - **Title**: The Bridge Architecture
 - **Subtitle**: 5-Layer GDExtension Architecture, ClassDB Generators & Turnkey Distribution
 - **Chapter Highlights**:
@@ -5335,7 +5306,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 156: Lapis Architecture: The Layered Bridge [Architecture]
+### Slide 157: Lapis Architecture: The Layered Bridge [Architecture]
 - **Tier 4 • Gameplay Application Layer**:
   - **Custom Nodes**: <code>node Player &lt; CharacterBody3D</code>
   - **Inspector Exports**: <code>@[Export]</code> ranges, enums, &amp; flags
@@ -5365,7 +5336,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 157: Dual Modes: Mode A vs. Mode B [Dual-Mode]
+### Slide 158: Dual Modes: Mode A vs. Mode B [Dual-Mode]
 **Overview**: Self-Hosted Tooling: Just like the Crystal compiler is self-hosted in Crystal, Lapis&apos;s Godot editor integration plugin, syntax highlighting, and tooling docks are authored 100% in Crystal.
 
 - **Mode A: GDExtension In-Editor**:
@@ -5390,7 +5361,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 158: The Packaging System: Turnkey Distribution
+### Slide 159: The Packaging System: Turnkey Distribution
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
@@ -5420,7 +5391,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 159: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
+### Slide 160: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
 - **Title**: Live Demonstration & Roadmap
 - **Subtitle**: Zero-Config Scaffolding, 60s Node Iteration, Full Architecture & Standalone Release
 - **Chapter Highlights**:
@@ -5435,7 +5406,7 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 160: Live Demonstration: End-to-End Workflow [Demo Roadmap]
+### Slide 161: Live Demonstration: End-to-End Workflow [Demo Roadmap]
 - **STEP 1 • BOOTSTRAP — Scaffold & Supervise**:
   ```bash
   $ lapis new game my_game
@@ -5486,28 +5457,31 @@ Theme: `sol.vin` | Total Slides: 162
 
 ---
 
-### Slide 161: The Future of Native Scripting in Godot
-- **Theme Palette**: `former_rain` (The Former Rain)
-- **Badge**: `CONCLUSION • LOOKING AHEAD`
-- **Title**: The Future of Native Scripting in Godot
-- **Subtitle**: Roadmap Ahead: Mobile & Wasm Targets, Multimodal AI Testing, and Community Shards
-- **Upcoming Milestones & Roadmap**:
-  - Mobile & WebAssembly Targets: Compiling Lapis games to Android, iOS, and WebAssembly via Emscripten and cross-compilation toolchains.
-  - Multimodal AI Testing Pipelines: Autonomous game QA using Set-of-Marks ActionDriver manifests and vision LLM feedback loops.
-  - Curated Game Shards Registry: Community repository of game-ready Crystal shards (behavior trees, voxel engines, procedural generation).
-  - Distributed Server Clustering: High-throughput headless server clusters with deterministic fiber tick synchronization.
-- **Join the Revolution**:
-  - GitHub Repository: github.com/sol-vin/lapis
-  - Documentation & API Guide: sol.vin/lapis
-  - Community Discord: Join our growing community of Crystal game developers.
-  - Try it Today: Run git clone and make all to experience the next generation of Godot scripting.
+### Slide 162: The Future of Native Scripting in Godot [Timeline]
+- **Q1 2027 — Mobile & Wasm Targets**:
+  - Compiling Lapis games to Android, iOS, and WebAssembly via Emscripten.
+  - Cross-compilation toolchains with zero native tool installation friction.
+  - Automated touch controls and mobile viewport orientation bindings.
+- **Q2 2027 — Multimodal AI Testing**:
+  - Autonomous game QA using Set-of-Marks ActionDriver manifests.
+  - Vision LLM feedback loops detecting visual regressions and physics glitches.
+  - Continuous headless gameplay exploration and automated bug filing.
+- **Q3 2027 — Curated Game Shards**:
+  - Community repository of game-ready Crystal shards (behavior trees, voxel engines).
+  - Automated shard audit gates checking zero dead-pointers and memory budgets.
+  - Decentralized packaging registry with instant lapis install shard.
+- **Q4 2027 — Distributed Clustering**:
+  - High-throughput headless server clusters with deterministic fiber tick sync.
+  - Direct RPC binary serialization matching Crystal struct memory layout.
+  - Zero-copy UDP message passing across distributed multiplayer nodes.
 
 **Presenter Notes**:
-> Thank you all for listening! We believe Lapis represents the future of native scripting in Godot: the raw machine speed and type safety of C++ combined with the joy, clarity, and ergonomics of Ruby. With 4.8-dev7, we have delivered real-time editor diagnostics, transactional hot-reloading, and comprehensive in-editor UI automation. The project is open source and ready for you to try today. Check out our repository on GitHub, join our Discord, and start building high-performance Godot games in Crystal!
+> Thank you all for listening! We believe Lapis represents the future of native scripting in Godot: the raw machine speed and type safety of C++ combined with the joy, clarity, and ergonomics of Ruby. With 4.8-dev7, we have delivered real-time editor diagnostics, transactional hot-reloading, and comprehensive in-editor UI automation.
+> Looking ahead, our roadmap delivers mobile and WebAssembly exports, multimodal AI vision testing pipelines, a curated community shard registry, and distributed headless server clustering. The project is open source and ready for you to try today. Check out our repository on GitHub, join our Discord, and start building high-performance Godot games in Crystal!
 
 ---
 
-### Slide 162: THANKS FOR WATCHING! [Closing]
+### Slide 163: THANKS FOR WATCHING! [Closing]
 - **Lapis & sol.vin**: Interactive 3D showcases, architecture guides, and open source repository.
   - `sol.vin • github.com/sol-vin/lapis`
 - **Crystal Language**: Official Crystal website, language reference, standard library docs, and blog.

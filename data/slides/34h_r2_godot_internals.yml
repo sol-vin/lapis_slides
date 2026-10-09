@@ -6,7 +6,7 @@ badge: ENGINE INTERNALS • GODOT PLUGIN
 badge_color: cyan
 palette: spaces_vista
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — r2 Godot Plugin Suite (godot detect, object, variant)

@@ -6,7 +6,7 @@ badge: 'LIVE DEMO • PART 1: WORKFLOW'
 badge_color: cyan
 palette: spaces_vista
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — Scaffold & Hot Reload Session

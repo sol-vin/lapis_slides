@@ -6,7 +6,7 @@ badge: TOOLCHAIN • DOCS IN ACTION
 badge_color: purple
 palette: game_sprocket
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — Lapis Docs CLI & Interactive TUI Explorer

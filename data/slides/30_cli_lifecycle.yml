@@ -6,7 +6,7 @@ badge: TOOLCHAIN • THE LAPIS CLI
 badge_color: cyan
 palette: spaces_95
 layout: two-column-layout
-ratio: 2:1
+ratio: 1:1
 left:
   type: asciinema
   title: Terminal — Lapis Command Center, Fuzzy Palette & Project Scaffolding
