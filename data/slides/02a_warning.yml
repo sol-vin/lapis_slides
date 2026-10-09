@@ -5,26 +5,26 @@ subtitle: "Technical Depth, Audience Advisory & Project Status"
 badge: "DISCLAIMER • EXPECTATIONS"
 badge_color: "amber"
 palette: "warm_paper"
-layout: "two-column-layout"
-ratio: "1:1"
-left:
-  type: card
-  title: "Audience & Content Advisory"
-  color: amber
-  badge: "HEAVY CODE"
-  items:
-    - "<strong>This is a Technically Heavy Talk:</strong> Deep dive into compiler mechanics, C-API GDExtension bridges, AST macros, and native memory layouts."
-    - "<strong>Talking a Lot About Code:</strong> We will be talking a lot about code—it will probably be very boring if you came looking for a quick gameplay trailer."
-    - "<strong>Beginner Caution:</strong> If you are a beginner, this probably isn't the video for you. I promise I will make a quick start into Lapis when things get more stable."
-right:
-  type: card
-  title: "Project Status & Hospitality"
-  color: coral
-  badge: "UNSTABLE & ACTIVE"
-  items:
-    - "<strong>Lapis is Still UNSTABLE:</strong> Lapis is very new and actively evolving. There are rough edges and probably many issues."
-    - "<strong>Solo Developer Effort:</strong> I've done my best and I am one man, so please report any bugs you find—please and thank you!"
-    - "<strong>Enjoy the 7-Course Meal from Yapplebees:</strong> Please enjoy my 7 course meal from Yapplebees."
+layout: "editorial-split"
+numeral: "⚠️"
+headline: "A Technical Deep Dive Ahead"
+quote: "We will be talking a lot about compiler internals, AST macros, and native memory layouts. If you came looking for a quick gameplay trailer, this 7-course meal from Yapplebees will be very boring."
+attribution: "sol.vin"
+cards:
+  - title: "Audience Advisory"
+    color: "amber"
+    badge: "HEAVY CODE"
+    items:
+      - "<strong>Compiler & Systems Focus:</strong> Deep dive into compiler mechanics, C-API GDExtension bridges, AST macros, and native memory layouts."
+      - "<strong>Code-Centric Content:</strong> We will be talking heavily about language ergonomics and systems architecture rather than high-level trailers."
+      - "<strong>Beginner Caution:</strong> If you are a beginner, a gentler quick-start guide will follow as things stabilize."
+  - title: "Project Status"
+    color: "coral"
+    badge: "ACTIVE EVOLUTION"
+    items:
+      - "<strong>Lapis is Still UNSTABLE:</strong> Lapis is actively evolving; expect rough edges and occasional early bugs."
+      - "<strong>Solo Developer Effort:</strong> I've done my best as one developer—please report any bugs or edge cases you encounter!"
+      - "<strong>Enjoy the Feast:</strong> Please enjoy this 7-course technical meal of compiler engineering and game engine design."
 notes: |
   A quick warning before we dive in: this is a technically heavy talk. We will be talking a lot about code, compiler internals, and engine mechanics—it will probably be very boring if you're looking for high-level summaries.
   If you are a beginner, this probably isn't the video for you. I promise I will make a quick start into Lapis when things get more stable.
