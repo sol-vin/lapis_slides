@@ -1193,7 +1193,7 @@ end
             <p class="slide-subtitle">Side-by-Side Implementation of the Same Player Node with Exported Property and Signal</p>
           </header>
           <div class="slide-body four-cols" data-layout="four-column">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
+            <div class="code-window code-container col" data-lang="crystal">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
@@ -1206,7 +1206,7 @@ end
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal code-compact">node Player &lt; CharacterBody3D do
+              <pre><code class="language-crystal">node Player &lt; CharacterBody3D do
   @[Export(range: 1.0_f32..20.0_f32)]
   property speed : Float32 = 7.0_f32
 
@@ -1404,7 +1404,7 @@ public:
                     <td>Slow (Heavy Cargo build)</td>
                     <td>Strict Borrow Checker</td>
                     <td>Proc Macros (Complex)</td>
-                    <td class="lapis-col highlight-col">High friction (&lt;code&gt;Base&amp;lt;T&amp;gt;&lt;/code&gt;)</td>
+                    <td class="lapis-col highlight-col">High friction (<code>Base&lt;T&gt;</code>)</td>
                   </tr>
                   <tr>
                     <td class="dim-header">godot-cpp (C++)</td>
