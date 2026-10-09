@@ -3895,6 +3895,8 @@ ul.card-list li strong {
   border: 1.5px solid var(--border-color) !important;
   box-shadow: 2px 2px 0px var(--shadow-color) !important;
   border-radius: 4px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .solvin-slide .badge-pill::before,
@@ -5197,6 +5199,11 @@ ul.card-list li strong {
   font-size: 0.84rem !important;
   line-height: 1.2 !important;
   color: var(--text-color) !important;
+}
+
+.solvin-slide .timeline-card .badge {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .solvin-slide .timeline-card ul.card-list {

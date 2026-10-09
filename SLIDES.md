@@ -319,7 +319,7 @@ Theme: `sol.vin` | Total Slides: 158
   - Tooling lacked true jump-to-definition, type hover, and reliable symbol rename.
   - Frequent production outages caused by silent NoMethodError (undefined method for nil).
   - Massive test suites with tens of thousands of tests required just to catch basic type typos.
-- **2017-2020 — The Bolted-On Tax (Sorbet / RBS)**:
+- **2017-2020 — Type Checking Era**:
   - Stripe builds Sorbet; Ruby Core ships RBS to bolt static type checking onto YARV runtime.
   - Verbose sig { params(...).returns(...) } clutters every single method definition.
   - Metaprogramming breaks static analyzers; teams must maintain 10,000+ brittle RBI shims.

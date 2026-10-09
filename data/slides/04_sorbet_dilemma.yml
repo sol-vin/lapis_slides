@@ -27,7 +27,7 @@ cards:
   - Massive test suites with tens of thousands of tests required just to catch basic type typos.
 - year: "2017-2020"
   phase: "STAGE 3"
-  title: "The Bolted-On Tax (Sorbet / RBS)"
+  title: "Type Checking Era"
   color: amber
   items:
   - Stripe builds Sorbet; Ruby Core ships RBS to bolt static type checking onto YARV runtime.
