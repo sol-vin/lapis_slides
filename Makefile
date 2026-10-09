@@ -1,19 +1,19 @@
-.PHONY: build serve validate clean
+.PHONY: build serve validate clean casts
 
+SUNSTONE ?= sunstone
 CRYSTAL ?= crystal
 
 build:
-	$(CRYSTAL) run src/builder.cr -- build
+	$(SUNSTONE) build -o .
 
 serve:
-	$(CRYSTAL) run src/builder.cr -- serve
+	$(SUNSTONE) serve
 
 validate:
-	$(CRYSTAL) run src/builder.cr -- validate
-
-clean:
-	rm -rf bin/
+	$(SUNSTONE) validate
 
 casts:
 	$(CRYSTAL) run scripts/record_casts.cr -- --all
 
+clean:
+	rm -rf dist/ bin/

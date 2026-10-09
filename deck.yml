@@ -6,6 +6,20 @@ theme: sol.vin
 resolution:
   width: 1280
   height: 720
+slides_dir: data/slides
+
+header:
+  enabled: true
+  label: "LAPIS FOR CRYSTAL"
+  cube: true
+
+footer:
+  left: "{title} • {subtitle}"
+  center: "{author} ({palette})"
+  right: "Slide {slide_num} / {total_slides}"
+
+default_palette: "warm_paper"
+
 slides:
 # ==============================================================================
 # ACT I: ETHOS & THE VISION

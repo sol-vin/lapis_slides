@@ -6,18 +6,18 @@ A modular, high-performance slide presentation engine written in **Crystal**, in
 
 ## Features
 
-- **Crystal-Native Engine**: Zero external dependencies. Uses Crystal's standard library (`yaml`, `json`, `html`, `http/server`, `option_parser`).
-- **Human-Readable YAML Data**: Every slide lives in `data/slides/*.yml`. Adding or rearranging slides is as simple as creating a file and updating `data/deck.yml`.
+- **Sunstone-Powered Engine**: Built on [Sunstone](https://github.com/sol-vin/sunstone), the generic, modular YAML-driven slide presentation engine with zero-inline-style semantic HTML.
+- **Human-Readable YAML Data**: Every slide lives in `data/slides/*.yml`. Adding or rearranging slides is as simple as creating a file and updating `deck.yml`.
 - **Pre-Determined Layouts**:
-  - `code-comparison-layout`: Side-by-side GDScript Anti-Pattern vs. Crystal Clean Solution.
-  - `hero-layout`: Cover slide with spinning 3D isometric cube and 4 pillar cards.
-  - `two-column-layout`: Flexible two-column layout (code, cards, terminal windows) with customizable ratios (`1:1`, `3:2`, `2:3`).
+  - `code-comparison-layout`: Side-by-side GDScript Anti-Pattern vs. Crystal Clean Solution with 2-step progressive reveal.
+  - `hero-layout` / `intro-layout`: Cover slide with spinning 3D isometric cube and topic badges.
+  - `two-column-layout`: Flexible two-column layout (code, cards, terminal windows, embedded Asciinema replays) with customizable ratios (`1:1`, `3:2`, `2:3`).
   - `three-column-layout` & `four-column-layout`: Multi-column card sets and 4-way language comparisons.
   - `matrix-layout`: Comparative tables and feature matrices.
   - `timeline-layout`: Sequential historical or architectural milestones.
   - `media-layout`: Video or image displays with sidebar contextual cards.
-  - `architecture-layout`: 5-layer bridge architecture diagram.
-- **46 Retro Sol.vin Palettes**: Theme palettes loaded from `solvin_palettes.json` (`monokai`, `warm_paper`, `spaces_98`, `aperture`, `m64`, etc.).
+  - `architecture-layout`: Multi-tier bridge architecture diagram.
+- **102 Retro Sol.vin Palettes**: Authentic vintage computing palettes (`monokai`, `warm_paper`, `spaces_98`, `aperture`, `m64`, `amigo`, `game_station_2`, etc.).
 - **Live Preview Server**: Built-in HTTP server with auto-launching browser and speaker notes view.
 
 ---
@@ -30,8 +30,8 @@ Compiles YAML slides into `index.html` and `SLIDES.md`:
 # Using Makefile
 make build
 
-# Or directly with Crystal
-crystal run src/builder.cr -- build
+# Or directly with Sunstone CLI
+sunstone build -o .
 ```
 
 ### 2. Validate Slide Schemas
@@ -39,7 +39,7 @@ Validates that all slides have titles, valid layouts, and existing Sol.vin theme
 ```bash
 make validate
 # or
-crystal run src/builder.cr -- validate
+sunstone validate
 ```
 
 ### 3. Launch Local Preview Server
@@ -47,7 +47,7 @@ Starts the built-in HTTP server on port 8000 and opens your default browser:
 ```bash
 make serve
 # or
-crystal run src/builder.cr -- serve
+sunstone serve
 ```
 
 **Presentation Keyboard Shortcuts:**

@@ -31,11 +31,18 @@ jobs:
         with:
           crystal: latest
 
-      - name: Build Slide Deck
+      - name: Install Sunstone CLI
         run: |
-          mkdir -p bin
-          crystal build src/builder.cr -o bin/slide_builder --release
-          ./bin/slide_builder build
+          git clone --depth 1 https://github.com/sol-vin/sunstone.git /tmp/sunstone
+          cd /tmp/sunstone
+          shards install
+          shards build sunstone --release
+          sudo cp bin/sunstone /usr/local/bin/sunstone
+
+      - name: Validate & Build Slide Deck
+        run: |
+          sunstone validate
+          sunstone build -o .
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
