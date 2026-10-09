@@ -2817,40 +2817,42 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 76: Memory Safety: Dangling Pointers vs. Protection [Step 1: Code]
 - **Palette**: `game_station_2` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
-- **:circle-xmark: Unshielded Native C++ / GDExtension: Dangling Pointers & Crashes**:
-  ```gdscript
-  // In unshielded native bindings: Combat target acquired earlier
-  Ref<Enemy> target = get_node<Enemy>("Enemies/Boss");
+- **:circle-xmark: Unshielded Native C++: Dangling Pointer Crashes**:
+  ```cpp
+  // Combat target acquired earlier in native C++:
+  Ref<Enemy> target = get_node<Enemy>("Boss");
   
   void cast_spell(Ref<Spell> spell) {
-      // Meanwhile: Boss died from a poison tick and called queue_free()!
-      // Raw target pointer still references freed native C++ memory!
+      // Boss died from poison & called queue_free()!
+      // Raw pointer still references dead C++ memory!
       target->take_damage(spell->get_power()); 
-      // FATAL CRASH: 0xC0000005 ACCESS_VIOLATION at 0x00007ff812a...
-      // Uncatchable! Instant crash to desktop with NO stack trace!
+      // FATAL: 0xC0000005 ACCESS_VIOLATION segfault!
+      // Instant crash to desktop with NO stack trace!
   
-      // Guard boilerplate required in native code:
-      if (target.is_valid() && is_instance_valid(target.ptr())) {
+      // Defensive guard boilerplate required:
+      if (target.is_valid() &&
+          is_instance_valid(target.ptr())) {
           target->take_damage(spell->get_power());
       }
   }
   ```
-- **:sparkles: Crystal: Monotonic 64-Bit ObjectDB Verification & Dead-Pointer Armor**:
+- **:sparkles: Crystal: Monotonic ObjectDB & Dead-Pointer Armor**:
   ```crystal
   property target : Enemy?
   
   def cast_spell(spell : Spell) : Void
     # 1. Dead-Pointer Safe try? Invocation:
-    # Evaluates block ONLY if target is alive in ObjectDB; returns nil if freed!
-    @target.try?(&.take_damage(spell.power)) || find_next_target
+    # Evaluates only if target is alive in ObjectDB:
+    @target.try?(&.take_damage(spell.power)) ||
+      find_next_target
   
-    # 2. Or Direct Dispatch Protected by Monotonic ID Check:
-    # Checks ObjectDB before dispatch; raises catchable DisposedObjectError!
+    # 2. Or Monotonic ID Check on Direct Dispatch:
+    # Checks ObjectDB; raises DisposedObjectError:
     if enemy = @target
       enemy.take_damage(spell.power)
     end
   rescue ex : Godot::DisposedObjectError
-    # Fully catchable! Retarget gracefully, ZERO crashes!
+    # Catchable! Retarget gracefully, zero segfaults:
     find_next_target
   end
   ```

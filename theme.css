@@ -242,10 +242,12 @@
 .terminal-dot.green { background-color: #27c93f; }
 
 .window-title {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: block;
 }
 
 .window-controls {
@@ -396,31 +398,31 @@
 .slide-body[data-layout*="two-column"][data-ratio="1:1"],
 [data-layout*="two-column"][data-ratio="1:1"] .slide-body,
 [data-layout*="two-column"] .slide-body[data-ratio="1:1"] {
-  grid-template-columns: 1fr 1fr !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
 }
 
 .slide-body[data-layout*="two-column"][data-ratio="3:2"],
 [data-layout*="two-column"][data-ratio="3:2"] .slide-body,
 [data-layout*="two-column"] .slide-body[data-ratio="3:2"] {
-  grid-template-columns: 3fr 2fr !important;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) !important;
 }
 
 .slide-body[data-layout*="two-column"][data-ratio="2:3"],
 [data-layout*="two-column"][data-ratio="2:3"] .slide-body,
 [data-layout*="two-column"] .slide-body[data-ratio="2:3"] {
-  grid-template-columns: 2fr 3fr !important;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) !important;
 }
 
 .slide-body[data-layout*="two-column"][data-ratio="2:1"],
 [data-layout*="two-column"][data-ratio="2:1"] .slide-body,
 [data-layout*="two-column"] .slide-body[data-ratio="2:1"] {
-  grid-template-columns: 2fr 1fr !important;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
 }
 
 .slide-body[data-layout*="two-column"][data-ratio="1:2"],
 [data-layout*="two-column"][data-ratio="1:2"] .slide-body,
 [data-layout*="two-column"] .slide-body[data-ratio="1:2"] {
-  grid-template-columns: 1fr 2fr !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) !important;
 }
 
 .column, .col {
@@ -436,7 +438,7 @@
 .slide-body[data-layout*="three-column"],
 [data-layout*="three-column"] .slide-body {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: 1rem;
   align-items: stretch;
   flex: 1;
@@ -446,7 +448,7 @@
 .slide-body[data-layout*="four-column"],
 [data-layout*="four-column"] .slide-body {
   display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   gap: 0.8rem;
   align-items: stretch;
   flex: 1;
@@ -457,7 +459,7 @@
 .slide-body[data-layout*="code-comparison"],
 [data-layout*="code-comparison"] .slide-body {
   display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
   gap: 1rem;
   align-items: stretch;
   flex: 1;
@@ -469,7 +471,12 @@
   flex-direction: column;
   gap: 0.6rem;
   min-height: 0;
+  min-width: 0;
   flex: 1;
+}
+
+.code-window {
+  min-width: 0;
 }
 
 .comparison-pane > .card {
@@ -4076,9 +4083,18 @@ ul.card-list li strong {
   font-weight: 700 !important;
   font-size: 0.78rem !important;
   letter-spacing: 0.02em !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.4rem !important;
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.solvin-slide .code-title .fa-icon,
+.solvin-slide .terminal-title .fa-icon {
+  vertical-align: -0.125em;
+  margin-right: 0.4rem;
 }
 
 /* Window Dots (Close, Min, Max) strictly follow the active palette */
@@ -4344,6 +4360,7 @@ ul.card-list li strong {
   display: flex !important;
   flex-direction: column !important;
   min-height: 0 !important;
+  min-width: 0 !important;
   flex: 1 !important;
 }
 
