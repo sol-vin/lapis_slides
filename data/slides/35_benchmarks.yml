@@ -14,21 +14,41 @@ left:
   unit: ms
   benchmarks:
     - name: N-Body Gravitational Physics (10k bodies)
-      gdscript: 184.2
-      crystal: 3.1
-      speedup: "59.4x"
+      speedup: 59.4x
+      bars:
+        - platform: GDScript
+          lang: gdscript
+          val: 184.2
+        - platform: Crystal
+          lang: crystal
+          val: 3.1
     - name: Procedural Perlin Terrain Generation (256x256)
-      gdscript: 92.4
-      crystal: 2.8
-      speedup: "33.0x"
+      speedup: 33.0x
+      bars:
+        - platform: GDScript
+          lang: gdscript
+          val: 92.4
+        - platform: Crystal
+          lang: crystal
+          val: 2.8
     - name: A* Pathfinding Grid Traversal (1,000 agents)
-      gdscript: 64.8
-      crystal: 4.2
-      speedup: "15.4x"
+      speedup: 15.4x
+      bars:
+        - platform: GDScript
+          lang: gdscript
+          val: 64.8
+        - platform: Crystal
+          lang: crystal
+          val: 4.2
     - name: Raycast Query & Entity Filtering (50,000 hits)
-      gdscript: 45.6
-      crystal: 5.1
-      speedup: "8.9x"
+      speedup: 8.9x
+      bars:
+        - platform: GDScript
+          lang: gdscript
+          val: 45.6
+        - platform: Crystal
+          lang: crystal
+          val: 5.1
 right:
   type: card
   title: Why Crystal Dominates

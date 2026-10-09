@@ -11229,30 +11229,82 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="3:2">
             <div class="column col" data-slot="left">
-            <div class="card barchart-card">
+            <div class="card barchart-card col">
               <div class="card-header">
                 <span class="card-title">Benchmark Results (Execution Time)</span>
                 <span class="badge">LOWER IS BETTER</span>
               </div>
               <div class="barchart-container">
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">N-Body Gravitational Physics (10k bodies)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">N-Body Gravitational Physics (10k bodies)</span>
+                    <span class="badge barchart-speedup badge-pill">59.4x</span>
+                  </div>
                   <div class="barchart-bars">
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">GDScript</span>
+                      <div class="bar-track"><div class="bar-fill gdscript" style="width: 100.0%;"></div></div>
+                      <span class="bar-val">184.2 ms</span>
+                    </div>
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">Crystal</span>
+                      <div class="bar-track"><div class="bar-fill crystal" style="width: 2.0%;"></div></div>
+                      <span class="bar-val">3.10 ms</span>
+                    </div>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Procedural Perlin Terrain Generation (256x256)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Procedural Perlin Terrain Generation (256x256)</span>
+                    <span class="badge barchart-speedup badge-pill">33.0x</span>
+                  </div>
                   <div class="barchart-bars">
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">GDScript</span>
+                      <div class="bar-track"><div class="bar-fill gdscript" style="width: 100.0%;"></div></div>
+                      <span class="bar-val">92.4 ms</span>
+                    </div>
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">Crystal</span>
+                      <div class="bar-track"><div class="bar-fill crystal" style="width: 3.0%;"></div></div>
+                      <span class="bar-val">2.80 ms</span>
+                    </div>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">A* Pathfinding Grid Traversal (1,000 agents)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">A* Pathfinding Grid Traversal (1,000 agents)</span>
+                    <span class="badge barchart-speedup badge-pill">15.4x</span>
+                  </div>
                   <div class="barchart-bars">
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">GDScript</span>
+                      <div class="bar-track"><div class="bar-fill gdscript" style="width: 100.0%;"></div></div>
+                      <span class="bar-val">64.8 ms</span>
+                    </div>
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">Crystal</span>
+                      <div class="bar-track"><div class="bar-fill crystal" style="width: 6.5%;"></div></div>
+                      <span class="bar-val">4.20 ms</span>
+                    </div>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Raycast Query &amp; Entity Filtering (50,000 hits)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Raycast Query &amp; Entity Filtering (50,000 hits)</span>
+                    <span class="badge barchart-speedup badge-pill">8.9x</span>
+                  </div>
                   <div class="barchart-bars">
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">GDScript</span>
+                      <div class="bar-track"><div class="bar-fill gdscript" style="width: 100.0%;"></div></div>
+                      <span class="bar-val">45.6 ms</span>
+                    </div>
+                    <div class="barchart-bar-line">
+                      <span class="bar-platform">Crystal</span>
+                      <div class="bar-track"><div class="bar-fill crystal" style="width: 11.2%;"></div></div>
+                      <span class="bar-val">5.10 ms</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -11298,14 +11350,17 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="3:2">
             <div class="column col" data-slot="left">
-            <div class="card barchart-card">
+            <div class="card barchart-card col">
               <div class="card-header">
                 <span class="card-title">Cross-Language Latency (vs GDScript Baseline)</span>
                 <span class="badge">LOWER IS BETTER</span>
               </div>
               <div class="barchart-container">
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Dense Matrix Multiplication (N=300)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Dense Matrix Multiplication (N=300)</span>
+                    <span class="badge barchart-speedup badge-pill">67.5x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -11335,7 +11390,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Sieve of Atkin Prime Search (500k)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Sieve of Atkin Prime Search (500k)</span>
+                    <span class="badge barchart-speedup badge-pill">44.7x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -11365,7 +11423,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">N-Body Orbital Physics (50k steps)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">N-Body Orbital Physics (50k steps)</span>
+                    <span class="badge barchart-speedup badge-pill">149.4x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -11438,14 +11499,17 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="3:2">
             <div class="column col" data-slot="left">
-            <div class="card barchart-card">
+            <div class="card barchart-card col">
               <div class="card-header">
                 <span class="card-title">Native Tier Latency (Sub-150ms Close-Up)</span>
                 <span class="badge">LOWER IS BETTER</span>
               </div>
               <div class="barchart-container">
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">3D N-Body Orbital Physics (50k steps)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">3D N-Body Orbital Physics (50k steps)</span>
+                    <span class="badge barchart-speedup badge-pill">Parity</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">C#</span>
@@ -11470,7 +11534,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">2D Mandelbrot Fractal (500x500)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">2D Mandelbrot Fractal (500x500)</span>
+                    <span class="badge barchart-speedup badge-pill">Parity</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">C#</span>
@@ -11495,7 +11562,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Sieve of Atkin + Trie (Limit=500k)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Sieve of Atkin + Trie (Limit=500k)</span>
+                    <span class="badge barchart-speedup badge-pill">1.37x vs C++</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">C#</span>
@@ -11520,7 +11590,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">BinaryTrees GC Pressure (Depth 12)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">BinaryTrees GC Pressure (Depth 12)</span>
+                    <span class="badge barchart-speedup badge-pill">GC Shootout</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">Crystal</span>
