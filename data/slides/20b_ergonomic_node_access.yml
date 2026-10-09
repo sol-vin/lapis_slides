@@ -33,7 +33,7 @@ left:
         sprite  = self[Sprite2D]                     # Class-based lookup
         blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
         unique  = self["%UniqueNode", UniqueNode]    # Scene unique % lookup
-        hitbox  = self["Enemies/*/Hitbox", Area2D]?  # Wildcard glob (returns nil if empty)!
+        hitbox  = self["Enemies/*/Hitbox", Area2D]? # Glob: first match (or nil)
       end
     end
 right:

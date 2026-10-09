@@ -3372,7 +3372,7 @@ ul.card-list li strong {
 }
 
 .slide-body.four-cols .code-container pre code {
-  font-size: 0.65rem !important;
+  font-size: 0.58rem !important;
   line-height: 1.25 !important;
   padding: 0.35rem 0.45rem !important;
   overflow-x: hidden !important;
@@ -3383,14 +3383,14 @@ ul.card-list li strong {
 
 .slide-body.four-cols .code-container.code-dense pre code,
 .slide-body.four-cols .code-container pre code.code-dense {
-  font-size: 0.58rem !important;
-  line-height: 1.20 !important;
+  font-size: 0.52rem !important;
+  line-height: 1.18 !important;
 }
 
 .slide-body.four-cols .code-container.code-compact pre code,
 .slide-body.four-cols .code-container pre code.code-compact {
-  font-size: 0.52rem !important;
-  line-height: 1.16 !important;
+  font-size: 0.46rem !important;
+  line-height: 1.14 !important;
 }
 
 .slide-body.four-cols .code-header {

@@ -1414,7 +1414,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
       sprite  = self[Sprite2D]                     # Class-based lookup
       blaster = self["$Weapons/Blaster", Node3D]? # Explicit $ path
       unique  = self["%UniqueNode", UniqueNode]    # Scene unique % lookup
-      hitbox  = self["Enemies/*/Hitbox", Area2D]?  # Wildcard glob (returns nil if empty)!
+      hitbox  = self["Enemies/*/Hitbox", Area2D]? # Glob: first match (or nil)
     end
   end
   ```
@@ -1758,8 +1758,8 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```crystal
   node CombatArena < Node2D do
     def _ready : Void
-      # 1. Single-tier wildcard glob query (*):
-      hitboxes = self["Enemies/*/Hitbox", Array(Area2D)]? # Safe: returns nil if empty!
+      # 1. Multi-node wildcard glob query (*) & get_nodes:
+      hitboxes = self * {"Enemies/*/Hitbox", Area2D}
       targets  = self.get_nodes("Enemies/*/Hitbox", Area2D)
   
       # 2. Recursive globstar query (**):
@@ -1771,8 +1771,8 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
       end
   
       # 4. Ancestor lookup operator (<<) & typed queries:
-      player = self << Player           # Strict lookup (returns Player or raises)
-      boss   = self << BossController?  # Safe nilable lookup (returns BossController?)
+      player = self << Player          # Strict lookup (Player or raises)
+      boss   = self << BossController? # Safe nilable lookup (BossController?)
   
       # 5. Fluent GroupQuery DSL:
       group(:enemies).each(as: Enemy) { |e| e.alert! }
@@ -1786,7 +1786,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   end
   ```
 - **Ergonomic Hierarchy Query Engine**:
-  - Wildcard & Globstar Matching: get_nodes and []? support single-level * (e.g. Enemies/*/Hitbox), recursive globstars **, and returning nil when empty.
+  - Wildcard & Globstar Queries (*): self * {"pattern", Type} and get_nodes support single-level * and recursive globstars **, returning Array(T).
   - Streaming Iteration: each_node(pattern, Type) and each_descendant(Type) traverse subtrees without creating intermediate array allocations.
   - Ancestor Traversal Operator (<<): node << Class performs strict non-nil upward hierarchy search; node << Class? returns safe nilable match.
   - Fluent GroupQuery DSL: group(:name) provides chainable .each(as: Type), .to_a(as: Type), .first, .first!, and broadcast .call.

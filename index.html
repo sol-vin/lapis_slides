@@ -1193,7 +1193,7 @@ end
             <p class="slide-subtitle">Side-by-Side Implementation of the Same Player Node with Exported Property and Signal</p>
           </header>
           <div class="slide-body four-cols" data-layout="four-column">
-            <div class="code-window code-container col" data-lang="crystal">
+            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
@@ -1206,7 +1206,7 @@ end
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal">node Player &lt; CharacterBody3D do
+              <pre><code class="language-crystal code-compact">node Player &lt; CharacterBody3D do
   @[Export(range: 1.0_f32..20.0_f32)]
   property speed : Float32 = 7.0_f32
 
@@ -1404,7 +1404,7 @@ public:
                     <td>Slow (Heavy Cargo build)</td>
                     <td>Strict Borrow Checker</td>
                     <td>Proc Macros (Complex)</td>
-                    <td class="lapis-col highlight-col">High friction (<code>Base&lt;T&gt;</code>)</td>
+                    <td class="lapis-col highlight-col">High friction (&lt;code&gt;Base&amp;lt;T&amp;gt;&lt;/code&gt;)</td>
                   </tr>
                   <tr>
                     <td class="dim-header">godot-cpp (C++)</td>
@@ -3380,7 +3380,7 @@ end</code></pre>
     sprite  = self[Sprite2D]                     # Class-based lookup
     blaster = self[&quot;$Weapons/Blaster&quot;, Node3D]? # Explicit $ path
     unique  = self[&quot;%UniqueNode&quot;, UniqueNode]    # Scene unique % lookup
-    hitbox  = self[&quot;Enemies/*/Hitbox&quot;, Area2D]?  # Wildcard glob (returns nil if empty)!
+    hitbox  = self[&quot;Enemies/*/Hitbox&quot;, Area2D]? # Glob: first match (or nil)
   end
 end</code></pre>
             </div>
@@ -4031,8 +4031,8 @@ coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)</code></pre>
               </div>
               <pre><code class="language-crystal code-compact">node CombatArena &lt; Node2D do
   def _ready : Void
-    # 1. Single-tier wildcard glob query (*):
-    hitboxes = self[&quot;Enemies/*/Hitbox&quot;, Array(Area2D)]? # Safe: returns nil if empty!
+    # 1. Multi-node wildcard glob query (*) &amp; get_nodes:
+    hitboxes = self * {&quot;Enemies/*/Hitbox&quot;, Area2D}
     targets  = self.get_nodes(&quot;Enemies/*/Hitbox&quot;, Area2D)
 
     # 2. Recursive globstar query (**):
@@ -4044,8 +4044,8 @@ coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)</code></pre>
     end
 
     # 4. Ancestor lookup operator (&lt;&lt;) &amp; typed queries:
-    player = self &lt;&lt; Player           # Strict lookup (returns Player or raises)
-    boss   = self &lt;&lt; BossController?  # Safe nilable lookup (returns BossController?)
+    player = self &lt;&lt; Player          # Strict lookup (Player or raises)
+    boss   = self &lt;&lt; BossController? # Safe nilable lookup (BossController?)
 
     # 5. Fluent GroupQuery DSL:
     group(:enemies).each(as: Enemy) { |e| e.alert! }
@@ -4065,7 +4065,7 @@ end</code></pre>
                 <span>Ergonomic Hierarchy Query Engine</span>
               </div>
               <ul class="card-list">
-                <li><strong>Wildcard &amp; Globstar Matching:</strong> <code>get_nodes</code> and <code>[]?</code> support single-level <code>*</code> (e.g. <code>Enemies/*/Hitbox</code>), recursive globstars <code>**</code>, and returning <code>nil</code> when empty.</li>
+                <li><strong>Wildcard &amp; Globstar Queries (<code>*</code>):</strong> <code>self * {"pattern", Type}</code> and <code>get_nodes</code> support single-level <code>*</code> and recursive globstars <code>**</code>, returning <code>Array(T)</code>.</li>
                 <li><strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> and <code>each_descendant(Type)</code> traverse subtrees without creating intermediate array allocations.</li>
                 <li><strong>Ancestor Traversal Operator (<code>&lt;&lt;</code>):</strong> <code>node &lt;&lt; Class</code> performs strict non-nil upward hierarchy search; <code>node &lt;&lt; Class?</code> returns safe nilable match.</li>
                 <li><strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides chainable <code>.each(as: Type)</code>, <code>.to_a(as: Type)</code>, <code>.first</code>, <code>.first!</code>, and broadcast <code>.call</code>.</li>
