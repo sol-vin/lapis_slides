@@ -52,20 +52,25 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 3: A WARNING [Editorial Split]
+### Slide 3: A WARNING [One-Top-Two-Bottom]
 - **Theme Palette**: `warm_paper` (Warm Paper (Default))
-- **Headline**: A Technical Deep Dive Ahead
+- **Title**: A WARNING
 
-> We will be talking a lot about compiler internals, AST macros, and native memory layouts. If you came looking for a quick gameplay trailer, this 7-course meal from Yapplebees will be very boring. — sol.vin
+#### Top Hero Slot:
+- **Audience & Content Advisory: A Technically Heavy Deep Dive**
+  - Deep Compiler & Systems Focus: We will be talking heavily about compiler internals, C-API GDExtension bridges, AST macros, and native 64-bit memory layouts.
+  - Authentic Code Walkthrough: This is a rigorous engineering presentation—it will probably be very boring if you came looking for a quick gameplay trailer.
+  - Zero High-Level Sizzle: No glossy marketing teasers; an authentic look at how low-level engine architecture and language tooling get built.
 
-- **Audience Advisory**
-  - Compiler & Systems Focus: Deep dive into compiler mechanics, C-API GDExtension bridges, AST macros, and native memory layouts.
-  - Code-Centric Content: We will be talking heavily about language ergonomics and systems architecture rather than high-level trailers.
-  - Beginner Caution: If you are a beginner, a gentler quick-start guide will follow as things stabilize.
-- **Project Status**
-  - Lapis is Still UNSTABLE: Lapis is actively evolving; expect rough edges and occasional early bugs.
+#### Bottom Split Columns:
+- **Beginner Guidance & Prerequisites**
+  - Not For Beginners: If you are completely new to programming or game engines, this talk will likely be overwhelming.
+  - Helpful Background: Familiarity with static typing, low-level memory, or languages like Ruby, Crystal, Rust, or C++.
+  - Gentle Tutorial Coming: A lighter quick-start guide and beginner onboarding video will follow as Lapis stabilizes.
+- **Project Status & Hospitality**
+  - Lapis is Still UNSTABLE: Lapis is very new and actively evolving; expect rough edges and occasional early bugs.
   - Solo Developer Effort: I've done my best as one developer—please report any bugs or edge cases you encounter!
-  - Enjoy the Feast: Please enjoy this 7-course technical meal of compiler engineering and game engine design.
+  - Welcome to Yapplebees: Grab a fork and please enjoy my 7-course meal of compiler engineering and game systems design.
 
 **Presenter Notes**:
 > A quick warning before we dive in: this is a technically heavy talk. We will be talking a lot about code, compiler internals, and engine mechanics—it will probably be very boring if you're looking for high-level summaries.

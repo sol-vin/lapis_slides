@@ -491,7 +491,7 @@
       </section>
 
       <!-- Slide 3: Warm Paper (Default) (A WARNING) -->
-      <section class="slide solvin-slide warm_paper" data-layout="editorial-split" data-palette="warm_paper" data-background-color="#faf6ee" data-palette-name="Warm Paper (Default)" data-palette-cube="#1c1c1e" data-palette-cube-hover="#303030" data-slide-id="02a_warning" id="slide-02a_warning">
+      <section class="slide solvin-slide warm_paper" data-layout="one-top-two-bottom" data-palette="warm_paper" data-background-color="#faf6ee" data-palette-name="Warm Paper (Default)" data-palette-cube="#1c1c1e" data-palette-cube-hover="#303030" data-slide-id="02a_warning" id="slide-02a_warning">
         <div class="palette-corner-badge" title="Theme: Warm Paper (Default)">
           <span class="palette-corner-dot"></span> PALETTE: Warm Paper (Default)
         </div>
@@ -503,39 +503,46 @@
             <h2 class="slide-title">A WARNING</h2>
             <p class="slide-subtitle">Technical Depth, Audience Advisory &amp; Project Status</p>
           </header>
-          <div class="slide-body layout-editorial-split" data-layout="editorial-split">
-            <div class="editorial-lead-col">
-              <div class="editorial-numeral-wrap">
-                <span class="editorial-huge-numeral">⚠️</span>
+          <div class="slide-body layout-one-top-two-bottom" data-layout="one-top-two-bottom" data-ratio="1:1">
+            <div class="row-hero slot-top" data-slot="top">
+            <div class="card col amber" data-color="amber">
+              <div class="card-header card-title amber">
+                <span>Audience &amp; Content Advisory: A Technically Heavy Deep Dive</span>
+                <span class="badge amber" data-color="amber">HEAVY CODE WARNING</span>
               </div>
-              <h3 class="editorial-lead-headline">A Technical Deep Dive Ahead</h3>
-              <div class="editorial-pull-quote">
-                <p>“We will be talking a lot about compiler internals, AST macros, and native memory layouts. If you came looking for a quick gameplay trailer, this 7-course meal from Yapplebees will be very boring.”</p>
-                <span class="editorial-attribution">— sol.vin</span>
-              </div>
+              <ul class="card-list">
+                <li><strong>Deep Compiler & Systems Focus:</strong> We will be talking heavily about compiler internals, C-API GDExtension bridges, AST macros, and native 64-bit memory layouts.</li>
+                <li><strong>Authentic Code Walkthrough:</strong> This is a rigorous engineering presentation—it will probably be very boring if you came looking for a quick gameplay trailer.</li>
+                <li><strong>Zero High-Level Sizzle:</strong> No glossy marketing teasers; an authentic look at how low-level engine architecture and language tooling get built.</li>
+              </ul>
             </div>
-            <div class="editorial-cards-col">
-              <div class="card editorial-card amber" data-color="amber">
-                <div class="card-header">
-                  <span class="card-title">Audience Advisory</span>
-                  <span class="badge amber" data-color="amber">HEAVY CODE</span>
-                </div>
-                <ul class="card-list">
-                  <li><strong>Compiler & Systems Focus:</strong> Deep dive into compiler mechanics, C-API GDExtension bridges, AST macros, and native memory layouts.</li>
-                  <li><strong>Code-Centric Content:</strong> We will be talking heavily about language ergonomics and systems architecture rather than high-level trailers.</li>
-                  <li><strong>Beginner Caution:</strong> If you are a beginner, a gentler quick-start guide will follow as things stabilize.</li>
-                </ul>
+            </div>
+            <div class="row-split slot-bottom" data-slot="bottom">
+              <div class="column col slot-bottom-left" data-slot="bottom-left">
+            <div class="card col purple" data-color="purple">
+              <div class="card-header card-title purple">
+                <span>Beginner Guidance &amp; Prerequisites</span>
+                <span class="badge purple" data-color="purple">TARGET AUDIENCE</span>
               </div>
-              <div class="card editorial-card coral" data-color="coral">
-                <div class="card-header">
-                  <span class="card-title">Project Status</span>
-                  <span class="badge coral" data-color="coral">ACTIVE EVOLUTION</span>
-                </div>
-                <ul class="card-list">
-                  <li><strong>Lapis is Still UNSTABLE:</strong> Lapis is actively evolving; expect rough edges and occasional early bugs.</li>
-                  <li><strong>Solo Developer Effort:</strong> I've done my best as one developer—please report any bugs or edge cases you encounter!</li>
-                  <li><strong>Enjoy the Feast:</strong> Please enjoy this 7-course technical meal of compiler engineering and game engine design.</li>
-                </ul>
+              <ul class="card-list">
+                <li><strong>Not For Beginners:</strong> If you are completely new to programming or game engines, this talk will likely be overwhelming.</li>
+                <li><strong>Helpful Background:</strong> Familiarity with static typing, low-level memory, or languages like Ruby, Crystal, Rust, or C++.</li>
+                <li><strong>Gentle Tutorial Coming:</strong> A lighter quick-start guide and beginner onboarding video will follow as Lapis stabilizes.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="column col slot-bottom-right" data-slot="bottom-right">
+            <div class="card col coral" data-color="coral">
+              <div class="card-header card-title coral">
+                <span>Project Status &amp; Hospitality</span>
+                <span class="badge coral" data-color="coral">UNSTABLE &amp; ACTIVE</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Lapis is Still UNSTABLE:</strong> Lapis is very new and actively evolving; expect rough edges and occasional early bugs.</li>
+                <li><strong>Solo Developer Effort:</strong> I've done my best as one developer—please report any bugs or edge cases you encounter!</li>
+                <li><strong>Welcome to Yapplebees:</strong> Grab a fork and please enjoy my 7-course meal of compiler engineering and game systems design.</li>
+              </ul>
+            </div>
               </div>
             </div>
           </div>
