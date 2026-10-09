@@ -36,18 +36,6 @@ slides:
 - 03_ruby_backend
 - 03_ruby_frontend
 - 03a_ruby_small_syntax
-- 03b_ruby_syntax_sugar
-- 03c_ruby_closures
-- 03d_ruby_context_exec
-- 03h_ruby_oddities_intro
-- 03i_ruby_implicit_returns
-- 03j_ruby_if_assignment
-- 03k_ruby_statement_modifiers
-- 03l_ruby_predicate_and_bang
-- 03m_ruby_missing_for_loop
-- 03e_ruby_monkey_patching
-- 03g_ruby_runtime_metaprogramming
-- 03f_ruby_dynamic_dispatch
 - 04_sorbet_dilemma
 
 # ==============================================================================
@@ -60,10 +48,17 @@ slides:
 - 05_birth_of_crystal
 - 05b_crystal_type_system
 - 10_expressive_ergonomics
-- 10b_ruby_parity_in_crystal
+- 10g_crystal_bare_words_and_operators
+- 10h_crystal_syntax_delights_faq
+- 10i_crystal_implicit_returns
+- 10j_crystal_if_expressions_and_nil_narrowing
+- 10k_crystal_statement_modifiers
+- 10l_crystal_predicate_and_bang
+- 10m_crystal_iteration_architecture
 - 10d_crystal_modules
 - 10e_crystal_monkey_patching
 - 10f_crystal_closures
+- 10b_ruby_parity_in_crystal
 - 10c_static_metaprogramming_tradeoffs
 - 14b_crystal_macro_hooks
 - 14c_macro_finished_introspection

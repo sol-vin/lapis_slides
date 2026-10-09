@@ -1,0 +1,51 @@
+---
+id: 10m_crystal_iteration_architecture
+title: 'The "Missing" for Loop: Zero-Cost Iteration'
+subtitle: Why Crystal Uses Internal Iterators & Inlines Enumerable Blocks to Native Loops
+badge: CRYSTAL ERGONOMICS • ITERATION ARCHITECTURE
+badge_color: blue
+palette: game_station
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: iteration_architecture.cr — Inlined Blocks Over Indexing
+  tag: Crystal
+  lang: crystal
+  font_size: '0.73rem'
+  code: |
+    # The C / Java / GDScript Imperative Tradition:
+    # for (int i = 0; i < enemies.length; i++) { ... } # Index leaks, bounds risk!
+
+    # The Crystal Way: Internal Iterators & Inlined Blocks!
+    enemies.each do |enemy|
+      enemy.take_damage(25) # Clean, strictly scoped, zero index bookkeeping
+    end
+
+    # Looping without a 'for' keyword: Methods on the objects!
+    5.times { spawn_skeleton! }
+    1.upto(10) { |level| generate_dungeon_floor(level) }
+
+    # Iterating with indices when needed:
+    enemies.each_with_index do |enemy, idx|
+      puts "Target ##{idx + 1}: #{enemy.name}"
+    end
+
+    # Composable Enumerable pipelines (map, select, reject, any?, all?):
+    active_bosses = enemies.select(&.boss?).reject(&.defeated?)
+right:
+  type: card
+  title: 'Why Internal Iterators Excel in Crystal'
+  color: blue
+  items:
+    - '<strong>Strict Lexical Scope:</strong> In Python and older languages, loop variables leak into the surrounding function. Blocks strictly isolate <code>|item|</code> to their own scope.'
+    - '<strong>Zero Off-By-One Errors:</strong> The collection encapsulates its own traversal via <code>each</code>. Eliminates manual index arithmetic and out-of-bounds panics.'
+    - '<strong>50+ Free Query Methods:</strong> Defining a single <code>def each(&amp;)</code> and including <code>Enumerable(T)</code> automatically unlocks <code>map</code>, <code>select</code>, <code>reject</code>, and <code>reduce</code>.'
+    - '<strong>LLVM Direct Inlining (Zero Heap Overhead):</strong> Crystal inlines blocks directly at compile time. <code>5.times</code> compiles to the exact same bare-metal CPU register loop as a C <code>for</code> loop.'
+notes: |
+  When programmers coming from C, C++, Java, C#, Go, or Python learn Crystal, one of their first questions is: 'Where is the for loop?'
+  While Crystal technically supports 'for ... in', idiomatic Crystal code uses internal iteration via blocks.
+  Why? First, scope leakage: in languages like Python, the loop variable leaks into the surrounding function after the loop ends. In Crystal, blocks introduce a strict lexical closure scope—block parameters (|enemy|) vanish the moment the block terminates.
+  Second, internal iteration means the collection controls its own traversal via the 'each' method, eliminating manual index variables and off-by-one errors.
+  Third, numbers and ranges are first-class: instead of 'for (int i = 0; i < 5; i++)', you write '5.times { spawn_skeleton! }' or '1.upto(10) { |lvl| ... }'.
+  And best of all, defining a single 'each' method and including Enumerable gives any custom data structure over 50 functional query methods for free. LLVM inlines these blocks completely, generating direct CPU register loops identical to hand-optimized C with zero heap allocation.

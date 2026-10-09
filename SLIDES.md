@@ -1,7 +1,7 @@
 # Lapis for Crystal — Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
 
 Author: sol.vin
-Theme: `sol.vin` | Total Slides: 163
+Theme: `sol.vin` | Total Slides: 158
 
 ---
 
@@ -308,503 +308,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 9: Bare Words & Operators
-- **Theme Palette**: `monokai` (Monokai)
-- **Badge**: `RUBY HERITAGE • SYNTACTIC ERGONOMICS`
-- **Title**: Bare Words & Operators
-- **Subtitle**: Optional Parentheses, Uniform Access & Operator Methods
-- **Code (bare_words_and_operators.rb)**:
-  ```ruby
-  # 1. Bare Words & Uniform Access: my_func vs my_func()
-  def max_health
-    100
-  end
-  
-  puts max_health    # Property-like read, but executes method!
-  puts max_health()  # Parentheses are completely optional
-  
-  # Fluent DSL sentence: no parens or hash braces needed!
-  render_rect at: Vector2.new(10, 20), color: :red
-  
-  # 2. Operator Overloading: Everything is an object method!
-  class Vector2
-    attr_reader :x, :y
-    def initialize(x, y)
-      @x = x
-      @y = y
-    end
-  
-    # Operators (+, -, *, [], <<) are standard methods:
-    def +(other)
-      Vector2.new(@x + other.x, @y + other.y)
-    end
-  
-    def [](axis)
-      axis == :x ? @x : @y
-    end
-  end
-  
-  v1 = Vector2.new(10, 20)
-  v2 = Vector2.new(5, 5)
-  v3 = v1 + v2       # Sugar for: v1.+(v2)
-  puts v3[:x]        # Sugar for: v3.[](:x) => 15
-  ```
-- **Why Developers Fell in Love with Bare Words**:
-  - Uniform Access Principle: Callers cannot tell whether player.health is a stored variable or a dynamic method. Eliminates Java-style getHealth() ceremony.
-  - Fluent, Human-Centric Sentences: Omitting parentheses and argument braces turns method calls into readable English instructions (render_rect at: pos, color: :red).
-  - Operators are Pure Methods: Symbols like +, -, [], and << are ordinary instance methods dispatched on objects, not hardcoded compiler syntax.
-  - Mathematical Expressiveness: Enables game physics, 2D/3D vectors, and collection streams to read with clean mathematical elegance.
-
-**Presenter Notes**:
-> One of Ruby's greatest gifts to programming ergonomics was the total elimination of syntax ceremony. In Ruby, method parentheses are optional: calling max_health looks identical to accessing a property, fulfilling Bertrand Meyer's Uniform Access Principle. Callers never need to know if a value is a cached field or a dynamic calculation. Combined with hash-argument sugar, method calls read like natural English sentences. Furthermore, Ruby treated operators not as hardcoded compiler keywords, but as regular method dispatches. Defining def +(other) or def [](axis) allows custom vector math, coordinate systems, and custom collections to feel like built-in language primitives. Crystal completely inherits this philosophy, making 3D math and scene manipulation feel completely natural in Godot.
-
----
-
-### Slide 10: Blocks, Procs & Lambdas
-- **Palette**: `playbox` | **Badge**: `RUBY HERITAGE • CLOSURE ARCHITECTURE`
-- **1. Blocks & Yield**:
-  - Zero Heap Overhead: Blocks are passed implicitly without allocating heap Proc objects.
-  - Ephemeral Control Flow: Invoked directly with yield in the method body.
-  - Natural Enumerable Chaining: Powers idiomatic Ruby loops: [1, 2].each { |n| ... }.
-  - The Ampersand Bridge: &block reifies a block into a Proc object when needed.
-- **2. Procs (Proc.new)**:
-  - First-Class Objects: Reified callable instances instantiated via Proc.new.
-  - Permissive Arity: Missing arguments default to nil with zero runtime argument errors.
-  - Enclosing Method Return: Calling return inside a Proc exits the enclosing method scope.
-  - Callable Dispatch: Invoked explicitly via p.call(args) or bracket syntax p[args].
-- **3. Lambdas (->)**:
-  - Anonymous Method Semantics: Created via ->(x, y) { ... } or lambda { ... }.
-  - Strict Arity Enforcement: Raises ArgumentError immediately if argument counts mismatch.
-  - Isolated Local Return: Calling return inside a lambda exits only the lambda itself.
-  - Predictable Encapsulation: Ideal for passing higher-order functions and callbacks safely.
-
-**Presenter Notes**:
-> Closures are the beating heart of Ruby and Crystal. Ruby provides three distinct tiers of closures. At the lightest level are blocks—ephemeral code chunks passed implicitly and triggered with yield. They power iteration and resource-scoping patterns without allocating heap objects. When you need closures as first-class citizens that you can store in variables or pass around, you have Procs and Lambdas. Procs are lenient: they don't care if you pass too few or too many arguments, and returning from a Proc returns from the enclosing method. Lambdas, on the other hand, behave like true anonymous methods: they strictly enforce parameter counts and their return statements only exit the lambda itself. The ampersand operator acts as the bidirectional bridge between blocks and Procs. Crystal preserves this exact block-and-proc elegance, while adding compile-time static types and LLVM optimization.
-
----
-
-### Slide 11: instance_exec: The Better Eval
-- **Theme Palette**: `game_station_2` (GameStation2)
-- **Badge**: `METAPROGRAMMING • DYNAMIC SCOPE`
-- **Title**: instance_exec: The Better Eval
-- **Subtitle**: Rebinding self for Clean DSLs Over String eval
-- **Code (context_exec_builder.rb)**:
-  ```ruby
-  # Anti-Pattern: String eval is unsafe, unhygienic & slow
-  # eval("player.#{action}(#{value})") # Injection risk, syntax errors!
-  
-  # The "Better Eval": instance_exec rebinds `self` to an object
-  class CombatRoomBuilder
-    def initialize(room); @room = room; end
-    def wave(enemy_type, count); @room.spawn_wave(enemy_type, count); end
-    def reward(item_id); @room.set_chest(item_id); end
-  end
-  
-  room = CombatRoom.new("Dungeon_A1")
-  builder = CombatRoomBuilder.new(room)
-  
-  # Dynamic context shifting: self becomes `builder` inside block!
-  difficulty = :elite # Lexical variable from outer scope is retained!
-  builder.instance_exec(difficulty) do |diff|
-    wave :skeleton_archer, count: 4
-    wave :bone_golem, count: 1 if diff == :elite
-    reward :obsidian_key
-    # Inside this block, self IS builder — zero "builder." noise!
-  end
-  ```
-- **Why instance_exec Powers World-Class DSLs**:
-  - Rebinding self on the Fly: instance_exec temporarily switches self to the receiver inside the block, eliminating repetitive builder. prefixes.
-  - The "Better Eval": Replaces dangerous string eval() with structured AST blocks—giving you syntax highlighting, linter checks, and zero injection vulnerabilities.
-  - Dynamic DSL Construction: Enables clean, declarative builder patterns without polluting global namespaces or requiring explicit receiver prefixes.
-
-**Presenter Notes**:
-> Before instance_exec, developers who wanted dynamic behavior often resorted to eval with string concatenation—which was slow, unhygienic, full of security risks, and completely broken for editor tooling. Ruby solved this by introducing instance_exec and class_exec: what Matz and the Ruby community called 'the better eval'. Instead of parsing raw strings, instance_exec takes an existing Ruby block and executes it while temporarily rebinding self to the target object. Inside the block, you can call the builder's methods directly without prefixing them, while still retaining full access to local variables from your surrounding lexical scope. This enabled Ruby to pioneer elegant, readable configuration and game entity builders.
-
----
-
-### Slide 12: The Ruby "Oddities" [FAQ / Q&A]
-
-**Q: Where is the return statement?**
-> A: Ruby treats the last evaluated expression as the implicit return value. This eliminates redundant keyword noise and encourages expression-oriented design.
-
-**Q: Assigning an if statement to a variable?**
-> A: Control flow constructs are expressions that evaluate to concrete values: <code>val = if cond then 1 else 2 end</code>, completely eliminating temporary mutable dummy state.
-
-**Q: Why is 'if' at the end of the line?**
-> A: Statement modifiers put the primary action up front in natural English word order (<code>return unless valid?</code>), keeping conditional guardrails unobtrusive.
-
-**Q: Punctuation inside method names (? and !)?**
-> A: <code>?</code> denotes pure predicate queries returning boolean (<code>alive?</code>), while <code>!</code> screams destructive in-place mutation or exception danger.
-
-**Presenter Notes**:
-> When programmers coming from C, C++, Java, C#, Go, or Python first encounter Ruby code, they often experience intense cognitive dissonance. The syntax doesn't look like the traditional C-family algol-derived languages they grew up with. Where are the return statements? Why is someone assigning an if statement to a variable? Why is there an 'if' tacked onto the end of a line after the function call? How can a method have a question mark or exclamation mark in its name? And how can you possibly re-open a standard library class and add methods to it?
-> To an outsider, these conventions look like lawless chaos. But to experienced Rubyists, they are the secret sauce of developer happiness. None of these are accidents or sloppy language design—they are intentional, human-centered ergonomic choices grounded in linguistics and expression-oriented programming. In this section, we'll demystify each of these famous 'oddities' and explain why they make code cleaner, more readable, and less error-prone. And most importantly, we will see how Crystal took these exact ergonomic oddities and proved they can run at native C++ execution speeds.
-
----
-
-### Slide 13: Implicit Returns: The Last Evaluated Expression
-- **Theme Palette**: `amigo` (Amigo)
-- **Badge**: `RUBY QUIRKS • EXPRESSION RETURNS`
-- **Title**: Implicit Returns: The Last Evaluated Expression
-- **Subtitle**: Expression-Oriented Design, Functional Flow & High-Signal Early Returns
-- **Code (implicit_returns.rb — Expressions Over Rituals)**:
-  ```ruby
-  # 1. Methods return their last evaluated expression:
-  def calculate_damage(base_power, defense)
-    multiplier = critical_hit? ? 2.0 : 1.0
-    [base_power * multiplier - defense, 1].max # No "return" needed!
-  end
-  
-  # 2. Blocks in pipelines return values effortlessly:
-  healed_party = party.map do |player|
-    player.heal(25) # Return value of heal() becomes mapped element!
-  end
-  
-  # 3. Branching returns naturally from whichever branch ran:
-  def player_rank(score)
-    if score >= 10_000
-      :grandmaster
-    elsif score >= 5_000
-      :diamond
-    else
-      :challenger
-    end # Entire if returns the resulting symbol to the caller!
-  end
-  
-  # 4. Explicit "return" is reserved strictly for early bailouts:
-  def process_turn(actor)
-    return unless actor.alive? # High-signal guard clause!
-    actor.take_action
-  end
-  ```
-- **Why Outsiders Hesitate vs Why It's Brilliant**:
-  - The Outsider's Worry: In C, Java, and Python, developers are trained that omitting return means the routine is void or returns None. Seeing no return looks like an accidental omission.
-  - Expression-Oriented Semantics: Routines evaluate naturally to their resulting value rather than requiring procedural return statements. Mandating a return keyword on every single function is ritualistic syntax noise.
-  - Crucial for Blocks & Closures: Functional pipelines (map, select) rely on implicit returns. In Ruby, writing an explicit return inside a block aborts the enclosing method, not just the block!
-  - High-Signal Guard Clauses: Because ordinary returns are implicit, an explicit return stands out vividly on code review as an intentional early bailout (return if dead?).
-  - Crystal Flow Typing: Crystal infers the static union type across all branch exit expressions at compile time—delivering functional elegance with zero runtime dispatch cost.
-
-**Presenter Notes**:
-> In traditional imperative programming languages like C, Java, or Python, every function that computes a value must conclude with the keyword 'return'. If you omit it in C, your code might return garbage; if you omit it in Python, it returns None. When developers from those ecosystems look at Ruby, they instinctively think: 'Wait, did you forget to write return?'
-> In Ruby, methods, blocks, and conditionals naturally evaluate to the result of their last executed expression. In expression-oriented languages, code computes values directly—aligning with functional programming principles.
-> More importantly, implicit returns are essential for blocks. In collection operations like party.map, the block returns the last expression automatically. If you were forced to write 'return', it would trigger a non-local jump and exit the entire enclosing method! Furthermore, because standard method exits never use 'return', whenever an explicit 'return' does appear—like 'return unless actor.alive?'—it immediately screams out as a high-priority guard clause. Crystal preserves this exact expression-based model, computing static union types at compile time with zero LLVM overhead.
-
----
-
-### Slide 14: Control Expressions: Assigning "if" and "case"
-- **Theme Palette**: `fos` (FOS)
-- **Badge**: `RUBY QUIRKS • EXPRESSION ASSIGNMENT`
-- **Title**: Control Expressions: Assigning "if" and "case"
-- **Subtitle**: The Readable Analog to the Ternary '?:' Operator — Without the Cramping or Spaghetti
-- **Code (if_assignment.rb — The Ternary Elevated)**:
-  ```ruby
-  # The Old C/Java/Python Way (Imperative Dummy Variable):
-  # let speed = 0; // Uninitialized/mutable state!
-  # if (boosted) { speed = 100; } else { speed = 50; }
-  
-  # The Traditional Ternary (Single line only, cramped):
-  # speed = boosted ? 100 : 50
-  
-  # The Ruby/Crystal Expression Way: if IS a readable ternary!
-  speed = if boosted?
-            play_sfx(:turbo)
-            100 # Evaluates to branch value
-          else
-            50
-          end
-  
-  # Multi-branch case expression replaces nested ternary spaghetti:
-  loot = case dice_roll
-         when 95..100 then :legendary_sword
-         when 80..94  then :rare_shield
-         when 50..79  then :health_potion
-         else              :rusty_dagger
-         end
-  
-  # Pass conditional expressions directly into method arguments:
-  render_dialog(title: "Warning",
-                color: if critical? then :red else :yellow end)
-  ```
-- **Why It Baffles Other Languages & Why It Wins**:
-  - The Outsider's Shock: In C, Java, C#, Go, and Python, if is a statement, not an expression. Writing x = if (cond) is a compiler syntax error.
-  - The Mental Bridge (The Ternary Analogy): Every programmer understands val = cond ? a : b. In Ruby and Crystal, if is the exact same concept—an expression that yields a value—elevated into a clean, formatted block.
-  - Eliminating Mutable Dummy State: Eliminates declaring uninitialized variables (var result;) outside an if-block, killing temporal coupling and null pointer bugs.
-  - Curing Nested Ternary Hell: Chained ternaries (a ? b : c ? d : e) are unreadable eye-strain traps. Expression if and case allow formatted indentation, comments, and preparatory code per branch.
-  - Crystal Type Union Resolution: In Crystal, val = if cond then 42 else "fallback" end infers the static union Int32 | String with zero heap allocation or boxing.
-
-**Presenter Notes**:
-> In traditional languages like C, C++, Java, or Go, there is a strict divide between 'statements' and 'expressions'. Expressions evaluate to a value (like 2 + 2 or a ? b : c), while statements only execute actions and return nothing (like if, while, or for). When developers from those languages see 'speed = if boosted? ...', their brain screams: 'You can't assign an if statement to a variable!'
-> The key to understanding this is the ternary operator. Every programmer is familiar with 'speed = boosted ? 100 : 50'. In Ruby and Crystal, 'if' is literally the ternary operator elevated into a first-class block structure!
-> Why is this better than the ternary? Because the ternary operator is notoriously cramped: it cannot support multi-line logic, you cannot run preparatory statements or sound effects inside a branch, and chaining multiple ternaries together creates an unreadable nightmare of colons and question marks.
-> With expression if and case, you get the clean composition of assigning expressions directly without declaring uninitialized dummy variables outside the block. And in Crystal, this is completely type-safe: the compiler analyzes all branches and infers precise static union types with zero runtime overhead.
-
----
-
-### Slide 15: Backwards One-Liners: Statement Modifiers
-- **Theme Palette**: `spaces_xp` (Spaces XP)
-- **Badge**: `RUBY QUIRKS • STATEMENT MODIFIERS`
-- **Title**: Backwards One-Liners: Statement Modifiers
-- **Subtitle**: 'action if condition' — Putting the Action First to Match Human Thought Flow
-- **Code (statement_modifiers.rb — Action-First Syntax)**:
-  ```ruby
-  # 1. Action-First Intent: What we're doing comes first!
-  player.drink_potion! if player.low_health?
-  
-  # 2. Flattening Guard Clauses (Goodbye Pyramid of Doom):
-  def cast_spell(spell, target)
-    return unless spell.ready?
-    return if target.invulnerable?
-    return unless mana >= spell.cost
-  
-    # Core logic stays completely flat at indentation level 1:
-    consume_mana(spell.cost)
-    target.apply_damage(spell.damage)
-    spawn_vfx(spell.effect_id)
-  end
-  
-  # 3. Postfix unless, while & until loops:
-  play_hit_sound unless player.muted?
-  
-  frame_step while simulation.running?
-  tick_physics until game.paused?
-  ```
-- **Why Foreign Eyes Flinch vs Why Rubyists Love It**:
-  - The Outsider's Discomfort: Mainstream languages enforce prefix order: if (cond) { action(); }. Seeing the condition at the end feels inverted and backward to prefix-trained brains.
-  - Human Conversational Alignment: In real life, humans say: "Take an umbrella if it rains", not "If it rains, take an umbrella". The primary action is what matters most to the reader.
-  - Flattening Indentation (Zero Pyramid of Doom): Preconditions and guard clauses are dispatched in clean, single lines without wrapping code in 3 or 4 levels of nested if-blocks.
-  - Secondary Guards Tucked Out of Sight: By placing if low_health? at the tail, code reads as a clean list of actions with guardrails neatly aligned on the right.
-  - Zero Cost in Crystal: Crystal's compiler lowers statement modifiers directly to the exact same conditional branch instructions in LLVM assembly.
-
-**Presenter Notes**:
-> In virtually all mainstream programming languages—C, C++, Java, C#, Python, and Go—control flow is strictly prefix: the 'if' condition must come before the curly brace or colon, followed by the code block. When developers from those languages encounter Ruby's statement modifiers, like 'player.drink_potion! if player.low_health?', they often flinch and complain: 'Why is the if statement backwards?'
-> The answer lies in human linguistics and cognitive psychology. When speaking to another person, you don't say: 'If it begins to precipitate outside, ensure you grab an umbrella.' You say: 'Take an umbrella if it rains.' The primary action—what the computer is actually doing—is the most important piece of information. The condition is merely a secondary guardrail.
-> Statement modifiers also solve one of the greatest curses of software engineering: the 'Pyramid of Doom'. Instead of nesting four levels of if-statements just to validate that an actor can cast a spell, you write three flat guard clauses: 'return unless spell.ready?', 'return if target.invulnerable?', 'return unless mana >= cost'. The primary business logic stays completely un-indented at the left margin. Crystal preserves this exact postfix syntax, compiling it down to direct branch instructions with zero overhead.
-
----
-
-### Slide 16: Semantic Punctuation: "?" and "!" Method Endings
-- **Theme Palette**: `candy` (Candy)
-- **Badge**: `RUBY QUIRKS • SEMANTIC IDENTIFIERS`
-- **Title**: Semantic Punctuation: "?" and "!" Method Endings
-- **Subtitle**: Predicates, Nil Over Errors & Unmissable Mutation Flares
-- **Code (predicates_and_bangs.rb — Expressive Punctuation)**:
-  ```ruby
-  # 1. Predicates (?): Returns boolean, asks a clear question
-  player.alive?        # Returns Bool (vs player.is_alive())
-  inventory.empty?     # Returns Bool (vs inventory.isEmpty())
-  shield.can_absorb?   # Conversational, fluent English!
-  
-  # 2. Nil Over Errors (?): Idiomatic Non-Throwing Alternative
-  party.first?         # Returns Player | Nil (party.first raises if empty!)
-  items[99]?           # Returns Item | Nil (items[99] raises IndexError!)
-  "abc".to_i?          # Returns Int32 | Nil ("abc".to_i raises ArgumentError!)
-  world.find_node?("X")# Returns Node | Nil (safe nilable traversal)
-  
-  # 3. Bang methods (!): Warns of in-place mutation or danger
-  inventory.sort       # PURE: returns a new sorted copy
-  inventory.sort!      # MUTATING: alters array in place!
-  vector.normalize!    # Mutates existing Vector3 in place
-  
-  # 4. Bang methods (!): Raising exceptions vs soft nilable returns
-  user.save            # Soft failure: returns false/nil on invalid
-  user.save!           # Hard failure: raises RecordInvalid exception!
-  ```
-- **Punctuation as High-Signal Communication**:
-  - The Outsider's Bafflement: In C, Java, Go, and Python, punctuation characters in identifiers are illegal syntax errors. In C# or Swift, ? is reserved solely for nullability operators.
-  - Eliminating Prefix Bikeshedding: Kills naming debates between is_empty, has_items, check_alive, and should_spawn. A question mark turns any word into an English question.
-  - Nil Over Errors Convention (some_method?): By convention in Ruby and Crystal, methods ending in ? return nil on missing values instead of raising exceptions, avoiding cumbersome rescue blocks for routine lookups.
-  - In-Place Mutation Flare (!): A developer scanning a pull request can instantly spot destructive mutations (sort!, normalize!) versus harmless pure functions.
-  - Dual Error Handling APIs: Elegant, idiomatic pairing between non-throwing nilable lookups (find?), soft boolean returns (save), and strict assertions (save!).
-  - Crystal Compile-Time Nil Safety: Crystal enforces strict compile-time checks on T | Nil returns from ? methods, making null pointer dereferences impossible.
-
-**Presenter Notes**:
-> In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores: [a-zA-Z0-9_]. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error. In modern languages like C# or Swift, question marks are compiler operators for optional types and safe navigation.
-> In Ruby and Crystal, punctuation is elevated into a rich semantic communication tool. First, methods ending in '?' are 'predicates'—they ask a question and return a boolean. This single convention permanently eliminated thousands of hours of bikeshedding over whether a function should be named 'is_alive', 'has_health', 'check_active', or 'get_is_alive'.
-> Second, methods like 'first?', 'items[99]?', and '"abc".to_i?' embody the beloved 'Nil over Errors' philosophy: by convention, they return 'nil' on lookup failure instead of raising an exception ('KeyError', 'IndexOutOfBoundsException', 'ValueError'), avoiding bulky try/catch blocks for routine control flow. Callers can handle edge cases cleanly with nil checks or fallback operators (like 'val || default').
-> Third, the exclamation point, or 'bang' method, acts as an unmissable safety flare: it signals in-place destructive mutation ('sort!' vs 'sort') or that the method raises an exception on failure ('save!' vs 'save'). Crystal preserves these exact conventions and enforces compile-time nil safety and boolean typing with zero runtime overhead.
-
----
-
-### Slide 17: The "Missing" for Loop
-- **Theme Palette**: `game_station` (GameStation)
-- **Badge**: `RUBY QUIRKS • ITERATION ARCHITECTURE`
-- **Title**: The "Missing" for Loop
-- **Subtitle**: Why Ruby Abandoned Primitive Loops for Internal Iterators & Enumerable Blocks
-- **Code (missing_for_loop.rb — Blocks Over Indexing)**:
-  ```ruby
-  # The C / Java / Python Imperative Tradition:
-  # for (int i = 0; i < enemies.length; i++) { ... } # Index leaks, bounds risk!
-  # for enemy in enemies: # Language-level statement keyword
-  
-  # The Ruby Way: Internal Iterators & Enumerable Blocks!
-  enemies.each do |enemy|
-    enemy.take_damage(25) # Clean, scoped, no index bookkeeping
-  end
-  
-  # Looping without a 'for' keyword: Methods on the objects!
-  5.times { spawn_skeleton! }
-  1.upto(10) { |level| generate_dungeon_floor(level) }
-  
-  # Iterating with indices when needed:
-  enemies.each_with_index do |enemy, idx|
-    puts "Target ##{idx + 1}: #{enemy.name}"
-  end
-  
-  # Composable pipelines (map, select, reject, any?, all?):
-  active_bosses = enemies.select(&:boss?).reject(&:defeated?)
-  ```
-- **Why Outsiders Search for "for" vs Why Blocks Win**:
-  - The Outsider's Bewilderment: "Where is the for loop? Why are you calling a method on an integer (5.times)? Why is iteration a method call instead of a core language keyword?"
-  - The Flaw of Traditional for: C and Java index loops require manual bounds tracking (i < len), inviting off-by-one errors and array out-of-bounds panics.
-  - Lexical Scope Isolation: In Python and early Ruby, for loops leak the loop variable into the enclosing function. Blocks strictly isolate |item| to their own lexical scope.
-  - Internal Iterators & Enumerable: The collection encapsulates its own traversal. Defining a single each method automatically unlocks map, select, reject, and reduce for free.
-  - Crystal's LLVM Inlining Miracle: In Crystal, blocks are inlined directly at compile time. 5.times compiles to the exact same bare-metal CPU register loop as a C for loop with zero function call overhead.
-
-**Presenter Notes**:
-> When programmers coming from C, C++, Java, C#, Go, or Python learn Ruby, one of their very first stumbling blocks is looking for the 'for' loop. In every C-family language, 'for' is the universal workhorse of iteration. While Ruby technically has a 'for ... in' keyword, nobody in the professional Ruby community uses it—in fact, standard linters like RuboCop flag 'for' as an antipattern!
-> Why did Ruby reject the traditional for loop? First, scope leakage: in languages like Python, the loop variable leaks into the surrounding function after the loop ends. In Ruby, blocks introduce a strict lexical closure scope—block parameters (|enemy|) vanish the moment the block terminates.
-> Second, Ruby pioneered 'Internal Iteration'. In an imperative language, the caller manages loop counters, bounds checks, and array indexing—creating off-by-one bugs. In Ruby, the collection controls its own traversal via the '.each' method.
-> Third, it treats numbers and ranges as first-class objects: instead of 'for (int i = 0; i < 5; i++)', you simply write '5.times { spawn_skeleton! }' or '1.upto(10) { |lvl| ... }'.
-> And best of all, defining a single 'each' method and including Enumerable gives any custom game data structure over 50 functional query methods for free. In Crystal, LLVM inlines these blocks completely, generating direct CPU register loops identical to hand-optimized C.
-
----
-
-### Slide 18: Open Classes: The "Monkey Patch" Heresy
-- **Theme Palette**: `creation` (Creation)
-- **Badge**: `RUBY QUIRKS • OPEN CLASSES`
-- **Title**: Open Classes: The "Monkey Patch" Heresy
-- **Subtitle**: Why Foreigners Fear It, Why Rubyists Love It & How Crystal Made It Safe
-- **Code (open_classes_and_refinements.rb — Taming the Monkey)**:
-  ```ruby
-  # 1. Open Classes: Extend types with domain verbs (No StringUtils!)
-  class Numeric
-    def meters; self * 1.0; end
-    def kilometers; self * 1000.0; end
-  end
-  jump_distance = 15.meters + 0.5.kilometers
-  
-  # 2. Taming Pathologic Monkey Patching: Scoped Refinements (Ruby 2.0+)
-  # Global mutations can collide across gems; refinements scope them lexically:
-  module GameSanitizers
-    refine String do
-      def to_slug
-        downcase.strip.gsub(/[^\w-]/, '_')
-      end
-    end
-  end
-  
-  # Outside this file, String#to_slug DOES NOT EXIST (zero pollution!)
-  using GameSanitizers
-  url_slug = "Forest Temple (Zone 1)".to_slug
-  ```
-- **Why It Terrifies Outsiders vs Why It's Brilliant**:
-  - The Outsider's Horror: In Java and C++, types are sealed. Re-opening a core class from another file feels like lawless monkey business that shatters encapsulation and causes spooky action at a distance.
-  - Killing Static Utility Junk Drawers: Eradicates procedural StringUtils, MathHelper, and ArrayUtils. Verbs belong on the object itself, not in unrelated helper classes!
-  - The Pathologic Monkey Patch Hazard: In early Ruby, two third-party gems patching the same core method caused catastrophic load-order bugs where whichever gem loaded last won.
-  - Ruby 2.0+ Refinements (refine / using): Ruby introduced lexical refinements to tame pathologic patching—confining mutations strictly to the single file or module where using is declared.
-  - Crystal's Whole-Program Miracle: Crystal embraces open classes with zero runtime pathology: the compiler unifies the entire AST ahead of time, resolving methods with deterministic LLVM inlining.
-
-**Presenter Notes**:
-> To developers raised on classical object-oriented languages like Java, C#, or C++, classes are sealed, sacred units of compilation. The very idea that you can open a file in your project, write 'class String', and inject a new method directly into the standard library feels like heresy. In those communities, this practice was mockingly dubbed 'monkey patching' because it felt like lawless tampering that violates encapsulation.
-> Yet in Ruby, open classes are a foundational superpower. Why? Because they eliminate one of the ugliest antipatterns in software engineering: static utility dumping grounds like StringUtils, MathHelper, and DateUtil. Instead of writing 'StringUtils.sanitize(str)' or 'MathHelper.meters(15)', the method lives where it belongs: on the object itself ('str.sanitize', '15.meters').
-> However, as Ruby codebases grew into massive monoliths, developers encountered 'pathologic monkey patching': if Gem A and Gem B both patched Array#sum or String#strip in slightly different ways, subtle bugs arose depending purely on which file was required first. To tame this, Ruby 2.0+ introduced Scoped Refinements using 'refine' and 'using'. With refinements, class modifications are confined strictly to the file or module that explicitly activates them, eliminating global namespace pollution.
-> Crystal took this evolution to its ultimate conclusion: it embraces open classes natively, but because Crystal compiles a unified whole-program AST before type checking, there are zero runtime collisions, zero load-order race conditions, and LLVM inlines the methods directly into native machine code.
-
----
-
-### Slide 19: Runtime Metaprogramming & Singleton Classes
-- **Theme Palette**: `monokai` (Monokai)
-- **Badge**: `RUBY HERITAGE • RUNTIME METAPROGRAMMING`
-- **Title**: Runtime Metaprogramming & Singleton Classes
-- **Subtitle**: define_method, Object Eigenclasses & The Magic (and Chaos) of Mutable Types
-- **Code (runtime_eigenclasses.rb)**:
-  ```ruby
-  # 1. Dynamic class methods: synthesize verbs from runtime data
-  [:slash, :pierce, :smite, :fireball].each do |spell|
-    Player.define_method("cast_#{spell}") do |target, power = 10|
-      puts "#{name} casts #{spell} at #{target} for #{power} dmg!"
-    end
-  end
-  
-  hero = Player.new("Arthur")
-  hero.cast_smite("Goblin", 50) # Synthesized at runtime!
-  
-  # 2. Singleton Classes (Eigenclasses): Mutating a single instance
-  boss = Enemy.new("Malakor", hp: 10_000)
-  
-  # Inject bespoke behavior ONLY into this one specific instance:
-  def boss.enrage!
-    @phase = :enraged
-    puts "Malakor enters Phase 2! Unlocking meteor storm!"
-  end
-  
-  # Or directly open the object's hidden singleton eigenclass:
-  class << boss
-    def summon_meteor(target)
-      target.take_damage(999)
-    end
-  end
-  
-  minion = Enemy.new("Skeleton", hp: 20)
-  boss.enrage!   # => Works!
-  minion.enrage! # => NoMethodError! (minion has no eigenclass method)
-  ```
-- **The Eigenclass & The JIT Nightmare**:
-  - Dynamic define_method: Classes synthesize entirely new method dispatch tables on the fly at runtime based on configs, loops, or network data.
-  - Instance Eigenclasses (class << obj): Every object in Ruby has a hidden singleton class inserted before its class in the ancestor lookup hierarchy.
-  - Per-Instance Method Mutation: A single object can gain custom methods (def boss.enrage!) that no other instance of the same class possesses.
-  - The Compiler & JIT Nightmare: Polymorphic inline caches (PIC) shatter. A compiler cannot predict memory layouts or inline calls when an object's VTable is mutable heap state.
-
-**Presenter Notes**:
-> This slide captures the magnificent runtime insanity that made developers fall in love with Ruby—and made compiler engineers weep. In Ruby, classes aren't static blueprints; you can loop over an array of symbols at runtime and call define_method to synthesize methods on the fly. Even wilder, every single object in Ruby has a hidden 'singleton class'—often called an eigenclass or metaclass. You can attach methods to a single specific instance of an enemy that no other enemy has! This enabled magical testing frameworks like RSpec and dynamic mocks. But for game engines running at 60 FPS, this is devastating: the VM cannot inline method calls, polymorphic inline caches are constantly invalidated, and LLVM cannot compile ahead-of-time because an object's method dispatch table is literally mutable state living on the heap. Crystal took this joy and asked: how do we achieve this expressive elegance at compile time?
-
----
-
-### Slide 20: Dynamic Dispatch & Mixins
-- **Theme Palette**: `candy` (Candy)
-- **Badge**: `RUBY HERITAGE • METAPROGRAMMING`
-- **Title**: Dynamic Dispatch & Mixins
-- **Subtitle**: method_missing, send, Dynamic Proxies & Module Composition
-- **Code (dynamic_dispatch_and_mixins.rb)**:
-  ```ruby
-  # 1. method_missing: Ghost methods & dynamic proxying
-  class EntityProxy
-    def initialize(target); @target = target; end
-  
-    def method_missing(name, *args, &block)
-      if name.to_s.start_with?("can_")
-        puts "Checking capability for #{name}..."
-        true
-      else
-        @target.send(name, *args, &block) # send: dynamic dispatch
-      end
-    end
-  end
-  
-  # 2. Mixin Modules: Composable horizontal behavior
-  module Damageable
-    attr_accessor :health
-    def take_damage(amount)
-      @health = [@health - amount, 0].max
-    end
-  end
-  
-  class BossEnemy
-    include Damageable # Mixes in behavior without deep inheritance!
-  end
-  ```
-- **Dynamic Reflection & Composition**:
-  - Ghost Methods (method_missing): Intercepts undefined calls at runtime to synthesize dynamic query methods and transparent network proxies.
-  - Dynamic Dispatch via send: Invokes any method dynamically using symbols or strings (target.send(:cast_spell, :fireball)).
-  - Horizontal Mixin Modules: Modules share reusable behavior across unrelated classes via include, avoiding brittle multiple inheritance hierarchies.
-  - The VM Performance Cost: Runtime ancestor chain traversals and polymorphic inline cache misses make tight 60 FPS physics loops difficult to optimize.
-
-**Presenter Notes**:
-> Ruby's dynamic reflection model gave developers magical tools like method_missing and send. With method_missing, objects can intercept calls that don't exist at compile time—enabling ActiveRecord's famous dynamic finders like find_by_name or automatic network proxying. With send, any method can be dispatched dynamically using a runtime symbol or string. And mixin modules allowed developers to compose functionality horizontally via include, extend, and prepend without the brittle complexity of multiple inheritance. But this dynamic flexibility came at a steep cost: every method call in Ruby had to traverse ancestor lookup trees and check method caches at runtime, making it virtually impossible to achieve the sub-millisecond execution speeds needed for 60 FPS physics engines. Crystal observed these patterns and realized they could be achieved at compile-time using AST macros.
-
----
-
-### Slide 21: The Rise & Fall of Dynamic Ruby [Timeline]
+### Slide 9: The Rise & Fall of Dynamic Ruby [Timeline]
 - **1995-2012 — The Rise of Ruby**:
   - Yukihiro Matsumoto designs Ruby for human happiness, expressive blocks, and elegant syntax.
   - Ruby on Rails explodes: powers GitHub, Shopify, Airbnb, Twitter, Kickstarter, and Basecamp.
@@ -833,7 +337,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 22: Crystal: The Compiled Solution (ACT III • THE SYNTHESIS)
+### Slide 10: Crystal: The Compiled Solution (ACT III • THE SYNTHESIS)
 - **Title**: Crystal: The Compiled Solution
 - **Subtitle**: Native Machine Speed, Whole-Program Type Inference & Macro Metaprogramming
 - **Chapter Highlights**:
@@ -848,7 +352,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 23: Why Crystal? [Media]
+### Slide 11: Why Crystal? [Media]
 - **Media**: Language Selection & Pragmatic Trade-Offs (`crystalmeme.mp4`)
 - **Quote**: "Computers are not very smart. They don't understand human language, so we have to tell them what to do in a language that both humans and computers can understand." — Yukihiro Matsumoto:
 - **Engineering Trade-Offs: Beyond the Hype**:
@@ -865,7 +369,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 24: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
+### Slide 12: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
 - **Palette**: `spaces_98` | **Badge**: `LANGUAGE COMPARISON • BOILERPLATE`
 - **Lapis (Crystal)**:
 - **Godot C# (.NET)**:
@@ -877,7 +381,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 25: Language & GDExtension Ecosystem Feature Matrix [Matrix]
+### Slide 13: Language & GDExtension Ecosystem Feature Matrix [Matrix]
 | Language / Binding | Execution Model | Compilation Speed | Type Safety | Metaprogramming | SceneTree Ergonomics |
 | --- | --- | --- | --- | --- | --- |
 | <strong>Lapis (Crystal)</strong> | Native LLVM AOT | Fast (AOT Incremental) | Static + Nil Safe | AST Macros (Compile-Time) | Zen DSL (Ruby-like) |
@@ -893,7 +397,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 26: The Birth of Crystal [Convergence / Synthesis]
+### Slide 14: The Birth of Crystal [Convergence / Synthesis]
 - **Theme Palette**: `spaces_98` (Spaces 98)
 - **Title**: The Birth of Crystal
 
@@ -923,7 +427,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 27: The Zero-Tax Type System
+### Slide 15: The Zero-Tax Type System
 - **Theme Palette**: `spaces_xp` (Spaces XP)
 - **Badge**: `TYPE SYSTEM • COMPILE-TIME RIGOR`
 - **Title**: The Zero-Tax Type System
@@ -964,7 +468,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 28: Expressive Ergonomics: High-Level Language Primitives
+### Slide 16: Expressive Ergonomics: High-Level Language Primitives
 - **Theme Palette**: `playbox` (Playbox)
 - **Badge**: `CRYSTAL ERGONOMICS • EXPRESSION`
 - **Title**: Expressive Ergonomics: High-Level Language Primitives
@@ -1007,54 +511,305 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 29: The DSL Engine: with self yield & Macros
-- **Theme Palette**: `digital_guy` (DigitalGuy)
-- **Badge**: `CRYSTAL METAPROGRAMMING • COMPILE-TIME DSLs`
-- **Title**: The DSL Engine: with self yield & Macros
-- **Subtitle**: Compile-Time Context Shifting: How Rails Routes, RSpec & FactoryBot Become 100% Type-Safe
-- **Code (compile_time_dsl.cr — Pure Ruby Ergonomics, Static Dispatch)**:
+### Slide 17: Bare Words & Operators: Zero-Cost Uniform Access
+- **Theme Palette**: `monokai` (Monokai)
+- **Badge**: `CRYSTAL ERGONOMICS • SYNTACTIC ELEGANCE`
+- **Title**: Bare Words & Operators: Zero-Cost Uniform Access
+- **Subtitle**: Optional Parentheses, Uniform Access Principle & LLVM-Inlined Operator Methods
+- **Code (bare_words_and_operators.cr — Zero-Cost Ergonomics)**:
   ```crystal
-  # 1. Declarative Builder Class:
-  class CombatRoomBuilder
-    getter room : Room
+  # 1. Bare Words & Uniform Access: my_func vs my_func()
+  def max_health : Int32
+    100
+  end
   
-    def initialize(@room : Room)
+  puts max_health    # Property-like read, but executes method!
+  puts max_health()  # Parentheses are completely optional
+  
+  # Fluent DSL method calls without parentheses ceremony:
+  render_rect at: Vector2.new(10.0_f32, 20.0_f32), color: :red
+  
+  # 2. Operator Overloading: Pure struct methods, LLVM inlined!
+  struct Vector2
+    getter x : Float32, y : Float32
+  
+    def initialize(@x : Float32, @y : Float32)
     end
   
-    def wave(enemy : String, count : Int32)
-      @room.spawn_wave(enemy, count)
+    # Operators (+, -, *, [], []=) compile to direct CPU ops:
+    def +(other : Vector2) : Vector2
+      Vector2.new(@x + other.x, @y + other.y)
     end
   
-    def reward(item : String)
-      @room.set_chest(item)
-    end
-  
-    # 'with builder yield' rebinds self inside the caller's block!
-    def self.build(name : String, &) : Room
-      builder = new(Room.new(name))
-      with builder yield # self IS builder inside block!
-      builder.room
+    def [](axis : Symbol) : Float32
+      axis == :x ? @x : @y
     end
   end
   
-  # 2. Pure declarative DSL — zero "builder." boilerplate:
-  dungeon = CombatRoomBuilder.build("Dungeon_A1") do
-    wave "skeleton_archer", count: 4 # Calls wave on builder!
-    reward "obsidian_key"            # 100% type-checked at compile time!
-  end
+  v1 = Vector2.new(10.0_f32, 20.0_f32)
+  v2 = Vector2.new(5.0_f32, 5.0_f32)
+  v3 = v1 + v2       # Sugar for: v1.+(v2) — Inlined by LLVM!
+  puts v3[:x]        # Sugar for: v3.[](:x) => 15.0
   ```
-- **How Crystal Elevates Ruby's Secret Weapon**:
-  - The Secret Weapon of Ruby DSLs: In Ruby, instance_exec powered iconic frameworks like Rails routes (routes.rb), RSpec (describe/it), and FactoryBot by rebinding self.
-  - Static Context Shifting (with ... yield): Crystal achieves this exact ergonomic miracle at compile time: with builder yield rebinds self to the builder inside the block without runtime dynamic evaluation.
-  - 100% Compile-Time Verification: Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.
-  - Static Dispatch (No Reflection): The context-shifted block resolves methods statically at compile time—delivering declarative DSL syntax without runtime dynamic dispatch or reflection penalties.
+- **Why Bare Words & Operators Excel in Crystal**:
+  - Uniform Access Principle: Callers cannot tell whether player.health is a stored ivar or a dynamic calculation. Eliminates Java/C++ getter/setter ceremony.
+  - Fluent, Human-Centric Sentences: Omitting parentheses turns method calls into readable English instructions (render_rect at: pos, color: :red) while remaining 100% statically typed.
+  - Operators are Pure Methods on Value Types: Symbols like +, -, [], and == are standard methods on struct value types.
+  - Direct LLVM Inlining (0 Heap Overhead): In dynamic Ruby, v1 + v2 dispatches through VM tables and allocates objects; in Crystal, LLVM inlines the math directly into CPU registers with zero heap allocations.
 
 **Presenter Notes**:
-> In the Ruby section, we saw how instance_exec was the secret weapon that made Ruby famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead.
+> One of Ruby's greatest gifts to programming ergonomics was the total elimination of syntax ceremony. In Crystal, this philosophy is fully preserved, but supercharged by native compilation.
+> First, method parentheses are optional: calling max_health looks identical to reading a field, fulfilling Bertrand Meyer's Uniform Access Principle. Callers never need to know if a value is a cached field or a dynamic calculation.
+> Second, operators are not hardcoded compiler keywords—they are ordinary instance methods! Defining def +(other : Vector2) allows custom vector math, matrix multiplication, and spatial indexing to feel like built-in language primitives.
+> Unlike dynamic languages where vector math triggers heap allocations and dynamic method lookups, Crystal structs are stack-allocated and LLVM inlines operator methods directly into SIMD CPU instructions. You get the expressive syntax of high-level scripting with the raw execution speed of hand-written C++.
 
 ---
 
-### Slide 30: Modules: Mixins, Traits & Namespaces
+### Slide 18: The Crystal Syntax "Oddities" [FAQ / Q&A]
+
+**Q: Where is the return statement?**
+> A: Crystal treats the last evaluated expression as the return value. Whole-program type inference calculates exact return types (including union types) with zero keyword ceremony.
+
+**Q: Assigning an if statement to a variable?**
+> A: Control flow constructs are expressions that evaluate to concrete values (<code>val = if cond then 1 else 2 end</code>). Plus, <code>if x = find()</code> performs static compile-time nil narrowing!
+
+**Q: Why is 'if' or 'unless' at the end of the line?**
+> A: Statement modifiers put the primary action up front in natural English word order (<code>return unless valid?</code>), keeping guardrails flat without nested indentation pyramids.
+
+**Q: Punctuation inside method names (? and !)?**
+> A: <code>?</code> denotes pure predicate queries strictly returning <code>Bool</code> (or <code>T | Nil</code> for safe lookups), while <code>!</code> screams in-place mutation or throwing assertions.
+
+**Presenter Notes**:
+> When systems programmers coming from C, C++, Rust, Go, or Java first encounter Crystal code, they often experience a flash of cognitive dissonance. The syntax doesn't look like the traditional C-family algol-derived languages they grew up with. Where are the return statements? Why is someone assigning an if statement to a variable? Why is there an 'unless' tacked onto the end of a line after the function call? How can a method have a question mark or exclamation mark in its name?
+> To an outsider, these conventions look unusual. But to experienced developers, they are the secret sauce of productivity and joy. None of these are accidents—they are intentional, human-centered ergonomic choices grounded in linguistics and expression-oriented programming.
+> Crystal took every single one of these expressive syntactic delights and proved they can run at bare-metal C++ execution speeds with full compile-time static type safety and nil checking. In the next few slides, we'll examine each of these superpowers in depth.
+
+---
+
+### Slide 19: Implicit Returns: Expression-Oriented Flow
+- **Theme Palette**: `amigo` (Amigo)
+- **Badge**: `CRYSTAL ERGONOMICS • EXPRESSION RETURNS`
+- **Title**: Implicit Returns: Expression-Oriented Flow
+- **Subtitle**: Expression-Oriented Design, Functional Flow & High-Signal Early Returns
+- **Code (implicit_returns.cr — Expressions Over Rituals)**:
+  ```crystal
+  # 1. Methods return their last evaluated expression:
+  def calculate_damage(base : Int32, defense : Int32) : Int32
+    multiplier = critical_hit? ? 2.0_f32 : 1.0_f32
+    Math.max((base.to_f32 * multiplier).to_i - defense, 1) # No "return"!
+  end
+  
+  # 2. Blocks in pipelines return values effortlessly:
+  healed_party = party.map do |player|
+    player.heal(25) # Return value of heal() becomes mapped element!
+  end
+  
+  # 3. Branching returns naturally from whichever branch ran:
+  def player_rank(score : Int32) : Symbol
+    if score >= 10_000
+      :grandmaster
+    elsif score >= 5_000
+      :diamond
+    else
+      :challenger
+    end # Entire if returns the resulting symbol to caller!
+  end
+  
+  # 4. Explicit "return" is reserved strictly for early bailouts:
+  def process_turn(actor : Actor) : Nil
+    return unless actor.alive? # High-signal guard clause!
+    actor.take_action
+  end
+  ```
+- **Why Outsiders Hesitate vs Why It Wins in Crystal**:
+  - The Imperative Habit: In C, Java, and Python, developers are trained that omitting return means the routine is void or returns None. Seeing no return looks like an accidental omission.
+  - Expression-Oriented Semantics: Routines evaluate naturally to their resulting value. Mandating a return keyword on every single function is ritualistic syntax noise.
+  - Crucial for Inlined Blocks: Functional pipelines (map, select) rely on implicit returns. Writing an explicit return inside a block exits the enclosing method, not just the block!
+  - High-Signal Guard Clauses: Because ordinary returns are implicit, an explicit return stands out vividly on code review as an intentional early bailout (return if dead?).
+  - Compile-Time Union Inference: Crystal computes the exact static type (including unions like Int32 | String) across all exit branches with zero runtime dispatch cost.
+
+**Presenter Notes**:
+> In traditional imperative languages like C, Java, or Python, every function that computes a value must conclude with the keyword 'return'. If you omit it in C, your code might return garbage; if you omit it in Python, it returns None. When developers from those ecosystems first look at Crystal, they instinctively think: 'Wait, did you forget to write return?'
+> In Crystal, methods, blocks, and conditionals naturally evaluate to the result of their last executed expression. In expression-oriented languages, code computes values directly—aligning with functional programming principles.
+> More importantly, implicit returns are essential for blocks. In collection operations like party.map, the block returns the last expression automatically. If you were forced to write 'return', it would trigger a non-local jump and exit the entire enclosing method! Furthermore, because standard method exits never use 'return', whenever an explicit 'return' does appear—like 'return unless actor.alive?'—it immediately screams out as a high-priority guard clause. Crystal preserves this exact expression-based model, computing static union types at compile time with zero LLVM overhead.
+
+---
+
+### Slide 20: Control Expressions: If, Case & Nil Narrowing
+- **Theme Palette**: `fos` (FOS)
+- **Badge**: `CRYSTAL TYPE SAFETY • EXPRESSION CONTROL`
+- **Title**: Control Expressions: If, Case & Nil Narrowing
+- **Subtitle**: Expression Assignment, Range Cases & Crystal's Compile-Time Static Nil Narrowing
+- **Code (control_expressions.cr — Clean Expressions & Nil Safety)**:
+  ```crystal
+  # 1. if IS a readable expression that returns a value:
+  speed = if boosted?
+            play_sfx(:turbo)
+            100 # Evaluates to branch value
+          else
+            50
+          end
+  
+  # 2. Multi-branch case expression with discrete ranges:
+  loot = case dice_roll
+         when 95..100 then :legendary_sword
+         when 80..94  then :rare_shield
+         when 50..79  then :health_potion
+         else              :rusty_dagger
+         end
+  
+  # 3. Crystal's Killer Feature: Static Nil Narrowing via 'if x = ...'
+  def inspect_player(id : String)
+    # find_player? returns (Player | Nil)
+    if player = find_player?(id)
+      # Inside this block, compiler proves player is non-nil Player!
+      player.cast_spell(:protect)
+    else
+      # Compiler knows player is Nil here
+      puts "Player #{id} not found."
+    end
+  end
+  ```
+- **Why Control Expressions Excel in Crystal**:
+  - The Ternary Elevated: In Crystal, if and case are first-class expressions, eliminating uninitialized mutable dummy variables (var result;) outside blocks.
+  - Curing Nested Ternary Hell: Chained ternaries (a ? b : c ? d : e) are unreadable. Expression case allows clean range checks (when 95..100) with formatted indentation.
+  - Static Nil Narrowing (Type Flow): if x = find_player? tests truthiness AND narrows the variable type from T | Nil to T at compile time, eliminating null pointer crashes.
+  - Static Union Resolution: If branches evaluate to different types (e.g. Int32 and String), Crystal infers the exact union Int32 | String on the stack with zero heap allocation or boxing.
+
+**Presenter Notes**:
+> In traditional languages like C, C++, Java, or Go, there is a strict divide between 'statements' and 'expressions'. Expressions evaluate to a value, while statements only execute actions. When developers from those languages see 'speed = if boosted? ...', their instinct is surprise.
+> The key to understanding this is the ternary operator. Every programmer knows 'speed = boosted ? 100 : 50'. In Crystal, 'if' is literally the ternary operator elevated into a first-class block structure—supporting multi-line logic, sound effects, and clean formatting.
+> Even more powerfully, Crystal combines expression assignment with its whole-program type inference: 'if x = find_player?(id)' tests for presence AND statically narrows the type of 'player' from 'Player | Nil' to guaranteed non-nil 'Player' inside the block. If you forget to handle the nil case, the compiler refuses to build your game. You get expressive syntax with 100% compile-time null safety.
+
+---
+
+### Slide 21: Action-First Syntax: Statement Modifiers
+- **Theme Palette**: `spaces_xp` (Spaces XP)
+- **Badge**: `CRYSTAL ERGONOMICS • STATEMENT MODIFIERS`
+- **Title**: Action-First Syntax: Statement Modifiers
+- **Subtitle**: 'action if condition' — Putting Intent First to Match Human Cognitive Flow
+- **Code (statement_modifiers.cr — Action-First Syntax)**:
+  ```crystal
+  # 1. Action-First Intent: What we're doing comes first!
+  player.drink_potion! if player.low_health?
+  
+  # 2. Flattening Guard Clauses (Goodbye Pyramid of Doom):
+  def cast_spell(spell : Spell, target : Target) : Nil
+    return unless spell.ready?
+    return if target.invulnerable?
+    return unless mana >= spell.cost
+  
+    # Core logic stays completely flat at indentation level 1:
+    consume_mana(spell.cost)
+    target.apply_damage(spell.damage)
+    spawn_vfx(spell.effect_id)
+  end
+  
+  # 3. Postfix unless, while & until loops:
+  play_hit_sound unless player.muted?
+  
+  frame_step while simulation.running?
+  tick_physics until game.paused?
+  ```
+- **Why Statement Modifiers Excel in Crystal**:
+  - Human Conversational Alignment: In real life, humans say: "Take an umbrella if it rains", not "If it rains, take an umbrella". The primary action is what matters most to the reader.
+  - Flattening Indentation (Zero Pyramid of Doom): Preconditions and guard clauses are dispatched in clean, single lines without wrapping code in 3 or 4 levels of nested if-blocks.
+  - Secondary Guards Tucked Out of Sight: By placing if low_health? at the tail, code reads as a clean list of actions with guardrails neatly aligned on the right.
+  - Zero-Cost LLVM Lowering: Crystal lowers statement modifiers directly to standard conditional branch instructions in LLVM assembly with zero overhead.
+
+**Presenter Notes**:
+> In virtually all mainstream programming languages—C, C++, Java, C#, Python, and Go—control flow is strictly prefix: the 'if' condition must come before the block. When developers from those languages encounter statement modifiers like 'player.drink_potion! if player.low_health?', they often wonder why the 'if' is at the end.
+> The answer lies in human linguistics and cognitive psychology. In real conversation, the primary action—what the program is actually doing—is the most important piece of information. The condition is merely a secondary guardrail.
+> Statement modifiers also solve one of the greatest curses of software engineering: the 'Pyramid of Doom'. Instead of nesting four levels of if-statements just to validate that an actor can cast a spell, you write three flat guard clauses: 'return unless spell.ready?', 'return if target.invulnerable?', 'return unless mana >= cost'. The primary business logic stays completely un-indented at the left margin. Crystal preserves this exact postfix syntax, compiling it down to direct branch instructions with zero overhead.
+
+---
+
+### Slide 22: Semantic Punctuation: "?" and "!" Method Endings
+- **Theme Palette**: `candy` (Candy)
+- **Badge**: `CRYSTAL ERGONOMICS • SEMANTIC IDENTIFIERS`
+- **Title**: Semantic Punctuation: "?" and "!" Method Endings
+- **Subtitle**: Predicates, Nil Over Errors & Unmissable Mutation Flares
+- **Code (predicates_and_bangs.cr — Expressive Punctuation)**:
+  ```crystal
+  # 1. Predicates (?): Returns boolean, asks a clear question
+  player.alive?        # Returns Bool (vs player.is_alive())
+  inventory.empty?     # Returns Bool (vs inventory.isEmpty())
+  shield.can_absorb?   # Conversational, fluent English!
+  
+  # 2. Nil Over Errors (?): Idiomatic Non-Throwing Alternative
+  party.first?         # Returns Player | Nil (party.first raises if empty!)
+  items[99]?           # Returns Item | Nil (items[99] raises IndexError!)
+  "abc".to_i?          # Returns Int32 | Nil ("abc".to_i raises ArgumentError!)
+  world.find_node?("X")# Returns Node | Nil (safe nilable traversal)
+  
+  # 3. Bang methods (!): Warns of in-place mutation or danger
+  inventory.sort       # PURE: returns a new sorted copy
+  inventory.sort!      # MUTATING: alters array in place!
+  vector.normalize!    # Mutates existing Vector3 in place
+  
+  # 4. Bang methods (!): Raising exceptions vs soft nilable returns
+  user.save            # Soft failure: returns Bool (false on invalid)
+  user.save!           # Hard failure: raises RecordInvalid exception!
+  ```
+- **Punctuation as High-Signal Communication**:
+  - Semantic Identifiers: In C, Java, and Go, punctuation in identifiers is illegal. Crystal embraces ? and ! as rich semantic communication tools.
+  - Eliminating Prefix Bikeshedding: Kills naming debates between is_empty, has_items, check_alive, and should_spawn. A question mark turns any word into an English question.
+  - Nil Over Errors Convention (?): Methods ending in ? return nil on missing values instead of raising exceptions, avoiding cumbersome rescue blocks for routine lookups.
+  - In-Place Mutation Flare (!): A developer scanning a pull request can instantly spot destructive in-place mutations (sort!, normalize!) versus pure functions.
+  - Compiler-Enforced Nil Safety: Crystal enforces strict compile-time checks on T | Nil returns from ? methods, making null pointer dereferences impossible.
+
+**Presenter Notes**:
+> In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error.
+> In Crystal, punctuation is elevated into a rich semantic communication tool. First, methods ending in '?' are 'predicates'—they ask a question and return a boolean. This single convention permanently eliminates bikeshedding over whether a function should be named 'is_alive', 'has_health', or 'get_is_alive'.
+> Second, methods like 'first?', 'items[99]?', and '"abc".to_i?' embody the beloved 'Nil over Errors' philosophy: by convention, they return 'nil' on lookup failure instead of raising an exception, avoiding bulky try/catch blocks for routine control flow.
+> Third, the exclamation point, or 'bang' method, acts as an unmissable safety flare: it signals in-place destructive mutation ('sort!' vs 'sort') or that the method raises an exception on failure ('save!' vs 'save'). Crystal preserves these exact conventions and enforces compile-time nil safety and boolean typing with zero runtime overhead.
+
+---
+
+### Slide 23: The "Missing" for Loop: Zero-Cost Iteration
+- **Theme Palette**: `game_station` (GameStation)
+- **Badge**: `CRYSTAL ERGONOMICS • ITERATION ARCHITECTURE`
+- **Title**: The "Missing" for Loop: Zero-Cost Iteration
+- **Subtitle**: Why Crystal Uses Internal Iterators & Inlines Enumerable Blocks to Native Loops
+- **Code (iteration_architecture.cr — Inlined Blocks Over Indexing)**:
+  ```crystal
+  # The C / Java / GDScript Imperative Tradition:
+  # for (int i = 0; i < enemies.length; i++) { ... } # Index leaks, bounds risk!
+  
+  # The Crystal Way: Internal Iterators & Inlined Blocks!
+  enemies.each do |enemy|
+    enemy.take_damage(25) # Clean, strictly scoped, zero index bookkeeping
+  end
+  
+  # Looping without a 'for' keyword: Methods on the objects!
+  5.times { spawn_skeleton! }
+  1.upto(10) { |level| generate_dungeon_floor(level) }
+  
+  # Iterating with indices when needed:
+  enemies.each_with_index do |enemy, idx|
+    puts "Target ##{idx + 1}: #{enemy.name}"
+  end
+  
+  # Composable Enumerable pipelines (map, select, reject, any?, all?):
+  active_bosses = enemies.select(&.boss?).reject(&.defeated?)
+  ```
+- **Why Internal Iterators Excel in Crystal**:
+  - Strict Lexical Scope: In Python and older languages, loop variables leak into the surrounding function. Blocks strictly isolate |item| to their own scope.
+  - Zero Off-By-One Errors: The collection encapsulates its own traversal via each. Eliminates manual index arithmetic and out-of-bounds panics.
+  - 50+ Free Query Methods: Defining a single def each(&) and including Enumerable(T) automatically unlocks map, select, reject, and reduce.
+  - LLVM Direct Inlining (Zero Heap Overhead): Crystal inlines blocks directly at compile time. 5.times compiles to the exact same bare-metal CPU register loop as a C for loop.
+
+**Presenter Notes**:
+> When programmers coming from C, C++, Java, C#, Go, or Python learn Crystal, one of their first questions is: 'Where is the for loop?'
+> While Crystal technically supports 'for ... in', idiomatic Crystal code uses internal iteration via blocks.
+> Why? First, scope leakage: in languages like Python, the loop variable leaks into the surrounding function after the loop ends. In Crystal, blocks introduce a strict lexical closure scope—block parameters (|enemy|) vanish the moment the block terminates.
+> Second, internal iteration means the collection controls its own traversal via the 'each' method, eliminating manual index variables and off-by-one errors.
+> Third, numbers and ranges are first-class: instead of 'for (int i = 0; i < 5; i++)', you write '5.times { spawn_skeleton! }' or '1.upto(10) { |lvl| ... }'.
+> And best of all, defining a single 'each' method and including Enumerable gives any custom data structure over 50 functional query methods for free. LLVM inlines these blocks completely, generating direct CPU register loops identical to hand-optimized C with zero heap allocation.
+
+---
+
+### Slide 24: Modules: Mixins, Traits & Namespaces
 - **Theme Palette**: `creation` (Creation)
 - **Badge**: `CRYSTAL ARCHITECTURE • COMPOSITION`
 - **Title**: Modules: Mixins, Traits & Namespaces
@@ -1103,7 +858,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 31: Open Classes: Static Monkey Patching
+### Slide 25: Open Classes: Static Monkey Patching
 - **Theme Palette**: `monokai` (Monokai)
 - **Badge**: `CRYSTAL METAPROGRAMMING • OPEN CLASSES`
 - **Title**: Open Classes: Static Monkey Patching
@@ -1146,7 +901,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 32: Blocks, Procs & Lambdas: Inlined Closures
+### Slide 26: Blocks, Procs & Lambdas: Inlined Closures
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS`
 - **Title**: Blocks, Procs & Lambdas: Inlined Closures
@@ -1199,7 +954,54 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 33: Static Trade-Offs: No 'send' & Limits of 'exec'
+### Slide 27: The DSL Engine: with self yield & Macros
+- **Theme Palette**: `digital_guy` (DigitalGuy)
+- **Badge**: `CRYSTAL METAPROGRAMMING • COMPILE-TIME DSLs`
+- **Title**: The DSL Engine: with self yield & Macros
+- **Subtitle**: Compile-Time Context Shifting: How Rails Routes, RSpec & FactoryBot Become 100% Type-Safe
+- **Code (compile_time_dsl.cr — Pure Ruby Ergonomics, Static Dispatch)**:
+  ```crystal
+  # 1. Declarative Builder Class:
+  class CombatRoomBuilder
+    getter room : Room
+  
+    def initialize(@room : Room)
+    end
+  
+    def wave(enemy : String, count : Int32)
+      @room.spawn_wave(enemy, count)
+    end
+  
+    def reward(item : String)
+      @room.set_chest(item)
+    end
+  
+    # 'with builder yield' rebinds self inside the caller's block!
+    def self.build(name : String, &) : Room
+      builder = new(Room.new(name))
+      with builder yield # self IS builder inside block!
+      builder.room
+    end
+  end
+  
+  # 2. Pure declarative DSL — zero "builder." boilerplate:
+  dungeon = CombatRoomBuilder.build("Dungeon_A1") do
+    wave "skeleton_archer", count: 4 # Calls wave on builder!
+    reward "obsidian_key"            # 100% type-checked at compile time!
+  end
+  ```
+- **How Crystal Elevates Ruby's Secret Weapon**:
+  - The Secret Weapon of Ruby DSLs: In Ruby, instance_exec powered iconic frameworks like Rails routes (routes.rb), RSpec (describe/it), and FactoryBot by rebinding self.
+  - Static Context Shifting (with ... yield): Crystal achieves this exact ergonomic miracle at compile time: with builder yield rebinds self to the builder inside the block without runtime dynamic evaluation.
+  - 100% Compile-Time Verification: Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.
+  - Static Dispatch (No Reflection): The context-shifted block resolves methods statically at compile time—delivering declarative DSL syntax without runtime dynamic dispatch or reflection penalties.
+
+**Presenter Notes**:
+> In dynamic Ruby, instance_exec was the secret weapon that made DSLs famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead.
+
+---
+
+### Slide 28: Static Trade-Offs: No 'send' & Limits of 'exec'
 - **Theme Palette**: `candy` (Candy)
 - **Badge**: `METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS`
 - **Title**: Static Trade-Offs: No 'send' & Limits of 'exec'
@@ -1247,7 +1049,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 34: Macro Hooks: included & inherited
+### Slide 29: Macro Hooks: included & inherited
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `METAPROGRAMMING • AST HOOKS`
 - **Title**: Macro Hooks: included & inherited
@@ -1296,7 +1098,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 35: Deferred Synthesis: macro finished
+### Slide 30: Deferred Synthesis: macro finished
 - **Theme Palette**: `creation` (Creation)
 - **Badge**: `METAPROGRAMMING • DEFERRED AST`
 - **Title**: Deferred Synthesis: macro finished
@@ -1346,7 +1148,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 36: Macros: Zero-Reflection Serialization
+### Slide 31: Macros: Zero-Reflection Serialization
 - **Theme Palette**: `spaces_97` (Spaces 97)
 - **Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
 - **Title**: Macros: Zero-Reflection Serialization
@@ -1388,7 +1190,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 37: Where Macros Shine: Declarative State Machines
+### Slide 32: Where Macros Shine: Declarative State Machines
 - **Theme Palette**: `super_es` (Super ES)
 - **Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
 - **Title**: Where Macros Shine: Declarative State Machines
@@ -1443,7 +1245,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 38: Behind the DSL: The FSM AST Macro
+### Slide 33: Behind the DSL: The FSM AST Macro
 - **Theme Palette**: `super_es` (Super ES)
 - **Badge**: `AST METAPROGRAMMING • UNDER THE HOOD`
 - **Title**: Behind the DSL: The FSM AST Macro
@@ -1516,7 +1318,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 39: The Lapis Gameplay DSL (ACT IV • CHAPTER 01)
+### Slide 34: The Lapis Gameplay DSL (ACT IV • CHAPTER 01)
 - **Title**: The Lapis Gameplay DSL
 - **Subtitle**: First-Class Godot ClassDB Integration, Scene Tree Queries & Fluent Ergonomics
 - **Chapter Highlights**:
@@ -1531,7 +1333,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 40: What is Lapis? [Profile]
+### Slide 35: What is Lapis? [Profile]
 - **Stats**:
   - Up to 60x faster than GDScript: **LLVM Bare Metal**
   - Zen blocks & static nil safety: **Ruby-Like Syntax**
@@ -1567,7 +1369,7 @@ Theme: `sol.vin` | Total Slides: 163
 
 ---
 
-### Slide 41: The Lapis DSL: Clean, Declarative Node Authoring [Feature Grid / Bento]
+### Slide 36: The Lapis DSL: Clean, Declarative Node Authoring [Feature Grid / Bento]
 #### node Player < CharacterBody3D
 Compile-time ClassDB registration with automatic doc harvesting, zero GDExtension boilerplate, and static type safety.
 
@@ -1586,7 +1388,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 42: Node Ergonomics: onready, Operators /, %, and []
+### Slide 37: Node Ergonomics: onready, Operators /, %, and []
 - **Theme Palette**: `monokai` (Monokai)
 - **Badge**: `LAPIS DSL • OPERATOR ERGONOMICS`
 - **Title**: Node Ergonomics: onready, Operators /, %, and []
@@ -1630,7 +1432,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 43: Bare Scene Ergonomics: The Unary ~ Operator
+### Slide 38: Bare Scene Ergonomics: The Unary ~ Operator
 - **Theme Palette**: `playbox` (Playbox)
 - **Badge**: `LAPIS DSL • CONTEXT-AWARE ERGONOMICS`
 - **Title**: Bare Scene Ergonomics: The Unary ~ Operator
@@ -1679,7 +1481,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 44: Modular Traits: The gmodule Macro
+### Slide 39: Modular Traits: The gmodule Macro
 - **Theme Palette**: `bring_me_hope` (Bluebie)
 - **Badge**: `LAPIS DSL • MODULAR MIXINS`
 - **Title**: Modular Traits: The gmodule Macro
@@ -1735,7 +1537,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 45: Advanced gmodule: Composition, Hooks & Contracts
+### Slide 40: Advanced gmodule: Composition, Hooks & Contracts
 - **Theme Palette**: `monokai` (Monokai)
 - **Badge**: `LAPIS ARCHITECTURE • TRAIT COMPOSITION`
 - **Title**: Advanced gmodule: Composition, Hooks & Contracts
@@ -1784,7 +1586,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 46: Resource Loading: The Preload (>) & Load (>>) Operators [Step 1: Code]
+### Slide 41: Resource Loading: The Preload (>) & Load (>>) Operators [Step 1: Code]
 - **Palette**: `cross_cube` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Two-Step Preload & Untyped Load**:
   ```gdscript
@@ -1830,7 +1632,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 47: Resource Loading: The Preload (>) & Load (>>) Operators [Step 2: Analysis & Critique]
+### Slide 42: Resource Loading: The Preload (>) & Load (>>) Operators [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Two-Step Instantiation: Requires calling preload(...), storing a PackedScene, and calling .instantiate() separately.
   - Unsafe Runtime Casting: Untyped Resource return requires as Player casting that fails silently if types diverge.
@@ -1849,7 +1651,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 48: Gameplay Usability: Fluent Creation & Spawning
+### Slide 43: Gameplay Usability: Fluent Creation & Spawning
 - **Theme Palette**: `candy` (Candy)
 - **Badge**: `GAMEPLAY • ERGONOMIC DSL`
 - **Title**: Gameplay Usability: Fluent Creation & Spawning
@@ -1899,7 +1701,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 49: Game Feel & Juice: Fluent Tweens & Animation
+### Slide 44: Game Feel & Juice: Fluent Tweens & Animation
 - **Theme Palette**: `spaces_7` (Spaces 7)
 - **Badge**: `ANIMATION & JUICE • GAME FEEL`
 - **Title**: Game Feel & Juice: Fluent Tweens & Animation
@@ -1947,7 +1749,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 50: Scene Tree Glob Queries & Streaming Iteration
+### Slide 45: Scene Tree Glob Queries & Streaming Iteration
 - **Theme Palette**: `cross_cube` (CrossCube)
 - **Badge**: `SCENE TREE • GLOB NAVIGATION`
 - **Title**: Scene Tree Glob Queries & Streaming Iteration
@@ -1998,7 +1800,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 51: Direct Space Physics: Zero-Boilerplate Raycasting [Step 1: Code]
+### Slide 46: Direct Space Physics: Zero-Boilerplate Raycasting [Step 1: Code]
 - **Palette**: `spaces_vista` | **Badge**: `PHYSICS • DIRECT SPACE QUERIES`
 - **:circle-xmark: GDScript: Manual RayQuery Setup & Untyped Dictionaries**:
   ```gdscript
@@ -2042,7 +1844,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 52: Direct Space Physics: Zero-Boilerplate Raycasting [Step 2: Analysis & Critique]
+### Slide 47: Direct Space Physics: Zero-Boilerplate Raycasting [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Manual Query Allocation: Requires allocating PhysicsRayQueryParameters2D objects for every single raycast.
   - Untyped Dictionary Unpacking: intersect_ray returns an untyped Variant dictionary, requiring manual string key lookups.
@@ -2060,7 +1862,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 53: Gameplay Architecture: Pattern Matching (match)
+### Slide 48: Gameplay Architecture: Pattern Matching (match)
 - **Theme Palette**: `cross_cube_360` (CrossCube 360)
 - **Badge**: `GAMEPLAY • PATTERN MATCHING DSL`
 - **Title**: Gameplay Architecture: Pattern Matching (match)
@@ -2123,7 +1925,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 54: Gameplay Architecture: Context-Aware Audio & Spatial Queries
+### Slide 49: Gameplay Architecture: Context-Aware Audio & Spatial Queries
 - **Theme Palette**: `spaces_8` (Spaces 8)
 - **Badge**: `GAMEPLAY • AUDIO & SPATIAL DSL`
 - **Title**: Gameplay Architecture: Context-Aware Audio & Spatial Queries
@@ -2168,7 +1970,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 55: Gameplay Architecture: FSM, Signal Bus & Object Pooling
+### Slide 50: Gameplay Architecture: FSM, Signal Bus & Object Pooling
 - **Theme Palette**: `playbox` (Playbox)
 - **Badge**: `GAMEPLAY • DESIGN PATTERNS`
 - **Title**: Gameplay Architecture: FSM, Signal Bus & Object Pooling
@@ -2226,7 +2028,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 56: Ergonomics: Fluent Raycasting & Scene Tree Operators
+### Slide 51: Ergonomics: Fluent Raycasting & Scene Tree Operators
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `ERGONOMICS • TREE & SPATIAL DSL`
 - **Title**: Ergonomics: Fluent Raycasting & Scene Tree Operators
@@ -2283,7 +2085,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 57: Autoload Singletons: Declarative Engine Singletons (@[Autoload])
+### Slide 52: Autoload Singletons: Declarative Engine Singletons (@[Autoload])
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `THE LAPIS DSL • AUTOLOAD SINGLETONS`
 - **Title**: Autoload Singletons: Declarative Engine Singletons (@[Autoload])
@@ -2336,7 +2138,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 58: Signals, Events & Reactive Async (ACT IV • CHAPTER 02)
+### Slide 53: Signals, Events & Reactive Async (ACT IV • CHAPTER 02)
 - **Title**: Signals, Events & Reactive Async
 - **Subtitle**: Typed Emission, Automatic ObjectDB Pruning & Pipeline Composition (> and >>)
 - **Chapter Highlights**:
@@ -2351,7 +2153,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 59: Signals & Events: Reactive Zen Ergonomics
+### Slide 54: Signals & Events: Reactive Zen Ergonomics
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `CRYSTAL ERGONOMICS • SIGNALS & EVENTS`
 - **Title**: Signals & Events: Reactive Zen Ergonomics
@@ -2396,7 +2198,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 60: Signals & Callables: String Handlers vs. The on Macro [Step 1: Code]
+### Slide 55: Signals & Callables: String Handlers vs. The on Macro [Step 1: Code]
 - **Palette**: `spaces_vista` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Method Sprawl & Callable Boilerplate**:
   ```gdscript
@@ -2441,7 +2243,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 61: Signals & Callables: String Handlers vs. The on Macro [Step 2: Analysis & Critique]
+### Slide 56: Signals & Callables: String Handlers vs. The on Macro [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Method Sprawl: Every connected signal requires creating a separate single-use handler function (_on_button_pressed).
   - Callable Verbosity: Dynamic connections require wrapping receivers in Callable(self, "_on_...").
@@ -2460,7 +2262,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 62: Signals: Strict (>) & Loose (>>) Reactive Piping [Step 1: Code]
+### Slide 57: Signals: Strict (>) & Loose (>>) Reactive Piping [Step 1: Code]
 - **Palette**: `playbox` | **Badge**: `REACTIVE ARCHITECTURE • SIGNAL PIPELINES`
 - **:circle-xmark: GDScript: Manual Signal Forwarding Boilerplate**:
   ```gdscript
@@ -2513,7 +2315,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 63: Signals: Strict (>) & Loose (>>) Reactive Piping [Step 2: Analysis & Critique]
+### Slide 58: Signals: Strict (>) & Loose (>>) Reactive Piping [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Forwarding Ceremony: Forwarding a signal from a child component to an outer system requires writing dummy intermediary handler methods.
   - Arity & Conversion Glue: Adapting a signal with extra arguments or mismatched numeric types requires allocating anonymous lambda wrappers.
@@ -2535,7 +2337,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 64: The GDScript Antipattern Face-Off (ACT IV • CHAPTER 03)
+### Slide 59: The GDScript Antipattern Face-Off (ACT IV • CHAPTER 03)
 - **Title**: The GDScript Antipattern Face-Off
 - **Subtitle**: 10 Structural Traps: Iterators, Closures, Nil Hazards, Dead Pointers & AST Macros
 - **Chapter Highlights**:
@@ -2550,7 +2352,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 65: Iterators: Imperative Loops vs. Functional Zen [Step 1: Code]
+### Slide 60: Iterators: Imperative Loops vs. Functional Zen [Step 1: Code]
 - **Palette**: `spaces_xp_royale` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Imperative Loops & Array Mutation**:
   ```gdscript
@@ -2586,7 +2388,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 66: Iterators: Imperative Loops vs. Functional Zen [Step 2: Analysis & Critique]
+### Slide 61: Iterators: Imperative Loops vs. Functional Zen [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Manual Accumulation: Allocates intermediate heap arrays and manually appends elements one-by-one.
   - Missing Functional Primitives: Lacks standard pipeline operations (map, select, reject, tally, chunk).
@@ -2604,7 +2406,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 67: Anonymous Functions: Callable Churn vs. Inlining [Step 1: Code]
+### Slide 62: Anonymous Functions: Callable Churn vs. Inlining [Step 1: Code]
 - **Palette**: `super_es` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Verbose Lambdas, Callable Allocations & Churn**:
   ```gdscript
@@ -2650,7 +2452,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 68: Anonymous Functions: Callable Churn vs. Inlining [Step 2: Analysis & Critique]
+### Slide 63: Anonymous Functions: Callable Churn vs. Inlining [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Heap-Allocated Callables: Every anonymous func(...) lambda instantiates a native Godot Callable heap object with refcount tracking.
   - Clunky Lambda Syntax: No compact block syntax or symbol-to-proc; even simple 1-line predicates require full function signature boilerplate.
@@ -2667,7 +2469,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 69: Symbols: String Churn vs. 32-Bit IDs [Step 1: Code]
+### Slide 64: Symbols: String Churn vs. 32-Bit IDs [Step 1: Code]
 - **Palette**: `spaces_vista` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs**:
   ```gdscript
@@ -2712,7 +2514,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 70: Symbols: String Churn vs. 32-Bit IDs [Step 2: Analysis & Critique]
+### Slide 65: Symbols: String Churn vs. 32-Bit IDs [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Silent Null on Typoed Keys: Typoing a dictionary string key (blackboard.get("target_enmy")) returns null without any warning, causing crashes down the line.
   - Silent Typo Bugs in States: String and StringName comparisons never fail at compile time. Misspellings like &"petrol" silently evaluate to false, creating insidious bugs.
@@ -2729,7 +2531,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 71: Nil Safety: Runtime Crashes vs. Compile-Time Enforcement [Step 1: Code]
+### Slide 66: Nil Safety: Runtime Crashes vs. Compile-Time Enforcement [Step 1: Code]
 - **Palette**: `aperture` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Runtime Null Dereference**:
   ```gdscript
@@ -2762,7 +2564,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 72: Nil Safety: Runtime Crashes vs. Compile-Time Enforcement [Step 2: Analysis & Critique]
+### Slide 67: Nil Safety: Runtime Crashes vs. Compile-Time Enforcement [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Nullable by Default: Variables are nullable without compiler enforcement or warnings.
   - Duck-Typing Roulette: Errors only surface when players execute specific actions in-game.
@@ -2779,7 +2581,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 73: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking [Step 1: Code]
+### Slide 68: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking [Step 1: Code]
 - **Palette**: `spaces_10` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Non-Exhaustive Match & Untyped Enums**:
   ```gdscript
@@ -2827,7 +2629,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 74: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking [Step 2: Analysis & Critique]
+### Slide 69: Enums & Pattern Matching: Silent Bugs vs. Exhaustive Checking [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Raw Integer Decay: Enums decay to raw integers; no type safety when passing invalid integers.
   - Silent Match Failures: Adding an enum variant leaves existing match statements silently broken.
@@ -2843,7 +2645,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 75: Metaprogramming: Strings vs. AST Macros [Step 1: Code]
+### Slide 70: Metaprogramming: Strings vs. AST Macros [Step 1: Code]
 - **Palette**: `spaces_xp_royale` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Dictionary Sprawl & String Signals**:
   ```gdscript
@@ -2879,7 +2681,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 76: Metaprogramming: Strings vs. AST Macros [Step 2: Analysis & Critique]
+### Slide 71: Metaprogramming: Strings vs. AST Macros [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Stringly-Typed Dictionaries: Requires constructing complex property dictionaries in _get_property_list().
   - Brittle String Signals: Typo in signal name string fails silently or crashes at runtime.
@@ -2895,7 +2697,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 77: Value Types: GC Thrashing vs. Stack Structs [Step 1: Code]
+### Slide 72: Value Types: GC Thrashing vs. Stack Structs [Step 1: Code]
 - **Palette**: `spaces_11` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing**:
   ```gdscript
@@ -2946,7 +2748,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 78: Value Types: GC Thrashing vs. Stack Structs [Step 2: Analysis & Critique]
+### Slide 73: Value Types: GC Thrashing vs. Stack Structs [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Heap Thrashing for Ephemeral Data: 10,000 events require 10,000 separate malloc calls and atomic refcount modifications.
   - Pointer Indirection & Cache Misses: Array[CombatEvent] stores 64-bit pointers scattered across RAM, thrashing CPU L1/L2 cache lines.
@@ -2963,7 +2765,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 79: Type Firewall: Crystal Enforces Strict Safety on GDScript [Step 1: Code]
+### Slide 74: Type Firewall: Crystal Enforces Strict Safety on GDScript [Step 1: Code]
 - **Palette**: `former_rain` | **Badge**: `INTEROPERABILITY • TYPE FIREWALL`
 - **:circle-xmark: GDScript: Duck-Typing & Malformed Arguments**:
   ```gdscript
@@ -2997,7 +2799,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 80: Type Firewall: Crystal Enforces Strict Safety on GDScript [Step 2: Analysis & Critique]
+### Slide 75: Type Firewall: Crystal Enforces Strict Safety on GDScript [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Duck-Typing Pitfall: Dynamic dictionaries and RPC packets can easily pass strings where numbers are expected.
   - Memory Corruption Risk: Untyped native bindings risk severe memory corruption on illegal type reinterpretation.
@@ -3013,7 +2815,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 81: Memory Safety: Dangling Pointers vs. Protection [Step 1: Code]
+### Slide 76: Memory Safety: Dangling Pointers vs. Protection [Step 1: Code]
 - **Palette**: `game_station_2` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: Unshielded Native C++ / GDExtension: Dangling Pointers & Crashes**:
   ```gdscript
@@ -3055,7 +2857,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 82: Memory Safety: Dangling Pointers vs. Protection [Step 2: Analysis & Critique]
+### Slide 77: Memory Safety: Dangling Pointers vs. Protection [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Deallocated Native Memory: queue_free() frees native C++ memory; unshielded pointers retain dead memory addresses.
   - Fatal Engine Segfault: Dereferencing dead unmanaged pointers crashes immediately with 0xC0000005 ACCESS_VIOLATION.
@@ -3072,7 +2874,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 83: Signals & Async: String Awaits vs. Typed Handles [Step 1: Code]
+### Slide 78: Signals & Async: String Awaits vs. Typed Handles [Step 1: Code]
 - **Palette**: `aperture` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Unsafe Await & Leaked Coroutines**:
   ```gdscript
@@ -3109,7 +2911,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 84: Signals & Async: String Awaits vs. Typed Handles [Step 2: Analysis & Critique]
+### Slide 79: Signals & Async: String Awaits vs. Typed Handles [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Infinite Hang Risk: await boss.died hangs indefinitely if the target node is freed before emitting.
   - No Built-In Timeouts: Adding timeouts requires manual timer nodes and complex cleanup logic.
@@ -3125,7 +2927,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 85: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 1: Code]
+### Slide 80: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 1: Code]
 - **Palette**: `spaces_95` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Dangling Timers & Node Leaks**:
   ```gdscript
@@ -3171,7 +2973,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 86: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 2: Analysis & Critique]
+### Slide 81: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Node Sprawl: Creating intervals requires spawning extra Timer nodes in the scene tree and manually wiring signals.
   - Dangling Callbacks: SceneTreeTimer continues ticking even if the target node is destroyed, causing crashes on freed instances.
@@ -3189,7 +2991,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 87: Fearless Concurrency & Multiplayer (ACT IV • CHAPTER 04)
+### Slide 82: Fearless Concurrency & Multiplayer (ACT IV • CHAPTER 04)
 - **Title**: Fearless Concurrency & Multiplayer
 - **Subtitle**: Lightweight Fibers, Lock-Free Channels, Main-Thread Dispatch & Authoritative RPCs
 - **Chapter Highlights**:
@@ -3204,7 +3006,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 88: Concurrency: Lightweight Fibers & Signal Awaiting
+### Slide 83: Concurrency: Lightweight Fibers & Signal Awaiting
 - **Theme Palette**: `pastel` (Pastel)
 - **Badge**: `CONCURRENCY ARCHITECTURE • FIBERS`
 - **Title**: Concurrency: Lightweight Fibers & Signal Awaiting
@@ -3240,7 +3042,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 89: Concurrency: Parallel OS Threads & SceneTree Safety
+### Slide 84: Concurrency: Parallel OS Threads & SceneTree Safety
 - **Theme Palette**: `entertainment_system` (Entertainment System)
 - **Badge**: `CONCURRENCY ARCHITECTURE • OS THREADS & SAFETY`
 - **Title**: Concurrency: Parallel OS Threads & SceneTree Safety
@@ -3275,7 +3077,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 90: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 1: Code]
+### Slide 85: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 1: Code]
 - **Palette**: `spaces_97` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Mutex Locking & SceneTree Hazard**:
   ```gdscript
@@ -3318,7 +3120,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 91: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 2: Analysis & Critique]
+### Slide 86: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Manual Mutex Locking: Prone to race conditions, priority inversions, and deadlocks.
   - SceneTree Thread Invariants: Mutating nodes from background threads corrupts Godot's internal structures.
@@ -3334,7 +3136,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 92: Thread & Scope Policies
+### Slide 87: Thread & Scope Policies
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `CONCURRENCY SAFETY • THREAD AFFINITY`
 - **Title**: Thread & Scope Policies
@@ -3375,7 +3177,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 93: Main-Thread Dispatch
+### Slide 88: Main-Thread Dispatch
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `THREAD SYNCHRONIZATION • ENGINE QUEUE`
 - **Title**: Main-Thread Dispatch
@@ -3414,7 +3216,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 94: Multiplayer: Authoritative RPCs & Lockstep Sync
+### Slide 89: Multiplayer: Authoritative RPCs & Lockstep Sync
 - **Theme Palette**: `playtoy` (PlayToy)
 - **Badge**: `MULTIPLAYER ARCHITECTURE • NETWORKING`
 - **Title**: Multiplayer: Authoritative RPCs & Lockstep Sync
@@ -3461,7 +3263,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 95: Multiplayer Testing & Lockstep Network Debugging
+### Slide 90: Multiplayer Testing & Lockstep Network Debugging
 - **Theme Palette**: `playbox` (Playbox)
 - **Badge**: `MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING`
 - **Title**: Multiplayer Testing & Lockstep Network Debugging
@@ -3509,7 +3311,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 96: Crystal Concurrency Patterns in Games
+### Slide 91: Crystal Concurrency Patterns in Games
 - **Theme Palette**: `m64` (M64)
 - **Badge**: `ADVANCED CONCURRENCY • GAME PATTERNS`
 - **Title**: Crystal Concurrency Patterns in Games
@@ -3560,7 +3362,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 97: The C# (.NET) Shootout (ACT IV • CHAPTER 05)
+### Slide 92: The C# (.NET) Shootout (ACT IV • CHAPTER 05)
 - **Title**: The C# (.NET) Shootout
 - **Subtitle**: Escaping Keyword Ceremony, Null Minefields, Platform Lockout & The Runtime VM Tax
 - **Chapter Highlights**:
@@ -3575,7 +3377,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 98: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 1: Code]
+### Slide 93: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 1: Code]
 - **Palette**: `playbox` | **Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS`
 - **:circle-xmark: Godot C#: Mandatory Ceremony & Keyword Bloat**:
   ```csharp
@@ -3638,7 +3440,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 99: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 2: Analysis & Critique]
+### Slide 94: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Mandatory Partial Class Boilerplate: Godot C# forces every node to be declared public partial class to accommodate source generators.
   - Signal Delegate Ceremony: Defining a signal requires declaring a dummy delegate with an EventHandler suffix, multiplying code noise.
@@ -3656,7 +3458,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 100: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 1: Code]
+### Slide 95: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 1: Code]
 - **Palette**: `digital_guy` | **Badge**: `LANGUAGE SHOOTOUT • SAFETY & HYGIENE`
 - **:circle-xmark: Godot C#: The ?. Operator Trap & Leaking Delegates**:
   ```csharp
@@ -3722,7 +3524,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 101: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 2: Analysis & Critique]
+### Slide 96: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
   - The ?. Bytecode Trap: C# ?. and ?? operators compile to IL ldnull, bypassing Godot’s overloaded operator ==. Calling node?.Play() on a freed node evaluates to true and throws ObjectDisposedException.
   - Mandatory IsInstanceValid() Boilerplate: Because idiomatic C# null-conditional operators are unsafe with engine peers, developers must litter code with GodotObject.IsInstanceValid(node) guards.
@@ -3743,7 +3545,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 102: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 1: Code]
+### Slide 97: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 1: Code]
 - **Palette**: `former_rain` | **Badge**: `LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY`
 - **:circle-xmark: Godot C#: P/Invoke Overhead, Boxing & GC Spikes**:
   ```csharp
@@ -3791,7 +3593,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 103: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 2: Analysis & Critique]
+### Slide 98: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 2: Analysis & Critique]
 - **Critique Points**:
   - P/Invoke Boundary Overhead: Reading engine properties and calling C++ nodes repeatedly crosses the managed CLR boundary, incurring marshalling latency.
   - LINQ Closure & Enumerator Churn: Idiomatic operators (Where, OrderBy) instantiate delegate display classes, heap enumerators, and buffer arrays repeatedly in the frame loop.
@@ -3810,7 +3612,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 104: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 1: Code]
+### Slide 99: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 1: Code]
 - **Palette**: `game_station_2` | **Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN`
 - **:circle-xmark: Godot C#: Runtime Reflection & Roslyn Complexity**:
   ```csharp
@@ -3865,7 +3667,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 105: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 2: Analysis & Critique]
+### Slide 100: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Slow Runtime Reflection Overhead: Type.GetMethod() and method.Invoke() are 10-100x slower than direct calls, performing dynamic string table lookups on every invocation.
   - Variant & Object Boxing Penalties: Passing arguments through MethodInfo.Invoke forces primitive types (int, float, Vector3) to be boxed into heap objects.
@@ -3883,7 +3685,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 106: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
+### Slide 101: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
 - **Palette**: `cross_cube_360` | **Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING`
 - **:circle-xmark: Godot C#: Platform Lockout & Zombie Assemblies**:
   ```csharp
@@ -3918,7 +3720,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 107: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
+### Slide 102: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
   - AssemblyLoadContext Zombie Leaks: Hot-reloading in the editor relies on .NET ALC; lingering static events or threads pin assemblies in RAM, breaking debugger breakpoints and causing editor instability.
   - Platform Overhead & Lockout: Godot 4 C# lacks seamless out-of-the-box Web export and incurs heavy runtime overhead on mobile, requiring complex Ahead-Of-Time (AOT) toolchain workarounds.
@@ -3938,7 +3740,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 108: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
+### Slide 103: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
 - **Palette**: `aperture` | **Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY`
 - **:circle-xmark: Godot C#: Task Allocations, async void, and String Soup**:
   ```csharp
@@ -3993,7 +3795,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 109: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
+### Slide 104: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Task Heap Allocation Overhead: Every async Task invocation allocates a Task reference object and state machine on the managed heap, degrading game loop performance.
   - Async Void Crash Hazard: Exceptions thrown inside async void event handlers bypass try/catch blocks and directly crash the entire game process.
@@ -4011,7 +3813,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 110: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
+### Slide 105: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
 - **Palette**: `disinherited` | **Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS`
 - **:circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions**:
   ```csharp
@@ -4069,7 +3871,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 111: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
+### Slide 106: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Absence of Native Union Types: C# cannot natively express ShieldAbsorbed | CriticalDamage | Nil, forcing developers into loose object returns, wrapper hierarchies, or third-party libraries.
   - Non-Exhaustive Pattern Matching: C# switch expressions on general types do not enforce compile-time exhaustiveness; omitting a newly added type silently compiles and fails at runtime.
@@ -4087,7 +3889,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 112: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
+### Slide 107: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
 - **Palette**: `playbox` | **Badge**: `LANGUAGE SHOOTOUT • TESTING & ISOLATION`
 - **:circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps**:
   ```csharp
@@ -4146,7 +3948,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 113: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
+### Slide 108: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Engine Lifecycle Coupling: Godot C# nodes depend on C++ ObjectDB bindings; standard dotnet test throws NullReferenceException or native crashes unless run inside headless Godot.
   - Heavy External Test Harnesses: Requires third-party runners like GdUnit4 or WAT, loading scene packs and booting engine subsystems just to test pure gameplay logic.
@@ -4165,7 +3967,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 114: Zero-Friction Interoperability (ACT IV • CHAPTER 06)
+### Slide 109: Zero-Friction Interoperability (ACT IV • CHAPTER 06)
 - **Title**: Zero-Friction Interoperability
 - **Subtitle**: GDScript Meets Crystal: Dynamic Dispatch, Strongly-Typed FFI & The Type Firewall
 - **Chapter Highlights**:
@@ -4180,7 +3982,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 115: Interoperability: GDScript Calling Crystal
+### Slide 110: Interoperability: GDScript Calling Crystal
 - **Theme Palette**: `spaces_7` (Spaces 7)
 - **Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
 - **Title**: Interoperability: GDScript Calling Crystal
@@ -4226,7 +4028,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 116: Crystal Calling GDScript: Dynamic Dispatch
+### Slide 111: Crystal Calling GDScript: Dynamic Dispatch
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
@@ -4269,7 +4071,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 117: Crystal Calling GDScript: Strongly-Typed Bindings
+### Slide 112: Crystal Calling GDScript: Strongly-Typed Bindings
 - **Theme Palette**: `spaces_7` (Spaces 7)
 - **Badge**: `INTEROPERABILITY • AUTOMATIC TYPED BINDINGS`
 - **Title**: Crystal Calling GDScript: Strongly-Typed Bindings
@@ -4314,7 +4116,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 118: Inside the Godot Editor (ACT IV • CHAPTER 07)
+### Slide 113: Inside the Godot Editor (ACT IV • CHAPTER 07)
 - **Title**: Inside the Godot Editor
 - **Subtitle**: Gutter Diagnostics, In-Editor LSP, Doc Harvesting & 6-Phase Transactional Hot Reload
 - **Chapter Highlights**:
@@ -4329,7 +4131,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 119: First-Class Godot Editor Integration
+### Slide 114: First-Class Godot Editor Integration
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
 - **Title**: First-Class Godot Editor Integration
@@ -4350,7 +4152,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 120: In-Editor Diagnostics: Real-Time Static Validator & LSP
+### Slide 115: In-Editor Diagnostics: Real-Time Static Validator & LSP
 - **Theme Palette**: `spaces_10` (Spaces 10)
 - **Badge**: `EDITOR EXPERIENCE • DIAGNOSTICS & LSP`
 - **Title**: In-Editor Diagnostics: Real-Time Static Validator & LSP
@@ -4386,7 +4188,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Process Flow / Pipeline]
+### Slide 116: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Process Flow / Pipeline]
 01. **Pre-Flight**: Recursive node discovery & pre-reload sanity checks
 02. **Snapshot**: Quarantine live node properties into Engine metadata
 03. **DLL Swap**: Unlink old shadow DLL & re-register GDExtension
@@ -4400,7 +4202,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 122: The Lapis CLI Command Center (ACT IV • CHAPTER 08)
+### Slide 117: The Lapis CLI Command Center (ACT IV • CHAPTER 08)
 - **Title**: The Lapis CLI Command Center
 - **Subtitle**: Interactive Terminal Hub, Zero-Friction Diagnostics, 2-Way Reflection & Package Management
 - **Chapter Highlights**:
@@ -4415,7 +4217,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 123: CLI: Command Center & Scaffolding Hub
+### Slide 118: CLI: Command Center & Scaffolding Hub
 - **Theme Palette**: `spaces_95` (Spaces 95)
 - **Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: CLI: Command Center & Scaffolding Hub
@@ -4432,7 +4234,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 124: CLI: Environment Diagnostics & Doctor
+### Slide 119: CLI: Environment Diagnostics & Doctor
 - **Theme Palette**: `classic_green` (Nuke)
 - **Badge**: `SYSTEMS HEALTH • LAPIS DOCTOR`
 - **Title**: CLI: Environment Diagnostics & Doctor
@@ -4449,7 +4251,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 125: Workspace Hygiene & Project Upgrade: clean & upgrade [Dual-Mode]
+### Slide 120: Workspace Hygiene & Project Upgrade: clean & upgrade [Dual-Mode]
 **Overview**: Workspace Hygiene & Evolution: Lapis provides integrated commands to keep developer directories clean of locked shadow binaries and keep project dependencies current.
 
 - **Workspace Hygiene (lapis clean)**:
@@ -4470,7 +4272,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 126: CLI: 2-Way Bindings & Codegen
+### Slide 121: CLI: 2-Way Bindings & Codegen
 - **Theme Palette**: `amigo` (Amigo)
 - **Badge**: `TOOLCHAIN • 2-WAY CODEGEN`
 - **Title**: CLI: 2-Way Bindings & Codegen
@@ -4487,7 +4289,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 127: Addon & Shard Package Management
+### Slide 122: Addon & Shard Package Management
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `ECOSYSTEM • PACKAGE MANAGEMENT`
 - **Title**: Addon & Shard Package Management
@@ -4504,7 +4306,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 128: Low-Level Binary Forensics (ACT IV • CHAPTER 09)
+### Slide 123: Low-Level Binary Forensics (ACT IV • CHAPTER 09)
 - **Title**: Low-Level Binary Forensics
 - **Subtitle**: radare2 Native Debugger, Stale VTables, ObjectDB Memory Inspection & Crash Autopsies
 - **Chapter Highlights**:
@@ -4520,7 +4322,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 129: Native Debugging: radare2 vs. LLDB
+### Slide 124: Native Debugging: radare2 vs. LLDB
 - **Theme Palette**: `game_station_2` (GameStation2)
 - **Badge**: `SYSTEMS DIAGNOSTICS • RADARE2`
 - **Title**: Native Debugging: radare2 vs. LLDB
@@ -4542,7 +4344,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 130: Native Debugging & Side-by-Side Decompilation
+### Slide 125: Native Debugging & Side-by-Side Decompilation
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `SYSTEMS DIAGNOSTICS • CLI & FORENSICS`
 - **Title**: Native Debugging & Side-by-Side Decompilation
@@ -4560,7 +4362,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 131: In-Editor Debugging: Gutter Breakpoints & Godot radare2 Panel
+### Slide 126: In-Editor Debugging: Gutter Breakpoints & Godot radare2 Panel
 - **Theme Palette**: `game_station_2` (GameStation2)
 - **Badge**: `SYSTEMS DIAGNOSTICS • IN-EDITOR DEBUGGER`
 - **Title**: In-Editor Debugging: Gutter Breakpoints & Godot radare2 Panel
@@ -4594,7 +4396,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 132: R2 for Crystal: Runtime Inspection & Memory Layouts
+### Slide 127: R2 for Crystal: Runtime Inspection & Memory Layouts
 - **Theme Palette**: `playbox` (Playbox)
 - **Badge**: `SYSTEMS DIAGNOSTICS • CRYSTAL RUNTIME`
 - **Title**: R2 for Crystal: Runtime Inspection & Memory Layouts
@@ -4611,7 +4413,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 133: R2 for Godot: ObjectDB, Variant Decoding & ClassDB Reconstruction
+### Slide 128: R2 for Godot: ObjectDB, Variant Decoding & ClassDB Reconstruction
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `ENGINE INTERNALS • GODOT PLUGIN`
 - **Title**: R2 for Godot: ObjectDB, Variant Decoding & ClassDB Reconstruction
@@ -4628,7 +4430,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 134: R2 for Lapis: Editor Supervisor, Stale VTables & Dead-Pointer Forensics
+### Slide 129: R2 for Lapis: Editor Supervisor, Stale VTables & Dead-Pointer Forensics
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `HOT RELOAD FORENSICS • LAPIS SUPERVISOR`
 - **Title**: R2 for Lapis: Editor Supervisor, Stale VTables & Dead-Pointer Forensics
@@ -4645,7 +4447,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 135: R2 Native Debugger TUI: 7-Tab Studio & Crash Forensics
+### Slide 130: R2 Native Debugger TUI: 7-Tab Studio & Crash Forensics
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `INTERACTIVE DASHBOARD • NATIVE TUI`
 - **Title**: R2 Native Debugger TUI: 7-Tab Studio & Crash Forensics
@@ -4662,7 +4464,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 136: Binary Security & Hardening Audit: lapis analyze [Stats / KPI]
+### Slide 131: Binary Security & Hardening Audit: lapis analyze [Stats / KPI]
 - **474 KB** — Total Standalone DLL Size (AOT COMPILED): Complete self-contained GDExtension game logic binary with zero VM overhead
 - **312 KB** — .text Native Instructions (65.8% OF BINARY): Direct x86_64 machine instructions optimized by LLVM with SIMD autovectorization
 - **118 KB** — .rdata Read-Only Data (24.9% OF BINARY): Type descriptors, vtables, and immutable engine string constants
@@ -4673,7 +4475,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 137: Radare2 in the Test Suite: Automated Binary Forensics & CI
+### Slide 132: Radare2 in the Test Suite: Automated Binary Forensics & CI
 - **Theme Palette**: `spaces_10` (Spaces 10)
 - **Badge**: `QUALITY GATES • R2 TEST SUITE`
 - **Title**: Radare2 in the Test Suite: Automated Binary Forensics & CI
@@ -4716,7 +4518,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 138: CLI: Multi-Channel Log Triage & Fuzzy Search
+### Slide 133: CLI: Multi-Channel Log Triage & Fuzzy Search
 - **Theme Palette**: `spaces_xp` (Spaces XP)
 - **Badge**: `SYSTEMS DIAGNOSTICS • LOG TRIAGE`
 - **Title**: CLI: Multi-Channel Log Triage & Fuzzy Search
@@ -4733,7 +4535,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 139: CLI: Game Runtime Performance Monitor
+### Slide 134: CLI: Game Runtime Performance Monitor
 - **Theme Palette**: `fruit_osx` (Fruit OSX)
 - **Badge**: `RUNTIME TELEMETRY • LAPIS CLI`
 - **Title**: CLI: Game Runtime Performance Monitor
@@ -4750,7 +4552,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 140: CLI: Multi-Target Workspace Synchronization
+### Slide 135: CLI: Multi-Target Workspace Synchronization
 - **Theme Palette**: `creation` (Creation)
 - **Badge**: `WORKSPACE SYNC • LAPIS CLI`
 - **Title**: CLI: Multi-Target Workspace Synchronization
@@ -4767,7 +4569,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 141: Mission-Critical Testing (ACT IV • CHAPTER 10)
+### Slide 136: Mission-Critical Testing (ACT IV • CHAPTER 10)
 - **Title**: Mission-Critical Testing
 - **Subtitle**: Deterministic Leak Verification, In-Editor Automation & Headless CI Suites
 - **Chapter Highlights**:
@@ -4782,7 +4584,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 142: Testing Framework: Writing Tests & Leak Verification
+### Slide 137: Testing Framework: Writing Tests & Leak Verification
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • LEAK VERIFICATION`
 - **Title**: Testing Framework: Writing Tests & Leak Verification
@@ -4832,7 +4634,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 143: Editor Testing: Lapis::Test::EditorDriver
+### Slide 138: Editor Testing: Lapis::Test::EditorDriver
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `TOOLING • HEADLESS EDITOR TESTING`
 - **Title**: Editor Testing: Lapis::Test::EditorDriver
@@ -4874,7 +4676,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 144: In-Editor Action Driver: UI Automation & Synthetic Input
+### Slide 139: In-Editor Action Driver: UI Automation & Synthetic Input
 - **Theme Palette**: `ranger` (Ranger)
 - **Badge**: `QUALITY GATES • UI AUTOMATION`
 - **Title**: In-Editor Action Driver: UI Automation & Synthetic Input
@@ -4918,7 +4720,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 145: Automated CI/CD Quality Gates: Headless Test Execution
+### Slide 140: Automated CI/CD Quality Gates: Headless Test Execution
 - **Theme Palette**: `digital_guy` (DigitalGuy)
 - **Badge**: `QUALITY GATES • CONTINUOUS INTEGRATION`
 - **Title**: Automated CI/CD Quality Gates: Headless Test Execution
@@ -4951,7 +4753,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 146: Testing Framework: Behavioral Scenarios & Determinism
+### Slide 141: Testing Framework: Behavioral Scenarios & Determinism
 - **Theme Palette**: `aperture` (Aperture)
 - **Badge**: `QUALITY GATES • SCENARIO TESTING`
 - **Title**: Testing Framework: Behavioral Scenarios & Determinism
@@ -5011,7 +4813,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 147: In-Editor Tool Testing & Standalone TUI Runner
+### Slide 142: In-Editor Tool Testing & Standalone TUI Runner
 - **Theme Palette**: `spaces_31` (Spaces 3.1)
 - **Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
@@ -5028,7 +4830,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 148: The Hard Numbers (ACT IV • CHAPTER 11)
+### Slide 143: The Hard Numbers (ACT IV • CHAPTER 11)
 - **Title**: The Hard Numbers
 - **Subtitle**: Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language Shootout
 - **Chapter Highlights**:
@@ -5044,7 +4846,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 149: Quantitative Benchmarks: Crystal vs GDScript
+### Slide 144: Quantitative Benchmarks: Crystal vs GDScript
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
@@ -5061,7 +4863,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 150: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
+### Slide 145: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `BENCHMARKS • MULTI-LANGUAGE`
 - **Title**: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
@@ -5079,7 +4881,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 151: Native Tier Shootout: Crystal vs C++, Rust & C#
+### Slide 146: Native Tier Shootout: Crystal vs C++, Rust & C#
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `BENCHMARKS • NATIVE TIER`
 - **Title**: Native Tier Shootout: Crystal vs C++, Rust & C#
@@ -5097,7 +4899,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 152: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
+### Slide 147: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
 
 | Language / Binding Target | Direct Method Call | Vector3 & Transform | Memory Allocation | Speedup vs Dynamic |
 | --- | --- | --- | --- | --- |
@@ -5113,7 +4915,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 153: Authoring Custom Benchmarks: Lapis::Benchmark
+### Slide 148: Authoring Custom Benchmarks: Lapis::Benchmark
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `PERFORMANCE • CUSTOM BENCHMARKING`
 - **Title**: Authoring Custom Benchmarks: Lapis::Benchmark
@@ -5154,7 +4956,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 154: Automated Benchmark TUI: lapis benchmarks
+### Slide 149: Automated Benchmark TUI: lapis benchmarks
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `PERFORMANCE • BENCHMARK TUI`
 - **Title**: Automated Benchmark TUI: lapis benchmarks
@@ -5171,7 +4973,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 155: Benchmark Reports & CI Regression Tracking
+### Slide 150: Benchmark Reports & CI Regression Tracking
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `BENCHMARKS • CI & REPORTING`
 - **Title**: Benchmark Reports & CI Regression Tracking
@@ -5207,7 +5009,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 156: The Bridge Architecture (ACT IV • CHAPTER 12)
+### Slide 151: The Bridge Architecture (ACT IV • CHAPTER 12)
 - **Title**: The Bridge Architecture
 - **Subtitle**: 5-Layer GDExtension Architecture, ClassDB Generators & Turnkey Distribution
 - **Chapter Highlights**:
@@ -5222,7 +5024,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 157: Lapis Architecture: The Layered Bridge [Architecture]
+### Slide 152: Lapis Architecture: The Layered Bridge [Architecture]
 - **Tier 4 • Gameplay Application Layer**:
   - **Custom Nodes**: <code>node Player &lt; CharacterBody3D</code>
   - **Inspector Exports**: <code>@[Export]</code> ranges, enums, &amp; flags
@@ -5252,7 +5054,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 158: Dual Modes: Mode A vs. Mode B [Dual-Mode]
+### Slide 153: Dual Modes: Mode A vs. Mode B [Dual-Mode]
 **Overview**: Self-Hosted Tooling: Just like the Crystal compiler is self-hosted in Crystal, Lapis&apos;s Godot editor integration plugin, syntax highlighting, and tooling docks are authored 100% in Crystal.
 
 - **Mode A: GDExtension In-Editor**:
@@ -5277,7 +5079,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 159: The Packaging System: Turnkey Distribution
+### Slide 154: The Packaging System: Turnkey Distribution
 - **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
 - **Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
@@ -5307,7 +5109,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 160: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
+### Slide 155: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
 - **Title**: Live Demonstration & Roadmap
 - **Subtitle**: Zero-Config Scaffolding, 60s Node Iteration, Full Architecture & Standalone Release
 - **Chapter Highlights**:
@@ -5322,7 +5124,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 161: Live Demonstration: End-to-End Workflow [Demo Roadmap]
+### Slide 156: Live Demonstration: End-to-End Workflow [Demo Roadmap]
 - **STEP 1 • BOOTSTRAP — Scaffold & Supervise**:
   ```bash
   $ lapis new game my_game
@@ -5373,7 +5175,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 162: The Future of Native Scripting in Godot [Timeline]
+### Slide 157: The Future of Native Scripting in Godot [Timeline]
 - **Q1 2027 — Mobile & Wasm Targets**:
   - Compiling Lapis games to Android, iOS, and WebAssembly via Emscripten.
   - Cross-compilation toolchains with zero native tool installation friction.
@@ -5397,7 +5199,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 163: THANKS FOR WATCHING! [Closing]
+### Slide 158: THANKS FOR WATCHING! [Closing]
 - **Lapis & sol.vin**: Interactive 3D showcases, architecture guides, and open source repository.
   - `sol.vin • github.com/sol-vin/lapis`
 - **Crystal Language**: Official Crystal website, language reference, standard library docs, and blog.

@@ -1,24 +1,24 @@
 ---
-id: 03k_ruby_statement_modifiers
-title: 'Backwards One-Liners: Statement Modifiers'
-subtitle: "'action if condition' — Putting the Action First to Match Human Thought Flow"
-badge: RUBY QUIRKS • STATEMENT MODIFIERS
+id: 10k_crystal_statement_modifiers
+title: 'Action-First Syntax: Statement Modifiers'
+subtitle: "'action if condition' — Putting Intent First to Match Human Cognitive Flow"
+badge: CRYSTAL ERGONOMICS • STATEMENT MODIFIERS
 badge_color: amber
 palette: spaces_xp
 layout: two-column-layout
 ratio: 1:1
 left:
   type: code
-  title: statement_modifiers.rb — Action-First Syntax
-  tag: Ruby
-  lang: ruby
+  title: statement_modifiers.cr — Action-First Syntax
+  tag: Crystal
+  lang: crystal
   font_size: '0.74rem'
   code: |
     # 1. Action-First Intent: What we're doing comes first!
     player.drink_potion! if player.low_health?
 
     # 2. Flattening Guard Clauses (Goodbye Pyramid of Doom):
-    def cast_spell(spell, target)
+    def cast_spell(spell : Spell, target : Target) : Nil
       return unless spell.ready?
       return if target.invulnerable?
       return unless mana >= spell.cost
@@ -36,15 +36,14 @@ left:
     tick_physics until game.paused?
 right:
   type: card
-  title: Why Foreign Eyes Flinch vs Why Rubyists Love It
+  title: Why Statement Modifiers Excel in Crystal
   color: amber
   items:
-    - '<strong>The Outsider''s Discomfort:</strong> Mainstream languages enforce prefix order: <code>if (cond) { action(); }</code>. Seeing the condition at the end feels inverted and backward to prefix-trained brains.'
     - '<strong>Human Conversational Alignment:</strong> In real life, humans say: <em>"Take an umbrella if it rains"</em>, not <em>"If it rains, take an umbrella"</em>. The primary action is what matters most to the reader.'
     - '<strong>Flattening Indentation (Zero Pyramid of Doom):</strong> Preconditions and guard clauses are dispatched in clean, single lines without wrapping code in 3 or 4 levels of nested if-blocks.'
     - '<strong>Secondary Guards Tucked Out of Sight:</strong> By placing <code>if low_health?</code> at the tail, code reads as a clean list of actions with guardrails neatly aligned on the right.'
-    - '<strong>Zero Cost in Crystal:</strong> Crystal''s compiler lowers statement modifiers directly to the exact same conditional branch instructions in LLVM assembly.'
+    - '<strong>Zero-Cost LLVM Lowering:</strong> Crystal lowers statement modifiers directly to standard conditional branch instructions in LLVM assembly with zero overhead.'
 notes: |
-  In virtually all mainstream programming languages—C, C++, Java, C#, Python, and Go—control flow is strictly prefix: the 'if' condition must come before the curly brace or colon, followed by the code block. When developers from those languages encounter Ruby's statement modifiers, like 'player.drink_potion! if player.low_health?', they often flinch and complain: 'Why is the if statement backwards?'
-  The answer lies in human linguistics and cognitive psychology. When speaking to another person, you don't say: 'If it begins to precipitate outside, ensure you grab an umbrella.' You say: 'Take an umbrella if it rains.' The primary action—what the computer is actually doing—is the most important piece of information. The condition is merely a secondary guardrail.
+  In virtually all mainstream programming languages—C, C++, Java, C#, Python, and Go—control flow is strictly prefix: the 'if' condition must come before the block. When developers from those languages encounter statement modifiers like 'player.drink_potion! if player.low_health?', they often wonder why the 'if' is at the end.
+  The answer lies in human linguistics and cognitive psychology. In real conversation, the primary action—what the program is actually doing—is the most important piece of information. The condition is merely a secondary guardrail.
   Statement modifiers also solve one of the greatest curses of software engineering: the 'Pyramid of Doom'. Instead of nesting four levels of if-statements just to validate that an actor can cast a spell, you write three flat guard clauses: 'return unless spell.ready?', 'return if target.invulnerable?', 'return unless mana >= cost'. The primary business logic stays completely un-indented at the left margin. Crystal preserves this exact postfix syntax, compiling it down to direct branch instructions with zero overhead.

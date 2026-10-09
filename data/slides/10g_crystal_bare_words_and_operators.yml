@@ -1,0 +1,62 @@
+---
+id: 10g_crystal_bare_words_and_operators
+title: 'Bare Words & Operators: Zero-Cost Uniform Access'
+subtitle: Optional Parentheses, Uniform Access Principle & LLVM-Inlined Operator Methods
+badge: CRYSTAL ERGONOMICS • SYNTACTIC ELEGANCE
+badge_color: emerald
+palette: monokai
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: bare_words_and_operators.cr — Zero-Cost Ergonomics
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # 1. Bare Words & Uniform Access: my_func vs my_func()
+    def max_health : Int32
+      100
+    end
+
+    puts max_health    # Property-like read, but executes method!
+    puts max_health()  # Parentheses are completely optional
+
+    # Fluent DSL method calls without parentheses ceremony:
+    render_rect at: Vector2.new(10.0_f32, 20.0_f32), color: :red
+
+    # 2. Operator Overloading: Pure struct methods, LLVM inlined!
+    struct Vector2
+      getter x : Float32, y : Float32
+
+      def initialize(@x : Float32, @y : Float32)
+      end
+
+      # Operators (+, -, *, [], []=) compile to direct CPU ops:
+      def +(other : Vector2) : Vector2
+        Vector2.new(@x + other.x, @y + other.y)
+      end
+
+      def [](axis : Symbol) : Float32
+        axis == :x ? @x : @y
+      end
+    end
+
+    v1 = Vector2.new(10.0_f32, 20.0_f32)
+    v2 = Vector2.new(5.0_f32, 5.0_f32)
+    v3 = v1 + v2       # Sugar for: v1.+(v2) — Inlined by LLVM!
+    puts v3[:x]        # Sugar for: v3.[](:x) => 15.0
+right:
+  type: card
+  title: 'Why Bare Words & Operators Excel in Crystal'
+  color: emerald
+  items:
+    - '<strong>Uniform Access Principle:</strong> Callers cannot tell whether <code>player.health</code> is a stored ivar or a dynamic calculation. Eliminates Java/C++ getter/setter ceremony.'
+    - '<strong>Fluent, Human-Centric Sentences:</strong> Omitting parentheses turns method calls into readable English instructions (<code>render_rect at: pos, color: :red</code>) while remaining 100% statically typed.'
+    - '<strong>Operators are Pure Methods on Value Types:</strong> Symbols like <code>+</code>, <code>-</code>, <code>[]</code>, and <code>==</code> are standard methods on <code>struct</code> value types.'
+    - '<strong>Direct LLVM Inlining (0 Heap Overhead):</strong> In dynamic Ruby, <code>v1 + v2</code> dispatches through VM tables and allocates objects; in Crystal, LLVM inlines the math directly into CPU registers with zero heap allocations.'
+notes: |
+  One of Ruby's greatest gifts to programming ergonomics was the total elimination of syntax ceremony. In Crystal, this philosophy is fully preserved, but supercharged by native compilation.
+  First, method parentheses are optional: calling max_health looks identical to reading a field, fulfilling Bertrand Meyer's Uniform Access Principle. Callers never need to know if a value is a cached field or a dynamic calculation.
+  Second, operators are not hardcoded compiler keywords—they are ordinary instance methods! Defining def +(other : Vector2) allows custom vector math, matrix multiplication, and spatial indexing to feel like built-in language primitives.
+  Unlike dynamic languages where vector math triggers heap allocations and dynamic method lookups, Crystal structs are stack-allocated and LLVM inlines operator methods directly into SIMD CPU instructions. You get the expressive syntax of high-level scripting with the raw execution speed of hand-written C++.

@@ -1,0 +1,56 @@
+---
+id: 10j_crystal_if_expressions_and_nil_narrowing
+title: 'Control Expressions: If, Case & Nil Narrowing'
+subtitle: "Expression Assignment, Range Cases & Crystal's Compile-Time Static Nil Narrowing"
+badge: CRYSTAL TYPE SAFETY • EXPRESSION CONTROL
+badge_color: emerald
+palette: fos
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: control_expressions.cr — Clean Expressions & Nil Safety
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # 1. if IS a readable expression that returns a value:
+    speed = if boosted?
+              play_sfx(:turbo)
+              100 # Evaluates to branch value
+            else
+              50
+            end
+
+    # 2. Multi-branch case expression with discrete ranges:
+    loot = case dice_roll
+           when 95..100 then :legendary_sword
+           when 80..94  then :rare_shield
+           when 50..79  then :health_potion
+           else              :rusty_dagger
+           end
+
+    # 3. Crystal's Killer Feature: Static Nil Narrowing via 'if x = ...'
+    def inspect_player(id : String)
+      # find_player? returns (Player | Nil)
+      if player = find_player?(id)
+        # Inside this block, compiler proves player is non-nil Player!
+        player.cast_spell(:protect)
+      else
+        # Compiler knows player is Nil here
+        puts "Player #{id} not found."
+      end
+    end
+right:
+  type: card
+  title: Why Control Expressions Excel in Crystal
+  color: emerald
+  items:
+    - '<strong>The Ternary Elevated:</strong> In Crystal, <code>if</code> and <code>case</code> are first-class expressions, eliminating uninitialized mutable dummy variables (<code>var result;</code>) outside blocks.'
+    - '<strong>Curing Nested Ternary Hell:</strong> Chained ternaries (<code>a ? b : c ? d : e</code>) are unreadable. Expression <code>case</code> allows clean range checks (<code>when 95..100</code>) with formatted indentation.'
+    - '<strong>Static Nil Narrowing (Type Flow):</strong> <code>if x = find_player?</code> tests truthiness AND narrows the variable type from <code>T | Nil</code> to <code>T</code> at compile time, eliminating null pointer crashes.'
+    - '<strong>Static Union Resolution:</strong> If branches evaluate to different types (e.g. <code>Int32</code> and <code>String</code>), Crystal infers the exact union <code>Int32 | String</code> on the stack with zero heap allocation or boxing.'
+notes: |
+  In traditional languages like C, C++, Java, or Go, there is a strict divide between 'statements' and 'expressions'. Expressions evaluate to a value, while statements only execute actions. When developers from those languages see 'speed = if boosted? ...', their instinct is surprise.
+  The key to understanding this is the ternary operator. Every programmer knows 'speed = boosted ? 100 : 50'. In Crystal, 'if' is literally the ternary operator elevated into a first-class block structure—supporting multi-line logic, sound effects, and clean formatting.
+  Even more powerfully, Crystal combines expression assignment with its whole-program type inference: 'if x = find_player?(id)' tests for presence AND statically narrows the type of 'player' from 'Player | Nil' to guaranteed non-nil 'Player' inside the block. If you forget to handle the nil case, the compiler refuses to build your game. You get expressive syntax with 100% compile-time null safety.

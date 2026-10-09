@@ -1,0 +1,29 @@
+---
+id: 10h_crystal_syntax_delights_faq
+title: 'The Crystal Syntax "Oddities"'
+subtitle: Why Systems Programmers Scratch Their Heads & Game Developers Rejoice
+badge: CRYSTAL ERGONOMICS • EXPRESSION ARCHITECTURE
+badge_color: purple
+palette: aperture
+layout: faq
+questions:
+  - q: "Where is the return statement?"
+    a: "Crystal treats the last evaluated expression as the return value. Whole-program type inference calculates exact return types (including union types) with zero keyword ceremony."
+    color: "purple"
+    badge: "Q1 • RETURNS"
+  - q: "Assigning an if statement to a variable?"
+    a: "Control flow constructs are expressions that evaluate to concrete values (<code>val = if cond then 1 else 2 end</code>). Plus, <code>if x = find()</code> performs static compile-time nil narrowing!"
+    color: "cyan"
+    badge: "Q2 • EXPRESSIONS"
+  - q: "Why is 'if' or 'unless' at the end of the line?"
+    a: "Statement modifiers put the primary action up front in natural English word order (<code>return unless valid?</code>), keeping guardrails flat without nested indentation pyramids."
+    color: "emerald"
+    badge: "Q3 • MODIFIERS"
+  - q: "Punctuation inside method names (? and !)?"
+    a: "<code>?</code> denotes pure predicate queries strictly returning <code>Bool</code> (or <code>T | Nil</code> for safe lookups), while <code>!</code> screams in-place mutation or throwing assertions."
+    color: "coral"
+    badge: "Q4 • PUNCTUATION"
+notes: |
+  When systems programmers coming from C, C++, Rust, Go, or Java first encounter Crystal code, they often experience a flash of cognitive dissonance. The syntax doesn't look like the traditional C-family algol-derived languages they grew up with. Where are the return statements? Why is someone assigning an if statement to a variable? Why is there an 'unless' tacked onto the end of a line after the function call? How can a method have a question mark or exclamation mark in its name?
+  To an outsider, these conventions look unusual. But to experienced developers, they are the secret sauce of productivity and joy. None of these are accidents—they are intentional, human-centered ergonomic choices grounded in linguistics and expression-oriented programming.
+  Crystal took every single one of these expressive syntactic delights and proved they can run at bare-metal C++ execution speeds with full compile-time static type safety and nil checking. In the next few slides, we'll examine each of these superpowers in depth.

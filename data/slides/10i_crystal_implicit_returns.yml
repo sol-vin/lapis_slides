@@ -1,0 +1,57 @@
+---
+id: 10i_crystal_implicit_returns
+title: 'Implicit Returns: Expression-Oriented Flow'
+subtitle: Expression-Oriented Design, Functional Flow & High-Signal Early Returns
+badge: CRYSTAL ERGONOMICS • EXPRESSION RETURNS
+badge_color: blue
+palette: amigo
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: implicit_returns.cr — Expressions Over Rituals
+  tag: Crystal
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    # 1. Methods return their last evaluated expression:
+    def calculate_damage(base : Int32, defense : Int32) : Int32
+      multiplier = critical_hit? ? 2.0_f32 : 1.0_f32
+      Math.max((base.to_f32 * multiplier).to_i - defense, 1) # No "return"!
+    end
+
+    # 2. Blocks in pipelines return values effortlessly:
+    healed_party = party.map do |player|
+      player.heal(25) # Return value of heal() becomes mapped element!
+    end
+
+    # 3. Branching returns naturally from whichever branch ran:
+    def player_rank(score : Int32) : Symbol
+      if score >= 10_000
+        :grandmaster
+      elsif score >= 5_000
+        :diamond
+      else
+        :challenger
+      end # Entire if returns the resulting symbol to caller!
+    end
+
+    # 4. Explicit "return" is reserved strictly for early bailouts:
+    def process_turn(actor : Actor) : Nil
+      return unless actor.alive? # High-signal guard clause!
+      actor.take_action
+    end
+right:
+  type: card
+  title: Why Outsiders Hesitate vs Why It Wins in Crystal
+  color: blue
+  items:
+    - '<strong>The Imperative Habit:</strong> In C, Java, and Python, developers are trained that omitting <code>return</code> means the routine is void or returns None. Seeing no return looks like an accidental omission.'
+    - '<strong>Expression-Oriented Semantics:</strong> Routines evaluate naturally to their resulting value. Mandating a <code>return</code> keyword on every single function is ritualistic syntax noise.'
+    - '<strong>Crucial for Inlined Blocks:</strong> Functional pipelines (<code>map</code>, <code>select</code>) rely on implicit returns. Writing an explicit <code>return</code> inside a block exits the <em>enclosing method</em>, not just the block!'
+    - '<strong>High-Signal Guard Clauses:</strong> Because ordinary returns are implicit, an explicit <code>return</code> stands out vividly on code review as an intentional early bailout (<code>return if dead?</code>).'
+    - '<strong>Compile-Time Union Inference:</strong> Crystal computes the exact static type (including unions like <code>Int32 | String</code>) across all exit branches with zero runtime dispatch cost.'
+notes: |
+  In traditional imperative languages like C, Java, or Python, every function that computes a value must conclude with the keyword 'return'. If you omit it in C, your code might return garbage; if you omit it in Python, it returns None. When developers from those ecosystems first look at Crystal, they instinctively think: 'Wait, did you forget to write return?'
+  In Crystal, methods, blocks, and conditionals naturally evaluate to the result of their last executed expression. In expression-oriented languages, code computes values directly—aligning with functional programming principles.
+  More importantly, implicit returns are essential for blocks. In collection operations like party.map, the block returns the last expression automatically. If you were forced to write 'return', it would trigger a non-local jump and exit the entire enclosing method! Furthermore, because standard method exits never use 'return', whenever an explicit 'return' does appear—like 'return unless actor.alive?'—it immediately screams out as a high-priority guard clause. Crystal preserves this exact expression-based model, computing static union types at compile time with zero LLVM overhead.
