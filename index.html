@@ -1193,7 +1193,7 @@ end
             <p class="slide-subtitle">Side-by-Side Implementation of the Same Player Node with Exported Property and Signal</p>
           </header>
           <div class="slide-body four-cols" data-layout="four-column">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
+            <div class="code-window code-container col" data-lang="crystal">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
@@ -1206,7 +1206,7 @@ end
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal code-compact">node Player &lt; CharacterBody3D do
+              <pre><code class="language-crystal">node Player &lt; CharacterBody3D do
   @[Export(range: 1.0_f32..20.0_f32)]
   property speed : Float32 = 7.0_f32
 
@@ -1231,16 +1231,22 @@ end</code></pre>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-csharp code-compact">public partial class Player : CharacterBody3D {
-  [Export(PropertyHint.Range, &quot;1.0,20.0&quot;)]
-  public float Speed { get; set; } = 7.0f;
+              <pre><code class="language-csharp code-compact">public partial class
+  Player : CharacterBody3D
+{
+  [Export(PropertyHint.Range,
+    &quot;1.0,20.0&quot;)]
+  public float Speed { get; set; }
+    = 7.0f;
 
   [Signal]
   public delegate void
-    HealthChangedEventHandler(int hp);
+    HealthChangedEventHandler(
+      int hp);
 
   [Signal]
-  public delegate void DiedEventHandler();
+  public delegate void
+    DiedEventHandler();
 
   public override void _Ready() {
     GD.Print($&quot;Ready: {Name}&quot;);
@@ -1269,7 +1275,9 @@ pub struct Player {
 }
 #[godot_api]
 impl ICharacterBody3D for Player {
-  fn init(base: Base&lt;CharacterBody3D&gt;) -&gt; Self {
+  fn init(
+    base: Base&lt;CharacterBody3D&gt;
+  ) -&gt; Self {
     Self { base, speed: 7.0 }
   }
   fn ready(&amp;mut self) {
@@ -1298,7 +1306,9 @@ impl Player {
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-cpp code-compact">class Player : public CharacterBody3D {
+              <pre><code class="language-cpp code-compact">class Player :
+  public CharacterBody3D
+{
   GDCLASS(Player, CharacterBody3D);
   float speed = 7.0f;
 protected:
@@ -1310,14 +1320,18 @@ protected:
       D_METHOD(&quot;set_speed&quot;, &quot;s&quot;),
       &amp;Player::set_speed);
     ADD_PROPERTY(
-      PropertyInfo(Variant::FLOAT, &quot;speed&quot;,
-        PROPERTY_HINT_RANGE, &quot;1.0,20.0&quot;),
+      PropertyInfo(Variant::FLOAT,
+        &quot;speed&quot;,
+        PROPERTY_HINT_RANGE,
+        &quot;1.0,20.0&quot;),
       &quot;set_speed&quot;, &quot;get_speed&quot;);
-    ADD_SIGNAL(MethodInfo(&quot;died&quot;));
+    ADD_SIGNAL(
+      MethodInfo(&quot;died&quot;));
   }
 public:
   void _ready() override {
-    UtilityFunctions::print(&quot;Ready&quot;);
+    UtilityFunctions::print(
+      &quot;Ready&quot;);
   }
 };</code></pre>
             </div>
@@ -1361,7 +1375,7 @@ public:
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="dim-header">&lt;strong&gt;Lapis (Crystal)&lt;/strong&gt;</td>
+                    <td class="dim-header">Lapis (Crystal)</td>
                     <td>Native LLVM AOT</td>
                     <td>Fast (AOT Incremental)</td>
                     <td>Static + Nil Safe</td>
@@ -1369,7 +1383,7 @@ public:
                     <td class="lapis-col highlight-col">Zen DSL (Ruby-like)</td>
                   </tr>
                   <tr>
-                    <td class="dim-header">&lt;strong&gt;GDScript&lt;/strong&gt;</td>
+                    <td class="dim-header">GDScript</td>
                     <td>Bytecode VM Interpreter</td>
                     <td>Instant (Interpreted)</td>
                     <td>Gradual / Dynamic (Runtime Nil Crash)</td>
@@ -1377,7 +1391,7 @@ public:
                     <td class="lapis-col highlight-col">Native Engine Built-in</td>
                   </tr>
                   <tr>
-                    <td class="dim-header">&lt;strong&gt;Godot C# (.NET)&lt;/strong&gt;</td>
+                    <td class="dim-header">Godot C# (.NET)</td>
                     <td>CLR JIT / AOT</td>
                     <td>Moderate</td>
                     <td>Static (Runtime Null Ref)</td>
@@ -1385,15 +1399,15 @@ public:
                     <td class="lapis-col highlight-col">Moderate (Partial classes)</td>
                   </tr>
                   <tr>
-                    <td class="dim-header">&lt;strong&gt;godot-rust (gdext)&lt;/strong&gt;</td>
+                    <td class="dim-header">godot-rust (gdext)</td>
                     <td>Native LLVM AOT</td>
                     <td>Slow (Heavy Cargo build)</td>
                     <td>Strict Borrow Checker</td>
                     <td>Proc Macros (Complex)</td>
-                    <td class="lapis-col highlight-col">High friction (Base&lt;T&gt;)</td>
+                    <td class="lapis-col highlight-col">High friction (<code>Base&lt;T&gt;</code>)</td>
                   </tr>
                   <tr>
-                    <td class="dim-header">&lt;strong&gt;godot-cpp (C++)&lt;/strong&gt;</td>
+                    <td class="dim-header">godot-cpp (C++)</td>
                     <td>Native Clang/MSVC/GCC</td>
                     <td>Slow (Heavy headers)</td>
                     <td>Unsafe (Segfault / UB)</td>

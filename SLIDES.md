@@ -384,11 +384,11 @@ Theme: `sol.vin` | Total Slides: 158
 ### Slide 13: Language & GDExtension Ecosystem Feature Matrix [Matrix]
 | Language / Binding | Execution Model | Compilation Speed | Type Safety | Metaprogramming | SceneTree Ergonomics |
 | --- | --- | --- | --- | --- | --- |
-| <strong>Lapis (Crystal)</strong> | Native LLVM AOT | Fast (AOT Incremental) | Static + Nil Safe | AST Macros (Compile-Time) | Zen DSL (Ruby-like) |
-| <strong>GDScript</strong> | Bytecode VM Interpreter | Instant (Interpreted) | Gradual / Dynamic (Runtime Nil Crash) | Limited (Annotations) | Native Engine Built-in |
-| <strong>Godot C# (.NET)</strong> | CLR JIT / AOT | Moderate | Static (Runtime Null Ref) | Source Generators | Moderate (Partial classes) |
-| <strong>godot-rust (gdext)</strong> | Native LLVM AOT | Slow (Heavy Cargo build) | Strict Borrow Checker | Proc Macros (Complex) | High friction (Base<T>) |
-| <strong>godot-cpp (C++)</strong> | Native Clang/MSVC/GCC | Slow (Heavy headers) | Unsafe (Segfault / UB) | C Preprocessor Macros | Massive boilerplate |
+| Lapis (Crystal) | Native LLVM AOT | Fast (AOT Incremental) | Static + Nil Safe | AST Macros (Compile-Time) | Zen DSL (Ruby-like) |
+| GDScript | Bytecode VM Interpreter | Instant (Interpreted) | Gradual / Dynamic (Runtime Nil Crash) | Limited (Annotations) | Native Engine Built-in |
+| Godot C# (.NET) | CLR JIT / AOT | Moderate | Static (Runtime Null Ref) | Source Generators | Moderate (Partial classes) |
+| godot-rust (gdext) | Native LLVM AOT | Slow (Heavy Cargo build) | Strict Borrow Checker | Proc Macros (Complex) | High friction (<code>Base&lt;T&gt;</code>) |
+| godot-cpp (C++) | Native Clang/MSVC/GCC | Slow (Heavy headers) | Unsafe (Segfault / UB) | C Preprocessor Macros | Massive boilerplate |
 
 **Summary**: Key Takeaway: Lapis occupies the rare architectural sweet spot: native LLVM machine speed paired with the expressive, human-first ergonomics of Ruby.
 

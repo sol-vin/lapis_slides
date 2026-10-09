@@ -14,31 +14,31 @@ headers:
 - Metaprogramming
 - SceneTree Ergonomics
 rows:
-- - <strong>Lapis (Crystal)</strong>
+- - Lapis (Crystal)
   - Native LLVM AOT
   - Fast (AOT Incremental)
   - Static + Nil Safe
   - AST Macros (Compile-Time)
   - Zen DSL (Ruby-like)
-- - <strong>GDScript</strong>
+- - GDScript
   - Bytecode VM Interpreter
   - Instant (Interpreted)
   - Gradual / Dynamic (Runtime Nil Crash)
   - Limited (Annotations)
   - Native Engine Built-in
-- - <strong>Godot C# (.NET)</strong>
+- - Godot C# (.NET)
   - CLR JIT / AOT
   - Moderate
   - Static (Runtime Null Ref)
   - Source Generators
   - Moderate (Partial classes)
-- - <strong>godot-rust (gdext)</strong>
+- - godot-rust (gdext)
   - Native LLVM AOT
   - Slow (Heavy Cargo build)
   - Strict Borrow Checker
   - Proc Macros (Complex)
-  - High friction (Base<T>)
-- - <strong>godot-cpp (C++)</strong>
+  - High friction (<code>Base&lt;T&gt;</code>)
+- - godot-cpp (C++)
   - Native Clang/MSVC/GCC
   - Slow (Heavy headers)
   - Unsafe (Segfault / UB)

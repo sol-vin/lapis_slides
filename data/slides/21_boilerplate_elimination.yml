@@ -29,16 +29,22 @@ columns:
   tag: 16 Lines
   lang: csharp
   code: |
-    public partial class Player : CharacterBody3D {
-      [Export(PropertyHint.Range, "1.0,20.0")]
-      public float Speed { get; set; } = 7.0f;
+    public partial class
+      Player : CharacterBody3D
+    {
+      [Export(PropertyHint.Range,
+        "1.0,20.0")]
+      public float Speed { get; set; }
+        = 7.0f;
 
       [Signal]
       public delegate void
-        HealthChangedEventHandler(int hp);
+        HealthChangedEventHandler(
+          int hp);
 
       [Signal]
-      public delegate void DiedEventHandler();
+      public delegate void
+        DiedEventHandler();
 
       public override void _Ready() {
         GD.Print($"Ready: {Name}");
@@ -58,7 +64,9 @@ columns:
     }
     #[godot_api]
     impl ICharacterBody3D for Player {
-      fn init(base: Base<CharacterBody3D>) -> Self {
+      fn init(
+        base: Base<CharacterBody3D>
+      ) -> Self {
         Self { base, speed: 7.0 }
       }
       fn ready(&mut self) {
@@ -78,7 +86,9 @@ columns:
   tag: 32 Lines
   lang: cpp
   code: |
-    class Player : public CharacterBody3D {
+    class Player :
+      public CharacterBody3D
+    {
       GDCLASS(Player, CharacterBody3D);
       float speed = 7.0f;
     protected:
@@ -90,14 +100,18 @@ columns:
           D_METHOD("set_speed", "s"),
           &Player::set_speed);
         ADD_PROPERTY(
-          PropertyInfo(Variant::FLOAT, "speed",
-            PROPERTY_HINT_RANGE, "1.0,20.0"),
+          PropertyInfo(Variant::FLOAT,
+            "speed",
+            PROPERTY_HINT_RANGE,
+            "1.0,20.0"),
           "set_speed", "get_speed");
-        ADD_SIGNAL(MethodInfo("died"));
+        ADD_SIGNAL(
+          MethodInfo("died"));
       }
     public:
       void _ready() override {
-        UtilityFunctions::print("Ready");
+        UtilityFunctions::print(
+          "Ready");
       }
     };
 notes: 'Let''s put the four major GDExtension languages side by side. Here is the
