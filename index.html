@@ -9798,7 +9798,7 @@ end
       </section>
 
       <!-- Slide 121: GameStation2 (Hot-Reload State Preserver: 6-Phase Transactional Protocol) -->
-      <section class="slide solvin-slide game_station_2" data-layout="process-flow" data-palette="game_station_2" data-background-color="#090a10" data-palette-name="GameStation2" data-palette-cube="#e0e6f0" data-palette-cube-hover="#0088ff" data-slide-id="33d_hot_reload_state_preserver" id="slide-33d_hot_reload_state_preserver">
+      <section class="slide solvin-slide game_station_2" data-layout="feature-grid" data-palette="game_station_2" data-background-color="#090a10" data-palette-name="GameStation2" data-palette-cube="#e0e6f0" data-palette-cube-hover="#0088ff" data-slide-id="33d_hot_reload_state_preserver" id="slide-33d_hot_reload_state_preserver">
         <div class="palette-corner-badge" title="Theme: GameStation2">
           <span class="palette-corner-dot"></span> PALETTE: GameStation2
         </div>
@@ -9810,49 +9810,68 @@ end
             <h2 class="slide-title">Hot-Reload State Preserver: 6-Phase Transactional Protocol</h2>
             <p class="slide-subtitle">Preserving Live Scene State, Schema Drift Reconciliation &amp; Zero Dead Pointers</p>
           </header>
-          <div class="slide-body" data-layout="process-flow">
-            <div class="process-pipeline" data-steps="6">
-              <div class="card process-step-card col amber" data-color="amber">
+          <div class="slide-body" data-layout="feature-grid">
+            <div class="bento-hero-column">
+              <div class="card bento-hero-card amber" data-color="amber">
                 <div class="card-header">
-                  <span class="process-step-badge amber">01</span>
+                  <span class="card-title">live_state_preserver.cr — Hot-Reload</span>
+                  <span class="badge amber" data-color="amber">STATE PRESERVER</span>
                 </div>
-                <div class="process-step-title">Pre-Flight</div>
-                <div class="process-step-desc">Recursive node discovery &amp; pre-reload sanity checks</div>
+                <div class="code-window bento-code-window" data-lang="crystal">
+                  <pre><code class="language-crystal code-compact"># Lapis 4.8 StatePreserver: Transactional Hot-Reload
+node PlayerController &lt; CharacterBody3D do
+  # Phase 1 &amp; 2: Pre-Flight Scan &amp; Metadata Quarantine
+  @[Export]
+  property move_speed : Float32 = 8.5_f32 # Live Inspector tweak: 12.0
+  @[Export]
+  property inventory : Array(Item) = []  # Live runtime state
+
+  # Phase 3 &amp; 4: Shadow DLL Swap &amp; Schema Drift (Int32 -&gt; Int64)
+  @[Export]
+  property score : Int64 = 0_i64         # Coerced from Int32
+  @[Export]
+  property mana : Int32 = 100            # Added in new DLL
+
+  # Phase 5 &amp; 6: Silent Hydration &amp; Verification Hook
+  def _on_hot_reloaded : Void
+    Godot.print(&quot;Restored: #{@move_speed}m/s, #{@inventory.size} items&quot;)
+    # Dead pointers to deleted vtables asserted ZERO
+  end
+end</code></pre>
+                </div>
+                <div class="bento-desc">Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.</div>
               </div>
-              <div class="card process-step-card col amber" data-color="amber">
+            </div>
+            <div class="bento-side-column">
+              <div class="card bento-subcard amber" data-color="amber">
                 <div class="card-header">
-                  <span class="process-step-badge amber">02</span>
+                  <span class="card-title">Phases 1-2 • Scan &amp; Quarantine</span>
+                  <span class="badge amber" data-color="amber">PRE-RELOAD</span>
                 </div>
-                <div class="process-step-title">Snapshot</div>
-                <div class="process-step-desc">Quarantine live node properties into Engine metadata</div>
+                <ul class="card-list">
+                  <li><strong>01 Pre-Flight:</strong> Recursively traverses SceneTree, maps active GDExtension instances, and validates compiler locks.</li>
+                  <li><strong>02 Metadata Quarantine:</strong> Serializes live inspector edits and runtime collections into Engine metadata buffer before unload.</li>
+                </ul>
               </div>
-              <div class="card process-step-card col amber" data-color="amber">
+              <div class="card bento-subcard amber" data-color="amber">
                 <div class="card-header">
-                  <span class="process-step-badge amber">03</span>
+                  <span class="card-title">Phases 3-4 • DLL Swap &amp; Drift</span>
+                  <span class="badge amber" data-color="amber">TRANSACTION</span>
                 </div>
-                <div class="process-step-title">DLL Swap</div>
-                <div class="process-step-desc">Unlink old shadow DLL &amp; re-register GDExtension</div>
+                <ul class="card-list">
+                  <li><strong>03 Shadow DLL Swap:</strong> Unlinks shadow library (<code>game_PID_N.dll</code>) to bypass Windows locks; loads new GDExtension.</li>
+                  <li><strong>04 Schema Drift:</strong> Compares old/new ClassDB tables: coerces numeric widening (<code>Int32</code> &rarr; <code>Int64</code>) & seeds new defaults.</li>
+                </ul>
               </div>
-              <div class="card process-step-card col amber" data-color="amber">
+              <div class="card bento-subcard emerald" data-color="emerald">
                 <div class="card-header">
-                  <span class="process-step-badge amber">04</span>
+                  <span class="card-title">Phases 5-6 • Hydrate &amp; Verify</span>
+                  <span class="badge emerald" data-color="emerald">RESTORED</span>
                 </div>
-                <div class="process-step-title">Reconcile</div>
-                <div class="process-step-desc">Reconcile schema drift &amp; coerce type widening</div>
-              </div>
-              <div class="card process-step-card col amber" data-color="amber">
-                <div class="card-header">
-                  <span class="process-step-badge amber">05</span>
-                </div>
-                <div class="process-step-title">Hydration</div>
-                <div class="process-step-desc">Two-pass silent hydration with blocked signals</div>
-              </div>
-              <div class="card process-step-card col emerald" data-color="emerald">
-                <div class="card-header">
-                  <span class="process-step-badge emerald">06</span>
-                </div>
-                <div class="process-step-title">Verified</div>
-                <div class="process-step-desc">Invoke _on_hot_reloaded &amp; verify dead pointers</div>
+                <ul class="card-list">
+                  <li><strong>05 Silent Hydration:</strong> Two-pass property restoration with signals temporarily blocked to prevent cascades and sound glitches.</li>
+                  <li><strong>06 Verified:</strong> Dispatches <code>_on_hot_reloaded</code> lifecycle hooks and validates zero dead pointers via <code>#check_alive!</code>.</li>
+                </ul>
               </div>
             </div>
           </div>
@@ -9863,8 +9882,15 @@ end
           </footer>
         </div>
         <aside class="notes">
-          A major problem with C++ and GDExtension live reloading is that reloading the library usually resets all inspector values back to their defaults, or worse, crashes with dangling pointers to deleted vtables.
-          Lapis 4.8-dev7 implements the StatePreserver: a 6-phase transactional reloading protocol. Before reloading, it recursively snapshots all active node properties into Engine metadata quarantine. After the new DLL is swapped in, it reconciles schema drift—handling added, deleted, or type-widened fields cleanly. It then silently hydrates values with signals blocked, and notifies nodes via '_on_hot_reloaded', preserving level designer edits perfectly across reloads.
+          • The Reload Problem: In standard C++ GDExtension, live reloading either resets inspector tweaks back to scene defaults or immediately crashes the editor due to dangling vtables and dead pointers.
+          • Windows DLL Locking: On Windows, Godot locks open .dll files. Lapis solves this by compiling shadow DLLs (`game_PID_N.dll`), allowing instant swaps without closing the editor.
+          • Transactional 6-Phase Pipeline:
+            1. Pre-Flight: Scans the SceneTree, maps all registered Lapis nodes, and ensures compilation is atomic.
+            2. Quarantine: Serializes live properties and runtime collections into Godot Engine metadata buffers before unloading.
+            3. Shadow Swap: Safely unlinks the old DLL and re-registers the new GDExtension in ClassDB.
+            4. Schema Drift: Compares property signatures—widening types (Int32 to Int64) and applying defaults for new exports without losing existing values.
+            5. Silent Hydration: Restores quarantined state in two passes with signals blocked (`set_block_signals(true)`) to prevent unintended cascade effects or audio triggers.
+            6. Verification: Calls `_on_hot_reloaded` on every node and validates that dead pointers to old vtables are strictly ZERO via the `#check_alive!` firewall.
         </aside>
       </section>
 

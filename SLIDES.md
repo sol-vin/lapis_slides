@@ -4378,17 +4378,30 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Process Flow / Pipeline]
-01. **Pre-Flight**: Recursive node discovery & pre-reload sanity checks
-02. **Snapshot**: Quarantine live node properties into Engine metadata
-03. **DLL Swap**: Unlink old shadow DLL & re-register GDExtension
-04. **Reconcile**: Reconcile schema drift & coerce type widening
-05. **Hydration**: Two-pass silent hydration with blocked signals
-06. **Verified**: Invoke _on_hot_reloaded & verify dead pointers
+### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
+#### live_state_preserver.cr — Hot-Reload
+Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.
+
+- **Phases 1-2 • Scan & Quarantine**
+  - 01 Pre-Flight: Recursively traverses SceneTree, maps active GDExtension instances, and validates compiler locks.
+  - 02 Metadata Quarantine: Serializes live inspector edits and runtime collections into Engine metadata buffer before unload.
+- **Phases 3-4 • DLL Swap & Drift**
+  - 03 Shadow DLL Swap: Unlinks shadow library (game_PID_N.dll) to bypass Windows locks; loads new GDExtension.
+  - 04 Schema Drift: Compares old/new ClassDB tables: coerces numeric widening (Int32 &rarr; Int64) & seeds new defaults.
+- **Phases 5-6 • Hydrate & Verify**
+  - 05 Silent Hydration: Two-pass property restoration with signals temporarily blocked to prevent cascades and sound glitches.
+  - 06 Verified: Dispatches _on_hot_reloaded lifecycle hooks and validates zero dead pointers via #check_alive!.
 
 **Presenter Notes**:
-> A major problem with C++ and GDExtension live reloading is that reloading the library usually resets all inspector values back to their defaults, or worse, crashes with dangling pointers to deleted vtables.
-> Lapis 4.8-dev7 implements the StatePreserver: a 6-phase transactional reloading protocol. Before reloading, it recursively snapshots all active node properties into Engine metadata quarantine. After the new DLL is swapped in, it reconciles schema drift—handling added, deleted, or type-widened fields cleanly. It then silently hydrates values with signals blocked, and notifies nodes via '_on_hot_reloaded', preserving level designer edits perfectly across reloads.
+> • The Reload Problem: In standard C++ GDExtension, live reloading either resets inspector tweaks back to scene defaults or immediately crashes the editor due to dangling vtables and dead pointers.
+> • Windows DLL Locking: On Windows, Godot locks open .dll files. Lapis solves this by compiling shadow DLLs (`game_PID_N.dll`), allowing instant swaps without closing the editor.
+> • Transactional 6-Phase Pipeline:
+>   1. Pre-Flight: Scans the SceneTree, maps all registered Lapis nodes, and ensures compilation is atomic.
+>   2. Quarantine: Serializes live properties and runtime collections into Godot Engine metadata buffers before unloading.
+>   3. Shadow Swap: Safely unlinks the old DLL and re-registers the new GDExtension in ClassDB.
+>   4. Schema Drift: Compares property signatures—widening types (Int32 to Int64) and applying defaults for new exports without losing existing values.
+>   5. Silent Hydration: Restores quarantined state in two passes with signals blocked (`set_block_signals(true)`) to prevent unintended cascade effects or audio triggers.
+>   6. Verification: Calls `_on_hot_reloaded` on every node and validates that dead pointers to old vtables are strictly ZERO via the `#check_alive!` firewall.
 
 ---
 
