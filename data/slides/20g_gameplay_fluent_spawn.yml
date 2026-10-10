@@ -1,7 +1,7 @@
 ---
 id: 20g_gameplay_fluent_spawn
 title: 'Gameplay Usability: Fluent Creation & Spawning'
-subtitle: Scene Pipeline Operators, Context Execution (with..yield), and Fluent Configuration
+subtitle: Direct Tree Instantiation, Context Execution (with..yield), and Fluent Configuration
 badge: GAMEPLAY • ERGONOMIC DSL
 badge_color: purple
 palette: candy
@@ -9,13 +9,13 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: code
-  title: gameplay_dsl.cr — Fluent Spawning & Pipeline
+  title: gameplay_dsl.cr — Fluent Spawning & Creation
   tag: Crystal
   lang: crystal
   font_size: '0.74rem'
   code: |
-    # 1. Pipeline Operator (>) with with-yield block (no args needed!):
-    enemy = add_child("res://scenes/enemy.tscn" > Enemy) do
+    # 1. Instantiate PackedScene & mount with context configuration:
+    enemy = add_child(PackedScene.load("res://scenes/enemy.tscn").instantiate.as(Enemy)) do
       self.health = 250
       self.tag = "elite"
     end # typeof(enemy) is Enemy (preserves static type T!)
@@ -26,8 +26,8 @@ left:
       self.centered = true
     end
 
-    # 3. Direct sibling mounting with pipeline operator:
-    marker = add_sibling("res://scenes/marker.tscn" > Marker2D) do
+    # 3. Direct sibling mounting with standard instantiate:
+    marker = add_sibling(PackedScene.load("res://scenes/marker.tscn").instantiate.as(Marker2D)) do
       self.position = Vector2.new(0, 50)
     end
 
@@ -47,12 +47,12 @@ right:
   color: purple
   items:
     - '<strong>Context Execution (<code>with .. yield</code>):</strong> Configuration blocks execute directly within the receiver''s scope—no dummy block arguments (<code>|node|</code>) required.'
-    - '<strong>Scene Pipeline Operator (<code>&gt;</code>):</strong> <code>add_child(scene &gt; Enemy)</code> preloads, instantiates, and downcasts packed scenes in one line with inline configuration blocks.'
     - '<strong>Type-Preserving Returns:</strong> <code>Node#add_child(node : T) : T</code> preserves concrete static type instead of returning <code>Void</code>, enabling <code>enemy = add_child(...)</code>.'
     - '<strong>Direct Tree Instantiation:</strong> <code>add_child(Sprite2D) do ... end</code> instantiates, configures, and mounts child nodes in a single call without separate <code>.new</code>.'
-    - '<strong>Sibling Pipeline Parity:</strong> <code>add_sibling(scene &gt; Marker2D)</code> mounts sibling nodes under the current node''s parent with configuration block and standalone fallback.'
+    - '<strong>PackedScene Instantiation:</strong> <code>PackedScene.load("...").instantiate.as(T)</code> unpacks scenes cleanly with static type verification.'
+    - '<strong>Sibling Mounting Parity:</strong> <code>add_sibling(node)</code> mounts sibling nodes under the current node''s parent with configuration block evaluation.'
     - '<strong>Fluent <code>#build</code> &amp; <code>#configure</code>:</strong> Chainable configuration blocks allow fluent property setup on any Godot engine object or custom node.'
 notes: |
   Writing gameplay code shouldn't require repetitive three-step instantiation boilerplate (`new`, configure, `add_child`). In Lapis, we provide direct tree instantiation with Crystal's 'with .. yield' context execution: `add_child(Sprite2D) do ... end` creates the node, evaluates configuration directly in its context without needing block arguments like `|s|`, mounts it into the hierarchy, and returns the strongly-typed instance in a single expression.
-  Furthermore, the Scene Pipeline operator `>` turns packed scene spawning into pure joy: `add_child("res://scenes/enemy.tscn" > Enemy)` instantiates, downcasts, mounts, and configures the child inline. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
-  Sibling nodes mount effortlessly with `add_sibling(scene > Marker2D)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.
+  When working with pre-existing scenes, `PackedScene.load("...").instantiate.as(T)` pairs directly with `add_child` and `add_sibling`. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
+  Sibling nodes mount effortlessly with `add_sibling(...)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.

@@ -3758,7 +3758,7 @@ end</code></pre>
               <span class="badge badge-pill purple" data-color="purple">GAMEPLAY • ERGONOMIC DSL</span>
             </div>
             <h2 class="slide-title">Gameplay Usability: Fluent Creation &amp; Spawning</h2>
-            <p class="slide-subtitle">Scene Pipeline Operators, Context Execution (with..yield), and Fluent Configuration</p>
+            <p class="slide-subtitle">Direct Tree Instantiation, Context Execution (with..yield), and Fluent Configuration</p>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="3:2">
             <div class="column col" data-slot="left">
@@ -3769,14 +3769,14 @@ end</code></pre>
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title">gameplay_dsl.cr — Fluent Spawning &amp; Pipeline</span>
+                <span class="window-title code-title">gameplay_dsl.cr — Fluent Spawning &amp; Creation</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">Crystal</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal code-compact"># 1. Pipeline Operator (&gt;) with with-yield block (no args needed!):
-enemy = add_child(&quot;res://scenes/enemy.tscn&quot; &gt; Enemy) do
+              <pre><code class="language-crystal code-compact"># 1. Instantiate PackedScene &amp; mount with context configuration:
+enemy = add_child(PackedScene.load(&quot;res://scenes/enemy.tscn&quot;).instantiate.as(Enemy)) do
   self.health = 250
   self.tag = &quot;elite&quot;
 end # typeof(enemy) is Enemy (preserves static type T!)
@@ -3787,8 +3787,8 @@ sprite = add_child(Sprite2D) do
   self.centered = true
 end
 
-# 3. Direct sibling mounting with pipeline operator:
-marker = add_sibling(&quot;res://scenes/marker.tscn&quot; &gt; Marker2D) do
+# 3. Direct sibling mounting with standard instantiate:
+marker = add_sibling(PackedScene.load(&quot;res://scenes/marker.tscn&quot;).instantiate.as(Marker2D)) do
   self.position = Vector2.new(0, 50)
 end
 
@@ -3811,10 +3811,10 @@ change_scene!(&quot;res://scenes/level2.tscn&quot;)</code></pre>
               </div>
               <ul class="card-list">
                 <li><strong>Context Execution (<code>with .. yield</code>):</strong> Configuration blocks execute directly within the receiver's scope—no dummy block arguments (<code>|node|</code>) required.</li>
-                <li><strong>Scene Pipeline Operator (<code>&gt;</code>):</strong> <code>add_child(scene &gt; Enemy)</code> preloads, instantiates, and downcasts packed scenes in one line with inline configuration blocks.</li>
                 <li><strong>Type-Preserving Returns:</strong> <code>Node#add_child(node : T) : T</code> preserves concrete static type instead of returning <code>Void</code>, enabling <code>enemy = add_child(...)</code>.</li>
                 <li><strong>Direct Tree Instantiation:</strong> <code>add_child(Sprite2D) do ... end</code> instantiates, configures, and mounts child nodes in a single call without separate <code>.new</code>.</li>
-                <li><strong>Sibling Pipeline Parity:</strong> <code>add_sibling(scene &gt; Marker2D)</code> mounts sibling nodes under the current node's parent with configuration block and standalone fallback.</li>
+                <li><strong>PackedScene Instantiation:</strong> <code>PackedScene.load("...").instantiate.as(T)</code> unpacks scenes cleanly with static type verification.</li>
+                <li><strong>Sibling Mounting Parity:</strong> <code>add_sibling(node)</code> mounts sibling nodes under the current node's parent with configuration block evaluation.</li>
                 <li><strong>Fluent <code>#build</code> &amp; <code>#configure</code>:</strong> Chainable configuration blocks allow fluent property setup on any Godot engine object or custom node.</li>
               </ul>
             </div>
@@ -3828,8 +3828,8 @@ change_scene!(&quot;res://scenes/level2.tscn&quot;)</code></pre>
         </div>
         <aside class="notes">
           Writing gameplay code shouldn't require repetitive three-step instantiation boilerplate (`new`, configure, `add_child`). In Lapis, we provide direct tree instantiation with Crystal's 'with .. yield' context execution: `add_child(Sprite2D) do ... end` creates the node, evaluates configuration directly in its context without needing block arguments like `|s|`, mounts it into the hierarchy, and returns the strongly-typed instance in a single expression.
-          Furthermore, the Scene Pipeline operator `>` turns packed scene spawning into pure joy: `add_child("res://scenes/enemy.tscn" > Enemy)` instantiates, downcasts, mounts, and configures the child inline. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
-          Sibling nodes mount effortlessly with `add_sibling(scene > Marker2D)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.
+          When working with pre-existing scenes, `PackedScene.load("...").instantiate.as(T)` pairs directly with `add_child` and `add_sibling`. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
+          Sibling nodes mount effortlessly with `add_sibling(...)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.
         </aside>
       </section>
 
@@ -4946,7 +4946,7 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="code-comparison" data-step="code-only">
             <div class="comparison-pane" data-slot="before">
-            <div class="code-window code-container col" data-lang="gdscript">
+            <div class="code-window code-container col code-compact" data-lang="gdscript" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
@@ -4959,15 +4959,21 @@ end</code></pre>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-gdscript">func spawn_entities() -&gt; void:
-    # Pitfall 1: Verbose 3-step preload, instantiate &amp; cast
-    const PlayerScene = preload(&quot;res://scenes/player.tscn&quot;)
-    var player = PlayerScene.instantiate() as Player
-    if not player:
-        push_error(&quot;Failed to instantiate Player&quot;)
-    add_child(player)
+              <pre><code class="language-gdscript code-compact">func spawn_entities() -&gt; void:
+    # Pitfall 1: Multi-step preload, instantiate, cast &amp; mount
+    const EnemyScene = preload(&quot;res://scenes/enemy.tscn&quot;)
+    var enemy = EnemyScene.instantiate() as Enemy
+    enemy.health = 250
+    enemy.tag = &quot;elite&quot;
+    add_child(enemy)
 
-    # Pitfall 2: Dynamic loading requires manual resource checking
+    # Pitfall 2: Sibling mounting with manual parent lookup
+    const MarkerScene = preload(&quot;res://scenes/marker.tscn&quot;)
+    var marker = MarkerScene.instantiate() as Marker2D
+    marker.position = Vector2(0, 50)
+    get_parent().add_child(marker)
+
+    # Pitfall 3: Dynamic loading requires manual resource checking
     var boss_scene = load(&quot;res://scenes/boss.tscn&quot;) as PackedScene
     var boss = boss_scene.instantiate() as BossEnemy
     boss.damage = 100
@@ -4982,7 +4988,7 @@ end</code></pre>
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Preload (&gt;), Load (&gt;&gt;), and Configuration Blocks</span>
+                <span class="window-title code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Preload (&gt;), Load (&gt;&gt;), and Direct Tree Pipelines</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">Crystal (Lapis)</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
@@ -4991,21 +4997,22 @@ end</code></pre>
               <pre><code class="language-crystal code-compact">require &quot;lapis/extras&quot;
 
 def spawn_entities : Void
-  # 1. Preload Operator (&gt;): Preloads, instantiates &amp; types in 1 line!
-  player = &quot;res://scenes/player.tscn&quot; &gt; Player
-  theme  = &quot;res://assets/theme.tres&quot; &gt; Theme # Cached Resource preload
+  # 1. Pipeline Preload (&gt;): Preload, instantiate, cast &amp; mount!
+  enemy = add_child(&quot;res://scenes/enemy.tscn&quot; &gt; Enemy) do
+    self.health = 250
+    self.tag = &quot;elite&quot;
+  end # typeof(enemy) is Enemy (preserves static type T!)
 
-  # 2. Dynamic Runtime Load Operator (&gt;&gt;):
+  # 2. Pipeline Sibling Mounting (&gt;):
+  marker = add_sibling(&quot;res://scenes/marker.tscn&quot; &gt; Marker2D) do
+    self.position = Vector2.new(0, 50)
+  end
+
+  # 3. Dynamic Runtime Load Operator (&gt;&gt;):
   boss = &quot;res://scenes/boss.tscn&quot; &gt;&gt; BossEnemy
 
-  # 3. Nilable Pipeline (?): Returns nil if missing (no exception!):
+  # 4. Nilable Pipeline (?): Returns nil if missing (no exception!):
   secret = &quot;res://scenes/secret.tscn&quot; &gt; SecretRoom?
-
-  # 4. Pipeline Operator with Inline Configuration Block:
-  laser = (&quot;res://scenes/laser.tscn&quot; &gt; LaserBeam) do
-    self.beam_width = 12.0_f32
-    self.damage = 50
-  end
 end</code></pre>
             </div>
             </div>
@@ -5017,10 +5024,9 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          While standard Lapis provides compile-time inferred 'load' and 'preload', 'require "lapis/extras"' elevates scene and asset instantiation into ultra-clean pipeline operators.
-          With the greater-than operator (>), '"res://player.tscn" > Player' preloads the PackedScene, instantiates it, and returns a statically typed Player node in one concise expression.
-          The double-greater-than operator (>>) performs dynamic runtime loading. When paired with nilable types like 'SecretRoom?', it safely returns nil if the resource fails to load without crashing.
-          Best of all, pipeline operators accept trailing blocks, allowing you to fluently configure newly created nodes before mounting them to the scene tree.
+          In Chapter 4.1, we saw how `add_child` and `add_sibling` work with `PackedScene.load("...").instantiate.as(T)`. With `require "lapis/extras"`, we elevate scene instantiation into ultra-clean pipeline operators.
+          With the greater-than operator (`>`), `"res://scenes/enemy.tscn" > Enemy` preloads the PackedScene, instantiates it, and downcasts to `Enemy` in a single token stream. When passed directly into `add_child` or `add_sibling`, you can configure properties inline with Crystal's context execution (`with .. yield`).
+          The double-greater-than operator (`>>`) performs dynamic runtime loading. When paired with nilable types like `SecretRoom?`, it safely returns nil if the resource fails to load without crashing.
         </aside>
       </section>
 
@@ -5046,23 +5052,23 @@ end</code></pre>
                 <span class="badge coral antipattern" data-color="coral antipattern">ANTI-PATTERN</span>
               </div>
               <ul class="card-list">
-                <li><strong>Multi-Step Friction:</strong> Must store <code>PackedScene</code>, invoke <code>instantiate()</code>, and cast in separate statements.</li>
-                <li><strong>Unsafe Runtime Casting:</strong> Untyped <code>Resource</code> return requires <code>as Player</code> casting that fails silently if types diverge.</li>
-                <li><strong>No Inline Configuration:</strong> Setting initial properties requires tedious temporary variable assignments.</li>
+                <li><strong>Multi-Step Friction:</strong> Must store <code>PackedScene</code>, invoke <code>instantiate()</code>, cast, configure, and mount in separate statements.</li>
+                <li><strong>Unsafe Runtime Casting:</strong> Untyped <code>Resource</code> return requires <code>as Enemy</code> casting that fails silently if types diverge.</li>
+                <li><strong>Manual Tree Lookup:</strong> Sibling mounting requires explicit <code>get_parent().add_child(...)</code> navigation.</li>
               </ul>
             </div>
             </div>
             <div class="comparison-pane" data-slot="after">
             <div class="card col emerald solution" data-color="emerald solution">
               <div class="card-header card-title emerald solution">
-                <span><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Preload (&gt;), Load (&gt;&gt;), and Configuration Blocks</span>
+                <span><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Preload (&gt;), Load (&gt;&gt;), and Direct Tree Pipelines</span>
                 <span class="badge emerald solution" data-color="emerald solution">CLEAN SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable pipeline operators on <code>String</code> and <code>PackedScene</code>.</li>
-                <li><strong>Preload Pipeline (<code>&gt;</code>):</strong> Preloads <code>PackedScene</code>, instantiates it, and returns typed Node <code>T</code> with zero casting boilerplate.</li>
-                <li><strong>Dynamic Load Pipeline (<code>&gt;&gt;</code>):</strong> Dynamically loads and instantiates scenes at runtime without intermediate ceremony.</li>
-                <li><strong>Inline Configuration Blocks:</strong> <code>("path" &gt; Type) do ... end</code> evaluates configuration directly in the newly created instance context.</li>
+                <li><strong>Direct Tree Pipeline (<code>&gt;</code>):</strong> <code>add_child("path" &gt; T) do ... end</code> preloads, instantiates, types, mounts, and configures inline.</li>
+                <li><strong>Sibling Pipeline Parity:</strong> <code>add_sibling("path" &gt; T)</code> mounts directly under the parent node with full context block evaluation.</li>
+                <li><strong>Dynamic Load Pipeline (<code>&gt;&gt;</code>):</strong> Dynamically loads scenes at runtime; pairs with nilable types like <code>T?</code> without throwing.</li>
               </ul>
             </div>
             </div>
@@ -5078,10 +5084,9 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          While standard Lapis provides compile-time inferred 'load' and 'preload', 'require "lapis/extras"' elevates scene and asset instantiation into ultra-clean pipeline operators.
-          With the greater-than operator (>), '"res://player.tscn" > Player' preloads the PackedScene, instantiates it, and returns a statically typed Player node in one concise expression.
-          The double-greater-than operator (>>) performs dynamic runtime loading. When paired with nilable types like 'SecretRoom?', it safely returns nil if the resource fails to load without crashing.
-          Best of all, pipeline operators accept trailing blocks, allowing you to fluently configure newly created nodes before mounting them to the scene tree.
+          In Chapter 4.1, we saw how `add_child` and `add_sibling` work with `PackedScene.load("...").instantiate.as(T)`. With `require "lapis/extras"`, we elevate scene instantiation into ultra-clean pipeline operators.
+          With the greater-than operator (`>`), `"res://scenes/enemy.tscn" > Enemy` preloads the PackedScene, instantiates it, and downcasts to `Enemy` in a single token stream. When passed directly into `add_child` or `add_sibling`, you can configure properties inline with Crystal's context execution (`with .. yield`).
+          The double-greater-than operator (`>>`) performs dynamic runtime loading. When paired with nilable types like `SecretRoom?`, it safely returns nil if the resource fails to load without crashing.
         </aside>
       </section>
 
@@ -9793,7 +9798,7 @@ end
       </section>
 
       <!-- Slide 121: GameStation2 (Hot-Reload State Preserver: 6-Phase Transactional Protocol) -->
-      <section class="slide solvin-slide game_station_2" data-layout="feature-grid" data-palette="game_station_2" data-background-color="#090a10" data-palette-name="GameStation2" data-palette-cube="#e0e6f0" data-palette-cube-hover="#0088ff" data-slide-id="33d_hot_reload_state_preserver" id="slide-33d_hot_reload_state_preserver">
+      <section class="slide solvin-slide game_station_2" data-layout="process-flow" data-palette="game_station_2" data-background-color="#090a10" data-palette-name="GameStation2" data-palette-cube="#e0e6f0" data-palette-cube-hover="#0088ff" data-slide-id="33d_hot_reload_state_preserver" id="slide-33d_hot_reload_state_preserver">
         <div class="palette-corner-badge" title="Theme: GameStation2">
           <span class="palette-corner-dot"></span> PALETTE: GameStation2
         </div>
@@ -9805,68 +9810,49 @@ end
             <h2 class="slide-title">Hot-Reload State Preserver: 6-Phase Transactional Protocol</h2>
             <p class="slide-subtitle">Preserving Live Scene State, Schema Drift Reconciliation &amp; Zero Dead Pointers</p>
           </header>
-          <div class="slide-body" data-layout="feature-grid">
-            <div class="bento-hero-column">
-              <div class="card bento-hero-card amber" data-color="amber">
+          <div class="slide-body" data-layout="process-flow">
+            <div class="process-pipeline" data-steps="6">
+              <div class="card process-step-card col amber" data-color="amber">
                 <div class="card-header">
-                  <span class="card-title">live_state_preserver.cr — Hot-Reload</span>
-                  <span class="badge amber" data-color="amber">STATE PRESERVER</span>
+                  <span class="process-step-badge amber">01</span>
                 </div>
-                <div class="code-window bento-code-window" data-lang="crystal">
-                  <pre><code class="language-crystal code-compact"># Lapis 4.8 StatePreserver: Transactional Hot-Reload
-node PlayerController &lt; CharacterBody3D do
-  # Phase 1 &amp; 2: Pre-Flight Scan &amp; Metadata Quarantine
-  @[Export]
-  property move_speed : Float32 = 8.5_f32 # Inspector tweak: 12.0
-  @[Export]
-  property inventory : Array(Item) = []  # Live runtime state
-
-  # Phase 3 &amp; 4: DLL Swap &amp; Schema Drift (Int32 -&gt; Int64)
-  @[Export]
-  property score : Int64 = 0_i64         # Coerced from Int32
-  @[Export]
-  property mana : Int32 = 100            # Added in new DLL
-
-  # Phase 5 &amp; 6: Silent Hydration &amp; Verification Hook
-  def _on_hot_reloaded : Void
-    Godot.print(&quot;Restored: #{@move_speed}m/s, #{@inventory.size} items&quot;)
-    # Dead pointers to deleted vtables asserted ZERO
-  end
-end</code></pre>
-                </div>
-                <div class="bento-desc">Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.</div>
+                <div class="process-step-title">Pre-Flight</div>
+                <div class="process-step-desc">Recursive node discovery &amp; pre-reload sanity checks</div>
               </div>
-            </div>
-            <div class="bento-side-column">
-              <div class="card bento-subcard amber" data-color="amber">
+              <div class="card process-step-card col amber" data-color="amber">
                 <div class="card-header">
-                  <span class="card-title">Phase 1 &amp; 2 • Scan &amp; Quarantine</span>
-                  <span class="badge amber" data-color="amber">PRE-RELOAD</span>
+                  <span class="process-step-badge amber">02</span>
                 </div>
-                <ul class="card-list">
-                  <li><strong>01 Pre-Flight:</strong> Recursively traverses SceneTree, maps active GDExtension nodes, asserts compiler lock release.</li>
-                  <li><strong>02 Snapshot:</strong> Serializes live inspector & runtime state into Godot Engine metadata quarantine buffer before library unload.</li>
-                </ul>
+                <div class="process-step-title">Snapshot</div>
+                <div class="process-step-desc">Quarantine live node properties into Engine metadata</div>
               </div>
-              <div class="card bento-subcard amber" data-color="amber">
+              <div class="card process-step-card col amber" data-color="amber">
                 <div class="card-header">
-                  <span class="card-title">Phase 3 &amp; 4 • Swap &amp; Reconcile</span>
-                  <span class="badge amber" data-color="amber">TRANSACTION</span>
+                  <span class="process-step-badge amber">03</span>
                 </div>
-                <ul class="card-list">
-                  <li><strong>03 DLL Swap:</strong> Unlinks shadow DLL (<code>game_PID_N.dll</code>) and dynamically re-registers freshly compiled GDExtension library.</li>
-                  <li><strong>04 Schema Drift:</strong> Compares old vs new ClassDB property tables; coerces widened types & adopts defaults for added fields.</li>
-                </ul>
+                <div class="process-step-title">DLL Swap</div>
+                <div class="process-step-desc">Unlink old shadow DLL &amp; re-register GDExtension</div>
               </div>
-              <div class="card bento-subcard emerald" data-color="emerald">
+              <div class="card process-step-card col amber" data-color="amber">
                 <div class="card-header">
-                  <span class="card-title">Phase 5 &amp; 6 • Hydrate &amp; Verify</span>
-                  <span class="badge emerald" data-color="emerald">RESTORED</span>
+                  <span class="process-step-badge amber">04</span>
                 </div>
-                <ul class="card-list">
-                  <li><strong>05 Hydration:</strong> Two-pass silent hydration with signals blocked to eliminate cascades; reconnects object graphs.</li>
-                  <li><strong>06 Verified:</strong> Dispatches <code>_on_hot_reloaded</code> hooks; validates dead-pointer firewall (<code>#check_alive!</code>).</li>
-                </ul>
+                <div class="process-step-title">Reconcile</div>
+                <div class="process-step-desc">Reconcile schema drift &amp; coerce type widening</div>
+              </div>
+              <div class="card process-step-card col amber" data-color="amber">
+                <div class="card-header">
+                  <span class="process-step-badge amber">05</span>
+                </div>
+                <div class="process-step-title">Hydration</div>
+                <div class="process-step-desc">Two-pass silent hydration with blocked signals</div>
+              </div>
+              <div class="card process-step-card col emerald" data-color="emerald">
+                <div class="card-header">
+                  <span class="process-step-badge emerald">06</span>
+                </div>
+                <div class="process-step-title">Verified</div>
+                <div class="process-step-desc">Invoke _on_hot_reloaded &amp; verify dead pointers</div>
               </div>
             </div>
           </div>
@@ -9877,9 +9863,8 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          • The Reload Problem: In standard C++ GDExtension, reloading resets inspector values back to defaults or crashes the editor due to dangling vtables and dead pointers.
-          • Visual Callout (Left): Point to the code sample—notice how inspector tweaks (@move_speed), runtime collections, and even schema drift (score widened to Int64) survive seamlessly.
-          • The 6-Phase Pipeline (Right): Lapis executes an atomic transaction: recursive pre-flight scan -> metadata quarantine -> shadow DLL swap -> schema drift reconciliation -> two-pass silent hydration with blocked signals -> _on_hot_reloaded verification hook with dead pointer guarantees.
+          A major problem with C++ and GDExtension live reloading is that reloading the library usually resets all inspector values back to their defaults, or worse, crashes with dangling pointers to deleted vtables.
+          Lapis 4.8-dev7 implements the StatePreserver: a 6-phase transactional reloading protocol. Before reloading, it recursively snapshots all active node properties into Engine metadata quarantine. After the new DLL is swapped in, it reconciles schema drift—handling added, deleted, or type-widened fields cleanly. It then silently hydrates values with signals blocked, and notifies nodes via '_on_hot_reloaded', preserving level designer edits perfectly across reloads.
         </aside>
       </section>
 

@@ -1607,11 +1607,11 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Theme Palette**: `candy` (Candy)
 - **Badge**: `GAMEPLAY • ERGONOMIC DSL`
 - **Title**: Gameplay Usability: Fluent Creation & Spawning
-- **Subtitle**: Scene Pipeline Operators, Context Execution (with..yield), and Fluent Configuration
-- **Code (gameplay_dsl.cr — Fluent Spawning & Pipeline)**:
+- **Subtitle**: Direct Tree Instantiation, Context Execution (with..yield), and Fluent Configuration
+- **Code (gameplay_dsl.cr — Fluent Spawning & Creation)**:
   ```crystal
-  # 1. Pipeline Operator (>) with with-yield block (no args needed!):
-  enemy = add_child("res://scenes/enemy.tscn" > Enemy) do
+  # 1. Instantiate PackedScene & mount with context configuration:
+  enemy = add_child(PackedScene.load("res://scenes/enemy.tscn").instantiate.as(Enemy)) do
     self.health = 250
     self.tag = "elite"
   end # typeof(enemy) is Enemy (preserves static type T!)
@@ -1622,8 +1622,8 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     self.centered = true
   end
   
-  # 3. Direct sibling mounting with pipeline operator:
-  marker = add_sibling("res://scenes/marker.tscn" > Marker2D) do
+  # 3. Direct sibling mounting with standard instantiate:
+  marker = add_sibling(PackedScene.load("res://scenes/marker.tscn").instantiate.as(Marker2D)) do
     self.position = Vector2.new(0, 50)
   end
   
@@ -1640,16 +1640,16 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```
 - **Direct Tree Mounting & Instantiation**:
   - Context Execution (with .. yield): Configuration blocks execute directly within the receiver's scope—no dummy block arguments (|node|) required.
-  - Scene Pipeline Operator (>): add_child(scene > Enemy) preloads, instantiates, and downcasts packed scenes in one line with inline configuration blocks.
   - Type-Preserving Returns: Node#add_child(node : T) : T preserves concrete static type instead of returning Void, enabling enemy = add_child(...).
   - Direct Tree Instantiation: add_child(Sprite2D) do ... end instantiates, configures, and mounts child nodes in a single call without separate .new.
-  - Sibling Pipeline Parity: add_sibling(scene > Marker2D) mounts sibling nodes under the current node's parent with configuration block and standalone fallback.
+  - PackedScene Instantiation: PackedScene.load("...").instantiate.as(T) unpacks scenes cleanly with static type verification.
+  - Sibling Mounting Parity: add_sibling(node) mounts sibling nodes under the current node's parent with configuration block evaluation.
   - Fluent #build & #configure: Chainable configuration blocks allow fluent property setup on any Godot engine object or custom node.
 
 **Presenter Notes**:
 > Writing gameplay code shouldn't require repetitive three-step instantiation boilerplate (`new`, configure, `add_child`). In Lapis, we provide direct tree instantiation with Crystal's 'with .. yield' context execution: `add_child(Sprite2D) do ... end` creates the node, evaluates configuration directly in its context without needing block arguments like `|s|`, mounts it into the hierarchy, and returns the strongly-typed instance in a single expression.
-> Furthermore, the Scene Pipeline operator `>` turns packed scene spawning into pure joy: `add_child("res://scenes/enemy.tscn" > Enemy)` instantiates, downcasts, mounts, and configures the child inline. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
-> Sibling nodes mount effortlessly with `add_sibling(scene > Marker2D)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.
+> When working with pre-existing scenes, `PackedScene.load("...").instantiate.as(T)` pairs directly with `add_child` and `add_sibling`. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
+> Sibling nodes mount effortlessly with `add_sibling(...)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.
 
 ---
 
@@ -2216,39 +2216,46 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **:circle-xmark: GDScript: Multi-Step Instantiation Boilerplate**:
   ```gdscript
   func spawn_entities() -> void:
-      # Pitfall 1: Verbose 3-step preload, instantiate & cast
-      const PlayerScene = preload("res://scenes/player.tscn")
-      var player = PlayerScene.instantiate() as Player
-      if not player:
-          push_error("Failed to instantiate Player")
-      add_child(player)
+      # Pitfall 1: Multi-step preload, instantiate, cast & mount
+      const EnemyScene = preload("res://scenes/enemy.tscn")
+      var enemy = EnemyScene.instantiate() as Enemy
+      enemy.health = 250
+      enemy.tag = "elite"
+      add_child(enemy)
   
-      # Pitfall 2: Dynamic loading requires manual resource checking
+      # Pitfall 2: Sibling mounting with manual parent lookup
+      const MarkerScene = preload("res://scenes/marker.tscn")
+      var marker = MarkerScene.instantiate() as Marker2D
+      marker.position = Vector2(0, 50)
+      get_parent().add_child(marker)
+  
+      # Pitfall 3: Dynamic loading requires manual resource checking
       var boss_scene = load("res://scenes/boss.tscn") as PackedScene
       var boss = boss_scene.instantiate() as BossEnemy
       boss.damage = 100
       add_child(boss)
   ```
-- **:sparkles: Crystal: Preload (>), Load (>>), and Configuration Blocks**:
+- **:sparkles: Crystal: Preload (>), Load (>>), and Direct Tree Pipelines**:
   ```crystal
   require "lapis/extras"
   
   def spawn_entities : Void
-    # 1. Preload Operator (>): Preloads, instantiates & types in 1 line!
-    player = "res://scenes/player.tscn" > Player
-    theme  = "res://assets/theme.tres" > Theme # Cached Resource preload
+    # 1. Pipeline Preload (>): Preload, instantiate, cast & mount!
+    enemy = add_child("res://scenes/enemy.tscn" > Enemy) do
+      self.health = 250
+      self.tag = "elite"
+    end # typeof(enemy) is Enemy (preserves static type T!)
   
-    # 2. Dynamic Runtime Load Operator (>>):
+    # 2. Pipeline Sibling Mounting (>):
+    marker = add_sibling("res://scenes/marker.tscn" > Marker2D) do
+      self.position = Vector2.new(0, 50)
+    end
+  
+    # 3. Dynamic Runtime Load Operator (>>):
     boss = "res://scenes/boss.tscn" >> BossEnemy
   
-    # 3. Nilable Pipeline (?): Returns nil if missing (no exception!):
+    # 4. Nilable Pipeline (?): Returns nil if missing (no exception!):
     secret = "res://scenes/secret.tscn" > SecretRoom?
-  
-    # 4. Pipeline Operator with Inline Configuration Block:
-    laser = ("res://scenes/laser.tscn" > LaserBeam) do
-      self.beam_width = 12.0_f32
-      self.damage = 50
-    end
   end
   ```
 
@@ -2256,21 +2263,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 58: Lapis Extras: Scene Preload (>) & Load (>>) Pipelines [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Multi-Step Friction: Must store PackedScene, invoke instantiate(), and cast in separate statements.
-  - Unsafe Runtime Casting: Untyped Resource return requires as Player casting that fails silently if types diverge.
-  - No Inline Configuration: Setting initial properties requires tedious temporary variable assignments.
+  - Multi-Step Friction: Must store PackedScene, invoke instantiate(), cast, configure, and mount in separate statements.
+  - Unsafe Runtime Casting: Untyped Resource return requires as Enemy casting that fails silently if types diverge.
+  - Manual Tree Lookup: Sibling mounting requires explicit get_parent().add_child(...) navigation.
 - **Solution Advantages**:
   - Opt-In Require: Add require "lapis/extras" to enable pipeline operators on String and PackedScene.
-  - Preload Pipeline (>): Preloads PackedScene, instantiates it, and returns typed Node T with zero casting boilerplate.
-  - Dynamic Load Pipeline (>>): Dynamically loads and instantiates scenes at runtime without intermediate ceremony.
-  - Inline Configuration Blocks: ("path" > Type) do ... end evaluates configuration directly in the newly created instance context.
+  - Direct Tree Pipeline (>): add_child("path" > T) do ... end preloads, instantiates, types, mounts, and configures inline.
+  - Sibling Pipeline Parity: add_sibling("path" > T) mounts directly under the parent node with full context block evaluation.
+  - Dynamic Load Pipeline (>>): Dynamically loads scenes at runtime; pairs with nilable types like T? without throwing.
 - **Key Takeaway**: Lapis scene pipeline operators (> and >>) turn multi-step scene preloading, instantiation, and initial configuration into expressive single-line expressions.
 
 **Presenter Notes**:
-> While standard Lapis provides compile-time inferred 'load' and 'preload', 'require "lapis/extras"' elevates scene and asset instantiation into ultra-clean pipeline operators.
-> With the greater-than operator (>), '"res://player.tscn" > Player' preloads the PackedScene, instantiates it, and returns a statically typed Player node in one concise expression.
-> The double-greater-than operator (>>) performs dynamic runtime loading. When paired with nilable types like 'SecretRoom?', it safely returns nil if the resource fails to load without crashing.
-> Best of all, pipeline operators accept trailing blocks, allowing you to fluently configure newly created nodes before mounting them to the scene tree.
+> In Chapter 4.1, we saw how `add_child` and `add_sibling` work with `PackedScene.load("...").instantiate.as(T)`. With `require "lapis/extras"`, we elevate scene instantiation into ultra-clean pipeline operators.
+> With the greater-than operator (`>`), `"res://scenes/enemy.tscn" > Enemy` preloads the PackedScene, instantiates it, and downcasts to `Enemy` in a single token stream. When passed directly into `add_child` or `add_sibling`, you can configure properties inline with Crystal's context execution (`with .. yield`).
+> The double-greater-than operator (`>>`) performs dynamic runtime loading. When paired with nilable types like `SecretRoom?`, it safely returns nil if the resource fails to load without crashing.
 
 ---
 
@@ -4372,24 +4378,17 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
-#### live_state_preserver.cr — Hot-Reload
-Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.
-
-- **Phase 1 & 2 • Scan & Quarantine**
-  - 01 Pre-Flight: Recursively traverses SceneTree, maps active GDExtension nodes, asserts compiler lock release.
-  - 02 Snapshot: Serializes live inspector & runtime state into Godot Engine metadata quarantine buffer before library unload.
-- **Phase 3 & 4 • Swap & Reconcile**
-  - 03 DLL Swap: Unlinks shadow DLL (game_PID_N.dll) and dynamically re-registers freshly compiled GDExtension library.
-  - 04 Schema Drift: Compares old vs new ClassDB property tables; coerces widened types & adopts defaults for added fields.
-- **Phase 5 & 6 • Hydrate & Verify**
-  - 05 Hydration: Two-pass silent hydration with signals blocked to eliminate cascades; reconnects object graphs.
-  - 06 Verified: Dispatches _on_hot_reloaded hooks; validates dead-pointer firewall (#check_alive!).
+### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Process Flow / Pipeline]
+01. **Pre-Flight**: Recursive node discovery & pre-reload sanity checks
+02. **Snapshot**: Quarantine live node properties into Engine metadata
+03. **DLL Swap**: Unlink old shadow DLL & re-register GDExtension
+04. **Reconcile**: Reconcile schema drift & coerce type widening
+05. **Hydration**: Two-pass silent hydration with blocked signals
+06. **Verified**: Invoke _on_hot_reloaded & verify dead pointers
 
 **Presenter Notes**:
-> • The Reload Problem: In standard C++ GDExtension, reloading resets inspector values back to defaults or crashes the editor due to dangling vtables and dead pointers.
-> • Visual Callout (Left): Point to the code sample—notice how inspector tweaks (@move_speed), runtime collections, and even schema drift (score widened to Int64) survive seamlessly.
-> • The 6-Phase Pipeline (Right): Lapis executes an atomic transaction: recursive pre-flight scan -> metadata quarantine -> shadow DLL swap -> schema drift reconciliation -> two-pass silent hydration with blocked signals -> _on_hot_reloaded verification hook with dead pointer guarantees.
+> A major problem with C++ and GDExtension live reloading is that reloading the library usually resets all inspector values back to their defaults, or worse, crashes with dangling pointers to deleted vtables.
+> Lapis 4.8-dev7 implements the StatePreserver: a 6-phase transactional reloading protocol. Before reloading, it recursively snapshots all active node properties into Engine metadata quarantine. After the new DLL is swapped in, it reconciles schema drift—handling added, deleted, or type-widened fields cleanly. It then silently hydrates values with signals blocked, and notifies nodes via '_on_hot_reloaded', preserving level designer edits perfectly across reloads.
 
 ---
 
