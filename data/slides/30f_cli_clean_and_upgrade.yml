@@ -16,13 +16,13 @@ modes:
     specs:
       - label: 'Shadow Pruning'
         value: 'Purges locked <code>*_loaded_*.dll/pdb</code> files without closing Godot'
-        icon: broom
+        icon: rotate-right
       - label: 'Dry-Run Preview'
         value: '<code>--dry-run</code> previews candidates and disk space before deletion'
-        icon: eye
+        icon: magnifying-glass
       - label: 'Deep Clean'
         value: '<code>--all</code> removes build binaries, docs, and engine caches'
-        icon: trash-can
+        icon: burst
       - label: 'Runtime Safety'
         value: 'Preserves foundational DLLs (<code>gc.dll</code>, <code>pcre2-8.dll</code>)'
         icon: shield-check
@@ -41,7 +41,7 @@ modes:
         icon: wrench
       - label: 'API Validation'
         value: 'Refreshes <code>extension_api.json</code> and validates schemas'
-        icon: file-code
+        icon: code
       - label: 'Safe Preview'
         value: '<code>--dry-run</code> previews schema diffs before writing changes'
         icon: circle-check

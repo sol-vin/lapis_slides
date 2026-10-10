@@ -15,7 +15,7 @@ pillars:
     color: "cyan"
   - title: "lapis doctor Diagnostics"
     desc: "Automated toolchain health audit checking Crystal, LLVM, Godot, runtime DLLs, and fiber barriers"
-    icon: "stethoscope"
+    icon: "microscope"
     color: "emerald"
   - title: "Two-Way Codegen Engine"
     desc: "Synthesizing 824 typed ClassDB classes and generating Crystal wrappers for custom GDScript nodes"

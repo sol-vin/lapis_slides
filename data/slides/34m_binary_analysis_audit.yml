@@ -11,19 +11,19 @@ metrics:
     label: "Total Standalone DLL Size"
     delta: "AOT COMPILED"
     color: cyan
-    icon: file-zipper
+    icon: box-archive
     desc: "Complete self-contained GDExtension game logic binary with zero VM overhead"
   - value: "312 KB"
     label: ".text Native Instructions"
     delta: "65.8% OF BINARY"
     color: emerald
-    icon: microchip
+    icon: code
     desc: "Direct x86_64 machine instructions optimized by LLVM with SIMD autovectorization"
   - value: "118 KB"
     label: ".rdata Read-Only Data"
     delta: "24.9% OF BINARY"
     color: purple
-    icon: database
+    icon: scroll
     desc: "Type descriptors, vtables, and immutable engine string constants"
   - value: "0"
     label: "Unstripped Debug Symbols"

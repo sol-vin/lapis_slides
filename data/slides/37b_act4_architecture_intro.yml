@@ -11,7 +11,7 @@ cube_size: 160
 pillars:
   - title: "5-Layer Architecture"
     desc: "From the raw C API and Variant bridge up to high-level macros and user gameplay scripts"
-    icon: "layers"
+    icon: "cube"
     color: "cyan"
   - title: "Dual Compilation Modes"
     desc: "Seamlessly switch between Mode A (Rapid Dynamic Extension) and Mode B (Statically Linked Binary)"

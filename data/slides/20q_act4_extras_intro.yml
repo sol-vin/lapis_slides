@@ -19,7 +19,7 @@ pillars:
     color: "purple"
   - title: 'require "lapis/cs_extras"'
     desc: "Compound signal assignment operators (+= and -=) with 64-bit ObjectDB auto-pruning"
-    icon: "plus"
+    icon: "plug"
     color: "emerald"
 notes: |
   Now that we've seen how clean, safe, and robust core Lapis is using pure Crystal methods like Node#[] and the 'on' macro, let's explore Lapis Extras!
