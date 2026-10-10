@@ -3363,10 +3363,10 @@ end</code></pre>
               </div>
               <pre><code class="language-crystal code-compact">node PlayerController &lt; CharacterBody2D do
   # 1. Declarative onready node caching (GDScript @onready parity):
-  onready camera : Camera2D, &quot;CameraRig/Camera2D&quot;
-  onready hud : CanvasLayer, &quot;%PlayerHUD&quot;
-  unique_node score_label : Label, &quot;ScoreLabel&quot;
-  onready weapon : Weapon, &quot;WeaponMount/Sword&quot;
+  onready camera : Camera2D = &quot;CameraRig/Camera2D&quot;
+  onready hud : CanvasLayer = &quot;%PlayerHUD&quot;
+  unique_node score_label : Label = &quot;ScoreLabel&quot;
+  onready weapon : Weapon = &quot;WeaponMount/Sword&quot;
   onready sprite : Sprite2D # Infers child &quot;Sprite2D&quot; from name!
 
   def _ready : Void
@@ -3393,7 +3393,7 @@ end</code></pre>
                 <span>Core Subscripts &amp; Lazy Caching</span>
               </div>
               <ul class="card-list">
-                <li><strong>Declarative <code>onready</code> Macro:</strong> <code>onready camera : Camera2D, "path"</code> lazily caches, types, and validates child nodes during <code>_ready</code> with zero boilerplate.</li>
+                <li><strong>Declarative <code>onready</code> Macro:</strong> <code>onready camera : Camera2D = "path"</code> lazily caches, types, and validates child nodes during <code>_ready</code> with zero boilerplate.</li>
                 <li><strong>Type-Inferred Child Subscript:</strong> <code>self[Sprite2D]</code> looks up child nodes matching the class name and returns a concrete, typed instance without manual casting.</li>
                 <li><strong>Typed Path Indexers (<code>Node#[]</code>):</strong> <code>self["path", T]</code> provides type-safe path queries for deep children and scene-unique nodes (<code>self["%HUD", CanvasLayer]</code>).</li>
                 <li><strong>Safe Downcasting &amp; Nil Checks (<code>[]?</code>):</strong> <code>self["path", T]?</code> and <code>self[T]?</code> return <code>T?</code> (or <code>nil</code> if absent), enabling sound compile-time nil safety without runtime crashes.</li>

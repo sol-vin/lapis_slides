@@ -1397,10 +1397,10 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```crystal
   node PlayerController < CharacterBody2D do
     # 1. Declarative onready node caching (GDScript @onready parity):
-    onready camera : Camera2D, "CameraRig/Camera2D"
-    onready hud : CanvasLayer, "%PlayerHUD"
-    unique_node score_label : Label, "ScoreLabel"
-    onready weapon : Weapon, "WeaponMount/Sword"
+    onready camera : Camera2D = "CameraRig/Camera2D"
+    onready hud : CanvasLayer = "%PlayerHUD"
+    unique_node score_label : Label = "ScoreLabel"
+    onready weapon : Weapon = "WeaponMount/Sword"
     onready sprite : Sprite2D # Infers child "Sprite2D" from name!
   
     def _ready : Void
@@ -1421,7 +1421,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   end
   ```
 - **Core Subscripts & Lazy Caching**:
-  - Declarative onready Macro: onready camera : Camera2D, "path" lazily caches, types, and validates child nodes during _ready with zero boilerplate.
+  - Declarative onready Macro: onready camera : Camera2D = "path" lazily caches, types, and validates child nodes during _ready with zero boilerplate.
   - Type-Inferred Child Subscript: self[Sprite2D] looks up child nodes matching the class name and returns a concrete, typed instance without manual casting.
   - Typed Path Indexers (Node#[]): self["path", T] provides type-safe path queries for deep children and scene-unique nodes (self["%HUD", CanvasLayer]).
   - Safe Downcasting & Nil Checks ([]?): self["path", T]? and self[T]? return T? (or nil if absent), enabling sound compile-time nil safety without runtime crashes.
