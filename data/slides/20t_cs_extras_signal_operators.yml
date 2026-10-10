@@ -1,0 +1,59 @@
+---
+id: 20t_cs_extras_signal_operators
+title: 'C# Extras: Compound Signal Assignment (+= and -=)'
+subtitle: 'require "lapis/cs_extras" • C#-Style Event Syntax with 64-bit ObjectDB Leak Protection'
+badge: LAPIS CS_EXTRAS • EVENT OPERATORS
+badge_color: purple
+palette: digital_guy
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: event_operators.cr — C#-Style Event Sugar
+  tag: Crystal (Lapis)
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    require "lapis/cs_extras"
+
+    node CombatController < Node2D do
+      def _ready : Void
+        # 1. Compound assignment with parameterless proc:
+        start_btn = self["UI/StartButton", Godot::Button]
+        start_btn.pressed += ->start_game_sequence
+
+        # 2. Multi-argument typed signal binding:
+        player = self["Player", PlayerController]
+        player.health_changed += ->(cur : Int32, max : Int32) do
+          hud.update_health_bar(cur, max)
+        end
+
+        # 3. Positional type filtering in += proc:
+        # Filters out non-Enemy bodies; auto-downcasts matching Enemy!
+        area = self["DetectionArea", Area2D]
+        area.body_entered += ->(enemy : Enemy) do
+          combat_radar.track(enemy)
+        end
+
+        # 4. Clean unbinding via -= operator:
+        start_btn.pressed -= ->start_game_sequence
+      end
+
+      # ZERO _exit_tree memory leaks! When CombatController dies,
+      # Lapis tracks 64-bit ObjectDB IDs and self-prunes connections.
+    end
+right:
+  type: card
+  title: C# Event Syntax Without the Leaks
+  color: purple
+  items:
+    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/cs_extras"</code> to enable <code>+=</code> and <code>-=</code> event operators on signals.'
+    - '<strong>Familiar C# Syntax:</strong> <code>signal += -&gt;handler</code> provides a seamless onboarding ramp for developers migrating from Godot C#.'
+    - '<strong>Typed Proc Overloads:</strong> Supports 0, 1, and 2-argument typed Procs with automatic argument narrowing and downcasting.'
+    - '<strong>Positional Type Filtering:</strong> <code>area.body_entered += -&gt;(enemy : Enemy)</code> automatically drops non-matching instances.'
+    - '<strong>64-Bit ObjectDB Leak Armor:</strong> Unlike .NET CLR event delegates which create strong roots and leak memory unless manually detached in <code>_ExitTree</code>, Lapis connections self-prune automatically!'
+notes: |
+  Many developers transitioning to Godot from Unity or Godot C# love the concise 'event += handler' operator syntax.
+  With 'require "lapis/cs_extras"', Lapis provides first-class compound assignment operators: '+=' to subscribe and '-=' to unsubscribe typed Procs.
+  Crucially, Lapis solves C#'s fatal flaw: in C#, '+=' binds a strong managed delegate to the subscriber. If a node is removed or freed in the scene tree without manual '-=' in _ExitTree, the CLR Garbage Collector cannot collect it, leaking memory forever.
+  In Lapis, '+=' binds via 64-bit Godot ObjectDB monotonic IDs. When either emitter or receiver is destroyed in the engine, the subscription dissolves automatically with zero ghost leaks and zero _exit_tree ceremony.

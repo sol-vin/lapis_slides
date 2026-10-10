@@ -1,8 +1,8 @@
 ---
 id: 20l_expression_pattern_matching
-title: 'Gameplay Architecture: Pattern Matching (match)'
-subtitle: Polymorphic Downcasting, Variant Unboxing, Guards, and Structural Destructuring
-badge: GAMEPLAY • PATTERN MATCHING DSL
+title: 'GDScript Extras: Expression-Oriented match DSL'
+subtitle: 'require "lapis/gd_extras" • Polymorphic Downcasting, Variant Unboxing, and Destructuring'
+badge: LAPIS GD_EXTRAS • PATTERN MATCHING
 badge_color: purple
 palette: cross_cube_360
 layout: two-column-layout
@@ -14,6 +14,8 @@ left:
   lang: crystal
   font_size: '0.74rem'
   code: |
+    require "lapis/gd_extras"
+
     # 1. Polymorphic node downcasting with pattern guards:
     match collider do
       is Player, if: p.health < 20 do |p|
@@ -57,15 +59,15 @@ right:
   title: Expression-Oriented Matching Capabilities
   color: purple
   items:
-    - '<strong>Polymorphic Class Downcasting:</strong> <code>is NodeClass do</code> (receiver scoped) or <code>is NodeClass do |n|</code> dynamically inspects and downcasts Godot node hierarchies into typed contexts with zero unsafe casts.'
-    - '<strong>Pattern Guards (<code>if:</code>):</strong> Combine structural type inspection with boolean runtime guards (<code>is Player, if: p.health &lt; 20</code>) in a single unified branch.'
-    - '<strong>Engine Variant Unboxing &amp; Implicit Binding:</strong> Unpacks untyped Godot <code>Variant</code> objects into concrete primitives, vectors, and math types with implicit variable narrowing (<code>match i do is Int64 do ...</code>).'
+    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/gd_extras"</code> to enable the expression-oriented <code>match</code> macro.'
+    - '<strong>Polymorphic Class Downcasting:</strong> <code>is NodeClass do |n|</code> dynamically inspects and downcasts Godot node hierarchies into typed contexts with zero unsafe casts.'
+    - '<strong>Pattern Guards (<code>if:</code>):</strong> Combine structural type inspection with boolean runtime guards (<code>is Player, if: p.health &lt; 20</code>) in a single branch.'
+    - '<strong>Engine Variant Unboxing &amp; Binding:</strong> Unpacks untyped Godot <code>Variant</code> objects into concrete primitives, vectors, and math types with implicit variable narrowing.'
     - '<strong>Tuple & Array Rest Matching:</strong> Destructure multi-value state transitions (<code>is :jump, true</code>) and array boundaries with double-dot rest (<code>[first, .., last]</code>).'
-    - '<strong>Partial Dictionary Matching:</strong> <code>is dict(type: "chat", user: u)</code> extracts named dictionary fields directly without repetitive key lookups or boilerplate.'
 notes: |
   Pattern matching is one of the most powerful paradigms for gameplay logic, state machines, and network processing. In GDScript, the match statement is largely limited to scalar values and enums, lacking type downcasting, guards, and Variant unboxing.
-  Lapis introduces a first-class expression-oriented 'match' macro that handles every gameplay pattern:
+  With 'require "lapis/gd_extras"', Lapis introduces a first-class expression-oriented 'match' macro:
   First, polymorphic class downcasting allows matching on node hierarchies like 'is Player do |p|' with automatic type narrowing and optional pattern guards like 'if: p.health < 20'.
   Second, engine Variant unboxing allows matching on arbitrary Godot Variants and unboxing them directly into typed Crystal types like Int64, String, or Vector2.
-  Third, structural destructuring supports multi-variable tuples, array boundary matching with rest ('[head, .., tail]'), and partial Godot::Dictionary extraction ('is dict(type: "chat", user: u, msg: m)').
+  Third, structural destructuring supports multi-variable tuples, array boundary matching with rest ('[head, .., tail]'), and partial Godot::Dictionary extraction.
   Because 'match' is expression-oriented, every branch returns a value directly, turning complex if/else trees into elegant, declarative game architecture.

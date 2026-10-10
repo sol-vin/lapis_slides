@@ -1,0 +1,53 @@
+---
+id: 20r_hierarchy_and_tree_operators
+title: 'Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<)'
+subtitle: 'require "lapis/extras" • Path Traversal (/), Unique Nodes (%), and Chainable Tree Assembly (<<)'
+badge: LAPIS EXTRAS • HIERARCHY OPERATORS
+badge_color: cyan
+palette: monokai
+layout: two-column-layout
+ratio: 1:1
+left:
+  type: code
+  title: hierarchy_operators.cr — DSL Operator Sugar
+  tag: Crystal (Lapis)
+  lang: crystal
+  font_size: '0.74rem'
+  code: |
+    require "lapis/extras"
+
+    node CombatArena < Node2D do
+      def _ready : Void
+        # 1. Path Traversal with / and .as(T):
+        mount  = self / "Visuals" / Marker2D
+        cam_up = camera / ".."
+
+        # 2. Scene Unique Nodes with %:
+        bar = self % ProgressBar
+        hud = (self % "HUD").as(CanvasLayer)
+
+        # 3. Chainable Tree Assembly Operator (<<):
+        # Mounts children in sequence and returns parent for fluent chains:
+        self << player << hud << ambient_sound
+
+        # 4. Upward Ancestor Navigation Operator (<<):
+        # Strictly traverses upward hierarchy looking for Player:
+        found_player = self << Player          # Strict (Player or raises)
+        found_boss   = self << BossController? # Safe nilable (returns T?)
+      end
+    end
+right:
+  type: card
+  title: Hierarchy Traversal & Mounting
+  color: cyan
+  items:
+    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable expressive operator sugar on Godot Node classes.'
+    - '<strong>Path Traversal Operator (<code>/</code>):</strong> <code>self / "Visuals" / Marker2D</code> walks scene paths fluently, pairing seamlessly with Crystal''s native <code>.as(T)</code>.'
+    - '<strong>Scene Unique Nodes (<code>%</code>):</strong> <code>self % ProgressBar</code> provides instant 1:1 parity with Godot''s unique node identifier syntax.'
+    - '<strong>Multi-Append Tree Assembly (<code>&lt;&lt;</code>):</strong> <code>parent &lt;&lt; c1 &lt;&lt; c2</code> brings Crystal''s stream-append idiom to SceneTree construction.'
+    - '<strong>Ancestor Climbing (<code>&lt;&lt; Class</code>):</strong> <code>node &lt;&lt; Player</code> climbs parent nodes until finding the requested type, with <code>Class?</code> supporting safe nilable searches.'
+notes: |
+  With 'require "lapis/extras"', Node gains expressive mathematical and stream operators for hierarchy manipulation.
+  First, the slash operator (/) provides intuitive path traversal: 'self / "Visuals" / Marker2D' navigates down the scene tree without writing raw strings or method calls.
+  Second, the percent operator (%) provides 1:1 parity with GDScript's scene-unique nodes: 'self % ProgressBar' resolves and types the unique node in a single expression.
+  Third, the double-arrow operator (<<) serves dual ergonomic roles: when passed a Node, it mounts the child to the parent and returns the parent, enabling fluent chains like 'self << player << hud'. When passed a Class type like 'self << Player', it performs upward ancestor climbing, searching parent nodes until finding a matching instance!

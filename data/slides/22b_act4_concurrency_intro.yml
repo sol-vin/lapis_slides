@@ -2,8 +2,8 @@
 id: 22b_act4_concurrency_intro
 title: "Fearless Concurrency & Multiplayer"
 subtitle: "Lightweight Fibers, Lock-Free Channels, Main-Thread Dispatch & Authoritative RPCs"
-act: "ACT IV • CHAPTER 04"
-badge: "ACT IV • CHAPTER 04"
+act: "ACT IV • CHAPTER 05"
+badge: "ACT IV • CHAPTER 05"
 badge_color: "emerald"
 palette: "classic_green"
 layout: "chapter-layout"
@@ -23,5 +23,5 @@ pillars:
     color: "purple"
 notes: |
   Game engines live and die by frame budgets. Modern hardware gives us 16 cores, yet most game scripting is restricted to a single thread due to engine safety limits.
-  In Chapter 4, we tackle Concurrency and Multiplayer.
+  In Chapter 5, we tackle Concurrency and Multiplayer.
   We'll see how Crystal's lightweight fibers and lock-free channels make concurrent background physics and asset loading painless, how Lapis enforces safe main-thread dispatch back into the Godot SceneTree, and how our declarative RPC macros power deterministic multiplayer networking.

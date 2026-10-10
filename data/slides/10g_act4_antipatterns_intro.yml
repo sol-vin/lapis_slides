@@ -2,8 +2,8 @@
 id: 10g_act4_antipatterns_intro
 title: "The GDScript Antipattern Face-Off"
 subtitle: "10 Structural Traps: Iterators, Closures, Nil Hazards, Dead Pointers & AST Macros"
-act: "ACT IV • CHAPTER 03"
-badge: "ACT IV • CHAPTER 03"
+act: "ACT IV • CHAPTER 04"
+badge: "ACT IV • CHAPTER 04"
 badge_color: "coral"
 palette: "monokai"
 layout: "chapter-layout"

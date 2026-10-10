@@ -2,8 +2,8 @@
 id: 26g_act4_interop_intro
 title: "Zero-Friction Interoperability"
 subtitle: "GDScript Meets Crystal: Dynamic Dispatch, Strongly-Typed FFI & The Type Firewall"
-act: "ACT IV • CHAPTER 06"
-badge: "ACT IV • CHAPTER 06"
+act: "ACT IV • CHAPTER 07"
+badge: "ACT IV • CHAPTER 07"
 badge_color: "blue"
 palette: "warm_paper"
 layout: "chapter-layout"
@@ -24,4 +24,4 @@ pillars:
 notes: |
   A common concern when introducing a new compiled language is: 'Do I have to rewrite my entire game from scratch?'
   The answer with Lapis is an emphatic no.
-  In Chapter 6, we examine bi-directional interoperability. Lapis provides a zero-friction bridge where GDScript designers can call Crystal nodes as if they were built into the engine, while Crystal systems can invoke GDScript logic both dynamically and through strongly-typed generated interfaces.
+  In Chapter 7, we examine bi-directional interoperability. Lapis provides a zero-friction bridge where GDScript designers can call Crystal nodes as if they were built into the engine, while Crystal systems can invoke GDScript logic both dynamically and through strongly-typed generated interfaces.

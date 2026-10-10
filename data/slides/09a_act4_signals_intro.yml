@@ -1,7 +1,7 @@
 ---
 id: 09a_act4_signals_intro
 title: "Signals, Events & Reactive Async"
-subtitle: "Typed Emission, Automatic ObjectDB Pruning & Pipeline Composition (> and >>)"
+subtitle: "Typed Emission, Automatic ObjectDB Pruning & Declarative on Connections"
 act: "ACT IV • CHAPTER 02"
 badge: "ACT IV • CHAPTER 02"
 badge_color: "cyan"
@@ -17,11 +17,11 @@ pillars:
     desc: "Eliminating single-use callback methods with clean block closures"
     icon: "plug"
     color: "purple"
-  - title: "Reactive Piping (> and >>)"
-    desc: "Strict and loose event streams that auto-prune on instance destruction"
-    icon: "rotate-right"
+  - title: "Positional Type Filtering"
+    desc: "Automatic downcasting and filtering in blocks without single-use handler sprawl"
+    icon: "filter"
     color: "emerald"
 notes: |
   Now let's examine communication: Signals.
   In Godot, signals are the backbone of decoupled architecture. But in GDScript and C++, signals are often wired up with magic strings and untyped Callables that fail silently at runtime.
-  In Chapter 2, we look at how Lapis turns signals into first-class, strongly-typed objects. We'll explore our declarative 'on' macro, compound event operators, and our reactive piping syntax with greater-than operators that automatically prune stale connections.
+  In Chapter 2, we look at how core Lapis turns signals into first-class, strongly-typed objects. We'll explore our declarative 'on' macro, positional type filtering, first-class typed emissions, and automatic 64-bit ObjectDB self-pruning that prevents memory leaks without manual _exit_tree boilerplate.

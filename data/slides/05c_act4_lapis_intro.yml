@@ -1,7 +1,7 @@
 ---
 id: 05c_act4_lapis_intro
 title: "The Lapis Gameplay DSL"
-subtitle: "First-Class Godot ClassDB Integration, Scene Tree Queries & Fluent Ergonomics"
+subtitle: "First-Class Godot ClassDB Integration, Typed Node Indexers & Fluent Ergonomics"
 act: "ACT IV • CHAPTER 01"
 badge: "ACT IV • CHAPTER 01"
 badge_color: "cyan"
@@ -13,8 +13,8 @@ pillars:
     desc: "node, gdclass, and gmodule synthesize native GDExtension bindings automatically"
     icon: "gamepad"
     color: "cyan"
-  - title: "Unary ~ Scene Lookups"
-    desc: "Thread-local NodeContext queries with GDScript $ and % parity"
+  - title: "Typed Node Indexers & onready"
+    desc: "Node#[] and Node#[]? subscripts with compile-time type inference and safe nilable queries"
     icon: "sparkles"
     color: "purple"
   - title: "Fluent Gameplay Helpers"
@@ -23,5 +23,5 @@ pillars:
     color: "emerald"
 notes: |
   Welcome to Act IV—the centerpiece of our talk: Lapis for Godot Engine.
-  In this first chapter, we explore the Lapis Gameplay DSL. We'll see how declaring Godot nodes feels completely natural in Crystal.
-  Forget verbose GDExtension C++ registration boilerplate. You write 'node Player < CharacterBody3D', declare exported properties with ranges, resolve scene tree hierarchies using our unary tilde operator, and spawn fluent tweens with pure Crystal elegance.
+  In this first chapter, we explore the core Lapis Gameplay DSL. We'll see how declaring Godot nodes feels completely natural in Crystal.
+  Forget verbose GDExtension C++ registration boilerplate. You write 'node Player < CharacterBody3D', declare exported properties with ranges, cache children lazily with onready, index nodes type-safely with Node#[], and spawn fluent tweens with pure Crystal elegance.

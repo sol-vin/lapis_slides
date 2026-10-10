@@ -2,8 +2,8 @@
 id: 29b_act4_cli_intro
 title: "The Lapis CLI Command Center"
 subtitle: "Interactive Terminal Hub, Zero-Friction Diagnostics, 2-Way Reflection & Package Management"
-act: "ACT IV • CHAPTER 08"
-badge: "ACT IV • CHAPTER 08"
+act: "ACT IV • CHAPTER 09"
+badge: "ACT IV • CHAPTER 09"
 badge_color: "purple"
 palette: "playbox"
 layout: "chapter-layout"
@@ -24,4 +24,4 @@ pillars:
 notes: |
   Now let's step out of the engine GUI and into the terminal.
   The Lapis CLI toolchain was designed from day one to eliminate setup friction and put raw native power at your fingertips.
-  In Chapter 8, we explore our unified terminal command center: interactive TUI telemetry and turnkey scaffolding, automated 'lapis doctor' diagnostics, two-way ClassDB code generation, and our dual-mode package management ecosystem.
+  In Chapter 9, we explore our unified terminal command center: interactive TUI telemetry and turnkey scaffolding, automated 'lapis doctor' diagnostics, two-way ClassDB code generation, and our dual-mode package management ecosystem.

@@ -1,7 +1,7 @@
 ---
 id: 20o_fluent_raycast_and_tree_operators
-title: 'Ergonomics: Fluent Raycasting & Scene Tree Operators'
-subtitle: 'Fluent Spatial Builders, Multi-Append Tree Assembly (<<), and Context Spawning'
+title: 'Ergonomics: Fluent Raycasting & Scene Helpers'
+subtitle: 'Fluent Spatial Builders, Context Spawning, and CanvasItem Helpers'
 badge: ERGONOMICS • TREE & SPATIAL DSL
 badge_color: amber
 palette: spaces_vista
@@ -9,7 +9,7 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: code
-  title: tree_and_raycast.cr — Fluent Tree Ergonomics
+  title: tree_and_raycast.cr — Fluent Core Ergonomics
   tag: Crystal (Lapis)
   lang: crystal
   font_size: '0.73rem'
@@ -27,24 +27,21 @@ left:
       hit.collider.as?(Enemy).try(&.take_damage(25))
     end
 
-    # 2. Multi-Append Tree Assembly Operator (<<):
-    # Returns parent for clean, chainable scene construction:
-    arena << player << hud << ambient_sound
-
-    # 3. Context-Evaluating Node Spawning (Node#spawn):
+    # 2. Context-Evaluating Node Spawning (Node#spawn):
     boss = arena.spawn(BossEnemy) do
       self.position = Vector2.new(640, 360)
       self.health = 1000
       self.boss_name = "Void Colossus"
     end # Returns typed BossEnemy instance!
 
-    # 4. CanvasItem Visibility & Opacity Helpers:
+    # 3. CanvasItem Visibility & Opacity Helpers:
     hud.opacity = 0.85 # Modulate alpha shorthand
     shield_fx.visible! # Immediate boolean visibility
     status_icon.hidden!
 
-    # 5. Pipeline Operator with Configuration Block:
-    laser = ("res://scenes/laser.tscn" > LaserBeam) do
+    # 4. Typed Scene Instantiation with Configuration Block:
+    scene = preload("res://scenes/laser.tscn")
+    laser = scene.instantiate_as(LaserBeam) do
       self.beam_width = 12.0_f32
     end
 right:
@@ -53,13 +50,12 @@ right:
   color: amber
   items:
     - '<strong>Fluent Raycast Builders:</strong> <code>raycast2d</code> and <code>raycast3d</code> provide fluent builders chaining <code>to</code>, <code>exclude</code>, <code>mask</code>, and <code>query</code> with typed <code>PhysicsHit</code> results.'
-    - '<strong>Chainable Tree Operator (<code>&lt;&lt;</code>):</strong> <code>parent &lt;&lt; c1 &lt;&lt; c2</code> mounts multiple children in a single chain and returns the parent for expressive scene building.'
     - '<strong>Typed Context Spawning:</strong> <code>Node#spawn(T)</code> and <code>spawn_child(T)</code> allocate, parent, and evaluate configuration blocks directly in the receiver context with static typing.'
     - '<strong>CanvasItem Opacity &amp; Visibility:</strong> Direct <code>node.opacity = val</code>, <code>node.visible!</code>, and <code>node.hidden!</code> streamline rapid UI transitions without color structs.'
-    - '<strong>Configured Scene Pipelines:</strong> The <code>&gt;</code> operator accepts trailing blocks to configure preloaded and instantiated scenes before mounting.'
+    - '<strong>Configured Scene Instantiation:</strong> <code>scene.instantiate_as(T)</code> accepts trailing blocks to configure newly instantiated nodes before mounting.'
+    - '<strong>Dead-Pointer Guarded:</strong> All spatial queries and node allocations run through Lapis''s monotonic 64-bit instance checks.'
 notes: |
-  Building and manipulating scene trees in game engines often suffers from repetitive multi-step ceremony. In Lapis, we've extended our core ergonomics to make gameplay construction fast, readable, and fluid.
+  Building and manipulating scene trees in game engines often suffers from repetitive multi-step ceremony. In Lapis, our core engine bindings make gameplay construction fast, readable, and fluid.
   First, 'raycast2d' and 'raycast3d' introduce fluent builder pipelines on Node2D and Node3D. Instead of constructing raw query dictionaries or parameter objects, you fluently configure targets, exclusion lists, collision masks, and body/area flags before firing '.query' to receive a strongly-typed PhysicsHit struct.
-  Second, the '<<' operator brings Crystal's classic stream-append idiom to the Godot scene tree: 'arena << player << hud' mounts multiple children in sequence, returning the parent node to enable fluent chains.
-  Third, 'Node#spawn' combines instantiation, parenting, and receiver-scoped configuration into a single typed expression.
-  Finally, CanvasItem gains direct opacity assignment and imperative visibility helpers ('visible!', 'hidden!'), while the scene pipeline operator '>' supports inline configuration blocks.
+  Second, 'Node#spawn' combines instantiation, parenting, and receiver-scoped configuration into a single typed expression.
+  Third, CanvasItem gains direct opacity assignment and imperative visibility helpers ('visible!', 'hidden!'), while 'scene.instantiate_as(T)' supports inline configuration blocks for preloaded scenes.

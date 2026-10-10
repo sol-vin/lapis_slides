@@ -2,8 +2,8 @@
 id: 35h_act4_testing_intro
 title: "Mission-Critical Testing"
 subtitle: "Deterministic Leak Verification, In-Editor Automation & Headless CI Suites"
-act: "ACT IV • CHAPTER 10"
-badge: "ACT IV • CHAPTER 10"
+act: "ACT IV • CHAPTER 11"
+badge: "ACT IV • CHAPTER 11"
 badge_color: "emerald"
 palette: "game_station_2"
 layout: "chapter-layout"
@@ -23,5 +23,5 @@ pillars:
     color: "purple"
 notes: |
   Games are notoriously difficult to test systematically. Studios often rely on manual QA, allowing subtle memory leaks and physics regressions to slip into production.
-  In Chapter 10, we examine Lapis's automated testing toolchain.
+  In Chapter 11, we examine Lapis's automated testing toolchain.
   We'll demonstrate deterministic leak verification that tracks Godot ObjectDB instance counts and flags dangling nodes. We'll also explore in-editor automation drivers and automated headless test suites that run cleanly in CI/CD pipelines.

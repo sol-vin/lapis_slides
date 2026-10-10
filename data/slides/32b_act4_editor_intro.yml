@@ -2,8 +2,8 @@
 id: 32b_act4_editor_intro
 title: "Inside the Godot Editor"
 subtitle: "Gutter Diagnostics, In-Editor LSP, Doc Harvesting & 6-Phase Transactional Hot Reload"
-act: "ACT IV • CHAPTER 07"
-badge: "ACT IV • CHAPTER 07"
+act: "ACT IV • CHAPTER 08"
+badge: "ACT IV • CHAPTER 08"
 badge_color: "cyan"
 palette: "monokai"
 layout: "chapter-layout"
@@ -23,5 +23,5 @@ pillars:
     color: "purple"
 notes: |
   A great language is useless without first-class tooling. One of the greatest superpowers of GDScript has always been the seamless editor experience.
-  In Chapter 7, we see how Lapis achieves true editor parity.
+  In Chapter 8, we see how Lapis achieves true editor parity.
   We integrate our Crystalline Language Server directly inside Godot, display real-time gutter diagnostics, automatically harvest source code docstrings into the engine help browser, and execute a 6-phase transactional hot reload protocol that updates running gameplay code in less than half a second.

@@ -1,0 +1,69 @@
+---
+id: 20s_scene_pipeline_operators
+title: 'Lapis Extras: Scene Preload (>) & Load (>>) Pipelines'
+subtitle: 'require "lapis/extras" • Single-Line Instantiation, Dynamic Fetching, and Inline Setup Blocks'
+badge: LAPIS EXTRAS • SCENE & ASSET PIPELINES
+badge_color: purple
+palette: spaces_vista
+layout: code-comparison-layout
+gdscript:
+  title: ':circle-xmark: GDScript: Multi-Step Instantiation Boilerplate'
+  lang: gdscript
+  tag: GDScript
+  font_size: '0.78rem'
+  code: |
+    func spawn_entities() -> void:
+        # Pitfall 1: Verbose 3-step preload, instantiate & cast
+        const PlayerScene = preload("res://scenes/player.tscn")
+        var player = PlayerScene.instantiate() as Player
+        if not player:
+            push_error("Failed to instantiate Player")
+        add_child(player)
+
+        # Pitfall 2: Dynamic loading requires manual resource checking
+        var boss_scene = load("res://scenes/boss.tscn") as PackedScene
+        var boss = boss_scene.instantiate() as BossEnemy
+        boss.damage = 100
+        add_child(boss)
+  points:
+  - <strong>Multi-Step Friction:</strong> Must store <code>PackedScene</code>, invoke <code>instantiate()</code>, and cast in separate statements.
+  - <strong>Unsafe Runtime Casting:</strong> Untyped <code>Resource</code> return requires <code>as Player</code> casting that fails silently if types diverge.
+  - <strong>No Inline Configuration:</strong> Setting initial properties requires tedious temporary variable assignments.
+crystal:
+  title: ':sparkles: Crystal: Preload (>), Load (>>), and Configuration Blocks'
+  lang: crystal
+  tag: Crystal (Lapis)
+  font_size: '0.78rem'
+  code: |
+    require "lapis/extras"
+
+    def spawn_entities : Void
+      # 1. Preload Operator (>): Preloads, instantiates & types in 1 line!
+      player = "res://scenes/player.tscn" > Player
+      theme  = "res://assets/theme.tres" > Theme # Cached Resource preload
+
+      # 2. Dynamic Runtime Load Operator (>>):
+      boss = "res://scenes/boss.tscn" >> BossEnemy
+
+      # 3. Nilable Pipeline (?): Returns nil if missing (no exception!):
+      secret = "res://scenes/secret.tscn" > SecretRoom?
+
+      # 4. Pipeline Operator with Inline Configuration Block:
+      laser = ("res://scenes/laser.tscn" > LaserBeam) do
+        self.beam_width = 12.0_f32
+        self.damage = 50
+      end
+    end
+  points:
+  - <strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable pipeline operators on <code>String</code> and <code>PackedScene</code>.
+  - <strong>Preload Pipeline (<code>&gt;</code>):</strong> Preloads <code>PackedScene</code>, instantiates it, and returns typed Node <code>T</code> with zero casting boilerplate.
+  - <strong>Dynamic Load Pipeline (<code>&gt;&gt;</code>):</strong> Dynamically loads and instantiates scenes at runtime without intermediate ceremony.
+  - <strong>Inline Configuration Blocks:</strong> <code>("path" &gt; Type) do ... end</code> evaluates configuration directly in the newly created instance context.
+takeaway:
+  badge: PIPELINE ERGONOMICS
+  text: Lapis scene pipeline operators (> and >>) turn multi-step scene preloading, instantiation, and initial configuration into expressive single-line expressions.
+notes: |
+  While standard Lapis provides compile-time inferred 'load' and 'preload', 'require "lapis/extras"' elevates scene and asset instantiation into ultra-clean pipeline operators.
+  With the greater-than operator (>), '"res://player.tscn" > Player' preloads the PackedScene, instantiates it, and returns a statically typed Player node in one concise expression.
+  The double-greater-than operator (>>) performs dynamic runtime loading. When paired with nilable types like 'SecretRoom?', it safely returns nil if the resource fails to load without crashing.
+  Best of all, pipeline operators accept trailing blocks, allowing you to fluently configure newly created nodes before mounting them to the scene tree.

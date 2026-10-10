@@ -1,7 +1,7 @@
 ---
 id: 20f_resource_preload_and_load_dsl
-title: 'Resource Loading: The Preload (>) & Load (>>) Operators'
-subtitle: Cached Scene Instantiation, Dynamic Typed Fetching & Thread-Safe PreloadCache
+title: 'Resource Loading: load, preload & instantiate_as'
+subtitle: Compile-Time Extension Type Inference, Type-Safe Instantiation, and Thread-Safe PreloadCache
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
 palette: cross_cube
@@ -33,39 +33,38 @@ gdscript:
   - <strong>Unsafe Runtime Casting:</strong> Untyped <code>Resource</code> return requires <code>as Player</code> casting that fails silently if types diverge.
   - <strong>No Built-In Preload Cache:</strong> Dynamic <code>load()</code> hits the filesystem repeatedly unless developers hand-roll custom caching dictionaries.
 crystal:
-  title: ':sparkles: Crystal: Ergonomic Preload (>), Load (>>), load? & .as'
+  title: ':sparkles: Crystal: Inferred load, preload & instantiate_as'
   lang: crystal
   tag: Crystal (Lapis)
   font_size: '0.78rem'
   code: |
     def spawn_entities : Void
-      # 1. Operators: Preload (>), Dynamic Load (>>), and Nilable Pipeline (?):
-      player = "res://scenes/player.tscn" > Player      # Preloads, instantiates & types!
-      theme = "res://assets/theme.tres" > Theme         # Cached resource preload
-      boss = "res://scenes/boss.tscn" >> BossEnemy      # Dynamic runtime load
-      maybe_boss = "res://scenes/secret.tscn" > Boss?   # Nilable: nil if missing/failed!
+      # 1. Type-Safe Scene Instantiation via instantiate_as:
+      player_scene = preload("res://scenes/player.tscn")
+      player = player_scene.instantiate_as(Player) # Concrete Player node!
+      add_child(player)
 
-      # 2. Compile-Time Extension Inferred load & preload Macros:
-      scene = load("res://scenes/companion.tscn")       # Inferred -> Godot::PackedScene
-      companion = scene > Companion                     # Unpacks directly into Companion node!
+      # 2. Compile-Time Extension Inferred load & preload:
+      scene = load("res://scenes/companion.tscn")    # Inferred -> PackedScene
+      companion = scene.instantiate_as(Companion)
       add_child(companion)
 
-      icon  = preload("res://assets/icon.svg")          # Inferred -> Godot::Texture2D
-      sound = load("res://audio/jump.wav")              # Inferred -> Godot::AudioStream
+      icon  = preload("res://assets/icon.svg")       # Inferred -> Texture2D
+      sound = load("res://audio/jump.wav")           # Inferred -> AudioStream
 
       # 3. Explicit typing with native .as / .as? & nilable variants:
       combat = load("res://data/combat.tres").as(CombatConfig)
       opt_config = load?("res://data/optional.tres").as?(CombatConfig)
     end
   points:
-  - <strong>Concise Operators (<code>&gt;</code> &amp; <code>&gt;&gt;</code>):</strong> <code>&quot;path&quot; &gt; Player</code> preloads <code>PackedScene</code>, instantiates it, and casts in one line; pair with <code>Player?</code> for error-less nil returns.
+  - <strong>Type-Safe <code>instantiate_as(T)</code>:</strong> Unpacks and verifies the instantiated node type against ClassDB, eliminating silent runtime casting bugs.
   - <strong>Extension Type Inference:</strong> <code>load(&quot;res://...&quot;)</code> and <code>preload(&quot;res://...&quot;)</code> automatically deduce PackedScene (.tscn), Texture2D (.svg/.png), or AudioStream (.wav/.ogg) at compile time!
   - <strong>Native Casting (<code>.as</code> &amp; <code>.as?</code>):</strong> Standard Crystal downcasting replaces verbose <code>as:</code> arguments; use <code>load?</code> / <code>preload?</code> for safe, exception-free loading.
   - <strong>Thread-Safe Cache:</strong> <code>PreloadCache</code> and <code>preload(...)</code> use mutex synchronization to prevent race conditions during background loading.
 takeaway:
   badge: ASSET ERGONOMICS
-  text: Lapis operators (>) and (>>) alongside extension-inferred load and preload macros turn asset loading, scene instantiation, and typed casting into expressive single-line expressions.
+  text: Lapis extension-inferred load and preload macros alongside type-safe instantiate_as turn asset loading and scene instantiation into clean, compile-time verified operations.
 notes: |
   Every Godot developer knows the repetitive ceremony of loading scenes: const Scene = preload(...), then var instance = Scene.instantiate() as Type. It's multi-step, untyped, and clutters gameplay scripts.
-  In Lapis, we provide both expressive operators and compile-time type-inferred macros. With the preload (>) and load (>>) operators on String, 'res://player.tscn' > Player preloads the PackedScene, instantiates it, and returns a statically typed Player node in a single expression.
-  Furthermore, our top-level 'load' and 'preload' macros inspect file extensions at compile time—automatically deducing PackedScene for .tscn, Texture2D for .png/.svg, and AudioStream for audio files. When paired with the typed scene pipeline ('scene > Companion'), loading and instantiation are seamless and 100% type-safe.
+  In Lapis, our core engine bindings provide compile-time type-inferred macros and type-safe instantiation. Calling 'scene.instantiate_as(Player)' instantiates and returns a statically typed Player node with zero casting boilerplate.
+  Furthermore, our top-level 'load' and 'preload' macros inspect file extensions at compile time—automatically deducing PackedScene for .tscn, Texture2D for .png/.svg, and AudioStream for audio files. When paired with native Crystal '.as' and '.as?', loading and instantiation are seamless and 100% type-safe.

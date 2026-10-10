@@ -75,15 +75,12 @@ slides:
 - 06_what_is_lapis
 - 20_node_dsl
 - 20b_ergonomic_node_access
-- 20c_node_context_tilde_operator
-- 20i_scene_tree_glob_queries_and_collections
 - 20d_gmodule_mixins
 - 20e_gmodule_composition_and_lifecycle
 - 20f_resource_preload_and_load_dsl
 - 20g_gameplay_fluent_spawn
 - 20h_gameplay_tweens_and_juice
 - 20j_direct_space_physics_queries
-- 20l_expression_pattern_matching
 - 20m_spatial_audio_and_navigation
 - 20n_gameplay_patterns_fsm_and_pool
 - 20o_fluent_raycast_and_tree_operators
@@ -93,9 +90,18 @@ slides:
 - 09a_act4_signals_intro
 - 09_signals_async
 - 09b_antipattern_signals_on
-- 09c_signal_piping_and_composition
 
-# --- Chapter 4.3: The GDScript Face-Off: Antipatterns vs. Crystal Zen ---
+# --- Chapter 4.3: The Lapis Extras: Optional Syntactic Sugar & Operators ---
+- 20q_act4_extras_intro
+- 20r_hierarchy_and_tree_operators
+- 20i_scene_tree_glob_queries_and_collections
+- 20s_scene_pipeline_operators
+- 09c_signal_piping_and_composition
+- 20c_node_context_tilde_operator
+- 20l_expression_pattern_matching
+- 20t_cs_extras_signal_operators
+
+# --- Chapter 4.4: The GDScript Face-Off: Antipatterns vs. Crystal Zen ---
 - 10g_act4_antipatterns_intro
 - 11_antipattern_iterators
 - 11b_antipattern_anon_functions
@@ -109,7 +115,7 @@ slides:
 - 17_antipattern_async_signals
 - 17b_timer_dsl_and_handles
 
-# --- Chapter 4.4: Fearless Concurrency & Lockstep Multiplayer ---
+# --- Chapter 4.5: Fearless Concurrency & Lockstep Multiplayer ---
 - 22b_act4_concurrency_intro
 - 23_concurrency_fibers
 - 24_concurrency_threads
@@ -120,7 +126,7 @@ slides:
 - 26f_testing_multiplayer
 - 26c_concurrency_patterns
 
-# --- Chapter 4.5: The C# (.NET) Shootout ---
+# --- Chapter 4.6: The C# (.NET) Shootout ---
 - 27b_act4_csharp_intro
 - 27c_csharp_bloat_vs_crystal_zen
 - 27d_csharp_nullability_and_leaks
@@ -131,19 +137,19 @@ slides:
 - 27j_csharp_unions_and_pattern_matching
 - 27k_csharp_unit_testing_vs_crystal_spec
 
-# --- Chapter 4.6: Zero-Friction Interoperability ---
+# --- Chapter 4.7: Zero-Friction Interoperability ---
 - 26g_act4_interop_intro
 - 27_interop_gdscript_calls_crystal
 - 28_interop_crystal_calls_gdscript_dynamic
 - 29_interop_crystal_calls_gdscript_typed
 
-# --- Chapter 4.7: Inside the Godot Editor ---
+# --- Chapter 4.8: Inside the Godot Editor ---
 - 32b_act4_editor_intro
 - 33_editor_integration
 - 33c_in_editor_validator_and_lsp
 - 33d_hot_reload_state_preserver
 
-# --- Chapter 4.8: The Lapis CLI Command Center ---
+# --- Chapter 4.9: The Lapis CLI Command Center ---
 - 29b_act4_cli_intro
 - 30_cli_lifecycle
 - 30c_cli_doctor
@@ -151,7 +157,7 @@ slides:
 - 31_cli_codegen
 - 32_package_management
 
-# --- Chapter 4.9: Low-Level Binary Forensics ---
+# --- Chapter 4.10: Low-Level Binary Forensics ---
 - 33e_act4_debugger_intro
 - 34_debugger_radare2
 - 34c_debug_workflows
@@ -166,7 +172,7 @@ slides:
 - 34e_cli_run_monitor
 - 34f_cli_sync_targets
 
-# --- Chapter 4.10: Mission-Critical Testing ---
+# --- Chapter 4.11: Mission-Critical Testing ---
 - 35h_act4_testing_intro
 - 36_testing_zero_leak
 - 36b_testing_editor_driver
@@ -175,7 +181,7 @@ slides:
 - 36e_behavioral_scenario_testing
 - 37_tool_testing_tui
 
-# --- Chapter 4.11: The Hard Numbers (Benchmarks & Shootouts) ---
+# --- Chapter 4.12: The Hard Numbers (Benchmarks & Shootouts) ---
 - 34n_act4_benchmarks_intro
 - 35_benchmarks
 - 35d_multilang_benchmarks
@@ -185,7 +191,7 @@ slides:
 - 35c_benchmark_tui
 - 35g_benchmark_reports_ci
 
-# --- Chapter 4.12: The Bridge Architecture & Distribution ---
+# --- Chapter 4.13: The Bridge Architecture & Distribution ---
 - 37b_act4_architecture_intro
 - 38_architecture_layers
 - 39_dual_modes

@@ -2,8 +2,8 @@
 id: 37b_act4_architecture_intro
 title: "The Bridge Architecture"
 subtitle: "5-Layer GDExtension Architecture, ClassDB Generators & Turnkey Distribution"
-act: "ACT IV • CHAPTER 12"
-badge: "ACT IV • CHAPTER 12"
+act: "ACT IV • CHAPTER 13"
+badge: "ACT IV • CHAPTER 13"
 badge_color: "blue"
 palette: "cross_cube_360"
 layout: "chapter-layout"
@@ -24,4 +24,4 @@ pillars:
 notes: |
   Before we jump into our live demo, let's step back and look at the architectural blueprint.
   How does all of this fit together under the hood?
-  In Chapter 12, we inspect the 5-layer GDExtension bridge architecture that makes Lapis possible, explore our dual compilation modes—Mode A for rapid hot-reloading versus Mode B for production release binaries—and review our turnkey cross-platform packaging pipeline.
+  In Chapter 13, we inspect the 5-layer GDExtension bridge architecture that makes Lapis possible, explore our dual compilation modes—Mode A for rapid hot-reloading versus Mode B for production release binaries—and review our turnkey cross-platform packaging pipeline.

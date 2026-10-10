@@ -1,0 +1,27 @@
+---
+id: 20q_act4_extras_intro
+title: "The Lapis Extras: Syntactic Sugar & Operators"
+subtitle: 'Modular Opt-In Ergonomics: require "lapis/extras", "lapis/gd_extras", & "lapis/cs_extras"'
+act: "ACT IV • CHAPTER 03"
+badge: "ACT IV • CHAPTER 03"
+badge_color: "cyan"
+palette: "spaces_vista"
+layout: "chapter-layout"
+cube_size: 160
+pillars:
+  - title: 'require "lapis/extras"'
+    desc: "Hierarchy traversal (/, %, <<), scene pipelines (>, >>), signal pipes (>, >>), and wildcards (*)"
+    icon: "bolt"
+    color: "cyan"
+  - title: 'require "lapis/gd_extras"'
+    desc: "Unary ~ bare scene queries (~\"path\", ~Class, ~{...}) and expression-oriented match DSL"
+    icon: "sparkles"
+    color: "purple"
+  - title: 'require "lapis/cs_extras"'
+    desc: "Compound signal assignment operators (+= and -=) with 64-bit ObjectDB auto-pruning"
+    icon: "plus"
+    color: "emerald"
+notes: |
+  Now that we've seen how clean, safe, and robust core Lapis is using pure Crystal methods like Node#[] and the 'on' macro, let's explore Lapis Extras!
+  In Lapis, we made a deliberate architectural choice: core engine code should remain lean, explicit, and zero-magic. But game developers love expressive speed and zen syntax.
+  So we isolated high-velocity DSL conveniences and operator overloads into three modular, opt-in requires: 'lapis/extras' for hierarchy and pipeline operators, 'lapis/gd_extras' for GDScript-mimicking tilde queries and pattern matching, and 'lapis/cs_extras' for C#-style signal events. You choose exactly how much syntactic sugar to invite into your game!

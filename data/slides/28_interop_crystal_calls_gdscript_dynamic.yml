@@ -13,8 +13,8 @@ left:
   tag: Crystal
   lang: crystal
   code: |
-    # 1. Retrieve a GDScript node from scene tree:
-    gd_dialogue = (self / "UI/DialogueManager").as(Godot::Node)
+    # 1. Retrieve a GDScript node from scene tree via Node#[]:
+    gd_dialogue = self["UI/DialogueManager"]
 
     # 2. Dynamic method call with Variant marshalling:
     result = gd_dialogue.call("show_dialogue", "npc_elder_01", 100)
