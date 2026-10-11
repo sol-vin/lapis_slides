@@ -4,7 +4,7 @@ title: 'The Packaging System: Turnkey Distribution'
 subtitle: Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers
 badge: PRODUCTION • PACKAGING & DISTRIBUTION
 badge_color: purple
-palette: a64_pal
+palette: spaces_11
 layout: two-column-layout
 ratio: 1:1
 left:

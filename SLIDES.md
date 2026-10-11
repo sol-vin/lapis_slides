@@ -1812,7 +1812,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 47: Gameplay Architecture: FSM, Signal Bus & Object Pooling
-- **Theme Palette**: `resin_91` (Resin 91)
+- **Theme Palette**: `mineshaft` (Mineshaft)
 - **Badge**: `GAMEPLAY • DESIGN PATTERNS`
 - **Title**: Gameplay Architecture: FSM, Signal Bus & Object Pooling
 - **Subtitle**: Value-Type Union FSM, Decoupled Signal Bus & High-Throughput Node Pools
@@ -4806,7 +4806,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 138: The Packaging System: Turnkey Distribution
-- **Theme Palette**: `a64_pal` (A64 PAL)
+- **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
 - **Subtitle**: Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers
