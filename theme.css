@@ -704,23 +704,19 @@
 
 /* Timeline Layout (Rail & Dots via CSS Pseudo-elements) */
 [data-layout="timeline"] .timeline-track {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.8rem;
   align-items: center;
   position: relative;
-  margin: 0.6rem 1.5rem 0.8rem 1.5rem;
+  margin: 0.6rem 0 0.8rem 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Horizontal connecting rail */
 [data-layout="timeline"] .timeline-track::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--sunstone-border, #334155);
-  z-index: 1;
+  display: none;
 }
 
 .timeline-step {
@@ -732,6 +728,22 @@
   gap: 0.4rem;
 }
 
+/* Horizontal connecting rail */
+.timeline-step::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: calc(100% + 0.8rem);
+  height: 3px;
+  bottom: 5.5px;
+  background: var(--sunstone-border, #334155);
+  z-index: 1;
+}
+
+.timeline-step:last-child::after {
+  display: none;
+}
+
 /* Milestone Dot */
 .timeline-dot {
   width: 14px;
@@ -739,6 +751,9 @@
   border-radius: 50%;
   background: var(--sunstone-accent, #38bdf8);
   border: 3px solid var(--sunstone-bg, #0f172a);
+  box-shadow: 0 0 0 3px var(--sunstone-bg, #0f172a);
+  position: relative;
+  z-index: 3;
 }
 
 .timeline-cards {
@@ -746,6 +761,8 @@
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   gap: 0.8rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Architecture Layout */
@@ -3895,8 +3912,6 @@ ul.card-list li strong {
   border: 1.5px solid var(--border-color) !important;
   box-shadow: 2px 2px 0px var(--shadow-color) !important;
   border-radius: 4px !important;
-  white-space: nowrap !important;
-  flex-shrink: 0 !important;
 }
 
 .solvin-slide .badge-pill::before,
@@ -5026,37 +5041,52 @@ ul.card-list li strong {
   overflow: visible !important;
 }
 
-.timeline-rail-wrap {
-  position: relative;
-  width: 100%;
-  margin: 0.15rem 0 0.25rem 0;
-}
-
-.timeline-line {
-  position: absolute;
-  left: 12.5%;
-  right: 12.5%;
-  height: 3px;
-  background: var(--border-color);
-  bottom: 7px;
-  z-index: 1;
-  opacity: 0.85;
-}
-
+.solvin-slide .timeline-track,
+[data-layout="timeline"] .timeline-track,
 .timeline-track {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.85rem;
-  width: 100%;
-  z-index: 2;
+  position: relative !important;
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: 1fr !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0.6rem 0 0.8rem 0 !important;
+  padding: 0 6px !important;
+  z-index: 2 !important;
 }
 
+.solvin-slide .timeline-track::before,
+[data-layout="timeline"] .timeline-track::before {
+  display: none !important;
+}
+
+.solvin-slide .timeline-step,
 .timeline-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.solvin-slide .timeline-step::after,
+.timeline-step::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  width: calc(100% + 0.85rem) !important;
+  height: 3px !important;
+  bottom: 5.5px !important;
+  background: var(--border-color) !important;
+  opacity: 0.85 !important;
+  z-index: 1 !important;
+}
+
+.solvin-slide .timeline-step:last-child::after,
+.timeline-step:last-child::after {
+  display: none !important;
 }
 
 .timeline-year {
@@ -5096,14 +5126,17 @@ ul.card-list li strong {
   background: var(--border-active);
 }
 
+.solvin-slide .timeline-cards,
 .timeline-cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.85rem;
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: 1fr !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
   flex: 1;
   align-items: stretch;
   padding: 4px 6px 8px 6px !important;
-  box-sizing: border-box !important;
 }
 
 .timeline-card {
@@ -5179,9 +5212,6 @@ ul.card-list li strong {
   white-space: nowrap;
 }
 
-.solvin-slide .timeline-track {
-  margin: 0.6rem 1.5rem 0.8rem 1.5rem !important;
-}
 
 .solvin-slide .timeline-card .card-header {
   display: flex !important;
@@ -5199,11 +5229,6 @@ ul.card-list li strong {
   font-size: 0.84rem !important;
   line-height: 1.2 !important;
   color: var(--text-color) !important;
-}
-
-.solvin-slide .timeline-card .badge {
-  white-space: nowrap !important;
-  flex-shrink: 0 !important;
 }
 
 .solvin-slide .timeline-card ul.card-list {

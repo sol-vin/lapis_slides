@@ -1196,7 +1196,7 @@ BEGIN       END         __FILE__    __LINE__    __ENCODING__</code></pre>
             <p class="slide-subtitle">Side-by-Side Implementation of the Same Player Node with Exported Property and Signal</p>
           </header>
           <div class="slide-body four-cols" data-layout="four-column">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
+            <div class="code-window code-container col" data-lang="crystal">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
@@ -1209,7 +1209,7 @@ BEGIN       END         __FILE__    __LINE__    __ENCODING__</code></pre>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal code-compact">node Player &lt; CharacterBody3D do
+              <pre><code class="language-crystal">node Player &lt; CharacterBody3D do
   @[Export(range: 1.0_f32..20.0_f32)]
   property speed : Float32 = 7.0_f32
 
@@ -1407,7 +1407,7 @@ public:
                     <td>Slow (Heavy Cargo build)</td>
                     <td>Strict Borrow Checker</td>
                     <td>Proc Macros (Complex)</td>
-                    <td class="lapis-col highlight-col">High friction (&lt;code&gt;Base&amp;lt;T&amp;gt;&lt;/code&gt;)</td>
+                    <td class="lapis-col highlight-col">High friction (<code>Base&lt;T&gt;</code>)</td>
                   </tr>
                   <tr>
                     <td class="dim-header">godot-cpp (C++)</td>
@@ -10306,14 +10306,17 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="3:2">
             <div class="column col" data-slot="left">
-            <div class="card barchart-card">
+            <div class="card barchart-card col">
               <div class="card-header">
                 <span class="card-title">Benchmark Results (Execution Time)</span>
                 <span class="badge">LOWER IS BETTER</span>
               </div>
               <div class="barchart-container">
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">N-Body Gravitational Physics (10k bodies)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">N-Body Gravitational Physics (10k bodies)</span>
+                    <span class="badge barchart-speedup badge-pill">59.4x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -10328,7 +10331,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Procedural Perlin Terrain Generation (256x256)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Procedural Perlin Terrain Generation (256x256)</span>
+                    <span class="badge barchart-speedup badge-pill">33.0x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -10343,7 +10349,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">A* Pathfinding Grid Traversal (1,000 agents)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">A* Pathfinding Grid Traversal (1,000 agents)</span>
+                    <span class="badge barchart-speedup badge-pill">15.4x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -10358,7 +10367,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Raycast Query &amp; Entity Filtering (50,000 hits)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Raycast Query &amp; Entity Filtering (50,000 hits)</span>
+                    <span class="badge barchart-speedup badge-pill">8.9x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -10415,14 +10427,17 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="3:2">
             <div class="column col" data-slot="left">
-            <div class="card barchart-card">
+            <div class="card barchart-card col">
               <div class="card-header">
                 <span class="card-title">Cross-Language Latency (vs GDScript Baseline)</span>
                 <span class="badge">LOWER IS BETTER</span>
               </div>
               <div class="barchart-container">
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Dense Matrix Multiplication (N=300)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Dense Matrix Multiplication (N=300)</span>
+                    <span class="badge barchart-speedup badge-pill">67.5x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -10452,7 +10467,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Sieve of Atkin Prime Search (500k)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Sieve of Atkin Prime Search (500k)</span>
+                    <span class="badge barchart-speedup badge-pill">44.7x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -10482,7 +10500,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">N-Body Orbital Physics (50k steps)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">N-Body Orbital Physics (50k steps)</span>
+                    <span class="badge barchart-speedup badge-pill">149.4x</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">GDScript</span>
@@ -10555,14 +10576,17 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="3:2">
             <div class="column col" data-slot="left">
-            <div class="card barchart-card">
+            <div class="card barchart-card col">
               <div class="card-header">
                 <span class="card-title">Native Tier Latency (Sub-150ms Close-Up)</span>
                 <span class="badge">LOWER IS BETTER</span>
               </div>
               <div class="barchart-container">
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">3D N-Body Orbital Physics (50k steps)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">3D N-Body Orbital Physics (50k steps)</span>
+                    <span class="badge barchart-speedup badge-pill">Parity</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">C#</span>
@@ -10587,7 +10611,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">2D Mandelbrot Fractal (500x500)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">2D Mandelbrot Fractal (500x500)</span>
+                    <span class="badge barchart-speedup badge-pill">Parity</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">C#</span>
@@ -10612,7 +10639,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">Sieve of Atkin + Trie (Limit=500k)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">Sieve of Atkin + Trie (Limit=500k)</span>
+                    <span class="badge barchart-speedup badge-pill">1.37x vs C++</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">C#</span>
@@ -10637,7 +10667,10 @@ end</code></pre>
                   </div>
                 </div>
                 <div class="barchart-row">
-                  <div class="barchart-row-header"><span class="barchart-name">BinaryTrees GC Pressure (Depth 12)</span></div>
+                  <div class="barchart-row-header">
+                    <span class="barchart-name">BinaryTrees GC Pressure (Depth 12)</span>
+                    <span class="badge barchart-speedup badge-pill">GC Shootout</span>
+                  </div>
                   <div class="barchart-bars">
                     <div class="barchart-bar-line">
                       <span class="bar-platform">Crystal</span>
@@ -11671,6 +11704,7 @@ $ lapis run --showcase
   <script src="vendor/highlight/languages/rust.min.js"></script>
   <script src="vendor/highlight/languages/cpp.min.js"></script>
   <script src="vendor/highlight/languages/python.min.js"></script>
+  <script src="vendor/highlight/languages/gdscript.min.js"></script>
 
   <script>
     // Initialize Reveal.js Presentation Engine
@@ -11700,27 +11734,32 @@ $ lapis run --showcase
       // Highlight plugin configuration
       highlight: {
         beforeHighlight: (internalHljs) => {
-          if (window.hljs && window.hljs.registerAliases) {
-            try { window.hljs.registerAliases(['gdscript', 'gd'], { languageName: 'python' }); } catch(e) {}
-            try { window.hljs.registerAliases(['ruby', 'rb'], { languageName: 'crystal' }); } catch(e) {}
-            try { window.hljs.registerAliases(['csharp', 'cs', 'c#'], { languageName: 'csharp' }); } catch(e) {}
-            try { window.hljs.registerAliases(['sh', 'shell', 'zsh'], { languageName: 'bash' }); } catch(e) {}
-          }
-          if (internalHljs && internalHljs.registerAliases) {
-            try { internalHljs.registerAliases(['gdscript', 'gd'], { languageName: 'python' }); } catch(e) {}
-            try { internalHljs.registerAliases(['ruby', 'rb'], { languageName: 'crystal' }); } catch(e) {}
-            try { internalHljs.registerAliases(['csharp', 'cs', 'c#'], { languageName: 'csharp' }); } catch(e) {}
-            try { internalHljs.registerAliases(['sh', 'shell', 'zsh'], { languageName: 'bash' }); } catch(e) {}
-          }
+          // 1. Synchronize pre-registered languages from window.hljs to Reveal's internal hljs
           if (window.hljs && window.hljs.listLanguages) {
             window.hljs.listLanguages().forEach((lang) => {
               const def = window.hljs.getLanguage(lang);
-              if (def) {
+              if (def && internalHljs && internalHljs.registerLanguage) {
                 try { internalHljs.unregisterLanguage(lang); } catch(e) {}
                 internalHljs.registerLanguage(lang, def.rawDefinition || (() => def));
               }
             });
           }
+
+          // 2. Register aliases on BOTH window.hljs and internalHljs
+          [window.hljs, internalHljs].forEach((h) => {
+            if (h && h.registerAliases) {
+              try {
+                if (!h.getLanguage('gdscript')) {
+                  h.registerAliases(['gdscript', 'gd'], { languageName: 'python' });
+                } else {
+                  h.registerAliases(['gd'], { languageName: 'gdscript' });
+                }
+              } catch(e) {}
+              try { h.registerAliases(['ruby', 'rb'], { languageName: 'crystal' }); } catch(e) {}
+              try { h.registerAliases(['csharp', 'cs', 'c#'], { languageName: 'csharp' }); } catch(e) {}
+              try { h.registerAliases(['sh', 'shell', 'zsh'], { languageName: 'bash' }); } catch(e) {}
+            }
+          });
         }
       },
 
