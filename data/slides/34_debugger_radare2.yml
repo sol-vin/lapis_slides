@@ -1,8 +1,8 @@
 ---
 id: 34_debugger_radare2
-title: 'Native Debugging: radare2 vs. LLDB'
-subtitle: Eliminating Toolchain Bloat & Symbol Desyncs
-badge: SYSTEMS DIAGNOSTICS • RADARE2
+title: 'Low-Level Binary Forensics: radare2 vs. LLDB'
+subtitle: Eliminating Toolchain Bloat, Disassembly Mapping & Crash Forensics
+badge: SYSTEMS FORENSICS • RADARE2
 badge_color: blue
 palette: game_station_2
 layout: two-column-layout

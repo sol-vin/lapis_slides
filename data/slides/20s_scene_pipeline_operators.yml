@@ -70,6 +70,6 @@ takeaway:
   badge: PIPELINE ERGONOMICS
   text: Lapis scene pipeline operators (> and >>) turn multi-step scene preloading, instantiation, and initial configuration into expressive single-line expressions.
 notes: |
-  In Chapter 4.1, we saw how `add_child` and `add_sibling` work with `PackedScene.load("...").instantiate.as(T)`. With `require "lapis/extras"`, we elevate scene instantiation into ultra-clean pipeline operators.
+  In Chapter 4.1, we saw how `add_child` and `add_sibling` work directly with scene paths and typed targets. With `require "lapis/extras"`, we elevate scene instantiation into ultra-clean pipeline operators.
   With the greater-than operator (`>`), `"res://scenes/enemy.tscn" > Enemy` preloads the PackedScene, instantiates it, and downcasts to `Enemy` in a single token stream. When passed directly into `add_child` or `add_sibling`, you can configure properties inline with Crystal's context execution (`with .. yield`).
   The double-greater-than operator (`>>`) performs dynamic runtime loading. When paired with nilable types like `SecretRoom?`, it safely returns nil if the resource fails to load without crashing.

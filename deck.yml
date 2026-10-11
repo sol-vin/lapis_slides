@@ -150,35 +150,14 @@ slides:
 - 33d_hot_reload_state_preserver
 
 # --- Chapter 4.9: The Lapis CLI Command Center ---
-- 29b_act4_cli_intro
 - 30_cli_lifecycle
-- 30c_cli_doctor
-- 30f_cli_clean_and_upgrade
-- 31_cli_codegen
-- 32_package_management
 
 # --- Chapter 4.10: Low-Level Binary Forensics ---
-- 33e_act4_debugger_intro
 - 34_debugger_radare2
-- 34c_debug_workflows
-- 34k_in_editor_debugger
-- 34g_r2_crystal_runtime
-- 34h_r2_godot_internals
-- 34i_r2_lapis_supervisor
-- 34j_r2_tui_debugger
-- 34m_binary_analysis_audit
-- 34b_r2_test_suite
-- 34d_cli_log_triage
-- 34e_cli_run_monitor
-- 34f_cli_sync_targets
 
 # --- Chapter 4.11: Mission-Critical Testing ---
-- 35h_act4_testing_intro
 - 36_testing_zero_leak
 - 36b_testing_editor_driver
-- 36c_testing_editor_selenium_driver
-- 36d_testing_ai_vision_and_ipc_repl
-- 36e_behavioral_scenario_testing
 - 37_tool_testing_tui
 
 # --- Chapter 4.12: The Hard Numbers (Benchmarks & Shootouts) ---
