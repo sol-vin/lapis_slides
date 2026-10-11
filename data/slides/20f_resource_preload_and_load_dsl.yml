@@ -4,7 +4,7 @@ title: 'Resource Loading: load, preload & instantiate_as'
 subtitle: Compile-Time Extension Type Inference, Type-Safe Instantiation, and Thread-Safe PreloadCache
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
-palette: cross_cube
+palette: dreamcast
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Two-Step Preload & Untyped Load'

@@ -4,7 +4,7 @@ title: 'Concurrency: Parallel OS Threads & SceneTree Safety'
 subtitle: Utilizing Multi-Core Hardware for Heavy Workloads with Safe Main-Thread Synchronization
 badge: CONCURRENCY ARCHITECTURE • OS THREADS & SAFETY
 badge_color: amber
-palette: entertainment_system
+palette: pastel
 layout: two-column-layout
 ratio: 3:2
 left:

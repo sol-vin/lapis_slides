@@ -4,7 +4,7 @@ title: "Static Trade-Offs: No 'send' & Limits of 'exec'"
 subtitle: 'The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity'
 badge: METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS
 badge_color: amber
-palette: candy
+palette: digital_guy
 layout: two-column-layout
 ratio: 3:2
 left:

@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: Unit Testing & Engine Decoupling'
 subtitle: Heavy Headless Harnesses & Native Mocks vs Sub-Millisecond Crystal Spec
 badge: LANGUAGE SHOOTOUT • TESTING & ISOLATION
 badge_color: purple
-palette: playbox
+palette: functionalist
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps'

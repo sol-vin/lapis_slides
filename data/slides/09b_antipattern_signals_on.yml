@@ -4,7 +4,7 @@ title: 'Signals & Callables: String Handlers vs. The on Macro'
 subtitle: Verbose Named Callback Methods vs. Declarative Inline Closures & Type Filters
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
-palette: spaces_vista
+palette: indiglo_light
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Method Sprawl & Callable Boilerplate'

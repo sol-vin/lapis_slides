@@ -4,7 +4,7 @@ title: 'Dual Modes: Mode A vs. Mode B'
 subtitle: Seamless In-Editor GDExtension Development Paired with Lean Standalone Shipping
 badge: ARCHITECTURE • DUAL EXECUTION MODES
 badge_color: amber
-palette: fos
+palette: a64_pal
 layout: dual-mode-layout
 banner: '<strong>Self-Hosted Tooling:</strong> Just like the Crystal compiler is self-hosted in Crystal, Lapis&apos;s Godot editor integration plugin, syntax highlighting, and tooling docks are authored 100% in Crystal.'
 modes:

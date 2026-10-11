@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups'
 subtitle: Task Heap Churn, async void Process Crashes, and String Lookups vs Fibers & Symbols
 badge: LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY
 badge_color: purple
-palette: aperture
+palette: bento_pad
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: Task Allocations, async void, and String Soup'

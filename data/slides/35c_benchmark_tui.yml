@@ -4,7 +4,7 @@ title: 'Automated Benchmark TUI: lapis benchmarks'
 subtitle: Real-Time Double-Buffered ANSI Dashboard & Comparative Speedup Ratios
 badge: PERFORMANCE • BENCHMARK TUI
 badge_color: cyan
-palette: spaces_11
+palette: spaces_vista
 layout: two-column-layout
 ratio: 1:1
 left:

@@ -4,7 +4,7 @@ title: 'Lapis Extras: Wildcard Glob Queries & Streaming Iteration (*)'
 subtitle: 'require "lapis/extras" • Wildcards (*, **), get_nodes, each_node, and GroupQuery DSL'
 badge: LAPIS EXTRAS • WILDCARDS & ITERATION
 badge_color: cyan
-palette: cross_cube
+palette: cross_cube_360
 layout: two-column-layout
 ratio: 1:1
 left:

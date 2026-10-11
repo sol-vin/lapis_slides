@@ -4,7 +4,7 @@ title: Language & GDExtension Ecosystem Feature Matrix
 subtitle: Direct Feature Comparison Across Godot's Scripting & GDExtension Ecosystem
 badge: FEATURE MATRIX • ECOSYSTEM COMPARISON
 badge_color: cyan
-palette: spaces_95
+palette: solarized_dark
 layout: matrix-layout
 headers:
 - Language / Binding

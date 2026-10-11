@@ -4,7 +4,7 @@ title: 'Lapis Extras: Strict (>) & Loose (>>) Signal Piping'
 subtitle: 'require "lapis/extras" • Direct Signal Streams, Arity Trimming & Polymorphic Type Filtering'
 badge: LAPIS EXTRAS • SIGNAL PIPELINES
 badge_color: purple
-palette: playbox
+palette: phosphor_vector
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Manual Signal Forwarding Boilerplate'

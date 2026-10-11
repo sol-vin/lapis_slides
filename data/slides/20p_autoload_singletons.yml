@@ -4,7 +4,7 @@ title: 'Autoload Singletons: Declarative Engine Singletons (@[Autoload])'
 subtitle: 'Zero-Config SceneTree Mounting, Engine Singleton Registration & Type-Safe Accessors'
 badge: THE LAPIS DSL • AUTOLOAD SINGLETONS
 badge_color: cyan
-palette: aperture
+palette: vault_101
 layout: two-column-layout
 ratio: 3:2
 left:

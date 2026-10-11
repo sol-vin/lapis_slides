@@ -4,7 +4,7 @@ title: 'Low-Level Binary Forensics: radare2 vs. LLDB'
 subtitle: Eliminating Toolchain Bloat, Disassembly Mapping & Crash Forensics
 badge: SYSTEMS FORENSICS • RADARE2
 badge_color: blue
-palette: game_station_2
+palette: trash80
 layout: two-column-layout
 ratio: 1:1
 left:

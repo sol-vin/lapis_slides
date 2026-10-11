@@ -4,7 +4,7 @@ title: 'Interop & FFI Benchmarks: Nanosecond Boundary Analysis'
 subtitle: Quantifying GDExtension C-ABI Crossing, Variant Boxing & Typed Dispatch
 badge: BENCHMARKS • INTEROP & FFI
 badge_color: cyan
-palette: spaces_11
+palette: playdate
 layout: table
 headers:
   - "Language / Binding Target"

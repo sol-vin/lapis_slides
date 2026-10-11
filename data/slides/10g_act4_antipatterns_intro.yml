@@ -5,7 +5,7 @@ subtitle: "10 Structural Traps: Iterators, Closures, Nil Hazards, Dead Pointers 
 act: "ACT IV • CHAPTER 04"
 badge: "ACT IV • CHAPTER 04"
 badge_color: "coral"
-palette: "monokai"
+palette: atarl
 layout: "chapter-layout"
 cube_size: 160
 pillars:

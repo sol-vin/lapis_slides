@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: The Runtime VM Tax & GC Stutter'
 subtitle: P/Invoke Marshalling Overhead, LINQ Allocation Churn, and GC Frame Drops vs Native LLVM Speed
 badge: LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY
 badge_color: purple
-palette: former_rain
+palette: twin_tower
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: P/Invoke Overhead, Boxing & GC Spikes'

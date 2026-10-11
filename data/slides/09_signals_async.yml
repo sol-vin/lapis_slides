@@ -4,7 +4,7 @@ title: 'Signals & Events: Reactive Zen Ergonomics'
 subtitle: Declarative Signal Connections, First-Class Signal Emission, and Decoupled Systems
 badge: CRYSTAL ERGONOMICS • SIGNALS & EVENTS
 badge_color: cyan
-palette: spaces_vista
+palette: indiglo_light
 layout: two-column-layout
 ratio: 3:2
 left:

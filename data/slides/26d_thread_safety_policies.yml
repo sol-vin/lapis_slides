@@ -4,7 +4,7 @@ title: 'Thread & Scope Policies'
 subtitle: ThreadAffinity Enforcement & Detached Graph Assembly
 badge: CONCURRENCY SAFETY • THREAD AFFINITY
 badge_color: amber
-palette: aperture
+palette: silicon_indigo
 layout: two-column-layout
 ratio: 1:1
 left:

@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: Null Minefields & Ghost Leaks'
 subtitle: The .NET ?. Operator Trap, Dual CLR/C++ Lifetimes, and Delegate Leak Hygiene
 badge: LANGUAGE SHOOTOUT • SAFETY & HYGIENE
 badge_color: purple
-palette: digital_guy
+palette: disturbing_the_peace
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: The ?. Operator Trap & Leaking Delegates'

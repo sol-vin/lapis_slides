@@ -5,7 +5,7 @@ subtitle: 'Modular Opt-In Ergonomics: require "lapis/extras", "lapis/gd_extras",
 act: "ACT IV • CHAPTER 03"
 badge: "ACT IV • CHAPTER 03"
 badge_color: "cyan"
-palette: "spaces_vista"
+palette: tokyo_midnight
 layout: "chapter-layout"
 cube_size: 160
 pillars:

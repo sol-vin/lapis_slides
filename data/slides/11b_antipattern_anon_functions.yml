@@ -4,7 +4,7 @@ title: 'Anonymous Functions: Callable Churn vs. Inlining'
 subtitle: GDScript Callable Overhead vs. Crystal Inlined Blocks
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: purple
-palette: super_es
+palette: sweetie_80
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Verbose Lambdas, Callable Allocations & Churn'

@@ -4,7 +4,7 @@ title: 'Bare Words & Operators: Zero-Cost Uniform Access'
 subtitle: Optional Parentheses, Uniform Access Principle & LLVM-Inlined Operator Methods
 badge: CRYSTAL ERGONOMICS • SYNTACTIC ELEGANCE
 badge_color: emerald
-palette: monokai
+palette: retro_groove
 layout: two-column-layout
 ratio: 1:1
 left:

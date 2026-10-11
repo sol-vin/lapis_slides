@@ -5,7 +5,7 @@ subtitle: "Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language 
 act: "ACT IV • CHAPTER 12"
 badge: "ACT IV • CHAPTER 12"
 badge_color: "amber"
-palette: "m64"
+palette: engine_16
 layout: "chapter-layout"
 cube_size: 160
 pillars:

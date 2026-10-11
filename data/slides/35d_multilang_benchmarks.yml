@@ -4,7 +4,7 @@ title: 'Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript'
 subtitle: Canonical Microbenchmarks Measuring Native GDExtension Performance vs Bytecode
 badge: BENCHMARKS • MULTI-LANGUAGE
 badge_color: cyan
-palette: spaces_xp_royale
+palette: deck_handheld
 layout: two-column-layout
 ratio: 3:2
 left:

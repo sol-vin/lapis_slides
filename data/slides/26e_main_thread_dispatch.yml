@@ -4,7 +4,7 @@ title: 'Main-Thread Dispatch'
 subtitle: Thread-Safe Queues & Frame Boundary Flush
 badge: THREAD SYNCHRONIZATION • ENGINE QUEUE
 badge_color: cyan
-palette: spaces_vista
+palette: silicon_indigo
 layout: two-column-layout
 ratio: 1:1
 left:

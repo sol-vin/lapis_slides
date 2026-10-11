@@ -4,7 +4,7 @@ title: 'Gameplay Usability: Fluent Creation & Spawning'
 subtitle: Direct Tree Instantiation, Context Execution (with..yield), and Fluent Configuration
 badge: GAMEPLAY • ERGONOMIC DSL
 badge_color: purple
-palette: candy
+palette: orchard_2
 layout: two-column-layout
 ratio: 3:2
 left:

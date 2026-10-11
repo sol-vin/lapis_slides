@@ -4,7 +4,7 @@ title: First-Class Godot Editor Integration
 subtitle: Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync
 badge: GODOT EDITOR • FIRST-CLASS CITIZEN
 badge_color: cyan
-palette: spaces_11
+palette: gamestation_portable
 layout: two-column-layout
 ratio: 3:2
 left:

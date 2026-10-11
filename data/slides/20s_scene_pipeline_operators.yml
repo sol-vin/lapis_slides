@@ -4,7 +4,7 @@ title: 'Lapis Extras: Scene Preload (>) & Load (>>) Pipelines'
 subtitle: 'require "lapis/extras" • Single-Line Instantiation, Dynamic Fetching, and Inline Setup Blocks'
 badge: LAPIS EXTRAS • SCENE & ASSET PIPELINES
 badge_color: purple
-palette: spaces_vista
+palette: phosphor_vector
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Multi-Step Instantiation Boilerplate'

@@ -4,7 +4,7 @@ title: 'Node Ergonomics: onready & Typed Subscripts (Node#[])'
 subtitle: Declarative onready Property Caching, Type-Inferred Subscripts, and Safe Subscripts ([]?)
 badge: LAPIS DSL • NODE SUBSCRIPTS
 badge_color: cyan
-palette: monokai
+palette: cross_cube
 layout: two-column-layout
 ratio: 1:1
 left:

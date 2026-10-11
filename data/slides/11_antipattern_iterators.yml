@@ -4,7 +4,7 @@ title: 'Iterators: Imperative Loops vs. Functional Zen'
 subtitle: Manual Imperative Loops vs. Composable Enumerable Pipelines
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
-palette: spaces_xp_royale
+palette: sweetie_80
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Imperative Loops & Array Mutation'

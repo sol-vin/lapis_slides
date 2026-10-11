@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: Ceremony & Keyword Bloat'
 subtitle: Boilerplate Attributes, Partial Classes, and Delegate Rigmarole vs Declarative Macro DSL
 badge: LANGUAGE SHOOTOUT • C# VS LAPIS
 badge_color: purple
-palette: playbox
+palette: boom_bap_16
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: Mandatory Ceremony & Keyword Bloat'

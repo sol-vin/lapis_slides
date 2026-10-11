@@ -4,7 +4,7 @@ title: 'Macro Hooks: included & inherited'
 subtitle: 'Compile-Time Mixins & Automated Subclass Registration'
 badge: METAPROGRAMMING • AST HOOKS
 badge_color: amber
-palette: aperture
+palette: creation
 layout: two-column-layout
 ratio: 3:2
 left:

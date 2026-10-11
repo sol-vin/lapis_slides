@@ -4,7 +4,7 @@ title: 'GDScript Extras: Expression-Oriented match DSL'
 subtitle: 'require "lapis/gd_extras" • Polymorphic Downcasting, Variant Unboxing, and Destructuring'
 badge: LAPIS GD_EXTRAS • PATTERN MATCHING
 badge_color: purple
-palette: cross_cube_360
+palette: disinherited
 layout: two-column-layout
 ratio: 3:2
 left:

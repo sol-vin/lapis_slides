@@ -4,7 +4,7 @@ title: 'Multiplayer Testing & Lockstep Network Debugging'
 subtitle: Deterministic Multi-Client Simulation, Cooperative Breakpoint Lockstep & Wireshark-Style Packet Auditing
 badge: MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING
 badge_color: purple
-palette: playbox
+palette: playtoy
 layout: two-column-layout
 ratio: 1:1
 left:

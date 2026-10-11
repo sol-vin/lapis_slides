@@ -4,7 +4,7 @@ title: 'Crystal Calling GDScript: Strongly-Typed Bindings'
 subtitle: Automatic Strongly-Typed Proxies for GDScript Classes Generated via Lapis CLI
 badge: INTEROPERABILITY • AUTOMATIC TYPED BINDINGS
 badge_color: cyan
-palette: spaces_7
+palette: nds_aqua
 layout: two-column-layout
 ratio: 3:2
 left:

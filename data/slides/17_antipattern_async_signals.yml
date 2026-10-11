@@ -4,7 +4,7 @@ title: 'Signals & Async: String Awaits vs. Typed Handles'
 subtitle: Non-Blocking Coroutines, Timeout Guards & Dead-Pointer Checks
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: amber
-palette: aperture
+palette: oled_micro
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Unsafe Await & Leaked Coroutines'

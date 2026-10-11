@@ -4,7 +4,7 @@ title: 'Advanced gmodule: Composition, Hooks & Contracts'
 subtitle: Composed Module Inheritance, Cooperative Lifecycle Chaining & Abstract Contracts
 badge: LAPIS ARCHITECTURE • TRAIT COMPOSITION
 badge_color: purple
-palette: monokai
+palette: saturn
 layout: two-column-layout
 ratio: 1:1
 left:

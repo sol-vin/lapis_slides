@@ -4,7 +4,7 @@ title: 'Authoring Custom Benchmarks: Lapis::Benchmark'
 subtitle: In-Engine Microbenchmarking DSL, Multi-Target Comparisons & Automated HTML Reports
 badge: PERFORMANCE • CUSTOM BENCHMARKING
 badge_color: cyan
-palette: spaces_11
+palette: spaces_vista
 layout: two-column-layout
 ratio: 1:1
 left:

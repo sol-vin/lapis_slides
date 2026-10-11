@@ -4,7 +4,7 @@ title: 'Lapis Architecture: The Layered Bridge'
 subtitle: Modular Architectural Technology Stack from Gameplay Code to Engine Core & OS
 badge: CORE ARCHITECTURE • MODULAR TECHNOLOGY STACK
 badge_color: blue
-palette: game_station_2
+palette: a64_pal
 layout: architecture-layout
 tiers:
   - id: tier_app

@@ -4,7 +4,7 @@ title: 'Quantitative Benchmarks: Crystal vs GDScript'
 subtitle: Real-World Performance Comparison on Common Gameplay Workloads
 badge: QUANTITATIVE BENCHMARKS • PERFORMANCE
 badge_color: cyan
-palette: spaces_11
+palette: deck_handheld
 layout: two-column-layout
 ratio: 3:2
 left:

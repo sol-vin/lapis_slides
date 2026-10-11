@@ -4,7 +4,7 @@ title: 'Native Tier Shootout: Crystal vs C++, Rust & C#'
 subtitle: Pure Ahead-of-Time & JIT Close-Up Comparison (GDScript Baseline Removed)
 badge: BENCHMARKS • NATIVE TIER
 badge_color: cyan
-palette: spaces_vista
+palette: deck_handheld
 layout: two-column-layout
 ratio: 3:2
 left:

@@ -4,7 +4,7 @@ title: 'Where Macros Shine: Declarative State Machines'
 subtitle: Zero-Boilerplate State Transitions with Compile-Time Verification
 badge: AST METAPROGRAMMING • ARCHITECTURE
 badge_color: purple
-palette: super_es
+palette: speccy_48k
 layout: two-column-layout
 ratio: 3:2
 left:

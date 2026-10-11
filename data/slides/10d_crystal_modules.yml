@@ -4,7 +4,7 @@ title: 'Modules: Mixins, Traits & Namespaces'
 subtitle: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
 badge: CRYSTAL ARCHITECTURE • COMPOSITION
 badge_color: cyan
-palette: creation
+palette: vampire_count
 layout: two-column-layout
 ratio: 1:1
 left:

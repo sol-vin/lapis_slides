@@ -4,7 +4,7 @@ title: 'Concurrency: Mutex Deadlocks vs. CSP Actor Channels'
 subtitle: Manual Locking & SceneTree Hazards vs. Background Workers & Non-Blocking Drain
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
-palette: spaces_97
+palette: datacorder_464
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Mutex Locking & SceneTree Hazard'

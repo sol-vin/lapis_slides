@@ -4,7 +4,7 @@ title: 'In-Editor Diagnostics: Real-Time Static Validator & LSP'
 subtitle: Sub-Millisecond Syntax Squiggles, Crystalline LSP Integration & Starter Templates
 badge: EDITOR EXPERIENCE • DIAGNOSTICS & LSP
 badge_color: cyan
-palette: spaces_10
+palette: gamestation_portable
 layout: two-column-layout
 ratio: 3:2
 left:

@@ -4,7 +4,7 @@ title: 'Gameplay Architecture: FSM, Signal Bus & Object Pooling'
 subtitle: 'Value-Type Union FSM, Decoupled Signal Bus & High-Throughput Node Pools'
 badge: GAMEPLAY • DESIGN PATTERNS
 badge_color: green
-palette: playbox
+palette: resin_91
 layout: two-column-layout
 ratio: 3:2
 left:

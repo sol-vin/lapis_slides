@@ -4,7 +4,7 @@ title: 'Memory Safety: Dangling Pointers vs. Protection'
 subtitle: Monotonic 64-Bit ID Tracking Eliminates 0xC0000005 Crashes
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
-palette: game_station_2
+palette: catppuccin_mocha
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Unshielded Native C++: Dangling Pointer Crashes'

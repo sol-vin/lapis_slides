@@ -4,7 +4,7 @@ title: 'Gameplay Architecture: Context-Aware Audio & Spatial Queries'
 subtitle: Compile-Time play_sound Macro, Self-Pruning Root Players & Relative Spatial Helpers
 badge: GAMEPLAY • AUDIO & SPATIAL DSL
 badge_color: cyan
-palette: spaces_8
+palette: blue_cassette
 layout: two-column-layout
 ratio: 3:2
 left:

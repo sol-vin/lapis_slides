@@ -4,7 +4,7 @@ title: 'Editor Testing: Lapis::Test::EditorDriver'
 subtitle: Headless In-Editor Automation, @tool In-Process Verification & Live Reload Stress-Testing
 badge: TOOLING • HEADLESS EDITOR TESTING
 badge_color: cyan
-palette: spaces_xp_royale
+palette: spaces_2000
 layout: two-column-layout
 ratio: 1:1
 left:

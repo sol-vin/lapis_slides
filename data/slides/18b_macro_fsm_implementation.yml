@@ -4,7 +4,7 @@ title: 'Behind the DSL: The FSM AST Macro'
 subtitle: How Crystal's Compile-Time AST Rewriting Synthesizes Enums, Typed Dispatchers & Lifecycle Hooks
 badge: AST METAPROGRAMMING • UNDER THE HOOD
 badge_color: amber
-palette: super_es
+palette: speccy_48k
 layout: two-column-layout
 ratio: 3:2
 left:

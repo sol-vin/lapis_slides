@@ -4,7 +4,7 @@ title: 'Symbols: String Churn vs. 32-Bit IDs'
 subtitle: Runtime String Lookups vs. Compile-Time 32-Bit Enums
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
-palette: spaces_vista
+palette: sweetie_80
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs'

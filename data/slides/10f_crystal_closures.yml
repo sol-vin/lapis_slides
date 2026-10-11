@@ -4,7 +4,7 @@ title: 'Blocks, Procs & Lambdas: Inlined Closures'
 subtitle: Ephemeral Inlined Blocks, Typed Reified Procs & C-Function Pointer Interop
 badge: CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS
 badge_color: cyan
-palette: aperture
+palette: acid_303
 layout: two-column-layout
 ratio: 1:1
 left:

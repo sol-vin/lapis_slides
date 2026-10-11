@@ -4,7 +4,7 @@ title: 'Direct Space Physics: Zero-Boilerplate Raycasting'
 subtitle: One-Line Spatial Queries, Strongly-Typed Hits & Safe Collider Downcasting
 badge: PHYSICS • DIRECT SPACE QUERIES
 badge_color: amber
-palette: spaces_vista
+palette: hazard_suit
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Manual RayQuery Setup & Untyped Dictionaries'

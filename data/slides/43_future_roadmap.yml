@@ -4,7 +4,7 @@ title: The Future of Native Scripting in Godot
 subtitle: 'Roadmap Ahead: Mobile & Wasm Targets, Multimodal AI Testing, and Community Shards'
 badge: CONCLUSION • LOOKING AHEAD
 badge_color: purple
-palette: former_rain
+palette: dawnbringer_16
 layout: timeline-layout
 cards:
   - phase: "MILESTONE 1"

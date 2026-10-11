@@ -4,7 +4,7 @@ title: 'C# Extras: Compound Signal Assignment (+= and -=)'
 subtitle: 'require "lapis/cs_extras" • C#-Style Event Syntax with 64-bit ObjectDB Leak Protection'
 badge: LAPIS CS_EXTRAS • EVENT OPERATORS
 badge_color: purple
-palette: digital_guy
+palette: mega_shock
 layout: two-column-layout
 ratio: 1:1
 left:

@@ -4,7 +4,7 @@ title: 'Hot-Reload State Preserver: 6-Phase Transactional Protocol'
 subtitle: Preserving Live Scene State, Schema Drift Reconciliation & Zero Dead Pointers
 badge: RELOAD ARCHITECTURE • STATE PRESERVATION
 badge_color: amber
-palette: game_station_2
+palette: gamestation_portable
 layout: feature-grid
 hero_feature:
   title: 'live_state_preserver.cr — Hot-Reload'

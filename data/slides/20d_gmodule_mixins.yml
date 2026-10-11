@@ -4,7 +4,7 @@ title: 'Modular Traits: The gmodule Macro'
 subtitle: Reusable Gameplay Mixins with Godot ClassDB & Inspector Parity
 badge: LAPIS DSL • MODULAR MIXINS
 badge_color: cyan
-palette: bring_me_hope
+palette: saturn
 layout: two-column-layout
 ratio: 1:1
 left:

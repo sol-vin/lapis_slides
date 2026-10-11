@@ -5,7 +5,7 @@ subtitle: Side-by-Side Implementation of the Same Player Node with Exported Prop
   and Signal
 badge: LANGUAGE COMPARISON • BOILERPLATE
 badge_color: purple
-palette: spaces_98
+palette: nord_frost
 layout: four-column-layout
 columns:
 - type: code

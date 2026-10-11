@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks'
 subtitle: AssemblyLoadContext Zombie Leaks & Runtime Bloat vs Native LLVM Portability
 badge: LANGUAGE SHOOTOUT • PLATFORMS & TOOLING
 badge_color: purple
-palette: cross_cube_360
+palette: acorn_bbc
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: Platform Lockout & Zombie Assemblies'

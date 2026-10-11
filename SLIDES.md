@@ -97,7 +97,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 5: The Ruby Heritage
-- **Theme Palette**: `super_es` (Super ES)
+- **Theme Palette**: `kanto_red` (Kanto Red)
 - **Badge**: `HISTORICAL CONTEXT • THE RUBY HERITAGE`
 - **Title**: The Ruby Heritage
 - **Subtitle**: Developer Happiness, Small Syntax & Expressive Human Reach
@@ -147,7 +147,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 6: My Back End Looks Like This
-- **Theme Palette**: `super_es` (Super ES)
+- **Theme Palette**: `kanto_red` (Kanto Red)
 - **Badge**: `RUBY HERITAGE • BACKEND CLASS ARCHITECTURE`
 - **Title**: My Back End Looks Like This
 - **Subtitle**: Clean Class Encapsulation, State Guards & Expressive Internal Pipelines
@@ -210,7 +210,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 7: So My Front End Can Look Like This
-- **Theme Palette**: `candy` (Candy)
+- **Theme Palette**: `kanto_red` (Kanto Red)
 - **Badge**: `RUBY HERITAGE • CALL-SITE ERGONOMICS`
 - **Title**: So My Front End Can Look Like This
 - **Subtitle**: Natural Prose, Fluent Pipelines & Composable Object Mechanics
@@ -263,7 +263,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 8: Small Syntax: Postage-Stamp Grammar
-- **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
+- **Theme Palette**: `kanto_red` (Kanto Red)
 - **Badge**: `RUBY HERITAGE • MINIMAL GRAMMAR`
 - **Title**: Small Syntax: Postage-Stamp Grammar
 - **Subtitle**: ~40 Keywords Fueling an Infinite Universe of Domain Usages
@@ -373,7 +373,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 12: Boilerplate Elimination: Lapis vs. C# vs. Rust vs. C++
-- **Palette**: `spaces_98` | **Badge**: `LANGUAGE COMPARISON • BOILERPLATE`
+- **Palette**: `nord_frost` | **Badge**: `LANGUAGE COMPARISON • BOILERPLATE`
 - **Lapis (Crystal)**:
 - **Godot C# (.NET)**:
 - **godot-rust (gdext)**:
@@ -401,7 +401,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 14: The Birth of Crystal [Convergence / Synthesis]
-- **Theme Palette**: `spaces_98` (Spaces 98)
+- **Theme Palette**: `spaces_xp` (Spaces XP)
 - **Title**: The Birth of Crystal
 
 #### Converging Pillars:
@@ -472,7 +472,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 16: Expressive Ergonomics: High-Level Language Primitives
-- **Theme Palette**: `playbox` (Playbox)
+- **Theme Palette**: `atomic_purple` (Atomic Purple)
 - **Badge**: `CRYSTAL ERGONOMICS • EXPRESSION`
 - **Title**: Expressive Ergonomics: High-Level Language Primitives
 - **Subtitle**: Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax
@@ -515,7 +515,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 17: Bare Words & Operators: Zero-Cost Uniform Access
-- **Theme Palette**: `monokai` (Monokai)
+- **Theme Palette**: `retro_groove` (Retro Groove)
 - **Badge**: `CRYSTAL ERGONOMICS • SYNTACTIC ELEGANCE`
 - **Title**: Bare Words & Operators: Zero-Cost Uniform Access
 - **Subtitle**: Optional Parentheses, Uniform Access Principle & LLVM-Inlined Operator Methods
@@ -687,7 +687,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 21: Action-First Syntax: Statement Modifiers
-- **Theme Palette**: `spaces_xp` (Spaces XP)
+- **Theme Palette**: `spaces_31` (Spaces 3.1)
 - **Badge**: `CRYSTAL ERGONOMICS • STATEMENT MODIFIERS`
 - **Title**: Action-First Syntax: Statement Modifiers
 - **Subtitle**: 'action if condition' — Putting Intent First to Match Human Cognitive Flow
@@ -813,7 +813,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 24: Modules: Mixins, Traits & Namespaces
-- **Theme Palette**: `creation` (Creation)
+- **Theme Palette**: `vampire_count` (Vampire Count)
 - **Badge**: `CRYSTAL ARCHITECTURE • COMPOSITION`
 - **Title**: Modules: Mixins, Traits & Namespaces
 - **Subtitle**: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
@@ -862,7 +862,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 25: Open Classes: Static Monkey Patching
-- **Theme Palette**: `monokai` (Monokai)
+- **Theme Palette**: `vampire_count` (Vampire Count)
 - **Badge**: `CRYSTAL METAPROGRAMMING • OPEN CLASSES`
 - **Title**: Open Classes: Static Monkey Patching
 - **Subtitle**: Re-opening Types & Built-ins with LLVM Inlining & Zero Load-Order Race Conditions
@@ -905,7 +905,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 26: Blocks, Procs & Lambdas: Inlined Closures
-- **Theme Palette**: `aperture` (Aperture)
+- **Theme Palette**: `acid_303` (Acid 303)
 - **Badge**: `CRYSTAL CLOSURES • FIRST-CLASS FUNCTIONS`
 - **Title**: Blocks, Procs & Lambdas: Inlined Closures
 - **Subtitle**: Ephemeral Inlined Blocks, Typed Reified Procs & C-Function Pointer Interop
@@ -1005,7 +1005,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 28: Static Trade-Offs: No 'send' & Limits of 'exec'
-- **Theme Palette**: `candy` (Candy)
+- **Theme Palette**: `digital_guy` (DigitalGuy)
 - **Badge**: `METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS`
 - **Title**: Static Trade-Offs: No 'send' & Limits of 'exec'
 - **Subtitle**: The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity
@@ -1053,7 +1053,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 29: Macro Hooks: included & inherited
-- **Theme Palette**: `aperture` (Aperture)
+- **Theme Palette**: `creation` (Creation)
 - **Badge**: `METAPROGRAMMING • AST HOOKS`
 - **Title**: Macro Hooks: included & inherited
 - **Subtitle**: Compile-Time Mixins & Automated Subclass Registration
@@ -1194,7 +1194,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 32: Where Macros Shine: Declarative State Machines
-- **Theme Palette**: `super_es` (Super ES)
+- **Theme Palette**: `speccy_48k` (Speccy 48K)
 - **Badge**: `AST METAPROGRAMMING • ARCHITECTURE`
 - **Title**: Where Macros Shine: Declarative State Machines
 - **Subtitle**: Zero-Boilerplate State Transitions with Compile-Time Verification
@@ -1249,7 +1249,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 33: Behind the DSL: The FSM AST Macro
-- **Theme Palette**: `super_es` (Super ES)
+- **Theme Palette**: `speccy_48k` (Speccy 48K)
 - **Badge**: `AST METAPROGRAMMING • UNDER THE HOOD`
 - **Title**: Behind the DSL: The FSM AST Macro
 - **Subtitle**: How Crystal's Compile-Time AST Rewriting Synthesizes Enums, Typed Dispatchers & Lifecycle Hooks
@@ -1392,7 +1392,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 37: Node Ergonomics: onready & Typed Subscripts (Node#[])
-- **Theme Palette**: `monokai` (Monokai)
+- **Theme Palette**: `cross_cube` (CrossCube)
 - **Badge**: `LAPIS DSL • NODE SUBSCRIPTS`
 - **Title**: Node Ergonomics: onready & Typed Subscripts (Node#[])
 - **Subtitle**: Declarative onready Property Caching, Type-Inferred Subscripts, and Safe Subscripts ([]?)
@@ -1438,7 +1438,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 38: Modular Traits: The gmodule Macro
-- **Theme Palette**: `bring_me_hope` (Bluebie)
+- **Theme Palette**: `saturn` (Saturn)
 - **Badge**: `LAPIS DSL • MODULAR MIXINS`
 - **Title**: Modular Traits: The gmodule Macro
 - **Subtitle**: Reusable Gameplay Mixins with Godot ClassDB & Inspector Parity
@@ -1494,7 +1494,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 39: Advanced gmodule: Composition, Hooks & Contracts
-- **Theme Palette**: `monokai` (Monokai)
+- **Theme Palette**: `saturn` (Saturn)
 - **Badge**: `LAPIS ARCHITECTURE • TRAIT COMPOSITION`
 - **Title**: Advanced gmodule: Composition, Hooks & Contracts
 - **Subtitle**: Composed Module Inheritance, Cooperative Lifecycle Chaining & Abstract Contracts
@@ -1543,7 +1543,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 40: Resource Loading: load, preload & instantiate_as [Step 1: Code]
-- **Palette**: `cross_cube` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `dreamcast` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Two-Step Preload & Untyped Load**:
   ```gdscript
   func spawn_entities() -> void:
@@ -1607,7 +1607,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 42: Gameplay Usability: Fluent Creation & Spawning
-- **Theme Palette**: `candy` (Candy)
+- **Theme Palette**: `orchard_2` (Orchard II)
 - **Badge**: `GAMEPLAY • ERGONOMIC DSL`
 - **Title**: Gameplay Usability: Fluent Creation & Spawning
 - **Subtitle**: Direct Tree Instantiation, Context Execution (with..yield), and Fluent Configuration
@@ -1705,7 +1705,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 44: Direct Space Physics: Zero-Boilerplate Raycasting [Step 1: Code]
-- **Palette**: `spaces_vista` | **Badge**: `PHYSICS • DIRECT SPACE QUERIES`
+- **Palette**: `hazard_suit` | **Badge**: `PHYSICS • DIRECT SPACE QUERIES`
 - **:circle-xmark: GDScript: Manual RayQuery Setup & Untyped Dictionaries**:
   ```gdscript
   func check_line_of_sight(target_pos: Vector2) -> void:
@@ -1767,7 +1767,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 46: Gameplay Architecture: Context-Aware Audio & Spatial Queries
-- **Theme Palette**: `spaces_8` (Spaces 8)
+- **Theme Palette**: `blue_cassette` (Blue Cassette)
 - **Badge**: `GAMEPLAY • AUDIO & SPATIAL DSL`
 - **Title**: Gameplay Architecture: Context-Aware Audio & Spatial Queries
 - **Subtitle**: Compile-Time play_sound Macro, Self-Pruning Root Players & Relative Spatial Helpers
@@ -1812,7 +1812,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 47: Gameplay Architecture: FSM, Signal Bus & Object Pooling
-- **Theme Palette**: `playbox` (Playbox)
+- **Theme Palette**: `resin_91` (Resin 91)
 - **Badge**: `GAMEPLAY • DESIGN PATTERNS`
 - **Title**: Gameplay Architecture: FSM, Signal Bus & Object Pooling
 - **Subtitle**: Value-Type Union FSM, Decoupled Signal Bus & High-Throughput Node Pools
@@ -1870,7 +1870,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 48: Ergonomics: Fluent Raycasting & Scene Helpers
-- **Theme Palette**: `spaces_vista` (Spaces Vista)
+- **Theme Palette**: `hero_of_time` (Hero of Time)
 - **Badge**: `ERGONOMICS • TREE & SPATIAL DSL`
 - **Title**: Ergonomics: Fluent Raycasting & Scene Helpers
 - **Subtitle**: Fluent Spatial Builders, Context Spawning, and CanvasItem Helpers
@@ -1923,7 +1923,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 49: Autoload Singletons: Declarative Engine Singletons (@[Autoload])
-- **Theme Palette**: `aperture` (Aperture)
+- **Theme Palette**: `vault_101` (Vault 101)
 - **Badge**: `THE LAPIS DSL • AUTOLOAD SINGLETONS`
 - **Title**: Autoload Singletons: Declarative Engine Singletons (@[Autoload])
 - **Subtitle**: Zero-Config SceneTree Mounting, Engine Singleton Registration & Type-Safe Accessors
@@ -1991,7 +1991,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 51: Signals & Events: Reactive Zen Ergonomics
-- **Theme Palette**: `spaces_vista` (Spaces Vista)
+- **Theme Palette**: `indiglo_light` (Indiglo Light)
 - **Badge**: `CRYSTAL ERGONOMICS • SIGNALS & EVENTS`
 - **Title**: Signals & Events: Reactive Zen Ergonomics
 - **Subtitle**: Declarative Signal Connections, First-Class Signal Emission, and Decoupled Systems
@@ -2038,7 +2038,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 52: Signals & Callables: String Handlers vs. The on Macro [Step 1: Code]
-- **Palette**: `spaces_vista` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `indiglo_light` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Method Sprawl & Callable Boilerplate**:
   ```gdscript
   func _ready() -> void:
@@ -2119,7 +2119,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 55: Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<)
-- **Theme Palette**: `monokai` (Monokai)
+- **Theme Palette**: `cross_cube_360` (CrossCube 360)
 - **Badge**: `LAPIS EXTRAS • HIERARCHY OPERATORS`
 - **Title**: Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<)
 - **Subtitle**: require "lapis/extras" • Path Traversal (/), Unique Nodes (%), and Chainable Tree Assembly (<<)
@@ -2164,7 +2164,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 56: Lapis Extras: Wildcard Glob Queries & Streaming Iteration (*)
-- **Theme Palette**: `cross_cube` (CrossCube)
+- **Theme Palette**: `cross_cube_360` (CrossCube 360)
 - **Badge**: `LAPIS EXTRAS • WILDCARDS & ITERATION`
 - **Title**: Lapis Extras: Wildcard Glob Queries & Streaming Iteration (*)
 - **Subtitle**: require "lapis/extras" • Wildcards (*, **), get_nodes, each_node, and GroupQuery DSL
@@ -2215,7 +2215,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 57: Lapis Extras: Scene Preload (>) & Load (>>) Pipelines [Step 1: Code]
-- **Palette**: `spaces_vista` | **Badge**: `LAPIS EXTRAS • SCENE & ASSET PIPELINES`
+- **Palette**: `phosphor_vector` | **Badge**: `LAPIS EXTRAS • SCENE & ASSET PIPELINES`
 - **:circle-xmark: GDScript: Multi-Step Instantiation Boilerplate**:
   ```gdscript
   func spawn_entities() -> void:
@@ -2284,7 +2284,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 59: Lapis Extras: Strict (>) & Loose (>>) Signal Piping [Step 1: Code]
-- **Palette**: `playbox` | **Badge**: `LAPIS EXTRAS • SIGNAL PIPELINES`
+- **Palette**: `phosphor_vector` | **Badge**: `LAPIS EXTRAS • SIGNAL PIPELINES`
 - **:circle-xmark: GDScript: Manual Signal Forwarding Boilerplate**:
   ```gdscript
   func _ready() -> void:
@@ -2362,7 +2362,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 61: GDScript Extras: The Unary ~ Operator & NodeContext
-- **Theme Palette**: `playbox` (Playbox)
+- **Theme Palette**: `black_cube` (Black Cube)
 - **Badge**: `LAPIS GD_EXTRAS • UNARY ~ OPERATOR`
 - **Title**: GDScript Extras: The Unary ~ Operator & NodeContext
 - **Subtitle**: require "lapis/gd_extras" • Context-Aware Bare Scene Queries, ~Class, and Typed Tuples
@@ -2413,7 +2413,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 62: GDScript Extras: Expression-Oriented match DSL
-- **Theme Palette**: `cross_cube_360` (CrossCube 360)
+- **Theme Palette**: `disinherited` (Samuel)
 - **Badge**: `LAPIS GD_EXTRAS • PATTERN MATCHING`
 - **Title**: GDScript Extras: Expression-Oriented match DSL
 - **Subtitle**: require "lapis/gd_extras" • Polymorphic Downcasting, Variant Unboxing, and Destructuring
@@ -2478,7 +2478,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 63: C# Extras: Compound Signal Assignment (+= and -=)
-- **Theme Palette**: `digital_guy` (DigitalGuy)
+- **Theme Palette**: `mega_shock` (Mega Shock)
 - **Badge**: `LAPIS CS_EXTRAS • EVENT OPERATORS`
 - **Title**: C# Extras: Compound Signal Assignment (+= and -=)
 - **Subtitle**: require "lapis/cs_extras" • C#-Style Event Syntax with 64-bit ObjectDB Leak Protection
@@ -2544,7 +2544,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 65: Iterators: Imperative Loops vs. Functional Zen [Step 1: Code]
-- **Palette**: `spaces_xp_royale` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `sweetie_80` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Imperative Loops & Array Mutation**:
   ```gdscript
   # Manual loop, intermediate array allocations, verbose checks
@@ -2598,7 +2598,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 67: Anonymous Functions: Callable Churn vs. Inlining [Step 1: Code]
-- **Palette**: `super_es` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `sweetie_80` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Verbose Lambdas, Callable Allocations & Churn**:
   ```gdscript
   # 1. Custom sort allocates heap Callable object
@@ -2661,7 +2661,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 69: Symbols: String Churn vs. 32-Bit IDs [Step 1: Code]
-- **Palette**: `spaces_vista` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `sweetie_80` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs**:
   ```gdscript
   # PROBLEM 1: Dictionary String Keys — Silent Null on Typos
@@ -2723,7 +2723,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 71: Nil Safety: Runtime Crashes vs. Compile-Time Enforcement [Step 1: Code]
-- **Palette**: `aperture` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `ash_of_ember` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Runtime Null Dereference**:
   ```gdscript
   func attack_target(target: Node) -> void:
@@ -2837,7 +2837,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 75: Metaprogramming: Strings vs. AST Macros [Step 1: Code]
-- **Palette**: `spaces_xp_royale` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `iwasbornintheusa` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Dictionary Sprawl & String Signals**:
   ```gdscript
   # Manual dictionary definitions for editor export hints
@@ -2889,7 +2889,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 77: Value Types: GC Thrashing vs. Stack Structs [Step 1: Code]
-- **Palette**: `spaces_11` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `gamestation_3` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing**:
   ```gdscript
   # The GDScript Trap: Every custom data packet is a heap RefCounted
@@ -3007,7 +3007,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 81: Memory Safety: Dangling Pointers vs. Protection [Step 1: Code]
-- **Palette**: `game_station_2` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `catppuccin_mocha` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: Unshielded Native C++: Dangling Pointer Crashes**:
   ```cpp
   // Combat target acquired earlier in native C++:
@@ -3068,7 +3068,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 83: Signals & Async: String Awaits vs. Typed Handles [Step 1: Code]
-- **Palette**: `aperture` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `oled_micro` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Unsafe Await & Leaked Coroutines**:
   ```gdscript
   func start_boss_cinematic() -> void:
@@ -3121,7 +3121,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 85: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 1: Code]
-- **Palette**: `spaces_95` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `oled_micro` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Dangling Timers & Node Leaks**:
   ```gdscript
   func setup_gameplay_timers() -> void:
@@ -3236,7 +3236,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 89: Concurrency: Parallel OS Threads & SceneTree Safety
-- **Theme Palette**: `entertainment_system` (Entertainment System)
+- **Theme Palette**: `pastel` (Pastel)
 - **Badge**: `CONCURRENCY ARCHITECTURE • OS THREADS & SAFETY`
 - **Title**: Concurrency: Parallel OS Threads & SceneTree Safety
 - **Subtitle**: Utilizing Multi-Core Hardware for Heavy Workloads with Safe Main-Thread Synchronization
@@ -3271,7 +3271,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 90: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 1: Code]
-- **Palette**: `spaces_97` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `datacorder_464` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Mutex Locking & SceneTree Hazard**:
   ```gdscript
   var thread: Thread
@@ -3330,7 +3330,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 92: Thread & Scope Policies
-- **Theme Palette**: `aperture` (Aperture)
+- **Theme Palette**: `silicon_indigo` (Silicon Indigo)
 - **Badge**: `CONCURRENCY SAFETY • THREAD AFFINITY`
 - **Title**: Thread & Scope Policies
 - **Subtitle**: ThreadAffinity Enforcement & Detached Graph Assembly
@@ -3371,7 +3371,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 93: Main-Thread Dispatch
-- **Theme Palette**: `spaces_vista` (Spaces Vista)
+- **Theme Palette**: `silicon_indigo` (Silicon Indigo)
 - **Badge**: `THREAD SYNCHRONIZATION • ENGINE QUEUE`
 - **Title**: Main-Thread Dispatch
 - **Subtitle**: Thread-Safe Queues & Frame Boundary Flush
@@ -3457,7 +3457,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 95: Multiplayer Testing & Lockstep Network Debugging
-- **Theme Palette**: `playbox` (Playbox)
+- **Theme Palette**: `playtoy` (PlayToy)
 - **Badge**: `MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING`
 - **Title**: Multiplayer Testing & Lockstep Network Debugging
 - **Subtitle**: Deterministic Multi-Client Simulation, Cooperative Breakpoint Lockstep & Wireshark-Style Packet Auditing
@@ -3571,7 +3571,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 98: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 1: Code]
-- **Palette**: `playbox` | **Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS`
+- **Palette**: `boom_bap_16` | **Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS`
 - **:circle-xmark: Godot C#: Mandatory Ceremony & Keyword Bloat**:
   ```csharp
   using Godot;
@@ -3652,7 +3652,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 100: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 1: Code]
-- **Palette**: `digital_guy` | **Badge**: `LANGUAGE SHOOTOUT • SAFETY & HYGIENE`
+- **Palette**: `disturbing_the_peace` | **Badge**: `LANGUAGE SHOOTOUT • SAFETY & HYGIENE`
 - **:circle-xmark: Godot C#: The ?. Operator Trap & Leaking Delegates**:
   ```csharp
   public partial class CombatHUD : Control
@@ -3739,7 +3739,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 102: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 1: Code]
-- **Palette**: `former_rain` | **Badge**: `LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY`
+- **Palette**: `twin_tower` | **Badge**: `LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY`
 - **:circle-xmark: Godot C#: P/Invoke Overhead, Boxing & GC Spikes**:
   ```csharp
   public partial class CombatRadar : Node2D
@@ -3806,7 +3806,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 104: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 1: Code]
-- **Palette**: `game_station_2` | **Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN`
+- **Palette**: `game_sprocket` | **Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN`
 - **:circle-xmark: Godot C#: Runtime Reflection & Roslyn Complexity**:
   ```csharp
   using Godot;
@@ -3879,7 +3879,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 106: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
-- **Palette**: `cross_cube_360` | **Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING`
+- **Palette**: `acorn_bbc` | **Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING`
 - **:circle-xmark: Godot C#: Platform Lockout & Zombie Assemblies**:
   ```csharp
   using Godot;
@@ -3934,7 +3934,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 108: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
-- **Palette**: `aperture` | **Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY`
+- **Palette**: `bento_pad` | **Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY`
 - **:circle-xmark: Godot C#: Task Allocations, async void, and String Soup**:
   ```csharp
   using Godot;
@@ -4007,7 +4007,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 110: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
-- **Palette**: `disinherited` | **Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS`
+- **Palette**: `ranger` | **Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS`
 - **:circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions**:
   ```csharp
   using Godot;
@@ -4083,7 +4083,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 112: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
-- **Palette**: `playbox` | **Badge**: `LANGUAGE SHOOTOUT • TESTING & ISOLATION`
+- **Palette**: `functionalist` | **Badge**: `LANGUAGE SHOOTOUT • TESTING & ISOLATION`
 - **:circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps**:
   ```csharp
   using Godot;
@@ -4176,7 +4176,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 115: Interoperability: GDScript Calling Crystal
-- **Theme Palette**: `spaces_7` (Spaces 7)
+- **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
 - **Title**: Interoperability: GDScript Calling Crystal
 - **Subtitle**: Seamless Integration with GDScript Gameplay Teams and Asset Store Addons
@@ -4222,7 +4222,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 116: Crystal Calling GDScript: Dynamic Dispatch
-- **Theme Palette**: `spaces_vista` (Spaces Vista)
+- **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
 - **Subtitle**: Rapid Script Prototyping and Dynamic GDScript Invocation via Variant Reflection
@@ -4265,7 +4265,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 117: Crystal Calling GDScript: Strongly-Typed Bindings
-- **Theme Palette**: `spaces_7` (Spaces 7)
+- **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • AUTOMATIC TYPED BINDINGS`
 - **Title**: Crystal Calling GDScript: Strongly-Typed Bindings
 - **Subtitle**: Automatic Strongly-Typed Proxies for GDScript Classes Generated via Lapis CLI
@@ -4325,7 +4325,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 119: First-Class Godot Editor Integration
-- **Theme Palette**: `spaces_11` (Spaces 11)
+- **Theme Palette**: `gamestation_portable` (GameStationPortable)
 - **Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
 - **Title**: First-Class Godot Editor Integration
 - **Subtitle**: Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync
@@ -4346,7 +4346,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 120: In-Editor Diagnostics: Real-Time Static Validator & LSP
-- **Theme Palette**: `spaces_10` (Spaces 10)
+- **Theme Palette**: `gamestation_portable` (GameStationPortable)
 - **Badge**: `EDITOR EXPERIENCE • DIAGNOSTICS & LSP`
 - **Title**: In-Editor Diagnostics: Real-Time Static Validator & LSP
 - **Subtitle**: Sub-Millisecond Syntax Squiggles, Crystalline LSP Integration & Starter Templates
@@ -4426,7 +4426,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 123: Low-Level Binary Forensics: radare2 vs. LLDB
-- **Theme Palette**: `game_station_2` (GameStation2)
+- **Theme Palette**: `trash80` (Trash80)
 - **Badge**: `SYSTEMS FORENSICS • RADARE2`
 - **Title**: Low-Level Binary Forensics: radare2 vs. LLDB
 - **Subtitle**: Eliminating Toolchain Bloat, Disassembly Mapping & Crash Forensics
@@ -4498,7 +4498,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 125: Editor Testing: Lapis::Test::EditorDriver
-- **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
+- **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `TOOLING • HEADLESS EDITOR TESTING`
 - **Title**: Editor Testing: Lapis::Test::EditorDriver
 - **Subtitle**: Headless In-Editor Automation, @tool In-Process Verification & Live Reload Stress-Testing
@@ -4540,7 +4540,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 126: In-Editor Tool Testing & Standalone TUI Runner
-- **Theme Palette**: `spaces_31` (Spaces 3.1)
+- **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
 - **Subtitle**: Real-Time Terminal User Interface for 45+ Modular Engine Test Suites
@@ -4573,7 +4573,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 128: Quantitative Benchmarks: Crystal vs GDScript
-- **Theme Palette**: `spaces_11` (Spaces 11)
+- **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
 - **Subtitle**: Real-World Performance Comparison on Common Gameplay Workloads
@@ -4590,7 +4590,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 129: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
-- **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
+- **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • MULTI-LANGUAGE`
 - **Title**: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
 - **Subtitle**: Canonical Microbenchmarks Measuring Native GDExtension Performance vs Bytecode
@@ -4608,7 +4608,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 130: Native Tier Shootout: Crystal vs C++, Rust & C#
-- **Theme Palette**: `spaces_vista` (Spaces Vista)
+- **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • NATIVE TIER`
 - **Title**: Native Tier Shootout: Crystal vs C++, Rust & C#
 - **Subtitle**: Pure Ahead-of-Time & JIT Close-Up Comparison (GDScript Baseline Removed)
@@ -4642,7 +4642,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 132: Authoring Custom Benchmarks: Lapis::Benchmark
-- **Theme Palette**: `spaces_11` (Spaces 11)
+- **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • CUSTOM BENCHMARKING`
 - **Title**: Authoring Custom Benchmarks: Lapis::Benchmark
 - **Subtitle**: In-Engine Microbenchmarking DSL, Multi-Target Comparisons & Automated HTML Reports
@@ -4683,7 +4683,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 133: Automated Benchmark TUI: lapis benchmarks
-- **Theme Palette**: `spaces_11` (Spaces 11)
+- **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • BENCHMARK TUI`
 - **Title**: Automated Benchmark TUI: lapis benchmarks
 - **Subtitle**: Real-Time Double-Buffered ANSI Dashboard & Comparative Speedup Ratios
@@ -4806,7 +4806,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 ---
 
 ### Slide 138: The Packaging System: Turnkey Distribution
-- **Theme Palette**: `spaces_xp_royale` (Spaces XP Royale)
+- **Theme Palette**: `a64_pal` (A64 PAL)
 - **Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
 - **Subtitle**: Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers

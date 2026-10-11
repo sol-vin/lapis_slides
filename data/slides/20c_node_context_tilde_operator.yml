@@ -4,7 +4,7 @@ title: 'GDScript Extras: The Unary ~ Operator & NodeContext'
 subtitle: 'require "lapis/gd_extras" • Context-Aware Bare Scene Queries, ~Class, and Typed Tuples'
 badge: LAPIS GD_EXTRAS • UNARY ~ OPERATOR
 badge_color: purple
-palette: playbox
+palette: black_cube
 layout: two-column-layout
 ratio: 1:1
 left:

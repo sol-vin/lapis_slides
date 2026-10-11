@@ -4,7 +4,7 @@ title: 'Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<)'
 subtitle: 'require "lapis/extras" • Path Traversal (/), Unique Nodes (%), and Chainable Tree Assembly (<<)'
 badge: LAPIS EXTRAS • HIERARCHY OPERATORS
 badge_color: cyan
-palette: monokai
+palette: cross_cube_360
 layout: two-column-layout
 ratio: 1:1
 left:

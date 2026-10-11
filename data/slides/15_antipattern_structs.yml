@@ -4,7 +4,7 @@ title: 'Value Types: GC Thrashing vs. Stack Structs'
 subtitle: RefCounted Heap Pointers vs. Contiguous Cache-Friendly Structs
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
-palette: spaces_11
+palette: gamestation_3
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing'

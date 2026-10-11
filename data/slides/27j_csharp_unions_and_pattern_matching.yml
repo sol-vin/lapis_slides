@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching'
 subtitle: Unsound Object Casting & Simulated Unions vs First-Class Union Types
 badge: LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS
 badge_color: purple
-palette: disinherited
+palette: ranger
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions'

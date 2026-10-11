@@ -4,7 +4,7 @@ title: 'Gameplay Timers: Cancellable Coroutines & Timer Handles'
 subtitle: Non-Blocking Intervals, Node-Scoped Lifecycle & Testable Time Stepping
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: amber
-palette: spaces_95
+palette: oled_micro
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: GDScript: Dangling Timers & Node Leaks'

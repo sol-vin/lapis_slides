@@ -4,7 +4,7 @@ title: 'Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection'
 subtitle: Heavy Roslyn Generators & Fragile Runtime Reflection vs Native AST Macros
 badge: LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN
 badge_color: purple
-palette: game_station_2
+palette: game_sprocket
 layout: code-comparison-layout
 gdscript:
   title: ':circle-xmark: Godot C#: Runtime Reflection & Roslyn Complexity'

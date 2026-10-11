@@ -4,7 +4,7 @@ title: 'The Crystal Syntax "Oddities"'
 subtitle: Why Systems Programmers Scratch Their Heads & Game Developers Rejoice
 badge: CRYSTAL ERGONOMICS • EXPRESSION ARCHITECTURE
 badge_color: purple
-palette: aperture
+palette: yellow_tab
 layout: faq
 questions:
   - q: "Where is the return statement?"

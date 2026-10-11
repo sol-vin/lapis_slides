@@ -4,7 +4,7 @@ title: 'Live Demonstration: End-to-End Workflow'
 subtitle: From Zero-Config Bootstrapping & Live Node Editing to Full-Scale Architecture & Standalone Release
 badge: LIVE DEMONSTRATION • 4-STEP WORKFLOW
 badge_color: cyan
-palette: spaces_10
+palette: pico_8
 layout: demo-roadmap-layout
 steps:
   - phase: 'STEP 1 • BOOTSTRAP'

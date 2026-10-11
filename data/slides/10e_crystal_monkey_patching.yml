@@ -4,7 +4,7 @@ title: 'Open Classes: Static Monkey Patching'
 subtitle: Re-opening Types & Built-ins with LLVM Inlining & Zero Load-Order Race Conditions
 badge: CRYSTAL METAPROGRAMMING • OPEN CLASSES
 badge_color: cyan
-palette: monokai
+palette: vampire_count
 layout: two-column-layout
 ratio: 1:1
 left:

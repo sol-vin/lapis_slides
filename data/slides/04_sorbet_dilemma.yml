@@ -4,7 +4,7 @@ title: 'The Rise & Fall of Dynamic Ruby'
 subtitle: From Developer Joy to the Enterprise Scale Wall
 badge: ARCHITECTURAL EVOLUTION • TIMELINE
 badge_color: cyan
-palette: spaces_vista
+palette: operator_1
 layout: timeline-layout
 cards:
 - year: "1995-2012"

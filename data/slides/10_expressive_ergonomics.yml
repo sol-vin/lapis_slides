@@ -4,7 +4,7 @@ title: 'Expressive Ergonomics: High-Level Language Primitives'
 subtitle: Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax
 badge: CRYSTAL ERGONOMICS • EXPRESSION
 badge_color: cyan
-palette: playbox
+palette: atomic_purple
 layout: two-column-layout
 ratio: 3:2
 left:
