@@ -279,9 +279,9 @@ Theme: `sol.vin` | Total Slides: 142
   if          then        elsif       else
   unless      case        when
   
-  # Loops & Iteration
-  while       until       for         in
-  do          break       next        redo        retry
+  # Loops & Iteration (No 'for' loop needed!)
+  while       until       do          break
+  next        redo        retry
   
   # Execution Flow & Blocks
   yield       return      defined?
@@ -804,7 +804,7 @@ Theme: `sol.vin` | Total Slides: 142
 
 **Presenter Notes**:
 > When programmers coming from C, C++, Java, C#, Go, or Python learn Crystal, one of their first questions is: 'Where is the for loop?'
-> While Crystal technically supports 'for ... in', idiomatic Crystal code uses internal iteration via blocks.
+> Unlike languages that rely on a dedicated loop keyword, Crystal does not even have a 'for' keyword in its grammar—iteration is handled entirely via internal blocks and the Enumerable module.
 > Why? First, scope leakage: in languages like Python, the loop variable leaks into the surrounding function after the loop ends. In Crystal, blocks introduce a strict lexical closure scope—block parameters (|enemy|) vanish the moment the block terminates.
 > Second, internal iteration means the collection controls its own traversal via the 'each' method, eliminating manual index variables and off-by-one errors.
 > Third, numbers and ranges are first-class: instead of 'for (int i = 0; i < 5; i++)', you write '5.times { spawn_skeleton! }' or '1.upto(10) { |lvl| ... }'.

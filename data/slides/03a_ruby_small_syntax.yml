@@ -24,9 +24,9 @@ left:
     if          then        elsif       else
     unless      case        when
 
-    # Loops & Iteration
-    while       until       for         in
-    do          break       next        redo        retry
+    # Loops & Iteration (No 'for' loop needed!)
+    while       until       do          break
+    next        redo        retry
 
     # Execution Flow & Blocks
     yield       return      defined?
