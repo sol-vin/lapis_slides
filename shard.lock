@@ -1,0 +1,14 @@
+version: 2.0
+shards:
+  celestine:
+    git: https://github.com/celestinecr/celestine.git
+    version: 0.9.2+git.commit.273fe7e7db1d9843ceeca07b279a544254b4a5fa
+
+  opal:
+    git: https://github.com/sol-vin/opal.git
+    version: 0.1.59+git.commit.977a1c38fdfc4a30177fb6839c1b812475c9b7be
+
+  sunstone:
+    git: https://github.com/sol-vin/sunstone.git
+    version: 0.1.35+git.commit.11dd0b4fc7f6c3873d2a6bb020151e167cbb2a29
+
