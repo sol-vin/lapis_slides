@@ -12,34 +12,23 @@ left:
   title: scene_tree_globs.cr — Wildcards & Streaming Queries
   tag: Crystal (Lapis)
   lang: crystal
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
     require "lapis/extras"
 
     node CombatArena < Node2D do
       def _ready : Void
-        # 1. Multi-node wildcard glob query (*) & get_nodes:
+        # 1. Multi-node wildcard glob query (*) & globstar (**):
         hitboxes = self * {"Enemies/*/Hitbox", Area2D}
-        targets  = self.get_nodes("Enemies/*/Hitbox", Area2D)
+        spawns   = self.get_nodes("Spawns/**", Marker2D)
 
-        # 2. Recursive globstar query (**):
-        spawns = self.get_nodes("Spawns/**", Marker2D)
-
-        # 3. Streaming receiver-scoped iteration (zero intermediate array!):
+        # 2. Streaming receiver-scoped iteration (0 intermediate array!):
         self.each_node("Enemies/*", Enemy) do
-          alert! # Direct method call on Enemy!
+          alert! # Direct method call on Enemy context
         end
 
-        # 4. Regex child search operator:
-        fx_nodes = self * /^FX_Spark_\d+$/
-
-        # 5. Fluent GroupQuery DSL:
+        # 3. Fluent typed GroupQuery DSL:
         group(:enemies).each(as: Enemy) { |e| e.alert! }
-        boss = group(:boss).first(as: Boss)
-        group(:enemies).call("alert", global_position)
-
-        # 6. Direct streaming cleanup and manipulation:
-        self.each_node("Bullets/*", &.queue_free)
       end
     end
 right:
@@ -47,11 +36,10 @@ right:
   title: Ergonomic Hierarchy Query Engine
   color: cyan
   items:
-    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable wildcard globbing and streaming query methods on scene nodes.'
-    - '<strong>Wildcard &amp; Globstar Queries (<code>*</code>):</strong> <code>self * {"pattern", Type}</code> and <code>get_nodes</code> support single-level <code>*</code> and recursive globstars <code>**</code>, returning <code>Array(T)</code>.'
-    - '<strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> traverses subtrees without allocating intermediate collections.'
-    - '<strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides chainable <code>.each(as: Type)</code>, <code>.to_a(as: Type)</code>, <code>.first</code>, <code>.first!</code>, and broadcast <code>.call</code>.'
-    - '<strong>Receiver Scoping &amp; Block Shorthands:</strong> <code>each_node</code> yields via <code>with node yield node</code>, supporting receiver-scoped blocks (<code>do alert! end</code>) and proc shorthands (<code>&amp;.queue_free</code>).'
+    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable wildcard globbing and streaming query methods.'
+    - '<strong>Wildcard & Globstar (<code>*</code>):</strong> <code>self * {"pattern", Type}</code> searches single and recursive subtrees returning <code>Array(T)</code>.'
+    - '<strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> traverses descendants without allocating intermediate arrays.'
+    - '<strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides typed <code>.each(as: Type)</code> and broadcast <code>.call</code> methods.'
 notes: |
   Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
   With 'require "lapis/extras"', Lapis introduces an expressive scene tree query engine: First, intuitive shell-like patterns query immediate wildcards like 'self * {"Enemies/*/Hitbox", Area2D}' or recursive globstars like 'get_nodes("Spawns/**", Marker2D)'.

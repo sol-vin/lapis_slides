@@ -12,7 +12,7 @@ left:
   title: bare_node_context_access.cr
   tag: Crystal (Lapis)
   lang: crystal
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
     require "lapis/gd_extras"
 
@@ -22,24 +22,12 @@ left:
       onready hud : CanvasLayer = ~"%PlayerHUD"
 
       def _ready : Void
-        # 2. Bare path lookups via active NodeContext (GDScript $ & % parity):
-        cam = ~"$CameraRig/Camera2D" # => Node (or NodeNotFoundError)
-        hud = ~"%PlayerHUD"          # => Scene Unique Node
-        
-        # 3. Typed scene queries with ~Class (up-casts & checks alive):
-        sprite = ~Sprite2D           # Searches tree, up-casts, raises if nil
-        if shield = ~Shield?         # Safe nilable lookup (Shield? or nil)
-          shield.absorb_hit(10)
-        end
+        # 2. Typed scene query with ~Class (searches & casts):
+        sprite = ~Sprite2D
 
-        # 4. Typed Node Query Tuple (~{"path", Type}):
+        # 3. Typed query tuple (~{"path", Type}):
         sword     = ~{"$WeaponMount/Sword", Sword}
-        maybe_gun = ~{"$Weapons/Blaster", Blaster?} # Safe nilable tuple!
-
-        # 5. External blocks scope via with_context:
-        target.with_context do
-          mesh = ~MeshInstance3D?    # Safe lookup on target
-        end
+        maybe_gun = ~{"$Weapons/Blaster", Blaster?} # Safe nilable!
       end
     end
 right:
@@ -48,11 +36,10 @@ right:
   color: purple
   compact: true
   items:
-    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/gd_extras"</code> to enable unary <code>~</code> queries and GDScript-mimicking syntax.'
-    - '<strong>Active Lifecycle Context:</strong> Every Godot callback (<code>_ready</code>, <code>_process</code>, <code>_input</code>) automatically scopes <code>NodeContext.current = self</code> via thread-local storage.'
-    - '<strong>Strict &amp; Nilable Class Queries:</strong> <code>~Sprite2D</code> searches and casts to concrete node types; <code>~Shield?</code> returns <code>Shield?</code> without raising.'
-    - '<strong>Typed Node Query Tuples:</strong> <code>~{"$Mount/Sword", Sword}</code> combines path routing, type casting, and optional <code>Type?</code> nil-safety in one expressive tuple.'
-    - '<strong>Negligible Context Overhead (~0.4 ns):</strong> Backed by <code>@[ThreadLocal] NodeContext.current</code>, adding practically zero overhead over explicit <code>self</code>.'
+    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/gd_extras"</code> to enable unary <code>~</code> queries and syntax.'
+    - '<strong>Active Lifecycle Context:</strong> Godot callbacks automatically scope <code>NodeContext.current = self</code> via thread-local storage.'
+    - '<strong>Strict & Nilable Class Queries:</strong> <code>~Sprite2D</code> searches and casts concrete nodes; <code>~Shield?</code> returns <code>Shield?</code>.'
+    - '<strong>Typed Node Query Tuples:</strong> <code>~{"$Mount/Sword", Sword}</code> combines path routing, type casting, and nil-safety.'
 notes: |
   In GDScript, accessing nodes is often concise because of $Node syntax, but it's untyped and requires runtime casting. In Lapis, 'require "lapis/gd_extras"' introduces the unary tilde operator (~) backed by an active NodeContext.
   Every Godot lifecycle callback—such as _ready, _process, _physics_process, and _input—automatically scopes NodeContext.current to the executing node using thread-local storage (~0.4 ns lookup).

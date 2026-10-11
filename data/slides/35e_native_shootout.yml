@@ -78,10 +78,10 @@ right:
   title: Architecture & Allocation Tradeoffs
   color: cyan
   items:
-    - '<strong>Compute Equivalence:</strong> On pure algorithmic loops (Mandelbrot, N-Body), Crystal, C++, and Rust produce virtually identical machine code (~21.6ms vs 21.9ms vs 24.3ms).'
-    - '<strong>Boehm GC vs Generational GC:</strong> On extreme pointer churn (BinaryTrees), C#''s generational GC leads (46.4ms), while Crystal''s conservative Boehm GC (129.5ms) remains within striking distance of manual C++ arena allocators (101.3ms).'
-    - '<strong>Compilation & Binary Footprint:</strong> Crystal compiles release DLLs in <strong>3.2s</strong> producing a <strong>474 KB standalone DLL</strong>, compared to C++ (2,860 KB) and C# (~80 MB CLR runtime dependency).'
-    - '<strong>Zero JIT Warmup or FFI Cost:</strong> Unlike C# which requires JIT compilation and P/Invoke marshalling, Crystal links directly against GDExtension via pure C-ABI entrypoints.'
+    - '<strong>Compute Equivalence:</strong> On pure algorithmic loops, Crystal, C++, and Rust produce near-identical machine code (~22ms).'
+    - '<strong>GC Profile:</strong> On extreme tree churn, C# nursery GC leads (46ms), while Crystal Boehm GC (129ms) remains close to C++ arenas (101ms).'
+    - '<strong>Binary Footprint:</strong> Crystal compiles in <strong>3.2s</strong> to a <strong>474 KB standalone DLL</strong>, vs C# (~80 MB CLR dependency).'
+    - '<strong>Zero JIT or FFI Penalty:</strong> Crystal links directly via C-ABI entrypoints without JIT warmups or P/Invoke marshalling.'
 notes: |
   Removing the GDScript baseline allows us to zoom directly into the sub-150 millisecond race between the four native compiled languages.
   Notice how tight the competition is: on Mandelbrot and N-Body physics, Crystal is neck-and-neck with C++ and Rust within single-digit milliseconds. On BinaryTrees, we see the trade-offs of garbage collection strategies: C#'s generational GC excels at short-lived nursery allocations, while Crystal's Boehm GC performs reliably with predictable frame times and zero multi-gigabyte runtime dependencies.

@@ -12,49 +12,30 @@ left:
   title: game_manager.cr — Declarative Autoload Singletons
   tag: Crystal (Lapis)
   lang: crystal
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
-    require "lapis"
-
-    # 1. Declarative Autoload Node:
     @[Autoload]
     node GameManager < Node do
       property score : Int32 = 0
-      property current_stage : String = "dungeon_01"
-
-      def add_score(pts : Int32) : Void
-        @score += pts
-      end
+      def add_score(pts : Int32) : Void; @score += pts; end
     end
 
-    # 2. Type-Safe Access Anywhere in Crystal:
+    # 1. Type-safe instance access anywhere in Crystal:
     GameManager.instance.add_score(100)
 
-    # 3. Nilable Check (before SceneTree boot):
+    # 2. Nilable check (safe before SceneTree boot):
     if gm = GameManager.instance?
       Godot.print("Score: #{gm.score}")
-    end
-
-    # 4. Custom Configuration (Name, Singleton, Mount):
-    @[Autoload(name: "AudioService", singleton: false)]
-    node CustomAudioManager < AudioStreamPlayer do
-    end
-
-    # 5. In-Body Macro Directive Parity:
-    node InventoryManager < Node do
-      autoload name: "Inventory", singleton: true, mount_tree: true
     end
 right:
   type: card
   title: Autoload Singleton Invariants & Comparison
   color: cyan
   items:
-    - '<strong>GDScript Anti-Pattern:</strong> Requires manually editing <code>project.godot</code> under <code>[autoload]</code>, relying on untyped global identifiers or string paths (<code>get_node("/root/GameManager")</code>).'
-    - '<strong>C# / Native Boilerplate:</strong> Demands verbose <code>GetNode&lt;GameManager&gt;("/root/GameManager")</code> casting, manual static instance caching, and brittle DLL unload cleanup.'
-    - '<strong>Zero-Config Root Mounting:</strong> <code>Godot::AutoloadManager</code> automatically attaches instances to <code>/root/&lt;Name&gt;</code>, participating in <code>_process</code>, physics, and input loops.'
-    - '<strong>Engine Singleton Registration:</strong> Registers with <code>Godot.engine.register_singleton</code> by default, giving GDScript instant access via <code>Engine.get_singleton("GameManager")</code>.'
-    - '<strong>Type-Safe Class Accessors:</strong> Synthesizes strict <code>.instance</code> (raises if unmounted) and safe <code>.instance?</code> accessors with zero dictionary lookup overhead.'
-    - '<strong>Transactional Hot-Reload Safety:</strong> Automatically unparents nodes and unregisters singletons during live reloads, eliminating dangling pointers and Windows DLL lockouts.'
+    - '<strong>Zero-Config Root Mounting:</strong> <code>@[Autoload]</code> attaches instances directly to <code>/root/GameManager</code> with zero <code>project.godot</code> edits.'
+    - '<strong>Engine Singleton Registration:</strong> Registers in <code>Godot.engine</code>, giving GDScript access via <code>Engine.get_singleton</code>.'
+    - '<strong>Type-Safe Class Accessors:</strong> Synthesizes strict <code>.instance</code> and nilable <code>.instance?</code> with zero dictionary lookup overhead.'
+    - '<strong>Hot-Reload Safe:</strong> Automatically unparents nodes and clears singletons during live reloads, eliminating dangling pointers.'
 notes: |
   In standard Godot development, configuring singletons is notoriously fragmented. In GDScript, you have to open Project Settings, register an autoload script in project.godot, and access it as a dynamic global without compile-time type safety. In Godot C# or C++, you have to manually traverse the scene tree with GetNode("/root/..."), maintain your own static instance pointers, and write defensive teardown code so engine reloads don't crash.
   Lapis unifies this entire workflow with a single declarative annotation: @[Autoload].

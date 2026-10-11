@@ -10,62 +10,50 @@ gdscript:
   title: ':circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing'
   lang: gdscript
   tag: GDScript
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
-    # The GDScript Trap: Every custom data packet is a heap RefCounted
     class_name CombatEvent extends RefCounted:
         var damage: float; var element: int; var crit: bool
         func _init(d: float, e: int, c: bool):
             damage = d; element = e; crit = c
 
-    # In a bullet-hell, horde survivor, or particle simulation:
+    # 10,000 separate heap mallocs + atomic refcount updates:
     var events: Array[CombatEvent] = []
+    for e in enemies:
+        events.append(CombatEvent.new(45.0, 1, true))
 
-    func process_combat_batch(enemies: Array[Node3D]) -> void:
-        for e in enemies:
-            # 10,000 separate heap mallocs + atomic refcount updates:
-            events.append(CombatEvent.new(45.0, 1, true))
-
-        # Cache disaster: Array of 10,000 pointers scattered across RAM
-        for evt in events:
-            apply_damage(evt.damage) # 10,000 pointer chases -> L1 misses!
-
-        events.clear() # Mass deallocation triggers GC/allocator stutters!
+    # Cache disaster: Array of 10,000 pointers scattered in RAM
+    for evt in events:
+        apply_damage(evt.damage) # 10,000 pointer chases!
+    events.clear() # Mass deallocation triggers GC stutter
   points:
-  - <strong>Heap Thrashing for Ephemeral Data:</strong> 10,000 events require 10,000 separate <code>malloc</code> calls and atomic refcount modifications.
-  - <strong>Pointer Indirection & Cache Misses:</strong> <code>Array[CombatEvent]</code> stores 64-bit pointers scattered across RAM, thrashing CPU L1/L2 cache lines.
-  - <strong>Deallocation Frame Stutters:</strong> Destroying thousands of <code>RefCounted</code> instances per frame spikes frame times and causes GC micro-freezes.
+    - '<strong>Heap Thrashing for Ephemeral Data:</strong> 10,000 events require 10,000 individual <code>malloc</code> calls and atomic refcount updates.'
+    - '<strong>Pointer Chasing & Cache Misses:</strong> <code>Array[CombatEvent]</code> stores scattered 64-bit pointers, thrashing CPU L1/L2 caches.'
+    - '<strong>Deallocation Frame Stutters:</strong> Bulk disposal of thousands of <code>RefCounted</code> instances causes GC micro-freezes.'
 crystal:
   title: ':sparkles: Crystal: CPU Register Value Passing & Flat Contiguous Buffers'
   lang: crystal
   tag: Crystal (Lapis)
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
-    # Stack-allocated value type: exactly 12 bytes, 0 pointer indirection!
     struct CombatEvent
-      getter damage : Float32
-      getter element : ElementType
-      getter? critical : Bool
-
+      getter damage : Float32, element : ElementType, critical : Bool
       def initialize(@damage, @element, @critical = false); end
     end
 
-    # 1. Ephemeral event passed via CPU registers/stack — 0 heap bytes!
+    # 1. Ephemeral event in CPU registers: 0 heap allocations!
     def apply_damage(event : CombatEvent) : Void
-      total = event.critical? ? event.damage * 2.0_f32 : event.damage
-      @health -= total # Pure inlined math, 0 pointers, 0 GC tracking
+      @health -= event.critical? ? event.damage * 2.0_f32 : event.damage
     end
 
     # 2. 10,000 structs inlined into ONE flat 120 KB buffer:
     events = Array(CombatEvent).new(10_000)
     10_000.times { events << CombatEvent.new(45.0_f32, ElementType::Fire, true) }
-
-    # 3. Cache-friendly contiguous memory traversal:
-    events.each { |evt| apply_damage(evt) } # Linear memory sweep
+    events.each { |evt| apply_damage(evt) } # Linear cache sweep!
   points:
-  - <strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> by value copies it directly in CPU registers or on the stack with 0 heap allocations and 0 GC tracking.
-  - <strong>Contiguous Cache Line Saturation:</strong> <code>Array(CombatEvent)</code> embeds raw structs inline. 10,000 items fit in a single 120 KB buffer with zero pointer indirection.
-  - <strong>Cache Locality & Vectorization:</strong> Flat contiguous struct arrays avoid pointer chasing, maximizing cache line utilization and enabling LLVM loop optimizations.
+    - '<strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> copies directly in CPU registers or on the stack with 0 heap bytes.'
+    - '<strong>Contiguous Cache Line Saturation:</strong> <code>Array(CombatEvent)</code> embeds structs inline into a single 120 KB buffer.'
+    - '<strong>Zero Pointer Dereferencing:</strong> Flat contiguous memory maximizes CPU cache line hits and unlocks LLVM auto-vectorization.'
 takeaway:
   badge: SYSTEMS SPEED • CACHE LOCALITY
   text: Stack-allocated structs eliminate thousands of heap allocations per frame, delivering bare-metal C cache locality with elegant object syntax.

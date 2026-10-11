@@ -12,44 +12,27 @@ left:
   title: ruby_keywords.rb — The ~40 Core Keywords
   tag: Ruby
   lang: ruby
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
-    # Ruby's Entire Reserved Keyword Grammar (~41 Words):
-
-    # Definitions & Scope
-    class       module      def         end
-    self        super       alias       undef
-
-    # Control Flow & Branching
-    if          then        elsif       else
-    unless      case        when
-
-    # Loops & Iteration (No 'for' loop needed!)
-    while       until       do          break
-    next        redo        retry
-
-    # Execution Flow & Blocks
-    yield       return      defined?
-
-    # Exception Handling
-    begin       rescue      ensure
-
-    # Literals & Boolean Logic
-    true        false       nil
-    and         or          not
-
-    # Special Scope & File Tokens
-    BEGIN       END         __FILE__    __LINE__    __ENCODING__
+    # Ruby's Core Reserved Grammar (~41 Keywords):
+    class     module    def       end
+    self      super     alias     undef
+    if        then      elsif     else
+    unless    case      when      return
+    while     until     do        break
+    next      redo      retry     yield
+    begin     rescue    ensure    defined?
+    true      false     nil       and/or
+    BEGIN     END       __FILE__  __LINE__
 right:
   type: card
   title: The Postage-Stamp Advantage
   color: purple
   items:
-    - '<strong>Fits on a Postage Stamp:</strong> While C++ and C# continually bloat their grammars with 80+ keywords, Ruby''s core grammar famously fits on a postage stamp (~40 keywords).'
-    - '<strong>Methods Over Keywords:</strong> Features like properties (<code>attr_accessor</code>), visibility (<code>private</code>), and mixins (<code>include</code>) are plain methods, not compiler grammar.'
-    - '<strong>Blocks as Universal Primitives:</strong> A single, universal construct—the block (<code>do...end</code>)—powers iteration, resource safety (<code>File.open</code>), and rich DSLs.'
-    - '<strong>Zero Syntax Bloat:</strong> Ecosystems like Rails, RSpec, and Sinatra look like dedicated domain languages, yet require zero new syntax rules in the compiler.'
-    - '<strong>Elegance Through Restraint:</strong> Rather than accumulating specialized syntactic sugar, a compact set of orthogonal primitives yields maximum expressive freedom.'
+    - '<strong>Fits on a Postage Stamp:</strong> Unlike C++ or C# with 80+ keywords, Ruby’s grammar fits on a single card (~40 words).'
+    - '<strong>Methods Over Keywords:</strong> Properties (<code>attr_accessor</code>) and access control (<code>private</code>) are plain methods.'
+    - '<strong>Blocks as Universal Primitives:</strong> A single construct (<code>do...end</code>) powers loops, resource guards, and DSLs.'
+    - '<strong>Zero Syntax Bloat:</strong> Expressive frameworks (Rails, RSpec, Lapis) require zero new parser grammar rules.'
 notes: |
   In computer science lore, Alan Kay famously observed that Smalltalk was so elegant that its entire grammar could fit on a postcard. Matz brought this profound insight to Ruby: you do not need 80 or 100 keywords to build a powerful programming language.
   In fact, adding keywords often restricts what developers can do. In C#, Java, or C++, if you want properties, asynchronous tasks, or access control, the language committee must invent new keywords and syntax rules.

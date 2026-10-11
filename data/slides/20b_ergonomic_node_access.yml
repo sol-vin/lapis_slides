@@ -12,30 +12,21 @@ left:
   title: typed_node_subscripts.cr
   tag: Crystal
   lang: crystal
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
     node PlayerController < CharacterBody2D do
-      # 1. Declarative onready node caching (GDScript @onready parity):
+      # 1. Declarative onready node caching:
       onready camera : Camera2D = "CameraRig/Camera2D"
       onready hud : CanvasLayer = "%PlayerHUD"
-      unique_node score_label : Label = "ScoreLabel"
-      onready weapon : Weapon = "WeaponMount/Sword"
-      onready sprite : Sprite2D # Infers child "Sprite2D" from name!
 
       def _ready : Void
         # 2. Type-inferred child lookup (self[Class] & self[Class]?):
-        anim  = self[AnimationPlayer]              # Inferred lookup & cast
-        light = self[PointLight2D]?                # Safe nilable (no raise!)
+        anim  = self[AnimationPlayer] # Inferred lookup & cast
+        light = self[PointLight2D]?   # Safe nilable lookup
 
-        # 3. Typed path subscripts (self["path", Class]):
-        blaster = self["Weapons/Blaster", Node3D]? # Safe nilable path lookup
-        unique  = self["%PlayerHUD", CanvasLayer]  # Scene unique % lookup
-        marker  = self["Visuals/Marker2D", Marker2D]
-
-        # 4. Standard path lookup with compile-time nil branching:
-        if target = self["TargetNode"]?
-          Godot.print("Found target: #{target.name}")
-        end
+        # 3. Typed path subscripts with scene-unique % support:
+        blaster = self["Weapons/Blaster", Node3D]?
+        hud_ui  = self["%PlayerHUD", CanvasLayer]
       end
     end
 right:
@@ -43,11 +34,10 @@ right:
   title: Core Subscripts & Lazy Caching
   color: cyan
   items:
-    - '<strong>Declarative <code>onready</code> Macro:</strong> <code>onready camera : Camera2D = "path"</code> lazily caches, types, and validates child nodes during <code>_ready</code> with zero boilerplate.'
-    - '<strong>Type-Inferred Child Subscript:</strong> <code>self[Sprite2D]</code> looks up child nodes matching the class name and returns a concrete, typed instance without manual casting.'
-    - '<strong>Typed Path Indexers (<code>Node#[]</code>):</strong> <code>self["path", T]</code> provides type-safe path queries for deep children and scene-unique nodes (<code>self["%HUD", CanvasLayer]</code>).'
-    - '<strong>Safe Downcasting &amp; Nil Checks (<code>[]?</code>):</strong> <code>self["path", T]?</code> and <code>self[T]?</code> return <code>T?</code> (or <code>nil</code> if absent), enabling sound compile-time nil safety without runtime crashes.'
-    - '<strong>Dead-Pointer Armor:</strong> Every subscript lookup verifies instance survival against Godot''s 64-bit ObjectDB table via <code>#check_alive!</code>.'
+    - '<strong>Declarative <code>onready</code> Macro:</strong> Lazily caches, types, and validates child nodes during <code>_ready</code>.'
+    - '<strong>Type-Inferred Child Subscript:</strong> <code>self[Sprite2D]</code> looks up matching children without manual casting.'
+    - '<strong>Typed Path Indexers (<code>Node#[]</code>):</strong> <code>self["path", T]</code> queries deep children and unique nodes (<code>%HUD</code>).'
+    - '<strong>Safe Downcasting (<code>[]?</code>):</strong> <code>self["path", T]?</code> returns <code>T?</code> on missing nodes, avoiding crashes.'
 notes: |
   One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or untyped $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class subscript ergonomics.
   Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. It can even infer the node name from the property name itself.

@@ -12,24 +12,18 @@ hero_feature:
   color: amber
   lang: crystal
   code: |
-    # Lapis 4.8 StatePreserver: Transactional Hot-Reload
     node PlayerController < CharacterBody3D do
-      # Phase 1 & 2: Pre-Flight Scan & Metadata Quarantine
-      @[Export]
-      property move_speed : Float32 = 8.5_f32 # Live Inspector tweak: 12.0
-      @[Export]
-      property inventory : Array(Item) = []  # Live runtime state
+      # Phases 1-2: Pre-Flight Scan & Quarantine
+      @[Export] property move_speed : Float32 = 8.5_f32 # Live tweak: 12.0
+      @[Export] property inventory : Array(Item) = []   # Live state
 
-      # Phase 3 & 4: Shadow DLL Swap & Schema Drift (Int32 -> Int64)
-      @[Export]
-      property score : Int64 = 0_i64         # Coerced from Int32
-      @[Export]
-      property mana : Int32 = 100            # Added in new DLL
+      # Phases 3-4: Shadow DLL Swap & Schema Drift
+      @[Export] property score : Int64 = 0_i64          # Coerced from Int32
+      @[Export] property mana : Int32 = 100             # New DLL addition
 
-      # Phase 5 & 6: Silent Hydration & Verification Hook
+      # Phases 5-6: Silent Hydration & Verification
       def _on_hot_reloaded : Void
         Godot.print("Restored: #{@move_speed}m/s, #{@inventory.size} items")
-        # Dead pointers to deleted vtables asserted ZERO
       end
     end
   desc: "Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved."
@@ -38,20 +32,20 @@ features:
     badge: "PRE-RELOAD"
     color: "amber"
     items:
-      - "<strong>01 Pre-Flight:</strong> Recursively traverses SceneTree, maps active GDExtension instances, and validates compiler locks."
-      - "<strong>02 Metadata Quarantine:</strong> Serializes live inspector edits and runtime collections into Engine metadata buffer before unload."
+      - "<strong>01 Pre-Flight:</strong> Traverses SceneTree and maps active GDExtension node instances."
+      - "<strong>02 Quarantine:</strong> Serializes live inspector edits into Engine metadata buffers before unload."
   - title: "Phases 3-4 • DLL Swap & Drift"
     badge: "TRANSACTION"
     color: "amber"
     items:
-      - "<strong>03 Shadow DLL Swap:</strong> Unlinks shadow library (<code>game_PID_N.dll</code>) to bypass Windows locks; loads new GDExtension."
-      - "<strong>04 Schema Drift:</strong> Compares old/new ClassDB tables: coerces numeric widening (<code>Int32</code> &rarr; <code>Int64</code>) & seeds new defaults."
+      - "<strong>03 Shadow DLL Swap:</strong> Unlinks shadow library (<code>game_PID_N.dll</code>) bypassing Windows file locks."
+      - "<strong>04 Schema Drift:</strong> Reconciles ClassDB tables, coerces widened types, and seeds new defaults."
   - title: "Phases 5-6 • Hydrate & Verify"
     badge: "RESTORED"
     color: "emerald"
     items:
-      - "<strong>05 Silent Hydration:</strong> Two-pass property restoration with signals temporarily blocked to prevent cascades and sound glitches."
-      - "<strong>06 Verified:</strong> Dispatches <code>_on_hot_reloaded</code> lifecycle hooks and validates zero dead pointers via <code>#check_alive!</code>."
+      - "<strong>05 Silent Hydration:</strong> Restores properties with signals blocked to avoid cascade glitches."
+      - "<strong>06 Verification:</strong> Fires <code>_on_hot_reloaded</code> and verifies zero dead vtable pointers."
 notes: |
   • The Reload Problem: In standard C++ GDExtension, live reloading either resets inspector tweaks back to scene defaults or immediately crashes the editor due to dangling vtables and dead pointers.
   • Windows DLL Locking: On Windows, Godot locks open .dll files. Lapis solves this by compiling shadow DLLs (`game_PID_N.dll`), allowing instant swaps without closing the editor.

@@ -12,33 +12,30 @@ left:
   title: gameplay_modules.cr — Horizontal Composition
   tag: Crystal
   lang: crystal
-  font_size: '0.76rem'
+  font_size: '0.84rem'
   code: |
-    # 1. Pure Crystal Utility & Math Namespace:
+    # 1. Pure Utility Namespace
     module SpatialMath
-      extend self # Callable as SpatialMath.dist_sq or mixed in
+      extend self
       def dist_sq(a : Vector2, b : Vector2) : Float32
         (a.x - b.x) ** 2 + (a.y - b.y) ** 2
       end
     end
 
-    # 2. Lapis Trait (gmodule wires ClassDB, exports & signals):
+    # 2. Lapis Trait (wires ClassDB, exports & signals)
     gmodule Damageable do
-      signal health_changed(current : Int32, max : Int32)
-      abstract def max_health : Int32
+      signal health_changed(current : Int32)
       @[Export] property health : Int32 = 100
 
       def take_damage(amount : Int32) : Void
-        @health = (@health - amount).clamp(0, max_health)
-        health_changed.emit(@health, max_health)
+        @health = (@health - amount).clamp(0, 100)
+        health_changed.emit(@health)
       end
     end
 
-    # 3. Horizontal composition into Godot nodes:
+    # 3. Horizontal composition into Godot nodes
     node Enemy < CharacterBody2D do
-      include Damageable # Inlines methods & registers ClassDB exports!
-
-      def max_health : Int32; 150; end
+      include Damageable # Inlines methods & registers ClassDB signals
     end
 right:
   type: card
@@ -46,11 +43,10 @@ right:
   color: cyan
   compact: true
   items:
-    - '<strong>Horizontal Composition via <code>include</code>:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance trees or multiple-inheritance hazards.'
-    - '<strong>Why Lapis Uses <code>gmodule</code>:</strong> Pure <code>module</code> handles language-level mixins, but Godot nodes need <code>gmodule</code> to register <code>@[Export]</code> properties and signals into ClassDB.'
-    - '<strong>Zero Virtual Dispatch Overhead:</strong> Mixin methods resolve statically at compile time and inline directly into machine code—zero vtable lookups.'
-    - '<strong>Abstract Method Contracts:</strong> <code>abstract def</code> in traits enforces compile-time interface conformance without runtime reflection or interface boxing.'
-    - '<strong>Namespace & Singleton Utilities:</strong> <code>extend self</code> enables modules to act simultaneously as standalone functional namespaces and mixable math traits.'
+    - '<strong>Horizontal Composition:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance trees or diamond problems.'
+    - '<strong>Engine-Aware Traits (<code>gmodule</code>):</strong> Wires <code>@[Export]</code> properties and engine signals directly into Godot’s ClassDB metadata.'
+    - '<strong>Zero Virtual Overhead:</strong> Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.'
+    - '<strong>Namespace & Mixin Dual Use:</strong> <code>extend self</code> lets modules act simultaneously as pure functional namespaces and mixable traits.'
 notes: |
   In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy.
   In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains.

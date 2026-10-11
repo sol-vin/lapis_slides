@@ -10,7 +10,7 @@ gdscript:
   title: ':circle-xmark: GDScript: Manual RayQuery Setup & Untyped Dictionaries'
   lang: gdscript
   tag: GDScript
-  font_size: '0.80rem'
+  font_size: '0.84rem'
   code: |
     func check_line_of_sight(target_pos: Vector2) -> void:
         # Pitfall: 12 lines of ceremony to cast a single ray
@@ -19,25 +19,21 @@ gdscript:
             global_position, target_pos
         )
         query.collision_mask = 0b0001
-        query.collide_with_areas = false
-        query.collide_with_bodies = true
-
         var result: Dictionary = space.intersect_ray(query)
         if not result.is_empty():
             var point: Vector2 = result["position"]
-            var normal: Vector2 = result["normal"]
             var collider = result["collider"]
             if collider is Enemy:
                 collider.take_damage(25)
   points:
-    - '<strong>Manual Query Allocation:</strong> Requires allocating <code>PhysicsRayQueryParameters2D</code> objects for every single raycast.'
-    - '<strong>Untyped Dictionary Unpacking:</strong> <code>intersect_ray</code> returns an untyped Variant dictionary, requiring manual string key lookups.'
-    - '<strong>Runtime Type Casting:</strong> Colliders must be manually checked with <code>is Enemy</code>, prone to null errors if destroyed mid-frame.'
+    - '<strong>Manual Query Setup:</strong> Requires allocating <code>PhysicsRayQueryParameters2D</code> objects for every raycast.'
+    - '<strong>Untyped Dictionaries:</strong> <code>intersect_ray</code> returns a dynamic Variant dictionary requiring string key lookups.'
+    - '<strong>Runtime Casting Hazards:</strong> Colliders must be manually checked with <code>is Enemy</code>, prone to null errors.'
 crystal:
   title: ':sparkles: Crystal: One-Line Queries & Strongly-Typed PhysicsHit'
   lang: crystal
   tag: Crystal (Lapis)
-  font_size: '0.80rem'
+  font_size: '0.84rem'
   code: |
     def check_line_of_sight(target_pos : Vector2) : Void
       # 1. One-line direct space raycast query:
@@ -49,17 +45,11 @@ crystal:
           enemy.take_damage(25)
         end
       end
-
-      # 3. Directional raycast query:
-      if wall = raycast(Vector2::RIGHT, distance: 50.0)
-        slide_along_wall(wall.normal)
-      end
     end
   points:
-    - '<strong>One-Line Spatial Queries:</strong> <code>raycast_to</code> and <code>raycast</code> acquire the space state and query physics in a single call.'
-    - '<strong>Strongly-Typed Hit Structs:</strong> Returns <code>PhysicsHit2D</code> / <code>PhysicsHit3D</code> value types with typed <code>point</code>, <code>normal</code>, and <code>rid</code>.'
-    - '<strong>Alive-Safe Collider Downcasting:</strong> <code>hit.collider</code> validates <code>#alive?</code> automatically, allowing safe downcasting via <code>hit.collider.as?(Enemy)</code> with zero dangling pointer risks.'
-    - '<strong>Eliminates Variant Dictionary Churn:</strong> Unpacks raycast hits directly into stack PhysicsHit value structs, bypassing Godot''s intermediate Variant Dictionary allocations.'
+    - '<strong>One-Line Spatial Queries:</strong> <code>raycast_to</code> and <code>raycast</code> query physics directly in a single call.'
+    - '<strong>Strongly-Typed Hits:</strong> Returns <code>PhysicsHit2D</code> / <code>3D</code> value types with typed <code>point</code>, <code>normal</code>, and <code>rid</code>.'
+    - '<strong>Alive-Safe Downcasting:</strong> <code>hit.collider.as?(Enemy)</code> validates survival with zero dangling pointer risks.'
 takeaway:
   badge: ZERO-BOILERPLATE RAYCASTING
   text: Lapis collapses Godot's multi-step raycasting ceremony into safe, one-line space queries returning strongly typed hit structs.

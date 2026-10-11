@@ -10,36 +10,28 @@ gdscript:
   title: ':circle-xmark: GDScript: Multi-Step Instantiation Boilerplate'
   lang: gdscript
   tag: GDScript
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
     func spawn_entities() -> void:
         # Pitfall 1: Multi-step preload, instantiate, cast & mount
         const EnemyScene = preload("res://scenes/enemy.tscn")
         var enemy = EnemyScene.instantiate() as Enemy
         enemy.health = 250
-        enemy.tag = "elite"
         add_child(enemy)
 
-        # Pitfall 2: Sibling mounting with manual parent lookup
-        const MarkerScene = preload("res://scenes/marker.tscn")
-        var marker = MarkerScene.instantiate() as Marker2D
-        marker.position = Vector2(0, 50)
-        get_parent().add_child(marker)
-
-        # Pitfall 3: Dynamic loading requires manual resource checking
+        # Pitfall 2: Dynamic loading requires manual resource checking
         var boss_scene = load("res://scenes/boss.tscn") as PackedScene
         var boss = boss_scene.instantiate() as BossEnemy
-        boss.damage = 100
         add_child(boss)
   points:
-  - <strong>Multi-Step Friction:</strong> Must store <code>PackedScene</code>, invoke <code>instantiate()</code>, cast, configure, and mount in separate statements.
-  - <strong>Unsafe Runtime Casting:</strong> Untyped <code>Resource</code> return requires <code>as Enemy</code> casting that fails silently if types diverge.
-  - <strong>Manual Tree Lookup:</strong> Sibling mounting requires explicit <code>get_parent().add_child(...)</code> navigation.
+    - '<strong>Multi-Step Friction:</strong> Must store <code>PackedScene</code>, instantiate, cast, configure, and mount in separate calls.'
+    - '<strong>Unsafe Runtime Casting:</strong> Untyped returns require <code>as Enemy</code> casts that fail silently if types drift.'
+    - '<strong>Verbose Dynamic Loading:</strong> Runtime scene loading requires manual error checking and multiple intermediate variables.'
 crystal:
   title: ':sparkles: Crystal: Preload (>), Load (>>), and Direct Tree Pipelines'
   lang: crystal
   tag: Crystal (Lapis)
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
     require "lapis/extras"
 
@@ -47,25 +39,18 @@ crystal:
       # 1. Pipeline Preload (>): Preload, instantiate, cast & mount!
       enemy = add_child("res://scenes/enemy.tscn" > Enemy) do
         self.health = 250
-        self.tag = "elite"
-      end # typeof(enemy) is Enemy (preserves static type T!)
-
-      # 2. Pipeline Sibling Mounting (>):
-      marker = add_sibling("res://scenes/marker.tscn" > Marker2D) do
-        self.position = Vector2.new(0, 50)
       end
 
-      # 3. Dynamic Runtime Load Operator (>>):
+      # 2. Dynamic Runtime Load Operator (>>):
       boss = "res://scenes/boss.tscn" >> BossEnemy
 
-      # 4. Nilable Pipeline (?): Returns nil if missing (no exception!):
+      # 3. Safe Nilable Pipeline (?): Returns nil if missing
       secret = "res://scenes/secret.tscn" > SecretRoom?
     end
   points:
-  - <strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable pipeline operators on <code>String</code> and <code>PackedScene</code>.
-  - <strong>Direct Tree Pipeline (<code>&gt;</code>):</strong> <code>add_child("path" &gt; T) do ... end</code> preloads, instantiates, types, mounts, and configures inline.
-  - <strong>Sibling Pipeline Parity:</strong> <code>add_sibling("path" &gt; T)</code> mounts directly under the parent node with full context block evaluation.
-  - <strong>Dynamic Load Pipeline (<code>&gt;&gt;</code>):</strong> Dynamically loads scenes at runtime; pairs with nilable types like <code>T?</code> without throwing.
+    - '<strong>Direct Tree Pipeline (<code>&gt;</code>):</strong> <code>add_child("path" &gt; T) do ... end</code> preloads, instantiates, types, and mounts inline.'
+    - '<strong>Dynamic Load Pipeline (<code>&gt;&gt;</code>):</strong> Dynamically loads scenes at runtime with guaranteed static return type.'
+    - '<strong>Sound Nilable Pipeline:</strong> <code>"path" &gt; SecretRoom?</code> safely returns <code>nil</code> on missing resources without throwing.'
 takeaway:
   badge: PIPELINE ERGONOMICS
   text: Lapis scene pipeline operators (> and >>) turn multi-step scene preloading, instantiation, and initial configuration into expressive single-line expressions.

@@ -27,25 +27,21 @@ Theme: `sol.vin` | Total Slides: 142
   - Trijam 363 & 1dayjam #3: **1st Place Winner**
   - 10+ Years Crystal Ecosystem: **Lapis Creator**
 - **Open Source & Lapis**:
-  - Creator of Lapis: High-performance Crystal bindings & toolchain for Godot 4.8+.
-  - raylib-cr (118 :star:): Idiomatic, zero-overhead Crystal bindings for the Raylib game engine.
-  - celestine (97 :star:): Expressive SVG compiler, vector graphics library, and canvas DSL.
-  - libsunvox & wireland: SunVox modular synth bindings and circuit simulation.
+  - Creator of Lapis: High-performance Crystal toolchain & bindings for Godot 4.8+.
+  - raylib-cr & celestine: Idiomatic Raylib bindings and expressive SVG vector compiler.
+  - libsunvox & wireland: SunVox modular synth bindings and circuit simulation frameworks.
 - **Security & Systems Rigor**:
-  - CompTIA Certified: A+ & Network+ certified hardware and network technician.
-  - CVE-2019-11014: Author of VStarCam remote hijacking & RTSP exploitation advisory.
-  - CVE-2019-11878: Discovered Xiongmai DVR integer overflow leading to remote execution.
-  - Reverse Engineering: Firmware extraction, exploit toolkits (XET), and protocol fuzzing.
+  - Security Researcher: Published CVE-2019-11014 and CVE-2019-11878 remote exploit advisories.
+  - CompTIA Certified: A+ and Network+ certified hardware and infrastructure technician.
+  - Systems Forensics: Low-level firmware extraction, protocol fuzzing, and exploit tooling.
 - **Shipped Games & Jams**:
-  - Solo Oasis: Unlimited Places: Atmospheric walking simulator shipped on Steam & itch.io.
-  - Trijam 363 Winner: 1st place overall with 'The Problem With Trolleys' (built in < 3 hours).
-  - 1dayjam #3 Winner: 1st place overall in 24-hour high-intensity game development sprint.
-  - Game Jam Velocity: Fast prototyping and iteration without sacrificing determinism.
+  - Steam Author: Shipped atmospheric title 'Solo Oasis: Unlimited Places' on Steam and itch.io.
+  - Jam Champion: 1st place winner in Trijam 363 (< 3 hours) and 1dayjam #3 (24 hours).
+  - Rapid Prototyping: Delivering tight game loops and deterministic systems under sprint limits.
 - **Talks & Community**:
-  - Crystal 1.0 Conf (2021): Featured speaker on 'Artistic Crystal' & creative systems.
-  - Raw Crystal (2020): Technical talk: 'Generative Art, SVG, & Celestine'.
-  - Crystal Code Camp (2017): Contributor certificate and language ecosystem advocate.
-  - sol.vin Journal & Lab: Engineering blog documenting low-level systems and game architecture.
+  - Conference Speaker: Featured speaker at Crystal 1.0 Conf (2021) and Raw Crystal (2020).
+  - Ecosystem Contributor: Over a decade of contributions across the Crystal language and compiler.
+  - sol.vin Journal & Lab: Technical writing and deep-dive systems architecture guides.
 
 **Presenter Notes**:
 > A quick introduction to who I am. I'm Ian Rash, known online by my domain sol.vin. My engineering background spans systems architecture, reverse engineering, and low-level security research—having published CVE-2019-11014 and CVE-2019-11878, and holding CompTIA A+ and Network+ certifications. I've been an active speaker in the Crystal community, presenting at the Crystal 1.0 Conference in 2021 and Raw Crystal 2020. In game development, I've shipped 'Solo Oasis' on Steam, and won both Trijam 363 and 1dayjam #3 under intense sprint constraints. I've authored open source tools like raylib-cr and celestine. That blend of low-level systems rigor, rapid game jam iteration, and love for expressive language design is exactly why I built Lapis: to give Godot developers the speed and type safety of compiled systems code with the ergonomics of a joyful language.
@@ -103,8 +99,8 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Developer Happiness, Small Syntax & Expressive Human Reach
 - **Code (ruby_philosophy.rb — Developer Happiness First)**:
   ```ruby
-  # Yukihiro "Matz" Matsumoto's Vision (1995)
-  # "Ruby is designed for human cognitive comfort, not machine convenience."
+  # Yukihiro "Matz" Matsumoto's Vision (1995):
+  # "Ruby is designed for human comfort, not machine convenience."
   
   Ruby.manifesto do
     prioritize :human_happiness, over: :machine_convenience
@@ -112,33 +108,18 @@ Theme: `sol.vin` | Total Slides: 142
     syntax     :natural_english_prose
   
     empower do
-      first_class_blocks { just_like_magic }
-      expressive_closures.each do |easy, inputs|
-        makes easy.code
-        inputs.handled! { |input| nicely?(input) }
-      end
-      unbounded_dsl_freedom do
-        make the future bright
-        introduce new syntax
-  
-        5.times do
-          still use (ruby / crystal) syntax
-          domain_specific_languages.powered_up!
-        end
-      end
+      first_class_blocks { natural_flow }
+      expressive_closures.each(&:make_code_joyful)
     end
   
     goal "Make programmers smile when they write code"
   end
-  
-  puts "Programming should be a joy, not a chore."
   ```
 - **Why Ruby Won Developer Hearts**:
-  - Developer Happiness as Primary Goal: Yukihiro 'Matz' Matsumoto designed Ruby to prioritize human cognitive comfort over machine convenience.
-  - Small Syntax, Massive Reach: A minimal grammatical surface area that bends to almost any domain—turning simple method calls and blocks into DSLs without language bloat.
-  - First-Class Blocks & Closures: Chaining Enumerable methods (select(&:alive?)) turned data manipulation into an expressive, natural English flow.
-  - Principle of Least Surprise (POLS): Statement modifiers (return unless) and predicates (alive?) feel intuitive and minimize cognitive friction.
-  - The Downside in Game Tech: Dynamic method dispatch (YARV byte interpreter) was too slow for 60/120 FPS physics, frame budgets, and tight loops.
+  - Developer Happiness First: Prioritizes human cognitive comfort over raw machine convenience.
+  - Minimal Syntax, Massive Reach: A postage-stamp grammar that molds to domain DSLs without compiler bloat.
+  - First-Class Closures: Chaining Enumerable methods (select(&:alive?)) turns data into readable prose.
+  - The Game Tech Dilemma: Dynamic interpreted bytecode (YARV) lacked the performance needed for 60 FPS physics.
 
 **Presenter Notes**:
 > To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English.
@@ -153,54 +134,33 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Clean Class Encapsulation, State Guards & Expressive Internal Pipelines
 - **Code (player.rb — The Class Definition)**:
   ```ruby
-  # The Backend: Encapsulating state, rules & internal pipelines
   class Player
-    attr_accessor :name, :health, :inventory, :buffs
+    attr_accessor :name, :health, :buffs
   
     def initialize(name, health: 100)
-      @name      = name
-      @health    = health
-      @inventory = []
-      @buffs     = []
+      @name, @health, @buffs = name, health, []
     end
   
-    # Predicates keep state queries clean and self-documenting
-    def alive?
-      @health > 0
-    end
+    def alive?; @health > 0; end
+    def wounded?; alive? && @health < 100; end
   
-    def wounded?
-      alive? && @health < 100
-    end
-  
-    # Fluent collection pipelines with blocks & symbol-to-proc
     def heal_party(companions, amount)
-      companions.select(&:alive?).each do |companion|
-        companion.health = [companion.health + amount, 100].min
-        puts "Healed #{companion.name} to #{companion.health} HP"
+      companions.select(&:alive?).each do |ally|
+        ally.health = [ally.health + amount, 100].min
       end
     end
   
-    # Guard clauses with statement modifiers keep methods flat
     def equip(item)
       return unless item.usable?
-      @inventory << item
       puts "#{@name} equipped #{item.name}!"
-    end
-  
-    # Behavioral composition via closures & modular buffs
-    def apply_buff(buff)
-      @buffs << buff
-      buff.apply(self)
     end
   end
   ```
 - **Anatomy of a Joyful Backend Class**:
-  - Zero-Boilerplate Property Access: attr_accessor generates getters and setters without verbose Java-style accessors.
-  - Self-Documenting Predicates: One-line predicate methods (alive?, wounded?) eliminate raw comparison logic across the codebase.
-  - Guard Clauses Over Nested Conditionals: Statement modifiers (return unless item.usable?) keep the main method execution path flat and readable.
-  - Symbol-to-Proc Collection Pipelines: Internal methods leverage select(&:alive?) and each to express intent without index-tracking loops.
-  - Open Composition over Rigid Inheritance: Dynamic arrays (@inventory, @buffs) accept any object adhering to the expected duck-typed protocol.
+  - Zero-Boilerplate Accessors: attr_accessor generates getters and setters without verbose Java-style accessors.
+  - Self-Documenting Predicates: One-line methods (alive?, wounded?) eliminate raw comparison logic.
+  - Guard Clauses Over Nesting: Statement modifiers (return unless item.usable?) keep method bodies flat.
+  - Symbol-to-Proc Pipelines: select(&:alive?) expresses clear intent without manual indexing loops.
 
 **Presenter Notes**:
 > This is the first half of the famous equation: "My back end looks like this, so my front end can look like that."
@@ -216,42 +176,27 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Natural Prose, Fluent Pipelines & Composable Object Mechanics
 - **Code (gameplay.rb — Composable Call-Site Usage)**:
   ```ruby
-  # The Frontend: Composing objects like natural prose
-  
-  # 1. Composing Modular Items & Dynamic Buffs
-  excalibur = Weapon.new("Excalibur", power: 45, element: :holy)
-  war_hymn  = Buff.new("War Hymn") { |p| p.health += 15 }
-  
-  # 2. Assembling a Diverse Party Composition
+  # 1. Composing entities & party composition:
+  excalibur = Weapon.new("Excalibur", power: 45)
   party = [
     Player.new("Arthur", health: 85),
-    Player.new("Gwen",   health: 40),
-    Player.new("Merlin", health: 95)
+    Player.new("Gwen",   health: 40)
   ]
   
-  # 3. Equipping & Composing Behaviors Dynamically
+  # 2. Equipping & fluent tactical healing:
   hero = party.first
   hero.equip(excalibur)
-  hero.apply_buff(war_hymn)
-  
-  # 4. Fluent Tactical Queries & Emergency Actions
   hero.heal_party(party.select(&:wounded?), 25)
   
-  # 5. Expressive English-Like Flow & Statement Modifiers
-  puts "Party is combat-ready!" if party.all?(&:alive?)
-  party.reject(&:alive?).each { |fallen| puts "Revive #{fallen.name}!" }
-  
-  # 6. Streamlined Team Metrics Without Loops
-  avg_hp = party.sum(&:health) / party.size
-  puts "Average Party Vitality: #{avg_hp}%"
+  # 3. Expressive prose flow with statement modifiers:
+  puts "Party ready!" if party.all?(&:alive?)
+  party.reject(&:alive?).each { |p| puts "Revive #{p.name}!" }
   ```
 - **Why The Front End Sings**:
-  - Prose-Like Call-Site Cadence: Code reads from left to right like an English script (hero.heal_party(party.select(&:wounded?), 25)).
-  - Flexible Object Composition: Entities, weapons, and buffs are composed at runtime without complex factory classes or builder ceremony.
-  - Closures as Dynamic Modifiers: Blocks passed to Buff.new { |p| ... } inject runtime behavior without class explosion.
-  - Higher-Order Enumerable Magic: all?, reject, sum, and select replace manual loops with declarative, expressive queries.
-  - Statement Modifiers as Qualifiers: Trailing if party.all?(&:alive?) lets the primary action lead the thought, treating conditions as qualifiers.
-  - Developer Happiness in Practice: The entire script reads like a high-level design specification, optimizing for cognitive ease and creative flow.
+  - Prose-Like Cadence: Code reads left-to-right like an English script without ceremony.
+  - Dynamic Composition: Items and entities assemble cleanly without factory classes or builders.
+  - Higher-Order Magic: all?, reject, and select replace manual loops with declarative intent.
+  - Statement Modifiers: Trailing if party.all?(&:alive?) lets the primary action lead the thought.
 
 **Presenter Notes**:
 > And here is the payoff: "So my front end can look like this."
@@ -269,39 +214,22 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: ~40 Keywords Fueling an Infinite Universe of Domain Usages
 - **Code (ruby_keywords.rb — The ~40 Core Keywords)**:
   ```ruby
-  # Ruby's Entire Reserved Keyword Grammar (~41 Words):
-  
-  # Definitions & Scope
-  class       module      def         end
-  self        super       alias       undef
-  
-  # Control Flow & Branching
-  if          then        elsif       else
-  unless      case        when
-  
-  # Loops & Iteration (No 'for' loop needed!)
-  while       until       do          break
-  next        redo        retry
-  
-  # Execution Flow & Blocks
-  yield       return      defined?
-  
-  # Exception Handling
-  begin       rescue      ensure
-  
-  # Literals & Boolean Logic
-  true        false       nil
-  and         or          not
-  
-  # Special Scope & File Tokens
-  BEGIN       END         __FILE__    __LINE__    __ENCODING__
+  # Ruby's Core Reserved Grammar (~41 Keywords):
+  class     module    def       end
+  self      super     alias     undef
+  if        then      elsif     else
+  unless    case      when      return
+  while     until     do        break
+  next      redo      retry     yield
+  begin     rescue    ensure    defined?
+  true      false     nil       and/or
+  BEGIN     END       __FILE__  __LINE__
   ```
 - **The Postage-Stamp Advantage**:
-  - Fits on a Postage Stamp: While C++ and C# continually bloat their grammars with 80+ keywords, Ruby's core grammar famously fits on a postage stamp (~40 keywords).
-  - Methods Over Keywords: Features like properties (attr_accessor), visibility (private), and mixins (include) are plain methods, not compiler grammar.
-  - Blocks as Universal Primitives: A single, universal construct—the block (do...end)—powers iteration, resource safety (File.open), and rich DSLs.
-  - Zero Syntax Bloat: Ecosystems like Rails, RSpec, and Sinatra look like dedicated domain languages, yet require zero new syntax rules in the compiler.
-  - Elegance Through Restraint: Rather than accumulating specialized syntactic sugar, a compact set of orthogonal primitives yields maximum expressive freedom.
+  - Fits on a Postage Stamp: Unlike C++ or C# with 80+ keywords, Ruby’s grammar fits on a single card (~40 words).
+  - Methods Over Keywords: Properties (attr_accessor) and access control (private) are plain methods.
+  - Blocks as Universal Primitives: A single construct (do...end) powers loops, resource guards, and DSLs.
+  - Zero Syntax Bloat: Expressive frameworks (Rails, RSpec, Lapis) require zero new parser grammar rules.
 
 **Presenter Notes**:
 > In computer science lore, Alan Kay famously observed that Smalltalk was so elegant that its entire grammar could fit on a postcard. Matz brought this profound insight to Ruby: you do not need 80 or 100 keywords to build a powerful programming language.
@@ -521,44 +449,32 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Optional Parentheses, Uniform Access Principle & LLVM-Inlined Operator Methods
 - **Code (bare_words_and_operators.cr — Zero-Cost Ergonomics)**:
   ```crystal
-  # 1. Bare Words & Uniform Access: my_func vs my_func()
-  def max_health : Int32
-    100
-  end
-  
-  puts max_health    # Property-like read, but executes method!
-  puts max_health()  # Parentheses are completely optional
-  
-  # Fluent DSL method calls without parentheses ceremony:
-  render_rect at: Vector2.new(10.0_f32, 20.0_f32), color: :red
+  # 1. Bare Words & Uniform Access (parentheses optional):
+  def max_health : Int32; 100; end
+  puts max_health # Property-like access, executes method!
+  render_rect at: Vector2.new(10.0, 20.0), color: :red
   
   # 2. Operator Overloading: Pure struct methods, LLVM inlined!
   struct Vector2
     getter x : Float32, y : Float32
+    def initialize(@x : Float32, @y : Float32); end
   
-    def initialize(@x : Float32, @y : Float32)
+    def +(o : Vector2) : Vector2
+      Vector2.new(@x + o.x, @y + o.y)
     end
-  
-    # Operators (+, -, *, [], []=) compile to direct CPU ops:
-    def +(other : Vector2) : Vector2
-      Vector2.new(@x + other.x, @y + other.y)
-    end
-  
     def [](axis : Symbol) : Float32
       axis == :x ? @x : @y
     end
   end
   
-  v1 = Vector2.new(10.0_f32, 20.0_f32)
-  v2 = Vector2.new(5.0_f32, 5.0_f32)
-  v3 = v1 + v2       # Sugar for: v1.+(v2) — Inlined by LLVM!
-  puts v3[:x]        # Sugar for: v3.[](:x) => 15.0
+  v = Vector2.new(10.0_f32, 20.0_f32) + Vector2.new(5.0_f32, 5.0_f32)
+  puts v[:x] # Sugar for v.[](:x) => 15.0
   ```
 - **Why Bare Words & Operators Excel in Crystal**:
-  - Uniform Access Principle: Callers cannot tell whether player.health is a stored ivar or a dynamic calculation. Eliminates Java/C++ getter/setter ceremony.
-  - Fluent, Human-Centric Sentences: Omitting parentheses turns method calls into readable English instructions (render_rect at: pos, color: :red) while remaining 100% statically typed.
-  - Operators are Pure Methods on Value Types: Symbols like +, -, [], and == are standard methods on struct value types.
-  - Direct LLVM Inlining (0 Heap Overhead): In dynamic Ruby, v1 + v2 dispatches through VM tables and allocates objects; in Crystal, LLVM inlines the math directly into CPU registers with zero heap allocations.
+  - Uniform Access Principle: Callers cannot tell whether player.health is an ivar or calculation.
+  - Fluent Human Sentences: Omitting parentheses yields natural prose while remaining 100% statically typed.
+  - Operators are Pure Methods: + and [] are standard methods on struct value types.
+  - Direct LLVM Inlining: Math compiles to CPU registers with zero heap allocation or dynamic dispatch.
 
 **Presenter Notes**:
 > One of Ruby's greatest gifts to programming ergonomics was the total elimination of syntax ceremony. In Crystal, this philosophy is fully preserved, but supercharged by native compilation.
@@ -596,40 +512,26 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Expression-Oriented Design, Functional Flow & High-Signal Early Returns
 - **Code (implicit_returns.cr — Expressions Over Rituals)**:
   ```crystal
-  # 1. Methods return their last evaluated expression:
+  # 1. Methods evaluate naturally to their final expression:
   def calculate_damage(base : Int32, defense : Int32) : Int32
     multiplier = critical_hit? ? 2.0_f32 : 1.0_f32
     Math.max((base.to_f32 * multiplier).to_i - defense, 1) # No "return"!
   end
   
-  # 2. Blocks in pipelines return values effortlessly:
-  healed_party = party.map do |player|
-    player.heal(25) # Return value of heal() becomes mapped element!
-  end
+  # 2. Functional blocks return values effortlessly:
+  healed_party = party.map { |player| player.heal(25) }
   
-  # 3. Branching returns naturally from whichever branch ran:
-  def player_rank(score : Int32) : Symbol
-    if score >= 10_000
-      :grandmaster
-    elsif score >= 5_000
-      :diamond
-    else
-      :challenger
-    end # Entire if returns the resulting symbol to caller!
-  end
-  
-  # 4. Explicit "return" is reserved strictly for early bailouts:
+  # 3. Explicit "return" is reserved strictly for early bailouts:
   def process_turn(actor : Actor) : Nil
     return unless actor.alive? # High-signal guard clause!
     actor.take_action
   end
   ```
 - **Why Outsiders Hesitate vs Why It Wins in Crystal**:
-  - The Imperative Habit: In C, Java, and Python, developers are trained that omitting return means the routine is void or returns None. Seeing no return looks like an accidental omission.
-  - Expression-Oriented Semantics: Routines evaluate naturally to their resulting value. Mandating a return keyword on every single function is ritualistic syntax noise.
-  - Crucial for Inlined Blocks: Functional pipelines (map, select) rely on implicit returns. Writing an explicit return inside a block exits the enclosing method, not just the block!
-  - High-Signal Guard Clauses: Because ordinary returns are implicit, an explicit return stands out vividly on code review as an intentional early bailout (return if dead?).
-  - Compile-Time Union Inference: Crystal computes the exact static type (including unions like Int32 | String) across all exit branches with zero runtime dispatch cost.
+  - Expression-Oriented Semantics: Routines evaluate to their result; mandating return everywhere is ritual noise.
+  - Essential for Functional Blocks: Pipelines (party.map { ... }) depend on implicit returns to avoid non-local method exits.
+  - High-Signal Guard Clauses: Because ordinary returns are implicit, an explicit return immediately flags an intentional early exit.
+  - Static Union Resolution: Infers exact types (Int32 | Symbol) across all branches with zero LLVM overhead.
 
 **Presenter Notes**:
 > In traditional imperative languages like C, Java, or Python, every function that computes a value must conclude with the keyword 'return'. If you omit it in C, your code might return garbage; if you omit it in Python, it returns None. When developers from those ecosystems first look at Crystal, they instinctively think: 'Wait, did you forget to write return?'
@@ -645,39 +547,32 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Expression Assignment, Range Cases & Crystal's Compile-Time Static Nil Narrowing
 - **Code (control_expressions.cr — Clean Expressions & Nil Safety)**:
   ```crystal
-  # 1. if IS a readable expression that returns a value:
+  # 1. 'if' and 'case' are first-class expressions returning values:
   speed = if boosted?
             play_sfx(:turbo)
-            100 # Evaluates to branch value
+            100
           else
             50
           end
   
-  # 2. Multi-branch case expression with discrete ranges:
   loot = case dice_roll
          when 95..100 then :legendary_sword
          when 80..94  then :rare_shield
-         when 50..79  then :health_potion
          else              :rusty_dagger
          end
   
-  # 3. Crystal's Killer Feature: Static Nil Narrowing via 'if x = ...'
-  def inspect_player(id : String)
-    # find_player? returns (Player | Nil)
-    if player = find_player?(id)
-      # Inside this block, compiler proves player is non-nil Player!
-      player.cast_spell(:protect)
-    else
-      # Compiler knows player is Nil here
-      puts "Player #{id} not found."
-    end
+  # 2. Static Nil Narrowing (Type Flow):
+  if player = find_player?(id) # returns Player | Nil
+    player.cast_spell(:protect) # Statically proven non-nil Player!
+  else
+    puts "Player #{id} not found."
   end
   ```
 - **Why Control Expressions Excel in Crystal**:
-  - The Ternary Elevated: In Crystal, if and case are first-class expressions, eliminating uninitialized mutable dummy variables (var result;) outside blocks.
-  - Curing Nested Ternary Hell: Chained ternaries (a ? b : c ? d : e) are unreadable. Expression case allows clean range checks (when 95..100) with formatted indentation.
-  - Static Nil Narrowing (Type Flow): if x = find_player? tests truthiness AND narrows the variable type from T | Nil to T at compile time, eliminating null pointer crashes.
-  - Static Union Resolution: If branches evaluate to different types (e.g. Int32 and String), Crystal infers the exact union Int32 | String on the stack with zero heap allocation or boxing.
+  - Expressions Over Statements: if and case evaluate to values directly, eliminating mutable dummy variables.
+  - Declarative Range Cases: when 95..100 replaces unreadable nested ternaries with clean branching.
+  - Static Nil Narrowing: if x = find_player? binds and narrows Player | Nil to guaranteed non-nil Player.
+  - Zero-Cost Unions: Branches returning different types resolve to stack-allocated unions (Int32 | Symbol) without boxing.
 
 **Presenter Notes**:
 > In traditional languages like C, C++, Java, or Go, there is a strict divide between 'statements' and 'expressions'. Expressions evaluate to a value, while statements only execute actions. When developers from those languages see 'speed = if boosted? ...', their instinct is surprise.
@@ -693,8 +588,9 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: 'action if condition' — Putting Intent First to Match Human Cognitive Flow
 - **Code (statement_modifiers.cr — Action-First Syntax)**:
   ```crystal
-  # 1. Action-First Intent: What we're doing comes first!
+  # 1. Action-First Intent: What we do comes first!
   player.drink_potion! if player.low_health?
+  play_hit_sound unless player.muted?
   
   # 2. Flattening Guard Clauses (Goodbye Pyramid of Doom):
   def cast_spell(spell : Spell, target : Target) : Nil
@@ -702,23 +598,19 @@ Theme: `sol.vin` | Total Slides: 142
     return if target.invulnerable?
     return unless mana >= spell.cost
   
-    # Core logic stays completely flat at indentation level 1:
+    # Core logic stays flat at indentation level 1:
     consume_mana(spell.cost)
     target.apply_damage(spell.damage)
-    spawn_vfx(spell.effect_id)
   end
   
-  # 3. Postfix unless, while & until loops:
-  play_hit_sound unless player.muted?
-  
+  # 3. Postfix while & until loops:
   frame_step while simulation.running?
-  tick_physics until game.paused?
   ```
 - **Why Statement Modifiers Excel in Crystal**:
-  - Human Conversational Alignment: In real life, humans say: "Take an umbrella if it rains", not "If it rains, take an umbrella". The primary action is what matters most to the reader.
-  - Flattening Indentation (Zero Pyramid of Doom): Preconditions and guard clauses are dispatched in clean, single lines without wrapping code in 3 or 4 levels of nested if-blocks.
-  - Secondary Guards Tucked Out of Sight: By placing if low_health? at the tail, code reads as a clean list of actions with guardrails neatly aligned on the right.
-  - Zero-Cost LLVM Lowering: Crystal lowers statement modifiers directly to standard conditional branch instructions in LLVM assembly with zero overhead.
+  - Conversational Alignment: Puts the primary action first, treating conditions as secondary qualifiers.
+  - Eliminates Pyramid of Doom: Guard clauses dispatch on single lines without nesting indentation.
+  - Clean Right-Aligned Guards: Conditions tuck neatly to the right without disrupting vertical flow.
+  - Zero-Cost LLVM Lowering: Compiles directly to standard conditional branch instructions with zero overhead.
 
 **Presenter Notes**:
 > In virtually all mainstream programming languages—C, C++, Java, C#, Python, and Go—control flow is strictly prefix: the 'if' condition must come before the block. When developers from those languages encounter statement modifiers like 'player.drink_potion! if player.low_health?', they often wonder why the 'if' is at the end.
@@ -734,32 +626,25 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Predicates, Nil Over Errors & Unmissable Mutation Flares
 - **Code (predicates_and_bangs.cr — Expressive Punctuation)**:
   ```crystal
-  # 1. Predicates (?): Returns boolean, asks a clear question
-  player.alive?        # Returns Bool (vs player.is_alive())
-  inventory.empty?     # Returns Bool (vs inventory.isEmpty())
-  shield.can_absorb?   # Conversational, fluent English!
+  # 1. Predicates (?): Clean boolean queries
+  player.alive?        # => Bool (no is_ / has_ prefixes)
+  inventory.empty?     # => Bool
   
-  # 2. Nil Over Errors (?): Idiomatic Non-Throwing Alternative
-  party.first?         # Returns Player | Nil (party.first raises if empty!)
-  items[99]?           # Returns Item | Nil (items[99] raises IndexError!)
-  "abc".to_i?          # Returns Int32 | Nil ("abc".to_i raises ArgumentError!)
-  world.find_node?("X")# Returns Node | Nil (safe nilable traversal)
+  # 2. Nil Over Errors (?): Non-throwing safe lookups
+  party.first?         # => Player | Nil (vs first raising)
+  items[99]?           # => Item | Nil   (vs [] raising)
+  "42".to_i?           # => Int32 | Nil  (safe parse)
   
-  # 3. Bang methods (!): Warns of in-place mutation or danger
-  inventory.sort       # PURE: returns a new sorted copy
-  inventory.sort!      # MUTATING: alters array in place!
-  vector.normalize!    # Mutates existing Vector3 in place
-  
-  # 4. Bang methods (!): Raising exceptions vs soft nilable returns
-  user.save            # Soft failure: returns Bool (false on invalid)
-  user.save!           # Hard failure: raises RecordInvalid exception!
+  # 3. Bang (!): In-place mutation & non-nil assertion
+  inventory.sort!      # Mutates array in place (vs pure sort)
+  vector.normalize!    # Mutates Vector3 in place
+  active_target!       # Asserts non-nil or raises RecordNotFound
   ```
 - **Punctuation as High-Signal Communication**:
-  - Semantic Identifiers: In C, Java, and Go, punctuation in identifiers is illegal. Crystal embraces ? and ! as rich semantic communication tools.
-  - Eliminating Prefix Bikeshedding: Kills naming debates between is_empty, has_items, check_alive, and should_spawn. A question mark turns any word into an English question.
-  - Nil Over Errors Convention (?): Methods ending in ? return nil on missing values instead of raising exceptions, avoiding cumbersome rescue blocks for routine lookups.
-  - In-Place Mutation Flare (!): A developer scanning a pull request can instantly spot destructive in-place mutations (sort!, normalize!) versus pure functions.
-  - Compiler-Enforced Nil Safety: Crystal enforces strict compile-time checks on T | Nil returns from ? methods, making null pointer dereferences impossible.
+  - Semantic Predicates: Methods ending in ? ask boolean questions, eliminating awkward is_/has_ prefix debates.
+  - Nil Over Errors: Lookup methods with ? return nil instead of raising exceptions, avoiding bulky try/catch blocks.
+  - Mutation Flares: Methods ending in ! warn at a glance of destructive in-place alterations (sort!, normalize!).
+  - Strict Nil Safety: Crystal checks union returns (T | Nil) at compile time, eliminating null dereference crashes entirely.
 
 **Presenter Notes**:
 > In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error.
@@ -776,31 +661,28 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Why Crystal Uses Internal Iterators & Inlines Enumerable Blocks to Native Loops
 - **Code (iteration_architecture.cr — Inlined Blocks Over Indexing)**:
   ```crystal
-  # The C / Java / GDScript Imperative Tradition:
-  # for (int i = 0; i < enemies.length; i++) { ... } # Index leaks, bounds risk!
-  
-  # The Crystal Way: Internal Iterators & Inlined Blocks!
+  # Internal Iterators: Scoped & index-free
   enemies.each do |enemy|
-    enemy.take_damage(25) # Clean, strictly scoped, zero index bookkeeping
+    enemy.take_damage(25)
   end
   
-  # Looping without a 'for' keyword: Methods on the objects!
+  # Numbers & Ranges as First-Class Iterators
   5.times { spawn_skeleton! }
-  1.upto(10) { |level| generate_dungeon_floor(level) }
+  1.upto(10) { |floor| generate_dungeon(floor) }
   
-  # Iterating with indices when needed:
+  # Indexed iteration without manual counters
   enemies.each_with_index do |enemy, idx|
     puts "Target ##{idx + 1}: #{enemy.name}"
   end
   
-  # Composable Enumerable pipelines (map, select, reject, any?, all?):
-  active_bosses = enemies.select(&.boss?).reject(&.defeated?)
+  # Inlined Enumerable pipeline
+  active = enemies.select(&.boss?).reject(&.defeated?)
   ```
-- **Why Internal Iterators Excel in Crystal**:
-  - Strict Lexical Scope: In Python and older languages, loop variables leak into the surrounding function. Blocks strictly isolate |item| to their own scope.
-  - Zero Off-By-One Errors: The collection encapsulates its own traversal via each. Eliminates manual index arithmetic and out-of-bounds panics.
-  - 50+ Free Query Methods: Defining a single def each(&) and including Enumerable(T) automatically unlocks map, select, reject, and reduce.
-  - LLVM Direct Inlining (Zero Heap Overhead): Crystal inlines blocks directly at compile time. 5.times compiles to the exact same bare-metal CPU register loop as a C for loop.
+- **Why Internal Iterators Excel**:
+  - Strict Lexical Scope: Block parameters (|item|) never leak into surrounding functions, preventing accidental variable reuse bugs.
+  - Zero Off-By-One Errors: The collection encapsulates its own traversal, eliminating manual index counters and bounds violations.
+  - 50+ Free Query Methods: Implementing a single def each(&) unlocks map, select, reject, and reduce.
+  - LLVM Direct Inlining: Crystal inlines blocks into bare-metal CPU register loops, matching hand-written C speed with zero heap allocations.
 
 **Presenter Notes**:
 > When programmers coming from C, C++, Java, C#, Go, or Python learn Crystal, one of their first questions is: 'Where is the for loop?'
@@ -819,39 +701,35 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
 - **Code (gameplay_modules.cr — Horizontal Composition)**:
   ```crystal
-  # 1. Pure Crystal Utility & Math Namespace:
+  # 1. Pure Utility Namespace
   module SpatialMath
-    extend self # Callable as SpatialMath.dist_sq or mixed in
+    extend self
     def dist_sq(a : Vector2, b : Vector2) : Float32
       (a.x - b.x) ** 2 + (a.y - b.y) ** 2
     end
   end
   
-  # 2. Lapis Trait (gmodule wires ClassDB, exports & signals):
+  # 2. Lapis Trait (wires ClassDB, exports & signals)
   gmodule Damageable do
-    signal health_changed(current : Int32, max : Int32)
-    abstract def max_health : Int32
+    signal health_changed(current : Int32)
     @[Export] property health : Int32 = 100
   
     def take_damage(amount : Int32) : Void
-      @health = (@health - amount).clamp(0, max_health)
-      health_changed.emit(@health, max_health)
+      @health = (@health - amount).clamp(0, 100)
+      health_changed.emit(@health)
     end
   end
   
-  # 3. Horizontal composition into Godot nodes:
+  # 3. Horizontal composition into Godot nodes
   node Enemy < CharacterBody2D do
-    include Damageable # Inlines methods & registers ClassDB exports!
-  
-    def max_health : Int32; 150; end
+    include Damageable # Inlines methods & registers ClassDB signals
   end
   ```
 - **Zero-Cost Architectural Composition**:
-  - Horizontal Composition via include: Mix reusable behaviors across unrelated scene nodes without deep inheritance trees or multiple-inheritance hazards.
-  - Why Lapis Uses gmodule: Pure module handles language-level mixins, but Godot nodes need gmodule to register @[Export] properties and signals into ClassDB.
-  - Zero Virtual Dispatch Overhead: Mixin methods resolve statically at compile time and inline directly into machine code—zero vtable lookups.
-  - Abstract Method Contracts: abstract def in traits enforces compile-time interface conformance without runtime reflection or interface boxing.
-  - Namespace & Singleton Utilities: extend self enables modules to act simultaneously as standalone functional namespaces and mixable math traits.
+  - Horizontal Composition: Mix reusable behaviors across unrelated scene nodes without deep inheritance trees or diamond problems.
+  - Engine-Aware Traits (gmodule): Wires @[Export] properties and engine signals directly into Godot’s ClassDB metadata.
+  - Zero Virtual Overhead: Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.
+  - Namespace & Mixin Dual Use: extend self lets modules act simultaneously as pure functional namespaces and mixable traits.
 
 **Presenter Notes**:
 > In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy.
@@ -912,45 +790,28 @@ Theme: `sol.vin` | Total Slides: 142
 - **Code (closures_and_procs.cr — Inlined Blocks & Typed Procs)**:
   ```crystal
   # 1. Ephemeral Block: Zero heap allocation, inlined by LLVM
-  def measure(label : String)
+  def bench(name : String, &)
     t0 = Time.monotonic
-    yield # Passes control directly to block with 0 allocation
-    elapsed = (Time.monotonic - t0).total_milliseconds
-    puts "#{label}: #{elapsed}ms"
+    yield
+    puts "#{name}: #{Time.monotonic - t0}"
   end
-  measure("Physics Tick") { run_simulation }
+  bench("Tick") { run_simulation }
   
-  # 2. First-Class Procs: Reified objects with strict types
+  # 2. Reified Typed Proc: First-class closure object
   scale = 1.5_f32
-  damage_calc = ->(base : Int32) { (base * scale).to_i }
-  # Statically typed as Proc(Int32, Int32) with captured 'scale'
+  calc = ->(base : Int32) { (base * scale).to_i } # Proc(Int32, Int32)
   
-  # 3. Method-to-Proc Cleanliness (->some_method):
-  # Turn any existing method into a typed Proc with '->':
-  def double(x : Int32) : Int32; x * 2; end
-  double_fn = ->double(Int32)
-  [1, 2, 3].map(&->double(Int32)) # Inlined method-as-block! => [2, 4, 6]
+  # 3. Non-Capturing Proc = Raw C Function Pointer
+  cb = ->(id : UInt64, evt : Int32) { Godot::Bridge.dispatch(id, evt) }
   
-  # Bound method pointer on an instance:
-  boss = Boss.new
-  on_roar = ->boss.roar            # Typed 0-arg callback
-  button.on_click(&on_roar)        # Bound directly to event listener
-  
-  # 4. Non-Capturing Procs = Bare C Function Pointers!
-  # Compiles to void (*)(uint64_t, int32_t) for C/C++ engine callbacks
-  bridge_cb = ->(target_id : UInt64, event : Int32) do
-    Godot::Bridge.dispatch_event(target_id, event)
-  end
-  
-  # 5. Symbol-to-Proc shorthand for iterator pipelines:
+  # 4. Symbol-to-Proc Shorthand
   enemies.select(&.alive?).map(&.health)
   ```
-- **The Spectrum of Crystal Closures: From Inlined Blocks to Typed Procs**:
-  - Ephemeral Blocks (yield): Blocks are not objects; they represent control-flow transfers that LLVM compiles into flat machine loops with 0 heap allocations.
-  - Statically Typed Proc Objects: Created via ->(x : T) { ... } or Proc.new with strict compile-time parameter and return checking.
-  - Method-to-Proc (->some_method): Turn any method into a typed Proc instantly without lambda wrapper boilerplate: ->double(Int32) or bound to an instance ->boss.roar, passed via &.
-  - Non-Capturing Procs = C Pointers: When a Proc does not capture outer variables, Crystal compiles it to a bare C function pointer, enabling 0-cost interop with native C/GDExtension APIs.
-  - Symbol-to-Proc Shorthand: &.alive? and &.health transform symbols into inlined block invocations with zero lambda boilerplate.
+- **The Spectrum of Crystal Closures**:
+  - Ephemeral Blocks (yield): Direct control-flow transfers inlined into machine loops by LLVM with zero heap allocations.
+  - Typed Proc Objects: First-class closures created via ->(x) { ... } with strict compile-time parameter and return checking.
+  - Bare C Function Pointers: Non-capturing procs compile directly to native C function pointers for zero-overhead GDExtension engine callbacks.
+  - Symbol-to-Proc Sugar: Shorthands like &.alive? inline property getters directly into iterator pipelines without lambda wrappers.
 
 **Presenter Notes**:
 > Closures are one of the most expressive parts of modern languages. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs that capture outer scope variables allocate a closure context on the heap, but are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead.
@@ -964,40 +825,33 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Compile-Time Context Shifting: How Rails Routes, RSpec & FactoryBot Become 100% Type-Safe
 - **Code (compile_time_dsl.cr — Pure Ruby Ergonomics, Static Dispatch)**:
   ```crystal
-  # 1. Declarative Builder Class:
   class CombatRoomBuilder
     getter room : Room
-  
-    def initialize(@room : Room)
-    end
+    def initialize(@room : Room); end
   
     def wave(enemy : String, count : Int32)
       @room.spawn_wave(enemy, count)
     end
+    def reward(item : String); @room.set_chest(item); end
   
-    def reward(item : String)
-      @room.set_chest(item)
-    end
-  
-    # 'with builder yield' rebinds self inside the caller's block!
     def self.build(name : String, &) : Room
       builder = new(Room.new(name))
-      with builder yield # self IS builder inside block!
+      with builder yield # Rebinds self inside caller block!
       builder.room
     end
   end
   
-  # 2. Pure declarative DSL — zero "builder." boilerplate:
+  # Pure declarative DSL — zero "builder." prefix noise
   dungeon = CombatRoomBuilder.build("Dungeon_A1") do
-    wave "skeleton_archer", count: 4 # Calls wave on builder!
-    reward "obsidian_key"            # 100% type-checked at compile time!
+    wave "skeleton_archer", count: 4
+    reward "obsidian_key"
   end
   ```
-- **How Crystal Elevates Ruby's Secret Weapon**:
-  - The Secret Weapon of Ruby DSLs: In Ruby, instance_exec powered iconic frameworks like Rails routes (routes.rb), RSpec (describe/it), and FactoryBot by rebinding self.
-  - Static Context Shifting (with ... yield): Crystal achieves this exact ergonomic miracle at compile time: with builder yield rebinds self to the builder inside the block without runtime dynamic evaluation.
-  - 100% Compile-Time Verification: Unlike Ruby where typos in DSL methods fail at runtime during execution, Crystal validates all method names, parameters, and types during compilation.
-  - Static Dispatch (No Reflection): The context-shifted block resolves methods statically at compile time—delivering declarative DSL syntax without runtime dynamic dispatch or reflection penalties.
+- **How Crystal Elevates Ruby DSLs**:
+  - Ruby DSL Legacy: Ruby used dynamic instance_exec to power Rails routes and RSpec by rebinding self at runtime.
+  - Static Context Shifting: Crystal achieves this at compile time via with builder yield without runtime evaluation overhead.
+  - 100% Type Checked: Unlike Ruby where DSL typos crash at runtime, Crystal validates all method names and arguments during compilation.
+  - Zero-Cost Dispatch: Methods in the block resolve statically and inline directly into machine code—zero reflection or vtables.
 
 **Presenter Notes**:
 > In dynamic Ruby, instance_exec was the secret weapon that made DSLs famous: it powered Rails routes, RSpec, and FactoryBot by dynamically rebinding self to eliminate prefix clutter. But in Ruby, instance_exec had major drawbacks: it bypassed static analysis, caused runtime method lookup penalties, and typos only blew up when that specific branch executed. Crystal takes this exact feature and elevates it into a first-class language construct: 'with ... yield'. When you write 'with builder yield', Crystal temporarily shifts the lexical scope of self to the target object during compilation. Developers get the exact same clean, declarative DSL syntax where you call methods directly without 'builder.' noise, but with 100% compile-time type safety, full IDE autocomplete, and direct LLVM inlining with zero runtime reflection overhead.
@@ -1059,10 +913,9 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Compile-Time Mixins & Automated Subclass Registration
 - **Code (macro_lifecycle_hooks.cr — Compile-Time Composition)**:
   ```crystal
-  # 1. macro included: Composable mixin behavior at compile time
+  # 1. macro included: Injects state & methods at compile time
   module Damageable
     macro included
-      # Injects properties & methods into the including class:
       property health : Int32 = 100
   
       def take_damage(amount : Int32) : Void
@@ -1071,27 +924,23 @@ Theme: `sol.vin` | Total Slides: 142
     end
   end
   
-  # 2. macro inherited: Subclass tracking & automated registration
+  # 2. macro inherited: Automated subclass registration
   abstract class GameEntity
-    # Global compile-time list of all registered game entities
     ENTITY_TYPES = [] of String
-  
     macro inherited
-      # Fires whenever a new subclass is declared:
       ENTITY_TYPES << {{@type.name.stringify}}
     end
   end
   
   class Player < GameEntity
-    include Damageable # Injects health & take_damage!
+    include Damageable
   end
   ```
 - **Compile-Time Module & Class Hooks**:
-  - The macro included Hook: Executes whenever a module is included into a class. Automatically injects instance variables, methods, and validations into the receiver.
-  - Replaces Ruby's self.included: Ruby required runtime metaprogramming tricks (base.extend ClassMethods). Crystal achieves full mixin synthesis at compile time with zero runtime reflection.
-  - The macro inherited Hook: Fires the instant a class is subclassed, allowing base classes to inspect, configure, and register child types automatically.
-  - Zero-Overhead Registries: Build entity factories and plugin lists during compilation—no manual arrays or reflection scanning at startup.
-  - Type-Safe & Inlined: All injected code participates in standard global type inference and compiles directly into bare-metal machine code.
+  - The macro included Hook: Executes when a module is included, injecting instance variables and methods directly into the receiver.
+  - The macro inherited Hook: Fires the instant a class is subclassed, allowing base classes to track and configure child types.
+  - Compile-Time Registries: Builds entity factories and type registries during compilation—eliminating startup reflection scans.
+  - Static Inlining: All injected code participates in global type inference and compiles directly into native machine code.
 
 **Presenter Notes**:
 > In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods).
@@ -1200,47 +1049,35 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Zero-Boilerplate State Transitions with Compile-Time Verification
 - **Code (enemy_fsm.cr — Declarative DSL & Gameplay Usage)**:
   ```crystal
-  # 1. Declare states & transitions with macro DSL
+  # 1. Declarative FSM declaration via macro DSL
   fsm BossState do
     state Patrol, initial: true do
       before { start_patrol_path }
       on :see_player, transition_to: Chase
-      after { alert_nearby_allies }
     end
   
     state Chase do
       before { play_animation("run") }
-      on :in_attack_range, transition_to: Attack
-      on :lost_player,     transition_to: Patrol
-    end
-  
-    state Attack do
-      before { play_sound("roar") }
-      on :attack_finished, transition_to: Patrol
-      after { reset_hitbox }
+      on :lost_player, transition_to: Patrol
     end
   end
   
-  # 2. Actual runtime gameplay usage
+  # 2. Runtime gameplay dispatch in _physics_process
   fsm = BossStateMachine.new
-  
   def _physics_process(delta : Float64) : Void
-    if distance_to(player) < 15.0
-      fsm.trigger(:see_player) # -> Chase (runs before/after hooks!)
-    end
+    fsm.trigger(:see_player) if distance_to(player) < 15.0
   
     case fsm.current_state
-    when .patrol? then move_along_path(delta)
+    when .patrol? then move_patrol(delta)
     when .chase?  then navigate_to(player, delta)
-    when .attack? then execute_slam_attack
     end
   end
   ```
 - **What the Macro Generates**:
-  - Typed Enum & Handlers: Generates concrete enum BossState with type-checked transition methods.
-  - Lifecycle Hooks (before & after): Entry (before) and exit (after) hooks are inlined directly into native state transition branches.
-  - Static Method Dispatch: Transitions compile to direct branch checks or enum case dispatches; zero lambda allocations or dictionary lookups.
-  - Official Standalone Module: Available as require "lapis/fsm" for zero-dependency inclusion across gameplay nodes.
+  - Typed Enum & Handlers: Generates concrete enum BossState with type-checked transition methods and exhaustive pattern matching.
+  - Inlined Lifecycle Hooks: Entry (before) and exit (after) hooks inline directly into native branch jumps.
+  - Static Method Dispatch: Transitions compile to direct CPU register comparisons—zero closures or dictionary lookups.
+  - Reusable Component: Available as require "lapis/fsm" for zero-dependency inclusion across gameplay nodes.
 
 **Presenter Notes**:
 > State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document.
@@ -1255,54 +1092,24 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: How Crystal's Compile-Time AST Rewriting Synthesizes Enums, Typed Dispatchers & Lifecycle Hooks
 - **Code (fsm_macro.cr — AST Rewriting Engine)**:
   ```crystal
-  # Compile-Time AST Macro: parses block into enums, hooks & static dispatchers
   macro fsm(name, &block)
-    # 1. Synthesize typed Enum for all declared states:
+    # 1. Synthesize typed Enum from AST state declarations
     enum {{name.id}}
       {% for call in block.body.expressions %}
         {% if call.name == "state" %} {{call.args[0].id}} {% end %}
       {% end %}
     end
   
-    # 2. Synthesize StateMachine with static dispatch:
+    # 2. Synthesize StateMachine with flat static dispatch
     class {{name.id}}Machine
-      {% first_state = block.body.expressions.find(&.name.== "state").args[0] %}
-      getter current_state : {{name.id}} = {{name.id}}::{{first_state.id}}
+      getter current_state : {{name.id}}
   
-      # 3. Flattens nested DSL calls into flat case branches:
       def trigger(event : Symbol) : Void
         case @current_state
         {% for state in block.body.expressions %}
           when .{{state.args[0].id.underscore}}?
-            {% for call in state.block.body.expressions %}
-              {% if call.name == "on" %}
-                if event == {{call.args[0]}}
-                  return transition_to({{name.id}}::{{call.named_args[:transition_to]}})
-                end
-              {% end %}
-            {% end %}
-        {% end %}
-        end
-      end
-  
-      # 4. Inlines 'before' (exit) & 'after' (enter) lifecycle hooks:
-      private def transition_to(target : {{name.id}}) : Void
-        case @current_state
-        {% for s in block.body.expressions %}
-          when .{{s.args[0].id.underscore}}?
-            {% for c in s.block.body.expressions %}
-              {% if c.name == "before" %} {{c.block.body}} {% end %}
-            {% end %}
-        {% end %}
-        end
-  
-        @current_state = target
-  
-        case target
-        {% for s in block.body.expressions %}
-          when .{{s.args[0].id.underscore}}?
-            {% for c in s.block.body.expressions %}
-              {% if c.name == "after" %} {{c.block.body}} {% end %}
+            {% for call in state.block.body.expressions.select(&.name.== "on") %}
+              return transition_to({{name.id}}::{{call.named_args[:transition_to]}}) if event == {{call.args[0]}}
             {% end %}
         {% end %}
         end
@@ -1311,10 +1118,10 @@ Theme: `sol.vin` | Total Slides: 142
   end
   ```
 - **Compile-Time Metaprogramming Invariants**:
-  - Inlined Lifecycle Hooks (before & after): The macro extracts before (pre-transition) and after (post-transition) blocks and inlines them directly into native case branches — zero lambda overhead, zero virtual dispatches!
-  - Compile-Time AST Traversal: Unlike Ruby's method_missing or C#'s reflection, Crystal macros inspect and manipulate the Abstract Syntax Tree during compilation.
-  - Synthesizes Concrete Types: The macro generates real enum BossState variants (Patrol, Chase), giving developers full compiler autocomplete and exhaustiveness checks.
-  - Static Branch Dispatch: trigger(:event) expands into compile-time case branches — eliminating runtime reflection, dictionary lookups, and heap-allocated state objects.
+  - Compile-Time AST Traversal: Inspects and manipulates the AST during compilation, avoiding runtime reflection or dynamic proxies.
+  - Synthesizes Concrete Types: Automatically generates real enum BossState variants (Patrol, Chase) with exhaustiveness checks.
+  - Inlined Lifecycle Hooks: Inlines before and after blocks directly into native case branches with zero closure allocation.
+  - Static Branch Dispatch: trigger(:event) expands into direct machine jumps—zero dictionary lookups or vtables.
 
 **Presenter Notes**:
 > This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with structured native machine execution.
@@ -1343,25 +1150,21 @@ Theme: `sol.vin` | Total Slides: 142
   - Editor tools written in Crystal: **Self-Hosted Plugin**
   - Build, test, package & debug: **Unified Toolchain**
 - **Native LLVM Engine Speed**:
-  - Ahead-of-Time Compiled: Zero bytecode interpreter or VM overhead.
-  - Up to 60x Faster: Eliminates CPU bottlenecks in math, physics, and loops.
-  - Predictable Frame Times: Low-latency Boehm GC with zero gameplay stutter.
-  - Compile-Time Nil Safety: Null pointer crashes eliminated at build time.
+  - Ahead-of-Time Compiled: Zero bytecode interpreter or virtual machine overhead.
+  - Up to 60x Faster: Eliminates CPU bottlenecks in math, physics, and intensive loops.
+  - Predictable Latency: Low-latency Boehm GC with compile-time nil safety.
 - **Zen Developer Ergonomics**:
-  - Declarative Node DSL: node Player < CharacterBody3D.
-  - Automated AST Macros: Effortless @[Export] properties and signals.
-  - Doc Comment Harvesting: Comments automatically populate Godot F1 Help.
-  - Expressive Ruby-like Code: Clean blocks, closures, and pattern matching.
+  - Declarative Node DSL: node Player < CharacterBody3D with zero boilerplate.
+  - Automated AST Macros: Seamless @[Export] property sliders and typed signals.
+  - In-Editor Help: Doc comments automatically harvested into Godot F1 tooltips.
 - **Self-Hosted Editor Integration**:
-  - Self-Hosted Like Crystal: Editor integration is written in Crystal.
-  - Script Parity: Attach and create .cr scripts via Godot's UI.
-  - Instant F5 Hot-Reload: Shadow DLL reloading with zero editor restarts.
-  - CodeEdit Highlighting: Pure Crystal tokenizer embedded in the editor.
+  - Self-Hosted Like Crystal: Godot editor integration plugin is written in Crystal.
+  - Native Script UI: Attach and create .cr scripts directly via Godot's UI.
+  - Instant Hot-Reload: Shadow DLL swap with live state preservation and zero restarts.
 - **Unified Game Toolchain**:
-  - Unified Lapis CLI: lapis init, test, package, and benchmarks.
-  - Quantitative Leak Testing: Verified zero memory leaks with Godot monitors.
-  - radare2 Debugger: Gutter breakpoints, call stacks, and crash forensics.
-  - Dual Execution Paradigms: In-editor GDExtension + standalone host.
+  - Complete Lapis CLI: lapis init, test, package, and benchmarks.
+  - Zero-Leak Verification: Deterministic leak testing via engine Performance monitors.
+  - Native Forensics: Gutter breakpoints and crash diagnostics via radare2.
 
 **Presenter Notes**:
 > What exactly is Lapis? Lapis is not merely a language binding; it is a comprehensive, full-featured developer toolchain for Godot Engine 4.8+.
@@ -1399,36 +1202,26 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Code (typed_node_subscripts.cr)**:
   ```crystal
   node PlayerController < CharacterBody2D do
-    # 1. Declarative onready node caching (GDScript @onready parity):
+    # 1. Declarative onready node caching:
     onready camera : Camera2D = "CameraRig/Camera2D"
     onready hud : CanvasLayer = "%PlayerHUD"
-    unique_node score_label : Label = "ScoreLabel"
-    onready weapon : Weapon = "WeaponMount/Sword"
-    onready sprite : Sprite2D # Infers child "Sprite2D" from name!
   
     def _ready : Void
       # 2. Type-inferred child lookup (self[Class] & self[Class]?):
-      anim  = self[AnimationPlayer]              # Inferred lookup & cast
-      light = self[PointLight2D]?                # Safe nilable (no raise!)
+      anim  = self[AnimationPlayer] # Inferred lookup & cast
+      light = self[PointLight2D]?   # Safe nilable lookup
   
-      # 3. Typed path subscripts (self["path", Class]):
-      blaster = self["Weapons/Blaster", Node3D]? # Safe nilable path lookup
-      unique  = self["%PlayerHUD", CanvasLayer]  # Scene unique % lookup
-      marker  = self["Visuals/Marker2D", Marker2D]
-  
-      # 4. Standard path lookup with compile-time nil branching:
-      if target = self["TargetNode"]?
-        Godot.print("Found target: #{target.name}")
-      end
+      # 3. Typed path subscripts with scene-unique % support:
+      blaster = self["Weapons/Blaster", Node3D]?
+      hud_ui  = self["%PlayerHUD", CanvasLayer]
     end
   end
   ```
 - **Core Subscripts & Lazy Caching**:
-  - Declarative onready Macro: onready camera : Camera2D = "path" lazily caches, types, and validates child nodes during _ready with zero boilerplate.
-  - Type-Inferred Child Subscript: self[Sprite2D] looks up child nodes matching the class name and returns a concrete, typed instance without manual casting.
-  - Typed Path Indexers (Node#[]): self["path", T] provides type-safe path queries for deep children and scene-unique nodes (self["%HUD", CanvasLayer]).
-  - Safe Downcasting & Nil Checks ([]?): self["path", T]? and self[T]? return T? (or nil if absent), enabling sound compile-time nil safety without runtime crashes.
-  - Dead-Pointer Armor: Every subscript lookup verifies instance survival against Godot's 64-bit ObjectDB table via #check_alive!.
+  - Declarative onready Macro: Lazily caches, types, and validates child nodes during _ready.
+  - Type-Inferred Child Subscript: self[Sprite2D] looks up matching children without manual casting.
+  - Typed Path Indexers (Node#[]): self["path", T] queries deep children and unique nodes (%HUD).
+  - Safe Downcasting ([]?): self["path", T]? returns T? on missing nodes, avoiding crashes.
 
 **Presenter Notes**:
 > One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or untyped $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class subscript ergonomics.
@@ -1613,46 +1406,29 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Direct Tree Instantiation, Context Execution (with..yield), and Fluent Configuration
 - **Code (gameplay_dsl.cr — Fluent Spawning & Creation)**:
   ```crystal
-  # 1. Direct Scene Instantiation & mounting with context block:
+  # 1. Direct Scene Instantiation with typed context block:
   enemy = add_child("res://scenes/enemy.tscn", Enemy) do
     self.health = 250
     self.tag = "elite"
-  end # typeof(enemy) is Enemy (preserves static type T!)
+  end # Returns Enemy (preserves static type T!)
   
-  # 2. Direct Tree Instantiation (zero separate .new or block args):
+  # 2. Direct Tree Instantiation (no separate .new or |node| arg):
   sprite = add_child(Sprite2D) do
     self.position = Vector2.new(100, 200)
-    self.centered = true
   end
   
-  # 3. Direct sibling mounting with scene path & type:
-  marker = add_sibling("res://scenes/marker.tscn", Marker2D) do
-    self.position = Vector2.new(0, 50)
-  end
-  
-  # 4. Fluent configuration via Object#build & #configure:
-  boss = BossEnemy.new.build do
-    self.health = 500
-    self.speed = 15.0_f32
-  end
-  boss.configure { self.health = 600 }
-  
-  # 5. Verified scene transitions & class-level loaders:
-  hud_scene = PackedScene.load("res://scenes/hud.tscn")
-  change_scene!("res://scenes/level2.tscn")
+  # 3. Direct sibling mounting:
+  marker = add_sibling("res://scenes/marker.tscn", Marker2D)
   ```
 - **Direct Tree Mounting & Instantiation**:
-  - Context Execution (with .. yield): Configuration blocks execute directly within the receiver's scope—no dummy block arguments (|node|) required.
-  - Type-Preserving Returns: Node#add_child(node : T) : T preserves concrete static type instead of returning Void, enabling enemy = add_child(...).
-  - Direct Tree Instantiation: add_child(Sprite2D) do ... end instantiates, configures, and mounts child nodes in a single call without separate .new.
-  - Direct Scene Child Mounting: add_child(path_or_scene, T) instantiates, downcasts, mounts, and configures child scenes in one call.
-  - Direct Scene Sibling Mounting: add_sibling(path_or_scene, T) mounts sibling nodes directly under the parent with inline configuration.
-  - Fluent #build & #configure: Chainable configuration blocks allow fluent property setup on any Godot engine object or custom node.
+  - Context Execution (with .. yield): Configuration blocks execute directly within the receiver’s scope without dummy block arguments.
+  - Type-Preserving Returns: add_child(node : T) : T returns the concrete type T instead of Void.
+  - Direct Scene Instantiation: add_child(path, T) preloads, instantiates, types, and mounts in a single expression.
+  - Direct Sibling Mounting: add_sibling(path, T) attaches nodes directly under the parent with inline configuration.
 
 **Presenter Notes**:
 > Writing gameplay code shouldn't require repetitive three-step instantiation boilerplate (`new`, configure, `add_child`). In Lapis, we provide direct tree instantiation with Crystal's 'with .. yield' context execution: `add_child(Sprite2D) do ... end` creates the node, evaluates configuration directly in its context without needing block arguments like `|s|`, mounts it into the hierarchy, and returns the strongly-typed instance in a single expression.
 > When working with pre-existing scenes, `add_child("res://scenes/enemy.tscn", Enemy)` and `add_sibling("res://scenes/marker.tscn", Marker2D)` provide short, elegant one-liners that instantiate, downcast, mount, and configure in a single expression. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
-> Sibling nodes mount effortlessly with `add_sibling(...)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.
 
 ---
 
@@ -1663,36 +1439,24 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Fluent Chain & Parallel Pipelines, Compile-Time Checked tween, and Cooperative Await
 - **Code (tween_and_juice.cr — Fluent Animation DSL)**:
   ```crystal
-  # 1. Statement-Based Tween Pipeline DSL:
+  # 1. Statement-based tween pipeline DSL:
   tw = tween(hero) do
-    animate(position, to: Vector2.new(120, 80), in: 4.seconds)
-    chain()
-    animate(modulate, from: Color::RED, to: Color::BLUE, in: 0.3.seconds)
-    parallel()
-    ease(Ease.Out)
-    trans(Trans.Cubic)
-    animate(scale, to: Vector2.new(1.2, 1.2), in: 0.3.seconds)
-    chain()
-    animate(modulate.a, to: 0.0, in: 0.25.seconds)
+    animate(position, to: Vector2.new(120, 80), in: 0.5.seconds)
+    chain
+    animate(scale, to: Vector2.new(1.2, 1.2), in: 0.2.seconds)
+    ease(Ease.Out); trans(Trans.Cubic)
   end
+  await(tw.finished) # Cooperative non-blocking await
   
-  await(tw.finished)
-  Godot.print("Hero entrance sequence completed!")
-  
-  # 2. Compile-Time Type-Checked Single Property Macro:
-  # Statically catches typos like boss.positiom.y at compile time!
+  # 2. Type-checked one-liners (catches typos at build time!):
   tween(boss.position.y, to: 150.0, in: 0.4.seconds)
-  
-  # 3. Compact Target-Omitted Sugar:
   coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)
   ```
 - **Animation & Juice Invariants**:
-  - Statement-Based Tween Pipelines: tween(item) do animate(...); chain(); parallel(); ease(Ease.Out) end automatically peels apart block statements into a unified execution pipeline.
-  - Strict Identifier Type Safety: Targets use typed property identifiers (animate(position), animate(modulate.a)), eliminating runtime typos and strictly rejecting symbols/strings.
-  - First-Class Ease & Trans Enums: Clean constants like Ease.Out and Trans.Cubic (or Ease::Out) with automatic type-safe method forwarding.
-  - Compile-Time Checked tween Macro: tween(boss.position.y, to: 150.0, in: 0.4.seconds) statically validates property access at compile time, eliminating runtime typos.
-  - Real Sub-Properties & Direct Alpha: Animate transparency directly via modulate.a (maps to engine modulate:a) or alpha with compile-time type verification.
-  - Native Time::Span Durations & Cooperative Await: Pass idiomatic Crystal time units (0.4.seconds, 150.milliseconds); await completion via await(tw.finished) without blocking the engine loop.
+  - Statement-Based Pipelines: Peels apart block statements into a unified tween execution pipeline.
+  - Strict Identifier Type Safety: Targets use typed property identifiers, eliminating runtime string typos.
+  - First-Class Enums & Spans: Ease.Out and Trans.Cubic paired with native 0.4.seconds durations.
+  - Cooperative Fiber Await: await(tw.finished) yields without blocking the engine process loop.
 
 **Presenter Notes**:
 > Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in GDScript often involves fragmented method calls and error-prone strings like "position:y".
@@ -1715,13 +1479,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
           global_position, target_pos
       )
       query.collision_mask = 0b0001
-      query.collide_with_areas = false
-      query.collide_with_bodies = true
-  
       var result: Dictionary = space.intersect_ray(query)
       if not result.is_empty():
           var point: Vector2 = result["position"]
-          var normal: Vector2 = result["normal"]
           var collider = result["collider"]
           if collider is Enemy:
               collider.take_damage(25)
@@ -1738,11 +1498,6 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
         enemy.take_damage(25)
       end
     end
-  
-    # 3. Directional raycast query:
-    if wall = raycast(Vector2::RIGHT, distance: 50.0)
-      slide_along_wall(wall.normal)
-    end
   end
   ```
 
@@ -1750,14 +1505,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 45: Direct Space Physics: Zero-Boilerplate Raycasting [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Manual Query Allocation: Requires allocating PhysicsRayQueryParameters2D objects for every single raycast.
-  - Untyped Dictionary Unpacking: intersect_ray returns an untyped Variant dictionary, requiring manual string key lookups.
-  - Runtime Type Casting: Colliders must be manually checked with is Enemy, prone to null errors if destroyed mid-frame.
+  - Manual Query Setup: Requires allocating PhysicsRayQueryParameters2D objects for every raycast.
+  - Untyped Dictionaries: intersect_ray returns a dynamic Variant dictionary requiring string key lookups.
+  - Runtime Casting Hazards: Colliders must be manually checked with is Enemy, prone to null errors.
 - **Solution Advantages**:
-  - One-Line Spatial Queries: raycast_to and raycast acquire the space state and query physics in a single call.
-  - Strongly-Typed Hit Structs: Returns PhysicsHit2D / PhysicsHit3D value types with typed point, normal, and rid.
-  - Alive-Safe Collider Downcasting: hit.collider validates #alive? automatically, allowing safe downcasting via hit.collider.as?(Enemy) with zero dangling pointer risks.
-  - Eliminates Variant Dictionary Churn: Unpacks raycast hits directly into stack PhysicsHit value structs, bypassing Godot's intermediate Variant Dictionary allocations.
+  - One-Line Spatial Queries: raycast_to and raycast query physics directly in a single call.
+  - Strongly-Typed Hits: Returns PhysicsHit2D / 3D value types with typed point, normal, and rid.
+  - Alive-Safe Downcasting: hit.collider.as?(Enemy) validates survival with zero dangling pointer risks.
 - **Key Takeaway**: Lapis collapses Godot's multi-step raycasting ceremony into safe, one-line space queries returning strongly typed hit structs.
 
 **Presenter Notes**:
@@ -1773,35 +1527,23 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Compile-Time play_sound Macro, Self-Pruning Root Players & Relative Spatial Helpers
 - **Code (audio_and_spatial.cr — Audio Macro & Spatial DSL)**:
   ```crystal
-  # 1. Context-Aware 2D Sound (spawns AudioStreamPlayer2D at global_position):
+  # 1. Context-Aware Audio (root-mounted: survives emitter queue_free!):
   play_sound "res://audio/laser.wav", pitch_scale: 1.2_f32
+  play_sound "res://audio/explosion.wav", at: enemy.global_position
   
-  # 2. Context-Aware 3D Sound (spawns AudioStreamPlayer3D at global_position):
-  # Attaches to scene root: audio survives even if caller is queue_freed!
-  play_sound "res://audio/explosion.wav", at: enemy.global_position do
-    max_distance = 250.0_f32
-  end
+  # 2. Direct Node-to-Node Relative Spatial Queries:
+  dist  = distance_to(player)    # 2D & 3D distance
+  dir   = direction_to(player)   # Normalized unit vector
+  angle = angle_to_point(player) # 2D orientation angle
   
-  # 3. Direct Node-to-Node Relative Spatial Navigation:
-  dist  = distance_to(player)          # 2D & 3D distance
-  dir   = direction_to(player)         # Unit vector pointing to target
-  angle = angle_to_point(player)       # 2D orientation angle
-  
-  # 4. Continuous Input Vector & Axis Queries via Input Singleton:
+  # 3. Continuous Input Vector Queries via Input Singleton:
   move_dir = Godot::Input.get_vector(:move_left, :move_right, :move_up, :move_down)
-  steer_ax = Godot::Input.axis(:steer_left, :steer_right)
-  
-  # 5. Direct CanvasItem Visual FX & Procedural Math:
-  self.alpha = 0.65_f32                # Direct modulate alpha property!
-  spark_col  = Color.hex("#ffaa00")    # Hex color constructor
-  spread_dir = Vector2.from_angle(angle) + Vector2.random_direction * 0.2
   ```
 - **Audio, Spatial & Math Invariants**:
-  - Context-Aware play_sound Macro: Automatically creates AudioStreamPlayer2D in 2D nodes, AudioStreamPlayer3D in 3D nodes, and non-spatial players in UI nodes.
-  - Root-Mounted Audio Lifecycle: Spawns audio players under the active scene root with finished.once { queue_free }, so one-shot sound effects never cut off when emitters die.
-  - Node-Relative Spatial Queries: distance_to(target), direction_to(target), and angle_to_point(target) eliminate repetitive global coordinate math.
-  - Continuous Input Vector Queries: Godot::Input.get_vector and axis map action symbols directly to normalized directions via the engine singleton.
-  - CanvasItem alpha & Procedural Math: Directly get and set node.alpha without color reconstruction, paired with Vector2.from_angle and Color.hex.
+  - Context-Aware play_sound Macro: Automatically selects 2D, 3D, or non-spatial audio players based on caller type.
+  - Root-Mounted Audio Lifecycle: Players attach to scene root, so one-shot sounds never cut off when emitters die.
+  - Relative Spatial Queries: distance_to, direction_to, and angle_to_point work directly between nodes.
+  - Input Vector Queries: Godot::Input.get_vector maps action symbols directly to normalized directions.
 
 **Presenter Notes**:
 > Playing audio and navigating spatial relationships are everyday tasks in game development that typically suffer from annoying engine friction.
@@ -1818,47 +1560,27 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Value-Type Union FSM, Decoupled Signal Bus & High-Throughput Node Pools
 - **Code (gameplay_patterns.cr — Optional Lapis Patterns)**:
   ```crystal
-  # 1. Value-Type Union FSM (record states):
   require "lapis/fsm"
-  record Idle; record Walk, speed : Float32
-  alias PlayerState = Idle | Walk
+  require "lapis/pool"
   
+  # 1. Value-Type Union FSM (stack records, zero heap allocations!):
+  record Idle; record Walk, speed : Float32
   fsm PlayerState, initial: Idle.new do
     on_enter Walk do |w|
-      Godot.print("Started walking at #{w.speed} m/s")
-    end
-    on_exit Walk do
-      Godot.print("Stopped walking")
+      Godot.print("Walk: #{w.speed} m/s")
     end
   end
   
-  # 2. Type-Safe Decoupled Signal Bus (lazy singleton):
-  require "lapis/signal_bus"
-  signal_bus GameEvents do
-    signal score_changed(points : Int32)
-    signal boss_defeated(name : String, loot_id : Int32)
-  end
-  GameEvents.score_changed.connect { |pts| update_hud(pts) }
-  GameEvents.score_changed.emit(500)
-  
-  # 3. High-Throughput Dead-Pointer Safe Node Pool:
-  require "lapis/pool"
+  # 2. Dead-Pointer Safe Node Pool (high-throughput recycling):
   node_pool BulletPool, node_type: Bullet, initial: 32, max: 128
   bullet = pool.acquire { |b| b.fire_at(target) }
   pool.release(bullet) # Resets parent, hides, stops process
-  
-  # 4. Typed Resource Cards with Deep Cloning:
-  resource_card SpellCard < Resource do
-    @[Export] property damage : Int32 = 50
-  end
-  card = spell.clone_card # Concrete type preserved!
   ```
 - **Modular Gameplay Patterns**:
-  - Strictly Optional Modules: require "lapis/fsm", signal_bus, and pool (or bundle via patterns.cr) ensure zero prelude bloat in standard games.
-  - Value-Type Union FSM: State transitions between Crystal value records (Idle | Walk) avoid allocating heap state objects; lifecycle hooks are resolved at compile time.
-  - Decoupled Signal Bus vs. @[Autoload]: signal_bus Name declares static event hubs with test-isolation reset (reset_bus!), complementing persistent @[Autoload] engine singletons.
-  - High-Throughput Node Pooling: Lapis::Pool(T) manages node recycling with automatic pre-warming, tree unparenting, and dead-pointer lifecycle verification.
-  - Deep Resource Card Cloning: resource_card macro provides clone_card for runtime card and item mutation while retaining concrete static typing.
+  - Strictly Optional Modules: require "lapis/fsm" and pool guarantee zero prelude bloat in standard projects.
+  - Value-Type Union FSM: State transitions between value records (Idle | Walk) avoid heap allocations and resolve at build time.
+  - High-Throughput Node Pooling: Lapis::Pool(T) manages node recycling with automatic pre-warming and dead-pointer verification.
+  - Decoupled Signal Bus: signal_bus Name declares static event hubs with test-isolation reset (reset_bus!).
 
 **Presenter Notes**:
 > Writing clean, scalable gameplay logic requires robust design patterns that don't sacrifice native performance. In Lapis, we provide high-level gameplay patterns as strictly optional requires, keeping the core prelude featherlight.
@@ -1881,7 +1603,6 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     .to(target_pos)
     .exclude(self)
     .mask(0b0011)
-    .areas(false)
     .query
   
   if hit
@@ -1889,36 +1610,22 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     hit.collider.as?(Enemy).try(&.take_damage(25))
   end
   
-  # 2. Context-Evaluating Node Spawning (Node#spawn):
-  boss = arena.spawn(BossEnemy) do
-    self.position = Vector2.new(640, 360)
-    self.health = 1000
-    self.boss_name = "Void Colossus"
-  end # Returns typed BossEnemy instance!
-  
-  # 3. CanvasItem Visibility & Opacity Helpers:
+  # 2. CanvasItem Visibility & Opacity Helpers:
   hud.opacity = 0.85 # Modulate alpha shorthand
   shield_fx.visible! # Immediate boolean visibility
   status_icon.hidden!
-  
-  # 4. Typed Scene Instantiation with Configuration Block:
-  scene = preload("res://scenes/laser.tscn")
-  laser = scene.instantiate_as(LaserBeam) do
-    self.beam_width = 12.0_f32
-  end
   ```
 - **Fluent Gameplay Usability**:
-  - Fluent Raycast Builders: raycast2d and raycast3d provide fluent builders chaining to, exclude, mask, and query with typed PhysicsHit results.
-  - Typed Context Spawning: Node#spawn(T) and spawn_child(T) allocate, parent, and evaluate configuration blocks directly in the receiver context with static typing.
-  - CanvasItem Opacity & Visibility: Direct node.opacity = val, node.visible!, and node.hidden! streamline rapid UI transitions without color structs.
-  - Configured Scene Instantiation: scene.instantiate_as(T) accepts trailing blocks to configure newly instantiated nodes before mounting.
-  - Dead-Pointer Guarded: All spatial queries and node allocations run through Lapis's monotonic 64-bit instance checks.
+  - Fluent Raycast Builders: raycast2d and raycast3d chain to, exclude, and mask into typed PhysicsHit results.
+  - Dead-Pointer Guarded: hit.collider.as?(T) verifies ObjectDB survival before yielding to try blocks.
+  - CanvasItem Opacity & Visibility: Direct node.opacity = val, visible!, and hidden! streamline rapid UI transitions.
+  - Zero-Allocation Queries: Spatial builders avoid intermediate dictionary allocations by populating stack query structs.
 
 **Presenter Notes**:
 > Building and manipulating scene trees in game engines often suffers from repetitive multi-step ceremony. In Lapis, our core engine bindings make gameplay construction fast, readable, and fluid.
 > First, 'raycast2d' and 'raycast3d' introduce fluent builder pipelines on Node2D and Node3D. Instead of constructing raw query dictionaries or parameter objects, you fluently configure targets, exclusion lists, collision masks, and body/area flags before firing '.query' to receive a strongly-typed PhysicsHit struct.
-> Second, 'Node#spawn' combines instantiation, parenting, and receiver-scoped configuration into a single typed expression.
-> Third, CanvasItem gains direct opacity assignment and imperative visibility helpers ('visible!', 'hidden!'), while 'scene.instantiate_as(T)' supports inline configuration blocks for preloaded scenes.
+> Second, CanvasItem gains direct opacity assignment and imperative visibility helpers ('visible!', 'hidden!'), eliminating boilerplate color math for routine transitions.
+> All spatial queries run through Lapis's monotonic 64-bit instance checks to ensure zero dead-pointer crashes.
 
 ---
 
@@ -1929,44 +1636,25 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Zero-Config SceneTree Mounting, Engine Singleton Registration & Type-Safe Accessors
 - **Code (game_manager.cr — Declarative Autoload Singletons)**:
   ```crystal
-  require "lapis"
-  
-  # 1. Declarative Autoload Node:
   @[Autoload]
   node GameManager < Node do
     property score : Int32 = 0
-    property current_stage : String = "dungeon_01"
-  
-    def add_score(pts : Int32) : Void
-      @score += pts
-    end
+    def add_score(pts : Int32) : Void; @score += pts; end
   end
   
-  # 2. Type-Safe Access Anywhere in Crystal:
+  # 1. Type-safe instance access anywhere in Crystal:
   GameManager.instance.add_score(100)
   
-  # 3. Nilable Check (before SceneTree boot):
+  # 2. Nilable check (safe before SceneTree boot):
   if gm = GameManager.instance?
     Godot.print("Score: #{gm.score}")
   end
-  
-  # 4. Custom Configuration (Name, Singleton, Mount):
-  @[Autoload(name: "AudioService", singleton: false)]
-  node CustomAudioManager < AudioStreamPlayer do
-  end
-  
-  # 5. In-Body Macro Directive Parity:
-  node InventoryManager < Node do
-    autoload name: "Inventory", singleton: true, mount_tree: true
-  end
   ```
 - **Autoload Singleton Invariants & Comparison**:
-  - GDScript Anti-Pattern: Requires manually editing project.godot under [autoload], relying on untyped global identifiers or string paths (get_node("/root/GameManager")).
-  - C# / Native Boilerplate: Demands verbose GetNode<GameManager>("/root/GameManager") casting, manual static instance caching, and brittle DLL unload cleanup.
-  - Zero-Config Root Mounting: Godot::AutoloadManager automatically attaches instances to /root/<Name>, participating in _process, physics, and input loops.
-  - Engine Singleton Registration: Registers with Godot.engine.register_singleton by default, giving GDScript instant access via Engine.get_singleton("GameManager").
-  - Type-Safe Class Accessors: Synthesizes strict .instance (raises if unmounted) and safe .instance? accessors with zero dictionary lookup overhead.
-  - Transactional Hot-Reload Safety: Automatically unparents nodes and unregisters singletons during live reloads, eliminating dangling pointers and Windows DLL lockouts.
+  - Zero-Config Root Mounting: @[Autoload] attaches instances directly to /root/GameManager with zero project.godot edits.
+  - Engine Singleton Registration: Registers in Godot.engine, giving GDScript access via Engine.get_singleton.
+  - Type-Safe Class Accessors: Synthesizes strict .instance and nilable .instance? with zero dictionary lookup overhead.
+  - Hot-Reload Safe: Automatically unparents nodes and clears singletons during live reloads, eliminating dangling pointers.
 
 **Presenter Notes**:
 > In standard Godot development, configuring singletons is notoriously fragmented. In GDScript, you have to open Project Settings, register an autoload script in project.godot, and access it as a dynamic global without compile-time type safety. In Godot C# or C++, you have to manually traverse the scene tree with GetNode("/root/..."), maintain your own static instance pointers, and write defensive teardown code so engine reloads don't crash.
@@ -1997,38 +1685,29 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Declarative Signal Connections, First-Class Signal Emission, and Decoupled Systems
 - **Code (reactive_events.cr — Type-Safe Signal Subscriptions)**:
   ```crystal
-  # 1. Declarative signal connection sugar with 'on' or 'connect':
-  start_btn = self["UI/StartButton", Godot::Button]
-  on start_btn.pressed do
-    start_game_sequence
-  end
-  
-  # 2. Declaring custom typed signals with parameters:
-  signal health_changed(current : Int32, max_health : Int32)
+  # 1. Custom typed signals
+  signal health_changed(current : Int32, max : Int32)
   signal player_died
   
-  # 3. First-class signal subscriptions, one-shot, and type filters:
+  # 2. Declarative subscriptions & one-shot hooks
   health_changed.connect do |curr, max|
-    hud.update_health_bar(curr, max)
+    hud.update_health(curr, max)
   end
-  player_died.once do
-    game_over_director.trigger_defeat
-  end
+  player_died.once { game_over_director.trigger_defeat }
+  
+  # 3. Positional type filtering
   on area.body_entered, Player do |player|
     player.collect_coin
   end
   
-  # 4. First-class signal emission on signal accessors:
+  # 4. First-class typed emission
   health_changed.emit(75, 100)
-  emit(health_changed, 75, 100) # macro sugar
-  player_died.emit
   ```
-- **Reactive Gameplay Features**:
-  - Declarative on & connect: Connect signals with clean Crystal blocks—on button.pressed { ... } eliminates single-use handler boilerplate.
-  - First-Class Signal Accessors: Signals are typed objects; health_changed.emit(75, 100) and health_changed.connect provide zero namespace pollution.
-  - Positional Type Filtering: on area.body_entered, Player do |p| automatically filters by class and downcasts argument without manual .as(T).
-  - One-Shot Subscriptions: signal.once { ... } automatically unhooks after the first invocation, preventing stale event leaks.
-  - Automatic ObjectDB Pruning: Subscriptions track 64-bit instance IDs; when either sender or receiver dies, connections dissolve cleanly.
+- **Reactive Gameplay Architecture**:
+  - Declarative on & connect: Wire signals with clean blocks, eliminating boilerplate intermediary methods.
+  - First-Class Signal Accessors: health_changed.emit(...) provides type-checked invocation with zero namespace pollution.
+  - Positional Type Filtering: on area.body_entered, Player filters collision events and downcasts targets automatically.
+  - One-Shot & Safe Lifecycle: signal.once { ... } auto-unhooks after firing, while dead-instance tracking prevents stale callback crashes.
 
 **Presenter Notes**:
 > Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. With our 'on' macro and 'connect' blocks, you can wire up signals with idiomatic closures—eliminating single-use handler functions.
@@ -2129,31 +1808,24 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   
   node CombatArena < Node2D do
     def _ready : Void
-      # 1. Path Traversal with / and .as(T):
-      mount  = self / "Visuals" / Marker2D
-      cam_up = camera / ".."
+      # 1. Path traversal (/) & Unique nodes (%):
+      mount = self / "Visuals" / Marker2D
+      bar   = self % ProgressBar
   
-      # 2. Scene Unique Nodes with %:
-      bar = self % ProgressBar
-      hud = (self % "HUD").as(CanvasLayer)
-  
-      # 3. Chainable Tree Assembly Operator (<<):
-      # Mounts children in sequence and returns parent for fluent chains:
+      # 2. Chainable tree assembly operator (<<):
       self << player << hud << ambient_sound
   
-      # 4. Upward Ancestor Navigation Operator (<<):
-      # Strictly traverses upward hierarchy looking for Player:
-      found_player = self << Player          # Strict (Player or raises)
-      found_boss   = self << BossController? # Safe nilable (returns T?)
+      # 3. Upward ancestor climbing (<< Class):
+      found_player = self << Player          # Climbs parents to Player
+      found_boss   = self << BossController? # Safe nilable search
     end
   end
   ```
 - **Hierarchy Traversal & Mounting**:
-  - Opt-In Require: Add require "lapis/extras" to enable expressive operator sugar on Godot Node classes.
-  - Path Traversal Operator (/): self / "Visuals" / Marker2D walks scene paths fluently, pairing seamlessly with Crystal's native .as(T).
-  - Scene Unique Nodes (%): self % ProgressBar provides instant 1:1 parity with Godot's unique node identifier syntax.
-  - Multi-Append Tree Assembly (<<): parent << c1 << c2 brings Crystal's stream-append idiom to SceneTree construction.
-  - Ancestor Climbing (<< Class): node << Player climbs parent nodes until finding the requested type, with Class? supporting safe nilable searches.
+  - Opt-In Require: Add require "lapis/extras" to enable expressive operator sugar.
+  - Path Traversal (/): self / "Visuals" / Marker2D walks paths fluently with native .as(T).
+  - Multi-Append Assembly (<<): parent << c1 << c2 brings stream-append to scene trees.
+  - Ancestor Climbing (<< Class): node << Player climbs parents to find requested types.
 
 **Presenter Notes**:
 > With 'require "lapis/extras"', Node gains expressive mathematical and stream operators for hierarchy manipulation.
@@ -2174,37 +1846,25 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   
   node CombatArena < Node2D do
     def _ready : Void
-      # 1. Multi-node wildcard glob query (*) & get_nodes:
+      # 1. Multi-node wildcard glob query (*) & globstar (**):
       hitboxes = self * {"Enemies/*/Hitbox", Area2D}
-      targets  = self.get_nodes("Enemies/*/Hitbox", Area2D)
+      spawns   = self.get_nodes("Spawns/**", Marker2D)
   
-      # 2. Recursive globstar query (**):
-      spawns = self.get_nodes("Spawns/**", Marker2D)
-  
-      # 3. Streaming receiver-scoped iteration (zero intermediate array!):
+      # 2. Streaming receiver-scoped iteration (0 intermediate array!):
       self.each_node("Enemies/*", Enemy) do
-        alert! # Direct method call on Enemy!
+        alert! # Direct method call on Enemy context
       end
   
-      # 4. Regex child search operator:
-      fx_nodes = self * /^FX_Spark_\d+$/
-  
-      # 5. Fluent GroupQuery DSL:
+      # 3. Fluent typed GroupQuery DSL:
       group(:enemies).each(as: Enemy) { |e| e.alert! }
-      boss = group(:boss).first(as: Boss)
-      group(:enemies).call("alert", global_position)
-  
-      # 6. Direct streaming cleanup and manipulation:
-      self.each_node("Bullets/*", &.queue_free)
     end
   end
   ```
 - **Ergonomic Hierarchy Query Engine**:
-  - Opt-In Require: Add require "lapis/extras" to enable wildcard globbing and streaming query methods on scene nodes.
-  - Wildcard & Globstar Queries (*): self * {"pattern", Type} and get_nodes support single-level * and recursive globstars **, returning Array(T).
-  - Streaming Iteration: each_node(pattern, Type) traverses subtrees without allocating intermediate collections.
-  - Fluent GroupQuery DSL: group(:name) provides chainable .each(as: Type), .to_a(as: Type), .first, .first!, and broadcast .call.
-  - Receiver Scoping & Block Shorthands: each_node yields via with node yield node, supporting receiver-scoped blocks (do alert! end) and proc shorthands (&.queue_free).
+  - Opt-In Require: Add require "lapis/extras" to enable wildcard globbing and streaming query methods.
+  - Wildcard & Globstar (*): self * {"pattern", Type} searches single and recursive subtrees returning Array(T).
+  - Streaming Iteration: each_node(pattern, Type) traverses descendants without allocating intermediate arrays.
+  - Fluent GroupQuery DSL: group(:name) provides typed .each(as: Type) and broadcast .call methods.
 
 **Presenter Notes**:
 > Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
@@ -2223,19 +1883,11 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
       const EnemyScene = preload("res://scenes/enemy.tscn")
       var enemy = EnemyScene.instantiate() as Enemy
       enemy.health = 250
-      enemy.tag = "elite"
       add_child(enemy)
   
-      # Pitfall 2: Sibling mounting with manual parent lookup
-      const MarkerScene = preload("res://scenes/marker.tscn")
-      var marker = MarkerScene.instantiate() as Marker2D
-      marker.position = Vector2(0, 50)
-      get_parent().add_child(marker)
-  
-      # Pitfall 3: Dynamic loading requires manual resource checking
+      # Pitfall 2: Dynamic loading requires manual resource checking
       var boss_scene = load("res://scenes/boss.tscn") as PackedScene
       var boss = boss_scene.instantiate() as BossEnemy
-      boss.damage = 100
       add_child(boss)
   ```
 - **:sparkles: Crystal: Preload (>), Load (>>), and Direct Tree Pipelines**:
@@ -2246,18 +1898,12 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     # 1. Pipeline Preload (>): Preload, instantiate, cast & mount!
     enemy = add_child("res://scenes/enemy.tscn" > Enemy) do
       self.health = 250
-      self.tag = "elite"
-    end # typeof(enemy) is Enemy (preserves static type T!)
-  
-    # 2. Pipeline Sibling Mounting (>):
-    marker = add_sibling("res://scenes/marker.tscn" > Marker2D) do
-      self.position = Vector2.new(0, 50)
     end
   
-    # 3. Dynamic Runtime Load Operator (>>):
+    # 2. Dynamic Runtime Load Operator (>>):
     boss = "res://scenes/boss.tscn" >> BossEnemy
   
-    # 4. Nilable Pipeline (?): Returns nil if missing (no exception!):
+    # 3. Safe Nilable Pipeline (?): Returns nil if missing
     secret = "res://scenes/secret.tscn" > SecretRoom?
   end
   ```
@@ -2266,14 +1912,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 58: Lapis Extras: Scene Preload (>) & Load (>>) Pipelines [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Multi-Step Friction: Must store PackedScene, invoke instantiate(), cast, configure, and mount in separate statements.
-  - Unsafe Runtime Casting: Untyped Resource return requires as Enemy casting that fails silently if types diverge.
-  - Manual Tree Lookup: Sibling mounting requires explicit get_parent().add_child(...) navigation.
+  - Multi-Step Friction: Must store PackedScene, instantiate, cast, configure, and mount in separate calls.
+  - Unsafe Runtime Casting: Untyped returns require as Enemy casts that fail silently if types drift.
+  - Verbose Dynamic Loading: Runtime scene loading requires manual error checking and multiple intermediate variables.
 - **Solution Advantages**:
-  - Opt-In Require: Add require "lapis/extras" to enable pipeline operators on String and PackedScene.
-  - Direct Tree Pipeline (>): add_child("path" > T) do ... end preloads, instantiates, types, mounts, and configures inline.
-  - Sibling Pipeline Parity: add_sibling("path" > T) mounts directly under the parent node with full context block evaluation.
-  - Dynamic Load Pipeline (>>): Dynamically loads scenes at runtime; pairs with nilable types like T? without throwing.
+  - Direct Tree Pipeline (>): add_child("path" > T) do ... end preloads, instantiates, types, and mounts inline.
+  - Dynamic Load Pipeline (>>): Dynamically loads scenes at runtime with guaranteed static return type.
+  - Sound Nilable Pipeline: "path" > SecretRoom? safely returns nil on missing resources without throwing.
 - **Key Takeaway**: Lapis scene pipeline operators (> and >>) turn multi-step scene preloading, instantiation, and initial configuration into expressive single-line expressions.
 
 **Presenter Notes**:
@@ -2288,50 +1933,34 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **:circle-xmark: GDScript: Manual Signal Forwarding Boilerplate**:
   ```gdscript
   func _ready() -> void:
-      # 1. Boilerplate intermediate methods for 1:1 signal forwarding
-      $Player.level_up.connect(_on_player_level_up)
+      # 1. Forwarding boilerplate needed for 1:1 forwarding
+      $Player.level_up.connect(func(lvl): $HUD.on_level.emit(lvl))
       
-      # 2. Verbose lambdas for arity trimming (3 args -> 2 args)
-      $Player.action_performed.connect(func(tag, intensity, _priority):
-          $HUD.on_notify.emit(tag, intensity)
-      )
+      # 2. Verbose lambda for arity trimming (3 args -> 1 arg)
+      $Player.hit.connect(func(_target, dmg, _type): $HUD.notify.emit(dmg))
       
-      # 3. Manual lambda for event trigger (dropping all 3 args)
-      $Player.action_performed.connect(func(_a, _b, _c):
-          $HUD.on_any_action.emit()
-      )
-      
-      # 4. Manual polymorphic type checking and downcasting
+      # 3. Manual type check and downcast lambda
       $Area.body_entered.connect(func(body):
           if body is Enemy:
               enemy_detected.emit(body)
       )
-  
-  func _on_player_level_up(new_lvl: int) -> void:
-      $HUD.on_level_changed.emit(new_lvl)
   ```
 - **:sparkles: Crystal: Strict (>) & Loose (>>) Signal Piping**:
   ```crystal
   require "lapis/extras"
   
   def _ready : Void
-    # 1. Strict Pipe (>): Compile-time verified signature match
-    player.level_up > hud.on_level_changed
+    # 1. Strict Pipe (>): Compile-time verified 1:1 forward
+    player.level_up > hud.on_level
   
-    # 2. Loose Pipe (>>): Automatic arity trimming & numeric conversion
-    # Drops priority (Int32), converts intensity Float64 -> Float32:
-    player.action_performed >> hud.on_notify
+    # 2. Loose Pipe (>>): Automatic arity trimming
+    player.hit >> hud.notify
   
-    # 3. Loose Pipe (>>): Arity trimming to 0-arguments
-    # Drops all 3 arguments and triggers event trigger:
-    player.action_performed >> hud.on_any_action
-  
-    # 4. Loose Pipe (>>): Polymorphic type filtering & auto-downcasting
-    # Silently ignores non-Enemy nodes; passes downcasted Enemy!
+    # 3. Loose Pipe (>>): Polymorphic type filtering & auto-downcast
     area.body_entered >> self.enemy_detected
   
-    # 5. Clean, explicit unpiping via subscription handle:
-    sub = (player.tapped >> hud.on_any_action)
+    # 4. Clean unpiping via subscription handle
+    sub = (player.hit >> hud.notify)
     sub.disconnect
   end
   ```
@@ -2340,16 +1969,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 60: Lapis Extras: Strict (>) & Loose (>>) Signal Piping [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Forwarding Ceremony: Forwarding a signal from a child component to an outer system requires writing dummy intermediary handler methods.
-  - Arity & Conversion Glue: Adapting a signal with extra arguments or mismatched numeric types requires allocating anonymous lambda wrappers.
-  - Manual Polymorphic Filtering: Filtering collision events to specific types requires runtime if body is Type: inspection and manual re-emission.
-  - Fragile Disconnection: Lambda connections are anonymous and cannot be cleanly disconnected without caching the Callable reference.
+  - Forwarding Ceremony: Forwarding child signals to parent HUD elements requires intermediary methods or lambda wrappers.
+  - Arity Trimming Glue: Dropping unused arguments or adapting signatures requires manual parameter binding in anonymous closures.
+  - Manual Type Filtering: Filtering collisions requires runtime if body is Enemy: inspection and manual re-emission.
 - **Solution Advantages**:
-  - Opt-In Require: Add require "lapis/extras" to enable reactive pipeline operators on signal accessors.
-  - Strict Pipe (>): source > target establishes a direct compile-time verified signal pipeline with zero intermediate methods.
-  - Loose Pipe (>>): Automatically trims unused trailing arguments and performs safe numeric conversions (e.g. Float64 to Float32).
-  - Polymorphic Type Filtering: area.body_entered >> self.enemy_detected silently ignores non-matching nodes and automatically downcasts matching instances.
-  - First-Class Subscription Lifecycle: Returns a concrete SignalSubscription handle for clean, deterministic unpiping via sub.disconnect without managing raw strings.
+  - Strict Pipe (>): source > target establishes a compile-time verified signal pipeline with zero wrapper methods.
+  - Loose Pipe (>>): Automatically trims unused trailing arguments and performs safe numeric conversions.
+  - Polymorphic Filtering: area.body_entered >> enemy_detected silently ignores non-Enemy nodes and downcasts matches.
 - **Key Takeaway**: Lapis signal piping operators (> and >>) eliminate boilerplate forwarding handlers, lambda wrappers, and manual type guards in favor of expressive reactive streams.
 
 **Presenter Notes**:
@@ -2376,33 +2002,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     onready hud : CanvasLayer = ~"%PlayerHUD"
   
     def _ready : Void
-      # 2. Bare path lookups via active NodeContext (GDScript $ & % parity):
-      cam = ~"$CameraRig/Camera2D" # => Node (or NodeNotFoundError)
-      hud = ~"%PlayerHUD"          # => Scene Unique Node
-      
-      # 3. Typed scene queries with ~Class (up-casts & checks alive):
-      sprite = ~Sprite2D           # Searches tree, up-casts, raises if nil
-      if shield = ~Shield?         # Safe nilable lookup (Shield? or nil)
-        shield.absorb_hit(10)
-      end
+      # 2. Typed scene query with ~Class (searches & casts):
+      sprite = ~Sprite2D
   
-      # 4. Typed Node Query Tuple (~{"path", Type}):
+      # 3. Typed query tuple (~{"path", Type}):
       sword     = ~{"$WeaponMount/Sword", Sword}
-      maybe_gun = ~{"$Weapons/Blaster", Blaster?} # Safe nilable tuple!
-  
-      # 5. External blocks scope via with_context:
-      target.with_context do
-        mesh = ~MeshInstance3D?    # Safe lookup on target
-      end
+      maybe_gun = ~{"$Weapons/Blaster", Blaster?} # Safe nilable!
     end
   end
   ```
 - **How NodeContext & ~ Work**:
-  - Opt-In Require: Add require "lapis/gd_extras" to enable unary ~ queries and GDScript-mimicking syntax.
-  - Active Lifecycle Context: Every Godot callback (_ready, _process, _input) automatically scopes NodeContext.current = self via thread-local storage.
-  - Strict & Nilable Class Queries: ~Sprite2D searches and casts to concrete node types; ~Shield? returns Shield? without raising.
-  - Typed Node Query Tuples: ~{"$Mount/Sword", Sword} combines path routing, type casting, and optional Type? nil-safety in one expressive tuple.
-  - Negligible Context Overhead (~0.4 ns): Backed by @[ThreadLocal] NodeContext.current, adding practically zero overhead over explicit self.
+  - Opt-In Require: Add require "lapis/gd_extras" to enable unary ~ queries and syntax.
+  - Active Lifecycle Context: Godot callbacks automatically scope NodeContext.current = self via thread-local storage.
+  - Strict & Nilable Class Queries: ~Sprite2D searches and casts concrete nodes; ~Shield? returns Shield?.
+  - Typed Node Query Tuples: ~{"$Mount/Sword", Sword} combines path routing, type casting, and nil-safety.
 
 **Presenter Notes**:
 > In GDScript, accessing nodes is often concise because of $Node syntax, but it's untyped and requires runtime casting. In Lapis, 'require "lapis/gd_extras"' introduces the unary tilde operator (~) backed by an active NodeContext.
@@ -2421,51 +2034,28 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```crystal
   require "lapis/gd_extras"
   
-  # 1. Polymorphic node downcasting with pattern guards:
+  # 1. Polymorphic downcasting with pattern guards:
   match collider do
     is Player, if: p.health < 20 do |p|
-      p.take_damage(100) # Execute lethal critical strike
+      p.take_damage(100) # Critical execution!
     end
-    is Enemy do
-      apply_knockback(transform.basis.z * 15.0_f32)
-    end
-    is WorldBoundary do
-      bounce_projectile!
+    is Enemy do |e|
+      e.apply_knockback(transform.basis.z * 15.0_f32)
     end
   end
   
-  # 2. Variant unboxing with implicit variable binding:
-  value_text = match i do
-    is Int64          do "Integer: #{i * 2}" end
-    is String         do "Text: #{i.upcase}" end
-    is Godot::Vector2 do "Vector: (#{i.x}, #{i.y})" end
-    default           do "Unsupported Variant" end
-  end
-  
-  # 3. Tuple destructuring for input & combat states:
+  # 2. Engine Variant unboxing & tuple destructuring:
   match {input_action, on_ground?} do
     is :jump, true  do perform_ground_jump end
     is :jump, false do perform_air_dash end
     is :attack, _   do queue_combo_attack end
   end
-  
-  # 4. Structural array rest & dictionary matching:
-  match packet do
-    is dict(type: "chat", user: u, msg: m) do |_, u, m|
-      broadcast_chat(user: u, text: m)
-    end
-    is [head, .., tail] do |first, last|
-      sync_waypoints(start: first, finish: last)
-    end
-    default do log_unknown_packet end
-  end
   ```
 - **Expression-Oriented Matching Capabilities**:
   - Opt-In Require: Add require "lapis/gd_extras" to enable the expression-oriented match macro.
-  - Polymorphic Class Downcasting: is NodeClass do |n| dynamically inspects and downcasts Godot node hierarchies into typed contexts with zero unsafe casts.
-  - Pattern Guards (if:): Combine structural type inspection with boolean runtime guards (is Player, if: p.health < 20) in a single branch.
-  - Engine Variant Unboxing & Binding: Unpacks untyped Godot Variant objects into concrete primitives, vectors, and math types with implicit variable narrowing.
-  - Tuple & Array Rest Matching: Destructure multi-value state transitions (is :jump, true) and array boundaries with double-dot rest ([first, .., last]).
+  - Polymorphic Downcasting: is NodeClass do |n| dynamically inspects and downcasts node hierarchies with zero unsafe casts.
+  - Pattern Guards (if:): Combine structural type matching with boolean runtime guards in a single branch.
+  - Tuple Destructuring: Destructure multi-value state transitions (is :jump, true) with clean underscore wildcards.
 
 **Presenter Notes**:
 > Pattern matching is one of the most powerful paradigms for gameplay logic, state machines, and network processing. In GDScript, the match statement is largely limited to scalar values and enums, lacking type downcasting, guards, and Variant unboxing.
@@ -2488,37 +2078,23 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   
   node CombatController < Node2D do
     def _ready : Void
-      # 1. Compound assignment with parameterless proc:
-      start_btn = self["UI/StartButton", Godot::Button]
+      # 1. Compound signal assignment with typed Procs:
       start_btn.pressed += ->start_game_sequence
+      start_btn.pressed -= ->start_game_sequence # Clean unbind via -=
   
-      # 2. Multi-argument typed signal binding:
-      player = self["Player", PlayerController]
-      player.health_changed += ->(cur : Int32, max : Int32) do
-        hud.update_health_bar(cur, max)
+      # 2. Positional type filtering (auto-downcasts Enemy!):
+      hit_area.body_entered += ->(enemy : Enemy) do
+        radar.track(enemy)
       end
-  
-      # 3. Positional type filtering in += proc:
-      # Filters out non-Enemy bodies; auto-downcasts matching Enemy!
-      area = self["DetectionArea", Area2D]
-      area.body_entered += ->(enemy : Enemy) do
-        combat_radar.track(enemy)
-      end
-  
-      # 4. Clean unbinding via -= operator:
-      start_btn.pressed -= ->start_game_sequence
     end
-  
-    # ZERO _exit_tree memory leaks! When CombatController dies,
-    # Lapis tracks 64-bit ObjectDB IDs and self-prunes connections.
+    # Zero _exit_tree leaks! Subscriptions self-prune via 64-bit ObjectDB IDs.
   end
   ```
 - **C# Event Syntax Without the Leaks**:
-  - Opt-In Require: Add require "lapis/cs_extras" to enable += and -= event operators on signals.
-  - Familiar C# Syntax: signal += ->handler provides a seamless onboarding ramp for developers migrating from Godot C#.
-  - Typed Proc Overloads: Supports 0, 1, and 2-argument typed Procs with automatic argument narrowing and downcasting.
+  - Opt-In Require: Add require "lapis/cs_extras" to enable += and -= event operators.
+  - Familiar C# Syntax: signal += ->handler provides ergonomic event binding for .NET developers.
   - Positional Type Filtering: area.body_entered += ->(enemy : Enemy) automatically drops non-matching instances.
-  - 64-Bit ObjectDB Leak Armor: Unlike .NET CLR event delegates which create strong roots and leak memory unless manually detached in _ExitTree, Lapis connections self-prune automatically!
+  - 64-Bit ObjectDB Leak Armor: Connections self-prune automatically when either node is freed—zero _ExitTree leaks.
 
 **Presenter Notes**:
 > Many developers transitioning to Godot from Unity or Godot C# love the concise 'event += handler' operator syntax.
@@ -2664,56 +2240,50 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `sweetie_80` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs**:
   ```gdscript
-  # PROBLEM 1: Dictionary String Keys — Silent Null on Typos
-  var blackboard: Dictionary = {}
-  blackboard["target_enemy"] = player_node
-  # Typo in key silently returns null, causing downstream crash:
-  var target = blackboard.get("target_enmy") # => null!
-  target.take_damage(10) # Runtime Crash: Invalid call on base Nil
+  # 1. String dictionary keys: silent null on typos
+  var blackboard: Dictionary = {"target": player}
+  var target = blackboard.get("targt") # Silent null -> crash!
+  target.take_damage(10)
   
-  # PROBLEM 2: State Machine String Hashing & Typo Blindspots
+  # 2. StringName comparisons: typos compile silently!
   var state: StringName = &"patrol"
-  if state == &"petrol": # Typo compiles silently! Logic fails at runtime.
+  if state == &"petrol": # Typo compiles silently; fails at runtime!
       refuel_vehicle()
   
-  # PROBLEM 3: Frame-by-Frame String Comparison & Intern Table Locks
+  # 3. Frame-by-frame string matching:
   match current_action:
-      "idle": play_animation("idle")
+      "idle": play_anim("idle")
       "attack": deal_damage() # Hashed string lookup every frame
   ```
 - **:sparkles: Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing**:
   ```crystal
-  # SOLUTION 1: Godot::Dictionary & NamedTuple Symbol Key Indexing
+  # 1. Native Symbol key indexing & safe digging:
   dict = Godot::Dictionary.new(target: player_node, score: 500)
-  dict[:score] = 750                             # Native Symbol key indexing!
-  dmg = dict.dig?(:stats, :attack, as: Int32)    # Safe nested digging!
+  dict[:score] = 750
+  dmg = dict.dig?(:stats, :attack, as: Int32)
   
-  # SOLUTION 2: 32-Bit Immediate Integer (cmp eax, imm32) — Value Types
-  # Symbols are NOT strings: they are immediate 32-bit compiler IDs:
+  # 2. Symbols are immediate 32-bit integers (cmp eax, imm32):
   state = :patrol
-  if state == :patrol # Single machine instruction (1 CPU cycle)
-    move_to_waypoint
-  end
+  move_to_waypoint if state == :patrol # Single CPU cycle!
   
-  # SOLUTION 3: Direct Integer Matching (Zero String Hashing)
+  # 3. Direct integer matching (zero string hashing):
   case state
   when :idle   then play_animation("idle")
   when :patrol then patrol_route
-  when :alert  then engage_combat
-  end # Direct integer comparison, 0 heap bytes!
+  end
   ```
 
 ---
 
 ### Slide 70: Symbols: String Churn vs. 32-Bit IDs [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Silent Null on Typoed Keys: Typoing a dictionary string key (blackboard.get("target_enmy")) returns null without any warning, causing crashes down the line.
-  - Silent Typo Bugs in States: String and StringName comparisons never fail at compile time. Misspellings like &"petrol" silently evaluate to false, creating insidious bugs.
-  - StringName Creation Cost: StringNames require global intern table hashing upon creation; typoed StringNames still fail silently at runtime.
+  - Silent Null on Typoed Keys: Misspelling a dictionary key returns null without warning, causing crashes down the line.
+  - Silent Typo Bugs in States: String and StringName comparisons never fail at compile time; &"petrol" silently evaluates to false.
+  - Intern Table Hashing: StringNames incur global intern table lookups, yet offer zero compile-time typo protection.
 - **Solution Advantages**:
-  - Frictionless Engine Dictionaries: Godot::Dictionary.new(**kwargs) and dict[:key] bring transparent Symbol key access and nested dig? to engine collections.
-  - Immediate 32-Bit Integers: In Crystal, symbols are NOT strings. They are immediate 32-bit integer IDs assigned by the compiler — zero heap allocations, zero GC tracking, zero pointer dereferences.
-  - Single-Cycle CPU Comparisons: Evaluating state == :patrol compiles to a single CPU machine instruction (cmp). No string hashing, no string length checks.
+  - Transparent Symbol Keys: dict[:score] = 750 and dig? bring clean symbol indexing to Godot collections.
+  - Immediate 32-Bit Integers: Symbols are 32-bit compiler integer IDs—zero heap allocations and zero GC overhead.
+  - Single-Cycle CPU Comparisons: state == :patrol compiles to a single cmp instruction with zero string hashing.
 - **Key Takeaway**: Symbols solve Godot's silent dictionary typos and runtime string hash overhead by turning identifiers into immediate 32-bit integers with compile-time checked keys.
 
 **Presenter Notes**:
@@ -2892,62 +2462,50 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `gamestation_3` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing**:
   ```gdscript
-  # The GDScript Trap: Every custom data packet is a heap RefCounted
   class_name CombatEvent extends RefCounted:
       var damage: float; var element: int; var crit: bool
       func _init(d: float, e: int, c: bool):
           damage = d; element = e; crit = c
   
-  # In a bullet-hell, horde survivor, or particle simulation:
+  # 10,000 separate heap mallocs + atomic refcount updates:
   var events: Array[CombatEvent] = []
+  for e in enemies:
+      events.append(CombatEvent.new(45.0, 1, true))
   
-  func process_combat_batch(enemies: Array[Node3D]) -> void:
-      for e in enemies:
-          # 10,000 separate heap mallocs + atomic refcount updates:
-          events.append(CombatEvent.new(45.0, 1, true))
-  
-      # Cache disaster: Array of 10,000 pointers scattered across RAM
-      for evt in events:
-          apply_damage(evt.damage) # 10,000 pointer chases -> L1 misses!
-  
-      events.clear() # Mass deallocation triggers GC/allocator stutters!
+  # Cache disaster: Array of 10,000 pointers scattered in RAM
+  for evt in events:
+      apply_damage(evt.damage) # 10,000 pointer chases!
+  events.clear() # Mass deallocation triggers GC stutter
   ```
 - **:sparkles: Crystal: CPU Register Value Passing & Flat Contiguous Buffers**:
   ```crystal
-  # Stack-allocated value type: exactly 12 bytes, 0 pointer indirection!
   struct CombatEvent
-    getter damage : Float32
-    getter element : ElementType
-    getter? critical : Bool
-  
+    getter damage : Float32, element : ElementType, critical : Bool
     def initialize(@damage, @element, @critical = false); end
   end
   
-  # 1. Ephemeral event passed via CPU registers/stack — 0 heap bytes!
+  # 1. Ephemeral event in CPU registers: 0 heap allocations!
   def apply_damage(event : CombatEvent) : Void
-    total = event.critical? ? event.damage * 2.0_f32 : event.damage
-    @health -= total # Pure inlined math, 0 pointers, 0 GC tracking
+    @health -= event.critical? ? event.damage * 2.0_f32 : event.damage
   end
   
   # 2. 10,000 structs inlined into ONE flat 120 KB buffer:
   events = Array(CombatEvent).new(10_000)
   10_000.times { events << CombatEvent.new(45.0_f32, ElementType::Fire, true) }
-  
-  # 3. Cache-friendly contiguous memory traversal:
-  events.each { |evt| apply_damage(evt) } # Linear memory sweep
+  events.each { |evt| apply_damage(evt) } # Linear cache sweep!
   ```
 
 ---
 
 ### Slide 78: Value Types: GC Thrashing vs. Stack Structs [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Heap Thrashing for Ephemeral Data: 10,000 events require 10,000 separate malloc calls and atomic refcount modifications.
-  - Pointer Indirection & Cache Misses: Array[CombatEvent] stores 64-bit pointers scattered across RAM, thrashing CPU L1/L2 cache lines.
-  - Deallocation Frame Stutters: Destroying thousands of RefCounted instances per frame spikes frame times and causes GC micro-freezes.
+  - Heap Thrashing for Ephemeral Data: 10,000 events require 10,000 individual malloc calls and atomic refcount updates.
+  - Pointer Chasing & Cache Misses: Array[CombatEvent] stores scattered 64-bit pointers, thrashing CPU L1/L2 caches.
+  - Deallocation Frame Stutters: Bulk disposal of thousands of RefCounted instances causes GC micro-freezes.
 - **Solution Advantages**:
-  - Zero-Heap Value Passing: Passing CombatEvent by value copies it directly in CPU registers or on the stack with 0 heap allocations and 0 GC tracking.
-  - Contiguous Cache Line Saturation: Array(CombatEvent) embeds raw structs inline. 10,000 items fit in a single 120 KB buffer with zero pointer indirection.
-  - Cache Locality & Vectorization: Flat contiguous struct arrays avoid pointer chasing, maximizing cache line utilization and enabling LLVM loop optimizations.
+  - Zero-Heap Value Passing: Passing CombatEvent copies directly in CPU registers or on the stack with 0 heap bytes.
+  - Contiguous Cache Line Saturation: Array(CombatEvent) embeds structs inline into a single 120 KB buffer.
+  - Zero Pointer Dereferencing: Flat contiguous memory maximizes CPU cache line hits and unlocks LLVM auto-vectorization.
 - **Key Takeaway**: Stack-allocated structs eliminate thousands of heap allocations per frame, delivering bare-metal C cache locality with elegant object syntax.
 
 **Presenter Notes**:
@@ -3466,30 +3024,22 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   require "spec_helper"
   include Lapis::Test
   
-  multiplayer_test "Simulated duel with Wireshark packet spy", clients: 2 do |harness|
+  multiplayer_test "Simulated duel with packet spy", clients: 2 do |harness|
     # 1. Deterministic peer topology (Server: 1, Clients: 2, 3)
     assert_eq harness.server.peer_id, 1
-    assert_eq harness.client(1).peer_id, 2
-    server_hero = harness.server.spawn(HeroNode, name: "Hero")
+    hero = harness.server.spawn(HeroNode, name: "Hero")
   
     # 2. Virtual input pumping & RPC dispatch
     harness.client(1).send_action(:attack, pressed: true)
     harness.client(1).rpc_id(1, :apply_damage, 35)
   
-    # 3. Synchronous lockstep frame stepping
+    # 3. Synchronous deterministic frame stepping
     harness.step_frames(3)
-    assert_eq server_hero.health, 65
+    assert_eq hero.health, 65
   
-    # 4. Wireshark-style Spy packet auditing (< 10 KB/s budget)
-    spy = harness.spy
-    spy.assert_rpc_sent(from: 2, to: 1, method: :apply_damage)
-    spy.assert_max_bandwidth(10240.0)
-  
-    # 5. Cooperative lockstep debugging & native r2 forensics
-    # Breakpoints freeze peers cooperatively without socket timeouts!
-    if spy.latency_ms > 50.0
-      spy.capture_r2_forensics!("Latency Spike", 0x140001000_u64)
-    end
+    # 4. Wireshark-style packet auditing (< 10 KB/s budget)
+    harness.spy.assert_rpc_sent(from: 2, to: 1, method: :apply_damage)
+    harness.spy.assert_max_bandwidth(10240.0)
   end
   ```
 - **Terminal — lapis test spec/suites/test_multiplayer.cr (Lockstep Network Capture)**:
@@ -3574,32 +3124,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `boom_bap_16` | **Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS`
 - **:circle-xmark: Godot C#: Mandatory Ceremony & Keyword Bloat**:
   ```csharp
-  using Godot;
-  using System;
-  
-  // Mandatory 'partial' modifier required by source generators
   public partial class PlayerController : CharacterBody3D
   {
       // Verbose property ceremony: attribute + public + explicit get/set
       [Export] public float Speed { get; set; } = 300.0f;
       [Export] public int MaxHealth { get; set; } = 100;
   
-      // Signal declaration requires separate delegate + EventHandler naming convention
+      // Signal declaration requires separate dummy delegate:
       [Signal]
-      public delegate void HealthChangedEventHandler(int currentHealth, int maxHealth);
+      public delegate void HealthChangedEventHandler(int cur, int max);
   
-      private int _health;
-  
-      public override void _Ready()
-      {
-          _health = MaxHealth;
-      }
-  
-      // Heavy boilerplate parameter types and return ceremony
       public int Heal(int amount)
       {
           _health = Math.Clamp(_health + amount, 0, MaxHealth);
-          // String-based signal name via nested generated SignalName class
           EmitSignal(SignalName.HealthChanged, _health, MaxHealth);
           return _health;
       }
@@ -3608,23 +3145,15 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **:sparkles: Crystal / Lapis: Expressive, Zero-Noise Declarations**:
   ```crystal
   node PlayerController < CharacterBody3D do
-    # Declarative, elegant macro annotations with direct type inference:
     @[Export]
     property speed : Float32 = 300.0_f32
     @[Export]
     property max_health : Int32 = 100
   
-    # Clean, native first-class signal definition:
     signal health_changed(current : Int32, max : Int32)
   
-    def _ready
-      @health = @max_health
-    end
-  
-    # Expressive, concise Ruby syntax with zero fluff:
     def heal(amount : Int32) : Int32
       @health = (@health + amount).clamp(0, @max_health)
-      # Strongly-typed signal emission verified at compile-time!
       emit(health_changed, @health, @max_health)
       @health
     end
@@ -3635,15 +3164,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 99: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Mandatory Partial Class Boilerplate: Godot C# forces every node to be declared public partial class to accommodate source generators.
-  - Signal Delegate Ceremony: Defining a signal requires declaring a dummy delegate with an EventHandler suffix, multiplying code noise.
-  - Export Property Verbosity: Every inspector variable requires [Export] public Type Name { get; set; } auto-property ceremony.
-  - Signal Name Indirection: Signal emission relies on generated nested static classes (SignalName.HealthChanged) and boxed argument arrays.
+  - Mandatory Partial Boilerplate: Forces every node to be declared public partial class for Roslyn generators.
+  - Dummy Signal Delegates: Defining a signal requires declaring an auxiliary delegate with an EventHandler suffix.
+  - String-Based Signal Names: Signal emission relies on generated static classes (SignalName.HealthChanged) and boxed parameters.
 - **Solution Advantages**:
-  - Zero-Ceremony Class Definitions: Clean node PlayerController < CharacterBody3D blocks without partial hacks or using noise.
-  - First-Class Signal DSL: signal name(...) macro automatically enables type-safe emit(name, ...) with compile-time argument checks.
-  - Direct ClassDB Registration: Properties annotated with @[Export] register seamlessly into Godot's inspector without getter/setter ceremony.
-  - Half the Code, Double the Signal: Delivers pure Ruby elegance with compiled native GDExtension ClassDB integration.
+  - Zero-Ceremony Declarations: Clean node PlayerController < CharacterBody3D blocks with zero partial class boilerplate.
+  - First-Class Signal DSL: signal name(...) automatically synthesizes type-safe emit(name, ...) methods.
+  - Direct ClassDB Exports: @[Export] registers properties directly into the Godot inspector with zero getter/setter noise.
 - **Key Takeaway**: Crystal strips away C#'s enterprise ceremony and attribute bloat, delivering clean declarative elegance backed by native GDExtension performance.
 
 **Presenter Notes**:
@@ -3663,29 +3190,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
       public override void _Ready()
       {
           _healSFX = GetNodeOrNull<AudioStreamPlayer>("Audio/HealSFX");
-  
-          // += binds strong managed delegate; prevents CLR GC of this HUD:
-          if (Player != null)
-              Player.HealthChanged += OnHealthChanged;
+          if (Player != null) Player.HealthChanged += OnHealthChanged; // Leak root!
       }
   
       private void OnHealthChanged(int cur, int max)
       {
-          // THE ?. TRAP: C# ?. bypasses custom operator == at bytecode level!
-          // CLR wrapper is not null, but C++ node was freed -> RUNTIME CRASH:
-          _healSFX?.Play(); // Throws System.ObjectDisposedException!
-  
-          // Must use verbose engine checks everywhere instead of idiomatic ?.:
-          if (GodotObject.IsInstanceValid(_healSFX))
-              _healSFX.Play();
+          // ?. TRAP: Bypasses operator ==, throwing ObjectDisposedException:
+          if (GodotObject.IsInstanceValid(_healSFX)) _healSFX.Play();
       }
   
       public override void _ExitTree()
       {
-          // FRAGILE: Must manually -= or HUD leaks forever in CLR heap.
-          // If Player was already freed, Player.HealthChanged crashes unless guarded:
           if (GodotObject.IsInstanceValid(Player))
-              Player.HealthChanged -= OnHealthChanged;
+              Player.HealthChanged -= OnHealthChanged; // Fragile -= required
       }
   }
   ```
@@ -3698,20 +3215,15 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   
     def _ready
       @heal_sfx = self["Audio/HealSFX", AudioStreamPlayer]?
-  
       if p = @player
-        # Ergonomic += binds through 64-bit ObjectDB IDs (no GC leak roots):
         p.health_changed += ->on_health_changed(Int32, Int32)
       end
     end
   
     private def on_health_changed(cur : Int32, max : Int32) : Void
-      # Sound nil safety + dead-pointer armor: respects both nil and freed nodes!
-      @heal_sfx.try?(&.play) # Zero ObjectDisposedException crashes!
+      @heal_sfx.try?(&.play) # Dead-pointer safe: respects both nil & freed nodes!
     end
-  
-    # ZERO _exit_tree boilerplate! When CombatHUD or Player dies,
-    # Lapis automatically prunes dead subscriptions via 64-bit ObjectDB IDs.
+    # Zero _exit_tree boilerplate! Signal subscriptions self-prune via 64-bit ObjectDB IDs.
   end
   ```
 
@@ -3719,15 +3231,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 101: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - The ?. Bytecode Trap: C# ?. and ?? operators compile to IL ldnull, bypassing Godot’s overloaded operator ==. Calling node?.Play() on a freed node evaluates to true and throws ObjectDisposedException.
-  - Mandatory IsInstanceValid() Boilerplate: Because idiomatic C# null-conditional operators are unsafe with engine peers, developers must litter code with GodotObject.IsInstanceValid(node) guards.
-  - Managed Delegate GC Leaks (+=): C# += events create strong managed references. If a UI or enemy node is removed from the scene tree without manual -=, the CLR keeps it alive in RAM forever.
-  - Fragile Teardown in _ExitTree: Unsubscribing in _ExitTree is required but hazardous: if the emitter died first, unhooking throws an exception unless defensive IsInstanceValid guards are written.
+  - The ?. Bytecode Trap: C# ?. compiles to IL ldnull, bypassing Godot’s equality. Calling node?.Play() on a freed peer throws ObjectDisposedException.
+  - Mandatory Guard Boilerplate: Because ?. is unsafe with engine peers, developers must litter code with GodotObject.IsInstanceValid.
+  - Managed Delegate GC Leaks: C# += events create strong GC roots. Failing to manually -= in _ExitTree leaks nodes in RAM forever.
 - **Solution Advantages**:
-  - Dead-Pointer Armor (try?): sfx.try?(&.play) safely inspects both nil and Godot ObjectDB instance survival, eliminating C# ObjectDisposedException traps in a single expression.
-  - Familiar += & -= Operators: Connect procs directly with concise operator sugar (sig += ->handler), providing C#-style ergonomics without managed delegate memory leaks.
-  - Self-Pruning ObjectDB Subscriptions: Signal subscriptions track 64-bit Godot ObjectDB monotonic IDs; when either node is freed, the connection dissolves automatically without manual _exit_tree boilerplate.
-  - Defensive Lifecycles: node.alive? and node.try? query Godot’s native ObjectDB table directly, safeguarding accesses to transient scene entities.
+  - Dead-Pointer Armor (try?): sfx.try?(&.play) inspects both nil and Godot ObjectDB survival, eliminating ObjectDisposedException crashes.
+  - Familiar += Operators: Connect procs directly with concise operator sugar (sig += ->handler) with zero GC root leakage.
+  - Self-Pruning ObjectDB Connections: Signal subscriptions track 64-bit Godot ObjectDB IDs; connections dissolve automatically when either node is freed.
 - **Key Takeaway**: Lapis solves the dual-lifetime problem: familiar += signal syntax with 64-bit ObjectDB auto-pruning eliminates C# ?. ObjectDisposedExceptions and managed delegate leaks.
 
 **Presenter Notes**:
@@ -3809,51 +3319,37 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `game_sprocket` | **Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN`
 - **:circle-xmark: Godot C#: Runtime Reflection & Roslyn Complexity**:
   ```csharp
-  using Godot;
-  using System;
-  using System.Reflection;
-  
   public partial class NetworkSync : Node
   {
-      // Runtime reflection: 100x slower, boxed arguments, and stripped by AOT!
+      // Runtime reflection: 10-100x slower, boxes args, and stripped by AOT!
       public void DispatchRPC(string methodName, params object[] args)
       {
-          // Dynamic method lookup across reflection metadata tables
-          MethodInfo? method = GetType().GetMethod(
-              methodName, 
-              BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic
-          );
-  
+          var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
+          MethodInfo? method = GetType().GetMethod(methodName, flags);
           if (method == null) throw new MissingMethodException(methodName);
   
-          // Allocates object[] array and boxes primitive value types into heap objects
-          method.Invoke(this, args); // Boxing tax on every incoming packet!
+          // Allocates object[] and boxes value types on every packet!
+          method.Invoke(this, args);
       }
-  
-      // Roslyn Source Generator Alternative:
-      // Requires separate .csproj analyzer, Microsoft.CodeAnalysis dependencies,
-      // complex Roslyn AST trees, and constant IDE red-squiggles and rebuild lag.
+      // Alternative Roslyn generators require separate .csproj, analyzers & MSBuild plumbing.
   }
   ```
 - **:sparkles: Crystal: First-Class Compile-Time AST Macros**:
   ```crystal
   node NetworkSync < Node do
-    # Built-in compile-time AST macros inspect types without runtime reflection tables
+    # Compile-time AST macro generates static dispatch without reflection tables
     macro generate_rpc_dispatcher(*methods)
       def dispatch_rpc(action : String, packet : Packet) : Nil
         case action
         {% for method in methods %}
         when {{ method.stringify }}
-          # Direct static dispatch with compile-time type-checked arguments!
-          {{ method.id }}(packet.read_{{ method.id }}_payload)
+          {{ method.id }}(packet.read_{{ method.id }}_payload) # Static dispatch!
         {% end %}
-        else
-          raise "Unknown RPC action: #{action}"
+        else raise "Unknown RPC: #{action}"
         end
       end
     end
   
-    # Expands into static pattern matching during compilation
     generate_rpc_dispatcher sync_transform, player_spawn, player_hit
   end
   ```
@@ -3862,15 +3358,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 105: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Slow Runtime Reflection Overhead: Type.GetMethod() and method.Invoke() are 10-100x slower than direct calls, performing dynamic string table lookups on every invocation.
-  - Variant & Object Boxing Penalties: Passing arguments through MethodInfo.Invoke forces primitive types (int, float, Vector3) to be boxed into heap objects.
-  - NativeAOT & Trimming Hazard: Modern .NET NativeAOT trims away unused reflection metadata at build time unless decorated with complex [DynamicallyAccessedMembers] attributes.
-  - Roslyn Generator Tooling Tax: Metaprogramming requires a separate analyzer project, MSBuild plumbing, and fragile Roslyn AST APIs that frequently desync in IDEs.
+  - Runtime Reflection Tax: method.Invoke() is 10–100x slower than direct calls and forces dynamic string lookups on every packet.
+  - Argument Boxing Penalties: Passing primitives through reflection boxes int, float, and Vector3 into heap objects.
+  - Roslyn Tooling Agony: Compile-time generators require separate analyzer projects, complex AST dependencies, and constant IDE desyncs.
 - **Solution Advantages**:
-  - First-Class Language Macros: AST macros are built directly into the Crystal language with zero separate projects, analyzers, or MSBuild setup.
-  - Deep Compile-Time Introspection: Direct access to {{ @type.instance_vars }}, {{ @type.methods }}, and annotations during compilation.
-  - Zero Runtime Reflection Cost: Macro expansions generate static dispatch branches, serialization logic, and GDExtension bindings with zero runtime reflection overhead.
-  - Whole-Program Type Inference: Native AOT compilation with no runtime reflection tables, no metadata stripping hazards, and no boxing.
+  - Built-In Language Macros: AST macros are native language primitives requiring zero extra projects, analyzers, or compiler plugins.
+  - Compile-Time Static Dispatch: Expands into direct static case branches with typed arguments—zero runtime reflection overhead.
+  - Whole-Program Type Inference: Full compile-time type validation with no metadata tables, no trimming hazards, and no boxing.
 - **Key Takeaway**: Crystal macros bring full compile-time metaprogramming and reflection without the tooling agony or runtime reflection tax of C#.
 
 **Presenter Notes**:
@@ -3937,26 +3431,17 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `bento_pad` | **Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY`
 - **:circle-xmark: Godot C#: Task Allocations, async void, and String Soup**:
   ```csharp
-  using Godot;
-  using System;
-  using System.Threading.Tasks;
-  
   public partial class NetworkEntity : Node3D
   {
-      // async void: unhandled exceptions crash the entire process
+      // async void: unhandled exceptions crash the entire engine process!
       public async void OnNetworkPacketReceived(byte[] data)
       {
-          // String lookups incur runtime hashing overhead
-          if (!IsInGroup("network_synced")) return;
+          if (!IsInGroup("network_synced")) return; // String hashing cost
   
-          // Task.Run allocates state machine on managed heap
+          // Task allocates state machine on heap; background thread cannot touch tree:
           await Task.Run(() => ProcessPacketPayload(data));
-  
-          // Must marshal back to main thread or crash SceneTree
           Callable.From(() => GlobalPosition = Vector3.Zero).CallDeferred();
       }
-  
-      private void ProcessPacketPayload(byte[] data) { /* ... */ }
   }
   ```
 - **:sparkles: Crystal: Lightweight Fibers & Compile-Time Symbols**:
@@ -3965,22 +3450,14 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     @packet_channel = Channel(Bytes).new(32)
   
     def _ready : Nil
-      # Lightweight fiber: runs cooperatively on the stack
+      # Lightweight fiber: runs cooperatively with 0 OS thread tax
       spawn do
-        loop do
-          packet = @packet_channel.receive
-          process_payload(packet)
-        end
+        loop { process_payload(@packet_channel.receive) }
       end
     end
   
-    def _process(delta : Float64) : Void
-      Fiber.yield # Cooperatively yield to spawned Crystal fibers
-    end
-  
     def on_network_packet_received(data : Bytes) : Nil
-      # Symbol comparison is an instantaneous integer check
-      return unless in_group?(:network_synced)
+      return unless in_group?(:network_synced) # Instant 32-bit integer cmp!
       @packet_channel.send(data)
     end
   end
@@ -3990,15 +3467,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 109: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Task Heap Allocation Overhead: Every async Task invocation allocates a Task reference object and state machine on the managed heap, degrading game loop performance.
-  - Async Void Crash Hazard: Exceptions thrown inside async void event handlers bypass try/catch blocks and directly crash the entire game process.
-  - SceneTree Threading Hazards: Godot's SceneTree is strictly single-threaded; calling engine APIs from background threads triggers race conditions and fatal crashes.
-  - Stringly-Typed Group & Action Lookups: Looking up groups (IsInGroup("enemies")) and actions requires runtime string hashing unless boilerplate StringName constants are declared.
+  - Heap Task Churn: async Task allocates state machine objects on the managed heap, degrading tight game loop performance.
+  - Async Void Crash Hazard: Unhandled exceptions inside async void event handlers bypass try/catch and kill the entire process.
+  - SceneTree Threading Hazard: Touching Godot nodes from background tasks causes fatal thread races, requiring CallDeferred.
 - **Solution Advantages**:
-  - Microscopic Fiber Concurrency: Crystal's spawn creates lightweight cooperative fibers with stack allocation, executing concurrent tasks with negligible memory overhead.
-  - Thread-Safe CSP Channels: Channel(T) delivers clean, lock-free message passing between background worker fibers and the main game thread without race conditions.
-  - First-Class Compile-Time Symbols: Identifiers like :network_synced and :jump are interned at compile time as lightweight integers, eliminating string allocations and hashing.
-  - Robust Error Containment: Fiber exceptions are isolated and reported with full backtraces without taking down the engine or crashing the game process.
+  - Microscopic Stack Fibers: spawn creates cooperative fibers running on the stack with negligible memory footprint.
+  - Thread-Safe CSP Channels: Channel(T) provides lock-free message passing between background workers and the main thread.
+  - Immediate 32-Bit Symbols: Symbols like :network_synced are interned integers evaluated at build time without string hashing.
 - **Key Takeaway**: Crystal replaces C#s heavy Task heap allocations and string soup with lightweight stack fibers and compile-time integer symbols.
 
 **Presenter Notes**:
@@ -4010,54 +3485,35 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `ranger` | **Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS`
 - **:circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions**:
   ```csharp
-  using Godot;
-  using System;
-  
   public partial class CombatResolver : Node
   {
-      // C# lacks native union types; forces loose object returns
+      // C# lacks native unions; forces loose object returns & runtime casts:
       public object ResolveHit(Node3D target, float rawDamage)
       {
           if (target is ShieldDrone drone)
-          {
-              // Unchecked runtime type checking and downcasting
               return new ShieldAbsorbed(drone.ShieldPoints, rawDamage * 0.5f);
-          }
           else if (target is PlayerCharacter player)
-          {
               return new CriticalDamage(player.ArmorRating, rawDamage * 2.0f);
-          }
   
-          // Non-exhaustive: unhandled types silently fail at runtime
-          return null!;
+          return null!; // Non-exhaustive: unhandled types fail silently!
       }
   }
   ```
 - **:sparkles: Crystal: First-Class Union Types & Sound Patterns**:
   ```crystal
-  struct ShieldAbsorbed
-    getter shield_remaining : Float32, mitigated : Float32
-    def initialize(@shield_remaining, @mitigated); end
-  end
-  struct CriticalDamage
-    getter armor : Float32, final_damage : Float32
-    def initialize(@armor, @final_damage); end
-  end
+  record ShieldAbsorbed, shield : Float32, mitigated : Float32
+  record CriticalDamage, armor : Float32, damage : Float32
   
   node CombatResolver < Node do
-    # Native union type: unboxed value types, zero wrapper classes
+    # Native union type: unboxed value types, zero heap wrappers
     alias HitResult = ShieldAbsorbed | CriticalDamage | Nil
   
     def resolve_hit(target : Node3D, raw_damage : Float32) : HitResult
       case target
-      when ShieldDrone
-        # Flow-sensitive typing narrows target to ShieldDrone
-        ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
-      when PlayerCharacter
-        CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
-      else
-        nil
-      end
+      when ShieldDrone      then ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
+      when PlayerCharacter  then CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
+      else                       nil
+      end # Flow-sensitive typing narrows target in each branch!
     end
   end
   ```
@@ -4066,15 +3522,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 111: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Absence of Native Union Types: C# cannot natively express ShieldAbsorbed | CriticalDamage | Nil, forcing developers into loose object returns, wrapper hierarchies, or third-party libraries.
-  - Non-Exhaustive Pattern Matching: C# switch expressions on general types do not enforce compile-time exhaustiveness; omitting a newly added type silently compiles and fails at runtime.
-  - Runtime Type Check & Downcast Tax: Evaluating target is ShieldDrone drone incurs runtime type inspection and pointer downcasting instructions on every evaluation.
-  - Wrapper Object Allocation Overhead: Simulating discriminated unions via records or wrapper structs allocates intermediate objects and incurs boxing.
+  - No Native Union Types: Cannot express ShieldAbsorbed | CriticalDamage | Nil, forcing loose object returns or wrapper classes.
+  - Non-Exhaustive Matching: C# type switches do not guarantee compile-time exhaustiveness; unhandled cases fail silently at runtime.
+  - Runtime Downcast Overhead: target is ShieldDrone drone incurs dynamic type checks and pointer downcasts on every frame.
 - **Solution Advantages**:
-  - First-Class Union Types: Types like ShieldAbsorbed | CriticalDamage | Nil are native language primitives with zero heap wrappers and zero boxing.
-  - Compile-Time Exhaustive Pattern Matching: The Crystal compiler verifies that all possible union types are handled; omitting a variant triggers a compile-time build error.
-  - Flow-Sensitive Type Narrowing: Inside when ShieldDrone, the compiler automatically narrows the variable type without unsafe downcasts or manual casts.
-  - Value-Type Stack Structs: Small data structures (struct) live directly on the stack or inline within the union, avoiding heap allocation.
+  - First-Class Union Types: ShieldAbsorbed | CriticalDamage | Nil are native primitives with zero heap allocation or boxing.
+  - Compile-Time Exhaustiveness: The compiler verifies that all possible union types are handled, preventing unhandled runtime branch bugs.
+  - Flow-Sensitive Narrowing: when ShieldDrone automatically narrows the variable type without manual casting or unsafe downcasts.
 - **Key Takeaway**: Crystal provides first-class union types with compile-time exhaustive pattern matching and zero wrapper allocations.
 
 **Presenter Notes**:
@@ -4086,31 +3540,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `functionalist` | **Badge**: `LANGUAGE SHOOTOUT • TESTING & ISOLATION`
 - **:circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps**:
   ```csharp
-  using Godot;
-  using GdUnit4;
-  using System.Threading.Tasks;
-  
   [TestSuite]
   public class PlayerCombatTests
   {
       [TestCase]
       public async Task TestShieldMitigation()
       {
-          // Requires Godot engine scene runner; new Player() crashes in ObjectDB
-          var player = ISceneRunner.Load("res://Player.tscn")
-                                  .Instantiate<Player>();
-  
+          // Requires engine scene runner; new Player() crashes in ObjectDB
+          var player = ISceneRunner.Load("res://Player.tscn").Instantiate<Player>();
           player.EquipShield(50f);
           player.TakeDamage(20f);
   
-          // Awkward untyped signal awaiter in C# requiring engine ticks
+          // Awkward untyped signal awaiter requiring engine ticks & casting
           var args = await player.ToSignal(player, Player.SignalName.HealthChanged);
-          float hp = (float)args[0];
-  
-          Assertions.AssertThat(player.Health).IsEqual(100f);
-          Assertions.AssertThat(player.Shield).IsEqual(30f);
-          Assertions.AssertThat(hp).IsEqual(100f);
-  
+          Assertions.AssertThat((float)args[0]).IsEqual(100f);
           player.QueueFree(); // Manual cleanup of unmanaged C++ handle
       }
   }
@@ -4120,19 +3563,14 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   require "spec"
   require "../src/entities/player"
   
-  # Standard Crystal BDD spec: runs in milliseconds without booting Godot
   describe Player do
     it "mitigates damage through shield and emits health_changed" do
-      # Direct, instant node instantiation in memory
-      player = Player.new
+      player = Player.new # Instant memory instantiation; zero engine boot!
       player.equip_shield(50.0_f32)
   
-      # First-class typed signal await: zero engine boot, zero external harnesses
       spawn { player.take_damage(20.0_f32) }
-      hp, max = player.health_changed.await
+      hp, _ = player.health_changed.await # Typed signal await!
   
-      # Pure, fast assertions without editor boot overhead
-      player.health.should eq(100.0_f32)
       player.shield.should eq(30.0_f32)
       hp.should eq(100.0_f32)
     end
@@ -4143,15 +3581,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 113: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Engine Lifecycle Coupling: Godot C# nodes depend on C++ ObjectDB bindings; standard dotnet test throws NullReferenceException or native crashes unless run inside headless Godot.
-  - Heavy External Test Harnesses: Requires third-party runners like GdUnit4 or WAT, loading scene packs and booting engine subsystems just to test pure gameplay logic.
-  - Untyped Asynchronous Signal Testing: await player.ToSignal(...) returns loosely typed Variant[] arrays requiring manual runtime casts.
-  - Unmanaged Cleanup & Leak Risks: Instantiated test nodes must be manually disposed via QueueFree() to prevent native C++ engine memory leaks across test suites.
+  - Engine Lifecycle Coupling: Godot C# nodes depend on C++ ObjectDB bindings; standard dotnet test crashes unless booted in headless Godot.
+  - Heavy External Test Harnesses: Requires third-party runners like GdUnit4 or WAT, loading scene packs to test pure gameplay logic.
+  - Untyped Async Signal Testing: await player.ToSignal(...) returns loosely-typed Variant[] arrays requiring manual runtime casts.
 - **Solution Advantages**:
-  - Built-In Zero-Config BDD Runner: Crystal includes a blazing-fast, RSpec-inspired testing framework (crystal spec) standard in the compiler with zero NuGet packages.
-  - Fast Isolated Testing: Test gameplay logic, combat math, and component state directly in memory without launching heavy editor test runners.
-  - Typed Signal Awaiting: hp, max = player.health_changed.await awaits cooperative signals with full compile-time type destructuring—no untyped Variant[] casting.
-  - Clean Fixture Teardown: Pure models are managed by Boehm GC, while Lapis test fixtures automate clean teardown of engine-backed nodes.
+  - Built-In Zero-Config Runner: Crystal includes a blazing-fast testing framework (crystal spec) standard in the compiler with zero NuGet dependencies.
+  - Sub-Millisecond Isolated Testing: Test gameplay logic and component state directly in memory without launching editor test runners.
+  - Typed Signal Awaiting: hp, _ = player.health_changed.await awaits cooperative signals with full compile-time type destructuring.
 - **Key Takeaway**: Crystal specs run in milliseconds via built-in crystal spec without configuring external plugins, complex mock frameworks, or manual signal polling.
 
 **Presenter Notes**:
@@ -4271,36 +3707,30 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Automatic Strongly-Typed Proxies for GDScript Classes Generated via Lapis CLI
 - **Code (quest_controller.cr — Automatic Strongly-Typed GDScript Invocation)**:
   ```crystal
-  # 1. GDScript defines: class_name DialogueSystem extends Node
-  # 2. 'lapis bind project' automatically synthesizes typed bindings:
   require "project_nodes/dialogue_system"
   
   node QuestController < Node do
-    # Type-safe node injection: compiler knows it is DialogueSystem
     @[OnReady("%DialogueManager")]
     getter dialogue : DialogueSystem
   
     def trigger_dialogue(line_id : Int32) : Bool
-      # Direct typed method call: NO .call(), NO strings, NO Variant casts!
+      # Direct typed method call: NO .call(), NO string lookups!
       success = dialogue.show_dialogue(speaker: "Elder", line_id: line_id)
-  
-      # Direct typed property accessor: NO .get() or .set()!
       dialogue.dialogue_speed = 1.5_f32
   
-      # Strongly-typed native signal subscription:
+      # Strongly-typed signal subscription
       on dialogue.line_completed do |speaker, text|
         display_subtitles(speaker, text)
       end
-  
       success
     end
   end
   ```
 - **Automatic Typed Binding Architecture**:
-  - Zero Manual Boilerplate: lapis bind project inspects GDScript ASTs and automatically synthesizes strongly-typed Crystal wrappers.
-  - Eliminates Dynamic .call(): Invokes GDScript methods as native Crystal functions—eliminating stringly .call(), .get(), and Variant casts.
-  - Compile-Time Signature Verification: Crystal's compiler statically checks parameter types, argument counts, and return types before running.
-  - First-Class IDE Autocomplete: Full parameter hinting, type inference, and jump-to-definition across the GDScript-Crystal boundary in VS Code and Crystalline.
+  - Zero Manual Boilerplate: lapis bind project inspects GDScript ASTs to synthesize typed Crystal wrappers.
+  - Eliminates Dynamic .call(): Invokes GDScript methods as native functions—eliminating stringly calls and Variant casts.
+  - Compile-Time Signature Verification: Statically verifies parameter types, argument counts, and return types before running.
+  - Full Autocomplete: Provides instant IDE parameter hinting and jump-to-definition across the GDScript-Crystal boundary.
 
 **Presenter Notes**:
 > In the previous slide, we explored dynamic dispatch using .call, .get, and .set with Variant reflection. But in production projects with established GDScript subsystems, you never want manual dynamic calls or hand-written wrappers.
@@ -4386,14 +3816,14 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.
 
 - **Phases 1-2 • Scan & Quarantine**
-  - 01 Pre-Flight: Recursively traverses SceneTree, maps active GDExtension instances, and validates compiler locks.
-  - 02 Metadata Quarantine: Serializes live inspector edits and runtime collections into Engine metadata buffer before unload.
+  - 01 Pre-Flight: Traverses SceneTree and maps active GDExtension node instances.
+  - 02 Quarantine: Serializes live inspector edits into Engine metadata buffers before unload.
 - **Phases 3-4 • DLL Swap & Drift**
-  - 03 Shadow DLL Swap: Unlinks shadow library (game_PID_N.dll) to bypass Windows locks; loads new GDExtension.
-  - 04 Schema Drift: Compares old/new ClassDB tables: coerces numeric widening (Int32 &rarr; Int64) & seeds new defaults.
+  - 03 Shadow DLL Swap: Unlinks shadow library (game_PID_N.dll) bypassing Windows file locks.
+  - 04 Schema Drift: Reconciles ClassDB tables, coerces widened types, and seeds new defaults.
 - **Phases 5-6 • Hydrate & Verify**
-  - 05 Silent Hydration: Two-pass property restoration with signals temporarily blocked to prevent cascades and sound glitches.
-  - 06 Verified: Dispatches _on_hot_reloaded lifecycle hooks and validates zero dead pointers via #check_alive!.
+  - 05 Silent Hydration: Restores properties with signals blocked to avoid cascade glitches.
+  - 06 Verification: Fires _on_hot_reloaded and verifies zero dead vtable pointers.
 
 **Presenter Notes**:
 > • The Reload Problem: In standard C++ GDExtension, live reloading either resets inspector tweaks back to scene defaults or immediately crashes the editor due to dangling vtables and dead pointers.
@@ -4457,40 +3887,29 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
   include Lapis::Test
   
   test_suite "Player Combat System" do
-    test "damage calculation & signal dispatch" do |root|
+    test "signal dispatch & assertions" do |root|
       player = add_child_autofree(root, Godot.create(Player))
       assert_alive player
   
-      # Asynchronously asserts signal fires within timeout
       assert_emits(player, "health_changed", timeout_sec: 1.0) do
         player.take_damage(25)
       end
       assert_eq player.health, 75
     end
   
-    test "deterministic physics step & vector assertions" do
-      bullet = autofree(Godot.create(Bullet))
-      bullet.velocity = Godot::Vector2.new(100.0, 0.0)
-      simulate(bullet, frames: 5, physics: true)
-      assert_vector_approx bullet.position, Godot::Vector2.new(500.0, 0.0), 0.01
-    end
-  
     test "deterministic memory leak verification" do
       # Verifies ΔObjects == 0 across 100 allocation cycles
       assert_no_leak(max_delta_objects: 0) do
-        100.times do
-          fx = Godot.create(ParticleFX)
-          fx.destroy
-        end
+        100.times { Godot.create(ParticleFX).destroy }
       end
     end
   end
   ```
 - **Testing Apparatus Invariants**:
-  - Automated Fixture Tracking: add_child_autofree and autofree track spawned nodes and automatically queue-free them after each test.
-  - Async Signals & Simulation: assert_emits and simulate advance processing frames cooperatively to test event-driven game logic.
-  - Godot ObjectDB Assertions: assert_alive and assert_vector_approx prevent dead-pointer crashes and validate spatial precision.
-  - Deterministic Leak Verification: assert_no_leak verifies ΔObjects == 0 across engine singletons (OBJECT_COUNT, MEMORY_STATIC).
+  - Automated Fixture Tracking: add_child_autofree registers test nodes and safely queue-frees them upon test completion.
+  - Async Signal Assertions: assert_emits steps engine frames cooperatively to verify asynchronous event delivery.
+  - Engine ObjectDB Checks: assert_alive checks 64-bit instance IDs against ObjectDB to catch use-after-free bugs.
+  - Deterministic Leak Gate: assert_no_leak tracks Godot OBJECT_COUNT metrics to ensure ΔObjects == 0.
 
 **Presenter Notes**:
 > Memory leaks and dead pointers are critical issues in game development. Lapis provides a full-featured testing apparatus tailored for Godot. Using add_child_autofree, nodes are tracked and automatically cleaned up after test runs. With assert_emits and simulate, you can cooperatively step idle and physics frames to verify asynchronous event dispatch and spatial positions. Finally, assert_no_leak queries Godot's Performance singletons before and after test execution, verifying that all instantiated native objects were properly disposed and no memory leaked.
@@ -4614,10 +4033,10 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 - **Subtitle**: Pure Ahead-of-Time & JIT Close-Up Comparison (GDScript Baseline Removed)
 - **Native Tier Latency (Sub-150ms Close-Up)**:
 - **Architecture & Allocation Tradeoffs**:
-  - Compute Equivalence: On pure algorithmic loops (Mandelbrot, N-Body), Crystal, C++, and Rust produce virtually identical machine code (~21.6ms vs 21.9ms vs 24.3ms).
-  - Boehm GC vs Generational GC: On extreme pointer churn (BinaryTrees), C#'s generational GC leads (46.4ms), while Crystal's conservative Boehm GC (129.5ms) remains within striking distance of manual C++ arena allocators (101.3ms).
-  - Compilation & Binary Footprint: Crystal compiles release DLLs in 3.2s producing a 474 KB standalone DLL, compared to C++ (2,860 KB) and C# (~80 MB CLR runtime dependency).
-  - Zero JIT Warmup or FFI Cost: Unlike C# which requires JIT compilation and P/Invoke marshalling, Crystal links directly against GDExtension via pure C-ABI entrypoints.
+  - Compute Equivalence: On pure algorithmic loops, Crystal, C++, and Rust produce near-identical machine code (~22ms).
+  - GC Profile: On extreme tree churn, C# nursery GC leads (46ms), while Crystal Boehm GC (129ms) remains close to C++ arenas (101ms).
+  - Binary Footprint: Crystal compiles in 3.2s to a 474 KB standalone DLL, vs C# (~80 MB CLR dependency).
+  - Zero JIT or FFI Penalty: Crystal links directly via C-ABI entrypoints without JIT warmups or P/Invoke marshalling.
 
 **Presenter Notes**:
 > Removing the GDScript baseline allows us to zoom directly into the sub-150 millisecond race between the four native compiled languages.

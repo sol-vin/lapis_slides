@@ -12,22 +12,18 @@ hero_feature:
   color: cyan
   lang: crystal
   code: |
-    # Declares Godot class registered in ClassDB
     node Player < CharacterBody3D do
-      # Movement speed in meters per second
+      # Exported inspector property with range
       @[Export(range: 1.0_f32..20.0_f32, step: 0.5_f32)]
       property speed : Float32 = 7.0_f32
 
       property health : Int32 = 100
-      @[Export(range: 10..500, step: 10)]
-      property max_health : Int32 = 100
-
-      signal health_changed(current : Int32, max_health : Int32)
+      signal health_changed(current : Int32)
       signal died
 
       def take_damage(amount : Int32) : Void
         @health = Math.max(0, @health - amount)
-        health_changed.emit(@health, @max_health)
+        health_changed.emit(@health)
         died.emit if @health == 0
       end
 

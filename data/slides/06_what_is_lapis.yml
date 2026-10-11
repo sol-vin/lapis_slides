@@ -24,34 +24,30 @@ cards:
     color: cyan
     badge: PERFORMANCE
     items:
-      - "<strong>Ahead-of-Time Compiled:</strong> Zero bytecode interpreter or VM overhead."
-      - "<strong>Up to 60x Faster:</strong> Eliminates CPU bottlenecks in math, physics, and loops."
-      - "<strong>Predictable Frame Times:</strong> Low-latency Boehm GC with zero gameplay stutter."
-      - "<strong>Compile-Time Nil Safety:</strong> Null pointer crashes eliminated at build time."
+      - "<strong>Ahead-of-Time Compiled:</strong> Zero bytecode interpreter or virtual machine overhead."
+      - "<strong>Up to 60x Faster:</strong> Eliminates CPU bottlenecks in math, physics, and intensive loops."
+      - "<strong>Predictable Latency:</strong> Low-latency Boehm GC with compile-time nil safety."
   - title: Zen Developer Ergonomics
     color: purple
     badge: METAPROGRAMMING
     items:
-      - "<strong>Declarative Node DSL:</strong> <code>node Player &lt; CharacterBody3D</code>."
-      - "<strong>Automated AST Macros:</strong> Effortless <code>@[Export]</code> properties and signals."
-      - "<strong>Doc Comment Harvesting:</strong> Comments automatically populate Godot F1 Help."
-      - "<strong>Expressive Ruby-like Code:</strong> Clean blocks, closures, and pattern matching."
+      - "<strong>Declarative Node DSL:</strong> <code>node Player &lt; CharacterBody3D</code> with zero boilerplate."
+      - "<strong>Automated AST Macros:</strong> Seamless <code>@[Export]</code> property sliders and typed signals."
+      - "<strong>In-Editor Help:</strong> Doc comments automatically harvested into Godot F1 tooltips."
   - title: Self-Hosted Editor Integration
     color: blue
     badge: IN-EDITOR TOOLING
     items:
-      - "<strong>Self-Hosted Like Crystal:</strong> Editor integration is written <em>in Crystal</em>."
-      - "<strong>Script Parity:</strong> Attach and create <code>.cr</code> scripts via Godot's UI."
-      - "<strong>Instant F5 Hot-Reload:</strong> Shadow DLL reloading with zero editor restarts."
-      - "<strong>CodeEdit Highlighting:</strong> Pure Crystal tokenizer embedded in the editor."
+      - "<strong>Self-Hosted Like Crystal:</strong> Godot editor integration plugin is written in Crystal."
+      - "<strong>Native Script UI:</strong> Attach and create <code>.cr</code> scripts directly via Godot's UI."
+      - "<strong>Instant Hot-Reload:</strong> Shadow DLL swap with live state preservation and zero restarts."
   - title: Unified Game Toolchain
     color: amber
     badge: WORKFLOW & CLI
     items:
-      - "<strong>Unified Lapis CLI:</strong> <code>lapis init</code>, <code>test</code>, <code>package</code>, and <code>benchmarks</code>."
-      - "<strong>Quantitative Leak Testing:</strong> Verified zero memory leaks with Godot monitors."
-      - "<strong>radare2 Debugger:</strong> Gutter breakpoints, call stacks, and crash forensics."
-      - "<strong>Dual Execution Paradigms:</strong> In-editor GDExtension + standalone host."
+      - "<strong>Complete Lapis CLI:</strong> <code>lapis init</code>, <code>test</code>, <code>package</code>, and <code>benchmarks</code>."
+      - "<strong>Zero-Leak Verification:</strong> Deterministic leak testing via engine Performance monitors."
+      - "<strong>Native Forensics:</strong> Gutter breakpoints and crash diagnostics via radare2."
 notes: |
   What exactly is Lapis? Lapis is not merely a language binding; it is a comprehensive, full-featured developer toolchain for Godot Engine 4.8+.
   First, it gives you bare-metal LLVM machine speed—up to 60x faster than GDScript with zero interpreter overhead and compile-time nil safety.

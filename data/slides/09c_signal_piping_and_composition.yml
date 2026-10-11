@@ -11,70 +11,51 @@ gdscript:
   lang: gdscript
   tag: GDScript
   card_title: GDScript Forwarding Friction
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
     func _ready() -> void:
-        # 1. Boilerplate intermediate methods for 1:1 signal forwarding
-        $Player.level_up.connect(_on_player_level_up)
+        # 1. Forwarding boilerplate needed for 1:1 forwarding
+        $Player.level_up.connect(func(lvl): $HUD.on_level.emit(lvl))
         
-        # 2. Verbose lambdas for arity trimming (3 args -> 2 args)
-        $Player.action_performed.connect(func(tag, intensity, _priority):
-            $HUD.on_notify.emit(tag, intensity)
-        )
+        # 2. Verbose lambda for arity trimming (3 args -> 1 arg)
+        $Player.hit.connect(func(_target, dmg, _type): $HUD.notify.emit(dmg))
         
-        # 3. Manual lambda for event trigger (dropping all 3 args)
-        $Player.action_performed.connect(func(_a, _b, _c):
-            $HUD.on_any_action.emit()
-        )
-        
-        # 4. Manual polymorphic type checking and downcasting
+        # 3. Manual type check and downcast lambda
         $Area.body_entered.connect(func(body):
             if body is Enemy:
                 enemy_detected.emit(body)
         )
-
-    func _on_player_level_up(new_lvl: int) -> void:
-        $HUD.on_level_changed.emit(new_lvl)
   points:
-  - <strong>Forwarding Ceremony:</strong> Forwarding a signal from a child component to an outer system requires writing dummy intermediary handler methods.
-  - <strong>Arity & Conversion Glue:</strong> Adapting a signal with extra arguments or mismatched numeric types requires allocating anonymous lambda wrappers.
-  - <strong>Manual Polymorphic Filtering:</strong> Filtering collision events to specific types requires runtime <code>if body is Type:</code> inspection and manual re-emission.
-  - <strong>Fragile Disconnection:</strong> Lambda connections are anonymous and cannot be cleanly disconnected without caching the <code>Callable</code> reference.
+  - <strong>Forwarding Ceremony:</strong> Forwarding child signals to parent HUD elements requires intermediary methods or lambda wrappers.
+  - <strong>Arity Trimming Glue:</strong> Dropping unused arguments or adapting signatures requires manual parameter binding in anonymous closures.
+  - <strong>Manual Type Filtering:</strong> Filtering collisions requires runtime <code>if body is Enemy:</code> inspection and manual re-emission.
 crystal:
   title: ':sparkles: Crystal: Strict (>) & Loose (>>) Signal Piping'
   lang: crystal
   tag: Crystal (Lapis)
   card_title: Lapis Reactive Signal Piping
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
     require "lapis/extras"
 
     def _ready : Void
-      # 1. Strict Pipe (>): Compile-time verified signature match
-      player.level_up > hud.on_level_changed
+      # 1. Strict Pipe (>): Compile-time verified 1:1 forward
+      player.level_up > hud.on_level
 
-      # 2. Loose Pipe (>>): Automatic arity trimming & numeric conversion
-      # Drops priority (Int32), converts intensity Float64 -> Float32:
-      player.action_performed >> hud.on_notify
+      # 2. Loose Pipe (>>): Automatic arity trimming
+      player.hit >> hud.notify
 
-      # 3. Loose Pipe (>>): Arity trimming to 0-arguments
-      # Drops all 3 arguments and triggers event trigger:
-      player.action_performed >> hud.on_any_action
-
-      # 4. Loose Pipe (>>): Polymorphic type filtering & auto-downcasting
-      # Silently ignores non-Enemy nodes; passes downcasted Enemy!
+      # 3. Loose Pipe (>>): Polymorphic type filtering & auto-downcast
       area.body_entered >> self.enemy_detected
 
-      # 5. Clean, explicit unpiping via subscription handle:
-      sub = (player.tapped >> hud.on_any_action)
+      # 4. Clean unpiping via subscription handle
+      sub = (player.hit >> hud.notify)
       sub.disconnect
     end
   points:
-  - <strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable reactive pipeline operators on signal accessors.
-  - <strong>Strict Pipe (<code>&gt;</code>):</strong> <code>source &gt; target</code> establishes a direct compile-time verified signal pipeline with zero intermediate methods.
-  - <strong>Loose Pipe (<code>&gt;&gt;</code>):</strong> Automatically trims unused trailing arguments and performs safe numeric conversions (e.g. <code>Float64</code> to <code>Float32</code>).
-  - <strong>Polymorphic Type Filtering:</strong> <code>area.body_entered &gt;&gt; self.enemy_detected</code> silently ignores non-matching nodes and automatically downcasts matching instances.
-  - <strong>First-Class Subscription Lifecycle:</strong> Returns a concrete <code>SignalSubscription</code> handle for clean, deterministic unpiping via <code>sub.disconnect</code> without managing raw strings.
+  - <strong>Strict Pipe (<code>&gt;</code>):</strong> <code>source &gt; target</code> establishes a compile-time verified signal pipeline with zero wrapper methods.
+  - <strong>Loose Pipe (<code>&gt;&gt;</code>):</strong> Automatically trims unused trailing arguments and performs safe numeric conversions.
+  - <strong>Polymorphic Filtering:</strong> <code>area.body_entered &gt;&gt; enemy_detected</code> silently ignores non-Enemy nodes and downcasts matches.
 takeaway:
   badge: REACTIVE PIPELINES
   text: Lapis signal piping operators (> and >>) eliminate boilerplate forwarding handlers, lambda wrappers, and manual type guards in favor of expressive reactive streams.

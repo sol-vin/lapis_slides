@@ -12,43 +12,34 @@ left:
   title: reactive_events.cr — Type-Safe Signal Subscriptions
   tag: Crystal
   lang: crystal
-  font_size: '0.78rem'
+  font_size: '0.84rem'
   code: |
-    # 1. Declarative signal connection sugar with 'on' or 'connect':
-    start_btn = self["UI/StartButton", Godot::Button]
-    on start_btn.pressed do
-      start_game_sequence
-    end
-
-    # 2. Declaring custom typed signals with parameters:
-    signal health_changed(current : Int32, max_health : Int32)
+    # 1. Custom typed signals
+    signal health_changed(current : Int32, max : Int32)
     signal player_died
 
-    # 3. First-class signal subscriptions, one-shot, and type filters:
+    # 2. Declarative subscriptions & one-shot hooks
     health_changed.connect do |curr, max|
-      hud.update_health_bar(curr, max)
+      hud.update_health(curr, max)
     end
-    player_died.once do
-      game_over_director.trigger_defeat
-    end
+    player_died.once { game_over_director.trigger_defeat }
+
+    # 3. Positional type filtering
     on area.body_entered, Player do |player|
       player.collect_coin
     end
 
-    # 4. First-class signal emission on signal accessors:
+    # 4. First-class typed emission
     health_changed.emit(75, 100)
-    emit(health_changed, 75, 100) # macro sugar
-    player_died.emit
 right:
   type: card
-  title: Reactive Gameplay Features
+  title: Reactive Gameplay Architecture
   color: cyan
   items:
-  - <strong>Declarative <code>on</code> &amp; <code>connect</code>:</strong> Connect signals with clean Crystal blocks—<code>on button.pressed { ... }</code> eliminates single-use handler boilerplate.
-  - <strong>First-Class Signal Accessors:</strong> Signals are typed objects; <code>health_changed.emit(75, 100)</code> and <code>health_changed.connect</code> provide zero namespace pollution.
-  - <strong>Positional Type Filtering:</strong> <code>on area.body_entered, Player do |p|</code> automatically filters by class and downcasts argument without manual <code>.as(T)</code>.
-  - <strong>One-Shot Subscriptions:</strong> <code>signal.once { ... }</code> automatically unhooks after the first invocation, preventing stale event leaks.
-  - <strong>Automatic ObjectDB Pruning:</strong> Subscriptions track 64-bit instance IDs; when either sender or receiver dies, connections dissolve cleanly.
+    - '<strong>Declarative <code>on</code> &amp; <code>connect</code>:</strong> Wire signals with clean blocks, eliminating boilerplate intermediary methods.'
+    - '<strong>First-Class Signal Accessors:</strong> <code>health_changed.emit(...)</code> provides type-checked invocation with zero namespace pollution.'
+    - '<strong>Positional Type Filtering:</strong> <code>on area.body_entered, Player</code> filters collision events and downcasts targets automatically.'
+    - '<strong>One-Shot & Safe Lifecycle:</strong> <code>signal.once { ... }</code> auto-unhooks after firing, while dead-instance tracking prevents stale callback crashes.'
 notes: |
   Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. With our 'on' macro and 'connect' blocks, you can wire up signals with idiomatic closures—eliminating single-use handler functions.
   Signals are first-class typed accessors: 'health_changed.emit(75, 100)', 'player_died.once', and positional type filtering like 'on area.body_entered, Player' prevent method namespace pollution and collisions.

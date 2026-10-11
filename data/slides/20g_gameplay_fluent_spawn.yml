@@ -12,47 +12,30 @@ left:
   title: gameplay_dsl.cr — Fluent Spawning & Creation
   tag: Crystal
   lang: crystal
-  font_size: '0.74rem'
+  font_size: '0.84rem'
   code: |
-    # 1. Direct Scene Instantiation & mounting with context block:
+    # 1. Direct Scene Instantiation with typed context block:
     enemy = add_child("res://scenes/enemy.tscn", Enemy) do
       self.health = 250
       self.tag = "elite"
-    end # typeof(enemy) is Enemy (preserves static type T!)
+    end # Returns Enemy (preserves static type T!)
 
-    # 2. Direct Tree Instantiation (zero separate .new or block args):
+    # 2. Direct Tree Instantiation (no separate .new or |node| arg):
     sprite = add_child(Sprite2D) do
       self.position = Vector2.new(100, 200)
-      self.centered = true
     end
 
-    # 3. Direct sibling mounting with scene path & type:
-    marker = add_sibling("res://scenes/marker.tscn", Marker2D) do
-      self.position = Vector2.new(0, 50)
-    end
-
-    # 4. Fluent configuration via Object#build & #configure:
-    boss = BossEnemy.new.build do
-      self.health = 500
-      self.speed = 15.0_f32
-    end
-    boss.configure { self.health = 600 }
-
-    # 5. Verified scene transitions & class-level loaders:
-    hud_scene = PackedScene.load("res://scenes/hud.tscn")
-    change_scene!("res://scenes/level2.tscn")
+    # 3. Direct sibling mounting:
+    marker = add_sibling("res://scenes/marker.tscn", Marker2D)
 right:
   type: card
   title: Direct Tree Mounting & Instantiation
   color: purple
   items:
-    - '<strong>Context Execution (<code>with .. yield</code>):</strong> Configuration blocks execute directly within the receiver''s scope—no dummy block arguments (<code>|node|</code>) required.'
-    - '<strong>Type-Preserving Returns:</strong> <code>Node#add_child(node : T) : T</code> preserves concrete static type instead of returning <code>Void</code>, enabling <code>enemy = add_child(...)</code>.'
-    - '<strong>Direct Tree Instantiation:</strong> <code>add_child(Sprite2D) do ... end</code> instantiates, configures, and mounts child nodes in a single call without separate <code>.new</code>.'
-    - '<strong>Direct Scene Child Mounting:</strong> <code>add_child(path_or_scene, T)</code> instantiates, downcasts, mounts, and configures child scenes in one call.'
-    - '<strong>Direct Scene Sibling Mounting:</strong> <code>add_sibling(path_or_scene, T)</code> mounts sibling nodes directly under the parent with inline configuration.'
-    - '<strong>Fluent <code>#build</code> &amp; <code>#configure</code>:</strong> Chainable configuration blocks allow fluent property setup on any Godot engine object or custom node.'
+    - '<strong>Context Execution (<code>with .. yield</code>):</strong> Configuration blocks execute directly within the receiver’s scope without dummy block arguments.'
+    - '<strong>Type-Preserving Returns:</strong> <code>add_child(node : T) : T</code> returns the concrete type <code>T</code> instead of <code>Void</code>.'
+    - '<strong>Direct Scene Instantiation:</strong> <code>add_child(path, T)</code> preloads, instantiates, types, and mounts in a single expression.'
+    - '<strong>Direct Sibling Mounting:</strong> <code>add_sibling(path, T)</code> attaches nodes directly under the parent with inline configuration.'
 notes: |
   Writing gameplay code shouldn't require repetitive three-step instantiation boilerplate (`new`, configure, `add_child`). In Lapis, we provide direct tree instantiation with Crystal's 'with .. yield' context execution: `add_child(Sprite2D) do ... end` creates the node, evaluates configuration directly in its context without needing block arguments like `|s|`, mounts it into the hierarchy, and returns the strongly-typed instance in a single expression.
   When working with pre-existing scenes, `add_child("res://scenes/enemy.tscn", Enemy)` and `add_sibling("res://scenes/marker.tscn", Marker2D)` provide short, elegant one-liners that instantiate, downcast, mount, and configure in a single expression. Crucially, `add_child` preserves the child's static type `T` rather than returning `Void`, enabling direct assignment.
-  Sibling nodes mount effortlessly with `add_sibling(...)`, while any object can be customized with `Object#build` and `Object#configure`. Scene management is rounded out with `PackedScene.load(...)` and verified `change_scene!(...)`.

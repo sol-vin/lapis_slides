@@ -12,12 +12,11 @@ left:
   title: macro_lifecycle_hooks.cr — Compile-Time Composition
   tag: Crystal
   lang: crystal
-  font_size: '0.85rem'
+  font_size: '0.84rem'
   code: |
-    # 1. macro included: Composable mixin behavior at compile time
+    # 1. macro included: Injects state & methods at compile time
     module Damageable
       macro included
-        # Injects properties & methods into the including class:
         property health : Int32 = 100
 
         def take_damage(amount : Int32) : Void
@@ -26,30 +25,26 @@ left:
       end
     end
 
-    # 2. macro inherited: Subclass tracking & automated registration
+    # 2. macro inherited: Automated subclass registration
     abstract class GameEntity
-      # Global compile-time list of all registered game entities
       ENTITY_TYPES = [] of String
-
       macro inherited
-        # Fires whenever a new subclass is declared:
         ENTITY_TYPES << {{@type.name.stringify}}
       end
     end
 
     class Player < GameEntity
-      include Damageable # Injects health & take_damage!
+      include Damageable
     end
 right:
   type: card
   title: Compile-Time Module & Class Hooks
   color: amber
   items:
-    - '<strong>The <code>macro included</code> Hook:</strong> Executes whenever a module is included into a class. Automatically injects instance variables, methods, and validations into the receiver.'
-    - '<strong>Replaces Ruby''s <code>self.included</code>:</strong> Ruby required runtime metaprogramming tricks (<code>base.extend ClassMethods</code>). Crystal achieves full mixin synthesis at compile time with zero runtime reflection.'
-    - '<strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to inspect, configure, and register child types automatically.'
-    - '<strong>Zero-Overhead Registries:</strong> Build entity factories and plugin lists during compilation—no manual arrays or reflection scanning at startup.'
-    - '<strong>Type-Safe & Inlined:</strong> All injected code participates in standard global type inference and compiles directly into bare-metal machine code.'
+    - '<strong>The <code>macro included</code> Hook:</strong> Executes when a module is included, injecting instance variables and methods directly into the receiver.'
+    - '<strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to track and configure child types.'
+    - '<strong>Compile-Time Registries:</strong> Builds entity factories and type registries during compilation—eliminating startup reflection scans.'
+    - '<strong>Static Inlining:</strong> All injected code participates in global type inference and compiles directly into native machine code.'
 notes: |
   In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods).
   In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type.

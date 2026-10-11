@@ -11,7 +11,7 @@ gdscript:
   lang: csharp
   tag: C# (.NET 8)
   card_title: C# Null-Conditional & Lifecycle Pitfalls
-  font_size: '0.73rem'
+  font_size: '0.82rem'
   code: |
     public partial class CombatHUD : Control
     {
@@ -21,42 +21,31 @@ gdscript:
         public override void _Ready()
         {
             _healSFX = GetNodeOrNull<AudioStreamPlayer>("Audio/HealSFX");
-
-            // += binds strong managed delegate; prevents CLR GC of this HUD:
-            if (Player != null)
-                Player.HealthChanged += OnHealthChanged;
+            if (Player != null) Player.HealthChanged += OnHealthChanged; // Leak root!
         }
 
         private void OnHealthChanged(int cur, int max)
         {
-            // THE ?. TRAP: C# ?. bypasses custom operator == at bytecode level!
-            // CLR wrapper is not null, but C++ node was freed -> RUNTIME CRASH:
-            _healSFX?.Play(); // Throws System.ObjectDisposedException!
-
-            // Must use verbose engine checks everywhere instead of idiomatic ?.:
-            if (GodotObject.IsInstanceValid(_healSFX))
-                _healSFX.Play();
+            // ?. TRAP: Bypasses operator ==, throwing ObjectDisposedException:
+            if (GodotObject.IsInstanceValid(_healSFX)) _healSFX.Play();
         }
 
         public override void _ExitTree()
         {
-            // FRAGILE: Must manually -= or HUD leaks forever in CLR heap.
-            // If Player was already freed, Player.HealthChanged crashes unless guarded:
             if (GodotObject.IsInstanceValid(Player))
-                Player.HealthChanged -= OnHealthChanged;
+                Player.HealthChanged -= OnHealthChanged; // Fragile -= required
         }
     }
   points:
-    - '<strong>The <code>?.</code> Bytecode Trap:</strong> C# <code>?.</code> and <code>??</code> operators compile to IL <code>ldnull</code>, bypassing Godot’s overloaded <code>operator ==</code>. Calling <code>node?.Play()</code> on a freed node evaluates to true and throws <code>ObjectDisposedException</code>.'
-    - '<strong>Mandatory <code>IsInstanceValid()</code> Boilerplate:</strong> Because idiomatic C# null-conditional operators are unsafe with engine peers, developers must litter code with <code>GodotObject.IsInstanceValid(node)</code> guards.'
-    - '<strong>Managed Delegate GC Leaks (<code>+=</code>):</strong> C# <code>+=</code> events create strong managed references. If a UI or enemy node is removed from the scene tree without manual <code>-=</code>, the CLR keeps it alive in RAM forever.'
-    - '<strong>Fragile Teardown in <code>_ExitTree</code>:</strong> Unsubscribing in <code>_ExitTree</code> is required but hazardous: if the emitter died first, unhooking throws an exception unless defensive <code>IsInstanceValid</code> guards are written.'
+    - '<strong>The <code>?.</code> Bytecode Trap:</strong> C# <code>?.</code> compiles to IL <code>ldnull</code>, bypassing Godot’s equality. Calling <code>node?.Play()</code> on a freed peer throws <code>ObjectDisposedException</code>.'
+    - '<strong>Mandatory Guard Boilerplate:</strong> Because <code>?.</code> is unsafe with engine peers, developers must litter code with <code>GodotObject.IsInstanceValid</code>.'
+    - '<strong>Managed Delegate GC Leaks:</strong> C# <code>+=</code> events create strong GC roots. Failing to manually <code>-=</code> in <code>_ExitTree</code> leaks nodes in RAM forever.'
 crystal:
   title: ':sparkles: Crystal / Lapis: Strict Nil Safety & Native Signal Lifecycle'
   lang: crystal
   tag: Crystal (Lapis)
   card_title: Lapis Sound Nil Safety & Native Signals
-  font_size: '0.73rem'
+  font_size: '0.82rem'
   code: |
     node CombatHUD < Control do
       @[Export]
@@ -65,26 +54,20 @@ crystal:
 
       def _ready
         @heal_sfx = self["Audio/HealSFX", AudioStreamPlayer]?
-
         if p = @player
-          # Ergonomic += binds through 64-bit ObjectDB IDs (no GC leak roots):
           p.health_changed += ->on_health_changed(Int32, Int32)
         end
       end
 
       private def on_health_changed(cur : Int32, max : Int32) : Void
-        # Sound nil safety + dead-pointer armor: respects both nil and freed nodes!
-        @heal_sfx.try?(&.play) # Zero ObjectDisposedException crashes!
+        @heal_sfx.try?(&.play) # Dead-pointer safe: respects both nil & freed nodes!
       end
-
-      # ZERO _exit_tree boilerplate! When CombatHUD or Player dies,
-      # Lapis automatically prunes dead subscriptions via 64-bit ObjectDB IDs.
+      # Zero _exit_tree boilerplate! Signal subscriptions self-prune via 64-bit ObjectDB IDs.
     end
   points:
-    - '<strong>Dead-Pointer Armor (<code>try?</code>):</strong> <code>sfx.try?(&.play)</code> safely inspects both <code>nil</code> and Godot ObjectDB instance survival, eliminating C# <code>ObjectDisposedException</code> traps in a single expression.'
-    - '<strong>Familiar <code>+=</code> & <code>-=</code> Operators:</strong> Connect procs directly with concise operator sugar (<code>sig += ->handler</code>), providing C#-style ergonomics without managed delegate memory leaks.'
-    - '<strong>Self-Pruning ObjectDB Subscriptions:</strong> Signal subscriptions track 64-bit Godot ObjectDB monotonic IDs; when either node is freed, the connection dissolves automatically without manual <code>_exit_tree</code> boilerplate.'
-    - '<strong>Defensive Lifecycles:</strong> <code>node.alive?</code> and <code>node.try?</code> query Godot’s native ObjectDB table directly, safeguarding accesses to transient scene entities.'
+    - '<strong>Dead-Pointer Armor (<code>try?</code>):</strong> <code>sfx.try?(&.play)</code> inspects both <code>nil</code> and Godot ObjectDB survival, eliminating <code>ObjectDisposedException</code> crashes.'
+    - '<strong>Familiar <code>+=</code> Operators:</strong> Connect procs directly with concise operator sugar (<code>sig += ->handler</code>) with zero GC root leakage.'
+    - '<strong>Self-Pruning ObjectDB Connections:</strong> Signal subscriptions track 64-bit Godot ObjectDB IDs; connections dissolve automatically when either node is freed.'
 takeaway:
   badge: AUTOMATED HYGIENE
   text: 'Lapis solves the dual-lifetime problem: familiar += signal syntax with 64-bit ObjectDB auto-pruning eliminates C# ?. ObjectDisposedExceptions and managed delegate leaks.'

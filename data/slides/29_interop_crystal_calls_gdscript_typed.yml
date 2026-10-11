@@ -12,29 +12,23 @@ left:
   title: quest_controller.cr — Automatic Strongly-Typed GDScript Invocation
   tag: Crystal
   lang: crystal
-  font_size: '0.80rem'
+  font_size: '0.84rem'
   code: |
-    # 1. GDScript defines: class_name DialogueSystem extends Node
-    # 2. 'lapis bind project' automatically synthesizes typed bindings:
     require "project_nodes/dialogue_system"
 
     node QuestController < Node do
-      # Type-safe node injection: compiler knows it is DialogueSystem
       @[OnReady("%DialogueManager")]
       getter dialogue : DialogueSystem
 
       def trigger_dialogue(line_id : Int32) : Bool
-        # Direct typed method call: NO .call(), NO strings, NO Variant casts!
+        # Direct typed method call: NO .call(), NO string lookups!
         success = dialogue.show_dialogue(speaker: "Elder", line_id: line_id)
-
-        # Direct typed property accessor: NO .get() or .set()!
         dialogue.dialogue_speed = 1.5_f32
 
-        # Strongly-typed native signal subscription:
+        # Strongly-typed signal subscription
         on dialogue.line_completed do |speaker, text|
           display_subtitles(speaker, text)
         end
-
         success
       end
     end
@@ -43,10 +37,10 @@ right:
   title: Automatic Typed Binding Architecture
   color: cyan
   items:
-  - <strong>Zero Manual Boilerplate:</strong> <code>lapis bind project</code> inspects GDScript ASTs and automatically synthesizes strongly-typed Crystal wrappers.
-  - <strong>Eliminates Dynamic <code>.call()</code>:</strong> Invokes GDScript methods as native Crystal functions—eliminating stringly <code>.call()</code>, <code>.get()</code>, and Variant casts.
-  - <strong>Compile-Time Signature Verification:</strong> Crystal's compiler statically checks parameter types, argument counts, and return types before running.
-  - <strong>First-Class IDE Autocomplete:</strong> Full parameter hinting, type inference, and jump-to-definition across the GDScript-Crystal boundary in VS Code and Crystalline.
+    - '<strong>Zero Manual Boilerplate:</strong> <code>lapis bind project</code> inspects GDScript ASTs to synthesize typed Crystal wrappers.'
+    - '<strong>Eliminates Dynamic <code>.call()</code>:</strong> Invokes GDScript methods as native functions—eliminating stringly calls and Variant casts.'
+    - '<strong>Compile-Time Signature Verification:</strong> Statically verifies parameter types, argument counts, and return types before running.'
+    - '<strong>Full Autocomplete:</strong> Provides instant IDE parameter hinting and jump-to-definition across the GDScript-Crystal boundary.'
 notes: |
   In the previous slide, we explored dynamic dispatch using .call, .get, and .set with Variant reflection. But in production projects with established GDScript subsystems, you never want manual dynamic calls or hand-written wrappers.
   Lapis provides fully automatic strongly-typed bindings via `lapis bind project`. The CLI automatically inspects custom GDScript files declaring a `class_name` and synthesizes complete, type-safe Crystal wrappers into `src/generated/project_nodes/`.

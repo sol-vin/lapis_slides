@@ -12,37 +12,30 @@ left:
   title: predicates_and_bangs.cr — Expressive Punctuation
   tag: Crystal
   lang: crystal
-  font_size: '0.70rem'
+  font_size: '0.84rem'
   code: |
-    # 1. Predicates (?): Returns boolean, asks a clear question
-    player.alive?        # Returns Bool (vs player.is_alive())
-    inventory.empty?     # Returns Bool (vs inventory.isEmpty())
-    shield.can_absorb?   # Conversational, fluent English!
+    # 1. Predicates (?): Clean boolean queries
+    player.alive?        # => Bool (no is_ / has_ prefixes)
+    inventory.empty?     # => Bool
 
-    # 2. Nil Over Errors (?): Idiomatic Non-Throwing Alternative
-    party.first?         # Returns Player | Nil (party.first raises if empty!)
-    items[99]?           # Returns Item | Nil (items[99] raises IndexError!)
-    "abc".to_i?          # Returns Int32 | Nil ("abc".to_i raises ArgumentError!)
-    world.find_node?("X")# Returns Node | Nil (safe nilable traversal)
+    # 2. Nil Over Errors (?): Non-throwing safe lookups
+    party.first?         # => Player | Nil (vs first raising)
+    items[99]?           # => Item | Nil   (vs [] raising)
+    "42".to_i?           # => Int32 | Nil  (safe parse)
 
-    # 3. Bang methods (!): Warns of in-place mutation or danger
-    inventory.sort       # PURE: returns a new sorted copy
-    inventory.sort!      # MUTATING: alters array in place!
-    vector.normalize!    # Mutates existing Vector3 in place
-
-    # 4. Bang methods (!): Raising exceptions vs soft nilable returns
-    user.save            # Soft failure: returns Bool (false on invalid)
-    user.save!           # Hard failure: raises RecordInvalid exception!
+    # 3. Bang (!): In-place mutation & non-nil assertion
+    inventory.sort!      # Mutates array in place (vs pure sort)
+    vector.normalize!    # Mutates Vector3 in place
+    active_target!       # Asserts non-nil or raises RecordNotFound
 right:
   type: card
   title: Punctuation as High-Signal Communication
   color: purple
   items:
-    - '<strong>Semantic Identifiers:</strong> In C, Java, and Go, punctuation in identifiers is illegal. Crystal embraces <code>?</code> and <code>!</code> as rich semantic communication tools.'
-    - '<strong>Eliminating Prefix Bikeshedding:</strong> Kills naming debates between <code>is_empty</code>, <code>has_items</code>, <code>check_alive</code>, and <code>should_spawn</code>. A question mark turns any word into an English question.'
-    - '<strong>Nil Over Errors Convention (<code>?</code>):</strong> Methods ending in <code>?</code> return <code>nil</code> on missing values instead of raising exceptions, avoiding cumbersome rescue blocks for routine lookups.'
-    - '<strong>In-Place Mutation Flare (<code>!</code>):</strong> A developer scanning a pull request can instantly spot destructive in-place mutations (<code>sort!</code>, <code>normalize!</code>) versus pure functions.'
-    - '<strong>Compiler-Enforced Nil Safety:</strong> Crystal enforces strict compile-time checks on <code>T | Nil</code> returns from <code>?</code> methods, making null pointer dereferences impossible.'
+    - '<strong>Semantic Predicates:</strong> Methods ending in <code>?</code> ask boolean questions, eliminating awkward <code>is_</code>/<code>has_</code> prefix debates.'
+    - '<strong>Nil Over Errors:</strong> Lookup methods with <code>?</code> return <code>nil</code> instead of raising exceptions, avoiding bulky try/catch blocks.'
+    - '<strong>Mutation Flares:</strong> Methods ending in <code>!</code> warn at a glance of destructive in-place alterations (<code>sort!</code>, <code>normalize!</code>).'
+    - '<strong>Strict Nil Safety:</strong> Crystal checks union returns (<code>T | Nil</code>) at compile time, eliminating null dereference crashes entirely.'
 notes: |
   In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error.
   In Crystal, punctuation is elevated into a rich semantic communication tool. First, methods ending in '?' are 'predicates'—they ask a question and return a boolean. This single convention permanently eliminates bikeshedding over whether a function should be named 'is_alive', 'has_health', or 'get_is_alive'.

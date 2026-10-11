@@ -11,67 +11,50 @@ gdscript:
   lang: csharp
   tag: C# (.NET 8)
   card_title: C# Concurrency & String Traps
+  font_size: '0.84rem'
   code: |
-    using Godot;
-    using System;
-    using System.Threading.Tasks;
-
     public partial class NetworkEntity : Node3D
     {
-        // async void: unhandled exceptions crash the entire process
+        // async void: unhandled exceptions crash the entire engine process!
         public async void OnNetworkPacketReceived(byte[] data)
         {
-            // String lookups incur runtime hashing overhead
-            if (!IsInGroup("network_synced")) return;
+            if (!IsInGroup("network_synced")) return; // String hashing cost
 
-            // Task.Run allocates state machine on managed heap
+            // Task allocates state machine on heap; background thread cannot touch tree:
             await Task.Run(() => ProcessPacketPayload(data));
-
-            // Must marshal back to main thread or crash SceneTree
             Callable.From(() => GlobalPosition = Vector3.Zero).CallDeferred();
         }
-
-        private void ProcessPacketPayload(byte[] data) { /* ... */ }
     }
   points:
-  - <strong>Task Heap Allocation Overhead:</strong> Every <code>async Task</code> invocation allocates a <code>Task</code> reference object and state machine on the managed heap, degrading game loop performance.
-  - <strong>Async Void Crash Hazard:</strong> Exceptions thrown inside <code>async void</code> event handlers bypass try/catch blocks and directly crash the entire game process.
-  - <strong>SceneTree Threading Hazards:</strong> Godot's SceneTree is strictly single-threaded; calling engine APIs from background threads triggers race conditions and fatal crashes.
-  - <strong>Stringly-Typed Group &amp; Action Lookups:</strong> Looking up groups (<code>IsInGroup("enemies")</code>) and actions requires runtime string hashing unless boilerplate <code>StringName</code> constants are declared.
+    - '<strong>Heap Task Churn:</strong> <code>async Task</code> allocates state machine objects on the managed heap, degrading tight game loop performance.'
+    - '<strong>Async Void Crash Hazard:</strong> Unhandled exceptions inside <code>async void</code> event handlers bypass try/catch and kill the entire process.'
+    - '<strong>SceneTree Threading Hazard:</strong> Touching Godot nodes from background tasks causes fatal thread races, requiring <code>CallDeferred</code>.'
 crystal:
   title: ':sparkles: Crystal: Lightweight Fibers & Compile-Time Symbols'
   lang: crystal
   tag: Crystal (Lapis)
   card_title: Crystal Zen Advantages
+  font_size: '0.84rem'
   code: |
     node NetworkEntity < Node3D do
       @packet_channel = Channel(Bytes).new(32)
 
       def _ready : Nil
-        # Lightweight fiber: runs cooperatively on the stack
+        # Lightweight fiber: runs cooperatively with 0 OS thread tax
         spawn do
-          loop do
-            packet = @packet_channel.receive
-            process_payload(packet)
-          end
+          loop { process_payload(@packet_channel.receive) }
         end
       end
 
-      def _process(delta : Float64) : Void
-        Fiber.yield # Cooperatively yield to spawned Crystal fibers
-      end
-
       def on_network_packet_received(data : Bytes) : Nil
-        # Symbol comparison is an instantaneous integer check
-        return unless in_group?(:network_synced)
+        return unless in_group?(:network_synced) # Instant 32-bit integer cmp!
         @packet_channel.send(data)
       end
     end
   points:
-  - <strong>Microscopic Fiber Concurrency:</strong> Crystal's <code>spawn</code> creates lightweight cooperative fibers with stack allocation, executing concurrent tasks with negligible memory overhead.
-  - <strong>Thread-Safe CSP Channels:</strong> <code>Channel(T)</code> delivers clean, lock-free message passing between background worker fibers and the main game thread without race conditions.
-  - <strong>First-Class Compile-Time Symbols:</strong> Identifiers like <code>:network_synced</code> and <code>:jump</code> are interned at compile time as lightweight integers, eliminating string allocations and hashing.
-  - <strong>Robust Error Containment:</strong> Fiber exceptions are isolated and reported with full backtraces without taking down the engine or crashing the game process.
+    - '<strong>Microscopic Stack Fibers:</strong> <code>spawn</code> creates cooperative fibers running on the stack with negligible memory footprint.'
+    - '<strong>Thread-Safe CSP Channels:</strong> <code>Channel(T)</code> provides lock-free message passing between background workers and the main thread.'
+    - '<strong>Immediate 32-Bit Symbols:</strong> Symbols like <code>:network_synced</code> are interned integers evaluated at build time without string hashing.'
 takeaway:
   badge: CONCURRENCY & SPEED
   text: 'Crystal replaces C#s heavy Task heap allocations and string soup with lightweight stack fibers and compile-time integer symbols.'
