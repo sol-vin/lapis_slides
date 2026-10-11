@@ -249,16 +249,16 @@ Theme: `sol.vin` | Total Slides: 163
   - Prose-Like Call-Site Cadence: Code reads from left to right like an English script (hero.heal_party(party.select(&:wounded?), 25)).
   - Flexible Object Composition: Entities, weapons, and buffs are composed at runtime without complex factory classes or builder ceremony.
   - Closures as Dynamic Modifiers: Blocks passed to Buff.new { |p| ... } inject runtime behavior without class explosion.
-  - Higher-Order Enumerable Magic: all?, reject, sum, and select replace manual loops with crystal-clear queries.
+  - Higher-Order Enumerable Magic: all?, reject, sum, and select replace manual loops with declarative, expressive queries.
   - Statement Modifiers as Qualifiers: Trailing if party.all?(&:alive?) lets the primary action lead the thought, treating conditions as qualifiers.
-  - The Direct Precursor to Lapis: This exact call-site joy is what Lapis brings to Godot engine nodes—combining Ruby's prose with C++ execution speed.
+  - Developer Happiness in Practice: The entire script reads like a high-level design specification, optimizing for cognitive ease and creative flow.
 
 **Presenter Notes**:
 > And here is the payoff: "So my front end can look like this."
 > Because our backend Player class was written with thoughtful Ruby idioms, the caller—whether a gameplay scripter, quest designer, or UI engineer—gets to write code that reads like natural English prose.
 > Look at how objects are composed: we assemble weapons, dynamic buff closures, and multi-character parties without factories or verbose boilerplate. Tactical actions like healing wounded allies happen via a single chained query: 'party.select(&:wounded?)'.
 > And statement modifiers let us write rules that read like design documents: 'puts "Party is combat-ready!" if party.all?(&:alive?)'.
-> This sublime ergonomics is why developers fell in love with Ruby—and it is the exact experience Lapis delivers natively in Godot with Crystal!
+> This sublime ergonomics is why developers fell in love with Ruby—syntax designed first and foremost for programmer joy and cognitive flow.
 
 ---
 
@@ -267,44 +267,47 @@ Theme: `sol.vin` | Total Slides: 163
 - **Badge**: `RUBY HERITAGE • MINIMAL GRAMMAR`
 - **Title**: Small Syntax: Postage-Stamp Grammar
 - **Subtitle**: ~40 Keywords Fueling an Infinite Universe of Domain Usages
-- **Code (postage_stamp_syntax.rb — Methods Over Grammar)**:
+- **Code (ruby_keywords.rb — The ~40 Core Keywords)**:
   ```ruby
-  # Other languages require compiler keywords for features.
-  # Ruby achieves rich ecosystems with methods & blocks:
+  # Ruby's Entire Reserved Keyword Grammar (~41 Words):
   
-  # 1. Properties & Accessors? Just a class method:
-  attr_accessor :health, :inventory
+  # Definitions & Scope
+  class       module      def         end
+  self        super       alias       undef
   
-  # 2. Access control visibility? Just a method call:
-  private
+  # Control Flow & Branching
+  if          then        elsif       else
+  unless      case        when
   
-  # 3. Testing suites? Ordinary methods taking blocks:
-  describe "BossFight" do
-    it "enrages at low health" do
-      boss.take_damage(900)
-      expect(boss.enraged?).to be true
-    end
-  end
+  # Loops & Iteration
+  while       until       for         in
+  do          break       next        redo        retry
   
-  # 4. Declarative Web Routing? Plain method + block:
-  get "/player/status" do
-    render json: { level: 42, alive: true }
-  end
+  # Execution Flow & Blocks
+  yield       return      defined?
   
-  # All of this powered by only ~40 core keywords!
+  # Exception Handling
+  begin       rescue      ensure
+  
+  # Literals & Boolean Logic
+  true        false       nil
+  and         or          not
+  
+  # Special Scope & File Tokens
+  BEGIN       END         __FILE__    __LINE__    __ENCODING__
   ```
 - **The Postage-Stamp Advantage**:
   - Fits on a Postage Stamp: While C++ and C# continually bloat their grammars with 80+ keywords, Ruby's core grammar famously fits on a postage stamp (~40 keywords).
   - Methods Over Keywords: Features like properties (attr_accessor), visibility (private), and mixins (include) are plain methods, not compiler grammar.
   - Blocks as Universal Primitives: A single, universal construct—the block (do...end)—powers iteration, resource safety (File.open), and rich DSLs.
   - Zero Syntax Bloat: Ecosystems like Rails, RSpec, and Sinatra look like dedicated domain languages, yet require zero new syntax rules in the compiler.
-  - The Crystal Connection: Crystal inherits this exact philosophy—giving you boundless DSL expressiveness with a clean, postage-stamp core compiled to native LLVM code.
+  - Elegance Through Restraint: Rather than accumulating specialized syntactic sugar, a compact set of orthogonal primitives yields maximum expressive freedom.
 
 **Presenter Notes**:
 > In computer science lore, Alan Kay famously observed that Smalltalk was so elegant that its entire grammar could fit on a postcard. Matz brought this profound insight to Ruby: you do not need 80 or 100 keywords to build a powerful programming language.
 > In fact, adding keywords often restricts what developers can do. In C#, Java, or C++, if you want properties, asynchronous tasks, or access control, the language committee must invent new keywords and syntax rules.
 > In Ruby, properties like attr_accessor, access modifiers like private, testing constructs like describe/it, and web routes like get/post are simply ordinary methods combined with blocks!
-> By keeping the core grammar down to a postage-stamp size of ~40 keywords, Ruby unlocked an unbounded universe of domain-specific languages. And as we'll see, Crystal inherited this exact same philosophy: keeping the grammar tiny, clean, and elegant, but compiling it straight to bare-metal LLVM machine code.
+> By keeping the core grammar down to a postage-stamp size of ~40 keywords, Ruby unlocked an unbounded universe of domain-specific languages: keeping the language tiny, clean, and elegant while empowering programmers to shape their own abstractions.
 
 ---
 

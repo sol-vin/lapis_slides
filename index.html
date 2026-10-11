@@ -863,9 +863,9 @@ puts &quot;Average Party Vitality: #{avg_hp}%&quot;</code></pre>
                 <li><strong>Prose-Like Call-Site Cadence:</strong> Code reads from left to right like an English script (<code>hero.heal_party(party.select(&:wounded?), 25)</code>).</li>
                 <li><strong>Flexible Object Composition:</strong> Entities, weapons, and buffs are composed at runtime without complex factory classes or builder ceremony.</li>
                 <li><strong>Closures as Dynamic Modifiers:</strong> Blocks passed to <code>Buff.new { |p| ... }</code> inject runtime behavior without class explosion.</li>
-                <li><strong>Higher-Order Enumerable Magic:</strong> <code>all?</code>, <code>reject</code>, <code>sum</code>, and <code>select</code> replace manual loops with crystal-clear queries.</li>
+                <li><strong>Higher-Order Enumerable Magic:</strong> <code>all?</code>, <code>reject</code>, <code>sum</code>, and <code>select</code> replace manual loops with declarative, expressive queries.</li>
                 <li><strong>Statement Modifiers as Qualifiers:</strong> Trailing <code>if party.all?(&:alive?)</code> lets the primary action lead the thought, treating conditions as qualifiers.</li>
-                <li><strong>The Direct Precursor to Lapis:</strong> This exact call-site joy is what Lapis brings to Godot engine nodes—combining Ruby's prose with C++ execution speed.</li>
+                <li><strong>Developer Happiness in Practice:</strong> The entire script reads like a high-level design specification, optimizing for cognitive ease and creative flow.</li>
               </ul>
             </div>
             </div>
@@ -881,7 +881,7 @@ puts &quot;Average Party Vitality: #{avg_hp}%&quot;</code></pre>
           Because our backend Player class was written with thoughtful Ruby idioms, the caller—whether a gameplay scripter, quest designer, or UI engineer—gets to write code that reads like natural English prose.
           Look at how objects are composed: we assemble weapons, dynamic buff closures, and multi-character parties without factories or verbose boilerplate. Tactical actions like healing wounded allies happen via a single chained query: 'party.select(&:wounded?)'.
           And statement modifiers let us write rules that read like design documents: 'puts "Party is combat-ready!" if party.all?(&:alive?)'.
-          This sublime ergonomics is why developers fell in love with Ruby—and it is the exact experience Lapis delivers natively in Godot with Crystal!
+          This sublime ergonomics is why developers fell in love with Ruby—syntax designed first and foremost for programmer joy and cognitive flow.
         </aside>
       </section>
 
@@ -907,35 +907,38 @@ puts &quot;Average Party Vitality: #{avg_hp}%&quot;</code></pre>
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title">postage_stamp_syntax.rb — Methods Over Grammar</span>
+                <span class="window-title code-title">ruby_keywords.rb — The ~40 Core Keywords</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">Ruby</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-ruby code-compact"># Other languages require compiler keywords for features.
-# Ruby achieves rich ecosystems with methods &amp; blocks:
+              <pre><code class="language-ruby code-compact"># Ruby&#39;s Entire Reserved Keyword Grammar (~41 Words):
 
-# 1. Properties &amp; Accessors? Just a class method:
-attr_accessor :health, :inventory
+# Definitions &amp; Scope
+class       module      def         end
+self        super       alias       undef
 
-# 2. Access control visibility? Just a method call:
-private
+# Control Flow &amp; Branching
+if          then        elsif       else
+unless      case        when
 
-# 3. Testing suites? Ordinary methods taking blocks:
-describe &quot;BossFight&quot; do
-  it &quot;enrages at low health&quot; do
-    boss.take_damage(900)
-    expect(boss.enraged?).to be true
-  end
-end
+# Loops &amp; Iteration
+while       until       for         in
+do          break       next        redo        retry
 
-# 4. Declarative Web Routing? Plain method + block:
-get &quot;/player/status&quot; do
-  render json: { level: 42, alive: true }
-end
+# Execution Flow &amp; Blocks
+yield       return      defined?
 
-# All of this powered by only ~40 core keywords!</code></pre>
+# Exception Handling
+begin       rescue      ensure
+
+# Literals &amp; Boolean Logic
+true        false       nil
+and         or          not
+
+# Special Scope &amp; File Tokens
+BEGIN       END         __FILE__    __LINE__    __ENCODING__</code></pre>
             </div>
             </div>
             <div class="column col" data-slot="right">
@@ -948,7 +951,7 @@ end
                 <li><strong>Methods Over Keywords:</strong> Features like properties (<code>attr_accessor</code>), visibility (<code>private</code>), and mixins (<code>include</code>) are plain methods, not compiler grammar.</li>
                 <li><strong>Blocks as Universal Primitives:</strong> A single, universal construct—the block (<code>do...end</code>)—powers iteration, resource safety (<code>File.open</code>), and rich DSLs.</li>
                 <li><strong>Zero Syntax Bloat:</strong> Ecosystems like Rails, RSpec, and Sinatra look like dedicated domain languages, yet require zero new syntax rules in the compiler.</li>
-                <li><strong>The Crystal Connection:</strong> Crystal inherits this exact philosophy—giving you boundless DSL expressiveness with a clean, postage-stamp core compiled to native LLVM code.</li>
+                <li><strong>Elegance Through Restraint:</strong> Rather than accumulating specialized syntactic sugar, a compact set of orthogonal primitives yields maximum expressive freedom.</li>
               </ul>
             </div>
             </div>
@@ -963,7 +966,7 @@ end
           In computer science lore, Alan Kay famously observed that Smalltalk was so elegant that its entire grammar could fit on a postcard. Matz brought this profound insight to Ruby: you do not need 80 or 100 keywords to build a powerful programming language.
           In fact, adding keywords often restricts what developers can do. In C#, Java, or C++, if you want properties, asynchronous tasks, or access control, the language committee must invent new keywords and syntax rules.
           In Ruby, properties like attr_accessor, access modifiers like private, testing constructs like describe/it, and web routes like get/post are simply ordinary methods combined with blocks!
-          By keeping the core grammar down to a postage-stamp size of ~40 keywords, Ruby unlocked an unbounded universe of domain-specific languages. And as we'll see, Crystal inherited this exact same philosophy: keeping the grammar tiny, clean, and elegant, but compiling it straight to bare-metal LLVM machine code.
+          By keeping the core grammar down to a postage-stamp size of ~40 keywords, Ruby unlocked an unbounded universe of domain-specific languages: keeping the language tiny, clean, and elegant while empowering programmers to shape their own abstractions.
         </aside>
       </section>
 
