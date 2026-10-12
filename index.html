@@ -2416,7 +2416,7 @@ end</code></pre>
             <h2 class="slide-title">Static Trade-Offs: No &#39;send&#39; &amp; Limits of &#39;exec&#39;</h2>
             <p class="slide-subtitle">The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
+          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
             <div class="column col" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
@@ -2580,7 +2580,7 @@ end</code></pre>
             <h2 class="slide-title">Deferred Synthesis: macro finished</h2>
             <p class="slide-subtitle">Exhaustive AST Introspection Without Runtime Reflection</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
+          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
             <div class="column col" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
@@ -4883,7 +4883,7 @@ end</code></pre>
             </div>
             </div>
             <div class="column col" data-slot="right">
-            <div class="card col purple compact" data-color="purple" data-density="compact">
+            <div class="card col purple" data-color="purple">
               <div class="card-header card-title purple">
                 <span>How NodeContext &amp; ~ Work</span>
               </div>
@@ -9447,9 +9447,9 @@ end</code></pre>
                 <span>In-Editor &amp; Out-of-Editor Debugging via CLI</span>
               </div>
               <ul class="card-list">
-                <li><strong>In-Editor Debugging (<code>lapis editor -d</code>):</strong> Opens Godot Editor with r2 attached; real-time pseudo-C decompiler tab (<code>pdc</code>), assembly tab (<code>pdf</code>), 64-bit register tracking, and multiplayer cooperative lockstep.</li>
-                <li><strong>Out-of-Editor Plugin Debugging (<code>lapis run -d</code>):</strong> Run standalone games and isolated plugin DLLs under r2 with zero editor overhead—catching hard crashes instantly.</li>
-                <li><strong>CLI Decompiler & Source Mapper (<code>lapis decompile</code>):</strong> Statically decompile Crystal methods to pseudo-C, side-by-side assembly (<code>pdca</code>), or map directly to original Crystal source lines (<code>cl</code> / <code>pdls</code>) without running the game.</li>
+                <li><strong>In-Editor Debugging:</strong> <code>lapis editor -d</code> launches Godot with r2 attached; real-time pseudo-C decompiler (<code>pdc</code>), assembly (<code>pdf</code>), register tracking, and multiplayer lockstep.</li>
+                <li><strong>Out-of-Editor Debugging:</strong> <code>lapis run -d</code> runs standalone games and plugin DLLs under r2 with zero editor overhead—catching hard crashes instantly.</li>
+                <li><strong>CLI Decompiler & Mapper:</strong> <code>lapis decompile</code> statically decompiles Crystal methods to pseudo-C, side-by-side assembly (<code>pdca</code>), or maps directly to source lines (<code>cl</code> / <code>pdls</code>).</li>
                 <li><strong>Hardware Memory Watchpoints:</strong> <code>rw &lt;addr&gt;</code> breaks CPU execution instantly at the exact machine instruction performing illegal writes (catching <code>0xC0000005</code>).</li>
                 <li><strong>Automated Crash Forensics:</strong> <code>PluginForensics</code> classifies crash boundaries (GameCode, LapisPlugin, GDExtensionBridge) and reads 64-bit ObjectDB IDs.</li>
               </ul>

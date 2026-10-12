@@ -34,7 +34,6 @@ right:
   type: card
   title: How NodeContext & ~ Work
   color: purple
-  compact: true
   items:
     - '<strong>Opt-In Require:</strong> Add <code>require "lapis/gd_extras"</code> to enable unary <code>~</code> queries and syntax.'
     - '<strong>Active Lifecycle Context:</strong> Godot callbacks automatically scope <code>NodeContext.current = self</code> via thread-local storage.'

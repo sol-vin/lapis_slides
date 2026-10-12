@@ -6,12 +6,13 @@ badge: METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS
 badge_color: amber
 palette: digital_guy
 layout: two-column-layout
-ratio: 3:2
+ratio: 1:1
 left:
   type: code
   title: static_vs_dynamic.cr — No Runtime Plasticity
   tag: Crystal
   lang: crystal
+  font_size: '0.78rem'
   code: |
     # What Ruby allows that Crystal CANNOT do:
     # target.send("cast_spell", 50)           # No runtime send!

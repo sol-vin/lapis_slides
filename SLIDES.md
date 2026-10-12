@@ -3902,9 +3902,9 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
   - Fragile Python Environment Binding: LLDB plugin scripts demanded exact host Python version matches, breaking constantly across OS updates.
   - Zero Headless CI Automation: Inability to script lightweight headless crash triage, stack frame decoding, and memory dump forensics in CI pipelines.
 - **In-Editor & Out-of-Editor Debugging via CLI**:
-  - In-Editor Debugging (lapis editor -d): Opens Godot Editor with r2 attached; real-time pseudo-C decompiler tab (pdc), assembly tab (pdf), 64-bit register tracking, and multiplayer cooperative lockstep.
-  - Out-of-Editor Plugin Debugging (lapis run -d): Run standalone games and isolated plugin DLLs under r2 with zero editor overhead—catching hard crashes instantly.
-  - CLI Decompiler & Source Mapper (lapis decompile): Statically decompile Crystal methods to pseudo-C, side-by-side assembly (pdca), or map directly to original Crystal source lines (cl / pdls) without running the game.
+  - In-Editor Debugging: lapis editor -d launches Godot with r2 attached; real-time pseudo-C decompiler (pdc), assembly (pdf), register tracking, and multiplayer lockstep.
+  - Out-of-Editor Debugging: lapis run -d runs standalone games and plugin DLLs under r2 with zero editor overhead—catching hard crashes instantly.
+  - CLI Decompiler & Mapper: lapis decompile statically decompiles Crystal methods to pseudo-C, side-by-side assembly (pdca), or maps directly to source lines (cl / pdls).
   - Hardware Memory Watchpoints: rw <addr> breaks CPU execution instantly at the exact machine instruction performing illegal writes (catching 0xC0000005).
   - Automated Crash Forensics: PluginForensics classifies crash boundaries (GameCode, LapisPlugin, GDExtensionBridge) and reads 64-bit ObjectDB IDs.
 

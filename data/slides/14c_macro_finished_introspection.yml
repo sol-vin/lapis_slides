@@ -6,13 +6,13 @@ badge: METAPROGRAMMING • DEFERRED AST
 badge_color: purple
 palette: creation
 layout: two-column-layout
-ratio: 3:2
+ratio: 1:1
 left:
   type: code
   title: deferred_introspection.cr — Complete Type Reflection
   tag: Crystal
   lang: crystal
-  font_size: '0.85rem'
+  font_size: '0.78rem'
   code: |
     # macro finished: Defers execution until the type is fully parsed
     abstract class NetworkSync
