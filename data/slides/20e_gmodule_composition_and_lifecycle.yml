@@ -44,7 +44,6 @@ right:
   type: card
   title: Architectural Rigor & Safety
   color: purple
-  compact: true
   items:
     - '<strong>Composed Inheritance:</strong> Traits inherit traits (<code>gmodule A &lt; B</code>), inheriting all properties and signals.'
     - '<strong>Cooperative Chaining:</strong> Calling <code>super</code> in <code>_process</code> chains lifecycle hooks across all mixed-in traits.'

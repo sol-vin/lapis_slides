@@ -12,7 +12,7 @@ left:
   title: damageable_trait.cr — First-Class Godot Mixin
   tag: Crystal
   lang: crystal
-  font_size: '0.80rem'
+  font_size: '0.70rem'
   code: |
     # Reusable gameplay trait with full engine reflection
     gmodule Damageable do
@@ -52,7 +52,6 @@ right:
   type: card
   title: Why gmodule Beats Raw Modules
   color: cyan
-  compact: true
   items:
     - '<strong>The Raw Module Gap:</strong> Standard modules inline methods, but cannot register Godot properties or signals.'
     - '<strong>ClassDB Registration:</strong> <code>macro node</code> inspects <code>gmodule</code> traits and flattens exports into ClassDB.'
