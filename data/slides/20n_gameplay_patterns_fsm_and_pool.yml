@@ -12,9 +12,10 @@ left:
   title: gameplay_patterns.cr — Optional Lapis Patterns
   tag: Crystal (Lapis)
   lang: crystal
-  font_size: '0.84rem'
+  font_size: '0.74rem'
   code: |
     require "lapis/fsm"
+    require "lapis/signal_bus"
     require "lapis/pool"
 
     # 1. Value-Type Union FSM (stack records, zero heap allocations!):
@@ -25,7 +26,16 @@ left:
       end
     end
 
-    # 2. Dead-Pointer Safe Node Pool (high-throughput recycling):
+    # 2. Type-Safe Decoupled Signal Bus (lazy singleton & test reset):
+    signal_bus GameEvents do
+      signal score_changed(points : Int32)
+      signal boss_defeated(name : String, loot_id : Int32)
+    end
+    GameEvents.score_changed.connect { |pts| update_hud(pts) }
+    GameEvents.score_changed.emit(500)
+    GameEvents.reset_bus! # Clean test isolation!
+
+    # 3. Dead-Pointer Safe Node Pool (high-throughput recycling):
     node_pool BulletPool, node_type: Bullet, initial: 32, max: 128
     bullet = pool.acquire { |b| b.fire_at(target) }
     pool.release(bullet) # Resets parent, hides, stops process
@@ -34,7 +44,7 @@ right:
   title: Modular Gameplay Patterns
   color: green
   items:
-    - '<strong>Strictly Optional Modules:</strong> <code>require "lapis/fsm"</code> and <code>pool</code> guarantee zero prelude bloat in standard projects.'
+    - '<strong>Strictly Optional Modules:</strong> <code>require "lapis/fsm"</code>, <code>signal_bus</code>, and <code>pool</code> guarantee zero prelude bloat in standard projects.'
     - '<strong>Value-Type Union FSM:</strong> State transitions between value records (<code>Idle | Walk</code>) avoid heap allocations and resolve at build time.'
     - '<strong>High-Throughput Node Pooling:</strong> <code>Lapis::Pool(T)</code> manages node recycling with automatic pre-warming and dead-pointer verification.'
     - '<strong>Decoupled Signal Bus:</strong> <code>signal_bus Name</code> declares static event hubs with test-isolation reset (<code>reset_bus!</code>).'

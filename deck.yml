@@ -115,6 +115,7 @@ slides:
 - 16_antipattern_dead_pointers
 - 17_antipattern_async_signals
 - 17b_timer_dsl_and_handles
+- 17c_await_variants_and_status
 
 # --- Chapter 4.5: Fearless Concurrency & Lockstep Multiplayer ---
 - 22b_act4_concurrency_intro

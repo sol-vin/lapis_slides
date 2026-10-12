@@ -137,13 +137,13 @@ This skill is the authoritative conversion guide and Rosetta Stone for translati
     </tr>
     <tr>
       <td><code>await get_tree().create_timer(1.0).timeout</code></td>
-      <td><code>await(1.0)</code><br>or <code>await(get_tree.create_timer(1.0))</code></td>
-      <td>Non-blocking signal awaiting; checks <code>#alive?</code> on every frame.</td>
+      <td><code>await(1.0)</code> &rarr; <code>AwaitStatus</code><br><code>await?(1.0)</code> &rarr; <code>Bool</code><br><code>await!(1.0)</code> &rarr; <code>Void</code></td>
+      <td>Non-blocking frame delay. <code>await?</code> returns <code>true</code>/<code>false</code>; <code>await!</code> raises <code>TimeoutError</code>.</td>
     </tr>
     <tr>
       <td><code>await enemy.died</code></td>
-      <td><code>await(enemy.died)</code><br>or <code>enemy.died.await</code></td>
-      <td>First-class bound signal awaiting with optional timeout argument.</td>
+      <td><code>await(enemy.died)</code><br><code>await?(enemy.died)</code><br><code>await!(enemy.died)</code></td>
+      <td>First-class signal awaiting with optional <code>timeout_sec:</code>. Returns <code>AwaitStatus(T)</code>, safe nilable/bool (<code>await?</code>), or unwrapped value (<code>await!</code>). Raises <code>Godot::DisposedObjectError</code> if target node is freed while waiting.</td>
     </tr>
     <tr>
       <td><code>match val:</code><br><code>&nbsp;&nbsp;1: foo()</code><br><code>&nbsp;&nbsp;_: bar()</code></td>
@@ -264,21 +264,42 @@ node HealthComponent < Node do
 end
 ```
 
-### 4. Non-Blocking Signal Awaiting
-Never use blocking `sleep` in fibers or threads! Use `await`:
+### 4. Non-Blocking Signal Awaiting (`await`, `await?`, `await!`)
+Never use blocking `sleep` in fibers or gameplay code! Lapis provides a triad of non-blocking await methods:
+- `await`: Returns `AwaitStatus(T)` with rich predicates (`.completed?`, `.timed_out?`, `.ok?`, `.status == AwaitState::Completed`). Supports tuple destructuring (`a, b = status`) and `.value`.
+- `await!`: Bang variant that unwraps the payload directly, or raises `TimeoutError` on timeout.
+- `await?`: Nilable/boolean variant that returns payload on emit, and `nil` (or `false` for 0-arg signals / timers) on timeout without raising.
 
 ```crystal
 def attack_routine : Void
-  # Wait 0.5 seconds without stopping engine frame loop
-  await(0.5)
+  # 1. Non-blocking delay (numeric duration or SceneTreeTimer):
+  status = await(0.5)  # => AwaitStatus
+  ok     = await?(0.5) # => Bool (true if completed)
+  await!(0.5)          # => Void (raises TimeoutError on timeout)
 
-  # Await a bound signal
-  await(~AnimatedSprite2D.animation_finished)
+  # 2. 0-argument signal:
+  await(enemy.died)  # => AwaitStatus(Nil)
+  await!(enemy.died) # => nil (or raises TimeoutError)
+  await?(enemy.died) # => true on emit, false on timeout
 
-  # Await with timeout protection
-  await(enemy.died, timeout_sec: 5.0)
+  # 3. Single-argument typed signal:
+  status = await(enemy.health_changed, timeout_sec: 5.0) # => AwaitStatus(Int32)
+  hp     = await!(enemy.health_changed, timeout_sec: 5.0) # => 42_i32
+  hp_opt = await?(enemy.health_changed, timeout_sec: 5.0) # => 42_i32 | Nil
+
+  # 4. Multi-argument typed signal & tuple destructuring:
+  status = await(enemy.item_dropped) # => AwaitStatus(Tuple(Int32, String))
+  id, name = status                   # Crystal tuple destructuring!
+  tup = await!(enemy.item_dropped)    # => {42, "legendary_sword"}
+  opt = await?(enemy.item_dropped)    # => {42, "legendary_sword"} | Nil
+
+  # 5. BoundSignal (dynamic Godot engine signal):
+  args = await!(~AnimatedSprite2D.animation_finished) # => Array(Variant)
 end
 ```
+
+> **Dead-Pointer Protection (`Godot::DisposedObjectError`):**
+> In GDScript, `await enemy.died` hangs forever if `enemy` is deleted via `queue_free()` before firing. In Lapis, if the target node is destroyed while a fiber is waiting in `await`, `await!`, or `await?`, the fiber immediately aborts by raising `Godot::DisposedObjectError`.
 
 ### 5. Memory Safety & Dead-Pointer Protection
 Godot's C++ memory model can delete nodes behind Crystal's back (e.g. via GDScript `queue_free()`).

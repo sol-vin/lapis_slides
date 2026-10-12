@@ -171,7 +171,7 @@ end
     <tr>
       <td><strong>Never Call Top-Level <code>sleep</code></strong></td>
       <td>Hangs fiber indefinitely or crashes OS thread</td>
-      <td><code>await(duration)</code> or <code>create_timer(sec)</code></td>
+      <td><code>await(sec)</code>, <code>await?</code>, or <code>await!</code></td>
     </tr>
     <tr>
       <td><strong>Yield in <code>_process</code></strong></td>

@@ -16,14 +16,17 @@ left:
     # Spawn lightweight cooperative fiber on main thread
     spawn do
       dialogue_box.typewrite("A storm is approaching...")
-      await(dialogue_box.finished)
+      await!(dialogue_box.finished) # Unwraps or raises TimeoutError
 
-      await(1.5.seconds) # Non-blocking delay
+      await?(1.5.seconds)           # Non-blocking delay (returns Bool)
       camera.screen_shake(intensity: 0.8)
       lightning.trigger_flash
 
-      await(lightning.flash_completed)
-      dialogue_box.typewrite("We must take shelter!")
+      # Await with AwaitStatus predicate inspection
+      status = await(lightning.flash_completed, timeout_sec: 2.0)
+      if status.ok?
+        dialogue_box.typewrite("We must take shelter!")
+      end
     end
 
     def _process(delta : Float64) : Void
@@ -39,11 +42,11 @@ right:
     zero mutexes or locks required for SceneTree operations.
   - <strong>Yielding in _process:</strong> Call <code>Fiber.yield</code> in <code>_process</code>
     to ensure fibers advance with frame ticks.
-  - <strong>No Blocking sleep in Fibers:</strong> Never call blocking <code>sleep</code>
-    inside a fiber; use <code>await(duration.seconds)</code> instead.
-  - <strong>Dead-Pointer Protection:</strong> Awaiting fibers validate <code>#alive?</code>
-    on each tick, preventing hangs on freed nodes.
+  - <strong>Await Triad (<code>await</code>, <code>await?</code>, <code>await!</code>):</strong>
+    Never call blocking <code>sleep</code> in fibers; use non-blocking await with status predicates.
+  - <strong>DisposedObjectError:</strong> Awaiting fibers raise <code>Godot::DisposedObjectError</code>
+    if the target node is freed, preventing silent hangs.
 notes: Godot's scene tree is fundamentally single-threaded. Lapis provides lightweight,
   cooperative fibers for orchestrating asynchronous gameplay sequences—dialogue, cutscenes,
-  scripted events—directly on the main thread. Because fibers run cooperatively, you
-  can modify nodes, add children, and change transforms with zero mutex overhead.
+  scripted events—directly on the main thread. With the await triad (await, await?, await!),
+  fibers can wait on signals or timers with full timeout control and dead-pointer safety.

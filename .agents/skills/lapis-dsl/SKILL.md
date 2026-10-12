@@ -202,26 +202,93 @@ end
 
 ---
 
-## 5. Non-Blocking Awaiting (`await`)
+## 5. Non-Blocking Awaiting (`await`, `await?`, `await!`)
 
-Never use blocking `sleep` in game loops! Use `await`:
+Never use blocking `sleep` in game loops or fibers! Lapis provides a triad of cooperative, non-blocking await methods:
+- `await`: Returns an `AwaitStatus(T)` object allowing rich inspection of completion or timeout state without throwing.
+- `await!`: The "bang" variant that directly unwraps the emitted value (`T`), raising `TimeoutError` when timed out.
+- `await?`: The predicate/nilable variant returning the value on emit, or `nil` on timeout (`true` / `false` for 0-argument signals or timers).
+
+### AwaitStatus Predicates & Inspection
+
+When using `await(...)`, the returned `AwaitStatus(T)` provides convenient predicate methods:
+- `.completed?`: Returns `true` if the signal or timer emitted before timing out.
+- `.timed_out?`: Returns `true` if the timeout duration expired before emission.
+- `.ok?`: Semantic alias for `.completed?`.
+- `.status == AwaitState::Completed`: Direct state enum comparison (`AwaitState::Completed` vs `AwaitState::TimedOut`).
+- `.value`: Unwraps the typed payload payload (e.g., `status.value == 42`).
+- Tuple Destructuring: Supports direct unpacking when awaiting multi-argument signals (`a, b = status`).
+
+### TypedSignal Awaiting & Return Types
 
 ```crystal
-def attack_combo : Void
-  # 1. Await a timer in seconds without blocking the engine loop
-  await(0.2)
+# 1. 0-argument signal: signal defeated
+status = await(target.defeated, timeout_sec: 5.0) # => AwaitStatus(Nil)
+res    = await!(target.defeated, timeout_sec: 5.0) # => nil (or raises TimeoutError)
+ok     = await?(target.defeated, timeout_sec: 5.0) # => true on emit, false on timeout
 
-  # 2. Await bound signal
-  await(~AnimatedSprite2D.animation_finished)
+# 2. Single-argument signal: signal health_changed(hp : Int32)
+status = await(target.health_changed, timeout_sec: 3.0) # => AwaitStatus(Int32)
+if status.ok?
+  puts status.value # => 42_i32
+end
 
-  # 3. Method syntax on bound signal
-  ~AnimatedSprite2D.animation_finished.await
+val = await!(target.health_changed, timeout_sec: 3.0) # => 42_i32 (or raises TimeoutError)
+val = await?(target.health_changed, timeout_sec: 3.0) # => 42_i32 on emit, nil on timeout
 
-  # 4. Await with timeout protection (raises on expiration)
-  await(target.died, timeout_sec: 5.0)
+# 3. Multi-argument signal: signal item_dropped(id : Int32, name : String)
+status = await(target.item_dropped, timeout_sec: 2.0) # => AwaitStatus(Tuple(Int32, String))
+id, name = status # Crystal tuple destructuring directly on status!
 
-  # 5. Await classic target + signal name
-  await(target, "died", timeout_sec: 5.0)
+tup = await!(target.item_dropped, timeout_sec: 2.0) # => {42, "hello"} (or raises TimeoutError)
+tup = await?(target.item_dropped, timeout_sec: 2.0) # => {42, "hello"} on emit, nil on timeout
+```
+
+### BoundSignal Awaiting (Dynamic Signals)
+
+Dynamic signals on Godot nodes without static type declarations return `Array(Variant)`:
+```crystal
+# Await bound signal handle or method syntax
+status = await(~AnimatedSprite2D.animation_finished)     # => AwaitStatus(Array(Variant))
+args   = await!(~AnimatedSprite2D.animation_finished)    # => Array(Variant) (or raises TimeoutError)
+args   = await?(~AnimatedSprite2D.animation_finished)    # => Array(Variant) on emit, nil on timeout
+
+# Method syntax on BoundSignal:
+~AnimatedSprite2D.animation_finished.await
+~AnimatedSprite2D.animation_finished.await!
+~AnimatedSprite2D.animation_finished.await?
+```
+
+### SceneTreeTimer & Numeric Duration Delays
+
+Awaiting numeric durations or `SceneTreeTimer` creates non-blocking engine delays:
+```crystal
+# Numeric seconds:
+status = await(1.0)  # => AwaitStatus
+ok     = await?(1.0) # => true / false
+await!(1.0)          # => Void (or raises TimeoutError)
+
+# Crystal time spans:
+await(500.milliseconds)
+await?(1.5.seconds)
+await!(2.seconds)
+```
+
+### Dead-Pointer Protection (`Godot::DisposedObjectError`)
+
+Unlike GDScript's `await` which hangs indefinitely if a target object is deleted before emitting, Lapis fibers track node liveness on every frame tick:
+> **Liveness Guard:** If the target node is destroyed while a fiber is waiting in `await`, `await!`, or `await?`, the fiber immediately aborts with `Godot::DisposedObjectError`. This prevents zombie coroutines, memory leaks, and dangling pointer dereferences.
+
+```crystal
+spawn do
+  begin
+    await!(boss.died, timeout_sec: 10.0)
+    show_victory_screen
+  rescue ex : Godot::DisposedObjectError
+    Godot.warn("Boss was despawned or scene unloaded while waiting: #{ex.message}")
+  rescue ex : TimeoutError
+    Godot.warn("Boss cinematic timed out!")
+  end
 end
 ```
 

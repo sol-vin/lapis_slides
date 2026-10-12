@@ -33,25 +33,24 @@ crystal:
   tag: Crystal (Lapis)
   code: |
     def start_boss_cinematic : Void
-      # 1. Type-safe await with built-in timeout guard:
-      # Automatically races signal against 10s timer; zero boilerplate!
-      await(boss.died, timeout_sec: 10.0)
-      show_victory_screen
+      # 1. Bang variant: unwraps or raises TimeoutError
+      await!(boss.died, timeout_sec: 10.0)
 
-      # 2. Dead-pointer aware: fiber checks #alive? each frame slice
-      # Aborts safely if boss was freed instead of hanging silently!
-
-      # 3. Declarative 'on' macro with clean closures:
-      on start_button.pressed do
-        launch_match_sequence
+      # 2. Nilable variant: returns value on emit, nil on timeout
+      if loot = await?(boss.dropped_loot, timeout_sec: 2.0)
+        collect_reward(loot)
       end
+
+      # 3. Dead-pointer safe: raises Godot::DisposedObjectError
+      # if node is freed mid-wait; zero zombie coroutines!
+      show_victory_screen
     end
   points:
-  - <strong>First-Class Signal Handles:</strong> <code>await(boss.died)</code> provides compile-time signal validation.
-  - <strong>Built-In Timeout Guards:</strong> Optional <code>timeout_sec: 10.0</code> prevents coroutines from leaking or hanging indefinitely.
-  - <strong>Declarative <code>on</code> Macro:</strong> Connect signals directly with inline blocks (<code>on button.pressed</code>); no clutter of single-use handler methods.
+  - <strong>Await Triad (<code>await</code>, <code>await?</code>, <code>await!</code>):</strong> Inspect <code>AwaitStatus</code>, unwrap safely with <code>await?</code>, or enforce with <code>await!</code>.
+  - <strong>Dead-Pointer Armor:</strong> Node destruction while waiting raises <code>Godot::DisposedObjectError</code> instead of hanging indefinitely.
+  - <strong>Built-In Timeout Guards:</strong> Optional <code>timeout_sec: 10.0</code> prevents coroutines from leaking or stalling state machines.
 takeaway:
   badge: SAFE ASYNCHRONY
-  text: Lapis signal awaiting features automatic timeout guards and dead-pointer checks, keeping coroutines safe and responsive.
+  text: Lapis signal awaiting provides await, await?, and await! with automatic timeouts and DisposedObjectError dead-pointer guards.
 notes: |
-  Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports built-in timeouts: await(boss.died, timeout_sec: 10.0). Furthermore, because Lapis fibers check instance liveness on every frame tick, if the target object is destroyed, the fiber safely aborts with DisposedObjectError rather than hanging silently.
+  Asynchronous game logic in GDScript relies on await, but await has major pitfalls: if the target object is freed or the signal is never fired, the coroutine is suspended forever, leaking memory and leaving game states stuck. In Lapis, await supports three ergonomic flavors: 'await' returning AwaitStatus, 'await!' asserting completion or raising TimeoutError, and 'await?' returning nil/false on timeout. Furthermore, if a target node is destroyed while awaiting, Lapis immediately raises Godot::DisposedObjectError rather than hanging silently.
