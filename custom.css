@@ -515,5 +515,93 @@
   border-radius: 3px !important;
 }
 
+/* ==========================================================================
+   Slide 41 (41_live_demo_roadmap): 5-Step Demo Roadmap Layout
+   ========================================================================== */
+.demo-steps-grid[data-cols="5"] {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0.50rem !important;
+}
 
+.demo-steps-grid[data-cols="5"] .demo-step-card {
+  padding: 0.55rem 0.60rem !important;
+  gap: 0.30rem !important;
+}
 
+.demo-steps-grid[data-cols="5"] .demo-step-card[data-color="cyan"] {
+  border-top: 3.5px solid var(--border-active) !important;
+}
+
+.demo-steps-grid[data-cols="5"] .demo-step-card[data-color="green"] {
+  border-top: 3.5px solid var(--link-color, #27c93f) !important;
+}
+
+.demo-steps-grid[data-cols="5"] .demo-step-card[data-color="purple"] {
+  border-top: 3.5px solid var(--accent-secondary, #b388ff) !important;
+}
+
+.demo-steps-grid[data-cols="5"] .demo-step-card[data-color="amber"] {
+  border-top: 3.5px solid var(--accent-tertiary, var(--accent-color)) !important;
+}
+
+.demo-steps-grid[data-cols="5"] .demo-step-card[data-color="emerald"] {
+  border-top: 3.5px solid var(--accent-color, #00e676) !important;
+}
+
+.demo-steps-grid[data-cols="5"] .card-header {
+  margin-bottom: 0.20rem !important;
+  padding-bottom: 0.20rem !important;
+}
+
+.demo-steps-grid[data-cols="5"] .card-header .card-title {
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+}
+
+.demo-steps-grid[data-cols="5"] .card-header .badge {
+  font-size: 0.60rem !important;
+  padding: 0.12rem 0.35rem !important;
+}
+
+.demo-steps-grid[data-cols="5"] .terminal-window,
+.demo-steps-grid[data-cols="5"] .code-window {
+  margin: 0.25rem 0 !important;
+  border-radius: 4px !important;
+}
+
+.demo-steps-grid[data-cols="5"] .terminal-window pre,
+.demo-steps-grid[data-cols="5"] .code-window pre {
+  font-size: 0.64rem !important;
+  padding: 0.30rem 0.40rem !important;
+  line-height: 1.25 !important;
+}
+
+.demo-steps-grid[data-cols="5"] ul.card-list {
+  gap: 0.30rem !important;
+  margin: 0.15rem 0 !important;
+  padding-left: 0 !important;
+}
+
+.demo-steps-grid[data-cols="5"] ul.card-list li {
+  font-size: 0.70rem !important;
+  line-height: 1.28 !important;
+  padding-left: 1.05rem !important;
+}
+
+.demo-steps-grid[data-cols="5"] ul.card-list li::before {
+  font-size: 0.90rem !important;
+  top: 0.02rem !important;
+  left: 0 !important;
+}
+
+.demo-steps-grid[data-cols="5"] ul.card-list li code {
+  font-size: 0.65rem !important;
+  padding: 0.04rem 0.22rem !important;
+}
+
+.demo-steps-grid[data-cols="5"] .demo-step-highlight {
+  font-size: 0.72rem !important;
+  padding: 0.22rem 0.40rem !important;
+  margin-top: auto !important;
+}

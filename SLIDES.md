@@ -4292,67 +4292,83 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ### Slide 139: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
 - **Title**: Live Demonstration & Roadmap
-- **Subtitle**: Zero-Config Scaffolding, 60s Node Iteration, Full Architecture & Standalone Release
+- **Subtitle**: Scaffolding, Diorite Addons, In-Editor Iteration, Single-EXE Packaging & Soulantern Demo
 - **Chapter Highlights**:
-  - **Scaffold & Supervise**: Bootstrapping with lapis new and launching the persistent Editor Supervisor dock (lapis cli -e)
-  - **60-Second Node Iteration**: Declarative Ruby-like gameplay DSL with sub-second shadow DLL hot-reload and zero file locks
-  - **Showcase & Distribution**: Full Soulantern architecture and single-command standalone portable release packaging
+  - **Scaffold & Diorite Addons**: Bootstrapping with lapis new game and single-command GDExtension install (github:sol-vin/diorite)
+  - **In-Editor Scripting & Play**: Declarative Crystal DSL node authoring, live Inspector properties, and F5 run with zero-lock hot reload
+  - **Single EXE & Soulantern**: Single-command standalone EXE packaging (--embed-pck) and full-scale Soulantern production showcase
 
 **Presenter Notes**:
 > We've covered the history, the language design, the benchmarks, and the low-level debugging forensics.
 > Now it's time to see it all in action.
-> In our final act, we go hands-on with a unified 4-step live demonstration: scaffolding a brand new project, authoring gameplay mechanics in a 60-second hot reload loop, inspecting a full Soulantern game architecture, compiling a standalone portable package, and charting the future roadmap for Lapis and Godot.
+> In our final act, we go hands-on with a unified 5-step live demonstration:
+> 1. Scaffolding a brand new game project with `lapis new game`
+> 2. Installing community GDExtension addons with `lapis install addon github:sol-vin/diorite`
+> 3. Exploring in-editor features: editing Crystal scripts in the DSL and running the game directly in Godot with sub-second hot reload
+> 4. Packaging the complete game into a single standalone portable `exe`
+> 5. Showcasing the full Soulantern production game demo in native Crystal!
 
 ---
 
 ### Slide 140: Live Demonstration: End-to-End Workflow [Demo Roadmap]
-- **STEP 1 • BOOTSTRAP — Scaffold & Supervise**:
+- **STEP 1 • SCAFFOLD — Scaffold Game**:
   ```bash
   $ lapis new game my_game
-  $ lapis cli -e
   # [OK] Scaffolds project.godot & shard.yml
-  # [OK] Boots Editor Supervisor & log stream
+  # [OK] Configured GDExtension bridge & src/
   ```
-  - Zero-config project bootstrapping in milliseconds
-  - Launches persistent Editor Supervisor dock
-  - Real-time engine telemetry & live log stream
-  - Godot editor boots with GDExtension bridge loaded
-- **STEP 2 • FAST LOOP — Editing Nodes (60s Loop)**:
-  - Declarative Ruby-like gameplay DSL
-  - Live inspector properties with typed range hints
-  - Sub-second recompilation & shadow DLL reload
-  - Instant turnaround: edit and run live in 60s
-- **STEP 3 • ARCHITECTURE — Full Game Architecture**:
+  - Zero-config project scaffolding in milliseconds
+  - Generates project.godot, shard.yml, & src/
+  - Pre-wired GDExtension bridge & initial scene
+  - Ready to compile and launch out of the box
+- **STEP 2 • ADDONS — Install Diorite**:
   ```bash
-  # Load rich multi-system showcase:
-  # (Remaking Soulantern in Crystal)
-  $ lapis run --showcase
-  # Multi-scene tree, shaders, dynamic lights, AI
+  $ lapis install addon github:sol-vin/diorite
+  # [OK] Unpacked to addons/diorite/
+  # [OK] Wired project.godot & shard.yml
+  # [OK] Generated typed bindings in src/
   ```
-  - Deep multi-node scene composition & entity systems
-  - Soulantern remake showcase in pure Crystal
-  - Procedural shaders, particle FX & spatial audio
-  - Bare-metal performance with zero GC stutter
-- **STEP 4 • DISTRIBUTION — Standalone Packaging**:
+  - Single-command community addon installation
+  - Fetches release, validates SHA256 & unpacks
+  - Auto-enables plugin in project.godot
+  - Links shard dependency & generates typed API
+- **STEP 3 • IN-EDITOR — Editor Features**:
+  - Declarative Ruby-like gameplay DSL in Crystal
+  - Live inspector properties with typed range hints
+  - Run game directly from Godot editor with F5
+  - Zero-lock shadow DLL reloading on Windows
+- **STEP 4 • PACKAGE — Single EXE Package**:
   ```bash
   $ lapis package game --release \
     --portable --embed-pck
   # [OK] Appended PCK into GDPC binary footer
-  # [OK] Staged runtime DLLs (gc.dll, bridge.dll)
-  # -> bin/my_game_portable.exe
+  # [OK] Bundled GC, engine & runtime
+  # -> bin/my_game.exe (Single executable!)
   ```
   - Aggressive LLVM dead-code elimination & -O3
-  - Embeds PCK directly into binary footer
-  - Bundles Boehm GC & runtime dependencies
-  - Single-file zero-dependency portable game showcase
+  - Embeds Godot PCK directly into binary footer
+  - Bundles Boehm GC & runtime into single file
+  - Single-file zero-dependency portable game
+- **STEP 5 • SHOWCASE — Soulantern Demo**:
+  ```bash
+  # Launch full-scale production showcase:
+  $ lapis run --project=soulantern
+  # 60 FPS • Zero GC frame stutter
+  # Dynamic lights, shaders & entity AI
+  ```
+  - Deep multi-system production game architecture
+  - Full Soulantern demo running in pure Crystal
+  - Volumetric lighting, shaders & spatial audio
+  - Bare-metal performance with zero GC pauses
 
 **Presenter Notes**:
 > Welcome to our unified live demonstration!
-> In this session, we walk through the four key milestones of the complete Lapis development lifecycle:
-> In Step 1, we scaffold a brand new project using 'lapis new game my_game' and immediately launch the persistent Editor Supervisor with 'lapis cli -e' to monitor engine health and stream logs in real time.
-> In Step 2, we dive into gameplay code: authoring a player character using our declarative node DSL, exporting typed inspector properties, and demonstrating our sub-second shadow DLL hot-reload—taking you through an edit-and-run cycle live in 60 seconds.
-> In Step 3, we open a production-scale showcase—remaking the acclaimed Soulantern project in pure Crystal—illustrating complex multi-node scenes, procedural shaders, dynamic lighting, and AI running with zero garbage collection spikes.
-> In Step 4, we run 'lapis package game --release --portable --embed-pck', bundling our game into a single, self-contained standalone executable ready to ship directly to Steam, itch.io, or LAN distribution!
+> In this hands-on session, we walk through the 5 core milestones of the Lapis development lifecycle:
+> In Step 1, we scaffold a brand new project using 'lapis new game my_game', generating a complete Godot 4.8 project with Crystal shard configuration in milliseconds.
+> In Step 2, we install community addons using 'lapis install addon github:sol-vin/diorite', showing how Lapis automatically unpacks the extension, registers it in project.godot, links shard.yml, and synthesizes typed Crystal AST bindings.
+> In Step 3, we explore in-editor features: authoring gameplay scripts using our declarative Crystal DSL, inspecting exported properties live in the Inspector, and running the game directly with F5 using our sub-second Windows shadow DLL hot reload with zero file locks.
+> In Step 4, we run 'lapis package game --release --portable --embed-pck', embedding the Godot PCK directly into the binary footer and bundling all runtimes into a single standalone .exe with zero external dependencies.
+> In Step 5, we launch the acclaimed Soulantern project demo in native Crystal, showcasing complex multi-node scenes, procedural shaders, dynamic lighting, and AI running smoothly at 60 FPS with zero garbage collection frame drops!
 
 ---
 

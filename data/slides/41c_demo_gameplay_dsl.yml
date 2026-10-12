@@ -1,47 +1,47 @@
 ---
 id: 41c_demo_gameplay_dsl
-title: 'Demo 2: Live Node Authoring'
-subtitle: Writing Gameplay with ~, onready, @Export Sliders & Typed Signals
-badge: 'LIVE DEMO • PART 2: GAMEPLAY DSL'
+title: 'Demo 3: In-Editor Features — Scripting & Running'
+subtitle: Editing Crystal Gameplay Scripts & Launching with Zero-Lock Shadow Reload
+badge: 'LIVE DEMO • PART 3: IN-EDITOR FEATURES'
 badge_color: purple
 palette: playbox
 layout: two-column-layout
 ratio: 1:1
 left:
   type: code
-  title: src/nodes/player_controller.cr
+  title: src/player_controller.cr & In-Editor Loop
   tag: Crystal
   lang: crystal
   font_size: '0.74rem'
   code: |
-    # src/nodes/player_controller.cr
+    # 1. Author and edit gameplay script in editor:
     node PlayerController < CharacterBody3D do
-      include Damageable # Reusable health, defense & signals!
-
       @[Export(range: 1.0_f32..25.0_f32, step: 0.5_f32)]
-      property speed : Float32 = 8.0_f32
+      property speed : Float32 = 14.0_f32
 
-      # Strongly typed onready caching with bare ~:
-      onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)
-
-      def _ready : Void
-        # Direct typed child lookup via ~Class:
-        hp_bar = ~ProgressBar
-
-        # Declarative signal connection sugar with 'on':
-        on health_changed do |cur, max|
-          hp_bar.value = (cur.to_f / max) * 100.0
-        end
+      def _physics_process(delta : Float64) : Void
+        dir = Input.get_vector("left", "right", "up", "down")
+        self.velocity = Vector3.new(dir.x * speed, 0.0, dir.y * speed)
+        move_and_slide
       end
     end
+
+    # 2. Press F5 in Godot to Run Project:
+    # [Editor] Shadow DLL loaded: game_9102.dll
+    # [OK] Recompiled & launched in 0.38s (0 file locks)!
 right:
   type: card
-  title: In-Editor Reactivity & DSL Power
+  title: In-Editor Scripting & Instant Play
   color: purple
   items:
-    - '<strong>Live Inspector Sliders:</strong> <code>@[Export]</code> properties immediately render native drag sliders and range constraints in Godot Inspector.'
-    - '<strong>Bare ~ Resolution:</strong> <code>~("CameraBoom/Camera3D").as(Camera3D)</code> resolves and types nested scene nodes via <code>NodeContext</code>.'
-    - '<strong>Typed Child Lookup (<code>~Class</code>):</strong> <code>~ProgressBar</code> queries child nodes by class name and returns a concrete, typed reference.'
-    - '<strong>Declarative <code>on</code> Sugar:</strong> <code>on health_changed do |cur, max|</code> binds typed signals with zero boilerplate.'
+    - '<strong>Declarative Script Editing:</strong> Write native Crystal scripts using the ergonomic Lapis DSL—clean syntax, type inference, and zero boilerplate.'
+    - '<strong>Live Inspector Sliders:</strong> <code>@[Export]</code> properties instantly render native drag sliders and range constraints in the Godot Inspector.'
+    - '<strong>F5 Run Game:</strong> Pressing F5 in Godot triggers recompilation and launches the game directly within the official editor environment.'
+    - '<strong>Windows Shadow DLL Loading:</strong> Bypasses Windows OS DLL file locks completely by loading timestamped shadow copies—true script-like iteration!'
 notes: |
-  In Part 2 of our demo, we author a full player character in under 20 lines of Crystal. Notice how clean the DSL is: we declare an exported speed property with a range slider, and Godot immediately exposes that slider in the Inspector dock for level designers. For child nodes, we use our clean unary tilde (~) ergonomics: 'onready camera : Camera3D = ~("CameraBoom/Camera3D").as(Camera3D)' caches the camera automatically, while '~ProgressBar' looks up the UI node with zero boilerplate. Signals are strongly typed: connecting to health_changed provides full parameter typing with autocomplete. Even regular source comments above properties get compiled directly into Godot's offline F1 documentation database.
+  In Part 3 of our demo, we explore first-class in-editor features.
+  First, script editing: we author a player controller script using Crystal's clean Lapis DSL.
+  Notice how readable this is: we declare an exported speed property with a range slider, and Godot immediately surfaces it in the Inspector dock for level designers to tweak in real time.
+  Second, running the game: we press F5 directly inside the Godot editor.
+  Unlike standard C++ or Rust GDExtension workflows where Windows locks the DLL and forces you to quit Godot, Lapis compiles a timestamped shadow DLL and loads it in 0.38s with zero file locks.
+  You get the speed of compiled native code with the iteration loop of GDScript!
