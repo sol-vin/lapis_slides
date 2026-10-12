@@ -14,39 +14,36 @@ left:
   lang: crystal
   font_size: '0.84rem'
   code: |
-    # 1. Pure Utility Namespace
+    # Namespace & mixin dual use (extend self)
     module SpatialMath
       extend self
-      def dist_sq(a : Vector2, b : Vector2) : Float32
-        (a.x - b.x) ** 2 + (a.y - b.y) ** 2
-      end
+      def dist_sq(a, b); (a.x - b.x)**2 + (a.y - b.y)**2; end
     end
 
-    # 2. Lapis Trait (wires ClassDB, exports & signals)
+    # Engine-aware traits: ClassDB metadata & signals
     gmodule Damageable do
       signal health_changed(current : Int32)
       @[Export] property health : Int32 = 100
-
-      def take_damage(amount : Int32) : Void
-        @health = (@health - amount).clamp(0, 100)
-        health_changed.emit(@health)
-      end
     end
 
-    # 3. Horizontal composition into Godot nodes
+    # Horizontal composition: mix across scene trees
     node Enemy < CharacterBody2D do
-      include Damageable # Inlines methods & registers ClassDB signals
+      include Damageable # Mixed into character branch
+    end
+
+    # Zero virtual overhead: inlined at compile time
+    node DestructibleProp < StaticBody2D do
+      include Damageable # Direct call sites, zero vtable cost
     end
 right:
   type: card
   title: Zero-Cost Architectural Composition
   color: cyan
-  compact: true
   items:
-    - '<strong>Horizontal Composition:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance trees or diamond problems.'
-    - '<strong>Engine-Aware Traits (<code>gmodule</code>):</strong> Wires <code>@[Export]</code> properties and engine signals directly into Godot’s ClassDB metadata.'
-    - '<strong>Zero Virtual Overhead:</strong> Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.'
     - '<strong>Namespace & Mixin Dual Use:</strong> <code>extend self</code> lets modules act simultaneously as pure functional namespaces and mixable traits.'
+    - '<strong>Engine-Aware Traits (<code>gmodule</code>):</strong> Wires <code>@[Export]</code> properties and engine signals directly into Godot’s ClassDB metadata.'
+    - '<strong>Horizontal Composition:</strong> Mix reusable behaviors across unrelated scene nodes without deep inheritance trees or diamond problems.'
+    - '<strong>Zero Virtual Overhead:</strong> Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.'
 notes: |
   In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy.
   In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains.

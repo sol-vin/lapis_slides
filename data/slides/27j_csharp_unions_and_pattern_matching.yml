@@ -45,11 +45,15 @@ crystal:
       alias HitResult = ShieldAbsorbed | CriticalDamage | Nil
 
       def resolve_hit(target : Node3D, raw_damage : Float32) : HitResult
+        # Flow-sensitive matching narrows target in each branch:
         case target
-        when ShieldDrone      then ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
-        when PlayerCharacter  then CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
-        else                       nil
-        end # Flow-sensitive typing narrows target in each branch!
+        when ShieldDrone
+          ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
+        when PlayerCharacter
+          CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
+        else
+          nil
+        end
       end
     end
   points:

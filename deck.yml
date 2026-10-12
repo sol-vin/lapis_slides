@@ -19,6 +19,8 @@ footer:
   right: "Slide {slide_num} / {total_slides}"
 
 default_palette: "warm_paper"
+custom_css:
+  - custom.css
 
 slides:
 # ==============================================================================
@@ -83,7 +85,6 @@ slides:
 - 20j_direct_space_physics_queries
 - 20m_spatial_audio_and_navigation
 - 20n_gameplay_patterns_fsm_and_pool
-- 20o_fluent_raycast_and_tree_operators
 - 20p_autoload_singletons
 
 # --- Chapter 4.2: Reactive Signals, Events & Async ---
