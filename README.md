@@ -3,7 +3,7 @@
 <!-- carbon:badges -->
 [![CI](https://github.com/sol-vin/lapis_slides/actions/workflows/deploy.yml/badge.svg)](https://github.com/sol-vin/lapis_slides/actions/workflows/deploy.yml)
 [![Crystal](https://img.shields.io/badge/crystal-%3E%3D%201.10.0-black.svg)](https://crystal-lang.org)
-[![Version](https://img.shields.io/badge/version-0.2.40-blue.svg)](https://github.com/sol-vin/lapis_slides/releases)
+[![Version](https://img.shields.io/badge/version-0.2.41-blue.svg)](https://github.com/sol-vin/lapis_slides/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <!-- /carbon:badges -->
 
@@ -26,6 +26,9 @@ A modular, high-performance slide presentation engine written in **Crystal**, in
   - `media-layout`: Video or image displays with sidebar contextual cards.
   - `architecture-layout`: Multi-tier bridge architecture diagram.
 - **102 Retro Sol.vin Palettes**: Authentic vintage computing palettes (`monokai`, `warm_paper`, `spaces_98`, `aperture`, `m64`, `amigo`, `game_station_2`, etc.).
+- **Conference CFP Proposal Package**: Production-ready submission package in [`CFP.md`](CFP.md) with multi-title variations, 50-word elevator pitch, 150-word abstract, 500-word proposal, and conference matrix (GodotCon 2026, FOSDEM 2027, Crystal Conf).
+- **30-Minute Keynote Choreography & Teleprompter**: Complete stage script in [`KEYNOTE_30MIN_SCRIPT.md`](KEYNOTE_30MIN_SCRIPT.md) with 6 Acts, 14 granular beats, 40 AV cues, rehearsal checkpoints, and 6-question technical Q&A defense playbook.
+- **Two-Tier Talk & Keynote DSL**: Declarative Crystal DSL (`LapisSlides.cfp`, `LapisSlides.keynote`) with static invariant validators (`validate_cfp`, `validate_choreography`).
 - **Live Preview Server**: Built-in HTTP server with auto-launching browser and speaker notes view.
 
 ---
@@ -63,6 +66,12 @@ sunstone serve
 - `S`: Open dual-screen **Speaker Notes** presenter console
 - `ESC` or `O`: Toggle multi-slide **Overview Grid**
 - `F`: Fullscreen mode
+
+### 4. Compile & Validate CFP and 30-Minute Keynote Choreography
+Validates talk timeline invariants, word pacing, and emits updated `CFP.md` and `KEYNOTE_30MIN_SCRIPT.md`:
+```bash
+crystal run scripts/generate_keynote_and_cfp.cr
+```
 
 ---
 

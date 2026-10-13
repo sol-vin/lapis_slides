@@ -58,4 +58,16 @@ describe "Flagship Lapis Slide Deck in Sunstone" do
     File.exists?(slides_md_path).should be_true
     File.size(slides_md_path).should be > 50_000
   end
+
+  it "verifies conference CFP.md and 30-minute KEYNOTE_30MIN_SCRIPT.md exist and are non-empty" do
+    cfp_path = File.join(__DIR__, "..", "CFP.md")
+    keynote_path = File.join(__DIR__, "..", "KEYNOTE_30MIN_SCRIPT.md")
+
+    File.exists?(cfp_path).should be_true
+    File.size(cfp_path).should be > 5_000
+
+    File.exists?(keynote_path).should be_true
+    File.size(keynote_path).should be > 20_000
+  end
 end
+
