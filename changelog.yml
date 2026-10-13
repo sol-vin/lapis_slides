@@ -1,0 +1,538 @@
+---
+settings:
+  title: CARBON CHANGELOG
+  output_file: CHANGELOG.md
+  auto_link_github: true
+  categories:
+    breaking:
+      title: "\U0001F4A5 Breaking Changes"
+      bullet: ▲
+    features:
+      title: ✨ Features & Improvements
+      bullet: ✦
+    fixes:
+      title: "\U0001F41B Bug Fixes"
+      bullet: ✓
+    perf:
+      title: ⚡ Performance Optimizations
+      bullet: "\U0001F680"
+    docs:
+      title: "\U0001F4DA Documentation"
+      bullet: "\U0001F4D6"
+    maintenance:
+      title: "\U0001F6E0️ Chores & Tooling"
+      bullet: •
+releases:
+- version: 0.2.40
+  date: "2026-10-13"
+  status: active
+  entries:
+  - type: feat
+    description: complete Lapis for Crystal slide presentation engine and deck
+    bullet: ✦
+    hash: 11f34e8
+    author: Ian Rash
+  - type: feat
+    description: update tween dsl to statement-based syntax and nilable wildcard indexing
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: b6b218f
+    author: Ian Rash
+  - type: feat
+    description: use try?(&.play) in C# null comparison slide
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 3d6700f
+    author: Ian Rash
+  - type: feat
+    description: add dead-pointer armor try? highlights to memory safety slide
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: e62161d
+    author: Ian Rash
+  - type: feat
+    description: overhaul presentation deck to Sunstone slide engine (sol.vin theme)
+    bullet: ✦
+    hash: 2b6d1f2
+    author: Ian Rash
+  - type: fix
+    description: eliminate 20f critique overflow, diversify layouts (timeline, stats,
+      process-flow, dual-mode), and balance column ratios
+    bullet: ✓
+    badge: '[SLIDES]'
+    hash: a904218
+    author: Ian Rash
+  - type: style
+    description: hide code-view and analysis step badges in slide headers
+    bullet: •
+    badge: '[THEME]'
+    hash: 81edaf1
+    author: Ian Rash
+  - type: feat
+    description: adopt rich Sunstone layouts (editorial-split, 3-column, faq, convergence,
+      bento feature-grid, table)
+    bullet: ✦
+    hash: 793ab8d
+    author: Ian Rash
+  - type: feat
+    description: redesign warning slide with one-top-two-bottom layout for optimal
+      space utilization
+    bullet: ✦
+    badge: '[SLIDE-02A]'
+    hash: 7b96377
+    author: Ian Rash
+  - type: feat
+    description: streamline Act II timeline and repurpose language syntax into Act
+      III Crystal slides
+    bullet: ✦
+    badge: '[ACT2,ACT3]'
+    hash: ba2276d
+    author: Ian Rash
+  - type: fix
+    description: increase code font size on slide 21 and fix unescaped strong tags
+      on slide 22
+    bullet: ✓
+    badge: '[SLIDES]'
+    hash: 4d5708a
+    author: Ian Rash
+  - type: fix
+    description: use operator * for multi-node glob queries and clarify single-node
+      []? glob semantics
+    bullet: ✓
+    badge: '[DSL]'
+    hash: a66bd71
+    author: Ian Rash
+  - type: chore
+    description: move Scene Tree Glob Queries to follow Bare Scene Ergonomics ~ operator
+    bullet: •
+    badge: '[DECK]'
+    hash: 318f455
+    author: Ian Rash
+  - type: fix
+    description: update theme.css and index.html with top-aligned badge header from
+      sunstone
+    bullet: ✓
+    badge: '[THEME]'
+    hash: 6a7f3e3
+    author: Ian Rash
+  - type: feat
+    description: add GDScript syntax highlighting support
+    bullet: ✦
+    badge: '[HIGHLIGHT]'
+    hash: cbfd97b
+    author: Ian Rash
+  - type: fix
+    description: fix code-comparison layout overflow, wrap long lines, and improve
+      header alignment
+    bullet: ✓
+    badge: '[SLIDE-16]'
+    hash: f9bcd3b
+    author: Ian Rash
+  - type: fix
+    description: format benchmarks with explicit bars and speedup metrics
+    bullet: ✓
+    badge: '[SLIDE-35]'
+    hash: 0bc43a3
+    author: Ian Rash
+  - type: fix
+    description: rename Stage 3 card to Type Checking Era and fix badge alignment
+    bullet: ✓
+    badge: '[SLIDE-04]'
+    hash: 6f4faf1
+    author: Ian Rash
+  - type: feat
+    description: prioritize core Node#[] and on before modular lapis extras
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 0d2b0e3
+    author: Ian Rash
+  - type: feat
+    description: use PackedScene.load in 20g and showcase add_child with > on slide
+      20s
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 45b3673
+    author: Ian Rash
+  - type: style
+    description: use = instead of , for onready and unique_node path assignments
+    bullet: •
+    badge: '[SLIDES]'
+    hash: 4cf3590
+    author: Ian Rash
+  - type: feat
+    description: enrich slide 33d with Bento feature-grid, hot-reload code, and detailed
+      6-phase protocol breakdown
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 39d4d35
+    author: Ian Rash
+  - type: feat
+    description: add complete fontawesome svgs and map slide icons to valid registry
+      symbols
+    bullet: ✦
+    badge: '[ICONS]'
+    hash: 690ac79
+    author: Ian Rash
+  - type: fix
+    description: list core keywords on 03a and remove crystal/lapis mentions from
+      03/03a
+    bullet: ✓
+    badge: '[SLIDES]'
+    hash: 6a5f4f2
+    author: Ian Rash
+  - type: feat
+    description: streamline CLI/forensics to 2 slides and testing to 3 slides, shorten
+      spawn methods in 20g
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: b2008fb
+    author: Ian Rash
+  - type: fix
+    description: rebuild deck with fixed milestone track alignment and overflow prevention
+    bullet: ✓
+    badge: '[TIMELINE]'
+    hash: 032155b
+    author: Ian Rash
+  - type: chore
+    description: update sunstone to v0.1.35 and sync shard.lock
+    bullet: •
+    badge: '[DEPS]'
+    hash: e4e1a1e
+    author: Ian Rash
+  - type: feat
+    description: diversify deck palettes across 79 distinct themes while preserving
+      linked slide coherence
+    bullet: ✦
+    badge: '[PALETTES]'
+    hash: 80eff7e
+    author: Ian Rash
+  - type: fix
+    description: remove 'for' and 'in' from core keywords and clarify Crystal has
+      no for keyword
+    bullet: ✓
+    badge: '[SYNTAX]'
+    hash: 71e5e60
+    author: Ian Rash
+  - type: fix
+    description: replace low-contrast resin_91 and a64_pal with high-contrast mineshaft
+      and spaces_11
+    bullet: ✓
+    badge: '[THEME]'
+    hash: b75f2dd
+    author: Ian Rash
+  - type: refactor
+    description: streamline code density, elevate typography, and eliminate canvas
+      clipping across 49 slides
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: c5e4098
+    author: Ian Rash
+  - type: other
+    description: Refactor Crystal case/when layout on slide 27j & enhance slide 33
+      card list styling
+    bullet: •
+    hash: 3afcfa6
+    author: Ian Rash
+  - type: feat
+    description: add await/await?/await! triad and restore signal_bus example
+    bullet: ✦
+    badge: '[ASYNC]'
+    hash: 65e3237
+    author: Ian Rash
+  - type: fix
+    description: fix pastel background clipping and enhance gmodule slides 20d/20e
+      card styling
+    bullet: ✓
+    badge: '[THEME]'
+    hash: 062501c
+    author: Ian Rash
+  - type: style
+    description: enhance right-side card spacing, margin, and padding across 5 slides
+    bullet: •
+    badge: '[LAYOUT]'
+    hash: 839dbac
+    author: Ian Rash
+  - type: feat
+    description: update live demo workflow to 5-step roadmap and align companion slides
+    bullet: ✦
+    badge: '[DEMO]'
+    hash: e5cebe3
+    author: Ian Rash
+  - type: style
+    description: use distinct palettes for ruby heritage slides 03 and 03a
+    bullet: •
+    badge: '[PALETTE]'
+    hash: 64f54e1
+    author: Ian Rash
+  - type: style
+    description: clean up lambda formatting on slide 09c signal piping
+    bullet: •
+    badge: '[GDSCRIPT]'
+    hash: fc66adf
+    author: Ian Rash
+  - type: feat
+    description: add 3->0 and 3->2 arity trimming signal piping examples on slide
+      09c
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 753d9bb
+    author: Ian Rash
+- version: 0.2.39
+  date: "2026-10-13"
+  status: released
+  entries:
+  - type: feat
+    description: complete Lapis for Crystal slide presentation engine and deck
+    bullet: ✦
+    hash: 11f34e8
+    author: Ian Rash
+  - type: feat
+    description: update tween dsl to statement-based syntax and nilable wildcard indexing
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: b6b218f
+    author: Ian Rash
+  - type: feat
+    description: use try?(&.play) in C# null comparison slide
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 3d6700f
+    author: Ian Rash
+  - type: feat
+    description: add dead-pointer armor try? highlights to memory safety slide
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: e62161d
+    author: Ian Rash
+  - type: feat
+    description: overhaul presentation deck to Sunstone slide engine (sol.vin theme)
+    bullet: ✦
+    hash: 2b6d1f2
+    author: Ian Rash
+  - type: fix
+    description: eliminate 20f critique overflow, diversify layouts (timeline, stats,
+      process-flow, dual-mode), and balance column ratios
+    bullet: ✓
+    badge: '[SLIDES]'
+    hash: a904218
+    author: Ian Rash
+  - type: style
+    description: hide code-view and analysis step badges in slide headers
+    bullet: •
+    badge: '[THEME]'
+    hash: 81edaf1
+    author: Ian Rash
+  - type: feat
+    description: adopt rich Sunstone layouts (editorial-split, 3-column, faq, convergence,
+      bento feature-grid, table)
+    bullet: ✦
+    hash: 793ab8d
+    author: Ian Rash
+  - type: feat
+    description: redesign warning slide with one-top-two-bottom layout for optimal
+      space utilization
+    bullet: ✦
+    badge: '[SLIDE-02A]'
+    hash: 7b96377
+    author: Ian Rash
+  - type: feat
+    description: streamline Act II timeline and repurpose language syntax into Act
+      III Crystal slides
+    bullet: ✦
+    badge: '[ACT2,ACT3]'
+    hash: ba2276d
+    author: Ian Rash
+  - type: fix
+    description: increase code font size on slide 21 and fix unescaped strong tags
+      on slide 22
+    bullet: ✓
+    badge: '[SLIDES]'
+    hash: 4d5708a
+    author: Ian Rash
+  - type: fix
+    description: use operator * for multi-node glob queries and clarify single-node
+      []? glob semantics
+    bullet: ✓
+    badge: '[DSL]'
+    hash: a66bd71
+    author: Ian Rash
+  - type: chore
+    description: move Scene Tree Glob Queries to follow Bare Scene Ergonomics ~ operator
+    bullet: •
+    badge: '[DECK]'
+    hash: 318f455
+    author: Ian Rash
+  - type: fix
+    description: update theme.css and index.html with top-aligned badge header from
+      sunstone
+    bullet: ✓
+    badge: '[THEME]'
+    hash: 6a7f3e3
+    author: Ian Rash
+  - type: feat
+    description: add GDScript syntax highlighting support
+    bullet: ✦
+    badge: '[HIGHLIGHT]'
+    hash: cbfd97b
+    author: Ian Rash
+  - type: fix
+    description: fix code-comparison layout overflow, wrap long lines, and improve
+      header alignment
+    bullet: ✓
+    badge: '[SLIDE-16]'
+    hash: f9bcd3b
+    author: Ian Rash
+  - type: fix
+    description: format benchmarks with explicit bars and speedup metrics
+    bullet: ✓
+    badge: '[SLIDE-35]'
+    hash: 0bc43a3
+    author: Ian Rash
+  - type: fix
+    description: rename Stage 3 card to Type Checking Era and fix badge alignment
+    bullet: ✓
+    badge: '[SLIDE-04]'
+    hash: 6f4faf1
+    author: Ian Rash
+  - type: feat
+    description: prioritize core Node#[] and on before modular lapis extras
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 0d2b0e3
+    author: Ian Rash
+  - type: feat
+    description: use PackedScene.load in 20g and showcase add_child with > on slide
+      20s
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 45b3673
+    author: Ian Rash
+  - type: style
+    description: use = instead of , for onready and unique_node path assignments
+    bullet: •
+    badge: '[SLIDES]'
+    hash: 4cf3590
+    author: Ian Rash
+  - type: feat
+    description: enrich slide 33d with Bento feature-grid, hot-reload code, and detailed
+      6-phase protocol breakdown
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 39d4d35
+    author: Ian Rash
+  - type: feat
+    description: add complete fontawesome svgs and map slide icons to valid registry
+      symbols
+    bullet: ✦
+    badge: '[ICONS]'
+    hash: 690ac79
+    author: Ian Rash
+  - type: fix
+    description: list core keywords on 03a and remove crystal/lapis mentions from
+      03/03a
+    bullet: ✓
+    badge: '[SLIDES]'
+    hash: 6a5f4f2
+    author: Ian Rash
+  - type: feat
+    description: streamline CLI/forensics to 2 slides and testing to 3 slides, shorten
+      spawn methods in 20g
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: b2008fb
+    author: Ian Rash
+  - type: fix
+    description: rebuild deck with fixed milestone track alignment and overflow prevention
+    bullet: ✓
+    badge: '[TIMELINE]'
+    hash: 032155b
+    author: Ian Rash
+  - type: chore
+    description: update sunstone to v0.1.35 and sync shard.lock
+    bullet: •
+    badge: '[DEPS]'
+    hash: e4e1a1e
+    author: Ian Rash
+  - type: feat
+    description: diversify deck palettes across 79 distinct themes while preserving
+      linked slide coherence
+    bullet: ✦
+    badge: '[PALETTES]'
+    hash: 80eff7e
+    author: Ian Rash
+  - type: fix
+    description: remove 'for' and 'in' from core keywords and clarify Crystal has
+      no for keyword
+    bullet: ✓
+    badge: '[SYNTAX]'
+    hash: 71e5e60
+    author: Ian Rash
+  - type: fix
+    description: replace low-contrast resin_91 and a64_pal with high-contrast mineshaft
+      and spaces_11
+    bullet: ✓
+    badge: '[THEME]'
+    hash: b75f2dd
+    author: Ian Rash
+  - type: refactor
+    description: streamline code density, elevate typography, and eliminate canvas
+      clipping across 49 slides
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: c5e4098
+    author: Ian Rash
+  - type: other
+    description: Refactor Crystal case/when layout on slide 27j & enhance slide 33
+      card list styling
+    bullet: •
+    hash: 3afcfa6
+    author: Ian Rash
+  - type: feat
+    description: add await/await?/await! triad and restore signal_bus example
+    bullet: ✦
+    badge: '[ASYNC]'
+    hash: 65e3237
+    author: Ian Rash
+  - type: fix
+    description: fix pastel background clipping and enhance gmodule slides 20d/20e
+      card styling
+    bullet: ✓
+    badge: '[THEME]'
+    hash: 062501c
+    author: Ian Rash
+  - type: style
+    description: enhance right-side card spacing, margin, and padding across 5 slides
+    bullet: •
+    badge: '[LAYOUT]'
+    hash: 839dbac
+    author: Ian Rash
+  - type: feat
+    description: update live demo workflow to 5-step roadmap and align companion slides
+    bullet: ✦
+    badge: '[DEMO]'
+    hash: e5cebe3
+    author: Ian Rash
+  - type: style
+    description: use distinct palettes for ruby heritage slides 03 and 03a
+    bullet: •
+    badge: '[PALETTE]'
+    hash: 64f54e1
+    author: Ian Rash
+  - type: style
+    description: clean up lambda formatting on slide 09c signal piping
+    bullet: •
+    badge: '[GDSCRIPT]'
+    hash: fc66adf
+    author: Ian Rash
+  - type: feat
+    description: add 3->0 and 3->2 arity trimming signal piping examples on slide
+      09c
+    bullet: ✦
+    badge: '[SLIDES]'
+    hash: 753d9bb
+    author: Ian Rash
+- version: 0.1.39
+  date: "2026-10-13"
+  status: released
+  summary: Initial release
+  entries: []

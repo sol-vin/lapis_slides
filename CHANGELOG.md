@@ -1,0 +1,97 @@
+# CARBON CHANGELOG
+## [0.2.40] - 2026-10-13
+### ✨ Features & Improvements
+- ✦ complete Lapis for Crystal slide presentation engine and deck ([`11f34e8`](https://github.com/sol-vin/lapis_slides/commit/11f34e8))
+- ✦ **[SLIDES]** update tween dsl to statement-based syntax and nilable wildcard indexing ([`b6b218f`](https://github.com/sol-vin/lapis_slides/commit/b6b218f))
+- ✦ **[SLIDES]** use try?(&.play) in C# null comparison slide ([`3d6700f`](https://github.com/sol-vin/lapis_slides/commit/3d6700f))
+- ✦ **[SLIDES]** add dead-pointer armor try? highlights to memory safety slide ([`e62161d`](https://github.com/sol-vin/lapis_slides/commit/e62161d))
+- ✦ overhaul presentation deck to Sunstone slide engine (sol.vin theme) ([`2b6d1f2`](https://github.com/sol-vin/lapis_slides/commit/2b6d1f2))
+- ✦ adopt rich Sunstone layouts (editorial-split, 3-column, faq, convergence, bento feature-grid, table) ([`793ab8d`](https://github.com/sol-vin/lapis_slides/commit/793ab8d))
+- ✦ **[SLIDE-02A]** redesign warning slide with one-top-two-bottom layout for optimal space utilization ([`7b96377`](https://github.com/sol-vin/lapis_slides/commit/7b96377))
+- ✦ **[ACT2,ACT3]** streamline Act II timeline and repurpose language syntax into Act III Crystal slides ([`ba2276d`](https://github.com/sol-vin/lapis_slides/commit/ba2276d))
+- ✦ **[HIGHLIGHT]** add GDScript syntax highlighting support ([`cbfd97b`](https://github.com/sol-vin/lapis_slides/commit/cbfd97b))
+- ✦ **[SLIDES]** prioritize core Node#[] and on before modular lapis extras ([`0d2b0e3`](https://github.com/sol-vin/lapis_slides/commit/0d2b0e3))
+- ✦ **[SLIDES]** use PackedScene.load in 20g and showcase add_child with > on slide 20s ([`45b3673`](https://github.com/sol-vin/lapis_slides/commit/45b3673))
+- ✦ **[SLIDES]** enrich slide 33d with Bento feature-grid, hot-reload code, and detailed 6-phase protocol breakdown ([`39d4d35`](https://github.com/sol-vin/lapis_slides/commit/39d4d35))
+- ✦ **[ICONS]** add complete fontawesome svgs and map slide icons to valid registry symbols ([`690ac79`](https://github.com/sol-vin/lapis_slides/commit/690ac79))
+- ✦ **[SLIDES]** streamline CLI/forensics to 2 slides and testing to 3 slides, shorten spawn methods in 20g ([`b2008fb`](https://github.com/sol-vin/lapis_slides/commit/b2008fb))
+- ✦ **[PALETTES]** diversify deck palettes across 79 distinct themes while preserving linked slide coherence ([`80eff7e`](https://github.com/sol-vin/lapis_slides/commit/80eff7e))
+- ✦ **[ASYNC]** add await/await?/await! triad and restore signal_bus example ([`65e3237`](https://github.com/sol-vin/lapis_slides/commit/65e3237))
+- ✦ **[DEMO]** update live demo workflow to 5-step roadmap and align companion slides ([`e5cebe3`](https://github.com/sol-vin/lapis_slides/commit/e5cebe3))
+- ✦ **[SLIDES]** add 3->0 and 3->2 arity trimming signal piping examples on slide 09c ([`753d9bb`](https://github.com/sol-vin/lapis_slides/commit/753d9bb))
+
+### 🐛 Bug Fixes
+- ✓ **[SLIDES]** eliminate 20f critique overflow, diversify layouts (timeline, stats, process-flow, dual-mode), and balance column ratios ([`a904218`](https://github.com/sol-vin/lapis_slides/commit/a904218))
+- ✓ **[SLIDES]** increase code font size on slide 21 and fix unescaped strong tags on slide 22 ([`4d5708a`](https://github.com/sol-vin/lapis_slides/commit/4d5708a))
+- ✓ **[DSL]** use operator * for multi-node glob queries and clarify single-node []? glob semantics ([`a66bd71`](https://github.com/sol-vin/lapis_slides/commit/a66bd71))
+- ✓ **[THEME]** update theme.css and index.html with top-aligned badge header from sunstone ([`6a7f3e3`](https://github.com/sol-vin/lapis_slides/commit/6a7f3e3))
+- ✓ **[SLIDE-16]** fix code-comparison layout overflow, wrap long lines, and improve header alignment ([`f9bcd3b`](https://github.com/sol-vin/lapis_slides/commit/f9bcd3b))
+- ✓ **[SLIDE-35]** format benchmarks with explicit bars and speedup metrics ([`0bc43a3`](https://github.com/sol-vin/lapis_slides/commit/0bc43a3))
+- ✓ **[SLIDE-04]** rename Stage 3 card to Type Checking Era and fix badge alignment ([`6f4faf1`](https://github.com/sol-vin/lapis_slides/commit/6f4faf1))
+- ✓ **[SLIDES]** list core keywords on 03a and remove crystal/lapis mentions from 03/03a ([`6a5f4f2`](https://github.com/sol-vin/lapis_slides/commit/6a5f4f2))
+- ✓ **[TIMELINE]** rebuild deck with fixed milestone track alignment and overflow prevention ([`032155b`](https://github.com/sol-vin/lapis_slides/commit/032155b))
+- ✓ **[SYNTAX]** remove 'for' and 'in' from core keywords and clarify Crystal has no for keyword ([`71e5e60`](https://github.com/sol-vin/lapis_slides/commit/71e5e60))
+- ✓ **[THEME]** replace low-contrast resin_91 and a64_pal with high-contrast mineshaft and spaces_11 ([`b75f2dd`](https://github.com/sol-vin/lapis_slides/commit/b75f2dd))
+- ✓ **[THEME]** fix pastel background clipping and enhance gmodule slides 20d/20e card styling ([`062501c`](https://github.com/sol-vin/lapis_slides/commit/062501c))
+
+### 🛠️ Chores & Tooling
+- • **[THEME]** hide code-view and analysis step badges in slide headers ([`81edaf1`](https://github.com/sol-vin/lapis_slides/commit/81edaf1))
+- • **[DECK]** move Scene Tree Glob Queries to follow Bare Scene Ergonomics ~ operator ([`318f455`](https://github.com/sol-vin/lapis_slides/commit/318f455))
+- • **[SLIDES]** use = instead of , for onready and unique_node path assignments ([`4cf3590`](https://github.com/sol-vin/lapis_slides/commit/4cf3590))
+- • **[DEPS]** update sunstone to v0.1.35 and sync shard.lock ([`e4e1a1e`](https://github.com/sol-vin/lapis_slides/commit/e4e1a1e))
+- ✦ **[SLIDES]** streamline code density, elevate typography, and eliminate canvas clipping across 49 slides ([`c5e4098`](https://github.com/sol-vin/lapis_slides/commit/c5e4098))
+- • Refactor Crystal case/when layout on slide 27j & enhance slide 33 card list styling ([`3afcfa6`](https://github.com/sol-vin/lapis_slides/commit/3afcfa6))
+- • **[LAYOUT]** enhance right-side card spacing, margin, and padding across 5 slides ([`839dbac`](https://github.com/sol-vin/lapis_slides/commit/839dbac))
+- • **[PALETTE]** use distinct palettes for ruby heritage slides 03 and 03a ([`64f54e1`](https://github.com/sol-vin/lapis_slides/commit/64f54e1))
+- • **[GDSCRIPT]** clean up lambda formatting on slide 09c signal piping ([`fc66adf`](https://github.com/sol-vin/lapis_slides/commit/fc66adf))
+
+---
+## [0.2.39] - 2026-10-13
+### ✨ Features & Improvements
+- ✦ complete Lapis for Crystal slide presentation engine and deck ([`11f34e8`](https://github.com/sol-vin/lapis_slides/commit/11f34e8))
+- ✦ **[SLIDES]** update tween dsl to statement-based syntax and nilable wildcard indexing ([`b6b218f`](https://github.com/sol-vin/lapis_slides/commit/b6b218f))
+- ✦ **[SLIDES]** use try?(&.play) in C# null comparison slide ([`3d6700f`](https://github.com/sol-vin/lapis_slides/commit/3d6700f))
+- ✦ **[SLIDES]** add dead-pointer armor try? highlights to memory safety slide ([`e62161d`](https://github.com/sol-vin/lapis_slides/commit/e62161d))
+- ✦ overhaul presentation deck to Sunstone slide engine (sol.vin theme) ([`2b6d1f2`](https://github.com/sol-vin/lapis_slides/commit/2b6d1f2))
+- ✦ adopt rich Sunstone layouts (editorial-split, 3-column, faq, convergence, bento feature-grid, table) ([`793ab8d`](https://github.com/sol-vin/lapis_slides/commit/793ab8d))
+- ✦ **[SLIDE-02A]** redesign warning slide with one-top-two-bottom layout for optimal space utilization ([`7b96377`](https://github.com/sol-vin/lapis_slides/commit/7b96377))
+- ✦ **[ACT2,ACT3]** streamline Act II timeline and repurpose language syntax into Act III Crystal slides ([`ba2276d`](https://github.com/sol-vin/lapis_slides/commit/ba2276d))
+- ✦ **[HIGHLIGHT]** add GDScript syntax highlighting support ([`cbfd97b`](https://github.com/sol-vin/lapis_slides/commit/cbfd97b))
+- ✦ **[SLIDES]** prioritize core Node#[] and on before modular lapis extras ([`0d2b0e3`](https://github.com/sol-vin/lapis_slides/commit/0d2b0e3))
+- ✦ **[SLIDES]** use PackedScene.load in 20g and showcase add_child with > on slide 20s ([`45b3673`](https://github.com/sol-vin/lapis_slides/commit/45b3673))
+- ✦ **[SLIDES]** enrich slide 33d with Bento feature-grid, hot-reload code, and detailed 6-phase protocol breakdown ([`39d4d35`](https://github.com/sol-vin/lapis_slides/commit/39d4d35))
+- ✦ **[ICONS]** add complete fontawesome svgs and map slide icons to valid registry symbols ([`690ac79`](https://github.com/sol-vin/lapis_slides/commit/690ac79))
+- ✦ **[SLIDES]** streamline CLI/forensics to 2 slides and testing to 3 slides, shorten spawn methods in 20g ([`b2008fb`](https://github.com/sol-vin/lapis_slides/commit/b2008fb))
+- ✦ **[PALETTES]** diversify deck palettes across 79 distinct themes while preserving linked slide coherence ([`80eff7e`](https://github.com/sol-vin/lapis_slides/commit/80eff7e))
+- ✦ **[ASYNC]** add await/await?/await! triad and restore signal_bus example ([`65e3237`](https://github.com/sol-vin/lapis_slides/commit/65e3237))
+- ✦ **[DEMO]** update live demo workflow to 5-step roadmap and align companion slides ([`e5cebe3`](https://github.com/sol-vin/lapis_slides/commit/e5cebe3))
+- ✦ **[SLIDES]** add 3->0 and 3->2 arity trimming signal piping examples on slide 09c ([`753d9bb`](https://github.com/sol-vin/lapis_slides/commit/753d9bb))
+
+### 🐛 Bug Fixes
+- ✓ **[SLIDES]** eliminate 20f critique overflow, diversify layouts (timeline, stats, process-flow, dual-mode), and balance column ratios ([`a904218`](https://github.com/sol-vin/lapis_slides/commit/a904218))
+- ✓ **[SLIDES]** increase code font size on slide 21 and fix unescaped strong tags on slide 22 ([`4d5708a`](https://github.com/sol-vin/lapis_slides/commit/4d5708a))
+- ✓ **[DSL]** use operator * for multi-node glob queries and clarify single-node []? glob semantics ([`a66bd71`](https://github.com/sol-vin/lapis_slides/commit/a66bd71))
+- ✓ **[THEME]** update theme.css and index.html with top-aligned badge header from sunstone ([`6a7f3e3`](https://github.com/sol-vin/lapis_slides/commit/6a7f3e3))
+- ✓ **[SLIDE-16]** fix code-comparison layout overflow, wrap long lines, and improve header alignment ([`f9bcd3b`](https://github.com/sol-vin/lapis_slides/commit/f9bcd3b))
+- ✓ **[SLIDE-35]** format benchmarks with explicit bars and speedup metrics ([`0bc43a3`](https://github.com/sol-vin/lapis_slides/commit/0bc43a3))
+- ✓ **[SLIDE-04]** rename Stage 3 card to Type Checking Era and fix badge alignment ([`6f4faf1`](https://github.com/sol-vin/lapis_slides/commit/6f4faf1))
+- ✓ **[SLIDES]** list core keywords on 03a and remove crystal/lapis mentions from 03/03a ([`6a5f4f2`](https://github.com/sol-vin/lapis_slides/commit/6a5f4f2))
+- ✓ **[TIMELINE]** rebuild deck with fixed milestone track alignment and overflow prevention ([`032155b`](https://github.com/sol-vin/lapis_slides/commit/032155b))
+- ✓ **[SYNTAX]** remove 'for' and 'in' from core keywords and clarify Crystal has no for keyword ([`71e5e60`](https://github.com/sol-vin/lapis_slides/commit/71e5e60))
+- ✓ **[THEME]** replace low-contrast resin_91 and a64_pal with high-contrast mineshaft and spaces_11 ([`b75f2dd`](https://github.com/sol-vin/lapis_slides/commit/b75f2dd))
+- ✓ **[THEME]** fix pastel background clipping and enhance gmodule slides 20d/20e card styling ([`062501c`](https://github.com/sol-vin/lapis_slides/commit/062501c))
+
+### 🛠️ Chores & Tooling
+- • **[THEME]** hide code-view and analysis step badges in slide headers ([`81edaf1`](https://github.com/sol-vin/lapis_slides/commit/81edaf1))
+- • **[DECK]** move Scene Tree Glob Queries to follow Bare Scene Ergonomics ~ operator ([`318f455`](https://github.com/sol-vin/lapis_slides/commit/318f455))
+- • **[SLIDES]** use = instead of , for onready and unique_node path assignments ([`4cf3590`](https://github.com/sol-vin/lapis_slides/commit/4cf3590))
+- • **[DEPS]** update sunstone to v0.1.35 and sync shard.lock ([`e4e1a1e`](https://github.com/sol-vin/lapis_slides/commit/e4e1a1e))
+- ✦ **[SLIDES]** streamline code density, elevate typography, and eliminate canvas clipping across 49 slides ([`c5e4098`](https://github.com/sol-vin/lapis_slides/commit/c5e4098))
+- • Refactor Crystal case/when layout on slide 27j & enhance slide 33 card list styling ([`3afcfa6`](https://github.com/sol-vin/lapis_slides/commit/3afcfa6))
+- • **[LAYOUT]** enhance right-side card spacing, margin, and padding across 5 slides ([`839dbac`](https://github.com/sol-vin/lapis_slides/commit/839dbac))
+- • **[PALETTE]** use distinct palettes for ruby heritage slides 03 and 03a ([`64f54e1`](https://github.com/sol-vin/lapis_slides/commit/64f54e1))
+- • **[GDSCRIPT]** clean up lambda formatting on slide 09c signal piping ([`fc66adf`](https://github.com/sol-vin/lapis_slides/commit/fc66adf))
+
+---
+## [0.1.39] - 2026-10-13
+> Initial release

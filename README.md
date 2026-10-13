@@ -1,5 +1,13 @@
 # Lapis Presentation Deck & YAML Slide Engine
 
+<!-- carbon:badges -->
+[![CI](https://github.com/sol-vin/lapis_slides/actions/workflows/deploy.yml/badge.svg)](https://github.com/sol-vin/lapis_slides/actions/workflows/deploy.yml)
+[![Crystal](https://img.shields.io/badge/crystal-%3E%3D%201.10.0-black.svg)](https://crystal-lang.org)
+[![Version](https://img.shields.io/badge/version-0.2.40-blue.svg)](https://github.com/sol-vin/lapis_slides/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<!-- /carbon:badges -->
+
+
 A modular, high-performance slide presentation engine written in **Crystal**, inspired by [sol.vin](https://www.sol.vin). It converts human-readable YAML slide definitions into an interactive **Reveal.js** presentation (`index.html`) and markdown speaking reference (`SLIDES.md`).
 
 ---
