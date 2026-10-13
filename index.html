@@ -4700,7 +4700,7 @@ end</code></pre>
           </header>
           <div class="slide-body" data-layout="code-comparison" data-step="code-only">
             <div class="comparison-pane" data-slot="before">
-            <div class="code-window code-container col" data-lang="gdscript">
+            <div class="code-window code-container col code-compact" data-lang="gdscript" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
@@ -4713,13 +4713,17 @@ end</code></pre>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-gdscript">func _ready() -&gt; void:
+              <pre><code class="language-gdscript code-compact">func _ready() -&gt; void:
     # 1. Forwarding boilerplate needed for 1:1 forwarding
-    $Player.level_up.connect(func(lvl): $HUD.on_level.emit(lvl))
-    
+    $Player.level_up.connect(func(lvl):
+        $HUD.on_level.emit(lvl)
+    )
+
     # 2. Verbose lambda for arity trimming (3 args -&gt; 1 arg)
-    $Player.hit.connect(func(_target, dmg, _type): $HUD.notify.emit(dmg))
-    
+    $Player.hit.connect(func(_target, dmg, _type):
+        $HUD.notify.emit(dmg)
+    )
+
     # 3. Manual type check and downcast lambda
     $Area.body_entered.connect(func(body):
         if body is Enemy:

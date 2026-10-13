@@ -1917,11 +1917,15 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```gdscript
   func _ready() -> void:
       # 1. Forwarding boilerplate needed for 1:1 forwarding
-      $Player.level_up.connect(func(lvl): $HUD.on_level.emit(lvl))
-      
+      $Player.level_up.connect(func(lvl):
+          $HUD.on_level.emit(lvl)
+      )
+  
       # 2. Verbose lambda for arity trimming (3 args -> 1 arg)
-      $Player.hit.connect(func(_target, dmg, _type): $HUD.notify.emit(dmg))
-      
+      $Player.hit.connect(func(_target, dmg, _type):
+          $HUD.notify.emit(dmg)
+      )
+  
       # 3. Manual type check and downcast lambda
       $Area.body_entered.connect(func(body):
           if body is Enemy:
