@@ -93,7 +93,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 5: The Ruby Heritage
-- **Theme Palette**: `kanto_red` (Kanto Red)
+- **Theme Palette**: `catppuccin_mocha` (Catppuccin Mocha)
 - **Badge**: `HISTORICAL CONTEXT • THE RUBY HERITAGE`
 - **Title**: The Ruby Heritage
 - **Subtitle**: Developer Happiness, Small Syntax & Expressive Human Reach
@@ -128,7 +128,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 6: My Back End Looks Like This
-- **Theme Palette**: `kanto_red` (Kanto Red)
+- **Theme Palette**: `retro_groove` (Retro Groove)
 - **Badge**: `RUBY HERITAGE • BACKEND CLASS ARCHITECTURE`
 - **Title**: My Back End Looks Like This
 - **Subtitle**: Clean Class Encapsulation, State Guards & Expressive Internal Pipelines
@@ -170,7 +170,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 7: So My Front End Can Look Like This
-- **Theme Palette**: `kanto_red` (Kanto Red)
+- **Theme Palette**: `atomic_purple` (Atomic Purple)
 - **Badge**: `RUBY HERITAGE • CALL-SITE ERGONOMICS`
 - **Title**: So My Front End Can Look Like This
 - **Subtitle**: Natural Prose, Fluent Pipelines & Composable Object Mechanics
@@ -208,7 +208,7 @@ Theme: `sol.vin` | Total Slides: 142
 ---
 
 ### Slide 8: Small Syntax: Postage-Stamp Grammar
-- **Theme Palette**: `kanto_red` (Kanto Red)
+- **Theme Palette**: `nord_frost` (Arctic Frost)
 - **Badge**: `RUBY HERITAGE • MINIMAL GRAMMAR`
 - **Title**: Small Syntax: Postage-Stamp Grammar
 - **Subtitle**: ~40 Keywords Fueling an Infinite Universe of Domain Usages
