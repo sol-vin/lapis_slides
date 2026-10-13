@@ -1921,12 +1921,17 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
           $HUD.on_level.emit(lvl)
       )
   
-      # 2. Verbose lambda for arity trimming (3 args -> 1 arg)
-      $Player.hit.connect(func(_target, dmg, _type):
-          $HUD.notify.emit(dmg)
+      # 2. Verbose lambda for arity trimming (3 args -> 0 arg)
+      $Player.hit.connect(func(_target, _dmg, _type):
+          $HUD.notify.emit()
       )
   
-      # 3. Manual type check and downcast lambda
+      # 3. Verbose lambda for arity trimming (3 args -> 2 args)
+      $WinScreen.won_game.connect(func(winner, points, _match_replay_data):
+          $HUD.win_notify.emit(winner, points)
+      )
+  
+      # 4. Manual type check and downcast lambda
       $Area.body_entered.connect(func(body):
           if body is Enemy:
               enemy_detected.emit(body)
@@ -1940,13 +1945,16 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     # 1. Strict Pipe (>): Compile-time verified 1:1 forward
     player.level_up > hud.on_level
   
-    # 2. Loose Pipe (>>): Automatic arity trimming
+    # 2. Loose Pipe (>>): Arity trimming (3 args -> 0 arg)
     player.hit >> hud.notify
   
-    # 3. Loose Pipe (>>): Polymorphic type filtering & auto-downcast
+    # 3. Loose Pipe (>>): Arity trimming (3 args -> 2 args)
+    win_screen.won_game >> hud.win_notify
+  
+    # 4. Loose Pipe (>>): Polymorphic type filtering & auto-downcast
     area.body_entered >> self.enemy_detected
   
-    # 4. Clean unpiping via subscription handle
+    # 5. Clean unpiping via subscription handle
     sub = (player.hit >> hud.notify)
     sub.disconnect
   end
