@@ -3148,6 +3148,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 103: Runtime Reflection: A Shotgun to Chop Down a Tree
 - **Palette**: `game_sprocket` | **Badge**: `LANGUAGE SHOOTOUT • REFLECTION VS. AST MACROS`
+- **1. Runtime Reflection: The Shotgun**:
+- **2. Compile-Time Macros: The Axe**:
+- **3. Shotgun vs. Surgical Axe**:
+  - 1. A Shotgun on a Static Tree: Your struct’s fields (@health, @stamina, @pos) are already 100% known when you hit compile—yet runtime reflection drags a massive metadata database into RAM to rediscover them at 60 FPS.
+  - 2. Heap Shrapnel & Boxing Tax: Every f.GetValue(this) or get_property_list() sprays heap allocations, boxing stack int, float, and Vector3 values into heap object wrappers.
+  - 3. Collateral Damage (AOT & Trimming): Because the linker cannot predict what strings a reflection shotgun will hit, NativeAOT either ships megabytes of bloat or strips fields and crashes in production.
+  - 4. Crystal’s Compile-Time Axe: AST macros (@type.instance_vars) chop the tree down once during compilation, unrolling direct register reads with 0 bytes of runtime metadata.
 
 **Presenter Notes**:
 > Using runtime reflection to serialize fields, bind properties, or dispatch RPCs is like using a shotgun to chop down a tree. Your struct's fields—health, stamina, position—are already 100% known the moment you press compile! Yet in C# or GDScript, runtime reflection drags an entire type-metadata dictionary into RAM, scans attribute tables at 60 frames per second, and sprays heap shrapnel across the garbage collector by boxing every primitive int, float, and Vector3 into a heap object. Worse yet, it causes massive collateral damage when exporting with NativeAOT or linker stripping: because the compiler can't see which fields a runtime string lookup might hit, the trimmer either keeps megabytes of dead metadata or strips a reflected field and crashes your release build.

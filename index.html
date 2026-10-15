@@ -8065,7 +8065,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 103: GameSprocket (Runtime Reflection: A Shotgun to Chop Down a Tree) -->
-      <section class="slide solvin-slide game_sprocket" data-layout="three-column-layout" data-palette="game_sprocket" data-background-color="#1c1e22" data-palette-name="GameSprocket" data-palette-cube="#f4f6fa" data-palette-cube-hover="#00c878" data-slide-id="27g_csharp_reflection_vs_crystal_macros" id="slide-27g_csharp_reflection_vs_crystal_macros">
+      <section class="slide solvin-slide game_sprocket" data-layout="three-column" data-palette="game_sprocket" data-background-color="#1c1e22" data-palette-name="GameSprocket" data-palette-cube="#f4f6fa" data-palette-cube-hover="#00c878" data-slide-id="27g_csharp_reflection_vs_crystal_macros" id="slide-27g_csharp_reflection_vs_crystal_macros">
         <div class="palette-corner-badge" title="Theme: GameSprocket">
           <span class="palette-corner-dot"></span> PALETTE: GameSprocket
         </div>
@@ -8078,6 +8078,89 @@ end</code></pre>
             <p class="slide-subtitle">Blasting Runtime Metadata &amp; Boxing Every Frame vs. Crystal’s Compile-Time AST Axe</p>
           </header>
           <div class="slide-body" data-layout="three-column">
+            <div class="code-window code-container col code-compact" data-lang="csharp" data-density="compact">
+              <div class="window-header code-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-1 red" title="Close"></span>
+                  <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
+                  <span class="terminal-dot dot-3 green" title="Maximize"></span>
+                </div>
+                <span class="window-title code-title">1. Runtime Reflection: The Shotgun</span>
+                <div class="window-controls">
+                  <span class="lang-tag code-lang-tag">C# / GDScript</span>
+                  <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
+                </div>
+              </div>
+              <pre><code class="language-csharp code-compact">// C#: Blasting runtime metadata every tick
+// just to read fields known at compile time!
+public void WriteSync(BinaryWriter io) {
+  var flags = BindingFlags.Instance
+            | BindingFlags.Public;
+  // 1. Allocates FieldInfo[] array on heap:
+  var fields = GetType().GetFields(flags);
+  foreach (var f in fields) {
+    // 2. Slow runtime attribute scan:
+    if (!f.IsDefined(typeof(SyncAttribute)))
+      continue;
+    // 3. Boxes int/float/Vector3 to object!
+    object boxed = f.GetValue(this)!;
+    WriteDynamic(io, f.FieldType, boxed);
+  }
+}
+
+// GDScript: Dictionary array + string lookup
+// for p in get_property_list():
+//   io.store_var(get(p[&quot;name&quot;])) # Dynamic!</code></pre>
+            </div>
+            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
+              <div class="window-header code-header">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-1 red" title="Close"></span>
+                  <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
+                  <span class="terminal-dot dot-3 green" title="Maximize"></span>
+                </div>
+                <span class="window-title code-title">2. Compile-Time Macros: The Axe</span>
+                <div class="window-controls">
+                  <span class="lang-tag code-lang-tag">Crystal (Lapis)</span>
+                  <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
+                </div>
+              </div>
+              <pre><code class="language-crystal code-compact">annotation Sync; end
+
+struct PlayerState
+  @[Sync] property health  : Int32   = 100
+  @[Sync] property stamina : Float32 = 50.0_f32
+  @[Sync] property pos     : Vector3 = Vector3.zero
+  property local_ui_dirty  : Bool    = false
+
+  # AST macro inspects fields ONCE at build time
+  # and unrolls direct native reads:
+  def write_sync(io : IO) : Nil
+    {% for ivar in @type.instance_vars %}
+      {% if ivar.annotation(Sync) %}
+        io.write_bytes(@{{ ivar.name.id }})
+      {% end %}
+    {% end %}
+  end
+
+  # Compiler emits exact same machine code as:
+  #   io.write_bytes(@health)
+  #   io.write_bytes(@stamina)
+  #   io.write_bytes(@pos)
+end</code></pre>
+            </div>
+            <div class="card col purple" data-color="purple">
+              <div class="card-header card-title purple">
+                <span>3. Shotgun vs. Surgical Axe</span>
+                <span class="badge purple" data-color="purple">ZERO RUNTIME METADATA</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>1. A Shotgun on a Static Tree:</strong> Your struct’s fields (<code>@health</code>, <code>@stamina</code>, <code>@pos</code>) are already 100% known when you hit compile—yet runtime reflection drags a massive metadata database into RAM to rediscover them at 60 FPS.</li>
+                <li><strong>2. Heap Shrapnel &amp; Boxing Tax:</strong> Every <code>f.GetValue(this)</code> or <code>get_property_list()</code> sprays heap allocations, boxing stack <code>int</code>, <code>float</code>, and <code>Vector3</code> values into heap <code>object</code> wrappers.</li>
+                <li><strong>3. Collateral Damage (AOT &amp; Trimming):</strong> Because the linker cannot predict what strings a reflection shotgun will hit, NativeAOT either ships megabytes of bloat or strips fields and crashes in production.</li>
+                <li><strong>4. Crystal’s Compile-Time Axe:</strong> AST macros (<code>@type.instance_vars</code>) chop the tree down <em>once</em> during compilation, unrolling direct register reads with <strong>0 bytes</strong> of runtime metadata.</li>
+              </ul>
+            </div>
           </div>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>

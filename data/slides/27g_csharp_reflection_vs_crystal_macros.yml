@@ -5,73 +5,77 @@ subtitle: 'Blasting Runtime Metadata & Boxing Every Frame vs. Crystal’s Compil
 badge: LANGUAGE SHOOTOUT • REFLECTION VS. AST MACROS
 badge_color: purple
 palette: game_sprocket
-layout: three-column-layout
-ratio: 11:11:10
-left:
-  type: code
-  title: ':circle-xmark: Runtime Reflection (The Shotgun)'
-  lang: csharp
-  tag: C# / GDScript
-  code: |
-    // C#: Blasting runtime metadata every tick
-    // just to read fields known at compile time!
-    public void WriteSync(BinaryWriter io) {
-      var flags = BindingFlags.Instance
-                | BindingFlags.Public;
-      // 1. Allocates FieldInfo[] array on heap:
-      var fields = GetType().GetFields(flags);
-      foreach (var f in fields) {
-        // 2. Slow runtime attribute scan:
-        if (!f.IsDefined(typeof(SyncAttribute)))
-          continue;
-        // 3. Boxes int/float/Vector3 to object!
-        object boxed = f.GetValue(this)!;
-        WriteDynamic(io, f.FieldType, boxed);
+layout: three-column
+columns:
+  - type: code
+    title: '1. Runtime Reflection: The Shotgun'
+    lang: csharp
+    tag: C# / GDScript
+    density: compact
+    code: |
+      // C#: Blasting runtime metadata every tick
+      // just to read fields known at compile time!
+      public void WriteSync(BinaryWriter io) {
+        var flags = BindingFlags.Instance
+                  | BindingFlags.Public;
+        // 1. Allocates FieldInfo[] array on heap:
+        var fields = GetType().GetFields(flags);
+        foreach (var f in fields) {
+          // 2. Slow runtime attribute scan:
+          if (!f.IsDefined(typeof(SyncAttribute)))
+            continue;
+          // 3. Boxes int/float/Vector3 to object!
+          object boxed = f.GetValue(this)!;
+          WriteDynamic(io, f.FieldType, boxed);
+        }
       }
-    }
 
-    // GDScript: Dictionary array + string lookup
-    // for p in get_property_list():
-    //   io.store_var(get(p["name"])) # Dynamic!
-center:
-  type: code
-  title: ':sparkles: Compile-Time Macros (The Axe)'
-  lang: crystal
-  tag: Crystal (Lapis)
-  code: |
-    annotation Sync; end
+      // GDScript: Dictionary array + string lookup
+      // for p in get_property_list():
+      //   io.store_var(get(p["name"])) # Dynamic!
+  - type: code
+    title: '2. Compile-Time Macros: The Axe'
+    lang: crystal
+    tag: Crystal (Lapis)
+    density: compact
+    code: |
+      annotation Sync; end
 
-    struct PlayerState
-      @[Sync] property health  : Int32   = 100
-      @[Sync] property stamina : Float32 = 50.0_f32
-      @[Sync] property pos     : Vector3 = Vector3.zero
-      property local_ui_dirty  : Bool    = false
+      struct PlayerState
+        @[Sync] property health  : Int32   = 100
+        @[Sync] property stamina : Float32 = 50.0_f32
+        @[Sync] property pos     : Vector3 = Vector3.zero
+        property local_ui_dirty  : Bool    = false
 
-      # AST macro inspects fields ONCE at build time
-      # and unrolls direct native reads:
-      def write_sync(io : IO) : Nil
-        {% for ivar in @type.instance_vars %}
-          {% if ivar.annotation(Sync) %}
-            io.write_bytes(@{{ ivar.name.id }})
+        # AST macro inspects fields ONCE at build time
+        # and unrolls direct native reads:
+        def write_sync(io : IO) : Nil
+          {% for ivar in @type.instance_vars %}
+            {% if ivar.annotation(Sync) %}
+              io.write_bytes(@{{ ivar.name.id }})
+            {% end %}
           {% end %}
-        {% end %}
-      end
+        end
 
-      # Compiler emits exact same machine code as:
-      #   io.write_bytes(@health)
-      #   io.write_bytes(@stamina)
-      #   io.write_bytes(@pos)
-    end
-right:
-  type: card
-  title: Shotgun vs. Surgical Axe
-  color: purple
-  items:
-    - '<strong>A Shotgun on a Static Tree:</strong> Your struct’s fields (<code>@health</code>, <code>@stamina</code>, <code>@pos</code>) are already 100% known when you hit compile—yet runtime reflection drags a massive metadata database into RAM to rediscover them at 60 FPS.'
-    - '<strong>Heap Shrapnel &amp; Boxing Tax:</strong> Every <code>f.GetValue(this)</code> or <code>get_property_list()</code> sprays heap allocations, boxing stack <code>int</code>, <code>float</code>, and <code>Vector3</code> values into heap <code>object</code> wrappers.'
-    - '<strong>Collateral Damage (AOT &amp; Trimming):</strong> Because the linker cannot predict what strings a reflection shotgun will hit, NativeAOT either ships megabytes of bloat or strips fields and crashes in production.'
-    - '<strong>Crystal’s Compile-Time Axe:</strong> AST macros (<code>@type.instance_vars</code>) chop the tree down <em>once</em> during compilation, unrolling direct register reads with <strong>0 bytes</strong> of runtime metadata.'
+        # Compiler emits exact same machine code as:
+        #   io.write_bytes(@health)
+        #   io.write_bytes(@stamina)
+        #   io.write_bytes(@pos)
+      end
+  - type: card
+    title: '3. Shotgun vs. Surgical Axe'
+    badge: 'ZERO RUNTIME METADATA'
+    color: purple
+    items:
+      - '<strong>1. A Shotgun on a Static Tree:</strong> Your struct’s fields (<code>@health</code>, <code>@stamina</code>, <code>@pos</code>) are already 100% known when you hit compile—yet runtime reflection drags a massive metadata database into RAM to rediscover them at 60 FPS.'
+      - '<strong>2. Heap Shrapnel &amp; Boxing Tax:</strong> Every <code>f.GetValue(this)</code> or <code>get_property_list()</code> sprays heap allocations, boxing stack <code>int</code>, <code>float</code>, and <code>Vector3</code> values into heap <code>object</code> wrappers.'
+      - '<strong>3. Collateral Damage (AOT &amp; Trimming):</strong> Because the linker cannot predict what strings a reflection shotgun will hit, NativeAOT either ships megabytes of bloat or strips fields and crashes in production.'
+      - '<strong>4. Crystal’s Compile-Time Axe:</strong> AST macros (<code>@type.instance_vars</code>) chop the tree down <em>once</em> during compilation, unrolling direct register reads with <strong>0 bytes</strong> of runtime metadata.'
+takeaway:
+  badge: COMPILE-TIME AST INTROSPECTION
+  text: 'Runtime reflection uses a 60 FPS heap-boxing shotgun on types already known at build time; Crystal AST macros chop the tree once at compile time with zero runtime overhead.'
 notes: |
   Using runtime reflection to serialize fields, bind properties, or dispatch RPCs is like using a shotgun to chop down a tree. Your struct's fields—health, stamina, position—are already 100% known the moment you press compile! Yet in C# or GDScript, runtime reflection drags an entire type-metadata dictionary into RAM, scans attribute tables at 60 frames per second, and sprays heap shrapnel across the garbage collector by boxing every primitive int, float, and Vector3 into a heap object. Worse yet, it causes massive collateral damage when exporting with NativeAOT or linker stripping: because the compiler can't see which fields a runtime string lookup might hit, the trimmer either keeps megabytes of dead metadata or strips a reflected field and crashes your release build.
   In Crystal, compile-time AST macros are a surgical axe. You loop over `@type.instance_vars` once during compilation, check for `@[Sync]`, and the compiler unrolls three direct, inlined `io.write_bytes` instructions—leaving zero runtime metadata tables, zero string lookups, and zero heap boxing.
+
 
