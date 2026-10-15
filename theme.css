@@ -7920,8 +7920,14 @@ ul.card-list li strong {
 
 .demo-steps-grid[data-cols="5"] .terminal-window pre,
 .demo-steps-grid[data-cols="5"] .code-window pre {
-  font-size: 0.64rem !important;
+  font-size: 0.62rem !important;
   padding: 0.30rem 0.40rem !important;
+  line-height: 1.25 !important;
+}
+
+.demo-steps-grid[data-cols="5"] .terminal-window pre code,
+.demo-steps-grid[data-cols="5"] .code-window pre code {
+  font-size: 0.62rem !important;
   line-height: 1.25 !important;
 }
 
@@ -8106,6 +8112,19 @@ ul.card-list li strong {
   color: var(--text-color) !important;
   opacity: 0.92 !important;
 }
+
+/* ==========================================================================
+   Code Comparison Layout: Consistent Compact Typography Across Both Panes
+   Prevents mismatched font sizes (0.82rem vs 0.72rem) and line wrapping in
+   side-by-side C# / GDScript / C++ vs Crystal comparison windows.
+   ========================================================================== */
+.slide-body[data-layout*="code-comparison"] .comparison-pane .code-container pre code,
+[data-layout*="code-comparison"] .comparison-pane .code-container pre code,
+.solvin-slide .slide-body[data-layout*="code-comparison"] .comparison-pane .code-container pre code {
+  font-size: 0.72rem !important;
+  line-height: 1.30 !important;
+}
+
 
 
 
