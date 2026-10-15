@@ -63,14 +63,14 @@ columns:
         #   io.write_bytes(@pos)
       end
   - type: card
-    title: '3. Shotgun vs. Surgical Axe'
-    badge: 'ZERO METADATA'
+    title: '3. Shotgun vs. Axe'
+    badge: '0 METADATA'
     color: purple
     items:
-      - '<strong>1. Shotgun on a Static Tree:</strong> Fields like <code>@health</code> and <code>@pos</code> are already 100% known at compile time—yet reflection scans a massive metadata table at 60 FPS.'
-      - '<strong>2. Heap Shrapnel &amp; Boxing:</strong> Every <code>f.GetValue(this)</code> or <code>get_property_list()</code> boxes stack <code>int</code>, <code>float</code>, and <code>Vector3</code> values into heap <code>object</code> wrappers.'
-      - '<strong>3. AOT &amp; Linker Fragility:</strong> Because the linker cannot predict dynamic strings, NativeAOT either ships megabytes of bloat or strips fields and crashes.'
-      - '<strong>4. Crystal’s Compile-Time Axe:</strong> AST macros (<code>@type.instance_vars</code>) chop the tree <em>once</em> at build time, unrolling direct register reads with <strong>0 bytes</strong> of metadata.'
+      - '<strong>1. Static Tree, 60 FPS Shotgun:</strong> <code>@health</code> and <code>@pos</code> are known at build time—yet reflection scans a massive metadata table every frame.'
+      - '<strong>2. Heap Shrapnel (Boxing):</strong> Every <code>f.GetValue(this)</code> or <code>get_property_list()</code> boxes stack <code>int</code>/<code>float</code>/<code>Vector3</code> values onto the GC heap.'
+      - '<strong>3. Linker &amp; AOT Collateral:</strong> Unpredictable string lookups force NativeAOT to either ship megabytes of bloat or strip fields and crash.'
+      - '<strong>4. Crystal’s Compile-Time Axe:</strong> <code>@type.instance_vars</code> unrolls direct register reads <em>once</em> at build time with <strong>0 bytes</strong> of metadata.'
 takeaway:
   badge: COMPILE-TIME AST INTROSPECTION
   text: 'Runtime reflection uses a 60 FPS heap-boxing shotgun on types already known at build time; Crystal AST macros chop the tree once at compile time with zero runtime overhead.'
