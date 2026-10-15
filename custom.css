@@ -625,4 +625,26 @@
   line-height: 1.30 !important;
 }
 
+/* ==========================================================================
+   Palette Swap Button: Dynamically Target Active Palette Background & Colors
+   ========================================================================== */
+#palette-swap-btn,
+.palette-swap-btn {
+  background-color: var(--palette-btn-bg, var(--bg-window, var(--bg-color, var(--sunstone-surface, #faf6ee)))) !important;
+  background: var(--palette-btn-bg, var(--bg-window, var(--bg-color, var(--sunstone-surface, #faf6ee)))) !important;
+  color: var(--text-color, var(--sunstone-text-primary, #1c1c1e)) !important;
+  border: 1.5px solid var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  box-shadow: 3px 3px 0px var(--shadow-color, #1c1c1e) !important;
+}
+
+#palette-swap-btn:hover,
+.palette-swap-btn:hover {
+  background-color: var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  background: var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  color: var(--bg-color, var(--sunstone-bg, #faf6ee)) !important;
+  border-color: var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
+  box-shadow: 3px 3px 0px var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
+}
+
+
 

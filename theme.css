@@ -7497,6 +7497,488 @@ ul.card-list li strong {
 
 
 
+/* Modular Sol.vin Palette Select Button & Catalog Menu CSS */
+/* ==========================================================================
+ * SOL.VIN Modular Palette Component Stylesheet for Sunstone
+ * Components: .sunstone-palette-toolbar, #palette-swap-btn, HoldClick Spinner,
+ *             #palette-picker-modal-overlay, .palette-picker-window, #palette-picker-grid
+ * ========================================================================== */
+
+.sunstone-palette-toolbar {
+  position: fixed;
+  top: 0.85rem;
+  right: 2.2rem;
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: auto;
+}
+
+/* Suppress static corner badge when interactive #palette-swap-btn is mounted */
+.reveal:has(.sunstone-palette-toolbar) .palette-corner-badge,
+body:has(#palette-swap-btn) .palette-corner-badge {
+  display: none !important;
+}
+
+#palette-swap-btn,
+.palette-swap-btn {
+  background-color: var(--palette-btn-bg, var(--bg-window, var(--bg-color, var(--sunstone-surface, #faf6ee)))) !important;
+  background: var(--palette-btn-bg, var(--bg-window, var(--bg-color, var(--sunstone-surface, #faf6ee)))) !important;
+  color: var(--text-color, var(--sunstone-text-primary, #1c1c1e)) !important;
+  border: 1.5px solid var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  padding: 0.35rem 0.75rem;
+  font-family: 'Quicksand', var(--sunstone-font-mono, monospace), sans-serif;
+  font-weight: bold;
+  font-size: 0.82rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px var(--shadow-color, #1c1c1e) !important;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+#palette-swap-btn:hover,
+.palette-swap-btn:hover {
+  background-color: var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  background: var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  color: var(--bg-color, var(--sunstone-bg, #faf6ee)) !important;
+  border-color: var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
+  box-shadow: 3px 3px 0px var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
+}
+
+#palette-swap-btn:active,
+.palette-swap-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
+}
+
+.palette-color-preview {
+  margin-right: 0.3rem;
+  color: var(--accent-secondary, var(--accent-color, var(--sunstone-accent, currentColor)));
+}
+
+/* HoldClick Progress Spinner */
+.palette-hold-spinner,
+.hold-click-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.7));
+}
+
+.palette-hold-spinner.is-visible,
+.hold-click-spinner.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.palette-hold-spinner svg,
+.hold-click-spinner svg {
+  display: block;
+}
+
+.palette-hold-spinner .spinner-base,
+.hold-click-spinner .spinner-base {
+  fill: var(--bg-window, var(--sunstone-surface, #111111));
+  stroke: var(--border-color, var(--sunstone-border, #444444));
+  stroke-width: 1.5px;
+}
+
+.palette-hold-spinner .spinner-track,
+.hold-click-spinner .spinner-track {
+  fill: none;
+  stroke: var(--text-dim, var(--sunstone-text-muted, rgba(255, 255, 255, 0.25)));
+  stroke-width: 3px;
+  opacity: 0.4;
+}
+
+.palette-hold-spinner .spinner-progress,
+.hold-click-spinner .spinner-progress {
+  fill: none;
+  stroke: var(--border-active, var(--accent-color, var(--sunstone-accent, #ffffff)));
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  transform-origin: 16px 16px;
+  transform: rotate(-90deg);
+  stroke-dasharray: 69.115;
+  stroke-dashoffset: 69.115;
+}
+
+.palette-hold-spinner .spinner-dot,
+.hold-click-spinner .spinner-dot {
+  fill: var(--border-active, var(--accent-color, var(--sunstone-accent, #ffffff)));
+}
+
+/* Standalone Retro Window & Modal Overlay Chrome */
+.skill-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.72);
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+.terminal-window.palette-picker-window {
+  background: var(--bg-window, var(--sunstone-surface, #faf6ee));
+  color: var(--text-color, var(--sunstone-text-primary, #1c1c1e));
+  border: 2px solid var(--border-color, var(--sunstone-border, #1c1c1e));
+  box-shadow: 6px 6px 0px var(--shadow-color, #1c1c1e);
+  height: auto;
+  border-radius: 4px;
+}
+
+.palette-picker-window .window-header {
+  background: var(--border-color, var(--sunstone-border, #1c1c1e));
+  color: var(--bg-color, var(--sunstone-bg, #faf6ee));
+  padding: 0.45rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.palette-picker-window .window-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: bold;
+  font-family: 'Quicksand', monospace, sans-serif;
+}
+
+.palette-picker-window .project-icon-svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
+.palette-picker-window .window-btn {
+  background: transparent;
+  color: inherit;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.1rem 0.25rem;
+}
+
+.palette-picker-window .export-btn {
+  background: var(--bg-window, var(--sunstone-surface, #faf6ee));
+  color: var(--text-color, var(--sunstone-text-primary, #1c1c1e));
+  border: 1px solid var(--border-color, var(--sunstone-border, #1c1c1e));
+  padding: 0.35rem 0.65rem;
+  box-shadow: 2px 2px 0px var(--shadow-color, #1c1c1e);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Quicksand', monospace, sans-serif;
+}
+
+/* Palette Picker Catalog Modal */
+.palette-picker-window {
+  width: 90%;
+  max-width: 860px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.palette-modal-title {
+  font-size: 0.95rem;
+}
+
+.palette-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+}
+
+.palette-modal-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.palette-modal-text {
+  font-size: 0.85rem;
+  color: var(--text-dim, var(--sunstone-text-muted, #545458));
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.export-btn-bold-sm {
+  font-size: 0.8rem !important;
+  font-weight: bold !important;
+}
+
+#palette-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.palette-grid-item-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.palette-grid-item-dot {
+  font-size: 0.9rem;
+}
+
+.palette-grid-item-index {
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+#palette-picker-modal-overlay {
+  display: none;
+}
+
+
+/* Modular RFC Card & [AS-X] Decision Matrix CSS */
+/* ==============================================================================
+   RFC Card & [AS-X] Architectural Decision Matrix Component
+   Zero Inline Styles • Semantic Classes & Theme Variable Encapsulation
+   ============================================================================== */
+.rfc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--sunstone-radius-md, 8px);
+  background: var(--sunstone-surface, var(--bg-window, rgba(30, 41, 59, 0.85)));
+  border: 1px solid var(--sunstone-border, var(--border-color, rgba(148, 163, 184, 0.25)));
+}
+
+.rfc-card:not(.rfc-window) {
+  padding: 0.9rem 1.15rem;
+}
+
+.rfc-card.rfc-window > :not(.window-header) {
+  padding-left: 1.05rem;
+  padding-right: 1.05rem;
+}
+
+.rfc-card.rfc-window > :last-child {
+  padding-bottom: 0.9rem;
+}
+
+.rfc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.rfc-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.rfc-card-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--sunstone-text-primary, var(--text-color, #f8fafc));
+}
+
+.rfc-card-subtitle {
+  margin: -0.25rem 0 0 0;
+  font-size: 0.82rem;
+  opacity: 0.85;
+  color: var(--sunstone-text-secondary, var(--text-dim, #cbd5e1));
+}
+
+.rfc-meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+}
+
+.rfc-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 6px;
+  background: var(--sunstone-surface-hover, rgba(148, 163, 184, 0.12));
+  border: 1px solid var(--sunstone-border, var(--border-color, rgba(148, 163, 184, 0.2)));
+  color: var(--sunstone-text-secondary, var(--text-color, #cbd5e1));
+}
+
+.rfc-decision-matrix-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.rfc-decision-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.rfc-decision-matrix th {
+  padding: 0.42rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--sunstone-border, var(--border-color, rgba(148, 163, 184, 0.3)));
+  color: var(--sunstone-text-secondary, var(--text-dim, #94a3b8));
+}
+
+.rfc-decision-matrix td {
+  padding: 0.48rem 0.6rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--sunstone-border, var(--border-color, rgba(148, 163, 184, 0.16)));
+}
+
+.rfc-card.compact .rfc-decision-matrix td {
+  padding: 0.34rem 0.5rem;
+}
+
+.rfc-as-badge {
+  font-family: var(--sunstone-font-mono, 'JetBrains Mono', 'Fira Code', monospace);
+  font-weight: 800;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.rfc-wo-tag,
+.rfc-issue-tag {
+  display: inline-block;
+  font-family: var(--sunstone-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.66rem;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-left: 0.25rem;
+}
+
+.rfc-as-title {
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--sunstone-text-primary, var(--text-color, #f8fafc));
+}
+
+.rfc-as-body,
+.rfc-as-rationale {
+  font-size: 0.72rem;
+  opacity: 0.85;
+  margin-top: 0.15rem;
+  line-height: 1.3;
+}
+
+.rfc-agent-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.rfc-greek-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.72rem;
+  background: var(--sunstone-surface-hover, rgba(56, 189, 248, 0.15));
+  color: var(--sunstone-accent, var(--accent-color, #38bdf8));
+}
+
+.rfc-repo-code {
+  font-size: 0.7rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.rfc-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rfc-council-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed var(--sunstone-border, var(--border-color, rgba(148, 163, 184, 0.25)));
+  font-size: 0.74rem;
+}
+
+.rfc-council-header {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.rfc-council-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.rfc-council-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.rfc-summary-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--sunstone-border, var(--border-color, rgba(148, 163, 184, 0.22)));
+  font-size: 0.76rem;
+}
+
+.rfc-summary-text {
+  font-weight: 500;
+  color: var(--sunstone-text-primary, var(--text-color, #f8fafc));
+}
+
 /* Custom User Deck CSS */
 /* ==========================================================================
    Custom User Deck CSS for Lapis Presentation Deck
@@ -8125,14 +8607,37 @@ ul.card-list li strong {
   line-height: 1.30 !important;
 }
 
+/* ==========================================================================
+   Palette Swap Button: Dynamically Target Active Palette Background & Colors
+   ========================================================================== */
+#palette-swap-btn,
+.palette-swap-btn {
+  background-color: var(--palette-btn-bg, var(--bg-window, var(--bg-color, var(--sunstone-surface, #faf6ee)))) !important;
+  background: var(--palette-btn-bg, var(--bg-window, var(--bg-color, var(--sunstone-surface, #faf6ee)))) !important;
+  color: var(--text-color, var(--sunstone-text-primary, #1c1c1e)) !important;
+  border: 1.5px solid var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  box-shadow: 3px 3px 0px var(--shadow-color, #1c1c1e) !important;
+}
+
+#palette-swap-btn:hover,
+.palette-swap-btn:hover {
+  background-color: var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  background: var(--border-color, var(--sunstone-border, #1c1c1e)) !important;
+  color: var(--bg-color, var(--sunstone-bg, #faf6ee)) !important;
+  border-color: var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
+  box-shadow: 3px 3px 0px var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
+}
 
 
 
-/* Theme-Scoped Palette CSS Rules */
+
+
+/* Theme-Scoped & 102-Palette Catalog CSS Rules */
 .slide[data-palette="warm_paper"], .solvin-slide.warm_paper, [data-palette="warm_paper"] {
   /* Sol.vin Theme Variables */
   --bg-color: #faf6ee;
   --bg-window: #faf6ee;
+  --palette-btn-bg: #faf6ee;
   --text-color: #1c1c1e;
   --text-dim: #1c1c1e;
   --link-color: #303030;
@@ -8173,6 +8678,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #ffffff;
   --bg-window: #ffffff;
+  --palette-btn-bg: #ffffff;
   --text-color: #000000;
   --text-dim: #555555;
   --link-color: #000000;
@@ -8213,6 +8719,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #000000;
   --bg-window: #000000;
+  --palette-btn-bg: #000000;
   --text-color: #ffffff;
   --text-dim: #aaaaaa;
   --link-color: #ffffff;
@@ -8253,6 +8760,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #272822;
   --bg-window: #1e1f1c;
+  --palette-btn-bg: #1e1f1c;
   --text-color: #f8f8f2;
   --text-dim: #75715e;
   --link-color: #66d9ef;
@@ -8293,6 +8801,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #fdf0f8;
   --bg-window: #ffffff;
+  --palette-btn-bg: #fdf0f8;
   --text-color: #4a2c58;
   --text-dim: #8c6899;
   --link-color: #d84b9b;
@@ -8333,6 +8842,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f7f5ff;
   --bg-window: #ffffff;
+  --palette-btn-bg: #f7f5ff;
   --text-color: #2d2738;
   --text-dim: #786b8e;
   --link-color: #ff6b8b;
@@ -8373,6 +8883,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0000aa;
   --bg-window: #0000aa;
+  --palette-btn-bg: #0000aa;
   --text-color: #ffffff;
   --text-dim: #aaaaaa;
   --link-color: #55ffff;
@@ -8413,6 +8924,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #40318d;
   --bg-window: #40318d;
+  --palette-btn-bg: #40318d;
   --text-color: #7869c4;
   --text-dim: #787878;
   --link-color: #94e089;
@@ -8453,6 +8965,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0000aa;
   --bg-window: #0000aa;
+  --palette-btn-bg: #0000aa;
   --text-color: #0088ff;
   --text-dim: #777777;
   --link-color: #aaff66;
@@ -8493,6 +9006,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0055aa;
   --bg-window: #0055aa;
+  --palette-btn-bg: #0055aa;
   --text-color: #ffffff;
   --text-dim: #aaaaaa;
   --link-color: #ff5500;
@@ -8533,6 +9047,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0a0d0a;
   --bg-window: #121612;
+  --palette-btn-bg: #121612;
   --text-color: #33ff33;
   --text-dim: #1e881e;
   --link-color: #66ff66;
@@ -8573,6 +9088,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0a0a0a;
   --bg-window: #121212;
+  --palette-btn-bg: #121212;
   --text-color: #33ff33;
   --text-dim: #1e881e;
   --link-color: #66ff66;
@@ -8613,6 +9129,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1f232a;
   --bg-window: #262a33;
+  --palette-btn-bg: #262a33;
   --text-color: #ffee55;
   --text-dim: #c4a63a;
   --link-color: #ff9900;
@@ -8653,6 +9170,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e6e6ea;
   --bg-window: #c0c0c0;
+  --palette-btn-bg: #c0c0c0;
   --text-color: #000000;
   --text-dim: #444444;
   --link-color: #b30000;
@@ -8693,6 +9211,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1b1726;
   --bg-window: #261e34;
+  --palette-btn-bg: #261e34;
   --text-color: #e8ddf5;
   --text-dim: #8a7b9c;
   --link-color: #c77dff;
@@ -8733,6 +9252,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1f1914;
   --bg-window: #2c241d;
+  --palette-btn-bg: #2c241d;
   --text-color: #d4c39e;
   --text-dim: #8c7355;
   --link-color: #e06d20;
@@ -8773,6 +9293,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #002b55;
   --bg-window: #003a70;
+  --palette-btn-bg: #003a70;
   --text-color: #00c8ff;
   --text-dim: #3a7ca5;
   --link-color: #66e0ff;
@@ -8813,6 +9334,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #16120e;
   --bg-window: #281f18;
+  --palette-btn-bg: #281f18;
   --text-color: #faf4e1;
   --text-dim: #857458;
   --link-color: #f2a81d;
@@ -8853,6 +9375,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #d2d2d6;
   --bg-window: #e8e8ec;
+  --palette-btn-bg: #e8e8ec;
   --text-color: #141418;
   --text-dim: #585860;
   --link-color: #0063be;
@@ -8893,6 +9416,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #090a10;
   --bg-window: #121520;
+  --palette-btn-bg: #121520;
   --text-color: #e0e6f0;
   --text-dim: #4a5870;
   --link-color: #0088ff;
@@ -8933,6 +9457,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #000000;
   --bg-window: #110000;
+  --palette-btn-bg: #110000;
   --text-color: #ff0000;
   --text-dim: #880000;
   --link-color: #ff3333;
@@ -8973,6 +9498,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #8bac0f;
   --bg-window: #9bbc0f;
+  --palette-btn-bg: #9bbc0f;
   --text-color: #0f380f;
   --text-dim: #1b3f1b;
   --link-color: #0f380f;
@@ -9013,6 +9539,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e8e8ec;
   --bg-window: #d8d8dc;
+  --palette-btn-bg: #d8d8dc;
   --text-color: #101012;
   --text-dim: #505055;
   --link-color: #c80018;
@@ -9053,6 +9580,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f0f0f5;
   --bg-window: #e2e2ea;
+  --palette-btn-bg: #e2e2ea;
   --text-color: #1b1924;
   --text-dim: #605c70;
   --link-color: #5c439b;
@@ -9093,6 +9621,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #232328;
   --bg-window: #32323a;
+  --palette-btn-bg: #32323a;
   --text-color: #d0d0d8;
   --text-dim: #80808a;
   --link-color: #1e68d8;
@@ -9133,6 +9662,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #2d224b;
   --bg-window: #563f91;
+  --palette-btn-bg: #563f91;
   --text-color: #ffffff;
   --text-dim: #b0a4d0;
   --link-color: #22c55e;
@@ -9173,6 +9703,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e8ecef;
   --bg-window: #ffffff;
+  --palette-btn-bg: #e8ecef;
   --text-color: #2c3238;
   --text-dim: #788490;
   --link-color: #00a3e0;
@@ -9213,6 +9744,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #121412;
   --bg-window: #1a1d1a;
+  --palette-btn-bg: #1a1d1a;
   --text-color: #e2ece2;
   --text-dim: #556855;
   --link-color: #107c41;
@@ -9253,6 +9785,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e4e8ec;
   --bg-window: #ffffff;
+  --palette-btn-bg: #e4e8ec;
   --text-color: #1e242b;
   --text-dim: #606d7a;
   --link-color: #107c41;
@@ -9293,6 +9826,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #141518;
   --bg-window: #1e2024;
+  --palette-btn-bg: #1e2024;
   --text-color: #e8e8ed;
   --text-dim: #7a7e85;
   --link-color: #d81b24;
@@ -9333,6 +9867,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1c1e22;
   --bg-window: #262930;
+  --palette-btn-bg: #262930;
   --text-color: #f4f6fa;
   --text-dim: #767e8c;
   --link-color: #0088ff;
@@ -9373,6 +9908,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #ffffff;
   --bg-window: #c0c0c0;
+  --palette-btn-bg: #c0c0c0;
   --text-color: #000000;
   --text-dim: #404040;
   --link-color: #000080;
@@ -9413,6 +9949,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f0f4f4;
   --bg-window: #c0c0c0;
+  --palette-btn-bg: #c0c0c0;
   --text-color: #000000;
   --text-dim: #333333;
   --link-color: #000080;
@@ -9453,6 +9990,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f0f4f8;
   --bg-window: #d4d0c8;
+  --palette-btn-bg: #d4d0c8;
   --text-color: #000000;
   --text-dim: #333333;
   --link-color: #000080;
@@ -9493,6 +10031,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f0f4f4;
   --bg-window: #c0c0c0;
+  --palette-btn-bg: #c0c0c0;
   --text-color: #000000;
   --text-dim: #444444;
   --link-color: #000080;
@@ -9533,6 +10072,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f0f4f8;
   --bg-window: #d4d0c8;
+  --palette-btn-bg: #d4d0c8;
   --text-color: #000000;
   --text-dim: #404040;
   --link-color: #0a246a;
@@ -9573,6 +10113,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e2ebf4;
   --bg-window: #ffffff;
+  --palette-btn-bg: #e2ebf4;
   --text-color: #0f2545;
   --text-dim: #4e6580;
   --link-color: #0055ea;
@@ -9613,6 +10154,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #141820;
   --bg-window: #1f2430;
+  --palette-btn-bg: #1f2430;
   --text-color: #f0f4f9;
   --text-dim: #7b8c9e;
   --link-color: #4090ff;
@@ -9653,6 +10195,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #141c24;
   --bg-window: #1f2b37;
+  --palette-btn-bg: #1f2b37;
   --text-color: #f0f4f8;
   --text-dim: #7890a8;
   --link-color: #00c3ff;
@@ -9693,6 +10236,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #dce8f5;
   --bg-window: #ffffff;
+  --palette-btn-bg: #dce8f5;
   --text-color: #1a2b3c;
   --text-dim: #5a7086;
   --link-color: #0066cc;
@@ -9733,6 +10277,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #eff3f8;
   --bg-window: #ffffff;
+  --palette-btn-bg: #eff3f8;
   --text-color: #1e1e1e;
   --text-dim: #555555;
   --link-color: #0078d7;
@@ -9773,6 +10318,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1f1f1f;
   --bg-window: #2c2c2c;
+  --palette-btn-bg: #2c2c2c;
   --text-color: #f3f3f3;
   --text-dim: #9e9e9e;
   --link-color: #26b5ff;
@@ -9813,6 +10359,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #18191c;
   --bg-window: #24272c;
+  --palette-btn-bg: #24272c;
   --text-color: #f8f9fa;
   --text-dim: #8e96a0;
   --link-color: #4cc2ff;
@@ -9853,6 +10400,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #d6d6d6;
   --bg-window: #ffffff;
+  --palette-btn-bg: #d6d6d6;
   --text-color: #000000;
   --text-dim: #555555;
   --link-color: #0000aa;
@@ -9893,6 +10441,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e8ecef;
   --bg-window: #ffffff;
+  --palette-btn-bg: #e8ecef;
   --text-color: #1d1d1f;
   --text-dim: #6e6e73;
   --link-color: #007aff;
@@ -9933,6 +10482,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #2c001e;
   --bg-window: #380c2a;
+  --palette-btn-bg: #380c2a;
   --text-color: #f7f7f7;
   --text-dim: #aea79f;
   --link-color: #ff6331;
@@ -9973,6 +10523,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1d2b53;
   --bg-window: #1d2b53;
+  --palette-btn-bg: #1d2b53;
   --text-color: #fff1e8;
   --text-dim: #83769c;
   --link-color: #29adff;
@@ -10013,6 +10564,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #ffc72c;
   --bg-window: #ffc72c;
+  --palette-btn-bg: #ffc72c;
   --text-color: #111110;
   --text-dim: #3a3a36;
   --link-color: #111110;
@@ -10053,6 +10605,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1a1c2c;
   --bg-window: #333c57;
+  --palette-btn-bg: #333c57;
   --text-color: #f4f4f4;
   --text-dim: #94b0c2;
   --link-color: #41a6f6;
@@ -10093,6 +10646,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #05080c;
   --bg-window: #05080c;
+  --palette-btn-bg: #05080c;
   --text-color: #00f0ff;
   --text-dim: #0099aa;
   --link-color: #ffffff;
@@ -10133,6 +10687,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #ececec;
   --bg-window: #dcdcdc;
+  --palette-btn-bg: #dcdcdc;
   --text-color: #232328;
   --text-dim: #55555c;
   --link-color: #ff6600;
@@ -10173,6 +10728,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #dcdde1;
   --bg-window: #cbccd1;
+  --palette-btn-bg: #cbccd1;
   --text-color: #22252a;
   --text-dim: #555f6d;
   --link-color: #192a56;
@@ -10213,6 +10769,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #4b3869;
   --bg-window: #6a528f;
+  --palette-btn-bg: #6a528f;
   --text-color: #e8e0f5;
   --text-dim: #bdaece;
   --link-color: #ad9cc1;
@@ -10253,6 +10810,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #3f427b;
   --bg-window: #282a52;
+  --palette-btn-bg: #282a52;
   --text-color: #e0e4f0;
   --text-dim: #9fa5b5;
   --link-color: #39ff14;
@@ -10293,6 +10851,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #124742;
   --bg-window: #092623;
+  --palette-btn-bg: #092623;
   --text-color: #66fcd4;
   --text-dim: #258575;
   --link-color: #2de2b6;
@@ -10333,6 +10892,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0c0d10;
   --bg-window: #181b22;
+  --palette-btn-bg: #181b22;
   --text-color: #e0f7fa;
   --text-dim: #758294;
   --link-color: #29b6f6;
@@ -10373,6 +10933,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0e0f14;
   --bg-window: #191b22;
+  --palette-btn-bg: #191b22;
   --text-color: #d4dae2;
   --text-dim: #8a95a5;
   --link-color: #ff1744;
@@ -10413,6 +10974,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #008b9e;
   --bg-window: #005d6b;
+  --palette-btn-bg: #005d6b;
   --text-color: #ffffff;
   --text-dim: #80deea;
   --link-color: #80deea;
@@ -10453,6 +11015,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1a1a1a;
   --bg-window: #5c3a21;
+  --palette-btn-bg: #5c3a21;
   --text-color: #f0e6d2;
   --text-dim: #997a54;
   --link-color: #ff4500;
@@ -10493,6 +11056,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #141416;
   --bg-window: #222329;
+  --palette-btn-bg: #222329;
   --text-color: #f5f5f5;
   --text-dim: #8f7524;
   --link-color: #d4af37;
@@ -10533,6 +11097,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f2f4f7;
   --bg-window: #e4e7eb;
+  --palette-btn-bg: #e4e7eb;
   --text-color: #33373d;
   --text-dim: #8e95a0;
   --link-color: #ff3b30;
@@ -10573,6 +11138,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #070709;
   --bg-window: #070709;
+  --palette-btn-bg: #070709;
   --text-color: #39ff14;
   --text-dim: #1a660a;
   --link-color: #00e5ff;
@@ -10613,6 +11179,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #17191e;
   --bg-window: #0f1013;
+  --palette-btn-bg: #0f1013;
   --text-color: #f1f3f6;
   --text-dim: #667085;
   --link-color: #1a9fff;
@@ -10653,6 +11220,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e3d8be;
   --bg-window: #e3d8be;
+  --palette-btn-bg: #e3d8be;
   --text-color: #4a3728;
   --text-dim: #735945;
   --link-color: #61bb46;
@@ -10693,6 +11261,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #ded7c4;
   --bg-window: #ffffff;
+  --palette-btn-bg: #ded7c4;
   --text-color: #000000;
   --text-dim: #888888;
   --link-color: #34312d;
@@ -10733,6 +11302,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #121214;
   --bg-window: #1c1c20;
+  --palette-btn-bg: #1c1c20;
   --text-color: #ffffff;
   --text-dim: #7d7f85;
   --link-color: #f9e01e;
@@ -10773,6 +11343,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #dcdfe3;
   --bg-window: #eef0f3;
+  --palette-btn-bg: #eef0f3;
   --text-color: #141416;
   --text-dim: #36414e;
   --link-color: #c40000;
@@ -10813,6 +11384,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1e3a8a;
   --bg-window: #14285e;
+  --palette-btn-bg: #14285e;
   --text-color: #ffffff;
   --text-dim: #c7d2fe;
   --link-color: #00f0ff;
@@ -10853,6 +11425,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #141416;
   --bg-window: #1e1e24;
+  --palette-btn-bg: #1e1e24;
   --text-color: #e6e6e6;
   --text-dim: #737373;
   --link-color: #e00000;
@@ -10893,6 +11466,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #000000;
   --bg-window: #141414;
+  --palette-btn-bg: #141414;
   --text-color: #ffffff;
   --text-dim: #666666;
   --link-color: #00d8d8;
@@ -10933,6 +11507,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #ded6c4;
   --bg-window: #ded6c4;
+  --palette-btn-bg: #ded6c4;
   --text-color: #2b221a;
   --text-dim: #6b5847;
   --link-color: #e62b1e;
@@ -10973,6 +11548,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #191b20;
   --bg-window: #0f1013;
+  --palette-btn-bg: #0f1013;
   --text-color: #e8ebf0;
   --text-dim: #5c6370;
   --link-color: #00ff88;
@@ -11013,6 +11589,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #26282e;
   --bg-window: #1c1d22;
+  --palette-btn-bg: #1c1d22;
   --text-color: #f4f4f7;
   --text-dim: #6c727d;
   --link-color: #27ae60;
@@ -11053,6 +11630,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #18191d;
   --bg-window: #23252b;
+  --palette-btn-bg: #23252b;
   --text-color: #f5f0e1;
   --text-dim: #7a7e88;
   --link-color: #ff7700;
@@ -11093,6 +11671,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #c2c7cc;
   --bg-window: #c2c7cc;
+  --palette-btn-bg: #c2c7cc;
   --text-color: #26282d;
   --text-dim: #50555e;
   --link-color: #ff0033;
@@ -11133,6 +11712,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #e2e4e2;
   --bg-window: #f0f2f0;
+  --palette-btn-bg: #f0f2f0;
   --text-color: #1c1d20;
   --text-dim: #4e5158;
   --link-color: #1658b4;
@@ -11173,6 +11753,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #d4cfc7;
   --bg-window: #d4cfc7;
+  --palette-btn-bg: #d4cfc7;
   --text-color: #212328;
   --text-dim: #69717d;
   --link-color: #d32f2f;
@@ -11213,6 +11794,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1e4d8c;
   --bg-window: #133563;
+  --palette-btn-bg: #133563;
   --text-color: #ffffff;
   --text-dim: #c8d1d9;
   --link-color: #ff6f00;
@@ -11253,6 +11835,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #212121;
   --bg-window: #363636;
+  --palette-btn-bg: #363636;
   --text-color: #ffffff;
   --text-dim: #7d7d7d;
   --link-color: #ff6d00;
@@ -11293,6 +11876,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #18191c;
   --bg-window: #9eaa90;
+  --palette-btn-bg: #9eaa90;
   --text-color: #1b241a;
   --text-dim: #595e69;
   --link-color: #0088ff;
@@ -11333,6 +11917,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0d0d11;
   --bg-window: #15151c;
+  --palette-btn-bg: #15151c;
   --text-color: #ffffff;
   --text-dim: #5e5073;
   --link-color: #fcee0a;
@@ -11373,6 +11958,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #101014;
   --bg-window: #1c1c24;
+  --palette-btn-bg: #1c1c24;
   --text-color: #ffffff;
   --text-dim: #78879e;
   --link-color: #f5a623;
@@ -11413,6 +11999,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0e2417;
   --bg-window: #163824;
+  --palette-btn-bg: #163824;
   --text-color: #f5f0db;
   --text-dim: #527a63;
   --link-color: #ffd700;
@@ -11453,6 +12040,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #b71c1c;
   --bg-window: #c62828;
+  --palette-btn-bg: #c62828;
   --text-color: #f8f9fa;
   --text-dim: #e0d8d8;
   --link-color: #ffeb3b;
@@ -11493,6 +12081,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1f2127;
   --bg-window: #14151a;
+  --palette-btn-bg: #14151a;
   --text-color: #e0e0e0;
   --text-dim: #607d8b;
   --link-color: #ff6f00;
@@ -11533,6 +12122,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0c2340;
   --bg-window: #071526;
+  --palette-btn-bg: #071526;
   --text-color: #ffcc00;
   --text-dim: #a88700;
   --link-color: #f5f5f5;
@@ -11573,6 +12163,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #5c94fc;
   --bg-window: #3f78e0;
+  --palette-btn-bg: #3f78e0;
   --text-color: #ffffff;
   --text-dim: #ffffff;
   --link-color: #fcd116;
@@ -11613,6 +12204,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #141316;
   --bg-window: #1e1e24;
+  --palette-btn-bg: #1e1e24;
   --text-color: #f0f2f5;
   --text-dim: #9aa0a6;
   --link-color: #38e6d2;
@@ -11653,6 +12245,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #3d4528;
   --bg-window: #2a301b;
+  --palette-btn-bg: #2a301b;
   --text-color: #eef2e6;
   --text-dim: #707b53;
   --link-color: #e5a823;
@@ -11693,6 +12286,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #f8f9fa;
   --bg-window: #f8f9fa;
+  --palette-btn-bg: #f8f9fa;
   --text-color: #212529;
   --text-dim: #6c757d;
   --link-color: #e60000;
@@ -11733,6 +12327,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #121214;
   --bg-window: #1e1e24;
+  --palette-btn-bg: #1e1e24;
   --text-color: #f5f5f5;
   --text-dim: #78909c;
   --link-color: #d84315;
@@ -11773,6 +12368,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0a0a0c;
   --bg-window: #16161c;
+  --palette-btn-bg: #16161c;
   --text-color: #ffffff;
   --text-dim: #6e6e78;
   --link-color: #e60012;
@@ -11813,6 +12409,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0c0714;
   --bg-window: #180f26;
+  --palette-btn-bg: #180f26;
   --text-color: #ffffff;
   --text-dim: #5e3a8c;
   --link-color: #00ffff;
@@ -11853,6 +12450,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #002b36;
   --bg-window: #073642;
+  --palette-btn-bg: #073642;
   --text-color: #839496;
   --text-dim: #586e75;
   --link-color: #268bd2;
@@ -11893,6 +12491,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #fdf6e3;
   --bg-window: #eee8d5;
+  --palette-btn-bg: #eee8d5;
   --text-color: #657b83;
   --text-dim: #93a1a1;
   --link-color: #268bd2;
@@ -11933,6 +12532,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #2e3440;
   --bg-window: #3b4252;
+  --palette-btn-bg: #3b4252;
   --text-color: #eceff4;
   --text-dim: #a3b1c6;
   --link-color: #88c0d0;
@@ -11973,6 +12573,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1e1e2e;
   --bg-window: #181825;
+  --palette-btn-bg: #181825;
   --text-color: #cdd6f4;
   --text-dim: #a6adc8;
   --link-color: #89b4fa;
@@ -12013,6 +12614,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #282a36;
   --bg-window: #44475a;
+  --palette-btn-bg: #44475a;
   --text-color: #f8f8f2;
   --text-dim: #6272a4;
   --link-color: #8be9fd;
@@ -12053,6 +12655,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #282828;
   --bg-window: #3c3836;
+  --palette-btn-bg: #3c3836;
   --text-color: #ebdbb2;
   --text-dim: #a89984;
   --link-color: #83a598;
@@ -12093,6 +12696,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #1a1b26;
   --bg-window: #24283b;
+  --palette-btn-bg: #24283b;
   --text-color: #c0caf5;
   --text-dim: #565f89;
   --link-color: #7dcfff;
@@ -12133,6 +12737,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #140c1c;
   --bg-window: #30346d;
+  --palette-btn-bg: #30346d;
   --text-color: #deeed6;
   --text-dim: #8595a1;
   --link-color: #6dc2ca;
@@ -12173,6 +12778,7 @@ ul.card-list li strong {
   /* Sol.vin Theme Variables */
   --bg-color: #0d080d;
   --bg-window: #1f1624;
+  --palette-btn-bg: #1f1624;
   --text-color: #eef4f4;
   --text-dim: #756c7d;
   --link-color: #73a7c4;
