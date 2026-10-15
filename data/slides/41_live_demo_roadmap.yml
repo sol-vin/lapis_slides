@@ -36,15 +36,15 @@ steps:
       - 'Links shard dependency & generates typed API'
     highlight: ':plug: Turnkey Addon Ecosystem'
 
-  - phase: 'STEP 3 • IN-EDITOR'
-    title: 'Editor Features'
+  - phase: 'STEP 3 • EDITOR'
+    title: 'In-Editor'
     color: purple
     code: |
-      node Player < CharacterBody3D do
-        @[Export] property speed : Float32 = 14.0_f32
-        def _physics_process(delta) : Void
-          self.velocity = Vector3.new(speed, velocity.y, velocity.z)
-          move_and_slide
+      node Player < Node3D do
+        @[Export]
+        property speed : Float32 = 14.0
+        def _process(dt) : Void
+          move_local_x(speed * dt)
         end
       end
     lang: crystal

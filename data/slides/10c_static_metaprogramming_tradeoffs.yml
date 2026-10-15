@@ -30,11 +30,6 @@ left_bottom:
         {% raise "Undefined method '#{call.name}' for #{@type}" %}
       {% end %}
     end
-
-    case action_name # Static branch dispatch instead of #send:
-    when "jump"   then player.jump
-    when "attack" then player.attack
-    end
 right:
   type: card
   title: The Static Compilation Contract

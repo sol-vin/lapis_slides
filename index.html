@@ -2436,11 +2436,6 @@ target.instance_variable_set(&quot;@hp&quot;, 100) # Fixed memory layout!</code>
   {% else %}
     {% raise &quot;Undefined method &#39;#{call.name}&#39; for #{@type}&quot; %}
   {% end %}
-end
-
-case action_name # Static branch dispatch instead of #send:
-when &quot;jump&quot;   then player.jump
-when &quot;attack&quot; then player.attack
 end</code></pre>
             </div>
               </div>
@@ -10348,7 +10343,7 @@ $ lapis benchmarks --compare --tag 4.8-dev7 --prev-tag 4.8-dev6 --html
   ✔ 07. VectorMath2D (1M)      :  0.42 ms vs  0.42 ms (within noise)
   ✔ 08. TransformHierarchy     :  1.80 ms vs  1.92 ms (+6.3% faster)
 
-  [PASS] Regression Gate: 0 regressions detected. Geomean: 46.2x vs GDScript.
+  [PASS] Regression Gate: 0 regressions (46.2x geomean vs GDScript)
   ✔ Staged HTML Report: benchmarks/reports/comparison_4.8-dev7.html
   ✔ Staged SVG Visuals: benchmarks/reports/comparison_4.8-dev7.svg
   ✔ Appended Run to   : benchmarks/history.xml (Run ID #42)</code></pre>
@@ -10831,15 +10826,15 @@ bin/release_dist/
               </div>
               <div class="card demo-step-card" data-color="purple">
                 <div class="card-header">
-                  <span class="card-title">Editor Features</span>
-                  <span class="badge" data-color="purple">STEP 3 • IN-EDITOR</span>
+                  <span class="card-title">In-Editor</span>
+                  <span class="badge" data-color="purple">STEP 3 • EDITOR</span>
                 </div>
                 <div class="code-window" data-density="compact">
-                  <div class="window-body"><pre><code class="language-crystal">node Player &lt; CharacterBody3D do
-  @[Export] property speed : Float32 = 14.0_f32
-  def _physics_process(delta) : Void
-    self.velocity = Vector3.new(speed, velocity.y, velocity.z)
-    move_and_slide
+                  <div class="window-body"><pre><code class="language-crystal">node Player &lt; Node3D do
+  @[Export]
+  property speed : Float32 = 14.0
+  def _process(dt) : Void
+    move_local_x(speed * dt)
   end
 end</code></pre></div>
                 </div>

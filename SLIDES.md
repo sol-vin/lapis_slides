@@ -3957,7 +3957,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
     ✔ 07. VectorMath2D (1M)      :  0.42 ms vs  0.42 ms (within noise)
     ✔ 08. TransformHierarchy     :  1.80 ms vs  1.92 ms (+6.3% faster)
   
-    [PASS] Regression Gate: 0 regressions detected. Geomean: 46.2x vs GDScript.
+    [PASS] Regression Gate: 0 regressions (46.2x geomean vs GDScript)
     ✔ Staged HTML Report: benchmarks/reports/comparison_4.8-dev7.html
     ✔ Staged SVG Visuals: benchmarks/reports/comparison_4.8-dev7.svg
     ✔ Appended Run to   : benchmarks/history.xml (Run ID #42)
@@ -4115,7 +4115,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
   - Fetches release, validates SHA256 & unpacks
   - Auto-enables plugin in project.godot
   - Links shard dependency & generates typed API
-- **STEP 3 • IN-EDITOR — Editor Features**:
+- **STEP 3 • EDITOR — In-Editor**:
   - Declarative Ruby-like gameplay DSL in Crystal
   - Live inspector properties with typed range hints
   - Run game directly from Godot editor with F5
