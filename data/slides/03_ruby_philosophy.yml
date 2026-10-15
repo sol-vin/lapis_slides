@@ -8,6 +8,22 @@ palette: catppuccin_mocha
 layout: editorial-split
 numeral: '1995'
 headline: 'Human Happiness Over Machine Convenience'
+code:
+  title: 'natural_dsl.rb — Expressive Syntax & Domain Prose'
+  tag: 'Ruby'
+  lang: 'ruby'
+  density: 'compact'
+  code: |
+    # Everything is an object, blocks & predicates (?) read like prose:
+    3.times { spawn :slime, near: player }
+
+    party.select(&:wounded?).each do |ally|
+      ally.heal!(25) unless ally.cursed?
+    end
+
+    after 2.seconds do
+      announce "Wave cleared!" if enemies.none?(&:alive?)
+    end
 quote: 'Ruby is designed to make programmers happy. We need to focus on humans, on how humans care about doing programming.'
 attribution: 'Yukihiro “Matz” Matsumoto'
 cards:

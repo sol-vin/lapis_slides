@@ -96,6 +96,19 @@ Theme: `sol.vin` | Total Slides: 141
 - **Theme Palette**: `catppuccin_mocha` (Catppuccin Mocha)
 - **Headline**: Human Happiness Over Machine Convenience
 
+```ruby
+# Everything is an object, blocks & predicates (?) read like prose:
+3.times { spawn :slime, near: player }
+
+party.select(&:wounded?).each do |ally|
+  ally.heal!(25) unless ally.cursed?
+end
+
+after 2.seconds do
+  announce "Wave cleared!" if enemies.none?(&:alive?)
+end
+```
+
 > Ruby is designed to make programmers happy. We need to focus on humans, on how humans care about doing programming. — Yukihiro “Matz” Matsumoto
 
 - **Developer Happiness First**
