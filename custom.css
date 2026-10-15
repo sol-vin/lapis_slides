@@ -663,5 +663,11 @@
   box-shadow: 3px 3px 0px var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
 }
 
+.code-container pre code .hljs-number,
+.code-container pre code .hljs-literal {
+  color: var(--accent-quaternary, var(--accent-color)) !important;
+  font-weight: 600 !important;
+}
+
 
 

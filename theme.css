@@ -4708,6 +4708,7 @@ ul.card-list li strong {
 .code-container pre code .hljs-number,
 .code-container pre code .hljs-literal {
   color: var(--accent-quaternary, var(--accent-color)) !important;
+  font-weight: 600 !important;
 }
 
 .code-container pre code .hljs-comment,
@@ -8712,6 +8713,12 @@ body:has(#palette-swap-btn) .palette-corner-badge {
   box-shadow: 3px 3px 0px var(--border-active, var(--sunstone-border-active, #1c1c1e)) !important;
 }
 
+.code-container pre code .hljs-number,
+.code-container pre code .hljs-literal {
+  color: var(--accent-quaternary, var(--accent-color)) !important;
+  font-weight: 600 !important;
+}
+
 
 
 
@@ -11067,7 +11074,7 @@ body:has(#palette-swap-btn) .palette-corner-badge {
   --accent-color: #80deea;
   --accent-secondary: #ffffff;
   --accent-tertiary: #80deea;
-  --accent-quaternary: #266973;
+  --accent-quaternary: #a7ffeb;
   --shadow-color: #0f1318;
   --cube: #ffffff;
   --cube-hover: #80deea;
