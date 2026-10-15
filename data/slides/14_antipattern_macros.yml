@@ -1,54 +1,74 @@
 ---
 id: 14_antipattern_macros
-title: 'Metaprogramming: Strings vs. AST Macros'
-subtitle: String Dictionaries & Manual Wiring vs. Typed AST Macros
+title: 'Metaprogramming: Copy-Paste Boilerplate vs. AST Macros'
+subtitle: Repetitive Setter & Signal Clones vs. Single-Line Compile-Time Macro Expansion
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: amber
 palette: iwasbornintheusa
 layout: code-comparison-layout
 gdscript:
-  title: ':circle-xmark: GDScript & C++: Untyped Signal Emits & No AST Macros'
+  title: ':circle-xmark: GDScript: Repetitive Copy-Paste Setter & Signal Boilerplate'
   lang: gdscript
   tag: GDScript 4
+  font_size: '0.78rem'
   code: |
-    @export_range(10.0, 500.0, 5.0) var move_speed: float = 150.0
+    # Zero user macros: every clamped stat duplicates signals, vars & setters
+    signal health_changed(cur: int, max_val: int)
+    @export var max_health: int = 100
+    var health: int = 100:
+        set(v):
+            var prev = health; health = clampi(v, 0, max_health)
+            if health != prev: health_changed.emit(health, max_health)
 
-    # Signal parameter types in GDScript 4 are documentation-only!
-    signal player_hit(damage: int, source: Node)
+    signal mana_changed(cur: int, max_val: int)
+    @export var max_mana: int = 50
+    var mana: int = 50:
+        set(v):
+            var prev = mana; mana = clampi(v, 0, max_health) # Copy-paste bug!
+            if mana != prev: mana_changed.emit(mana, max_mana)
 
-    func take_damage(dmg: int) -> void:
-        # Wrong argument types or counts are NOT checked by the parser:
-        player_hit.emit("not_an_int") # Compiles cleanly, fails at runtime!
-
-    # And in godot-cpp, exposing properties & signals requires manual
-    # ClassDB::bind_method + ADD_PROPERTY + ADD_SIGNAL boilerplate.
+    signal stamina_changed(cur: int, max_val: int)
+    @export var max_stamina: int = 100
+    var stamina: int = 100:
+        set(v):
+            var prev = stamina; stamina = clampi(v, 0, max_stamina)
+            if stamina != prev: stamina_changed.emit(stamina, max_stamina)
   points:
-  - <strong>Unchecked Signal Signatures:</strong> GDScript 4 signal type annotations are documentation-only; <code>Signal.emit(...)</code> is variadic and unchecked.
-  - <strong>No User Metaprogramming:</strong> GDScript has built-in <code>@export</code> tags, but zero user-definable macros or AST transforms to eliminate repetitive code.
-  - <strong>Manual C++ Registration:</strong> In <code>godot-cpp</code>, every property and signal requires manual string registration inside <code>_bind_methods()</code>.
+  - <strong>Zero User-Definable Macros:</strong> GDScript has no AST macros, forcing you to copy-paste identical setter, clamping, and signal boilerplate for every attribute.
+  - <strong>Silent Copy-Paste Bugs:</strong> Forgetting to rename one variable in a pasted block (e.g. clamping <code>mana</code> to <code>max_health</code>) compiles cleanly and breaks gameplay.
+  - <strong>N-Way Maintenance Tax:</strong> Adding a <code>*_depleted</code> check or network sync flag requires manually editing every duplicated setter across the codebase.
 crystal:
-  title: ':sparkles: Crystal: Compile-Time AST Macro Synthesis'
+  title: ':sparkles: Crystal: Write the Pattern Once with an AST Macro'
   lang: crystal
   tag: Crystal (Lapis)
+  font_size: '0.78rem'
   code: |
-    # Declarative compile-time annotations publish directly to Godot ClassDB
-    @[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
-    property move_speed : Float32 = 150.0_f32
+    # 1. Define a reusable compile-time AST macro ONCE:
+    macro stat(name, default_max)
+      property max_{{name.id}} : Int32 = {{default_max}}
+      getter {{name.id}} : Int32 = {{default_max}}
+      signal {{name.id}}_changed(current : Int32, max : Int32)
 
-    # Type-safe signal definition synthesizes emit and listener helpers:
-    signal player_hit(damage : Int32, source : Player)
-
-    def take_damage(dmg : Int32) : Void
-      # Compile-time checked: typos or wrong arg types fail during compilation!
-      emit(player_hit, dmg, self)
-      # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
+      def {{name.id}}=(val : Int32) : Int32
+        prev = @{{name.id}}
+        @{{name.id}} = val.clamp(0, @max_{{name.id}})
+        emit({{name.id}}_changed, @{{name.id}}, @max_{{name.id}}) if @{{name.id}} != prev
+        @{{name.id}}
+      end
     end
+
+    # 2. Stamp out complete, bug-free stat pipelines in one line each:
+    stat :health,  100
+    stat :mana,     50
+    stat :stamina, 100
   points:
-  - <strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc comments and ranges directly into Godot ClassDB at compile time.
-  - <strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player_hit, dmg, self)</code> validates exact argument types and arity during compilation.
-  - <strong>User-Extensible AST Macros:</strong> Write your own compile-time macros for FSMs, object pools, RPCs, and serialization with zero runtime reflection.
+  - <strong>Single Source of Truth:</strong> <code>macro stat</code> synthesizes the backing fields, typed <code>signal</code>, and clamping setter at compile time from a 1-line declaration.
+  - <strong>Copy-Paste Bugs Eliminated:</strong> Identifier interpolation (<code>{{name.id}}</code>) guarantees <code>mana</code> never accidentally references <code>max_health</code>.
+  - <strong>Zero Runtime Overhead:</strong> Expands directly into native inline methods and typed signals before LLVM codegen—no wrapper objects or runtime reflection.
 takeaway:
-  badge: ZERO-REFLECTION METAPROGRAMMING
-  text: Crystal AST macros execute at compile time, eliminating manual C++ registration and catching signal signature mismatches before launch.
+  badge: DRY BY CONSTRUCTION • ZERO BOILERPLATE
+  text: When you find yourself copy-pasting the same 8-line pattern across a node, a Crystal AST macro turns it into a single declarative line with zero runtime cost.
 notes: |
-  While Godot 4 added built-in @export annotations to GDScript, signal parameter types in GDScript are still documentation-only—calling player_hit.emit with the wrong types or argument count is not caught at parse time. Furthermore, GDScript does not support user-defined macros, and C++ requires manual ClassDB::_bind_methods() wiring for every property and signal. In Lapis, Crystal's compile-time AST macros generate strongly-typed signal accessors and full ClassDB registrations with zero runtime reflection.
+  Every game has repeated structural patterns—clamped RPG stats (health, mana, stamina, shield) that emit change signals, cooldown timers, dirty-flagged network properties, or state hooks. Because GDScript has no user-definable macros, developers are forced to copy-paste the same 7-line signal, export, and setter block over and over. Not only does this bloat your script, it breeds classic copy-paste bugs—like pasting the health setter for mana and forgetting to change max_health to max_mana, which compiles without warning because max_health is in scope.
+  In Crystal, you capture the pattern once in a compile-time AST macro. Writing 'stat :health, 100', 'stat :mana, 50', and 'stat :stamina, 100' expands at compile time into the exact same native properties, clamping setters, and strongly-typed signals—with zero runtime wrapper objects, zero reflection, and zero chance of a copy-paste typo.
+

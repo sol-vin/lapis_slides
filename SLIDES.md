@@ -1,7 +1,7 @@
 # Lapis for Crystal — Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
 
 Author: sol.vin
-Theme: `sol.vin` | Total Slides: 142
+Theme: `sol.vin` | Total Slides: 141
 
 ---
 
@@ -2248,53 +2248,70 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 74: Metaprogramming: Strings vs. AST Macros [Step 1: Code]
+### Slide 74: Metaprogramming: Copy-Paste Boilerplate vs. AST Macros [Step 1: Code]
 - **Palette**: `iwasbornintheusa` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
-- **:circle-xmark: GDScript & C++: Untyped Signal Emits & No AST Macros**:
+- **:circle-xmark: GDScript: Repetitive Copy-Paste Setter & Signal Boilerplate**:
   ```gdscript
-  @export_range(10.0, 500.0, 5.0) var move_speed: float = 150.0
+  # Zero user macros: every clamped stat duplicates signals, vars & setters
+  signal health_changed(cur: int, max_val: int)
+  @export var max_health: int = 100
+  var health: int = 100:
+      set(v):
+          var prev = health; health = clampi(v, 0, max_health)
+          if health != prev: health_changed.emit(health, max_health)
   
-  # Signal parameter types in GDScript 4 are documentation-only!
-  signal player_hit(damage: int, source: Node)
+  signal mana_changed(cur: int, max_val: int)
+  @export var max_mana: int = 50
+  var mana: int = 50:
+      set(v):
+          var prev = mana; mana = clampi(v, 0, max_health) # Copy-paste bug!
+          if mana != prev: mana_changed.emit(mana, max_mana)
   
-  func take_damage(dmg: int) -> void:
-      # Wrong argument types or counts are NOT checked by the parser:
-      player_hit.emit("not_an_int") # Compiles cleanly, fails at runtime!
-  
-  # And in godot-cpp, exposing properties & signals requires manual
-  # ClassDB::bind_method + ADD_PROPERTY + ADD_SIGNAL boilerplate.
+  signal stamina_changed(cur: int, max_val: int)
+  @export var max_stamina: int = 100
+  var stamina: int = 100:
+      set(v):
+          var prev = stamina; stamina = clampi(v, 0, max_stamina)
+          if stamina != prev: stamina_changed.emit(stamina, max_stamina)
   ```
-- **:sparkles: Crystal: Compile-Time AST Macro Synthesis**:
+- **:sparkles: Crystal: Write the Pattern Once with an AST Macro**:
   ```crystal
-  # Declarative compile-time annotations publish directly to Godot ClassDB
-  @[Export(range: 10.0_f32..500.0_f32, step: 5.0_f32)]
-  property move_speed : Float32 = 150.0_f32
+  # 1. Define a reusable compile-time AST macro ONCE:
+  macro stat(name, default_max)
+    property max_{{name.id}} : Int32 = {{default_max}}
+    getter {{name.id}} : Int32 = {{default_max}}
+    signal {{name.id}}_changed(current : Int32, max : Int32)
   
-  # Type-safe signal definition synthesizes emit and listener helpers:
-  signal player_hit(damage : Int32, source : Player)
-  
-  def take_damage(dmg : Int32) : Void
-    # Compile-time checked: typos or wrong arg types fail during compilation!
-    emit(player_hit, dmg, self)
-    # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
+    def {{name.id}}=(val : Int32) : Int32
+      prev = @{{name.id}}
+      @{{name.id}} = val.clamp(0, @max_{{name.id}})
+      emit({{name.id}}_changed, @{{name.id}}, @max_{{name.id}}) if @{{name.id}} != prev
+      @{{name.id}}
+    end
   end
+  
+  # 2. Stamp out complete, bug-free stat pipelines in one line each:
+  stat :health,  100
+  stat :mana,     50
+  stat :stamina, 100
   ```
 
 ---
 
-### Slide 75: Metaprogramming: Strings vs. AST Macros [Step 2: Analysis & Critique]
+### Slide 75: Metaprogramming: Copy-Paste Boilerplate vs. AST Macros [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Unchecked Signal Signatures: GDScript 4 signal type annotations are documentation-only; Signal.emit(...) is variadic and unchecked.
-  - No User Metaprogramming: GDScript has built-in @export tags, but zero user-definable macros or AST transforms to eliminate repetitive code.
-  - Manual C++ Registration: In godot-cpp, every property and signal requires manual string registration inside _bind_methods().
+  - Zero User-Definable Macros: GDScript has no AST macros, forcing you to copy-paste identical setter, clamping, and signal boilerplate for every attribute.
+  - Silent Copy-Paste Bugs: Forgetting to rename one variable in a pasted block (e.g. clamping mana to max_health) compiles cleanly and breaks gameplay.
+  - N-Way Maintenance Tax: Adding a *_depleted check or network sync flag requires manually editing every duplicated setter across the codebase.
 - **Solution Advantages**:
-  - Declarative Annotations: @[Export] extracts doc comments and ranges directly into Godot ClassDB at compile time.
-  - Type-Safe emit Macro: emit(player_hit, dmg, self) validates exact argument types and arity during compilation.
-  - User-Extensible AST Macros: Write your own compile-time macros for FSMs, object pools, RPCs, and serialization with zero runtime reflection.
-- **Key Takeaway**: Crystal AST macros execute at compile time, eliminating manual C++ registration and catching signal signature mismatches before launch.
+  - Single Source of Truth: macro stat synthesizes the backing fields, typed signal, and clamping setter at compile time from a 1-line declaration.
+  - Copy-Paste Bugs Eliminated: Identifier interpolation ({{name.id}}) guarantees mana never accidentally references max_health.
+  - Zero Runtime Overhead: Expands directly into native inline methods and typed signals before LLVM codegen—no wrapper objects or runtime reflection.
+- **Key Takeaway**: When you find yourself copy-pasting the same 8-line pattern across a node, a Crystal AST macro turns it into a single declarative line with zero runtime cost.
 
 **Presenter Notes**:
-> While Godot 4 added built-in @export annotations to GDScript, signal parameter types in GDScript are still documentation-only—calling player_hit.emit with the wrong types or argument count is not caught at parse time. Furthermore, GDScript does not support user-defined macros, and C++ requires manual ClassDB::_bind_methods() wiring for every property and signal. In Lapis, Crystal's compile-time AST macros generate strongly-typed signal accessors and full ClassDB registrations with zero runtime reflection.
+> Every game has repeated structural patterns—clamped RPG stats (health, mana, stamina, shield) that emit change signals, cooldown timers, dirty-flagged network properties, or state hooks. Because GDScript has no user-definable macros, developers are forced to copy-paste the same 7-line signal, export, and setter block over and over. Not only does this bloat your script, it breeds classic copy-paste bugs—like pasting the health setter for mana and forgetting to change max_health to max_mana, which compiles without warning because max_health is in scope.
+> In Crystal, you capture the pattern once in a compile-time AST macro. Writing 'stat :health, 100', 'stat :mana, 50', and 'stat :stamina, 100' expands at compile time into the exact same native properties, clamping setters, and strongly-typed signals—with zero runtime wrapper objects, zero reflection, and zero chance of a copy-paste typo.
 
 ---
 
@@ -2302,37 +2319,41 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Palette**: `gamestation_3` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing**:
   ```gdscript
-  class_name CombatEvent extends RefCounted:
-      var damage: float; var element: int; var crit: bool
-      func _init(d: float, e: int, c: bool):
-          damage = d; element = e; crit = c
+  class CombatEvent extends RefCounted:
+      var damage: float; var element: int; var critical: bool
+      func _init(d: float, e: int, c: bool = false) -> void:
+          damage = d; element = e; critical = c
   
-  # 10,000 separate heap mallocs + atomic refcount updates:
+  # 1. Passing RefCounted: heap pointer chase + atomic refcount churn!
+  func apply_damage(event: CombatEvent) -> void:
+      health -= event.damage * 2.0 if event.critical else event.damage
+  
+  # 2. 10,000 separate heap mallocs scattered across RAM:
   var events: Array[CombatEvent] = []
-  for e in enemies:
+  for i in 10_000:
       events.append(CombatEvent.new(45.0, 1, true))
-  
-  # Cache disaster: Array of 10,000 pointers scattered in RAM
   for evt in events:
-      apply_damage(evt.damage) # 10,000 pointer chases!
-  events.clear() # 10,000 synchronous atomic decrements + heap frees
+      apply_damage(evt) # 10,000 pointer chases + cache misses!
+  events.clear()        # 10,000 atomic decrements + heap frees!
   ```
 - **:sparkles: Crystal: CPU Register Value Passing & Flat Contiguous Buffers**:
   ```crystal
   struct CombatEvent
-    getter damage : Float32, element : ElementType, critical : Bool
+    getter damage : Float32, element : ElementType
+    getter? critical : Bool
     def initialize(@damage, @element, @critical = false); end
   end
   
-  # 1. Ephemeral event in CPU registers: 0 heap allocations!
+  # 1. Passed by value in CPU registers: 0 heap allocations!
   def apply_damage(event : CombatEvent) : Void
     @health -= event.critical? ? event.damage * 2.0_f32 : event.damage
   end
   
-  # 2. 10,000 structs inlined into ONE flat 120 KB buffer (or FrameScratch):
+  # 2. 10,000 structs inlined into ONE flat 120 KB buffer (or FrameArena):
   events = Array(CombatEvent).new(10_000)
   10_000.times { events << CombatEvent.new(45.0_f32, ElementType::Fire, true) }
-  events.each { |evt| apply_damage(evt) } # Linear cache sweep!
+  events.each { |evt| apply_damage(evt) } # Linear L1 cache sweep!
+  events.clear                            # O(1) reset — 0 heap frees!
   ```
 
 ---
@@ -2340,131 +2361,97 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ### Slide 77: Value Types: Heap Churn vs. Stack Structs [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Heap Thrashing for Ephemeral Data: 10,000 events require 10,000 individual heap allocations and atomic reference-count updates.
-  - Pointer Chasing & Cache Misses: Array[CombatEvent] stores scattered 64-bit pointers, thrashing CPU L1/L2 caches.
+  - Pointer Chasing & Cache Misses: Array[CombatEvent] stores scattered 64-bit pointers, thrashing CPU L1/L2 caches in apply_damage.
   - Synchronous Teardown Spikes: events.clear() runs 10,000 atomic refcount decrements and memdelete calls on the main thread.
 - **Solution Advantages**:
-  - Zero-Heap Value Passing: Passing CombatEvent copies directly in CPU registers or on the stack with 0 heap bytes.
+  - Zero-Heap Value Passing: Passing CombatEvent to apply_damage copies directly in CPU registers or on the stack with 0 heap bytes.
   - Contiguous Cache Line Saturation: Array(CombatEvent) embeds structs inline into a single 120 KB buffer.
-  - FrameArena Bump Allocation: Use Lapis.frame_arena (FrameScratch) for $O(1)$ per-frame scratch slices reset at frame end.
-- **Key Takeaway**: Stack-allocated structs and per-frame bump arenas eliminate thousands of heap allocations per frame, delivering C cache locality with clean object syntax.
+  - Instant $O(1)$ Reset & FrameArena: events.clear resets the buffer length in $O(1)$ with zero deallocations (or use Lapis.frame_arena).
+- **Key Takeaway**: Stack-allocated structs and contiguous value buffers eliminate thousands of heap allocations and pointer chases per frame.
 
 **Presenter Notes**:
-> In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types extend RefCounted. When you spawn 10,000 projectiles or process 10,000 combat events, Godot performs 10,000 individual heap allocations and atomic refcount updates. An array of these objects is an array of pointer addresses scattered across memory, causing L1 cache miss penalties. When cleared, 10,000 synchronous atomic decrements and heap frees run on the main thread.
-> In Crystal, structs are value types passed directly in CPU registers or on the stack. An Array(CombatEvent) stores the 12-byte structs contiguously in a single 120 KB block, and Lapis also provides Lapis.frame_arena for O(1) bump-allocated per-frame scratch buffers.
+> In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types extend RefCounted. When you spawn 10,000 combat events and pass them to apply_damage(evt), Godot performs 10,000 individual heap allocations and atomic refcount updates. An array of these objects is an array of pointer addresses scattered across memory, causing L1/L2 cache miss penalties on every apply_damage call. Worse, when events.clear() is called, 10,000 synchronous atomic decrements and heap frees run on the main thread.
+> In Crystal, structs are value types passed directly in CPU registers or on the stack. An Array(CombatEvent) stores the 12-byte structs contiguously in a single 120 KB block, events.clear resets the count in O(1) with zero deallocations, and Lapis also provides Lapis.frame_arena for O(1) bump-allocated per-frame scratch buffers.
 
 ---
 
-### Slide 78: Type Firewall: Crystal Enforces Strict Safety on GDScript [Step 1: Code]
+### Slide 78: Lapis.frame_arena: Zero-GC Linear Frame Scratchpad
+- **Theme Palette**: `cross_cube` (CrossCube)
+- **Badge**: `MEMORY ARCHITECTURE • ZERO ALLOCATION`
+- **Title**: Lapis.frame_arena: Zero-GC Linear Frame Scratchpad
+- **Subtitle**: Pointer-Bump Per-Frame Memory, Scoped Rewinds & O(1) Tick Reset
+- **Code (combat_arena.cr — Per-Frame Scratch Slices, Buffers & Scopes)**:
+  ```crystal
+  node CombatSystem < Node3D do
+    def _physics_process(delta : Float64) : Void
+      # 1. Carve an appendable ArenaBuffer(T) from the 1 MiB FrameArena:
+      hits = Lapis.frame_arena.buffer(CombatEvent, 256)
+      hits << CombatEvent.new(45.0_f32, ElementType::Fire, true)
+      hits.each { |evt| apply_damage(evt) } # Strictly 0 GC heap bytes!
+  
+      # 2. Sub-frame checkpoint scope: rewinds bump cursor on block exit!
+      Lapis.frame_scope do |arena|
+        verts = arena.alloc_slice(Vector3, 512)
+        build_debug_wireframe(verts) # Reuses L1-hot cache lines!
+      end
+  
+      # 3. Declarative builder DSL & real-time telemetry snapshot:
+      Lapis.frame_arena do |fa|
+        ptr = fa.push(Transform3D.identity)
+        stats = fa.arena.stats # high_water_mark, utilization, overflow_count
+      end
+    end
+  end
+  ```
+- **Inside Lapis::Core::FrameArena**:
+  - 1 MiB Linear Bump Allocator: Pre-allocates a contiguous scratchpad (configurable via FrameArena.configure); allocations are an 8-byte aligned offset bump.
+  - Typed ArenaBuffer(T) & Slice(T): Stack-allocated buffer views support <<, push_line, each, and to_slice with @[ZeroAllocation].
+  - Nested frame_scope Checkpoints: Captures arena.mark and automatically rewinds the cursor on exit to recycle L1 cache lines mid-frame.
+  - $O(1)$ Tick Reset & Telemetry: Lapis.tick_frame_arena! resets @offset = 0 in one instruction while tracking high_water_mark and utilization.
+
+**Presenter Notes**:
+> Even with value-type structs, games frequently need variable-length temporary arrays during a single frame—for spatial query results, combat event queues, signal broadcast payloads, or immediate-mode debug geometry in Diorite. Allocating and freeing those buffers on the heap every tick creates unnecessary GC pressure.
+> Lapis solves this with Lapis.frame_arena (backed by Lapis::Core::FrameArena). It pre-allocates a contiguous 1 MiB linear scratchpad. Calling Lapis.frame_arena.buffer(CombatEvent, 256) or alloc_slice(Vector3, 512) simply bumps an 8-byte aligned integer offset—taking nanoseconds with strictly zero Boehm GC heap allocations.
+> For temporary mid-frame calculations, Lapis.frame_scope records the current bump offset and immediately rewinds it when the block exits, keeping the working set inside L1 CPU cache. At the end of the engine tick, Lapis.tick_frame_arena! resets the cursor to zero in O(1) time while preserving high-water-mark telemetry via arena.stats.
+
+---
+
+### Slide 79: Type Firewall: Crystal Enforces Strict Safety on GDScript
 - **Palette**: `former_rain` | **Badge**: `INTEROPERABILITY • TYPE FIREWALL`
-- **:circle-xmark: GDScript: Duck-Typing & Malformed Arguments**:
-  ```gdscript
-  # GDScript is dynamic: data from JSON, RPCs, or UI may be untyped
-  func _on_potion_consumed(data: Variant) -> void:
-      # A bug passes a String instead of an Int:
-      player.heal("some bad string")
-  
-      # In standard unverified C++ bindings:
-      # -> Silent memory corruption or bizarre garbage values!
-      # In Lapis:
-      # -> Godot engine boundary immediately intercepts & halts:
-      # "Invalid call. Argument 1 (String) cannot be converted to int."
-  ```
-- **:sparkles: Crystal: Strongly-Typed ClassDB Registration**:
-  ```crystal
-  node Player < CharacterBody3D do
-    # Lapis registers exact parameter type (INT) in ClassDB:
-    def heal(amount : Int32) : Int32
-      @health += amount
-      emit(health_changed, @health)
-      @health
-    end
-  end
-  
-  # THE LAPIS TYPE FIREWALL:
-  # 1. GDExtension validates types before invoking native code
-  # 2. Strict Variant unboxing: TypeCastError on mismatch
-  # 3. Crystal method is NEVER executed with malformed data!
-  ```
-
----
-
-### Slide 79: Type Firewall: Crystal Enforces Strict Safety on GDScript [Step 2: Analysis & Critique]
-- **Critique Points**:
-  - Duck-Typing Pitfall: Dynamic dictionaries and RPC packets can easily pass strings where numbers are expected.
-  - Memory Corruption Risk: Untyped native bindings risk severe memory corruption on illegal type reinterpretation.
-  - Perimeter Interception: Lapis ensures the Godot engine catches malformed calls at the boundary before execution.
-- **Solution Advantages**:
-  - ClassDB Type Metadata: Method signatures register with exact GDExtension Variant types (INT, FLOAT).
-  - GDExtension Perimeter Guard: The engine validates argument types before method dispatch occurs.
-  - Guaranteed Internal Invariants: Inside Crystal, amount is guaranteed to be a valid Int32 with zero runtime checks.
-- **Key Takeaway**: Crystal acts as a strongly-typed shield for your game, preventing untyped GDScript and RPC inputs from polluting core logic.
+- **1. Untyped GDScript / RPC Caller**:
+- **2. Crystal Node (Protected Core)**:
+- **3. How the Firewall Works**:
+  - 1. ClassDB Type Metadata: Lapis macros publish exact Variant::Type (INT, FLOAT, OBJECT) and class hints to Godot at startup.
+  - 2. Inheritance & Liveness Gate: Incoming object pointers are verified via find_alive_instance and object_is_class before unboxing.
+  - 3. Safe Enum Coercion: _godot_set_property guards enums via Enum.from_value?(v) || current, rejecting invalid integers.
+  - Zero Internal Paranoia: Malformed GDScript calls never enter Crystal—your core methods run at bare-metal speed without defensive checks.
 
 **Presenter Notes**:
-> What happens when dynamic GDScript tries to pass bad data into your Crystal code? If someone calls `player.heal("some bad string")`, in naive C++ bindings that might cause memory corruption or bizarre behavior. But Lapis automatically registers exact parameter types directly into Godot's ClassDB. The GDExtension layer validates the arguments before the method is ever called, rejecting malformed calls with an explicit engine error. Crystal acts as a strongly-typed firewall protecting your game's integrity.
+> What happens when dynamic GDScript, an unvalidated JSON save file, or a network dictionary passes malformed data into your Crystal node? In naive C++ bindings, reinterpreting a Variant pointer without strict checks causes immediate memory corruption or garbage values.
+> Lapis builds a 3-layer Type Firewall right into the generated ClassDB bridge:
+> First, every method parameter and exported property registers its exact Variant type and class constraint with Godot's ClassDB, so calling player.heal("fifty_hp") is intercepted at the boundary before native code ever runs.
+> Second, object arguments like equip_weapon(weapon : Weapon) verify both ObjectDB liveness and ClassDB inheritance before unboxing the pointer.
+> Third, property setters generated by _godot_set_property use safe enum lookup (Stance.from_value?(val) || self.stance), so out-of-range integers from dynamic .set() calls cannot put your Crystal enum into an illegal state.
 
 ---
 
-### Slide 80: Memory Safety: Dangling Pointers vs. Protection [Step 1: Code]
+### Slide 80: Memory Safety: Dangling Pointers vs. Dead-Pointer Armor
 - **Palette**: `catppuccin_mocha` | **Badge**: `NATIVE C++ ANTI-PATTERN • MEMORY SAFETY`
-- **:circle-xmark: Unshielded Native C++: Dangling Pointer Crashes**:
-  ```cpp
-  // Combat target Node* acquired earlier in godot-cpp:
-  Enemy *target = get_node<Enemy>("Boss");
-  ObjectID target_id = target->get_instance_id();
-  
-  void cast_spell(const Ref<Spell> &spell) {
-      // Boss died from poison & called queue_free()!
-      // Raw Enemy* still points to freed C++ memory:
-      target->take_damage(spell->get_power());
-      // FATAL: 0xC0000005 ACCESS_VIOLATION segfault!
-  
-      // Manual ObjectDB guard required before every call:
-      if (ObjectDB::get_instance(target_id) != nullptr) {
-          target->take_damage(spell->get_power());
-      }
-  }
-  ```
-- **:sparkles: Crystal: Monotonic ObjectDB & Dead-Pointer Armor**:
-  ```crystal
-  property target : Enemy?
-  
-  def cast_spell(spell : Spell) : Void
-    # 1. Dead-Pointer Safe try? Invocation:
-    # Evaluates only if target is alive in ObjectDB:
-    @target.try?(&.take_damage(spell.power)) ||
-      find_next_target
-  
-    # 2. Or Monotonic ID Check on Direct Dispatch:
-    # Checks ObjectDB; raises DisposedObjectError:
-    if enemy = @target
-      enemy.take_damage(spell.power)
-    end
-  rescue ex : Godot::DisposedObjectError
-    # Catchable! Retarget gracefully, zero segfaults:
-    find_next_target
-  end
-  ```
-
----
-
-### Slide 81: Memory Safety: Dangling Pointers vs. Protection [Step 2: Analysis & Critique]
-- **Critique Points**:
-  - Deallocated Native Memory: Node is not reference-counted; queue_free() deletes the C++ instance while raw Enemy* pointers remain dangling.
-  - Fatal Engine Segfault: Dereferencing a freed Node* crashes immediately with 0xC0000005 ACCESS_VIOLATION and no managed stack trace.
-  - Manual ObjectID Tracking: C++ callers must manually store ObjectID and query ObjectDB::get_instance(id) before every dereference.
-- **Solution Advantages**:
-  - Dead-Pointer Armor with try?: @target.try?(&.take_damage(...)) inspects ObjectDB survival, executing only on living nodes and returning nil on freed targets.
-  - Monotonic 64-Bit Instance IDs: Godot ObjectDB IDs never collide with recycled heap addresses.
-  - Automatic #check_alive!: Lapis validates instance liveness before every method dispatch automatically.
-  - Catchable Exceptions: Direct access on freed objects raises a catchable DisposedObjectError instead of segfaulting.
-- **Key Takeaway**: Lapis checks Godot's 64-bit ObjectDB instance IDs before dispatch, converting native dead-pointer segfaults into catchable DisposedObjectError exceptions.
+- **1. Native C++: Dangling Node* & ABA Trap**:
+- **2. Crystal: .try?, onready & Catchable Errors**:
+- **3. How Dead-Pointer Armor Works**:
+  - 1. .try vs. .try? (if_alive): Standard .try checks for Nil; Lapis's .try? checks both Nil and ObjectDB liveness, returning nil if freed.
+  - 2. ABA Recycled-Pointer Immunity: Every wrapper snapshots its monotonic 64-bit @instance_id. Even if C++ reuses the heap address, IDs never collide.
+  - 3. Catchable DisposedObjectError: onready getters and #check_alive! zero @pointer and raise a clean exception instead of segfaulting.
+  - 4. Tombstone Forensics: Compile with -Dtrace_dead_pointers to log the exact backtrace where the freed object was destroyed.
 
 **Presenter Notes**:
-> The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If native code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully.
+> The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing across frames. Because Godot's Node class is not reference-counted, calling queue_free() deletes the underlying C++ memory at the end of the frame. If a homing missile or combat script holds a cached pointer to that enemy, two catastrophic things happen in C++: either dereferencing the freed pointer triggers an immediate 0xC0000005 ACCESS_VIOLATION segfault, or the C++ heap allocator reuses that exact memory address for a newly spawned object—the classic ABA problem—causing vtable corruption.
+> Lapis solves this at the root. Every Godot::Object wrapper snapshots its monotonic 64-bit ObjectDB instance_id on creation. When holding an optional reference across frames, calling .try? (or .if_alive) checks both for Nil and queries ObjectDB to verify the 64-bit ID is still alive. And if you access a freed node through an onready property or #check_alive!, Lapis zeroes the stale pointer and raises a catchable DisposedObjectError—with full tombstone backtrace support via -Dtrace_dead_pointers.
 
 ---
 
-### Slide 82: Signals & Async: String Awaits vs. Typed Handles [Step 1: Code]
+### Slide 81: Signals & Async: String Awaits vs. Typed Handles [Step 1: Code]
 - **Palette**: `oled_micro` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Unsafe Await & Leaked Coroutines**:
   ```gdscript
@@ -2500,7 +2487,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 83: Signals & Async: String Awaits vs. Typed Handles [Step 2: Analysis & Critique]
+### Slide 82: Signals & Async: String Awaits vs. Typed Handles [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Infinite Hang Risk: await boss.died hangs indefinitely if the target node is freed before emitting.
   - No Built-In Timeouts: Adding timeouts requires manual timer nodes and complex cleanup logic.
@@ -2516,7 +2503,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 84: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 1: Code]
+### Slide 83: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 1: Code]
 - **Palette**: `oled_micro` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Dangling Timers & Node Leaks**:
   ```gdscript
@@ -2562,7 +2549,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 85: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 2: Analysis & Critique]
+### Slide 84: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Node Sprawl: Creating intervals requires spawning extra Timer nodes in the scene tree and manually wiring signals.
   - Dangling Callbacks: SceneTreeTimer continues ticking even if the target node is destroyed, causing crashes on freed instances.
@@ -2580,7 +2567,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 86: Async Triad: "await", "await?", and "await!"
+### Slide 85: Async Triad: "await", "await?", and "await!"
 - **Theme Palette**: `oled_micro` (OLED Micro)
 - **Badge**: `LAPIS ASYNC • SIGNAL AWAITING`
 - **Title**: Async Triad: "await", "await?", and "await!"
@@ -2621,7 +2608,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 87: Fearless Concurrency & Multiplayer (ACT IV • CHAPTER 05)
+### Slide 86: Fearless Concurrency & Multiplayer (ACT IV • CHAPTER 05)
 - **Title**: Fearless Concurrency & Multiplayer
 - **Subtitle**: Lightweight Fibers, Lock-Free Channels, Main-Thread Dispatch & Authoritative RPCs
 - **Chapter Highlights**:
@@ -2636,7 +2623,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 88: Concurrency: Lightweight Fibers & Signal Awaiting
+### Slide 87: Concurrency: Lightweight Fibers & Signal Awaiting
 - **Theme Palette**: `pastel` (Pastel)
 - **Badge**: `CONCURRENCY ARCHITECTURE • FIBERS`
 - **Title**: Concurrency: Lightweight Fibers & Signal Awaiting
@@ -2675,7 +2662,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 89: Concurrency: Parallel OS Threads & SceneTree Safety
+### Slide 88: Concurrency: Parallel OS Threads & SceneTree Safety
 - **Theme Palette**: `pastel` (Pastel)
 - **Badge**: `CONCURRENCY ARCHITECTURE • OS THREADS & SAFETY`
 - **Title**: Concurrency: Parallel OS Threads & SceneTree Safety
@@ -2710,7 +2697,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 90: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 1: Code]
+### Slide 89: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 1: Code]
 - **Palette**: `datacorder_464` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Mutex Locking & SceneTree Hazard**:
   ```gdscript
@@ -2753,7 +2740,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 91: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 2: Analysis & Critique]
+### Slide 90: Concurrency: Mutex Deadlocks vs. CSP Actor Channels [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Manual Mutex Locking: Prone to race conditions, priority inversions, and deadlocks.
   - SceneTree Thread Invariants: Mutating nodes from background threads corrupts Godot's internal structures.
@@ -2769,7 +2756,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 92: Thread & Scope Policies
+### Slide 91: Thread & Scope Policies
 - **Theme Palette**: `silicon_indigo` (Silicon Indigo)
 - **Badge**: `CONCURRENCY SAFETY • THREAD AFFINITY`
 - **Title**: Thread & Scope Policies
@@ -2804,7 +2791,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 93: Main-Thread Dispatch
+### Slide 92: Main-Thread Dispatch
 - **Theme Palette**: `silicon_indigo` (Silicon Indigo)
 - **Badge**: `THREAD SYNCHRONIZATION • ENGINE QUEUE`
 - **Title**: Main-Thread Dispatch
@@ -2843,7 +2830,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 94: Multiplayer: Authoritative RPCs & Lockstep Sync
+### Slide 93: Multiplayer: Authoritative RPCs & Lockstep Sync
 - **Theme Palette**: `playtoy` (PlayToy)
 - **Badge**: `MULTIPLAYER ARCHITECTURE • NETWORKING`
 - **Title**: Multiplayer: Authoritative RPCs & Lockstep Sync
@@ -2884,7 +2871,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 95: Multiplayer Testing & Lockstep Network Debugging
+### Slide 94: Multiplayer Testing & Lockstep Network Debugging
 - **Theme Palette**: `playtoy` (PlayToy)
 - **Badge**: `MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING`
 - **Title**: Multiplayer Testing & Lockstep Network Debugging
@@ -2924,7 +2911,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 96: Crystal Concurrency Patterns in Games [Process Flow / Pipeline]
+### Slide 95: Crystal Concurrency Patterns in Games [Process Flow / Pipeline]
 1. **Main-Thread Gameplay**
 2. **Immutable Job Dispatch**
 3. **Multi-Core Compute**
@@ -2939,7 +2926,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 97: The C# (.NET) Shootout (ACT IV • CHAPTER 06)
+### Slide 96: The C# (.NET) Shootout (ACT IV • CHAPTER 06)
 - **Title**: The C# (.NET) Shootout
 - **Subtitle**: Escaping Keyword Ceremony, Null Minefields, Platform Lockout & The Runtime VM Tax
 - **Chapter Highlights**:
@@ -2954,7 +2941,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 98: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 1: Code]
+### Slide 97: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 1: Code]
 - **Palette**: `boom_bap_16` | **Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS`
 - **:circle-xmark: Godot C#: Mandatory Ceremony & Keyword Bloat**:
   ```csharp
@@ -2996,7 +2983,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 99: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 2: Analysis & Critique]
+### Slide 98: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Mandatory Partial Boilerplate: Forces every node to be declared public partial class for Roslyn generators.
   - Dummy Signal Delegates: Defining a signal requires declaring an auxiliary delegate with an EventHandler suffix.
@@ -3012,7 +2999,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 100: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 1: Code]
+### Slide 99: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 1: Code]
 - **Palette**: `disturbing_the_peace` | **Badge**: `LANGUAGE SHOOTOUT • SAFETY & HYGIENE`
 - **:circle-xmark: Godot C#: The ?. Operator Trap & Leaking Delegates**:
   ```csharp
@@ -3063,7 +3050,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 101: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 2: Analysis & Critique]
+### Slide 100: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
   - The ?. Bytecode Trap: C# ?. compiles to IL ldnull, bypassing Godot’s equality. Calling node?.Play() on a freed peer throws ObjectDisposedException.
   - Mandatory Guard Boilerplate: Because ?. is unsafe with engine peers, developers must litter code with GodotObject.IsInstanceValid.
@@ -3082,7 +3069,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 102: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 1: Code]
+### Slide 101: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 1: Code]
 - **Palette**: `twin_tower` | **Badge**: `LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY`
 - **:circle-xmark: Godot C#: P/Invoke Overhead, Boxing & GC Spikes**:
   ```csharp
@@ -3130,7 +3117,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 103: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 2: Analysis & Critique]
+### Slide 102: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 2: Analysis & Critique]
 - **Critique Points**:
   - P/Invoke Boundary Overhead: Reading engine properties repeatedly crosses the managed CLR boundary, adding marshalling latency.
   - LINQ Closure & Enumerator Churn: Where and OrderBy allocate closure classes, enumerators, and list buffers in the frame loop.
@@ -3149,7 +3136,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 104: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 1: Code]
+### Slide 103: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 1: Code]
 - **Palette**: `game_sprocket` | **Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN`
 - **:circle-xmark: Godot C#: Runtime Reflection & Roslyn Complexity**:
   ```csharp
@@ -3190,7 +3177,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 105: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 2: Analysis & Critique]
+### Slide 104: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Runtime Reflection Tax: method.Invoke() is 10–100x slower than direct calls and forces dynamic string lookups on every packet.
   - Argument Boxing Penalties: Passing primitives through reflection boxes int, float, and Vector3 into heap objects.
@@ -3206,7 +3193,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 106: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
+### Slide 105: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
 - **Palette**: `acorn_bbc` | **Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING`
 - **:circle-xmark: Godot C#: Platform Lockout & Zombie Assemblies**:
   ```csharp
@@ -3241,7 +3228,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 107: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
+### Slide 106: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
   - AssemblyLoadContext Leaks: Lingering static events or threads pin .NET assemblies in RAM during hot-reload, breaking breakpoints.
   - Web & Mobile Friction: Godot 4 C# lacks out-of-the-box Web export and requires heavy NativeAOT workarounds on mobile.
@@ -3261,7 +3248,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 108: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
+### Slide 107: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
 - **Palette**: `bento_pad` | **Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY`
 - **:circle-xmark: Godot C#: Task Allocations, async void, and String Soup**:
   ```csharp
@@ -3299,7 +3286,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 109: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
+### Slide 108: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Heap Task Churn: async Task allocates state machine objects on the managed heap, degrading tight game loop performance.
   - Async Void Crash Hazard: Unhandled exceptions inside async void event handlers bypass try/catch and kill the entire process.
@@ -3315,7 +3302,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 110: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
+### Slide 109: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
 - **Palette**: `ranger` | **Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS`
 - **:circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions**:
   ```csharp
@@ -3356,7 +3343,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 111: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
+### Slide 110: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
 - **Critique Points**:
   - No Native Union Types: Cannot express ShieldAbsorbed | CriticalDamage | Nil, forcing loose object returns or wrapper classes.
   - Non-Exhaustive Matching: C# type switches do not guarantee compile-time exhaustiveness; unhandled cases fail silently at runtime.
@@ -3372,7 +3359,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 112: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
+### Slide 111: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
 - **Palette**: `functionalist` | **Badge**: `LANGUAGE SHOOTOUT • TESTING & ISOLATION`
 - **:circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps**:
   ```csharp
@@ -3415,7 +3402,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 113: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
+### Slide 112: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Engine Lifecycle Coupling: Godot C# nodes depend on C++ ObjectDB bindings; standard dotnet test crashes unless booted in headless Godot.
   - Heavy External Test Harnesses: Requires third-party runners like GdUnit4 or WAT, loading scene packs to test pure gameplay logic.
@@ -3432,7 +3419,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 114: Zero-Friction Interoperability (ACT IV • CHAPTER 07)
+### Slide 113: Zero-Friction Interoperability (ACT IV • CHAPTER 07)
 - **Title**: Zero-Friction Interoperability
 - **Subtitle**: GDScript Meets Crystal: Dynamic Dispatch, Strongly-Typed FFI & The Type Firewall
 - **Chapter Highlights**:
@@ -3447,7 +3434,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 115: Interoperability: GDScript Calling Crystal
+### Slide 114: Interoperability: GDScript Calling Crystal
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
 - **Title**: Interoperability: GDScript Calling Crystal
@@ -3493,7 +3480,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 116: Crystal Calling GDScript: Dynamic Dispatch
+### Slide 115: Crystal Calling GDScript: Dynamic Dispatch
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
@@ -3529,7 +3516,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 117: Crystal Calling GDScript: Strongly-Typed Bindings
+### Slide 116: Crystal Calling GDScript: Strongly-Typed Bindings
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • AUTOMATIC TYPED BINDINGS`
 - **Title**: Crystal Calling GDScript: Strongly-Typed Bindings
@@ -3567,7 +3554,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 118: Inside the Godot Editor (ACT IV • CHAPTER 08)
+### Slide 117: Inside the Godot Editor (ACT IV • CHAPTER 08)
 - **Title**: Inside the Godot Editor
 - **Subtitle**: Gutter Diagnostics, In-Editor LSP, Doc Harvesting & 6-Phase Transactional Hot Reload
 - **Chapter Highlights**:
@@ -3582,7 +3569,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 119: First-Class Godot Editor Integration
+### Slide 118: First-Class Godot Editor Integration
 - **Palette**: `gamestation_portable` | **Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
 - **Native Script Editor**:
   - Attach Script Dialog: Select Crystal (*.cr) directly when attaching scripts to any node.
@@ -3602,7 +3589,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 120: In-Editor Diagnostics: Real-Time Static Validator & LSP
+### Slide 119: In-Editor Diagnostics: Real-Time Static Validator & LSP
 - **Theme Palette**: `gamestation_portable` (GameStationPortable)
 - **Badge**: `EDITOR EXPERIENCE • DIAGNOSTICS & LSP`
 - **Title**: In-Editor Diagnostics: Real-Time Static Validator & LSP
@@ -3637,7 +3624,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 121: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
+### Slide 120: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
 #### live_state_preserver.cr — Hot-Reload
 Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.
 
@@ -3664,7 +3651,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 122: CLI: Command Center & Scaffolding Hub
+### Slide 121: CLI: Command Center & Scaffolding Hub
 - **Theme Palette**: `spaces_95` (Spaces 95)
 - **Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: CLI: Command Center & Scaffolding Hub
@@ -3681,7 +3668,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 123: Low-Level Binary Forensics: radare2 vs. LLDB [One-Left-Two-Right]
+### Slide 122: Low-Level Binary Forensics: radare2 vs. LLDB [One-Left-Two-Right]
 - **Theme Palette**: `trash80` (Trash80)
 - **Title**: Low-Level Binary Forensics: radare2 vs. LLDB
 - **Subtitle**: Eliminating Toolchain Bloat, Disassembly Mapping & Crash Forensics
@@ -3707,7 +3694,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 124: Testing Framework: Writing Tests & Leak Verification
+### Slide 123: Testing Framework: Writing Tests & Leak Verification
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • LEAK VERIFICATION`
 - **Title**: Testing Framework: Writing Tests & Leak Verification
@@ -3746,7 +3733,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 125: Editor Testing: Lapis::Test::EditorDriver
+### Slide 124: Editor Testing: Lapis::Test::EditorDriver
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `TOOLING • HEADLESS EDITOR TESTING`
 - **Title**: Editor Testing: Lapis::Test::EditorDriver
@@ -3781,7 +3768,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 126: In-Editor Tool Testing & Standalone TUI Runner
+### Slide 125: In-Editor Tool Testing & Standalone TUI Runner
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
@@ -3798,7 +3785,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 127: The Hard Numbers (ACT IV • CHAPTER 12)
+### Slide 126: The Hard Numbers (ACT IV • CHAPTER 12)
 - **Title**: The Hard Numbers
 - **Subtitle**: Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language Shootout
 - **Chapter Highlights**:
@@ -3814,7 +3801,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 128: Quantitative Benchmarks: Crystal vs GDScript
+### Slide 127: Quantitative Benchmarks: Crystal vs GDScript
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
@@ -3831,7 +3818,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 129: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
+### Slide 128: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • MULTI-LANGUAGE`
 - **Title**: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
@@ -3849,7 +3836,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 130: Native Tier Shootout: Crystal vs C++, Rust & C#
+### Slide 129: Native Tier Shootout: Crystal vs C++, Rust & C#
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • NATIVE TIER`
 - **Title**: Native Tier Shootout: Crystal vs C++, Rust & C#
@@ -3867,7 +3854,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 131: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
+### Slide 130: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
 
 | Language / Binding Target | GDExtension ptrcall | Local Struct Math | Memory Allocation | Speedup vs Dynamic |
 | --- | --- | --- | --- | --- |
@@ -3883,7 +3870,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 132: Authoring Custom Benchmarks: Lapis::Benchmark
+### Slide 131: Authoring Custom Benchmarks: Lapis::Benchmark
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • CUSTOM BENCHMARKING`
 - **Title**: Authoring Custom Benchmarks: Lapis::Benchmark
@@ -3920,7 +3907,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 133: Automated Benchmark TUI: lapis benchmarks
+### Slide 132: Automated Benchmark TUI: lapis benchmarks
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • BENCHMARK TUI`
 - **Title**: Automated Benchmark TUI: lapis benchmarks
@@ -3937,7 +3924,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 134: Benchmark Reports & CI Regression Tracking
+### Slide 133: Benchmark Reports & CI Regression Tracking
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `BENCHMARKS • CI & REPORTING`
 - **Title**: Benchmark Reports & CI Regression Tracking
@@ -3973,7 +3960,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 135: The Bridge Architecture (ACT IV • CHAPTER 13)
+### Slide 134: The Bridge Architecture (ACT IV • CHAPTER 13)
 - **Title**: The Bridge Architecture
 - **Subtitle**: 4-Tier GDExtension Architecture, ClassDB Generators & Turnkey Distribution
 - **Chapter Highlights**:
@@ -3988,7 +3975,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 136: Lapis Architecture: The Layered Bridge [Architecture]
+### Slide 135: Lapis Architecture: The Layered Bridge [Architecture]
 - **Tier 4 • Gameplay Application Layer**:
   - **Custom Nodes**: <code>node Player &lt; CharacterBody3D</code>
   - **Inspector Exports**: <code>@[Export]</code> ranges, enums, &amp; flags
@@ -4018,7 +4005,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 137: Dual Modes: Mode A vs. Mode B [Dual-Mode]
+### Slide 136: Dual Modes: Mode A vs. Mode B [Dual-Mode]
 **Overview**: Self-Hosted Tooling: Just like the Crystal compiler is self-hosted in Crystal, Lapis&apos;s Godot editor integration plugin, syntax highlighting, and tooling docks are authored 100% in Crystal.
 
 - **Mode A: GDExtension In-Editor**:
@@ -4043,7 +4030,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 138: The Packaging System: Turnkey Distribution
+### Slide 137: The Packaging System: Turnkey Distribution
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
@@ -4073,7 +4060,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 139: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
+### Slide 138: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
 - **Title**: Live Demonstration & Roadmap
 - **Subtitle**: Scaffolding, Diorite Addons, In-Editor Iteration, Single-EXE Packaging & Soulantern Demo
 - **Chapter Highlights**:
@@ -4093,7 +4080,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 140: Live Demonstration: End-to-End Workflow [Demo Roadmap]
+### Slide 139: Live Demonstration: End-to-End Workflow [Demo Roadmap]
 - **STEP 1 • SCAFFOLD — Scaffold Game**:
   ```bash
   $ lapis new game my_game
@@ -4155,7 +4142,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 141: The Future of Native Scripting in Godot [Timeline]
+### Slide 140: The Future of Native Scripting in Godot [Timeline]
 - **Q1 2027 — Mobile & Wasm Targets**:
   - Compiling Lapis games to Android, iOS, and WebAssembly via Emscripten.
   - Cross-compilation toolchains with zero native tool installation friction.
@@ -4179,7 +4166,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 142: THANKS FOR WATCHING! [Closing]
+### Slide 141: THANKS FOR WATCHING! [Closing]
 - **Lapis & sol.vin**: Interactive 3D showcases, architecture guides, and open source repository.
   - `sol.vin • github.com/sol-vin/lapis`
 - **Crystal Language**: Official Crystal website, language reference, standard library docs, and blog.

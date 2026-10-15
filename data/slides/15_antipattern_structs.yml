@@ -10,53 +10,58 @@ gdscript:
   title: ':circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing'
   lang: gdscript
   tag: GDScript
-  font_size: '0.84rem'
+  font_size: '0.80rem'
   code: |
-    class_name CombatEvent extends RefCounted:
-        var damage: float; var element: int; var crit: bool
-        func _init(d: float, e: int, c: bool):
-            damage = d; element = e; crit = c
+    class CombatEvent extends RefCounted:
+        var damage: float; var element: int; var critical: bool
+        func _init(d: float, e: int, c: bool = false) -> void:
+            damage = d; element = e; critical = c
 
-    # 10,000 separate heap mallocs + atomic refcount updates:
+    # 1. Passing RefCounted: heap pointer chase + atomic refcount churn!
+    func apply_damage(event: CombatEvent) -> void:
+        health -= event.damage * 2.0 if event.critical else event.damage
+
+    # 2. 10,000 separate heap mallocs scattered across RAM:
     var events: Array[CombatEvent] = []
-    for e in enemies:
+    for i in 10_000:
         events.append(CombatEvent.new(45.0, 1, true))
-
-    # Cache disaster: Array of 10,000 pointers scattered in RAM
     for evt in events:
-        apply_damage(evt.damage) # 10,000 pointer chases!
-    events.clear() # 10,000 synchronous atomic decrements + heap frees
+        apply_damage(evt) # 10,000 pointer chases + cache misses!
+    events.clear()        # 10,000 atomic decrements + heap frees!
   points:
     - '<strong>Heap Thrashing for Ephemeral Data:</strong> 10,000 events require 10,000 individual heap allocations and atomic reference-count updates.'
-    - '<strong>Pointer Chasing &amp; Cache Misses:</strong> <code>Array[CombatEvent]</code> stores scattered 64-bit pointers, thrashing CPU L1/L2 caches.'
+    - '<strong>Pointer Chasing &amp; Cache Misses:</strong> <code>Array[CombatEvent]</code> stores scattered 64-bit pointers, thrashing CPU L1/L2 caches in <code>apply_damage</code>.'
     - '<strong>Synchronous Teardown Spikes:</strong> <code>events.clear()</code> runs 10,000 atomic refcount decrements and <code>memdelete</code> calls on the main thread.'
 crystal:
   title: ':sparkles: Crystal: CPU Register Value Passing & Flat Contiguous Buffers'
   lang: crystal
   tag: Crystal (Lapis)
-  font_size: '0.84rem'
+  font_size: '0.80rem'
   code: |
     struct CombatEvent
-      getter damage : Float32, element : ElementType, critical : Bool
+      getter damage : Float32, element : ElementType
+      getter? critical : Bool
       def initialize(@damage, @element, @critical = false); end
     end
 
-    # 1. Ephemeral event in CPU registers: 0 heap allocations!
+    # 1. Passed by value in CPU registers: 0 heap allocations!
     def apply_damage(event : CombatEvent) : Void
       @health -= event.critical? ? event.damage * 2.0_f32 : event.damage
     end
 
-    # 2. 10,000 structs inlined into ONE flat 120 KB buffer (or FrameScratch):
+    # 2. 10,000 structs inlined into ONE flat 120 KB buffer (or FrameArena):
     events = Array(CombatEvent).new(10_000)
     10_000.times { events << CombatEvent.new(45.0_f32, ElementType::Fire, true) }
-    events.each { |evt| apply_damage(evt) } # Linear cache sweep!
+    events.each { |evt| apply_damage(evt) } # Linear L1 cache sweep!
+    events.clear                            # O(1) reset — 0 heap frees!
   points:
-    - '<strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> copies directly in CPU registers or on the stack with 0 heap bytes.'
+    - '<strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> to <code>apply_damage</code> copies directly in CPU registers or on the stack with 0 heap bytes.'
     - '<strong>Contiguous Cache Line Saturation:</strong> <code>Array(CombatEvent)</code> embeds structs inline into a single 120 KB buffer.'
-    - '<strong>FrameArena Bump Allocation:</strong> Use <code>Lapis.frame_arena</code> (<code>FrameScratch</code>) for $O(1)$ per-frame scratch slices reset at frame end.'
+    - '<strong>Instant $O(1)$ Reset &amp; FrameArena:</strong> <code>events.clear</code> resets the buffer length in $O(1)$ with zero deallocations (or use <code>Lapis.frame_arena</code>).'
 takeaway:
   badge: SYSTEMS SPEED • CACHE LOCALITY
-  text: Stack-allocated structs and per-frame bump arenas eliminate thousands of heap allocations per frame, delivering C cache locality with clean object syntax.
+  text: Stack-allocated structs and contiguous value buffers eliminate thousands of heap allocations and pointer chases per frame.
 notes: |
-  In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types extend RefCounted. When you spawn 10,000 projectiles or process 10,000 combat events, Godot performs 10,000 individual heap allocations and atomic refcount updates. An array of these objects is an array of pointer addresses scattered across memory, causing L1 cache miss penalties. When cleared, 10,000 synchronous atomic decrements and heap frees run on the main thread.
-  In Crystal, structs are value types passed directly in CPU registers or on the stack. An Array(CombatEvent) stores the 12-byte structs contiguously in a single 120 KB block, and Lapis also provides Lapis.frame_arena for O(1) bump-allocated per-frame scratch buffers.
+  In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types extend RefCounted. When you spawn 10,000 combat events and pass them to apply_damage(evt), Godot performs 10,000 individual heap allocations and atomic refcount updates. An array of these objects is an array of pointer addresses scattered across memory, causing L1/L2 cache miss penalties on every apply_damage call. Worse, when events.clear() is called, 10,000 synchronous atomic decrements and heap frees run on the main thread.
+  In Crystal, structs are value types passed directly in CPU registers or on the stack. An Array(CombatEvent) stores the 12-byte structs contiguously in a single 120 KB block, events.clear resets the count in O(1) with zero deallocations, and Lapis also provides Lapis.frame_arena for O(1) bump-allocated per-frame scratch buffers.
+

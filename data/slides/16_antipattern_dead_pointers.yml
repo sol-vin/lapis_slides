@@ -1,64 +1,75 @@
 ---
 id: 16_antipattern_dead_pointers
-title: 'Memory Safety: Dangling Pointers vs. Protection'
-subtitle: Monotonic 64-Bit ID Tracking Eliminates 0xC0000005 Crashes
+title: 'Memory Safety: Dangling Pointers vs. Dead-Pointer Armor'
+subtitle: Monotonic 64-Bit ObjectDB Tracking, .try? Liveness Guards & ABA Immunity
 badge: NATIVE C++ ANTI-PATTERN • MEMORY SAFETY
 badge_color: cyan
 palette: catppuccin_mocha
-layout: code-comparison-layout
-gdscript:
-  title: ':circle-xmark: Unshielded Native C++: Dangling Pointer Crashes'
-  lang: cpp
-  tag: Native C++
-  code: |
-    // Combat target Node* acquired earlier in godot-cpp:
-    Enemy *target = get_node<Enemy>("Boss");
-    ObjectID target_id = target->get_instance_id();
+layout: three-column
+columns:
+  - type: code
+    title: '1. Native C++: Dangling Node* & ABA Trap'
+    tag: godot-cpp
+    lang: cpp
+    font_size: '0.73rem'
+    code: |
+      class HomingMissile : public Node3D {
+          Enemy *locked_target = nullptr;
+          ObjectID target_id;
+      public:
+          void _physics_process(double dt) override {
+              // Target died last frame & called queue_free()!
+              // 1. Freed heap -> 0xC0000005 ACCESS_VIOLATION!
+              // 2. Or ABA bug: heap address reused by a new
+              //    AudioStreamPlayer -> vtable corruption!
+              locked_target->take_damage(50);
 
-    void cast_spell(const Ref<Spell> &spell) {
-        // Boss died from poison & called queue_free()!
-        // Raw Enemy* still points to freed C++ memory:
-        target->take_damage(spell->get_power());
-        // FATAL: 0xC0000005 ACCESS_VIOLATION segfault!
+              // Must manually query ObjectDB on every frame:
+              if (Object *o = ObjectDB::get_instance(target_id)) {
+                  Object::cast_to<Enemy>(o)->take_damage(50);
+              }
+          }
+      };
+  - type: code
+    title: '2. Crystal: .try?, onready & Catchable Errors'
+    tag: Crystal (Lapis)
+    lang: crystal
+    font_size: '0.73rem'
+    code: |
+      node HomingMissile < Node3D do
+        property locked_target : Enemy?
+        onready boss : Enemy = "%ArenaBoss"
 
-        // Manual ObjectDB guard required before every call:
-        if (ObjectDB::get_instance(target_id) != nullptr) {
-            target->take_damage(spell->get_power());
-        }
-    }
-  points:
-  - <strong>Deallocated Native Memory:</strong> <code>Node</code> is not reference-counted; <code>queue_free()</code> deletes the C++ instance while raw <code>Enemy*</code> pointers remain dangling.
-  - <strong>Fatal Engine Segfault:</strong> Dereferencing a freed <code>Node*</code> crashes immediately with <code>0xC0000005 ACCESS_VIOLATION</code> and no managed stack trace.
-  - <strong>Manual ObjectID Tracking:</strong> C++ callers must manually store <code>ObjectID</code> and query <code>ObjectDB::get_instance(id)</code> before every dereference.
-crystal:
-  title: ':sparkles: Crystal: Monotonic ObjectDB & Dead-Pointer Armor'
-  lang: crystal
-  tag: Crystal (Lapis)
-  code: |
-    property target : Enemy?
+        def _physics_process(delta : Float64) : Void
+          # 1. .try? unwraps Nil AND verifies ObjectDB liveness:
+          if target = @locked_target.try?
+            steer_toward(target.global_position, delta)
+          else
+            @locked_target = acquire_next_target
+          end
 
-    def cast_spell(spell : Spell) : Void
-      # 1. Dead-Pointer Safe try? Invocation:
-      # Evaluates only if target is alive in ObjectDB:
-      @target.try?(&.take_damage(spell.power)) ||
-        find_next_target
+          # 2. One-liner dead-pointer-safe block call:
+          @locked_target.try?(&.take_damage(50))
 
-      # 2. Or Monotonic ID Check on Direct Dispatch:
-      # Checks ObjectDB; raises DisposedObjectError:
-      if enemy = @target
-        enemy.take_damage(spell.power)
+          # 3. onready & check_alive! raise catchable error:
+          boss.take_damage(10)
+        rescue ex : Godot::DisposedObjectError
+          queue_free # Graceful recovery — zero segfaults!
+        end
       end
-    rescue ex : Godot::DisposedObjectError
-      # Catchable! Retarget gracefully, zero segfaults:
-      find_next_target
-    end
-  points:
-  - <strong>Dead-Pointer Armor with <code>try?</code>:</strong> <code>@target.try?(&amp;.take_damage(...))</code> inspects ObjectDB survival, executing only on living nodes and returning <code>nil</code> on freed targets.
-  - <strong>Monotonic 64-Bit Instance IDs:</strong> Godot ObjectDB IDs never collide with recycled heap addresses.
-  - "<strong>Automatic #check_alive!:</strong> Lapis validates instance liveness before every method dispatch automatically."
-  - <strong>Catchable Exceptions:</strong> Direct access on freed objects raises a catchable <code>DisposedObjectError</code> instead of segfaulting.
+  - type: card
+    title: '3. How Dead-Pointer Armor Works'
+    badge: 'MONOTONIC 64-BIT OBJECTDB'
+    color: cyan
+    items:
+      - '<strong>1. <code>.try</code> vs. <code>.try?</code> (<code>if_alive</code>):</strong> Standard <code>.try</code> checks for <code>Nil</code>; Lapis''s <code>.try?</code> checks <strong>both</strong> <code>Nil</code> and <code>ObjectDB</code> liveness, returning <code>nil</code> if freed.'
+      - '<strong>2. ABA Recycled-Pointer Immunity:</strong> Every wrapper snapshots its monotonic 64-bit <code>@instance_id</code>. Even if C++ reuses the heap address, IDs never collide.'
+      - '<strong>3. Catchable <code>DisposedObjectError</code>:</strong> <code>onready</code> getters and <code>#check_alive!</code> zero <code>@pointer</code> and raise a clean exception instead of segfaulting.'
+      - '<strong>4. Tombstone Forensics:</strong> Compile with <code>-Dtrace_dead_pointers</code> to log the exact backtrace where the freed object was destroyed.'
 takeaway:
   badge: DEFENSIVE POINTER ARMOR
-  text: Lapis checks Godot's 64-bit ObjectDB instance IDs before dispatch, converting native dead-pointer segfaults into catchable DisposedObjectError exceptions.
+  text: Lapis pairs monotonic 64-bit ObjectDB instance IDs with .try? and #check_alive!, turning fatal C++ dead-pointer segfaults and ABA bugs into safe, catchable operations.
 notes: |
-  The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing. When a node is freed by queue_free(), its underlying C++ memory is deallocated. If native code holds a raw pointer to that memory, dereferencing it triggers an uncatchable access violation that crashes the game instantly. In Lapis, every Godot::Object wrapper tracks its monotonic 64-bit instance ID. Before every dispatch, Lapis verifies this ID with Godot's ObjectDB. If the node was freed, it cleanly raises a DisposedObjectError with a full stack trace that you can catch and recover from gracefully.
+  The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing across frames. Because Godot's Node class is not reference-counted, calling queue_free() deletes the underlying C++ memory at the end of the frame. If a homing missile or combat script holds a cached pointer to that enemy, two catastrophic things happen in C++: either dereferencing the freed pointer triggers an immediate 0xC0000005 ACCESS_VIOLATION segfault, or the C++ heap allocator reuses that exact memory address for a newly spawned object—the classic ABA problem—causing vtable corruption.
+  Lapis solves this at the root. Every Godot::Object wrapper snapshots its monotonic 64-bit ObjectDB instance_id on creation. When holding an optional reference across frames, calling .try? (or .if_alive) checks both for Nil and queries ObjectDB to verify the 64-bit ID is still alive. And if you access a freed node through an onready property or #check_alive!, Lapis zeroes the stale pointer and raises a catchable DisposedObjectError—with full tombstone backtrace support via -Dtrace_dead_pointers.
+

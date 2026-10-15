@@ -111,6 +111,7 @@ slides:
 - 13_antipattern_pattern_matching
 - 14_antipattern_macros
 - 15_antipattern_structs
+- 15b_frame_arena
 - 27b_interop_type_firewall
 - 16_antipattern_dead_pointers
 - 17_antipattern_async_signals
