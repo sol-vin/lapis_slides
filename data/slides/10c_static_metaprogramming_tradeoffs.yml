@@ -1,7 +1,7 @@
 ---
 id: 10c_static_metaprogramming_tradeoffs
 title: "Static Trade-Offs: No 'send' & Limits of 'exec'"
-subtitle: 'The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity'
+subtitle: 'Why Runtime Reflection Is a Shotgun to Chop Down a Tree'
 badge: METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS
 badge_color: amber
 palette: digital_guy
@@ -9,39 +9,37 @@ layout: two-left-one-right
 ratio: 3:2
 left_top:
   type: code
-  title: 'Dynamic Ruby Plasticity (Forbidden at Runtime)'
+  title: 'The Runtime Reflection Shotgun (Forbidden)'
   tag: Forbidden
   lang: crystal
   code: |
-    # Crystal has NO runtime interpreter or method dictionary:
+    # Crystal carries NO runtime method dictionary or eval loop:
     target.send("cast_spell", 50)            # Compile Error!
     eval("class Boss < #{dyn_parent}; end")  # Compile Error!
     target.instance_variable_set("@hp", 100) # Fixed memory layout!
 left_bottom:
   type: code
-  title: 'Compile-Time AST Replacement in Crystal'
+  title: 'Compile-Time AST Axe in Crystal'
   tag: Verified
   lang: crystal
   code: |
     macro method_missing(call)
       {% if call.name.stringify.starts_with?("can_") %}
-        true # Synthesizes concrete method body at compile time!
+        true # Synthesizes concrete typed method at compile time!
       {% else %}
         {% raise "Undefined method '#{call.name}' for #{@type}" %}
       {% end %}
     end
 right:
   type: card
-  title: The Static Compilation Contract
+  title: Dropping the Reflection Shotgun
   color: amber
   items:
-    - '<strong>No Dynamic <code>send</code> or <code>eval</code>:</strong> Methods compile to native LLVM symbols and fixed vtables; strings cannot be parsed at runtime.'
-    - '<strong>Fixed Memory Layouts:</strong> <code>with self yield</code> rebinds lexical scope, but cannot inject new instance variables onto the heap.'
+    - '<strong>A Shotgun on a Tree:</strong> Runtime reflection keeps massive string dictionaries in RAM just to look up methods and fields already known at compile time.'
+    - '<strong>No Dynamic <code>send</code> or <code>eval</code>:</strong> Methods compile directly to native LLVM symbols and fixed vtables with zero string-lookup tax.'
     - '<strong>Compile-Time <code>method_missing</code>:</strong> Intercepts unknown AST calls during compilation to synthesize real typed methods.'
-    - '<strong>The Engineering Payoff:</strong> Trading away runtime string dispatch unlocks 46x+ native speed and compile-time safety.'
+    - '<strong>The Engineering Payoff:</strong> Trading away runtime reflection unlocks 46x+ native speed, dead-code elimination, and compile-time safety.'
 notes: |
-  We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop.
-  In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object.
-  Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search!
-  Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time.
-  Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get native LLVM machine speed, zero runtime reflection overhead, and complete compile-time type safety.
+  Why does Crystal forbid runtime reflection like Ruby's `send`, `eval`, or `instance_variable_set`? Because in game development, runtime reflection is a shotgun used to chop down a tree: you pay for a massive runtime metadata dictionary, dynamic string hashing, and heap boxing on every frame just to inspect types that were already 100% known when you compiled the game!
+  Crystal deliberately drops the shotgun in favor of a compile-time surgical axe. Methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search. And Crystal's `method_missing` and `@type` introspection run at compile time on the AST, generating real, typed methods before the binary is linked.
+

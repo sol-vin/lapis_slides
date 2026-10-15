@@ -1,7 +1,7 @@
 # Lapis for Crystal — Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
 
 Author: sol.vin
-Theme: `sol.vin` | Total Slides: 141
+Theme: `sol.vin` | Total Slides: 140
 
 ---
 
@@ -835,22 +835,19 @@ end
 - **Title**: Static Trade-Offs: No 'send' & Limits of 'exec'
 
 #### Left Stacked Containers:
-- **Dynamic Ruby Plasticity (Forbidden at Runtime)**
-- **Compile-Time AST Replacement in Crystal**
+- **The Runtime Reflection Shotgun (Forbidden)**
+- **Compile-Time AST Axe in Crystal**
 
 #### Right Column:
-- **The Static Compilation Contract**
-  - No Dynamic send or eval: Methods compile to native LLVM symbols and fixed vtables; strings cannot be parsed at runtime.
-  - Fixed Memory Layouts: with self yield rebinds lexical scope, but cannot inject new instance variables onto the heap.
+- **Dropping the Reflection Shotgun**
+  - A Shotgun on a Tree: Runtime reflection keeps massive string dictionaries in RAM just to look up methods and fields already known at compile time.
+  - No Dynamic send or eval: Methods compile directly to native LLVM symbols and fixed vtables with zero string-lookup tax.
   - Compile-Time method_missing: Intercepts unknown AST calls during compilation to synthesize real typed methods.
-  - The Engineering Payoff: Trading away runtime string dispatch unlocks 46x+ native speed and compile-time safety.
+  - The Engineering Payoff: Trading away runtime reflection unlocks 46x+ native speed, dead-code elimination, and compile-time safety.
 
 **Presenter Notes**:
-> We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop.
-> In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object.
-> Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search!
-> Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time.
-> Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get native LLVM machine speed, zero runtime reflection overhead, and complete compile-time type safety.
+> Why does Crystal forbid runtime reflection like Ruby's `send`, `eval`, or `instance_variable_set`? Because in game development, runtime reflection is a shotgun used to chop down a tree: you pay for a massive runtime metadata dictionary, dynamic string hashing, and heap boxing on every frame just to inspect types that were already 100% known when you compiled the game!
+> Crystal deliberately drops the shotgun in favor of a compile-time surgical axe. Methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search. And Crystal's `method_missing` and `@type` introspection run at compile time on the AST, generating real, typed methods before the binary is linked.
 
 ---
 
@@ -3149,64 +3146,16 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 103: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 1: Code]
-- **Palette**: `game_sprocket` | **Badge**: `LANGUAGE SHOOTOUT • METAPROGRAMMING & CODEGEN`
-- **:circle-xmark: Godot C#: Runtime Reflection & Roslyn Complexity**:
-  ```csharp
-  public partial class NetworkSync : Node
-  {
-      // Runtime reflection: slow, boxes args, fragile under AOT!
-      public void DispatchRPC(string name, params object[] args)
-      {
-          var flags = BindingFlags.Public | BindingFlags.Instance;
-          MethodInfo? m = GetType().GetMethod(name, flags);
-          if (m == null) throw new MissingMethodException(name);
-  
-          // Allocates object[] & boxes value types per packet!
-          m.Invoke(this, args);
-      }
-      // Roslyn generators require separate Analyzer .csproj & MSBuild.
-  }
-  ```
-- **:sparkles: Crystal: First-Class Compile-Time AST Macros**:
-  ```crystal
-  node NetworkSync < Node do
-    # AST macro synthesizes static dispatch with zero reflection
-    macro generate_rpc_dispatcher(*methods)
-      def dispatch_rpc(action : String, pkt : Packet) : Nil
-        case action
-        {% for m in methods %}
-        when {{ m.stringify }}
-          {{ m.id }}(pkt.read_{{ m.id }}_payload) # Static call!
-        {% end %}
-        else raise "Unknown RPC: #{action}"
-        end
-      end
-    end
-  
-    generate_rpc_dispatcher sync_transform, player_spawn, player_hit
-  end
-  ```
-
----
-
-### Slide 104: Godot C# vs Lapis: Metaprogramming & Compile-Time Reflection [Step 2: Analysis & Critique]
-- **Critique Points**:
-  - Runtime Reflection Tax: method.Invoke() is 10–100x slower than direct calls and forces dynamic string lookups on every packet.
-  - Argument Boxing Penalties: Passing primitives through reflection boxes int, float, and Vector3 into heap objects.
-  - Roslyn Tooling Agony: Compile-time generators require separate analyzer projects, complex AST dependencies, and constant IDE desyncs.
-- **Solution Advantages**:
-  - Built-In Language Macros: AST macros are native language primitives requiring zero extra projects, analyzers, or compiler plugins.
-  - Compile-Time Static Dispatch: Expands into direct static case branches with typed arguments—zero runtime reflection overhead.
-  - Whole-Program Type Inference: Full compile-time type validation with no metadata tables, no trimming hazards, and no boxing.
-- **Key Takeaway**: Crystal macros bring full compile-time metaprogramming and reflection without the tooling agony or runtime reflection tax of C#.
+### Slide 103: Runtime Reflection: A Shotgun to Chop Down a Tree
+- **Palette**: `game_sprocket` | **Badge**: `LANGUAGE SHOOTOUT • REFLECTION VS. AST MACROS`
 
 **Presenter Notes**:
-> In C#, developers are trapped in an uncomfortable dilemma: either use `System.Reflection` at runtime—which is painfully slow, boxes every primitive argument, and crashes when NativeAOT trimming strips metadata—or write a Roslyn Source Generator. But Roslyn generators require an entire separate C# analyzer project, complex syntax tree parsing, and fragile MSBuild plumbing that constantly causes IDE red squiggles. In Crystal, macros are a first-class language feature. You write expressive metaprogramming logic directly inside your codebase using Crystal syntax. Macros inspect types, loop over properties, and generate type-safe dispatchers at compile time, leaving behind zero runtime reflection tables and zero boxing.
+> Using runtime reflection to serialize fields, bind properties, or dispatch RPCs is like using a shotgun to chop down a tree. Your struct's fields—health, stamina, position—are already 100% known the moment you press compile! Yet in C# or GDScript, runtime reflection drags an entire type-metadata dictionary into RAM, scans attribute tables at 60 frames per second, and sprays heap shrapnel across the garbage collector by boxing every primitive int, float, and Vector3 into a heap object. Worse yet, it causes massive collateral damage when exporting with NativeAOT or linker stripping: because the compiler can't see which fields a runtime string lookup might hit, the trimmer either keeps megabytes of dead metadata or strips a reflected field and crashes your release build.
+> In Crystal, compile-time AST macros are a surgical axe. You loop over `@type.instance_vars` once during compilation, check for `@[Sync]`, and the compiler unrolls three direct, inlined `io.write_bytes` instructions—leaving zero runtime metadata tables, zero string lookups, and zero heap boxing.
 
 ---
 
-### Slide 105: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
+### Slide 104: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
 - **Palette**: `acorn_bbc` | **Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING`
 - **:circle-xmark: Godot C#: Platform Lockout & Zombie Assemblies**:
   ```csharp
@@ -3241,7 +3190,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 106: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
+### Slide 105: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
   - AssemblyLoadContext Leaks: Lingering static events or threads pin .NET assemblies in RAM during hot-reload, breaking breakpoints.
   - Web & Mobile Friction: Godot 4 C# lacks out-of-the-box Web export and requires heavy NativeAOT workarounds on mobile.
@@ -3261,7 +3210,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 107: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
+### Slide 106: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
 - **Palette**: `bento_pad` | **Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY`
 - **:circle-xmark: Godot C#: Task Allocations, async void, and String Soup**:
   ```csharp
@@ -3299,7 +3248,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 108: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
+### Slide 107: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Heap Task Churn: async Task allocates state machine objects on the managed heap, degrading tight game loop performance.
   - Async Void Crash Hazard: Unhandled exceptions inside async void event handlers bypass try/catch and kill the entire process.
@@ -3315,7 +3264,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 109: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
+### Slide 108: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
 - **Palette**: `ranger` | **Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS`
 - **:circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions**:
   ```csharp
@@ -3356,7 +3305,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 110: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
+### Slide 109: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
 - **Critique Points**:
   - No Native Union Types: Cannot express ShieldAbsorbed | CriticalDamage | Nil, forcing loose object returns or wrapper classes.
   - Non-Exhaustive Matching: C# type switches do not guarantee compile-time exhaustiveness; unhandled cases fail silently at runtime.
@@ -3372,7 +3321,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 111: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
+### Slide 110: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
 - **Palette**: `functionalist` | **Badge**: `LANGUAGE SHOOTOUT • TESTING & ISOLATION`
 - **:circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps**:
   ```csharp
@@ -3415,7 +3364,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 112: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
+### Slide 111: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Engine Lifecycle Coupling: Godot C# nodes depend on C++ ObjectDB bindings; standard dotnet test crashes unless booted in headless Godot.
   - Heavy External Test Harnesses: Requires third-party runners like GdUnit4 or WAT, loading scene packs to test pure gameplay logic.
@@ -3432,7 +3381,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 113: Zero-Friction Interoperability (ACT IV • CHAPTER 07)
+### Slide 112: Zero-Friction Interoperability (ACT IV • CHAPTER 07)
 - **Title**: Zero-Friction Interoperability
 - **Subtitle**: GDScript Meets Crystal: Dynamic Dispatch, Strongly-Typed FFI & The Type Firewall
 - **Chapter Highlights**:
@@ -3447,7 +3396,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 114: Interoperability: GDScript Calling Crystal
+### Slide 113: Interoperability: GDScript Calling Crystal
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
 - **Title**: Interoperability: GDScript Calling Crystal
@@ -3493,7 +3442,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 115: Crystal Calling GDScript: Dynamic Dispatch
+### Slide 114: Crystal Calling GDScript: Dynamic Dispatch
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
@@ -3529,7 +3478,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 116: Crystal Calling GDScript: Strongly-Typed Bindings
+### Slide 115: Crystal Calling GDScript: Strongly-Typed Bindings
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • AUTOMATIC TYPED BINDINGS`
 - **Title**: Crystal Calling GDScript: Strongly-Typed Bindings
@@ -3567,7 +3516,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 117: Inside the Godot Editor (ACT IV • CHAPTER 08)
+### Slide 116: Inside the Godot Editor (ACT IV • CHAPTER 08)
 - **Title**: Inside the Godot Editor
 - **Subtitle**: Gutter Diagnostics, In-Editor LSP, Doc Harvesting & 6-Phase Transactional Hot Reload
 - **Chapter Highlights**:
@@ -3582,7 +3531,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 118: First-Class Godot Editor Integration
+### Slide 117: First-Class Godot Editor Integration
 - **Palette**: `gamestation_portable` | **Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
 - **Native Script Editor**:
   - Attach Script Dialog: Select Crystal (*.cr) directly when attaching scripts to any node.
@@ -3602,7 +3551,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 119: In-Editor Diagnostics: Real-Time Static Validator & LSP
+### Slide 118: In-Editor Diagnostics: Real-Time Static Validator & LSP
 - **Theme Palette**: `gamestation_portable` (GameStationPortable)
 - **Badge**: `EDITOR EXPERIENCE • DIAGNOSTICS & LSP`
 - **Title**: In-Editor Diagnostics: Real-Time Static Validator & LSP
@@ -3637,7 +3586,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 120: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
+### Slide 119: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
 #### live_state_preserver.cr — Hot-Reload
 Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.
 
@@ -3664,7 +3613,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 121: CLI: Command Center & Scaffolding Hub
+### Slide 120: CLI: Command Center & Scaffolding Hub
 - **Theme Palette**: `spaces_95` (Spaces 95)
 - **Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: CLI: Command Center & Scaffolding Hub
@@ -3681,7 +3630,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 122: Low-Level Binary Forensics: radare2 vs. LLDB [One-Left-Two-Right]
+### Slide 121: Low-Level Binary Forensics: radare2 vs. LLDB [One-Left-Two-Right]
 - **Theme Palette**: `trash80` (Trash80)
 - **Title**: Low-Level Binary Forensics: radare2 vs. LLDB
 - **Subtitle**: Eliminating Toolchain Bloat, Disassembly Mapping & Crash Forensics
@@ -3707,7 +3656,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 123: Testing Framework: Writing Tests & Leak Verification
+### Slide 122: Testing Framework: Writing Tests & Leak Verification
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • LEAK VERIFICATION`
 - **Title**: Testing Framework: Writing Tests & Leak Verification
@@ -3746,7 +3695,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 124: Editor Testing: Lapis::Test::EditorDriver
+### Slide 123: Editor Testing: Lapis::Test::EditorDriver
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `TOOLING • HEADLESS EDITOR TESTING`
 - **Title**: Editor Testing: Lapis::Test::EditorDriver
@@ -3781,7 +3730,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 125: In-Editor Tool Testing & Standalone TUI Runner
+### Slide 124: In-Editor Tool Testing & Standalone TUI Runner
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
@@ -3798,7 +3747,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 126: The Hard Numbers (ACT IV • CHAPTER 12)
+### Slide 125: The Hard Numbers (ACT IV • CHAPTER 12)
 - **Title**: The Hard Numbers
 - **Subtitle**: Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language Shootout
 - **Chapter Highlights**:
@@ -3814,7 +3763,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 127: Quantitative Benchmarks: Crystal vs GDScript
+### Slide 126: Quantitative Benchmarks: Crystal vs GDScript
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
@@ -3831,7 +3780,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 128: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
+### Slide 127: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • MULTI-LANGUAGE`
 - **Title**: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
@@ -3849,7 +3798,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 129: Native Tier Shootout: Crystal vs C++, Rust & C#
+### Slide 128: Native Tier Shootout: Crystal vs C++, Rust & C#
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • NATIVE TIER`
 - **Title**: Native Tier Shootout: Crystal vs C++, Rust & C#
@@ -3867,7 +3816,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 130: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
+### Slide 129: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
 
 | Language / Binding Target | GDExtension ptrcall | Local Struct Math | Memory Allocation | Speedup vs Dynamic |
 | --- | --- | --- | --- | --- |
@@ -3883,7 +3832,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 131: Authoring Custom Benchmarks: Lapis::Benchmark
+### Slide 130: Authoring Custom Benchmarks: Lapis::Benchmark
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • CUSTOM BENCHMARKING`
 - **Title**: Authoring Custom Benchmarks: Lapis::Benchmark
@@ -3920,7 +3869,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 132: Automated Benchmark TUI: lapis benchmarks
+### Slide 131: Automated Benchmark TUI: lapis benchmarks
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • BENCHMARK TUI`
 - **Title**: Automated Benchmark TUI: lapis benchmarks
@@ -3937,7 +3886,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 133: Benchmark Reports & CI Regression Tracking
+### Slide 132: Benchmark Reports & CI Regression Tracking
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `BENCHMARKS • CI & REPORTING`
 - **Title**: Benchmark Reports & CI Regression Tracking
@@ -3973,7 +3922,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 134: The Bridge Architecture (ACT IV • CHAPTER 13)
+### Slide 133: The Bridge Architecture (ACT IV • CHAPTER 13)
 - **Title**: The Bridge Architecture
 - **Subtitle**: 4-Tier GDExtension Architecture, ClassDB Generators & Turnkey Distribution
 - **Chapter Highlights**:
@@ -3988,7 +3937,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 135: Lapis Architecture: The Layered Bridge [Architecture]
+### Slide 134: Lapis Architecture: The Layered Bridge [Architecture]
 - **Tier 4 • Gameplay Application Layer**:
   - **Custom Nodes**: <code>node Player &lt; CharacterBody3D</code>
   - **Inspector Exports**: <code>@[Export]</code> ranges, enums, &amp; flags
@@ -4018,7 +3967,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 136: Dual Modes: Mode A vs. Mode B [Dual-Mode]
+### Slide 135: Dual Modes: Mode A vs. Mode B [Dual-Mode]
 **Overview**: Self-Hosted Tooling: Just like the Crystal compiler is self-hosted in Crystal, Lapis&apos;s Godot editor integration plugin, syntax highlighting, and tooling docks are authored 100% in Crystal.
 
 - **Mode A: GDExtension In-Editor**:
@@ -4043,7 +3992,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 137: The Packaging System: Turnkey Distribution
+### Slide 136: The Packaging System: Turnkey Distribution
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
@@ -4073,7 +4022,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 138: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
+### Slide 137: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
 - **Title**: Live Demonstration & Roadmap
 - **Subtitle**: Scaffolding, Diorite Addons, In-Editor Iteration, Single-EXE Packaging & Soulantern Demo
 - **Chapter Highlights**:
@@ -4093,7 +4042,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 139: Live Demonstration: End-to-End Workflow [Demo Roadmap]
+### Slide 138: Live Demonstration: End-to-End Workflow [Demo Roadmap]
 - **STEP 1 • SCAFFOLD — Scaffold Game**:
   ```bash
   $ lapis new game my_game
@@ -4155,7 +4104,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 140: The Future of Native Scripting in Godot [Timeline]
+### Slide 139: The Future of Native Scripting in Godot [Timeline]
 - **Q1 2027 — Mobile & Wasm Targets**:
   - Compiling Lapis games to Android, iOS, and WebAssembly via Emscripten.
   - Cross-compilation toolchains with zero native tool installation friction.
@@ -4179,7 +4128,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 141: THANKS FOR WATCHING! [Closing]
+### Slide 140: THANKS FOR WATCHING! [Closing]
 - **Lapis & sol.vin**: Interactive 3D showcases, architecture guides, and open source repository.
   - `sol.vin • github.com/sol-vin/lapis`
 - **Crystal Language**: Official Crystal website, language reference, standard library docs, and blog.
