@@ -6369,21 +6369,21 @@ end</code></pre>
                 </div>
               </div>
               <pre><code class="language-cpp code-compact">class HomingMissile : public Node3D {
-    Enemy *locked_target = nullptr;
-    ObjectID target_id;
+  Enemy *locked_target = nullptr;
+  ObjectID target_id;
 public:
-    void _physics_process(double dt) override {
-        // Target died last frame &amp; called queue_free()!
-        // 1. Freed heap -&gt; 0xC0000005 ACCESS_VIOLATION!
-        // 2. Or ABA bug: heap address reused by a new
-        //    AudioStreamPlayer -&gt; vtable corruption!
-        locked_target-&gt;take_damage(50);
+  void _physics_process(double dt) override {
+    // Target died last frame &amp; called queue_free()!
+    // 1. Freed heap -&gt; 0xC0000005 ACCESS_VIOLATION!
+    // 2. Or ABA bug: heap address reused by a new
+    //    AudioStreamPlayer -&gt; vtable corruption!
+    locked_target-&gt;take_damage(50);
 
-        // Must manually query ObjectDB on every frame:
-        if (Object *o = ObjectDB::get_instance(target_id)) {
-            Object::cast_to&lt;Enemy&gt;(o)-&gt;take_damage(50);
-        }
+    // Must manually query ObjectDB on every frame:
+    if (Object *o = ObjectDB::get_instance(target_id)) {
+      Object::cast_to&lt;Enemy&gt;(o)-&gt;take_damage(50);
     }
+  }
 };</code></pre>
             </div>
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
@@ -6404,7 +6404,7 @@ public:
   onready boss : Enemy = &quot;%ArenaBoss&quot;
 
   def _physics_process(delta : Float64) : Void
-    # 1. .try? unwraps Nil AND verifies ObjectDB liveness:
+    # 1. .try? checks both Nil &amp; ObjectDB liveness:
     if target = @locked_target.try?
       steer_toward(target.global_position, delta)
     else

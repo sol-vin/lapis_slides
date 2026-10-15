@@ -11,37 +11,37 @@ columns:
     title: '1. Native C++: Dangling Node* & ABA Trap'
     tag: godot-cpp
     lang: cpp
-    font_size: '0.73rem'
+    density: compact
     code: |
       class HomingMissile : public Node3D {
-          Enemy *locked_target = nullptr;
-          ObjectID target_id;
+        Enemy *locked_target = nullptr;
+        ObjectID target_id;
       public:
-          void _physics_process(double dt) override {
-              // Target died last frame & called queue_free()!
-              // 1. Freed heap -> 0xC0000005 ACCESS_VIOLATION!
-              // 2. Or ABA bug: heap address reused by a new
-              //    AudioStreamPlayer -> vtable corruption!
-              locked_target->take_damage(50);
+        void _physics_process(double dt) override {
+          // Target died last frame & called queue_free()!
+          // 1. Freed heap -> 0xC0000005 ACCESS_VIOLATION!
+          // 2. Or ABA bug: heap address reused by a new
+          //    AudioStreamPlayer -> vtable corruption!
+          locked_target->take_damage(50);
 
-              // Must manually query ObjectDB on every frame:
-              if (Object *o = ObjectDB::get_instance(target_id)) {
-                  Object::cast_to<Enemy>(o)->take_damage(50);
-              }
+          // Must manually query ObjectDB on every frame:
+          if (Object *o = ObjectDB::get_instance(target_id)) {
+            Object::cast_to<Enemy>(o)->take_damage(50);
           }
+        }
       };
   - type: code
     title: '2. Crystal: .try?, onready & Catchable Errors'
     tag: Crystal (Lapis)
     lang: crystal
-    font_size: '0.73rem'
+    density: compact
     code: |
       node HomingMissile < Node3D do
         property locked_target : Enemy?
         onready boss : Enemy = "%ArenaBoss"
 
         def _physics_process(delta : Float64) : Void
-          # 1. .try? unwraps Nil AND verifies ObjectDB liveness:
+          # 1. .try? checks both Nil & ObjectDB liveness:
           if target = @locked_target.try?
             steer_toward(target.global_position, delta)
           else
