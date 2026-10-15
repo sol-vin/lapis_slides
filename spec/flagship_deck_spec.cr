@@ -45,15 +45,27 @@ describe "Flagship Lapis Slide Deck in Sunstone" do
       yaml = YAML.parse(content)
       yaml["id"]?.should_not be_nil, "Slide #{File.basename(file)} missing 'id'"
       yaml["layout"]?.should_not be_nil, "Slide #{File.basename(file)} missing 'layout'"
+      if yaml["layout"].as_s.includes?("three-column")
+        cols = yaml["columns"]?.try(&.as_a?)
+        cols.should_not be_nil, "Slide #{File.basename(file)} with three-column layout must define a 'columns:' array"
+        cols.not_nil!.size.should eq(3), "Slide #{File.basename(file)} with three-column layout must have 3 columns"
+      end
     end
   end
 
-  it "verifies compiled artifacts index.html and SLIDES.md exist and are non-empty" do
+  it "verifies compiled artifacts index.html and SLIDES.md exist, are non-empty, and contain every slide in deck.yml" do
     html_path = File.join(__DIR__, "..", "index.html")
     slides_md_path = File.join(__DIR__, "..", "SLIDES.md")
 
     File.exists?(html_path).should be_true
     File.size(html_path).should be > 100_000
+
+    html_content = File.read(html_path)
+    deck_yaml = YAML.parse(File.read(File.join(__DIR__, "..", "deck.yml")))
+    deck_yaml["slides"].as_a.each do |slide_entry|
+      slide_id = slide_entry.as_s
+      html_content.includes?(%Q(id="slide-#{slide_id}")).should be_true, "Compiled index.html is missing slide-#{slide_id}"
+    end
 
     File.exists?(slides_md_path).should be_true
     File.size(slides_md_path).should be > 50_000
