@@ -9,12 +9,12 @@ palette: engine_16
 layout: "chapter-layout"
 cube_size: 160
 pillars:
-  - title: "Up to 150x Faster"
-    desc: "Rigorous N-body physics, prime sieves, and matrix multiplications beating GDScript by orders of magnitude"
+  - title: "46.2x Geomean Speedup"
+    desc: "27 comparative suites beating GDScript by 46.2x geomean (up to 149x on N-Body & 282x on AStar2D)"
     icon: "trophy"
     color: "amber"
   - title: "Native Tier Parity"
-    desc: "Crystal matches or outperforms C++, Rust, and C# across algorithmic and memory benchmarks"
+    desc: "Crystal matches C++ and Rust on tight algorithmic compute and beats C# on 4 of 5 workloads"
     icon: "bolt"
     color: "cyan"
   - title: "Nanosecond FFI Profiling"

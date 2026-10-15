@@ -14,19 +14,18 @@ left:
   lang: crystal
   font_size: '0.84rem'
   code: |
-    require "project_nodes/dialogue_system"
+    require "./generated/project_nodes/dialogue_system"
 
     node QuestController < Node do
-      @[OnReady("%DialogueManager")]
-      getter dialogue : DialogueSystem
+      onready dialogue : DialogueSystem = "%DialogueManager"
 
-      def trigger_dialogue(line_id : Int32) : Bool
+      def trigger_dialogue(line_id : Int64) : Bool
         # Direct typed method call: NO .call(), NO string lookups!
         success = dialogue.show_dialogue(speaker: "Elder", line_id: line_id)
         dialogue.dialogue_speed = 1.5_f32
 
-        # Strongly-typed signal subscription
-        on dialogue.line_completed do |speaker, text|
+        # Strongly-typed BoundSignal subscription with argument types
+        on dialogue.line_completed, String, String do |speaker, text|
           display_subtitles(speaker, text)
         end
         success

@@ -17,26 +17,19 @@ left:
     require "./spec_helper"
 
     describe Lapis::Test::EditorDriver do
-      # 1. Headless in-editor tool test execution
-      it "verifies @tool nodes and inspector buttons in headless editor" do
-        # Launches: godot --headless --editor --audio-driver Dummy
-        res = Lapis::Test::EditorDriver.run_tool_tests(
-          project: ".",
-          quit_frames: 300
-        )
+      it "verifies @tool nodes, Set-of-Marks UI, and hot-reload cycles" do
+        # 1. Headless in-editor @tool & ExportToolButton verification
+        res = Lapis::Test::EditorDriver.run_tool_tests(".", quit_frames: 300)
         res.passed?.should be_true
-        res.output.should contain("ToolTester2D: @tool _ready verified")
         res.output.should contain("ExportToolButton 'Reset Stats' executed")
-      end
 
-      # 2. Live GDExtension reload stress-testing
-      it "executes continuous shadow DLL hot reload cycles without leaks" do
-        res = Lapis::Test::EditorDriver.run_editor_reload_tests(
-          project: ".",
-          cycles: 3
-        )
-        res.passed?.should be_true
-        res.output.should contain("Reload cycle 3/3 succeeded (0 file locks)")
+        # 2. Live GDExtension shadow-DLL reload stress test (3 cycles)
+        reload = Lapis::Test::EditorDriver.run_editor_reload_tests(".", cycles: 3)
+        reload.output.should contain("Reload cycle 3/3 succeeded (0 file locks)")
+
+        # 3. Set-of-Marks ActionDriver for visual & AI-driven UI testing
+        marks = driver.actions.annotate_viewport # Numbered bounding-box overlay
+        driver.actions.click_mark(marks.first.id)
       end
     end
 right:

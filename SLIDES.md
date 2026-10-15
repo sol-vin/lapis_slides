@@ -92,34 +92,20 @@ Theme: `sol.vin` | Total Slides: 142
 
 ---
 
-### Slide 5: The Ruby Heritage
+### Slide 5: The Ruby Heritage [Editorial Split]
 - **Theme Palette**: `catppuccin_mocha` (Catppuccin Mocha)
-- **Badge**: `HISTORICAL CONTEXT • THE RUBY HERITAGE`
-- **Title**: The Ruby Heritage
-- **Subtitle**: Developer Happiness, Small Syntax & Expressive Human Reach
-- **Code (ruby_philosophy.rb — Developer Happiness First)**:
-  ```ruby
-  # Yukihiro "Matz" Matsumoto's Vision (1995):
-  # "Ruby is designed for human comfort, not machine convenience."
-  
-  Ruby.manifesto do
-    prioritize :human_happiness, over: :machine_convenience
-    principle  :least_surprise
-    syntax     :natural_english_prose
-  
-    empower do
-      first_class_blocks { natural_flow }
-      expressive_closures.each(&:make_code_joyful)
-    end
-  
-    goal "Make programmers smile when they write code"
-  end
-  ```
-- **Why Ruby Won Developer Hearts**:
-  - Developer Happiness First: Prioritizes human cognitive comfort over raw machine convenience.
-  - Minimal Syntax, Massive Reach: A postage-stamp grammar that molds to domain DSLs without compiler bloat.
-  - First-Class Closures: Chaining Enumerable methods (select(&:alive?)) turns data into readable prose.
-  - The Game Tech Dilemma: Dynamic interpreted bytecode (YARV) lacked the performance needed for 60 FPS physics.
+- **Headline**: Human Happiness Over Machine Convenience
+
+> Ruby is designed to make programmers happy. We need to focus on humans, on how humans care about doing programming. — Yukihiro “Matz” Matsumoto
+
+- **Developer Happiness First**
+  Optimizes for human intent and least surprise rather than compiler ceremony.
+- **Minimal Syntax, Massive Reach**
+  A ~40-keyword grammar that molds cleanly to expressive domain DSLs.
+- **First-Class Blocks & Enumerable**
+  Turns collection transforms (select, map, each) into readable prose.
+- **The Game Tech Bottleneck**
+  Dynamic interpreted bytecode (YARV) lacked the raw throughput for 60 FPS physics.
 
 **Presenter Notes**:
 > To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English.
@@ -207,29 +193,21 @@ Theme: `sol.vin` | Total Slides: 142
 
 ---
 
-### Slide 8: Small Syntax: Postage-Stamp Grammar
+### Slide 8: Small Syntax: Postage-Stamp Grammar [One-Left-Two-Right]
 - **Theme Palette**: `nord_frost` (Arctic Frost)
-- **Badge**: `RUBY HERITAGE • MINIMAL GRAMMAR`
 - **Title**: Small Syntax: Postage-Stamp Grammar
 - **Subtitle**: ~40 Keywords Fueling an Infinite Universe of Domain Usages
-- **Code (ruby_keywords.rb — The ~40 Core Keywords)**:
-  ```ruby
-  # Ruby's Core Reserved Grammar (~41 Keywords):
-  class     module    def       end
-  self      super     alias     undef
-  if        then      elsif     else
-  unless    case      when      return
-  while     until     do        break
-  next      redo      retry     yield
-  begin     rescue    ensure    defined?
-  true      false     nil       and/or
-  BEGIN     END       __FILE__  __LINE__
-  ```
-- **The Postage-Stamp Advantage**:
-  - Fits on a Postage Stamp: Unlike C++ or C# with 80+ keywords, Ruby’s grammar fits on a single card (~40 words).
-  - Methods Over Keywords: Properties (attr_accessor) and access control (private) are plain methods.
-  - Blocks as Universal Primitives: A single construct (do...end) powers loops, resource guards, and DSLs.
-  - Zero Syntax Bloat: Expressive frameworks (Rails, RSpec, Lapis) require zero new parser grammar rules.
+
+#### Left Column:
+- **ruby_keywords.rb — The ~40 Core Keywords**
+
+#### Right Stacked Containers:
+- **Fits on a Postage Stamp**
+  - Minimal Grammar: ~40 keywords vs. 90+ in C++20 and 100+ in C#.
+  - Methods Over Keywords: attr_accessor, private, and loop are ordinary methods.
+- **Universal Block Primitives**
+  - Blocks Everywhere: A single do...end construct powers iteration, guards, and DSLs.
+  - Zero Parser Bloat: Frameworks like Rails, RSpec, and Lapis add zero grammar rules.
 
 **Presenter Notes**:
 > In computer science lore, Alan Kay famously observed that Smalltalk was so elegant that its entire grammar could fit on a postcard. Matz brought this profound insight to Ruby: you do not need 80 or 100 keywords to build a powerful programming language.
@@ -287,11 +265,11 @@ Theme: `sol.vin` | Total Slides: 142
 - **Media**: Language Selection & Pragmatic Trade-Offs (`crystalmeme.mp4`)
 - **Quote**: "Computers are not very smart. They don't understand human language, so we have to tell them what to do in a language that both humans and computers can understand." — Yukihiro Matsumoto:
 - **Engineering Trade-Offs: Beyond the Hype**:
-  - Why Not Rust? Steep borrow-checker friction with cyclic SceneTree graphs; slow compilation times; heavy FFI boilerplate.
-  - Why Not C++? Manual pointer bookkeeping, header sprawl, absence of compile-time nil safety, and dreaded 0xC0000005 segfaults.
-  - Why Not GDScript? Severe CPU bottlenecks in math-intensive loops, procedural generation, and custom physics (Crystal is up to 60x faster).
-  - Why Not C#? Heavy .NET runtime footprint, unpredictable GC frame-time stutter, and verbose object-oriented ceremony.
-  - The Crystal Sweet Spot: Bare-metal LLVM machine code, whole-program type inference, Ruby-like expressive syntax, and pure developer joy!
+  - Why Not Rust? Borrow-checker friction with cyclic SceneTree graphs, slower compile times, and heavy FFI boilerplate.
+  - Why Not C++? Manual pointer management, header sprawl, no compile-time nil safety, and raw 0xC0000005 segfaults.
+  - Why Not GDScript? Interpreted VM bottlenecks in heavy simulation loops (Crystal averages 46.2x faster, up to 140x+ in compute).
+  - Why Not C#? 80 MB+ .NET runtime footprint, P/Invoke marshalling overhead, and verbose OOP ceremony.
+  - The Crystal Sweet Spot: Native LLVM machine code, global type inference, and expressive Ruby-inspired syntax.
 
 **Presenter Notes**:
 > When evaluating language bindings for game engines, the immediate question is always: 'Why Crystal? Why not Rust, C++, C#, or just stick with GDScript?'
@@ -365,34 +343,30 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Global Flow-Sensitive Inference & Compile-Time Nil Safety
 - **Code (type_inference_and_nil_safety.cr)**:
   ```crystal
-  # Crystal writes like Ruby, but with 100% static type safety:
   class Inventory
     getter items = [] of String # Inferred as Array(String)
   
-    # 1. Zero signature noise: parameter & return types inferred!
+    # 1. Zero signature noise: param & return types inferred!
     def find_item(name)
-      @items.find { |item| item == name } # Inferred: String | Nil
+      @items.find { |item| item == name } # => String | Nil
     end
   
     def equip(name)
       item = find_item(name)
-  
-      # 2. Compile-time nil safety via type narrowing:
       # item.upcase
-      # Compile Error: undefined method 'upcase' for Nil (type is String | Nil)
+      # Error: undefined method 'upcase' for Nil (String | Nil)
   
-      if item
-        # Inside guard, compiler narrows type strictly to String:
-        puts "Equipped: #{item.upcase}" # Safe!
+      if item # 2. Flow-sensitive narrowing to non-nil String:
+        puts "Equipped: #{item.upcase}"
       end
     end
   end
   ```
-- **How Crystal Defeats Sorbet & RBS**:
-  - Global Type Inference: Infers 95%+ of types across your entire codebase, completely eliminating verbose sig { params(...).returns(...) } clutter.
-  - Exhaustive Nil Safety: Treats Nil as a real type; accessing methods on nullable unions without checking fails at compile time, eliminating NoMethodError.
-  - Zero Runtime Tag Boxing: Primitives (Int32, Float64) and structs live unboxed on the stack with zero dynamic type-tag overhead.
-  - Native LLVM Speed: Compiles directly to bare-metal machine instructions with direct vtable dispatches, matching optimized C++ and Rust performance.
+- **Why Native Type Inference Beats Bolted-On Types**:
+  - Global Flow Inference: Infers 95%+ of types across your codebase without verbose sig { ... } annotations.
+  - Compile-Time Nil Safety: Treats Nil as a union member; unguarded calls fail at build time.
+  - Unboxed Value Types: Primitives (Int32, Float64) and structs live on the stack without tag boxing.
+  - Native LLVM Lowering: Compiles directly to machine code and static vtables at C++/Rust speeds.
 
 **Presenter Notes**:
 > When Ruby hit the scale wall, tools like Sorbet and RBS tried to bolt types onto an interpreted runtime. But as we saw, you paid the full syntactic tax of typing—writing verbose sig annotations on every method—with zero native speedups. Crystal was designed from day one with a global flow-sensitive type inference engine. You don't have to clutter your code with redundant type signatures; the compiler traces flow and infers 95% of all types automatically. More importantly, Crystal eliminates undefined method errors for nil through flow-sensitive branch analysis at compile time: if a method can return nil, its type is a union (String | Nil), and attempting to invoke methods on it without a branch guard causes a compile-time rejection. And because it targets LLVM, those types compile directly into native machine code.
@@ -406,7 +380,7 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Clean Higher-Order Functions, Inlined Closures, and Expressive Syntax
 - **Code (gameplay_primitives.cr — Expressive Systems Syntax)**:
   ```crystal
-  # 1. Clean vector math & operator overloading (SIMD-accelerated)
+  # 1. Algebraic operator overloading (inlined stack struct math)
   velocity = direction.normalized * move_speed + gravity * delta
   new_position = global_position + velocity
   
@@ -414,31 +388,24 @@ Theme: `sol.vin` | Total Slides: 142
   base_friction = 0.85_f32     # Explicit 32-bit float
   name, level, score = {"Shadow Knight", 85, 142_500_u64}
   
-  # 3. Infinite range slicing (endless & beginningless ranges)
+  # 3. Endless & beginningless range slicing
   inventory = ["Potion", "Shield", "Sword", "Helm", "Boots"]
+  tail_gear = inventory[2..]   # => ["Sword", "Helm", "Boots"]
+  quick_bar = inventory[..1]   # => ["Potion", "Shield"]
+  last_two  = inventory[-2..]  # => ["Helm", "Boots"]
   
-  # Endless range [2..]: slices from index 2 all the way to the end
-  tail_gear = inventory[2..]
-  # => ["Sword", "Helm", "Boots"]
-  
-  # Beginningless range [..1]: slices from the beginning up to index 1
-  quick_bar = inventory[..1]
-  # => ["Potion", "Shield"]
-  
-  # Negative offset with endless range [-3..]: slices last 3 items
-  recent_events = ["Spawn", "Aggro", "Hit: 12", "Crit: 45", "Died"]
-  combat_tail   = recent_events[-3..]
-  # => ["Hit: 12", "Crit: 45", "Died"]
+  # 4. Zero-copy contiguous memory view via Slice(T)
+  view = inventory.to_unsafe_slice[2..] # Zero heap allocation!
   ```
 - **Expressive Language Primitives**:
-  - Operator Overloading: Natural mathematical expressions (velocity = dir * speed + grav * delta) with direct CPU SIMD vectorization.
-  - Explicit Numeric Precision: Literals like 1.0_f32, 250_u32, and 1_000_000_u64 eliminate ambiguous runtime type coercion bugs.
-  - Zero-Cost Tuples: Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.
-  - Infinite & Endless Range Slicing: Expressive endless ([2..]), beginningless ([..1]), and negative-offset ([-3..]) slices on contiguous arrays with zero manual length math.
+  - Operator Overloading: Natural math syntax (dir * speed + grav * delta) compiled to inlined value-type machine code.
+  - Explicit Numeric Precision: Literals like 1.0_f32, 250_u32, and 1_000_000_u64 prevent silent type coercion bugs.
+  - Zero-Cost Tuples: Stack-allocated tuples provide multi-value returns and instant destructuring without heap allocation.
+  - Range Slicing & Zero-Copy Slice(T): Expressive [2..] and [..1] sub-arrays, plus Slice(T) for zero-copy pointer views.
 
 **Presenter Notes**:
-> Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
-> Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice.
+> Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading while compiling down to inlined stack-struct instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
+> Notice the range slicing: Crystal supports endless ranges like inventory[2..] and beginningless ranges like inventory[..1], as well as negative tail offsets like [-2..]—and when you need a true zero-copy pointer view without allocating a sub-array, Slice(T) gives you direct contiguous memory slicing.
 
 ---
 
@@ -638,7 +605,7 @@ Theme: `sol.vin` | Total Slides: 142
   # 3. Bang (!): In-place mutation & non-nil assertion
   inventory.sort!      # Mutates array in place (vs pure sort)
   vector.normalize!    # Mutates Vector3 in place
-  active_target!       # Asserts non-nil or raises RecordNotFound
+  active_target!       # Asserts non-nil (raises NilAssertionError)
   ```
 - **Punctuation as High-Signal Communication**:
   - Semantic Predicates: Methods ending in ? ask boolean questions, eliminating awkward is_/has_ prefix debates.
@@ -675,14 +642,14 @@ Theme: `sol.vin` | Total Slides: 142
     puts "Target ##{idx + 1}: #{enemy.name}"
   end
   
-  # Inlined Enumerable pipeline
-  active = enemies.select(&.boss?).reject(&.defeated?)
+  # Lazy Iterator pipeline (zero intermediate Arrays!)
+  active = enemies.each.select(&.boss?).reject(&.defeated?)
   ```
 - **Why Internal Iterators Excel**:
-  - Strict Lexical Scope: Block parameters (|item|) never leak into surrounding functions, preventing accidental variable reuse bugs.
-  - Zero Off-By-One Errors: The collection encapsulates its own traversal, eliminating manual index counters and bounds violations.
+  - Strict Lexical Scope: Block parameters (|item|) never leak into surrounding functions, preventing variable reuse bugs.
+  - Zero Off-By-One Errors: The collection encapsulates its own traversal, eliminating manual index counters and bounds bugs.
   - 50+ Free Query Methods: Implementing a single def each(&) unlocks map, select, reject, and reduce.
-  - LLVM Direct Inlining: Crystal inlines blocks into bare-metal CPU register loops, matching hand-written C speed with zero heap allocations.
+  - Zero-Allocation Inlined Blocks: Non-capturing yield blocks (each, times, any?) inline into native loops without closure allocation.
 
 **Presenter Notes**:
 > When programmers coming from C, C++, Java, C#, Go, or Python learn Crystal, one of their first questions is: 'Where is the for loop?'
@@ -746,12 +713,8 @@ Theme: `sol.vin` | Total Slides: 142
   ```crystal
   # 1. Re-opening standard primitives with game units:
   struct Int32
-    def tiles : Float32
-      self.to_f32 * 32.0_f32
-    end
-    def meters : Float32
-      self.to_f32 * 1.0_f32
-    end
+    def tiles : Float32;  self.to_f32 * 32.0_f32; end
+    def meters : Float32; self.to_f32 * 1.0_f32;  end
   end
   
   # 2. Extending native Godot engine types directly:
@@ -759,21 +722,19 @@ Theme: `sol.vin` | Total Slides: 142
     def to_iso : Godot::Vector2
       Godot::Vector2.new(x - y, (x + y) * 0.5_f32)
     end
-    def tile_snap(size : Float32 = 32.0_f32) : Godot::Vector2
-      Godot::Vector2.new((x / size).round * size, (y / size).round * size)
+    def tile_snap(s : Float32 = 32.0_f32) : Godot::Vector2
+      Godot::Vector2.new((x / s).round * s, (y / s).round * s)
     end
   end
   
   # 3. Fluent gameplay domain vocabulary in action:
-  jump_distance = 5.meters
-  map_offset = 4.tiles
-  grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap
+  jump_dist, grid_pos = 5.meters, Godot::Vector2.new(125.0, 75.0).tile_snap
   ```
 - **The Power of Open Classes Without the Peril**:
-  - Compile-Time Open Classes: Any class, struct, or primitive (Int32, String, Vector2) can be re-opened across files to add domain-specific verbs.
-  - Eliminating Ruby's Load-Order Hell: Because Crystal builds a unified whole-program AST before codegen, there are no runtime race conditions based on which require ran first.
-  - Zero Runtime Memory Overhead: Injected methods compile directly into native machine code and direct call sites—no dynamic method tables or cache invalidations.
-  - Extending Native Engine Types: Enrich native Godot structs and classes with project-specific mathematics without clunky wrappers or verbose helper classes.
+  - Compile-Time Open Classes: Re-open any class, struct, or primitive (Int32, Vector2) across files to add domain verbs.
+  - Deterministic Whole-Program AST: Parses all files before codegen, avoiding runtime load-order race conditions.
+  - Zero Runtime Overhead: Injected methods inline directly into native call sites without dynamic method-table lookups.
+  - Extend Engine Structs Directly: Add custom math to Godot::Vector2 and Transform3D without wrapper classes.
 
 **Presenter Notes**:
 > One of Ruby's most powerful yet polarizing features is open classes—the ability to monkey patch any class, including built-ins like Numeric or String. In dynamic Ruby, monkey patching is dangerous: if two gems patch the same method, whichever file is required last overwrites the other, creating terrifying load-order bugs. In Crystal, open classes are fully embraced, but with static safety. Because Crystal parses the entire project into a single unified AST before type checking and compilation, method additions are resolved deterministically. You can re-open Int32 to add game unit converters like 5.meters, or re-open Godot's Vector2 to add isometric conversions or tile snapping. LLVM inlines these methods directly, giving you pure Ruby ergonomics with zero runtime performance cost.
@@ -802,17 +763,17 @@ Theme: `sol.vin` | Total Slides: 142
   # 3. Non-Capturing Proc = Raw C Function Pointer
   cb = ->(id : UInt64, evt : Int32) { Godot::Bridge.dispatch(id, evt) }
   
-  # 4. Symbol-to-Proc Shorthand
+  # 4. Short Block Syntax (&.method — parsed directly to AST block)
   enemies.select(&.alive?).map(&.health)
   ```
 - **The Spectrum of Crystal Closures**:
   - Ephemeral Blocks (yield): Direct control-flow transfers inlined into machine loops by LLVM with zero heap allocations.
   - Typed Proc Objects: First-class closures created via ->(x) { ... } with strict compile-time parameter and return checking.
-  - Bare C Function Pointers: Non-capturing procs compile directly to native C function pointers for zero-overhead GDExtension engine callbacks.
-  - Symbol-to-Proc Sugar: Shorthands like &.alive? inline property getters directly into iterator pipelines without lambda wrappers.
+  - Bare C Function Pointers: Non-capturing procs compile directly to native C function pointers for zero-overhead GDExtension callbacks.
+  - Short Block Syntax (&.): enemies.select(&.alive?) expands at parse time into an inlined block—no Symbol or Proc allocation.
 
 **Presenter Notes**:
-> Closures are one of the most expressive parts of modern languages. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs that capture outer scope variables allocate a closure context on the heap, but are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead.
+> Closures are one of the most expressive parts of modern languages. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. Unlike Ruby's &:method which allocates a Symbol#to_proc closure, Crystal's &.method short block syntax expands directly in the parser AST into an inlined block. When you need first-class closures to store in variables, Crystal provides strictly typed Procs, and non-capturing Procs compile directly to raw C function pointers for zero-overhead GDExtension callbacks.
 
 ---
 
@@ -856,51 +817,27 @@ Theme: `sol.vin` | Total Slides: 142
 
 ---
 
-### Slide 28: Static Trade-Offs: No 'send' & Limits of 'exec'
+### Slide 28: Static Trade-Offs: No 'send' & Limits of 'exec' [Two-Left-One-Right]
 - **Theme Palette**: `digital_guy` (DigitalGuy)
-- **Badge**: `METAPROGRAMMING • ARCHITECTURAL TRADE-OFFS`
 - **Title**: Static Trade-Offs: No 'send' & Limits of 'exec'
-- **Subtitle**: The Boundaries of Compile-Time Reflection vs. Dynamic Plasticity
-- **Code (static_vs_dynamic.cr — No Runtime Plasticity)**:
-  ```crystal
-  # What Ruby allows that Crystal CANNOT do:
-  # target.send("cast_spell", 50)           # No runtime send!
-  # eval("class Boss < #{dyn_parent}; end") # No runtime eval!
-  # target.instance_variable_set("@hp", 100)# Frozen schemas!
-  
-  # How Crystal solves it at Compile Time:
-  # 1. Macro method_missing (evaluated during compilation):
-  macro method_missing(call)
-    {% if call.name.starts_with?("can_") %}
-      # Synthesizes concrete, typed methods at compile time!
-      def {{call.name}} : Bool
-        true
-      end
-    {% else %}
-      super
-    {% end %}
-  end
-  
-  # 2. Static unrolled dispatch instead of dynamic send:
-  case action_name
-  when "jump"   then player.jump
-  when "attack" then player.attack
-  else raise "Unknown action: #{action_name}"
-  end
-  ```
-- **The Limits of Static Metaprogramming**:
-  - No Dynamic send: Crystal compiles to native LLVM symbols and static vtables. Arbitrary runtime method strings cannot be dispatched dynamically.
-  - Zero Runtime eval: Code cannot be parsed or generated from strings at runtime; all syntax manipulation occurs at compile time via AST macros.
-  - Limits of 'exec': with self yield rebinds lexical context, but cannot inject dynamic ivars or alter object layout on the heap.
-  - Compile-Time method_missing: Macros intercept AST calls during compilation to generate real typed methods—not dynamic runtime proxies.
-  - The Grand Trade-Off: Giving up runtime plasticity earns 50x-100x bare-metal execution speed, SIMD vectorization, and compile-time safety.
+
+#### Left Stacked Containers:
+- **Dynamic Ruby Plasticity (Forbidden at Runtime)**
+- **Compile-Time AST Replacement in Crystal**
+
+#### Right Column:
+- **The Static Compilation Contract**
+  - No Dynamic send or eval: Methods compile to native LLVM symbols and fixed vtables; strings cannot be parsed at runtime.
+  - Fixed Memory Layouts: with self yield rebinds lexical scope, but cannot inject new instance variables onto the heap.
+  - Compile-Time method_missing: Intercepts unknown AST calls during compilation to synthesize real typed methods.
+  - The Engineering Payoff: Trading away runtime string dispatch unlocks 46x+ native speed and compile-time safety.
 
 **Presenter Notes**:
 > We must be honest about the trade-offs: Crystal is not a dynamic runtime with an eval loop.
 > In Ruby, you could call obj.send(:my_method) with a runtime string, or call instance_variable_set to inject arbitrary state into a live object.
 > Crystal deliberately forbids this. There is no 'send' because methods compile down to direct machine code symbols and fixed vtables—there is no runtime string dictionary to search!
 > Similarly, 'with self yield' gives you the ergonomic beauty of instance_exec, but it cannot alter object layout or invent fields at runtime: all types and memory layouts are fixed and frozen at compile time.
-> Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get bare-metal C++ speed, zero GC pauses, and complete compile-time type safety.
+> Crystal's method_missing is an AST macro that generates real, typed methods before the binary is linked. In exchange for losing that runtime plasticity, you get native LLVM machine speed, zero runtime reflection overhead, and complete compile-time type safety.
 
 ---
 
@@ -915,7 +852,6 @@ Theme: `sol.vin` | Total Slides: 142
   module Damageable
     macro included
       property health : Int32 = 100
-  
       def take_damage(amount : Int32) : Void
         @health = Math.max(0, @health - amount)
       end
@@ -930,9 +866,7 @@ Theme: `sol.vin` | Total Slides: 142
     end
   end
   
-  class Player < GameEntity
-    include Damageable
-  end
+  class Player < GameEntity; include Damageable; end
   ```
 - **Compile-Time Module & Class Hooks**:
   - The macro included Hook: Executes when a module is included, injecting instance variables and methods directly into the receiver.
@@ -955,21 +889,14 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Exhaustive AST Introspection Without Runtime Reflection
 - **Code (deferred_introspection.cr — Complete Type Reflection)**:
   ```crystal
-  # macro finished: Defers execution until the type is fully parsed
   abstract class NetworkSync
     macro inherited
-      # Wait until all properties, methods, and files are parsed:
+      # Wait until all reopened files, fields, and methods are parsed:
       macro finished
-        # 1. Exhaustive compile-time instance variable reflection:
         def serialize_network_state(io : IO) : Void
           {% for ivar in @type.instance_vars %}
             io.write_bytes(@{{ivar.name}})
           {% end %}
-        end
-  
-        # 2. Annotation inspection (e.g. @[Replicated], @[Export]):
-        def field_count : Int32
-          {{ @type.instance_vars.size }}
         end
       end
     end
@@ -979,15 +906,13 @@ Theme: `sol.vin` | Total Slides: 142
     property position_x : Float32 = 0.0_f32
     property position_y : Float32 = 0.0_f32
     property health     : Int32   = 100
-  end
-  # => Compiler automatically synthesizes serialize_network_state()!
+  end # => Synthesizes serialize_network_state(io) at compile time!
   ```
 - **The Power of Deferred Introspection**:
-  - The Open-Class Challenge: Because Crystal classes can be reopened across multiple files, the compiler cannot know all instance variables while parsing the class header.
-  - Deferred Execution: macro finished pauses macro expansion until the compiler has parsed every reopen, field, and method in the class.
-  - Static Type Reflection: Macro variables like @type.instance_vars, @type.methods, and @type.annotations allow complete type inspection.
-  - Boilerplate Annihilation: Powers Lapis's automated Godot ClassDB registration, @[Export] hints, and binary save/RPC serialization.
-  - Zero Reflection Overhead: Generates direct, unrolled field serialization methods at compile time—avoiding runtime reflection lookups, string field names, and dynamic boxing.
+  - Solves Open Classes: Because classes can be reopened across files, macro finished waits until the entire AST is parsed.
+  - Complete Static Reflection: Inspect @type.instance_vars, @type.methods, and @type.annotations at build time.
+  - Automated Dispatch Tables: Synthesizes Godot ClassDB bindings, @[Export] hints, and RPC serializers automatically.
+  - Zero Runtime Reflection: Emits unrolled native field accessors with zero dictionary lookups or boxing.
 
 **Presenter Notes**:
 > In dynamic languages like Ruby, you can inspect instance variables and methods at any time at runtime using reflection. But how do you do compile-time reflection in a statically typed language where classes are open and spread across multiple source files?
@@ -1018,7 +943,7 @@ Theme: `sol.vin` | Total Slides: 142
     property position_checkpoint : Godot::Vector3
   end
   
-  # 1. Serializing to JSON string: direct bytecode generation
+  # 1. Serializing to JSON string: streams directly to IO without reflection
   data = PlayerSaveData.new(...)
   json_str = data.to_json
   
@@ -1047,39 +972,38 @@ Theme: `sol.vin` | Total Slides: 142
 - **Subtitle**: Zero-Boilerplate State Transitions with Compile-Time Verification
 - **Code (enemy_fsm.cr — Declarative DSL & Gameplay Usage)**:
   ```crystal
-  # 1. Declarative FSM declaration via macro DSL
-  fsm BossState do
-    state Patrol, initial: true do
-      before { start_patrol_path }
-      on :see_player, transition_to: Chase
+  require "lapis/fsm"
+  
+  node BossEnemy < CharacterBody3D do
+    # 1. Declarative Symbol-Based FSM via Lapis macro DSL
+    fsm :state, initial: :patrol do
+      state :patrol do
+        enter  { start_patrol_path }
+        update { |dt| move_patrol(dt) }
+      end
+      state :chase do
+        enter  { play_animation("run") }
+        update { |dt| navigate_to(player, dt) }
+        exit   { stop_chase_music }
+      end
     end
   
-    state Chase do
-      before { play_animation("run") }
-      on :lost_player, transition_to: Patrol
-    end
-  end
-  
-  # 2. Runtime gameplay dispatch in _physics_process
-  fsm = BossStateMachine.new
-  def _physics_process(delta : Float64) : Void
-    fsm.trigger(:see_player) if distance_to(player) < 15.0
-  
-    case fsm.current_state
-    when .patrol? then move_patrol(delta)
-    when .chase?  then navigate_to(player, delta)
+    # 2. Runtime gameplay dispatch in _physics_process
+    def _physics_process(delta : Float64) : Void
+      transition_to(:chase) if in_state?(:patrol) && distance_to(player) < 15.0
+      update_state(delta)
     end
   end
   ```
 - **What the Macro Generates**:
-  - Typed Enum & Handlers: Generates concrete enum BossState with type-checked transition methods and exhaustive pattern matching.
-  - Inlined Lifecycle Hooks: Entry (before) and exit (after) hooks inline directly into native branch jumps.
-  - Static Method Dispatch: Transitions compile to direct CPU register comparisons—zero closures or dictionary lookups.
-  - Reusable Component: Available as require "lapis/fsm" for zero-dependency inclusion across gameplay nodes.
+  - Zero-Allocation State Tracking: Generates @state : Symbol, in_state?, transition_to, and update_state(delta).
+  - Inlined Lifecycle Hooks: enter, update, and exit blocks compile directly into static _fsm_* methods.
+  - Static Branch Dispatch: Transitions compile to 32-bit symbol comparisons—zero heap closures or hash lookups.
+  - Built-In Lapis Module: Shipped as require "lapis/fsm" (supporting both Symbol and Union Struct FSMs).
 
 **Presenter Notes**:
-> State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document.
-> Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct branch dispatches with zero reflection overhead. Packaged as the official standalone module `require "lapis/fsm"`, developers get expressive state management with minimal runtime overhead.
+> State machines are ubiquitous in gameplay engineering, but they often devolve into sprawling switch statements or heavy class hierarchies. With Crystal's AST macros, `require "lapis/fsm"` lets you declare states and `enter`, `update`, and `exit` hooks right inside your node.
+> Under the hood, the macro generates dedicated `_fsm_enter_*`, `_fsm_update_*`, and `_fsm_exit_*` methods and dispatches transitions via direct symbol comparisons with zero heap allocations.
 
 ---
 
@@ -1087,42 +1011,38 @@ Theme: `sol.vin` | Total Slides: 142
 - **Theme Palette**: `speccy_48k` (Speccy 48K)
 - **Badge**: `AST METAPROGRAMMING • UNDER THE HOOD`
 - **Title**: Behind the DSL: The FSM AST Macro
-- **Subtitle**: How Crystal's Compile-Time AST Rewriting Synthesizes Enums, Typed Dispatchers & Lifecycle Hooks
-- **Code (fsm_macro.cr — AST Rewriting Engine)**:
+- **Subtitle**: How Lapis's Compile-Time AST Rewriting Synthesizes Lifecycle Hooks & Static Dispatchers
+- **Code (src/libgodot/fsm.cr — AST Rewriting Engine)**:
   ```crystal
-  macro fsm(name, &block)
-    # 1. Synthesize typed Enum from AST state declarations
-    enum {{name.id}}
-      {% for call in block.body.expressions %}
-        {% if call.name == "state" %} {{call.args[0].id}} {% end %}
+  macro fsm(name, initial = :idle, &block)
+    @{{name.id}} : Symbol = {{initial}}
+    {{block.body}}
+  
+    def transition_to(new_state : Symbol) : Nil
+      old_state = @{{name.id}}
+      return if old_state == new_state
+      case old_state
+      {% for st in block.body.expressions %}
+        when {{st.args[0]}} then _fsm_exit_{{st.args[0].id}}
       {% end %}
-    end
-  
-    # 2. Synthesize StateMachine with flat static dispatch
-    class {{name.id}}Machine
-      getter current_state : {{name.id}}
-  
-      def trigger(event : Symbol) : Void
-        case @current_state
-        {% for state in block.body.expressions %}
-          when .{{state.args[0].id.underscore}}?
-            {% for call in state.block.body.expressions.select(&.name.== "on") %}
-              return transition_to({{name.id}}::{{call.named_args[:transition_to]}}) if event == {{call.args[0]}}
-            {% end %}
-        {% end %}
-        end
+      end
+      @{{name.id}} = new_state
+      case new_state
+      {% for st in block.body.expressions %}
+        when {{st.args[0]}} then _fsm_enter_{{st.args[0].id}}
+      {% end %}
       end
     end
   end
   ```
 - **Compile-Time Metaprogramming Invariants**:
-  - Compile-Time AST Traversal: Inspects and manipulates the AST during compilation, avoiding runtime reflection or dynamic proxies.
-  - Synthesizes Concrete Types: Automatically generates real enum BossState variants (Patrol, Chase) with exhaustiveness checks.
-  - Inlined Lifecycle Hooks: Inlines before and after blocks directly into native case branches with zero closure allocation.
-  - Static Branch Dispatch: trigger(:event) expands into direct machine jumps—zero dictionary lookups or vtables.
+  - Compile-Time AST Unrolling: Iterates over block.body.expressions during compilation with zero runtime reflection.
+  - Synthesizes Hook Methods: Each state :chase block compiles into concrete _fsm_enter_chase and _fsm_exit_chase methods.
+  - Zero Closure Allocations: Lifecycle blocks are spliced directly into method bodies rather than heap-allocated Proc closures.
+  - Direct Jump Tables: Both exit and enter case blocks lower to LLVM switch tables on interned 32-bit symbols.
 
 **Presenter Notes**:
-> This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with structured native machine execution.
+> Here is the actual Crystal macro implementation from `src/libgodot/fsm.cr`. Notice how `transition_to` works: the macro walks `block.body.expressions` at compile time and synthesizes two flat `case` statements—first calling `_fsm_exit_<state>` for the outgoing state, updating `@state = new_state`, and then calling `_fsm_enter_<state>` for the incoming state. Because every state block is unrolled into a direct method call at compile time, there are zero heap closures, zero function pointers, and zero dictionary lookups.
 
 ---
 
@@ -1141,34 +1061,17 @@ Theme: `sol.vin` | Total Slides: 142
 
 ---
 
-### Slide 35: What is Lapis? [Profile]
-- **Stats**:
-  - Up to 60x faster than GDScript: **LLVM Bare Metal**
-  - Zen blocks & static nil safety: **Ruby-Like Syntax**
-  - Editor tools written in Crystal: **Self-Hosted Plugin**
-  - Build, test, package & debug: **Unified Toolchain**
-- **Native LLVM Engine Speed**:
-  - Ahead-of-Time Compiled: Zero bytecode interpreter or virtual machine overhead.
-  - Up to 60x Faster: Eliminates CPU bottlenecks in math, physics, and intensive loops.
-  - Predictable Latency: Low-latency Boehm GC with compile-time nil safety.
-- **Zen Developer Ergonomics**:
-  - Declarative Node DSL: node Player < CharacterBody3D with zero boilerplate.
-  - Automated AST Macros: Seamless @[Export] property sliders and typed signals.
-  - In-Editor Help: Doc comments automatically harvested into Godot F1 tooltips.
-- **Self-Hosted Editor Integration**:
-  - Self-Hosted Like Crystal: Godot editor integration plugin is written in Crystal.
-  - Native Script UI: Attach and create .cr scripts directly via Godot's UI.
-  - Instant Hot-Reload: Shadow DLL swap with live state preservation and zero restarts.
-- **Unified Game Toolchain**:
-  - Complete Lapis CLI: lapis init, test, package, and benchmarks.
-  - Zero-Leak Verification: Deterministic leak testing via engine Performance monitors.
-  - Native Forensics: Gutter breakpoints and crash diagnostics via radare2.
+### Slide 35: What is Lapis? [Stats / KPI]
+- **46.2x** — Geomean Speedup vs GDScript (PERFORMANCE): Ahead-of-Time LLVM native machine code—averaging 46.2x faster across 27 suites and 140x+ in tight physics loops.
+- **0** — ClassDB Boilerplate (METAPROGRAMMING): Declarative node DSL (node Player < CharacterBody3D), @[Export] inspector ranges, typed signals, and F1 doc harvesting.
+- **100%** — Self-Hosted in Crystal (IN-EDITOR TOOLING): Godot editor integration plugin, syntax tokenizer, static AST validator, and <0.5s shadow DLL hot-reloader written in Crystal.
+- **30+** — Unified CLI Commands (WORKFLOW & CLI): Turnkey scaffolding, deterministic zero-leak spec runner, 5-language benchmark TUI, and native radare2 forensics.
 
 **Presenter Notes**:
-> What exactly is Lapis? Lapis is not merely a language binding; it is a comprehensive, full-featured developer toolchain for Godot Engine 4.8+.
-> First, it gives you bare-metal LLVM machine speed—up to 60x faster than GDScript with zero interpreter overhead and compile-time nil safety.
-> Second, it brings Ruby's zen ergonomics to Godot through a declarative node DSL with automated exports and signal generation.
-> Third, just like the Crystal compiler is famously self-hosted in Crystal, our Godot editor integration plugin is also self-hosted in Crystal! You get native script attachment, syntax highlighting, and instant F5 shadow DLL hot reloading.
+> What exactly is Lapis? Lapis is not merely a language binding; it is a comprehensive, self-hosted developer toolchain for Godot Engine 4.8+.
+> First, it gives you native LLVM machine speed—delivering a 46.2x geometric mean speedup over GDScript across 27 workloads (and over 140x on heavy simulation loops) with compile-time nil safety.
+> Second, it brings Ruby's expressive ergonomics to Godot through a declarative node DSL with automated exports, F1 doc harvesting, and typed signal generation.
+> Third, just like the Crystal compiler is self-hosted in Crystal, our Godot editor integration plugin is written in Crystal—providing native script attachment, syntax highlighting, and instant F5 shadow DLL hot reloading.
 > And fourth, Lapis provides a unified CLI for testing, deterministic leak verification, packaging, and native radare2 debugging.
 
 ---
@@ -1222,7 +1125,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - Safe Downcasting ([]?): self["path", T]? returns T? on missing nodes, avoiding crashes.
 
 **Presenter Notes**:
-> One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or untyped $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class subscript ergonomics.
+> One of the biggest pain points in GDExtension bindings is retrieving child nodes: in standard C++ or Rust bindings you write verbose get_node calls followed by manual downcasting. Lapis streamlines this with first-class subscript ergonomics and lazy caching.
 > Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. It can even infer the node name from the property name itself.
 > Furthermore, our typed subscript indexers—Node#[] and Node#[]?—provide intuitive, type-safe lookups: self["path", SomeClass] returns a strongly-typed instance with zero casting boilerplate. Safe subscripts with []? return nil if targets are absent or freed, integrating seamlessly with Crystal's flow-sensitive nil safety.
 
@@ -1235,47 +1138,32 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Reusable Gameplay Mixins with Godot ClassDB & Inspector Parity
 - **Code (damageable_trait.cr — First-Class Godot Mixin)**:
   ```crystal
-  # Reusable gameplay trait with full engine reflection
   gmodule Damageable do
     signal health_changed(current : Int32, max_health : Int32)
     signal died
   
-    @[Export(range: 0..500)]
-    property health : Int32 = 100
-    @[Export]
-    property max_health : Int32 = 100
+    @[Export(range: 0..500)] property health : Int32 = 100
+    @[Export] property max_health : Int32 = 100
   
     @[ExportToolButton("Reset Stats")]
-    def reset_stats : Void
-      self.health = self.max_health
-    end
-  
-    def heal(amount : Int32) : Void
-      self.health = Math.min(self.max_health, self.health + amount)
-      emit(health_changed, self.health, self.max_health)
-    end
+    def reset_stats : Void; self.health = max_health; end
   
     def take_damage(amount : Int32) : Void
-      self.health = Math.max(0, self.health - amount)
-      emit(health_changed, self.health, self.max_health)
-      emit(died) if self.health == 0
+      self.health = Math.max(0, health - amount)
+      emit(health_changed, health, max_health)
+      emit(died) if health == 0
     end
   end
   
-  # Custom node mixing in Damageable trait
   node HeroCharacter < CharacterBody2D do
-    include Damageable
-    def _ready : Void
-      Godot.print("Hero ready: #{health}/#{max_health} HP")
-    end
+    include Damageable # Flattens exports & signals into ClassDB!
   end
   ```
 - **Why gmodule Beats Raw Modules**:
-  - The Raw Module Gap: Standard modules inline methods, but cannot register Godot properties or signals.
-  - ClassDB Registration: macro node inspects gmodule traits and flattens exports into ClassDB.
-  - Full Inspector Parity: Export ranges, defaults, and @[ExportToolButton] render as native properties.
-  - Zero SceneTree Overhead: Mixins incur zero child node allocations and zero scene traversal cost.
-  - Cross-Branch Reuse: Share identical combat logic across CharacterBody2D, RigidBody3D, or Area2D.
+  - Solves the Module Gap: Raw Crystal modules inline methods, whereas gmodule also registers Godot properties and signals.
+  - Automated ClassDB Flattening: macro node introspects included gmodule traits and registers their metadata.
+  - Full Inspector Parity: Export ranges, defaults, and @[ExportToolButton] render as native Inspector controls.
+  - Zero SceneTree Overhead: Share combat or inventory traits across 2D/3D nodes with zero child-node allocation.
 
 **Presenter Notes**:
 > While Crystal has always supported mixin modules, integrating them into Godot presents a unique architectural challenge: Godot requires classes, properties, and signals to be explicitly registered in its reflection database, ClassDB. If you write a standard Crystal module, its methods compile into the class, but Godot's Inspector has no idea the properties exist, and signals cannot be wired up in the engine!
@@ -1291,11 +1179,10 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Composed Module Inheritance, Cooperative Lifecycle Chaining & Abstract Contracts
 - **Code (composed_traits.cr — Inheritance & Cooperative Hooks)**:
   ```crystal
-  # 1. Composed Module Inheritance (Module < Module)
+  # 1. Composed Module Inheritance (gmodule < gmodule)
   gmodule Combatant < Damageable do
     signal attack_landed(target : String, damage : Int32)
-    @[Export]
-    property attack_power : Int32 = 25
+    @[Export] property attack_power : Int32 = 25
     def attack(target : String) : Void
       emit(attack_landed, target, attack_power)
     end
@@ -1304,26 +1191,22 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   # 2. Cooperative Engine Lifecycle Hooks
   gmodule AutoRegen do
     include Damageable
-    @[Export]
-    property regen_rate : Float32 = 2.0_f32
+    @[Export] property regen_rate : Float32 = 2.0_f32
     def _process(delta : Float64) : Void
-      super # Chains through all mixed-in modules!
+      super # Chains through all mixed-in gmodules!
       heal((regen_rate * delta).to_i32)
     end
   end
   
-  # 3. Composed Node with Multiple Traits
   node BossMonster < CharacterBody3D do
-    include Combatant # Inherits Combatant + Damageable!
-    include AutoRegen # Autonomous frame regeneration
+    include Combatant; include AutoRegen
   end
   ```
 - **Architectural Rigor & Safety**:
-  - Composed Inheritance: Traits inherit traits (gmodule A < B), inheriting all properties and signals.
-  - Cooperative Chaining: Calling super in _process chains lifecycle hooks across all mixed-in traits.
-  - Abstract Contracts: abstract def enforces required node implementations at compile time.
-  - Diamond-Free: Linearized mixin semantics eliminate C++ virtual diamond ambiguities cleanly.
-  - Autonomous Traits: Traits like AutoRegen manage per-frame updates with zero child node cost.
+  - Composed Inheritance: Traits inherit traits (gmodule A < B), carrying over all exported properties and signals.
+  - Cooperative Chaining: Calling super in _process chains lifecycle hooks across all mixed-in traits in order.
+  - Compile-Time Contracts: abstract def enforces required host-node methods at build time.
+  - Diamond-Free Linearization: Crystal’s module ancestors eliminate C++ virtual diamond ambiguities cleanly.
 
 **Presenter Notes**:
 > gmodule goes far beyond simple flat mixins—it unlocks a complete, robust trait architecture for game engines.
@@ -1346,8 +1229,8 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
           push_error("Failed cast to Player")
       add_child(player)
   
-      # Pitfall 2: Dynamic load returns untyped Resource;
-      # no caching, no type parameters, silent null failures
+      # Pitfall 2: Dynamic load returns generic Resource;
+      # no path-extension type deduction, manual casting required
       var theme = load("res://assets/theme.tres") as Theme
       var sound = load("res://audio/jump.wav") as AudioStreamWAV
       var comp_scene = load("res://scenes/companion.tscn") as PackedScene
@@ -1359,20 +1242,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   def spawn_entities : Void
     # 1. Type-Safe Scene Instantiation via instantiate_as:
     player_scene = preload("res://scenes/player.tscn")
-    player = player_scene.instantiate_as(Player) # Concrete Player node!
+    player = player_scene.instantiate_as(Player) # Concrete Player!
     add_child(player)
   
     # 2. Compile-Time Extension Inferred load & preload:
-    scene = load("res://scenes/companion.tscn")    # Inferred -> PackedScene
-    companion = scene.instantiate_as(Companion)
-    add_child(companion)
+    scene = load("res://scenes/companion.tscn")  # -> PackedScene
+    add_child(scene.instantiate_as(Companion))
   
-    icon  = preload("res://assets/icon.svg")       # Inferred -> Texture2D
-    sound = load("res://audio/jump.wav")           # Inferred -> AudioStream
+    icon  = preload("res://assets/icon.svg")     # -> Texture2D
+    sound = load("res://audio/jump.wav")         # -> AudioStream
   
     # 3. Explicit typing with native .as / .as? & nilable variants:
     combat = load("res://data/combat.tres").as(CombatConfig)
-    opt_config = load?("res://data/optional.tres").as?(CombatConfig)
+    opt_cfg = load?("res://data/optional.tres").as?(CombatConfig)
   end
   ```
 
@@ -1381,13 +1263,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ### Slide 41: Resource Loading: load, preload & instantiate_as [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Two-Step Instantiation: Requires calling preload(...), storing a PackedScene, and calling .instantiate() separately.
-  - Unsafe Runtime Casting: Untyped Resource return requires as Player casting that fails silently if types diverge.
-  - No Built-In Preload Cache: Dynamic load() hits the filesystem repeatedly unless developers hand-roll custom caching dictionaries.
+  - Untyped Base Resource Return: load() returns a generic Resource, requiring manual as T casts with no extension type inference.
+  - Ephemeral RefCounted Caching: If local references drop to zero between waves, ResourceLoader evicts the asset and re-reads from disk.
 - **Solution Advantages**:
-  - Type-Safe instantiate_as(T): Unpacks and verifies the instantiated node type against ClassDB, eliminating silent runtime casting bugs.
-  - Extension Type Inference: load("res://...") and preload("res://...") automatically deduce PackedScene (.tscn), Texture2D (.svg/.png), or AudioStream (.wav/.ogg) at compile time!
-  - Native Casting (.as & .as?): Standard Crystal downcasting replaces verbose as: arguments; use load? / preload? for safe, exception-free loading.
-  - Thread-Safe Cache: PreloadCache and preload(...) use mutex synchronization to prevent race conditions during background loading.
+  - Type-Safe instantiate_as(T): Verifies the instantiated node type against ClassDB, preventing silent casting bugs.
+  - Extension Type Inference: load and preload deduce PackedScene (.tscn), Texture2D (.png/.svg), or AudioStream (.wav/.ogg) at build time.
+  - Safe Nilable Loaders: Pair load? and preload? with .as?(T) for exception-free optional asset loading.
+  - Persistent Thread-Safe Cache: PreloadCache pins preloaded assets in memory with mutex protection across worker threads.
 - **Key Takeaway**: Lapis extension-inferred load and preload macros alongside type-safe instantiate_as turn asset loading and scene instantiation into clean, compile-time verified operations.
 
 **Presenter Notes**:
@@ -1448,7 +1330,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   
   # 2. Type-checked one-liners (catches typos at build time!):
   tween(boss.position.y, to: 150.0, in: 0.4.seconds)
-  coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)
+  tween(coin.scale, to: Vector2.new(1.35, 1.35), in: 150.milliseconds)
   ```
 - **Animation & Juice Invariants**:
   - Statement-Based Pipelines: Peels apart block statements into a unified tween execution pipeline.
@@ -1501,10 +1383,10 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     .mask(0b0011)
     .query
   
-  # 3. CanvasItem Visibility & Opacity Helpers:
-  hud.opacity = 0.85 # Modulate alpha shorthand
-  shield_fx.visible! # Immediate boolean visibility
-  status_icon.hidden!
+  # 3. CanvasItem Visibility & Alpha Helpers:
+  hud.alpha = 0.85              # Modulate alpha shorthand
+  shield_fx.show                # Immediate visibility (or .hide)
+  status_icon.toggle_visibility # Flips & returns new Bool state
   ```
 
 ---
@@ -1516,18 +1398,18 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - Runtime Casting Hazards: Colliders must be manually checked with is Enemy, prone to null errors.
   - Verbose Property Ceremony: Altering opacity requires unpacking modulate.a instead of semantic helpers.
 - **Solution Advantages**:
-  - One-Line & Fluent Queries: raycast_to or chained raycast2d.to.exclude.mask.query in a single line.
-  - Strongly-Typed Hits: Returns PhysicsHit2D / 3D value types with typed point, normal, and rid.
+  - One-Line & Fluent Queries: raycast_to or chained raycast2d.to.exclude.mask.query in a single expression.
+  - Strongly-Typed Hits: Returns PhysicsHit2D / 3D structs with typed point, normal, and rid.
   - Dead-Pointer Guarded: hit.collider.as?(Enemy) validates survival with zero dangling pointer risks.
-  - CanvasItem Helpers: Direct node.opacity = val, visible!, and hidden! streamline rapid UI transitions.
+  - CanvasItem Helpers: Direct node.alpha = val, show/hide, and toggle_visibility streamline UI state.
 - **Key Takeaway**: Lapis collapses Godot's multi-step raycasting ceremony into safe one-line queries, fluent builders, and scene ergonomics.
 
 **Presenter Notes**:
 > Performing raycasts in Godot has historically been cumbersome. You either attach physical RayCast2D/3D nodes in the editor—which adds scene tree bloat—or write over a dozen lines of boilerplate: acquiring get_world_2d().direct_space_state, allocating PhysicsRayQueryParameters2D, executing intersect_ray, and unpacking an untyped Variant dictionary with string keys.
-> Lapis completely revolutionizes physics queries with direct space raycasting. Methods like 'raycast_to(target_pos)' and 'raycast(dir, distance)' run on Node2D and Node3D in a single line, returning strongly-typed PhysicsHit2D or PhysicsHit3D value structs.
+> Lapis simplifies physics queries with direct space raycasting. Methods like 'raycast_to(target_pos)' and 'raycast(dir, distance)' run on Node2D and Node3D in a single line, returning strongly-typed PhysicsHit2D or PhysicsHit3D value structs.
 > For complex queries, fluent builders ('raycast2d', 'raycast3d') let you chain targets, exclusions, and collision masks before calling '.query'.
 > All colliders can be safely downcast with 'hit.collider.as?(Enemy)' protected by Lapis's 64-bit dead-pointer armor.
-> Additionally, CanvasItem gains direct opacity assignment and imperative visibility helpers ('visible!', 'hidden!'), eliminating boilerplate color math for routine transitions.
+> Additionally, CanvasItem gains direct 'alpha' assignment and visibility helpers ('show', 'hide', 'toggle_visibility'), eliminating boilerplate color math for routine transitions.
 
 ---
 
@@ -1548,7 +1430,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   angle = angle_to_point(player) # 2D orientation angle
   
   # 3. Continuous Input Vector Queries via Input Singleton:
-  move_dir = Godot::Input.get_vector(:move_left, :move_right, :move_up, :move_down)
+  move_dir = Godot::Input.get_vector(
+    :move_left, :move_right, :move_up, :move_down
+  )
   ```
 - **Audio, Spatial & Math Invariants**:
   - Context-Aware play_sound Macro: Automatically selects 2D, 3D, or non-spatial audio players based on caller type.
@@ -1565,43 +1449,10 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 47: Gameplay Architecture: FSM, Signal Bus & Object Pooling
-- **Theme Palette**: `mineshaft` (Mineshaft)
-- **Badge**: `GAMEPLAY • DESIGN PATTERNS`
-- **Title**: Gameplay Architecture: FSM, Signal Bus & Object Pooling
-- **Subtitle**: Value-Type Union FSM, Decoupled Signal Bus & High-Throughput Node Pools
-- **Code (gameplay_patterns.cr — Optional Lapis Patterns)**:
-  ```crystal
-  require "lapis/fsm"
-  require "lapis/signal_bus"
-  require "lapis/pool"
-  
-  # 1. Value-Type Union FSM (stack records, zero heap allocations!):
-  record Idle; record Walk, speed : Float32
-  fsm PlayerState, initial: Idle.new do
-    on_enter Walk do |w|
-      Godot.print("Walk: #{w.speed} m/s")
-    end
-  end
-  
-  # 2. Type-Safe Decoupled Signal Bus (lazy singleton & test reset):
-  signal_bus GameEvents do
-    signal score_changed(points : Int32)
-    signal boss_defeated(name : String, loot_id : Int32)
-  end
-  GameEvents.score_changed.connect { |pts| update_hud(pts) }
-  GameEvents.score_changed.emit(500)
-  GameEvents.reset_bus! # Clean test isolation!
-  
-  # 3. Dead-Pointer Safe Node Pool (high-throughput recycling):
-  node_pool BulletPool, node_type: Bullet, initial: 32, max: 128
-  bullet = pool.acquire { |b| b.fire_at(target) }
-  pool.release(bullet) # Resets parent, hides, stops process
-  ```
-- **Modular Gameplay Patterns**:
-  - Strictly Optional Modules: require "lapis/fsm", signal_bus, and pool guarantee zero prelude bloat in standard projects.
-  - Value-Type Union FSM: State transitions between value records (Idle | Walk) avoid heap allocations and resolve at build time.
-  - High-Throughput Node Pooling: Lapis::Pool(T) manages node recycling with automatic pre-warming and dead-pointer verification.
-  - Decoupled Signal Bus: signal_bus Name declares static event hubs with test-isolation reset (reset_bus!).
+- **Palette**: `mineshaft` | **Badge**: `GAMEPLAY • DESIGN PATTERNS`
+- **1. Value-Type Union FSM**:
+- **2. Decoupled Signal Bus**:
+- **3. High-Throughput Pool**:
 
 **Presenter Notes**:
 > Writing clean, scalable gameplay logic requires robust design patterns that don't sacrifice native performance. In Lapis, we provide high-level gameplay patterns as strictly optional requires, keeping the core prelude featherlight.
@@ -1678,19 +1529,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   end
   player_died.once { game_over_director.trigger_defeat }
   
-  # 3. Positional type filtering
+  # 3. Positional type filtering (auto-downcasts body to Player)
   on area.body_entered, Player do |player|
     player.collect_coin
   end
   
-  # 4. First-class typed emission
-  health_changed.emit(75, 100)
+  # 4. Zero-allocation StaticSignalTable bind & hot-path emit
+  on_signal health_changed, ->on_hp_updated(Int32, Int32)
+  emit_health_changed(75, 100) # FNV-1a hash slot, 0 Variant boxing!
   ```
 - **Reactive Gameplay Architecture**:
-  - Declarative on & connect: Wire signals with clean blocks, eliminating boilerplate intermediary methods.
-  - First-Class Signal Accessors: health_changed.emit(...) provides type-checked invocation with zero namespace pollution.
+  - Declarative on & connect: Wire signals with clean blocks, eliminating single-use callback boilerplate.
+  - Zero-Allocation StaticSignalTable: on_signal and emit_health_changed dispatch via FNV-1a hashes with zero heap closures.
   - Positional Type Filtering: on area.body_entered, Player filters collision events and downcasts targets automatically.
-  - One-Shot & Safe Lifecycle: signal.once { ... } auto-unhooks after firing, while dead-instance tracking prevents stale callback crashes.
+  - One-Shot & Safe Lifecycle: signal.once { ... } auto-unhooks after firing, while 64-bit IDs prevent stale callback crashes.
 
 **Presenter Notes**:
 > Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. With our 'on' macro and 'connect' blocks, you can wire up signals with idiomatic closures—eliminating single-use handler functions.
@@ -1701,23 +1553,23 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 51: Signals & Callables: String Handlers vs. The on Macro [Step 1: Code]
 - **Palette**: `indiglo_light` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
-- **:circle-xmark: GDScript: Method Sprawl & Callable Boilerplate**:
+- **:circle-xmark: GDScript: Unchecked .emit() & Manual Type Guards**:
   ```gdscript
+  extends Node2D
+  signal health_changed(current: int, max: int)
+  
   func _ready() -> void:
-      # Pitfall 1: Clunky named method wiring for every interaction
+      # 1. Requires wiring separate callback methods or untyped lambdas
       $StartButton.pressed.connect(_on_start_button_pressed)
-      
-      # Pitfall 2: Verbose Callable wrapping for dynamic callbacks
-      $Enemy.connect("died", Callable(self, "_on_enemy_died"))
-      
-      # Pitfall 3: Stringly-typed emit lacks compile-time argument checks
-      emit_signal("health_changed", 75, 100)
+      $Area2D.body_entered.connect(_on_body_entered)
   
-  func _on_start_button_pressed() -> void:
-      start_game_sequence()
+      # 2. Signal.emit() is variadic Variant — wrong types compile silently!
+      health_changed.emit("wrong_type", 100) # Runtime bug, no compiler error!
   
-  func _on_enemy_died(bounty: int) -> void:
-      add_score(bounty)
+  func _on_body_entered(body: Node2D) -> void:
+      # 3. Manual runtime type guard & cast required in every callback
+      if body is Player:
+          (body as Player).collect_coin()
   ```
 - **:sparkles: Crystal: Declarative on Macro, Type Filters & emit**:
   ```crystal
@@ -1748,9 +1600,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 52: Signals & Callables: String Handlers vs. The on Macro [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Method Sprawl: Every connected signal requires creating a separate single-use handler function (_on_button_pressed).
-  - Callable Verbosity: Dynamic connections require wrapping receivers in Callable(self, "_on_...").
-  - Untyped String Emission: emit_signal("...") provides zero compile-time signature verification.
+  - Unchecked Variadic .emit(): Even in Godot 4, Signal.emit() accepts arbitrary Variant varargs—wrong argument counts or types fail only at runtime.
+  - Manual Type-Guard Boilerplate: Physics and UI callbacks require repetitive if body is Player: checks and casts instead of declarative type filtering.
+  - Callback Sprawl: Splits event wiring in _ready() from handler bodies scattered across the bottom of the script.
 - **Solution Advantages**:
   - Declarative on Sugar: Connects blocks directly to signals (on start_button.pressed { ... }) with zero single-use handler boilerplate.
   - Positional Type Filtering: on area.body_entered, Player do |player| filters signal arguments by concrete class and automatically downcasts.
@@ -2217,12 +2069,12 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ### Slide 67: Anonymous Functions: Callable Churn vs. Inlining [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Heap-Allocated Callables: Every anonymous func(...) lambda instantiates a native Godot Callable heap object with refcount tracking.
-  - Clunky Lambda Syntax: No compact block syntax or symbol-to-proc; even simple 1-line predicates require full function signature boilerplate.
+  - Clunky Lambda Syntax: No compact block syntax or &.method shorthand; even 1-line predicates require full func boilerplate.
   - Chaining & Intermediate Arrays: Chaining operations like filter and map creates intermediate temporary arrays, multiplying memory pressure.
 - **Solution Advantages**:
   - Inlined Block Execution: Crystal blocks passed to yield are inlined directly by LLVM into native loops without allocating heap closure objects.
   - Declarative on Sugar: on timer.timeout { ... } generates typed signal handlers with automatic listener lifecycle management.
-  - Clean Block Syntax: Curly braces { |x| ... } and symbol-to-proc (&.property) eliminate clutter while keeping full static type inference.
+  - Short Block Syntax: Curly braces { |x| ... } and (&.property) expand directly in the AST with full static type inference.
   - 50+ Rich Enumerators: sort_by!, select, reject, tally, and chunk compose seamlessly into readable data pipelines.
 - **Key Takeaway**: Crystal blocks eliminate lambda closure allocations through LLVM inlining, giving you expressive functional pipelines with C-level execution speed.
 
@@ -2358,12 +2210,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```
 - **:sparkles: Crystal: Exhaustive Case & Tuple Patterns**:
   ```crystal
-  enum State
-    Idle
-    Run
-    Attack
-    Dead
-  end
+  enum State; Idle; Run; Attack; Dead; end
   
   def handle_state(state : State, health : Int32) : Void
     # Compiler enforces exhaustiveness across all variants:
@@ -2374,9 +2221,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     when .dead?   then play_anim("death")
     end
   
-    # Tuple pattern matching in a single clean expression:
+    # Tuple pattern matching in a single expression:
     case {health, state}
-    when {..0, .dead?} then nil # already dead
+    when {..0, .dead?} then nil
     when {..0, _}      then die!
     when {..20, _}     then emit(low_health_warning)
     end
@@ -2403,21 +2250,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 74: Metaprogramming: Strings vs. AST Macros [Step 1: Code]
 - **Palette**: `iwasbornintheusa` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
-- **:circle-xmark: GDScript: Dictionary Sprawl & String Signals**:
+- **:circle-xmark: GDScript & C++: Untyped Signal Emits & No AST Macros**:
   ```gdscript
-  # Manual dictionary definitions for editor export hints
-  func _get_property_list() -> Array[Dictionary]:
-      return [{
-          "name": "move_speed",
-          "type": TYPE_FLOAT,
-          "hint": PROPERTY_HINT_RANGE,
-          "hint_string": "10.0,500.0,5.0"
-      }]
+  @export_range(10.0, 500.0, 5.0) var move_speed: float = 150.0
   
-  # Manual signal emissions with loose string names and untyped arguments
-  signal player_hit(damage, source)
+  # Signal parameter types in GDScript 4 are documentation-only!
+  signal player_hit(damage: int, source: Node)
+  
   func take_damage(dmg: int) -> void:
-      emit_signal("player_hit", dmg, self) # Typo in "player_hit" fails at runtime!
+      # Wrong argument types or counts are NOT checked by the parser:
+      player_hit.emit("not_an_int") # Compiles cleanly, fails at runtime!
+  
+  # And in godot-cpp, exposing properties & signals requires manual
+  # ClassDB::bind_method + ADD_PROPERTY + ADD_SIGNAL boilerplate.
   ```
 - **:sparkles: Crystal: Compile-Time AST Macro Synthesis**:
   ```crystal
@@ -2439,21 +2284,21 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 75: Metaprogramming: Strings vs. AST Macros [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Stringly-Typed Dictionaries: Requires constructing complex property dictionaries in _get_property_list().
-  - Brittle String Signals: Typo in signal name string fails silently or crashes at runtime.
-  - No Parameter Validation: Emit calls cannot verify argument counts or types at compile time.
+  - Unchecked Signal Signatures: GDScript 4 signal type annotations are documentation-only; Signal.emit(...) is variadic and unchecked.
+  - No User Metaprogramming: GDScript has built-in @export tags, but zero user-definable macros or AST transforms to eliminate repetitive code.
+  - Manual C++ Registration: In godot-cpp, every property and signal requires manual string registration inside _bind_methods().
 - **Solution Advantages**:
-  - Declarative Annotations: @[Export] extracts doc comments and ranges directly into Godot Inspector.
-  - Type-Safe emit Macro: emit(player_hit, dmg, self) validates argument types and arity at compile time.
-  - Zero Runtime Reflection: Metaprogramming executes at compile time; runtime cost is exactly zero.
-- **Key Takeaway**: Crystal AST macros execute at compile time, eliminating runtime reflection and catching API mismatches instantly.
+  - Declarative Annotations: @[Export] extracts doc comments and ranges directly into Godot ClassDB at compile time.
+  - Type-Safe emit Macro: emit(player_hit, dmg, self) validates exact argument types and arity during compilation.
+  - User-Extensible AST Macros: Write your own compile-time macros for FSMs, object pools, RPCs, and serialization with zero runtime reflection.
+- **Key Takeaway**: Crystal AST macros execute at compile time, eliminating manual C++ registration and catching signal signature mismatches before launch.
 
 **Presenter Notes**:
-> Metaprogramming in GDScript often means writing string dictionaries in _get_property_list, maintaining loose string names for signals, and relying on runtime reflection. In Lapis, we use Crystal's compile-time AST macros. When you declare an export or a signal, the macro generates first-class, strongly-typed signal accessors: player_hit.emit, player_hit.connect, and full ClassDB property registrations. Any typos or argument type mismatches are caught immediately by the compiler.
+> While Godot 4 added built-in @export annotations to GDScript, signal parameter types in GDScript are still documentation-only—calling player_hit.emit with the wrong types or argument count is not caught at parse time. Furthermore, GDScript does not support user-defined macros, and C++ requires manual ClassDB::_bind_methods() wiring for every property and signal. In Lapis, Crystal's compile-time AST macros generate strongly-typed signal accessors and full ClassDB registrations with zero runtime reflection.
 
 ---
 
-### Slide 76: Value Types: GC Thrashing vs. Stack Structs [Step 1: Code]
+### Slide 76: Value Types: Heap Churn vs. Stack Structs [Step 1: Code]
 - **Palette**: `gamestation_3` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: 10,000 Heap RefCounted Allocations & Pointer Chasing**:
   ```gdscript
@@ -2470,7 +2315,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   # Cache disaster: Array of 10,000 pointers scattered in RAM
   for evt in events:
       apply_damage(evt.damage) # 10,000 pointer chases!
-  events.clear() # Mass deallocation triggers GC stutter
+  events.clear() # 10,000 synchronous atomic decrements + heap frees
   ```
 - **:sparkles: Crystal: CPU Register Value Passing & Flat Contiguous Buffers**:
   ```crystal
@@ -2484,7 +2329,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     @health -= event.critical? ? event.damage * 2.0_f32 : event.damage
   end
   
-  # 2. 10,000 structs inlined into ONE flat 120 KB buffer:
+  # 2. 10,000 structs inlined into ONE flat 120 KB buffer (or FrameScratch):
   events = Array(CombatEvent).new(10_000)
   10_000.times { events << CombatEvent.new(45.0_f32, ElementType::Fire, true) }
   events.each { |evt| apply_damage(evt) } # Linear cache sweep!
@@ -2492,20 +2337,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 77: Value Types: GC Thrashing vs. Stack Structs [Step 2: Analysis & Critique]
+### Slide 77: Value Types: Heap Churn vs. Stack Structs [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Heap Thrashing for Ephemeral Data: 10,000 events require 10,000 individual malloc calls and atomic refcount updates.
+  - Heap Thrashing for Ephemeral Data: 10,000 events require 10,000 individual heap allocations and atomic reference-count updates.
   - Pointer Chasing & Cache Misses: Array[CombatEvent] stores scattered 64-bit pointers, thrashing CPU L1/L2 caches.
-  - Deallocation Frame Stutters: Bulk disposal of thousands of RefCounted instances causes GC micro-freezes.
+  - Synchronous Teardown Spikes: events.clear() runs 10,000 atomic refcount decrements and memdelete calls on the main thread.
 - **Solution Advantages**:
   - Zero-Heap Value Passing: Passing CombatEvent copies directly in CPU registers or on the stack with 0 heap bytes.
   - Contiguous Cache Line Saturation: Array(CombatEvent) embeds structs inline into a single 120 KB buffer.
-  - Zero Pointer Dereferencing: Flat contiguous memory maximizes CPU cache line hits and unlocks LLVM auto-vectorization.
-- **Key Takeaway**: Stack-allocated structs eliminate thousands of heap allocations per frame, delivering bare-metal C cache locality with elegant object syntax.
+  - FrameArena Bump Allocation: Use Lapis.frame_arena (FrameScratch) for $O(1)$ per-frame scratch slices reset at frame end.
+- **Key Takeaway**: Stack-allocated structs and per-frame bump arenas eliminate thousands of heap allocations per frame, delivering C cache locality with clean object syntax.
 
 **Presenter Notes**:
-> In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types must extend RefCounted. When you spawn 10,000 projectiles or process 10,000 combat events, Godot must perform 10,000 individual heap allocations and atomic refcount updates. An array of these objects is just an array of pointer addresses scattered randomly across memory, causing massive L1 cache miss penalties on every frame. When they die, mass deallocation causes micro-stutters.
-> In Crystal, structs are first-class value types. Passing a CombatEvent to a method passes it directly in CPU registers or on the stack with zero heap allocations. Even better, an Array(CombatEvent) stores the 12-byte structs contiguously in a single flat memory block. 10,000 events take just 120 KB of contiguous RAM, maximizing CPU cache line efficiency and allowing LLVM to auto-vectorize loops with zero GC overhead.
+> In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types extend RefCounted. When you spawn 10,000 projectiles or process 10,000 combat events, Godot performs 10,000 individual heap allocations and atomic refcount updates. An array of these objects is an array of pointer addresses scattered across memory, causing L1 cache miss penalties. When cleared, 10,000 synchronous atomic decrements and heap frees run on the main thread.
+> In Crystal, structs are value types passed directly in CPU registers or on the stack. An Array(CombatEvent) stores the 12-byte structs contiguously in a single 120 KB block, and Lapis also provides Lapis.frame_arena for O(1) bump-allocated per-frame scratch buffers.
 
 ---
 
@@ -2560,22 +2405,21 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 80: Memory Safety: Dangling Pointers vs. Protection [Step 1: Code]
-- **Palette**: `catppuccin_mocha` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
+- **Palette**: `catppuccin_mocha` | **Badge**: `NATIVE C++ ANTI-PATTERN • MEMORY SAFETY`
 - **:circle-xmark: Unshielded Native C++: Dangling Pointer Crashes**:
   ```cpp
-  // Combat target acquired earlier in native C++:
-  Ref<Enemy> target = get_node<Enemy>("Boss");
+  // Combat target Node* acquired earlier in godot-cpp:
+  Enemy *target = get_node<Enemy>("Boss");
+  ObjectID target_id = target->get_instance_id();
   
-  void cast_spell(Ref<Spell> spell) {
+  void cast_spell(const Ref<Spell> &spell) {
       // Boss died from poison & called queue_free()!
-      // Raw pointer still references dead C++ memory!
-      target->take_damage(spell->get_power()); 
+      // Raw Enemy* still points to freed C++ memory:
+      target->take_damage(spell->get_power());
       // FATAL: 0xC0000005 ACCESS_VIOLATION segfault!
-      // Instant crash to desktop with NO stack trace!
   
-      // Defensive guard boilerplate required:
-      if (target.is_valid() &&
-          is_instance_valid(target.ptr())) {
+      // Manual ObjectDB guard required before every call:
+      if (ObjectDB::get_instance(target_id) != nullptr) {
           target->take_damage(spell->get_power());
       }
   }
@@ -2605,9 +2449,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 81: Memory Safety: Dangling Pointers vs. Protection [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Deallocated Native Memory: queue_free() frees native C++ memory; unshielded pointers retain dead memory addresses.
-  - Fatal Engine Segfault: Dereferencing dead unmanaged pointers crashes immediately with 0xC0000005 ACCESS_VIOLATION.
-  - Defensive Clutter: Developers must litter code with is_instance_valid guards across every single scene access.
+  - Deallocated Native Memory: Node is not reference-counted; queue_free() deletes the C++ instance while raw Enemy* pointers remain dangling.
+  - Fatal Engine Segfault: Dereferencing a freed Node* crashes immediately with 0xC0000005 ACCESS_VIOLATION and no managed stack trace.
+  - Manual ObjectID Tracking: C++ callers must manually store ObjectID and query ObjectDB::get_instance(id) before every dereference.
 - **Solution Advantages**:
   - Dead-Pointer Armor with try?: @target.try?(&.take_damage(...)) inspects ObjectDB survival, executing only on living nodes and returning nil on freed targets.
   - Monotonic 64-Bit Instance IDs: Godot ObjectDB IDs never collide with recycled heap addresses.
@@ -2732,7 +2576,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 **Presenter Notes**:
 > Handling time in game engines is notoriously error-prone. In GDScript, you either have to spawn physical Timer nodes into the scene tree, or use get_tree().create_timer(). But SceneTreeTimer cannot be paused or cancelled, and if the node that scheduled it is destroyed, the timer fires anyway on a dead object, leading to crashes or leaked state.
-> Lapis 4.8-dev7 solves this with our non-blocking Timer DSL. Methods like 'every' and 'after' accept Time::Span literals (1.second, 500.milliseconds) and return a first-class TimerHandle. When attached to a node, the timer automatically disconnects if the node is deleted. Even better, in unit tests, you can call 'handle.advance(1.0)' to step time forward deterministically without having to sleep in your test runner.
+> Lapis solves this with our non-blocking Timer DSL. Methods like 'every' and 'after' accept Time::Span literals (1.second, 500.milliseconds) and return a first-class TimerHandle. When attached to a node, the timer automatically disconnects if the node is deleted. Even better, in unit tests, you can call 'handle.advance(1.0)' to step time forward deterministically without having to sleep in your test runner.
 
 ---
 
@@ -2746,9 +2590,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   # 1. 0-arg signal: predicates & timeout handling
   status = await(player.died, timeout_sec: 5.0)
   status.completed?                      # => Bool (.timed_out?, .ok?)
-  status.status == AwaitState::Completed # => Direct enum match
-  await!(player.died)                    # => nil (or raises TimeoutError)
-  await?(player.died)                    # => true on emit, false on timeout
+  await?(player.died, timeout_sec: 5.0)  # => true on emit, false on timeout
   
   # 2. Single-arg signal: typed payload unboxing
   status = await(player.health_changed)  # => AwaitStatus(Int32)
@@ -2759,20 +2601,16 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   status = await(boss.loot_dropped)      # => AwaitStatus(Tuple(Int32, String))
   id, name = status                      # Direct Crystal tuple destructuring!
   tup = await!(boss.loot_dropped)        # => {42, "relic"} (or raises)
-  opt = await?(boss.loot_dropped)        # => {42, "relic"} on emit, nil on timeout
   
   # 4. BoundSignal & numeric duration delays
-  args = await!(~Sprite2D.frame_changed) # => Array(Variant)
-  await(1.0)                             # => AwaitStatus
-  await?(1.0)                            # => true / false
-  await!(1.0)                            # => Void (or raises TimeoutError)
+  args = await!((~Sprite2D).frame_changed) # => Array(Variant)
+  await(1.0)                               # => AwaitStatus (or await?(1.0) / await!(1.0))
   ```
 - **Cooperative Awaiting Invariants**:
-  - AwaitStatus Predicates: .completed?, .timed_out?, .ok?, and .status == AwaitState::Completed enable non-throwing control flow.
-  - Triad Return Semantics: await returns typed AwaitStatus(T); await! unwraps values or raises TimeoutError; await? returns nilable values (or Bool).
-  - Tuple Destructuring: Multi-argument signals automatically unpack via tuple destructuring (id, name = status) with full compile-time type inference.
-  - BoundSignal & Delays: Dynamic untyped signals yield Array(Variant); numeric seconds (1.0) or timers return status, bool, or void.
-  - DisposedObjectError Protection: If the target node is destroyed while awaiting, Lapis raises Godot::DisposedObjectError, preventing silent infinite hangs.
+  - Triad Return Semantics: await returns AwaitStatus(T) (.completed?, .timed_out?); await! unwraps or raises TimeoutError; await? returns nilable (or Bool).
+  - Tuple Destructuring: Multi-argument signals unpack via tuple destructuring (id, name = status) with full static type inference.
+  - BoundSignal & Delays: Dynamic untyped signals ((~Sprite2D).frame_changed) yield Array(Variant); numeric delays pause fibers cooperatively.
+  - DisposedObjectError Protection: If the awaited node is freed, Lapis raises Godot::DisposedObjectError instead of hanging forever.
 
 **Presenter Notes**:
 > Lapis provides a complete triad of non-blocking await primitives matching Crystal's semantic naming idioms:
@@ -2944,28 +2782,22 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   
   # 2. Worker thread builds detached orphan graph in parallel
   Thread.new do
-    # Scope::TreeOnly permits building detached nodes off-thread:
-    room = Godot.create(Godot::Node3D)
-    room.name = "DungeonRoom_A1"
-  
-    mesh_node = Godot.create(Godot::MeshInstance3D)
-    mesh_node.mesh = generate_room_mesh(seed: 1234)
-    room.add_child(mesh_node) # Allowed: room is an orphan
-  
-    collider = Godot.create(Godot::CollisionShape3D)
-    collider.shape = generate_convex_shape(mesh_node.mesh)
-    room.add_child(collider)  # Allowed: detached hierarchy
+    room = Godot.create(Godot::Node3D) # Allowed: detached orphan
+    mesh = Godot.create(Godot::MeshInstance3D)
+    mesh.mesh = generate_room_mesh(seed: 1234)
+    room.add_child(mesh)               # Allowed: room is not in tree
   
     # Accidental live-tree mutation fails fast:
     # get_tree.root.add_child(room)
-    # => Raises Godot::ThreadAffinityError with calling context!
+    # => Raises Godot::ThreadAffinityError with caller context!
+    Godot.on_main_thread { get_tree.root.try(&.add_child(room)) }
   end
   ```
 - **ThreadSafety Invariants: Policy & Scope**:
-  - Scope::TreeOnly (Default): Only guards nodes inside the live SceneTree. Enables parallel off-thread assembly of detached orphan node graphs without mutex contention.
-  - Scope::AllNodes: Strict isolation mode blocking hierarchy mutations on any node off the main thread, regardless of tree attachment.
-  - Policy::Raise (Fail-Fast Debug): Intercepts illegal operations before native C++ executes, raising ThreadAffinityError with caller fiber and node name.
-  - Policy::Warn / Defer / Disabled: Configure non-fatal warnings, automatic call_deferred redirection, or compile-time check stripping in release builds.
+  - Scope::TreeOnly (Default): Guards only live SceneTree nodes, letting worker threads assemble detached node graphs in parallel.
+  - Scope::AllNodes: Strict isolation mode blocking off-thread hierarchy mutations on any node, attached or detached.
+  - Policy::Raise (Debug): Intercepts illegal cross-thread calls before C++ executes, raising a catchable ThreadAffinityError.
+  - Policy::Warn / Defer / Disabled: Log non-fatal warnings, auto-queue via call_deferred, or strip checks in release builds.
 
 **Presenter Notes**:
 > Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis provides a configurable ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled to compile out checks in release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread—such as procedurally generated dungeon rooms or terrain meshes—while strictly guarding the live scene tree.
@@ -3019,28 +2851,22 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Code (Crystal Multiplayer Node with @[RPC])**:
   ```crystal
   node NetworkPlayer < CharacterBody3D do
-    @[Export]
-    property player_id : Int32 = 1
+    @[Export] property player_id : Int32 = 1
   
-    # Authoritative RPC for state replication
     @[RPC(mode: :any_peer, call_local: true, transfer_mode: :unreliable_ordered)]
     def sync_transform(pos : Vector3, rot : Basis) : Void
-      if multiplayer.is_server
+      if server?
         self.global_position = pos
-        self.global_transform.basis = rot
-        # Re-broadcast validated state to clients
-        rpc("sync_transform", pos, rot)
+        self.global_basis = rot
+        rpc("sync_transform", pos, rot) # Re-broadcast validated state
       else
-        # Client-side prediction & interpolation
-        self.global_position = global_position.lerp(pos, 0.25)
+        self.global_position = global_position.lerp(pos, 0.25_f32)
       end
     end
   
-    # Reliable server-side validated gameplay action
     @[RPC(mode: :any_peer, transfer_mode: :reliable)]
     def request_fire_weapon(dir : Vector3) : Void
-      return unless multiplayer.is_server
-      spawn_projectile(dir)
+      spawn_projectile(dir) if server?
     end
   end
   ```
@@ -3062,7 +2888,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Theme Palette**: `playtoy` (PlayToy)
 - **Badge**: `MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING`
 - **Title**: Multiplayer Testing & Lockstep Network Debugging
-- **Subtitle**: Deterministic Multi-Client Simulation, Cooperative Breakpoint Lockstep & Wireshark-Style Packet Auditing
+- **Subtitle**: Deterministic Multi-Client Simulation, Cooperative Lockstep & Built-In RPC Packet Spy
 - **Code (test_multiplayer_simulation.cr — Multi-Client Harness & Lockstep Test)**:
   ```crystal
   require "spec_helper"
@@ -3081,7 +2907,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     harness.step_frames(3)
     assert_eq hero.health, 65
   
-    # 4. Wireshark-style packet auditing (< 10 KB/s budget)
+    # 4. Built-in RPC packet spy (< 10 KB/s bandwidth budget)
     harness.spy.assert_rpc_sent(from: 2, to: 1, method: :apply_damage)
     harness.spy.assert_max_bandwidth(10240.0)
   end
@@ -3090,62 +2916,26 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 **Presenter Notes**:
 > Testing and debugging multiplayer networking in game engines is notoriously difficult. Running multiple editor instances leads to port collisions and flaky CI, while hitting a breakpoint during development usually triggers network socket timeout disconnects.
-> Lapis completely solves both challenges with Lapis::Multiplayer::Harness and cooperative lockstep debugging.
-> The multiplayer_test macro spins up a full headless multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.
+> Lapis solves both challenges with Lapis::Multiplayer::Harness and cooperative lockstep debugging.
+> The multiplayer_test macro spins up a headless multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.
 > Using harness.step_frames(n), you step network packets, physics ticks, and SceneTree lifecycles synchronously and deterministically. You can pump virtual input actions like send_action(:attack) and dispatch RPCs.
 > When a breakpoint or r2 inspection occurs on the host, connected clients pause in cooperative lockstep, preserving network state without socket drops.
-> Furthermore, harness.spy acts as an embedded Wireshark packet inspector. You can assert that specific RPCs were delivered (spy.assert_rpc_sent), inject network latency variance and packet loss to verify delta reconciliation, enforce strict bandwidth caps (spy.assert_max_bandwidth), and capture native r2 forensics snapshots when anomalies occur!
+> Furthermore, harness.spy acts as a built-in RPC packet recorder: you can assert that specific RPCs were delivered (spy.assert_rpc_sent), inject simulated latency and packet loss, and enforce bandwidth caps (spy.assert_max_bandwidth) in CI.
 
 ---
 
-### Slide 96: Crystal Concurrency Patterns in Games
-- **Theme Palette**: `m64` (M64)
-- **Badge**: `ADVANCED CONCURRENCY • GAME PATTERNS`
-- **Title**: Crystal Concurrency Patterns in Games
-- **Subtitle**: Background Worker Actors, Cooperative Fibers, and Lock-Free Message Passing
-- **Code (Background Actor Worker Pattern)**:
-  ```crystal
-  # Off-thread worker actor with buffered channels
-  class NavmeshWorker
-    getter requests = Channel(PathReq).new(capacity: 64)
-    getter results  = Channel(PathRes).new(capacity: 64)
-  
-    def start : Void
-      Thread.new do
-        loop do
-          req = @requests.receive
-          # Heavy A* pathfinding runs off the main thread!
-          path = compute_astar_path(req.from, req.to)
-          @results.send(PathRes.new(req.id, path))
-        end
-      end
-    end
-  end
-  
-  # Main thread drains non-blockingly during _process
-  def _process(delta : Float64) : Void
-    loop do
-      select
-      when res = @nav_worker.results.receive
-        apply_path(res.id, res.path) # SceneTree safe!
-      else
-        break # Channel empty, continue frame loop
-      end
-    end
-    Fiber.yield # Cooperatively yield to spawned Crystal fibers
-  end
-  ```
-- **Concurrency Invariants & Architecture**:
-  - SceneTree Affinity Invariant: SceneTree modifications (add_child, transforms) must stay on the main thread; violations raise ThreadAffinityError.
-  - Buffered Channel Actors: Offload heavy pathfinding, procedural generation, and AI to OS threads (Thread.new) via buffered Channel(T).new(cap).
-  - Cooperative Gameplay Fibers: Non-blocking spawn fibers yield in _process via await(timer) or await(signal) without stalling engine frames.
-  - Zero-Lock Message Passing: Background threads pass immutable Crystal structs, eliminating mutex contention, cache invalidation, and deadlocks.
+### Slide 96: Crystal Concurrency Patterns in Games [Process Flow / Pipeline]
+1. **Main-Thread Gameplay**
+2. **Immutable Job Dispatch**
+3. **Multi-Core Compute**
+4. **Main-Thread Apply**
 
 **Presenter Notes**:
-> Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we combine Crystal's Actor model with Godot's single-threaded SceneTree guarantees.
-> Heavy tasks like A* pathfinding, voxel generation, and AI simulations run on dedicated OS worker threads (Thread.new). They communicate with the game through buffered channels.
-> On the main thread, _process non-blockingly drains completed results using a select block and applies updates directly to SceneTree nodes—100% thread-safe with zero mutex locks!
-> Meanwhile, cooperative gameplay fibers handle non-blocking asynchronous state machines using await without ever blocking the engine frame loop.
+> Concurrent game programming often devolves into mutex chaos and race conditions. In Lapis, we structure concurrency as a clean 4-stage pipeline:
+> 1. Main-thread cooperative fibers handle sequential gameplay, cutscenes, and timers using await without leaving the main thread.
+> 2. When heavy CPU compute is needed, the main thread pushes an immutable struct request into a bounded Crystal Channel.
+> 3. Dedicated OS worker threads (Thread.new) crunch A* pathfinding, voxel meshes, or detached orphan node graphs across all CPU cores.
+> 4. Completed results are either drained non-blockingly via select in _process or dispatched via Godot.on_main_thread at the next frame boundary—100% thread-safe with zero mutex deadlocks.
 
 ---
 
@@ -3155,7 +2945,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Chapter Highlights**:
   - **The Keyword Tax**: public partial class Player : CharacterBody3D vs. clean, expressive Lapis macros
   - **The GC Stutter Hazard**: Unpredictable garbage collector sweeps dropping frames during high-action moments
-  - **Bare-Metal Zen**: Native binary compilation, zero VM dependency, and full iOS/Web/Console export freedom
+  - **Bare-Metal Zen**: 474 KB native binaries, zero 60 MB+ CLR runtime payload, and clean OS-level hot-reload
 
 **Presenter Notes**:
 > Many Godot developers turn to C# when GDScript becomes too slow or too fragile. But C# in Godot comes with a heavy price tag: keyword ceremony, reflection boilerplate, and the perpetual dread of garbage collector pauses during gameplay.
@@ -3265,9 +3055,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     end
   
     private def on_health_changed(cur : Int32, max : Int32) : Void
-      @heal_sfx.try?(&.play) # Dead-pointer safe: respects both nil & freed nodes!
+      @heal_sfx.try?(&.play) # Safe: checks nil & ObjectDB liveness!
     end
-    # Zero _exit_tree boilerplate! Signal subscriptions self-prune via 64-bit ObjectDB IDs.
+    # Zero _exit_tree boilerplate: 64-bit ObjectDB IDs self-prune.
   end
   ```
 
@@ -3304,17 +3094,17 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
       {
           var origin = GlobalPosition; // P/Invoke across managed boundary
   
-          // LINQ allocates closures, enumerators, and list buffers on heap every frame
+          // LINQ allocates closures, enumerators & list buffers each frame:
           var inRange = _targets
               .Where(t => t.GlobalPosition.DistanceTo(origin) < 400.0f)
               .OrderBy(t => t.GlobalPosition.DistanceSquaredTo(origin))
               .ToList();
   
-          // Variant array allocation & dynamic dispatch boxes floats and vectors
+          // Dynamic dispatch boxes float & Vector2 into Variant[]:
           foreach (var target in inRange)
               target.Call("take_damage", 35.0f, origin);
   
-          // Floods .NET Gen0/Gen1 nursery -> GC sweeps can cause transient frame hitching
+          // Floods .NET Gen0/Gen1 nursery -> GC sweeps cause frame jitter
       }
   }
   ```
@@ -3330,7 +3120,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
       # Inlined loop: stack iteration with zero heap closures
       @targets.each do |target|
         next if target.global_position.distance_squared_to(origin) > range_sq
-        target.take_damage(35.0_f32, origin) # Direct typed dispatch: zero boxing
+        target.take_damage(35.0_f32, origin) # Static typed dispatch
       end
   
       # Stack iteration avoids GC churn in the hot physics loop
@@ -3342,14 +3132,14 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 103: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - P/Invoke Boundary Overhead: Reading engine properties and calling C++ nodes repeatedly crosses the managed CLR boundary, incurring marshalling latency.
-  - LINQ Closure & Enumerator Churn: Idiomatic operators (Where, OrderBy) instantiate delegate display classes, heap enumerators, and buffer arrays repeatedly in the frame loop.
-  - Variant Boxing & Dynamic Dispatch: Using dynamic calls or non-generic collections boxes value arguments into temporary arrays, increasing nursery GC pressure.
+  - P/Invoke Boundary Overhead: Reading engine properties repeatedly crosses the managed CLR boundary, adding marshalling latency.
+  - LINQ Closure & Enumerator Churn: Where and OrderBy allocate closure classes, enumerators, and list buffers in the frame loop.
+  - Variant Boxing & Dynamic Dispatch: Dynamic calls box value arguments into temporary arrays, increasing nursery GC pressure.
   - Garbage Collector Pauses: Frequent Gen0/Gen1 nursery sweeps introduce frame-time jitter during combat and physics updates.
 - **Solution Advantages**:
-  - Direct Native C ABI: Ahead-of-time compiled by LLVM directly to native machine code; engine property reads execute at raw C++ speed with zero marshalling overhead.
+  - Direct Native C ABI: Ahead-of-time compiled by LLVM to native machine code; property reads run at C++ speed without P/Invoke marshalling.
   - Inlined Iteration: Crystal's each block is inlined by LLVM directly on the stack—allocating zero heap closure objects.
-  - Static Typed Method Dispatch: target.take_damage(35.0_f32, origin) invokes direct function pointers without Variant boxing or dynamic lookups.
+  - Static Typed Method Dispatch: target.take_damage(35.0_f32, origin) invokes direct function pointers without Variant boxing.
   - Minimal Heap Churn: The inlined traversal allocates zero heap objects, maintaining smooth, deterministic frame pacing.
 - **Key Takeaway**: Lapis combines compiled C-ABI speed with Ruby ergonomics: minimal marshalling overhead, inlined stack traversal, and reduced garbage collection pressure.
 
@@ -3365,29 +3155,29 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```csharp
   public partial class NetworkSync : Node
   {
-      // Runtime reflection: 10-100x slower, boxes args, and stripped by AOT!
-      public void DispatchRPC(string methodName, params object[] args)
+      // Runtime reflection: slow, boxes args, fragile under AOT!
+      public void DispatchRPC(string name, params object[] args)
       {
-          var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
-          MethodInfo? method = GetType().GetMethod(methodName, flags);
-          if (method == null) throw new MissingMethodException(methodName);
+          var flags = BindingFlags.Public | BindingFlags.Instance;
+          MethodInfo? m = GetType().GetMethod(name, flags);
+          if (m == null) throw new MissingMethodException(name);
   
-          // Allocates object[] and boxes value types on every packet!
-          method.Invoke(this, args);
+          // Allocates object[] & boxes value types per packet!
+          m.Invoke(this, args);
       }
-      // Alternative Roslyn generators require separate .csproj, analyzers & MSBuild plumbing.
+      // Roslyn generators require separate Analyzer .csproj & MSBuild.
   }
   ```
 - **:sparkles: Crystal: First-Class Compile-Time AST Macros**:
   ```crystal
   node NetworkSync < Node do
-    # Compile-time AST macro generates static dispatch without reflection tables
+    # AST macro synthesizes static dispatch with zero reflection
     macro generate_rpc_dispatcher(*methods)
-      def dispatch_rpc(action : String, packet : Packet) : Nil
+      def dispatch_rpc(action : String, pkt : Packet) : Nil
         case action
-        {% for method in methods %}
-        when {{ method.stringify }}
-          {{ method.id }}(packet.read_{{ method.id }}_payload) # Static dispatch!
+        {% for m in methods %}
+        when {{ m.stringify }}
+          {{ m.id }}(pkt.read_{{ m.id }}_payload) # Static call!
         {% end %}
         else raise "Unknown RPC: #{action}"
         end
@@ -3453,15 +3243,15 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ### Slide 107: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - AssemblyLoadContext Zombie Leaks: Hot-reloading in the editor relies on .NET ALC; lingering static events or threads pin assemblies in RAM, breaking debugger breakpoints and causing editor instability.
-  - Platform Overhead & Lockout: Godot 4 C# lacks seamless out-of-the-box Web export and incurs heavy runtime overhead on mobile, requiring complex Ahead-Of-Time (AOT) toolchain workarounds.
-  - Massive Runtime Payload: Shipping a C# game requires packaging 60MB+ of .NET CLR virtual machine binaries, managed assemblies, and JIT/GC runtime dependencies.
-  - Double-Build Toolchain Tax: Developing in C# requires managing external .NET SDKs, .csproj XML configurations, and waiting for MSBuild on every editor play press.
+  - AssemblyLoadContext Leaks: Lingering static events or threads pin .NET assemblies in RAM during hot-reload, breaking breakpoints.
+  - Web & Mobile Friction: Godot 4 C# lacks out-of-the-box Web export and requires heavy NativeAOT workarounds on mobile.
+  - 60 MB+ Runtime Payload: Shipping a C# build bundles the .NET CLR virtual machine, managed assemblies, and JIT/GC runtime.
+  - Double-Build Tax: Requires external .NET SDKs, .csproj XML files, and MSBuild compilation on every editor play press.
 - **Solution Advantages**:
-  - LLVM Native Platform Targets: Compiles directly to bare-metal native machine code for Windows, Linux, macOS, and ARM64 via LLVM—with WebAssembly (WASM) actively in progress (WIP).
-  - Clean Dynamic Library Unloading: GDExtension shared libraries (.dll / .so / .dylib) reload cleanly at the OS level (FreeLibrary / dlclose) without ALC zombie leaks.
-  - Ultra-Lean Distribution Footprint: Ships as lean 4–8MB native shared libraries with zero external virtual machine or runtime dependencies.
-  - Unified Single-CLI Toolchain: The lapis CLI manages compilation, bindings, testing, and hot-reload in one integrated command without MSBuild or SDK churn.
+  - LLVM Native Targets: Compiles to native machine code for Windows, Linux, macOS, and ARM64—with WebAssembly / iOS in active development.
+  - Clean OS Library Unload: GDExtension shared libraries (.dll / .so / .dylib) unload cleanly via FreeLibrary / dlclose.
+  - Lean Native Footprint: Ships as compact native binaries (474 KB stripped Mode B, 4–8 MB full extension) with zero VM dependencies.
+  - Unified Single-CLI Toolchain: The lapis CLI manages compilation, bindings, testing, and hot-reload without MSBuild or SDK churn.
 - **Key Takeaway**: Crystal provides lean, native LLVM compilation and clean dynamic reloading across platforms—with zero VM bloat and WebAssembly support actively in progress.
 
 **Presenter Notes**:
@@ -3501,7 +3291,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     end
   
     def on_network_packet_received(data : Bytes) : Nil
-      return unless in_group?(:network_synced) # Instant 32-bit integer cmp!
+      return unless in_group?(:network_synced) # Cached StringName bridge!
       @packet_channel.send(data)
     end
   end
@@ -3517,11 +3307,11 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Solution Advantages**:
   - Microscopic Stack Fibers: spawn creates cooperative fibers running on the stack with negligible memory footprint.
   - Thread-Safe CSP Channels: Channel(T) provides lock-free message passing between background workers and the main thread.
-  - Immediate 32-Bit Symbols: Symbols like :network_synced are interned integers evaluated at build time without string hashing.
-- **Key Takeaway**: Crystal replaces C#s heavy Task heap allocations and string soup with lightweight stack fibers and compile-time integer symbols.
+  - Compile-Time Symbols & StringNames: :symbols are 32-bit integers in Crystal and auto-bridge to cached Godot StringName handles.
+- **Key Takeaway**: Crystal replaces C#s heavy Task heap allocations and string soup with lightweight stack fibers and cached StringName symbol bridges.
 
 **Presenter Notes**:
-> Handling concurrency and identifiers in Godot C# is notoriously fraught. In C#, every `async Task` allocates a task state machine on the heap, and if a signal handler uses `async void`, an unhandled exception will crash the entire game executable with no recovery. Furthermore, accessing Godot nodes from background tasks causes race conditions, forcing developers into clunky `Callable.From(...).CallDeferred()` boilerplate. In identifiers, C# relies on runtime string lookups unless you declare static `StringName` constants everywhere. In Lapis, Crystal uses microscopic cooperative fibers (`spawn`) and typed CSP channels (`Channel(T)`) for deterministic, thread-safe background work. And symbols like `:network_synced` are interned integers evaluated at compile time with zero string allocation.
+> Handling concurrency and identifiers in Godot C# is notoriously fraught. In C#, every `async Task` allocates a task state machine on the heap, and if a signal handler uses `async void`, an unhandled exception will crash the entire game executable with no recovery. Furthermore, accessing Godot nodes from background tasks causes race conditions, forcing developers into clunky `Callable.From(...).CallDeferred()` boilerplate. In identifiers, C# relies on runtime string lookups unless you declare static `StringName` constants everywhere. In Lapis, Crystal uses lightweight cooperative fibers (`spawn`) and typed CSP channels (`Channel(T)`) for deterministic, thread-safe background work. And symbols like `:network_synced` are 32-bit compile-time integers in Crystal that automatically bridge to interned Godot `StringName` handles without per-frame string allocation.
 
 ---
 
@@ -3547,21 +3337,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   ```crystal
   record ShieldAbsorbed, shield : Float32, mitigated : Float32
   record CriticalDamage, armor : Float32, damage : Float32
+  record Miss
   
   node CombatResolver < Node do
-    # Native union type: unboxed value types, zero heap wrappers
-    alias HitResult = ShieldAbsorbed | CriticalDamage | Nil
+    # Closed value-type union: unboxed on stack, zero heap wrappers
+    alias HitResult = ShieldAbsorbed | CriticalDamage | Miss
   
-    def resolve_hit(target : Node3D, raw_damage : Float32) : HitResult
-      # Flow-sensitive matching narrows target in each branch:
-      case target
-      when ShieldDrone
-        ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
-      when PlayerCharacter
-        CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
-      else
-        nil
-      end
+    def apply_hit(res : HitResult) : Float32
+      # Compiler enforces exhaustiveness across all union members:
+      case res
+      when ShieldAbsorbed then res.mitigated
+      when CriticalDamage then res.damage - res.armor
+      when Miss           then 0.0_f32
+      end # No 'else' needed — adding a 4th type is a compile error!
     end
   end
   ```
@@ -3574,9 +3362,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - Non-Exhaustive Matching: C# type switches do not guarantee compile-time exhaustiveness; unhandled cases fail silently at runtime.
   - Runtime Downcast Overhead: target is ShieldDrone drone incurs dynamic type checks and pointer downcasts on every frame.
 - **Solution Advantages**:
-  - First-Class Union Types: ShieldAbsorbed | CriticalDamage | Nil are native primitives with zero heap allocation or boxing.
-  - Compile-Time Exhaustiveness: The compiler verifies that all possible union types are handled, preventing unhandled runtime branch bugs.
-  - Flow-Sensitive Narrowing: when ShieldDrone automatically narrows the variable type without manual casting or unsafe downcasts.
+  - First-Class Union Types: ShieldAbsorbed | CriticalDamage | Miss are stack-allocated value unions with zero heap boxing.
+  - Compile-Time Exhaustiveness: Matching on a closed union requires no else; adding a new variant flags every unhandled case at compile time.
+  - Flow-Sensitive Narrowing: when ShieldAbsorbed narrows res automatically without manual casting or unsafe downcasts.
 - **Key Takeaway**: Crystal provides first-class union types with compile-time exhaustive pattern matching and zero wrapper allocations.
 
 **Presenter Notes**:
@@ -3606,18 +3394,18 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
       }
   }
   ```
-- **:sparkles: Crystal: Built-In Spec Runner & Millisecond Isolation**:
+- **:sparkles: Crystal: Built-In Spec Runner & Headless LibGodot**:
   ```crystal
   require "spec"
   require "../src/entities/player"
   
   describe Player do
     it "mitigates damage through shield and emits health_changed" do
-      player = Player.new # Instant memory instantiation; zero engine boot!
+      player = Godot.create(Player) # Direct ClassDB alloc; no .tscn needed!
       player.equip_shield(50.0_f32)
   
       spawn { player.take_damage(20.0_f32) }
-      hp, _ = player.health_changed.await # Typed signal await!
+      hp, _ = await!(player.health_changed) # Typed tuple destructuring!
   
       player.shield.should eq(30.0_f32)
       hp.should eq(100.0_f32)
@@ -3633,9 +3421,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - Heavy External Test Harnesses: Requires third-party runners like GdUnit4 or WAT, loading scene packs to test pure gameplay logic.
   - Untyped Async Signal Testing: await player.ToSignal(...) returns loosely-typed Variant[] arrays requiring manual runtime casts.
 - **Solution Advantages**:
-  - Built-In Zero-Config Runner: Crystal includes a blazing-fast testing framework (crystal spec) standard in the compiler with zero NuGet dependencies.
-  - Sub-Millisecond Isolated Testing: Test gameplay logic and component state directly in memory without launching editor test runners.
-  - Typed Signal Awaiting: hp, _ = player.health_changed.await awaits cooperative signals with full compile-time type destructuring.
+  - Built-In Zero-Config Runner: Crystal ships crystal spec in the standard library with zero external NuGet test harnesses.
+  - Pure Structs or Headless Nodes: Test pure gameplay structs in <1ms via crystal spec, or instantiate nodes via Godot.create(T) without .tscn files.
+  - Typed Signal Awaiting: hp, _ = await!(player.health_changed) awaits signals with full compile-time tuple destructuring.
 - **Key Takeaway**: Crystal specs run in milliseconds via built-in crystal spec without configuring external plugins, complex mock frameworks, or manual signal polling.
 
 **Presenter Notes**:
@@ -3716,31 +3504,24 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   gd_dialogue = self["UI/DialogueManager"]
   
   # 2. Dynamic method call with Variant marshalling:
-  result = gd_dialogue.call("show_dialogue", "npc_elder_01", 100)
-  
-  # Check method existence before dispatch:
-  if gd_dialogue.has_method("custom_hook")
-    gd_dialogue.call("custom_hook")
-  end
+  res = gd_dialogue.call("show_dialogue", "npc_elder_01", 100)
+  gd_dialogue.call("custom_hook") if gd_dialogue.has_method("custom_hook")
   
   # 3. Dynamic property get and set:
   current_line = gd_dialogue.get("current_line").as_s
   gd_dialogue.set("dialogue_speed", 1.5)
   
-  # 4. What if the property does NOT exist?
-  gd_dialogue.set("not_a_real_variable", "dummy_value")
-  # => Safely ignored by Godot ObjectDB: returns false, zero crash!
+  # 4. Non-existent properties are safely ignored by ObjectDB:
+  gd_dialogue.set("not_a_real_var", "dummy") # => false (zero crash)
+  missing = gd_dialogue.get("not_a_real_var") # => Variant(Nil)
   
-  missing = gd_dialogue.get("not_a_real_variable")
-  # => Returns Variant(Nil) / nil safely
-  
-  # For true dynamic key-value storage, use metadata:
+  # 5. For runtime key-value storage, use node metadata:
   gd_dialogue.set_meta("custom_data", "persisted_value")
   ```
 - **Dynamic Interop & Unknown Properties**:
   - Universal Variant Marshalling: Marshals numbers, strings, vectors, and arrays transparently between Crystal and GDScript.
-  - Unknown Property Handling: Setting a non-existent property via .set("invalid", val) is safely ignored by Godot's ObjectDB (returns false); .get("invalid") returns nil with zero crashes.
-  - Metadata for Dynamic Attributes: Use set_meta("key", val) and get_meta("key") when you need genuine dynamic dictionary storage on nodes.
+  - Safe Unknown Properties: .set("invalid", val) is safely ignored by ObjectDB (returns false); .get("invalid") returns nil.
+  - Metadata for Dynamic Attributes: Use set_meta("key", val) and get_meta("key") for runtime key-value storage on nodes.
   - Reflection & Safety: has_method("name") checks presence before invoking; dispatches are dead-pointer guarded via #check_alive!.
 
 **Presenter Notes**:
@@ -3755,19 +3536,18 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Subtitle**: Automatic Strongly-Typed Proxies for GDScript Classes Generated via Lapis CLI
 - **Code (quest_controller.cr — Automatic Strongly-Typed GDScript Invocation)**:
   ```crystal
-  require "project_nodes/dialogue_system"
+  require "./generated/project_nodes/dialogue_system"
   
   node QuestController < Node do
-    @[OnReady("%DialogueManager")]
-    getter dialogue : DialogueSystem
+    onready dialogue : DialogueSystem = "%DialogueManager"
   
-    def trigger_dialogue(line_id : Int32) : Bool
+    def trigger_dialogue(line_id : Int64) : Bool
       # Direct typed method call: NO .call(), NO string lookups!
       success = dialogue.show_dialogue(speaker: "Elder", line_id: line_id)
       dialogue.dialogue_speed = 1.5_f32
   
-      # Strongly-typed signal subscription
-      on dialogue.line_completed do |speaker, text|
+      # Strongly-typed BoundSignal subscription with argument types
+      on dialogue.line_completed, String, String do |speaker, text|
         display_subtitles(speaker, text)
       end
       success
@@ -3803,20 +3583,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 119: First-Class Godot Editor Integration
-- **Theme Palette**: `gamestation_portable` (GameStationPortable)
-- **Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
-- **Title**: First-Class Godot Editor Integration
-- **Subtitle**: Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync
-- **In-Editor Feature Highlights**:
-  - Native Script Creation Dialog: Select Crystal (*.cr) directly from Godot's Attach Node Script dialog.
-  - Pure Crystal Tokenizer: Embedded syntax highlighter in Godot's CodeEdit with keywords, strings, comments, and symbols.
-  - Instant Hot-Reloading: Pressing F5 triggers automatic recompilation and shadow DLL reload.
-  - Live In-Editor @[Tool] Execution: Custom nodes execute inside the editor viewport in real time.
-  - Harvested XML Documentation: Regular Crystal doc comments appear automatically in Godot's F1 Help viewer.
-- **Why It Changes the Game**:
-  - No External IDE Required: You can write and edit Crystal code directly inside Godot's built-in code editor.
-  - Seamless Level Design: Level designers adjust exported Crystal properties in the Inspector and see real-time updates.
-  - Zero GDExtension Friction: Feels just as integrated as GDScript and C#, not like an unwieldy foreign extension.
+- **Palette**: `gamestation_portable` | **Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
+- **Native Script Editor**:
+  - Attach Script Dialog: Select Crystal (*.cr) directly when attaching scripts to any node.
+  - Pure Crystal Tokenizer: Syntax highlighting in Godot's CodeEdit for keywords, macros, and symbols.
+  - 6 Starter Templates: Built-in templates for 2D/3D Physics, @[Tool], and Resource.
+- **Live Viewport & Reload**:
+  - Instant F5 Hot-Reload: Pressing Play or saving triggers shadow DLL compilation and state-preserving swap.
+  - Live @[Tool] Execution: Custom Crystal nodes render gizmos and procedural meshes live in the 3D viewport.
+  - Inspector Live Sync: Level designers tweak @[Export] properties and see immediate viewport updates.
+- **Integrated F1 Help & LSP**:
+  - Harvested XML Docs: Crystal # doc comments appear natively inside Godot's F1 Help browser.
+  - Sub-ms Gutter Squiggles: CrystalValidator flags unclosed blocks and syntax errors as you type.
+  - Zero External IDE Required: Author, inspect, and debug Crystal inside Godot or via VS Code / Zed LSP.
 
 **Presenter Notes**:
 > A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @[Tool] scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help.
@@ -3847,14 +3626,13 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   # Starter Templates: Standard, 2D Physics, 3D Physics, @[Tool], Resource
   ```
 - **In-Editor Tooling Highlights**:
-  - Live Red & Yellow Squiggles: Lapis::CrystalValidator runs in under 1ms, detecting unclosed blocks (def, class, do), unmatched delimiters (()[]{}), and unterminated strings.
-  - Native C++ Bridge Integration: Plugs into Godot's ScriptLanguageExtension::_validate via ret_dictionary_validate_ex without compiler subprocess lag.
-  - Crystalline LSP Diagnostics: Asynchronous JSON-RPC pump consumes publishDiagnostics for full compiler type checking and error reporting.
-  - F1 Hover & Docstrings: Hovering or pressing F1 over any symbol displays harvested docstrings, types, and method signatures directly in Godot's script editor.
-  - 6 Built-In Starter Templates: Implements _get_built_in_templates with templates for Standard Node, 2D Physics Movement, 3D Physics Movement, Tool Script (@[Tool]), Custom Resource, and Empty Class.
+  - Sub-ms Gutter Squiggles: Lapis::CrystalValidator hooks ScriptLanguageExtension::_validate to flag unclosed blocks and delimiters in <1ms.
+  - Crystalline LSP Pump: Asynchronous JSON-RPC pump consumes publishDiagnostics for full background compiler type checking.
+  - F1 Hover & Docstrings: Hovering or pressing F1 over any symbol displays harvested docstrings and method signatures in Godot's editor.
+  - 6 Built-In Starter Templates: Ships templates for Standard Node, 2D/3D Physics, @[Tool] Script, Custom Resource, and Empty Class.
 
 **Presenter Notes**:
-> Writing code in Godot's built-in script editor is now a first-class experience with Lapis 4.8-dev7. We implemented CrystalValidator, an ultra-fast static analyzer running in under a millisecond. As you type, it catches unclosed blocks, missing delimiters, and unterminated strings, rendering live red error squiggles directly in the editor gutter.
+> Writing code in Godot's built-in script editor is a first-class experience with Lapis. We implemented CrystalValidator, a fast static analyzer running in under a millisecond. As you type, it catches unclosed blocks, missing delimiters, and unterminated strings, rendering live red error squiggles directly in the editor gutter.
 > Furthermore, our Crystalline LSP daemon pump consumes publishDiagnostics and provides rich hover tooltips and F1 docstrings right inside Godot. And when attaching a script to a new node, Godot presents 6 built-in Crystal starter templates tailored for 2D/3D physics, tool scripts, and custom resources.
 
 ---
@@ -3903,25 +3681,29 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 123: Low-Level Binary Forensics: radare2 vs. LLDB
+### Slide 123: Low-Level Binary Forensics: radare2 vs. LLDB [One-Left-Two-Right]
 - **Theme Palette**: `trash80` (Trash80)
-- **Badge**: `SYSTEMS FORENSICS • RADARE2`
 - **Title**: Low-Level Binary Forensics: radare2 vs. LLDB
 - **Subtitle**: Eliminating Toolchain Bloat, Disassembly Mapping & Crash Forensics
-- **Why LLDB Was Removed — The Fat Debugger Trap**:
-  - Gigabyte Toolchain Bloat: Bundled 2GB+ of Clang/LLVM runtime binaries and Python dependencies, destroying lean developer onboarding.
-  - Windows DWARF vs. PDB Desyncs: Struggled with MinGW DWARF and MSVC symbol table format differences, causing lost breakpoints and blank backtraces.
-  - Fragile Python Environment Binding: LLDB plugin scripts demanded exact host Python version matches, breaking constantly across OS updates.
-  - Zero Headless CI Automation: Inability to script lightweight headless crash triage, stack frame decoding, and memory dump forensics in CI pipelines.
-- **In-Editor & Out-of-Editor Debugging via CLI**:
-  - In-Editor Debugging: lapis editor -d launches Godot with r2 attached; real-time pseudo-C decompiler (pdc), assembly (pdf), register tracking, and multiplayer lockstep.
-  - Out-of-Editor Debugging: lapis run -d runs standalone games and plugin DLLs under r2 with zero editor overhead—catching hard crashes instantly.
-  - CLI Decompiler & Mapper: lapis decompile statically decompiles Crystal methods to pseudo-C, side-by-side assembly (pdca), or maps directly to source lines (cl / pdls).
-  - Hardware Memory Watchpoints: rw <addr> breaks CPU execution instantly at the exact machine instruction performing illegal writes (catching 0xC0000005).
-  - Automated Crash Forensics: PluginForensics classifies crash boundaries (GameCode, LapisPlugin, GDExtensionBridge) and reads 64-bit ObjectDB IDs.
+
+#### Left Column:
+- **Why LLDB Was Replaced**
+  - 2 GB+ Toolchain Bloat: Bundled massive Clang/LLVM runtimes and Python dependencies.
+  - DWARF vs. PDB Desyncs: Struggled with MinGW DWARF vs. MSVC symbol tables on Windows.
+  - Fragile Python Bindings: Demanded exact host Python version matches across OS updates.
+  - No Headless Triage: Unsuitable for fast, scriptable crash forensics in CI pipelines.
+
+#### Right Stacked Containers:
+- **In-Editor & CLI Debugging via radare2**
+  - In-Editor (lapis editor -d): Live pseudo-C decompiler (pdc), assembly (pdf), and multiplayer lockstep.
+  - Standalone (lapis run -d): Debug native game binaries and DLLs under r2 with zero editor overhead.
+  - Static Mapper (lapis decompile): Inspect Crystal methods as pseudo-C, assembly (pdca), or source lines (pdls).
+- **Hardware Watchpoints & Crash Forensics**
+  - Hardware Watchpoints (rw <addr>): Traps CPU execution on the exact instruction performing an illegal write.
+  - Automated Boundary Triage: PluginForensics classifies crashes across GameCode, LapisPlugin, or GDExtensionBridge and decodes 64-bit ObjectDB IDs.
 
 **Presenter Notes**:
-> We completely removed LLDB from Lapis. LLDB was a 2GB+ bloat monster with fragile host Python dependencies and Windows PDB/DWARF symbol desyncs. In its place, Lapis standardizes on radare2 (r2) and our cradare2 bindings. Developers get seamless debugging both in and out of the editor: lapis editor -d embeds live pseudo-C decompilation and multiplayer lockstep debugging into Godot, while lapis run -d and lapis decompile let you debug standalone games, inspect compiled machine code, and set hardware memory watchpoints from the terminal.
+> We removed LLDB from Lapis because it was a 2GB+ dependency with fragile host Python bindings and Windows PDB/DWARF symbol issues. In its place, Lapis standardizes on radare2 (r2) and our cradare2 bindings. Developers get seamless debugging both in and out of the editor: lapis editor -d embeds live pseudo-C decompilation and multiplayer lockstep debugging into Godot, while lapis run -d and lapis decompile let you debug standalone games, inspect compiled machine code, and set hardware memory watchpoints from the terminal.
 
 ---
 
@@ -3974,26 +3756,19 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
   require "./spec_helper"
   
   describe Lapis::Test::EditorDriver do
-    # 1. Headless in-editor tool test execution
-    it "verifies @tool nodes and inspector buttons in headless editor" do
-      # Launches: godot --headless --editor --audio-driver Dummy
-      res = Lapis::Test::EditorDriver.run_tool_tests(
-        project: ".",
-        quit_frames: 300
-      )
+    it "verifies @tool nodes, Set-of-Marks UI, and hot-reload cycles" do
+      # 1. Headless in-editor @tool & ExportToolButton verification
+      res = Lapis::Test::EditorDriver.run_tool_tests(".", quit_frames: 300)
       res.passed?.should be_true
-      res.output.should contain("ToolTester2D: @tool _ready verified")
       res.output.should contain("ExportToolButton 'Reset Stats' executed")
-    end
   
-    # 2. Live GDExtension reload stress-testing
-    it "executes continuous shadow DLL hot reload cycles without leaks" do
-      res = Lapis::Test::EditorDriver.run_editor_reload_tests(
-        project: ".",
-        cycles: 3
-      )
-      res.passed?.should be_true
-      res.output.should contain("Reload cycle 3/3 succeeded (0 file locks)")
+      # 2. Live GDExtension shadow-DLL reload stress test (3 cycles)
+      reload = Lapis::Test::EditorDriver.run_editor_reload_tests(".", cycles: 3)
+      reload.output.should contain("Reload cycle 3/3 succeeded (0 file locks)")
+  
+      # 3. Set-of-Marks ActionDriver for visual & AI-driven UI testing
+      marks = driver.actions.annotate_viewport # Numbered bounding-box overlay
+      driver.actions.click_mark(marks.first.id)
     end
   end
   ```
@@ -4027,8 +3802,8 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 - **Title**: The Hard Numbers
 - **Subtitle**: Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language Shootout
 - **Chapter Highlights**:
-  - **Up to 150x Faster**: Rigorous N-body physics, prime sieves, and matrix multiplications beating GDScript by orders of magnitude
-  - **Native Tier Parity**: Crystal matches or outperforms C++, Rust, and C# across algorithmic and memory benchmarks
+  - **46.2x Geomean Speedup**: 27 comparative suites beating GDScript by 46.2x geomean (up to 149x on N-Body & 282x on AStar2D)
+  - **Native Tier Parity**: Crystal matches C++ and Rust on tight algorithmic compute and beats C# on 4 of 5 workloads
   - **Nanosecond FFI Profiling**: Sub-microsecond GDExtension boundary calls measured with nanosecond precision
 
 **Presenter Notes**:
@@ -4045,14 +3820,14 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
 - **Subtitle**: Real-World Performance Comparison on Common Gameplay Workloads
 - **Benchmark Results (Execution Time)**:
-- **Why Crystal Dominates**:
-  - LLVM Ahead-of-Time Compilation: Compiles down to optimized machine instructions; zero bytecode interpreter overhead.
-  - Autovectorization & SIMD: Vector math operations benefit from LLVM's automatic AVX2/NEON vectorization.
-  - Flat Memory Layout: Value types and structs live contiguously on the stack or in flat arrays without pointer indirection.
-  - Minimal GC Pauses: Predictable, low-latency execution during tight 60/120 FPS frame cycles.
+- **Why Compiled Crystal Excels**:
+  - LLVM Ahead-of-Time Compilation: Compiles directly to native machine instructions with zero bytecode interpreter dispatch overhead.
+  - Autovectorization & SIMD: Contiguous math loops benefit from LLVM's automatic AVX2/NEON vectorization.
+  - Flat Memory Layout: Value types and structs live contiguously on the stack or in flat buffers without pointer chasing.
+  - Zero-Allocation Frame Loops: Stack structs and inlined iterators avoid heap allocations on the hot path, keeping GC idle.
 
 **Presenter Notes**:
-> Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++.
+> Here are the quantitative numbers from our automated 27-suite benchmark harness. Across heavy gameplay calculations—AStar2D grid pathfinding, N-body gravitational simulations, 3D Perlin terrain generation, and VectorMath2D—Crystal achieves a 46.2x geometric mean speedup over GDScript (reaching 149x on N-Body and 282x on AStar2D). It lets you write simulation-heavy gameplay systems in high-level code without dropping down to C++.
 
 ---
 
@@ -4063,14 +3838,14 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 - **Subtitle**: Canonical Microbenchmarks Measuring Native GDExtension Performance vs Bytecode
 - **Cross-Language Latency (vs GDScript Baseline)**:
 - **Cross-Language Performance Spectrum**:
-  - Native Clustering (45x–150x vs GDScript): Compiled targets (Crystal, C++, Rust, C#) cluster tightly between 3.8ms and 42.9ms, outperforming interpreted GDScript bytecode by two orders of magnitude.
-  - Crystal vs C++ Parity: LLVM Ahead-of-Time compilation places Crystal within 1.0x–1.2x of optimized C++ (-O3), and Crystal actually beats C++ by 27% on Prime Sieve (27.2ms vs 37.4ms) due to aggressive inlining.
-  - Rust & Crystal Equivalence: On 3D N-Body velocity-verlet integration, Crystal (4.87ms) matches Rust (4.72ms) within 3% without manual memory ownership gymnastics.
-  - Unified Architecture: Developers achieve full native systems performance without leaving high-level, expressive Ruby-inspired object syntax.
+  - Native Clustering (45x–150x vs GDScript): Compiled targets (Crystal, C++, Rust, C#) cluster tightly between 3.8ms and 57.0ms, outperforming GDScript bytecode by two orders of magnitude.
+  - Crystal vs C++ Parity: LLVM AOT compilation places Crystal within 1.0x–1.2x of C++ (-O3) on matrix and physics compute, and ahead on Prime Sieve + Trie (27.2ms vs 37.4ms).
+  - Rust & Crystal Equivalence: On 3D N-Body velocity-verlet integration, Crystal (4.87ms) matches Rust (4.72ms) within 3% without borrow-checker ceremony.
+  - Unified Architecture: Achieve native systems throughput without leaving expressive, high-level Ruby-inspired syntax.
 
 **Presenter Notes**:
 > When evaluating game engines, performance comparisons often stop at GDScript vs C++. With Lapis, we benchmarked the same canonical algorithmic workloads across all five major Godot language targets: Crystal, C++, Rust, C# (.NET 8), and GDScript.
-> As you can see, all compiled languages cluster tightly together, running 45x to 150x faster than GDScript bytecode. Remarkably, Crystal matches optimized C++ and Rust step-for-step—even outperforming C++ on the Sieve of Atkin prime search due to LLVM's aggressive closure inlining. You get authentic native speed without sacrificing developer happiness.
+> As you can see, all compiled languages cluster tightly together, running 45x to 150x faster than GDScript bytecode. Crystal matches optimized C++ and Rust within single-digit milliseconds across compute-intensive loops while maintaining clean, high-level object syntax.
 
 ---
 
@@ -4088,23 +3863,23 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 **Presenter Notes**:
 > Removing the GDScript baseline allows us to zoom directly into the sub-150 millisecond race between the four native compiled languages.
-> Notice how tight the competition is: on Mandelbrot and N-Body physics, Crystal is neck-and-neck with C++ and Rust within single-digit milliseconds. On BinaryTrees, we see the trade-offs of garbage collection strategies: C#'s generational GC excels at short-lived nursery allocations, while Crystal's Boehm GC performs reliably with predictable frame times and zero multi-gigabyte runtime dependencies.
+> Notice how tight the competition is: on Mandelbrot and N-Body physics, Crystal is neck-and-neck with C++ and Rust within single-digit milliseconds. On BinaryTrees, we see the trade-offs of garbage collection strategies: C#'s generational GC excels at short-lived nursery allocations, while Crystal's Boehm GC performs reliably with predictable frame times when hot loops use value structs, and ships without an 80 MB CLR runtime dependency.
 
 ---
 
 ### Slide 131: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
 
-| Language / Binding Target | Direct Method Call | Vector3 & Transform | Memory Allocation | Speedup vs Dynamic |
+| Language / Binding Target | GDExtension ptrcall | Local Struct Math | Memory Allocation | Speedup vs Dynamic |
 | --- | --- | --- | --- | --- |
-| Lapis (Crystal) | 1.4 ns | 4.1 ns | Zero (Stack Struct) | 133.1x Faster |
-| C++ (godot-cpp) | 4.8 ns | 4.9 ns | Zero (Stack Struct) | 38.8x Faster |
-| C# (.NET P/Invoke) | 14.2 ns | 16.8 ns | Moderate (P/Invoke Marshalling) | 13.1x Faster |
+| Lapis (Crystal) | 4.6 ns | 1.4 ns | Zero (Stack Struct) | 40.5x Faster |
+| C++ (godot-cpp) | 4.5 ns | 1.4 ns | Zero (Stack Struct) | 41.4x Faster |
+| C# (.NET P/Invoke) | 14.2 ns | 3.8 ns | Moderate (P/Invoke Marshalling) | 13.1x Faster |
 | GDScript (Object#call) | 186.4 ns | 74.6 ns | High (Variant Boxing) | Baseline (1.0x) |
 
-** Nanosecond boundary crossing latencies measured across 10,000,000 iterations over Godot GDExtension boundary.*
+** Nanosecond boundary crossing latencies measured across 10,000,000 iterations over Godot GDExtension ptrcall ABI.*
 
 **Presenter Notes**:
-> A common bottleneck in multi-language game development is foreign function interface (FFI) overhead. In this benchmark, we measured the nanosecond-level cost of crossing the Godot GDExtension boundary. When using dynamic Variant method calls, each invocation costs roughly 186 nanoseconds due to string hashing and Variant packing. Lapis generates direct C-ABI ptrcall wrappers, reducing call latency to roughly 1.4 nanoseconds—matching pure C++ and letting you execute high-frequency engine queries without FFI bottlenecks.
+> A common bottleneck in multi-language game development is foreign function interface (FFI) overhead. In this benchmark, we measured the nanosecond-level cost of crossing the Godot GDExtension boundary. When using dynamic Variant method calls, each invocation costs roughly 186 nanoseconds due to string hashing and Variant packing. Because Lapis and godot-cpp both invoke the exact same GDExtension `ptrcall` C function pointer table and operate on stack-allocated structs (`Vector3`, `Transform3D`) locally in ~1.4 ns, Lapis achieves 1:1 FFI parity with native C++ (~4.6 ns per boundary crossing).
 
 ---
 
@@ -4115,27 +3890,23 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 - **Subtitle**: In-Engine Microbenchmarking DSL, Multi-Target Comparisons & Automated HTML Reports
 - **Code (custom_benchmark.cr — Lapis::Benchmark DSL)**:
   ```crystal
-  require "lapis/benchmark"
+  require "lapis"
   
-  # 1. Register standalone gameplay benchmark with metrics
-  Lapis::Benchmark.register("ProceduralDungeon", category: :compute) do |iter|
+  # 1. Register standalone gameplay benchmark with custom metrics
+  Lapis::Benchmark.register("ProceduralDungeon", category: :compute) do
     dungeon = DungeonGenerator.new(rooms: 50, corridors: 120)
     dungeon.generate!
-    Lapis::Benchmark.report_metric("rooms_per_sec", 50.0 / dungeon.elapsed_sec)
+    Lapis::Benchmark.report_metric("rooms_s", 50.0 / dungeon.elapsed_sec)
   end
   
-  # 2. Side-by-side comparison group against GDScript baseline
+  # 2. Side-by-side comparison group + zero-allocation profiler audit
   Lapis::Benchmark.group "PathfindingCrowd" do |g|
-    g.description "A* routing throughput across 5,000 active agents"
     g.category :engine
-  
-    # High-performance Crystal implementation
     g.benchmark("Crystal") do
-      crowd = CrowdSim.new(agent_count: 5_000)
-      crowd.step_navigation(delta: 0.016)
+      Lapis::Profiler.audit!(:crowd_step, max_alloc_bytes: 0) do
+        @crowd.step_navigation(delta: 0.016)
+      end
     end
-  
-    # Compare directly against GDScript script equivalent
     g.target "GDScript", "scripts/crowd_sim.gd", :gdscript
     g.baseline "Crystal"
   end
@@ -4156,10 +3927,10 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 - **Subtitle**: Real-Time Double-Buffered ANSI Dashboard & Comparative Speedup Ratios
 - **Terminal — lapis benchmarks --tui --all-languages**:
 - **Benchmark TUI Dashboard Invariants**:
-  - Double-Buffered ANSI Dashboard: lapis benchmarks --tui renders a zero-flicker split-pane interface with progress tracking, active suite timers, and live stdout streams.
-  - Cross-Language Shootout (--all-languages): Concurrently measures Crystal against C++, Rust, C# (.NET 8), and GDScript across all 8 canonical workloads.
-  - Interactive Metrics Modal: Pressing [Enter] reveals statistical confidence intervals (min, median, max, std dev), GC allocations, and AVX2 vectorization flags.
-  - Multi-Format Output Staging: Simultaneously generates console tables, visual vector charts (SVG), interactive HTML reports, and XML regression baselines.
+  - Double-Buffered ANSI Dashboard: lapis benchmarks --tui renders a flicker-free split-pane interface with live timers and stdout streams.
+  - Cross-Language Shootout (--all-languages): Measures Crystal against C++, Rust, C# (.NET 8), and GDScript across 27 comparative suites.
+  - Interactive Metrics Modal: Pressing [Enter] inspects confidence intervals (min, median, max, std dev) and memory allocations.
+  - Multi-Format Output Staging: Exports console tables, vector charts (SVG), interactive HTML reports, and XML regression baselines.
 
 **Presenter Notes**:
 > To verify real-world game performance across engine versions, Lapis provides a full-featured terminal UI for benchmarking. Invoking `lapis benchmarks --tui` launches a double-buffered ANSI dashboard that executes microbenchmarks and comparative stress tests side-by-side against Godot GDScript and native C++/Rust targets. As each suite runs, the TUI dynamically plots execution latency, calculates exact speedup multiples with statistical confidence intervals, and records peak memory. Developers can navigate suites with keyboard controls, drill down into sub-step iterations with Enter, and automatically export SVG comparison charts and HTML reports for documentation or CI regression tracking.
@@ -4171,22 +3942,22 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 - **Badge**: `BENCHMARKS • CI & REPORTING`
 - **Title**: Benchmark Reports & CI Regression Tracking
 - **Subtitle**: Interactive HTML Generation, SVG Charts & Version History Progression
-- **Terminal (Terminal — lapis benchmarks compare html)**:
+- **Terminal (Terminal — lapis benchmarks --compare --html)**:
   ```bash
   # Run benchmarks, compare against baseline, and output HTML report
-  $ lapis benchmarks compare html --tag 4.8-dev7 --previous-tag 4.8-dev6
+  $ lapis benchmarks --compare --tag 4.8-dev7 --prev-tag 4.8-dev6 --html
     [Lapis] Loading baseline: benchmarks/reports/benchmarks_4.8-dev6.xml
-    [Lapis] Measuring 8 benchmark suites (3 iterations each)...
-    ✔ 01. N-Body Physics         : 3.10 ms vs 3.15 ms (+1.6% faster)
-    ✔ 02. Perlin Noise           : 2.80 ms vs 2.84 ms (+1.4% faster)
-    ✔ 03. A* Pathing             : 4.20 ms vs 4.31 ms (+2.6% faster)
-    ✔ 04. Raycast Octree         : 5.10 ms vs 5.12 ms (within noise)
-    ✔ 05. Matrix 4x4 SIMD        : 1.40 ms vs 1.42 ms (within noise)
-    ✔ 06. Procedural Dungeon     : 3.90 ms vs 4.05 ms (+3.7% faster)
-    ✔ 07. Particle Sim           : 2.10 ms vs 2.15 ms (+2.3% faster)
-    ✔ 08. Multiplayer RPC Sync   : 1.80 ms vs 1.95 ms (+7.7% faster)
+    [Lapis] Measuring 27 benchmark suites (3 iterations each)...
+    ✔ 01. AStar2D Pathing        :  0.27 ms vs  0.28 ms (+3.6% faster)
+    ✔ 02. N-Body Physics (50k)   :  4.87 ms vs  4.95 ms (+1.6% faster)
+    ✔ 03. Perlin Noise (300k)    :  0.42 ms vs  0.43 ms (+2.3% faster)
+    ✔ 04. Dense Matmul (N=300)   : 38.84 ms vs 39.40 ms (+1.4% faster)
+    ✔ 05. Mandelbrot (500x500)   : 21.94 ms vs 22.10 ms (within noise)
+    ✔ 06. Prime Sieve (500k)     : 27.21 ms vs 27.85 ms (+2.3% faster)
+    ✔ 07. VectorMath2D (1M)      :  0.42 ms vs  0.42 ms (within noise)
+    ✔ 08. TransformHierarchy     :  1.80 ms vs  1.92 ms (+6.3% faster)
   
-    [PASS] Regression Gate: 0 regressions detected. Mean: +2.6% faster.
+    [PASS] Regression Gate: 0 regressions detected. Geomean: 46.2x vs GDScript.
     ✔ Staged HTML Report: benchmarks/reports/comparison_4.8-dev7.html
     ✔ Staged SVG Visuals: benchmarks/reports/comparison_4.8-dev7.svg
     ✔ Appended Run to   : benchmarks/history.xml (Run ID #42)
@@ -4204,16 +3975,16 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ### Slide 135: The Bridge Architecture (ACT IV • CHAPTER 13)
 - **Title**: The Bridge Architecture
-- **Subtitle**: 5-Layer GDExtension Architecture, ClassDB Generators & Turnkey Distribution
+- **Subtitle**: 4-Tier GDExtension Architecture, ClassDB Generators & Turnkey Distribution
 - **Chapter Highlights**:
-  - **5-Layer Architecture**: From the raw C API and Variant bridge up to high-level macros and user gameplay scripts
-  - **Dual Compilation Modes**: Seamlessly switch between Mode A (Rapid Dynamic Extension) and Mode B (Statically Linked Binary)
-  - **Turnkey Multi-Platform Dist**: Single-command artifact bundling for Windows, Linux, macOS, iOS, and WebAssembly
+  - **4-Tier Architecture**: From the raw C API and Variant bridge up to high-level macros and user gameplay scripts
+  - **Dual Compilation Modes**: Seamlessly switch between Mode A (Rapid Dynamic Extension) and Mode B (Standalone LibGodot Host)
+  - **Turnkey Multi-Platform Dist**: Single-command artifact bundling for standalone executables, addons, installers, and .deb packages
 
 **Presenter Notes**:
 > Before we jump into our live demo, let's step back and look at the architectural blueprint.
 > How does all of this fit together under the hood?
-> In Chapter 13, we inspect the 5-layer GDExtension bridge architecture that makes Lapis possible, explore our dual compilation modes—Mode A for rapid hot-reloading versus Mode B for production release binaries—and review our turnkey cross-platform packaging pipeline.
+> In Chapter 13, we inspect the 4-tier GDExtension bridge architecture that makes Lapis possible, explore our dual compilation modes—Mode A for rapid hot-reloading versus Mode B for standalone LibGodot production binaries—and review our turnkey packaging pipeline.
 
 ---
 
@@ -4284,11 +4055,11 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
   
   # Output artifact tree:
   bin/release_dist/
-  ├── crystal_integration-v0.1.0.zip      # Official Addon
-  ├── lapis-installer-v0.1.0-windows.exe   # Inno Setup
-  ├── lapis_0.1.0_amd64.deb               # Debian Package
+  ├── crystal_integration-v0.0.270.zip    # Official Addon
+  ├── lapis-installer-v0.0.270-win64.exe  # Inno Setup
+  ├── lapis_0.0.270_amd64.deb             # Debian Package
   ├── basic_demo-windows-x64.zip          # Playable Game
-  ├── benchmarks-report-v0.1.0.html       # Perf Charts
+  ├── benchmarks-report-v0.0.270.html     # Perf Charts
   └── SHA256SUMS.txt                      # Checksums
   ```
 - **Release Packaging Invariants**:
@@ -4365,13 +4136,13 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
   ```bash
   # Launch full-scale production showcase:
   $ lapis run --project=soulantern
-  # 60 FPS • Zero GC frame stutter
+  # 60 FPS • Smooth frame pacing
   # Dynamic lights, shaders & entity AI
   ```
   - Deep multi-system production game architecture
   - Full Soulantern demo running in pure Crystal
   - Volumetric lighting, shaders & spatial audio
-  - Bare-metal performance with zero GC pauses
+  - Native LLVM speed with stack-allocated structs
 
 **Presenter Notes**:
 > Welcome to our unified live demonstration!
@@ -4380,7 +4151,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 > In Step 2, we install community addons using 'lapis install addon github:sol-vin/diorite', showing how Lapis automatically unpacks the extension, registers it in project.godot, links shard.yml, and synthesizes typed Crystal AST bindings.
 > In Step 3, we explore in-editor features: authoring gameplay scripts using our declarative Crystal DSL, inspecting exported properties live in the Inspector, and running the game directly with F5 using our sub-second Windows shadow DLL hot reload with zero file locks.
 > In Step 4, we run 'lapis package game --release --portable --embed-pck', embedding the Godot PCK directly into the binary footer and bundling all runtimes into a single standalone .exe with zero external dependencies.
-> In Step 5, we launch the acclaimed Soulantern project demo in native Crystal, showcasing complex multi-node scenes, procedural shaders, dynamic lighting, and AI running smoothly at 60 FPS with zero garbage collection frame drops!
+> In Step 5, we launch the Soulantern project demo in native Crystal, showcasing complex multi-node scenes, procedural shaders, dynamic lighting, and AI running smoothly at 60 FPS!
 
 ---
 
@@ -4390,8 +4161,8 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
   - Cross-compilation toolchains with zero native tool installation friction.
   - Automated touch controls and mobile viewport orientation bindings.
 - **Q2 2027 — Multimodal AI Testing**:
-  - Autonomous game QA using Set-of-Marks ActionDriver manifests.
-  - Vision LLM feedback loops detecting visual regressions and physics glitches.
+  - Autonomous vision-LLM agents driving Lapis's shipped Set-of-Marks ActionDriver.
+  - Closed-loop visual regression and physics glitch detection in CI.
   - Continuous headless gameplay exploration and automated bug filing.
 - **Q3 2027 — Curated Game Shards**:
   - Community repository of game-ready Crystal shards (behavior trees, voxel engines).

@@ -14,27 +14,26 @@ left:
   lang: crystal
   font_size: '0.84rem'
   code: |
-    # 1. Declarative FSM declaration via macro DSL
-    fsm BossState do
-      state Patrol, initial: true do
-        before { start_patrol_path }
-        on :see_player, transition_to: Chase
+    require "lapis/fsm"
+
+    node BossEnemy < CharacterBody3D do
+      # 1. Declarative Symbol-Based FSM via Lapis macro DSL
+      fsm :state, initial: :patrol do
+        state :patrol do
+          enter  { start_patrol_path }
+          update { |dt| move_patrol(dt) }
+        end
+        state :chase do
+          enter  { play_animation("run") }
+          update { |dt| navigate_to(player, dt) }
+          exit   { stop_chase_music }
+        end
       end
 
-      state Chase do
-        before { play_animation("run") }
-        on :lost_player, transition_to: Patrol
-      end
-    end
-
-    # 2. Runtime gameplay dispatch in _physics_process
-    fsm = BossStateMachine.new
-    def _physics_process(delta : Float64) : Void
-      fsm.trigger(:see_player) if distance_to(player) < 15.0
-
-      case fsm.current_state
-      when .patrol? then move_patrol(delta)
-      when .chase?  then navigate_to(player, delta)
+      # 2. Runtime gameplay dispatch in _physics_process
+      def _physics_process(delta : Float64) : Void
+        transition_to(:chase) if in_state?(:patrol) && distance_to(player) < 15.0
+        update_state(delta)
       end
     end
 right:
@@ -42,10 +41,10 @@ right:
   title: What the Macro Generates
   color: purple
   items:
-    - '<strong>Typed Enum & Handlers:</strong> Generates concrete <code>enum BossState</code> with type-checked transition methods and exhaustive pattern matching.'
-    - '<strong>Inlined Lifecycle Hooks:</strong> Entry (<code>before</code>) and exit (<code>after</code>) hooks inline directly into native branch jumps.'
-    - '<strong>Static Method Dispatch:</strong> Transitions compile to direct CPU register comparisons—zero closures or dictionary lookups.'
-    - '<strong>Reusable Component:</strong> Available as <code>require "lapis/fsm"</code> for zero-dependency inclusion across gameplay nodes.'
+    - '<strong>Zero-Allocation State Tracking:</strong> Generates <code>@state : Symbol</code>, <code>in_state?</code>, <code>transition_to</code>, and <code>update_state(delta)</code>.'
+    - '<strong>Inlined Lifecycle Hooks:</strong> <code>enter</code>, <code>update</code>, and <code>exit</code> blocks compile directly into static <code>_fsm_*</code> methods.'
+    - '<strong>Static Branch Dispatch:</strong> Transitions compile to 32-bit symbol comparisons—zero heap closures or hash lookups.'
+    - '<strong>Built-In Lapis Module:</strong> Shipped as <code>require "lapis/fsm"</code> (supporting both Symbol and Union Struct FSMs).'
 notes: |
-  State machines are ubiquitous in gameplay engineering, but they often devolve into massive switch statements or complex class hierarchies. With Crystal's AST macros, we can write a clean, declarative state machine DSL that reads like a specification document.
-  Under the hood, the macro generates strongly-typed transition methods, inlines before (entry) and after (exit) lifecycle hooks, validates that all transitions are valid at compile time, and compiles down to direct branch dispatches with zero reflection overhead. Packaged as the official standalone module `require "lapis/fsm"`, developers get expressive state management with minimal runtime overhead.
+  State machines are ubiquitous in gameplay engineering, but they often devolve into sprawling switch statements or heavy class hierarchies. With Crystal's AST macros, `require "lapis/fsm"` lets you declare states and `enter`, `update`, and `exit` hooks right inside your node.
+  Under the hood, the macro generates dedicated `_fsm_enter_*`, `_fsm_update_*`, and `_fsm_exit_*` methods and dispatches transitions via direct symbol comparisons with zero heap allocations.

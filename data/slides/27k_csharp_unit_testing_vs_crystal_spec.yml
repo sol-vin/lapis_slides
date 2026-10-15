@@ -35,9 +35,9 @@ gdscript:
     - '<strong>Heavy External Test Harnesses:</strong> Requires third-party runners like GdUnit4 or WAT, loading scene packs to test pure gameplay logic.'
     - '<strong>Untyped Async Signal Testing:</strong> <code>await player.ToSignal(...)</code> returns loosely-typed <code>Variant[]</code> arrays requiring manual runtime casts.'
 crystal:
-  title: ':sparkles: Crystal: Built-In Spec Runner & Millisecond Isolation'
+  title: ':sparkles: Crystal: Built-In Spec Runner & Headless LibGodot'
   lang: crystal
-  tag: Crystal (crystal spec)
+  tag: Crystal (lapis test)
   card_title: Crystal Spec Zen
   font_size: '0.82rem'
   code: |
@@ -46,20 +46,20 @@ crystal:
 
     describe Player do
       it "mitigates damage through shield and emits health_changed" do
-        player = Player.new # Instant memory instantiation; zero engine boot!
+        player = Godot.create(Player) # Direct ClassDB alloc; no .tscn needed!
         player.equip_shield(50.0_f32)
 
         spawn { player.take_damage(20.0_f32) }
-        hp, _ = player.health_changed.await # Typed signal await!
+        hp, _ = await!(player.health_changed) # Typed tuple destructuring!
 
         player.shield.should eq(30.0_f32)
         hp.should eq(100.0_f32)
       end
     end
   points:
-    - '<strong>Built-In Zero-Config Runner:</strong> Crystal includes a blazing-fast testing framework (<code>crystal spec</code>) standard in the compiler with zero NuGet dependencies.'
-    - '<strong>Sub-Millisecond Isolated Testing:</strong> Test gameplay logic and component state directly in memory without launching editor test runners.'
-    - '<strong>Typed Signal Awaiting:</strong> <code>hp, _ = player.health_changed.await</code> awaits cooperative signals with full compile-time type destructuring.'
+    - '<strong>Built-In Zero-Config Runner:</strong> Crystal ships <code>crystal spec</code> in the standard library with zero external NuGet test harnesses.'
+    - '<strong>Pure Structs or Headless Nodes:</strong> Test pure gameplay structs in <code>&lt;1ms</code> via <code>crystal spec</code>, or instantiate nodes via <code>Godot.create(T)</code> without <code>.tscn</code> files.'
+    - '<strong>Typed Signal Awaiting:</strong> <code>hp, _ = await!(player.health_changed)</code> awaits signals with full compile-time tuple destructuring.'
 takeaway:
   badge: FAST TEST RUNNER
   text: 'Crystal specs run in milliseconds via built-in crystal spec without configuring external plugins, complex mock frameworks, or manual signal polling.'

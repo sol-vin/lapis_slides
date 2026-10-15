@@ -39,27 +39,25 @@ crystal:
   code: |
     record ShieldAbsorbed, shield : Float32, mitigated : Float32
     record CriticalDamage, armor : Float32, damage : Float32
+    record Miss
 
     node CombatResolver < Node do
-      # Native union type: unboxed value types, zero heap wrappers
-      alias HitResult = ShieldAbsorbed | CriticalDamage | Nil
+      # Closed value-type union: unboxed on stack, zero heap wrappers
+      alias HitResult = ShieldAbsorbed | CriticalDamage | Miss
 
-      def resolve_hit(target : Node3D, raw_damage : Float32) : HitResult
-        # Flow-sensitive matching narrows target in each branch:
-        case target
-        when ShieldDrone
-          ShieldAbsorbed.new(target.shield_points, raw_damage * 0.5_f32)
-        when PlayerCharacter
-          CriticalDamage.new(target.armor_rating, raw_damage * 2.0_f32)
-        else
-          nil
-        end
+      def apply_hit(res : HitResult) : Float32
+        # Compiler enforces exhaustiveness across all union members:
+        case res
+        when ShieldAbsorbed then res.mitigated
+        when CriticalDamage then res.damage - res.armor
+        when Miss           then 0.0_f32
+        end # No 'else' needed — adding a 4th type is a compile error!
       end
     end
   points:
-    - '<strong>First-Class Union Types:</strong> <code>ShieldAbsorbed | CriticalDamage | Nil</code> are native primitives with zero heap allocation or boxing.'
-    - '<strong>Compile-Time Exhaustiveness:</strong> The compiler verifies that all possible union types are handled, preventing unhandled runtime branch bugs.'
-    - '<strong>Flow-Sensitive Narrowing:</strong> <code>when ShieldDrone</code> automatically narrows the variable type without manual casting or unsafe downcasts.'
+    - '<strong>First-Class Union Types:</strong> <code>ShieldAbsorbed | CriticalDamage | Miss</code> are stack-allocated value unions with zero heap boxing.'
+    - '<strong>Compile-Time Exhaustiveness:</strong> Matching on a closed union requires no <code>else</code>; adding a new variant flags every unhandled <code>case</code> at compile time.'
+    - '<strong>Flow-Sensitive Narrowing:</strong> <code>when ShieldAbsorbed</code> narrows <code>res</code> automatically without manual casting or unsafe downcasts.'
 takeaway:
   badge: SOUND TYPE SYSTEM
   text: 'Crystal provides first-class union types with compile-time exhaustive pattern matching and zero wrapper allocations.'

@@ -5,39 +5,28 @@ subtitle: Developer Happiness, Small Syntax & Expressive Human Reach
 badge: HISTORICAL CONTEXT • THE RUBY HERITAGE
 badge_color: purple
 palette: catppuccin_mocha
-layout: two-column-layout
-ratio: 3:2
-left:
-  type: code
-  title: ruby_philosophy.rb — Developer Happiness First
-  tag: Ruby
-  lang: ruby
-  font_size: '0.84rem'
-  code: |
-    # Yukihiro "Matz" Matsumoto's Vision (1995):
-    # "Ruby is designed for human comfort, not machine convenience."
-
-    Ruby.manifesto do
-      prioritize :human_happiness, over: :machine_convenience
-      principle  :least_surprise
-      syntax     :natural_english_prose
-
-      empower do
-        first_class_blocks { natural_flow }
-        expressive_closures.each(&:make_code_joyful)
-      end
-
-      goal "Make programmers smile when they write code"
-    end
-right:
-  type: card
-  title: Why Ruby Won Developer Hearts
-  color: purple
-  items:
-    - '<strong>Developer Happiness First:</strong> Prioritizes human cognitive comfort over raw machine convenience.'
-    - '<strong>Minimal Syntax, Massive Reach:</strong> A postage-stamp grammar that molds to domain DSLs without compiler bloat.'
-    - '<strong>First-Class Closures:</strong> Chaining Enumerable methods (<code>select(&:alive?)</code>) turns data into readable prose.'
-    - '<strong>The Game Tech Dilemma:</strong> Dynamic interpreted bytecode (YARV) lacked the performance needed for 60 FPS physics.'
+layout: editorial-split
+numeral: '1995'
+headline: 'Human Happiness Over Machine Convenience'
+quote: 'Ruby is designed to make programmers happy. We need to focus on humans, on how humans care about doing programming.'
+attribution: 'Yukihiro “Matz” Matsumoto'
+cards:
+  - title: 'Developer Happiness First'
+    badge: 'COGNITIVE FLOW'
+    color: purple
+    desc: 'Optimizes for human intent and least surprise rather than compiler ceremony.'
+  - title: 'Minimal Syntax, Massive Reach'
+    badge: 'SMALL GRAMMAR'
+    color: cyan
+    desc: 'A ~40-keyword grammar that molds cleanly to expressive domain DSLs.'
+  - title: 'First-Class Blocks & Enumerable'
+    badge: 'CLOSURE PIPELINES'
+    color: emerald
+    desc: 'Turns collection transforms (select, map, each) into readable prose.'
+  - title: 'The Game Tech Bottleneck'
+    badge: 'VM OVERHEAD'
+    color: coral
+    desc: 'Dynamic interpreted bytecode (YARV) lacked the raw throughput for 60 FPS physics.'
 notes: |
   To understand why Crystal exists and why Lapis is designed the way it is, we have to look back at the Ruby era. In the early 2000s, Ruby took the software world by storm because it prioritized human developer ergonomics. Yukihiro Matsumoto explicitly designed Ruby for human happiness, introducing first-class blocks, elegant closures, and a syntax that reads like natural English.
   Matz proved that a programming language doesn't need hundreds of complex grammar rules to be extraordinarily expressive. Instead, thoughtful language design allows programmers to build clean internal class architectures ("our back end") so that consumer call-sites and gameplay code ("our front end") can read like poetry. But for game developers, Ruby's dynamic interpreted VM was far too slow for real-time physics and 60 FPS budgets.

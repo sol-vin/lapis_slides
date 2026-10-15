@@ -35,8 +35,8 @@ gdscript:
         if not e.is_dead: active_names.append(e.name.to_upper())
   points:
   - <strong>Heap-Allocated Callables:</strong> Every anonymous <code>func(...)</code> lambda instantiates a native Godot <code>Callable</code> heap object with refcount tracking.
-  - <strong>Clunky Lambda Syntax:</strong> No compact block syntax or symbol-to-proc; even simple 1-line predicates require full function signature boilerplate.
-  - <strong>Chaining & Intermediate Arrays:</strong> Chaining operations like <code>filter</code> and <code>map</code> creates intermediate temporary arrays, multiplying memory pressure.
+  - <strong>Clunky Lambda Syntax:</strong> No compact block syntax or <code>&amp;.method</code> shorthand; even 1-line predicates require full <code>func</code> boilerplate.
+  - <strong>Chaining &amp; Intermediate Arrays:</strong> Chaining operations like <code>filter</code> and <code>map</code> creates intermediate temporary arrays, multiplying memory pressure.
 crystal:
   title: ':sparkles: Crystal: Inlined Blocks, Rich Enumerators & Zero Lambda Churn'
   lang: crystal
@@ -59,7 +59,7 @@ crystal:
   points:
   - <strong>Inlined Block Execution:</strong> Crystal blocks passed to <code>yield</code> are inlined directly by LLVM into native loops without allocating heap closure objects.
   - <strong>Declarative <code>on</code> Sugar:</strong> <code>on timer.timeout { ... }</code> generates typed signal handlers with automatic listener lifecycle management.
-  - <strong>Clean Block Syntax:</strong> Curly braces <code>{ |x| ... }</code> and symbol-to-proc <code>(&.property)</code> eliminate clutter while keeping full static type inference.
+  - <strong>Short Block Syntax:</strong> Curly braces <code>{ |x| ... }</code> and <code>(&amp;.property)</code> expand directly in the AST with full static type inference.
   - <strong>50+ Rich Enumerators:</strong> <code>sort_by!</code>, <code>select</code>, <code>reject</code>, <code>tally</code>, and <code>chunk</code> compose seamlessly into readable data pipelines.
 takeaway:
   badge: BLOCK INLINING • MINIMAL HEAP CHURN

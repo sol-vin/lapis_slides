@@ -6,7 +6,7 @@ badge: LAPIS ASYNC • SIGNAL AWAITING
 badge_color: cyan
 palette: oled_micro
 layout: two-column-layout
-ratio: 1:1
+ratio: 3:2
 left:
   type: code
   title: signal_awaiting_triad.cr — Complete Await Architecture
@@ -17,9 +17,7 @@ left:
     # 1. 0-arg signal: predicates & timeout handling
     status = await(player.died, timeout_sec: 5.0)
     status.completed?                      # => Bool (.timed_out?, .ok?)
-    status.status == AwaitState::Completed # => Direct enum match
-    await!(player.died)                    # => nil (or raises TimeoutError)
-    await?(player.died)                    # => true on emit, false on timeout
+    await?(player.died, timeout_sec: 5.0)  # => true on emit, false on timeout
 
     # 2. Single-arg signal: typed payload unboxing
     status = await(player.health_changed)  # => AwaitStatus(Int32)
@@ -30,23 +28,19 @@ left:
     status = await(boss.loot_dropped)      # => AwaitStatus(Tuple(Int32, String))
     id, name = status                      # Direct Crystal tuple destructuring!
     tup = await!(boss.loot_dropped)        # => {42, "relic"} (or raises)
-    opt = await?(boss.loot_dropped)        # => {42, "relic"} on emit, nil on timeout
 
     # 4. BoundSignal & numeric duration delays
-    args = await!(~Sprite2D.frame_changed) # => Array(Variant)
-    await(1.0)                             # => AwaitStatus
-    await?(1.0)                            # => true / false
-    await!(1.0)                            # => Void (or raises TimeoutError)
+    args = await!((~Sprite2D).frame_changed) # => Array(Variant)
+    await(1.0)                               # => AwaitStatus (or await?(1.0) / await!(1.0))
 right:
   type: card
   title: Cooperative Awaiting Invariants
   color: cyan
   items:
-    - '<strong>AwaitStatus Predicates:</strong> <code>.completed?</code>, <code>.timed_out?</code>, <code>.ok?</code>, and <code>.status == AwaitState::Completed</code> enable non-throwing control flow.'
-    - '<strong>Triad Return Semantics:</strong> <code>await</code> returns typed <code>AwaitStatus(T)</code>; <code>await!</code> unwraps values or raises <code>TimeoutError</code>; <code>await?</code> returns nilable values (or <code>Bool</code>).'
-    - '<strong>Tuple Destructuring:</strong> Multi-argument signals automatically unpack via tuple destructuring (<code>id, name = status</code>) with full compile-time type inference.'
-    - '<strong>BoundSignal & Delays:</strong> Dynamic untyped signals yield <code>Array(Variant)</code>; numeric seconds (<code>1.0</code>) or timers return status, bool, or void.'
-    - '<strong>DisposedObjectError Protection:</strong> If the target node is destroyed while awaiting, Lapis raises <code>Godot::DisposedObjectError</code>, preventing silent infinite hangs.'
+    - '<strong>Triad Return Semantics:</strong> <code>await</code> returns <code>AwaitStatus(T)</code> (<code>.completed?</code>, <code>.timed_out?</code>); <code>await!</code> unwraps or raises <code>TimeoutError</code>; <code>await?</code> returns nilable (or <code>Bool</code>).'
+    - '<strong>Tuple Destructuring:</strong> Multi-argument signals unpack via tuple destructuring (<code>id, name = status</code>) with full static type inference.'
+    - '<strong>BoundSignal &amp; Delays:</strong> Dynamic untyped signals (<code>(~Sprite2D).frame_changed</code>) yield <code>Array(Variant)</code>; numeric delays pause fibers cooperatively.'
+    - '<strong>DisposedObjectError Protection:</strong> If the awaited node is freed, Lapis raises <code>Godot::DisposedObjectError</code> instead of hanging forever.'
 notes: |
   Lapis provides a complete triad of non-blocking await primitives matching Crystal's semantic naming idioms:
   1. Standard 'await' returns an 'AwaitStatus(T)' struct with predicates like '.completed?', '.timed_out?', and '.ok?'. When awaiting multi-argument signals, it yields a Tuple that supports Crystal tuple destructuring ('id, name = status').

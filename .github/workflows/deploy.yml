@@ -39,10 +39,11 @@ jobs:
           shards build sunstone --release
           sudo cp bin/sunstone /usr/local/bin/sunstone
 
-      - name: Validate & Build Slide Deck
+      - name: Validate, Build & Test Slide Deck
         run: |
           sunstone validate
           sunstone build -o .
+          crystal spec
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

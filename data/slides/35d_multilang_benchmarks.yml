@@ -72,10 +72,10 @@ right:
   title: Cross-Language Performance Spectrum
   color: cyan
   items:
-    - '<strong>Native Clustering (45x–150x vs GDScript):</strong> Compiled targets (Crystal, C++, Rust, C#) cluster tightly between 3.8ms and 42.9ms, outperforming interpreted GDScript bytecode by two orders of magnitude.'
-    - '<strong>Crystal vs C++ Parity:</strong> LLVM Ahead-of-Time compilation places Crystal within <strong>1.0x–1.2x of optimized C++ (-O3)</strong>, and Crystal actually <strong>beats C++ by 27% on Prime Sieve</strong> (27.2ms vs 37.4ms) due to aggressive inlining.'
-    - '<strong>Rust & Crystal Equivalence:</strong> On 3D N-Body velocity-verlet integration, Crystal (4.87ms) matches Rust (4.72ms) within 3% without manual memory ownership gymnastics.'
-    - '<strong>Unified Architecture:</strong> Developers achieve full native systems performance without leaving high-level, expressive Ruby-inspired object syntax.'
+    - '<strong>Native Clustering (45x–150x vs GDScript):</strong> Compiled targets (Crystal, C++, Rust, C#) cluster tightly between 3.8ms and 57.0ms, outperforming GDScript bytecode by two orders of magnitude.'
+    - '<strong>Crystal vs C++ Parity:</strong> LLVM AOT compilation places Crystal within <strong>1.0x–1.2x of C++ (-O3)</strong> on matrix and physics compute, and ahead on Prime Sieve + Trie (27.2ms vs 37.4ms).'
+    - '<strong>Rust &amp; Crystal Equivalence:</strong> On 3D N-Body velocity-verlet integration, Crystal (4.87ms) matches Rust (4.72ms) within 3% without borrow-checker ceremony.'
+    - '<strong>Unified Architecture:</strong> Achieve native systems throughput without leaving expressive, high-level Ruby-inspired syntax.'
 notes: |
   When evaluating game engines, performance comparisons often stop at GDScript vs C++. With Lapis, we benchmarked the same canonical algorithmic workloads across all five major Godot language targets: Crystal, C++, Rust, C# (.NET 8), and GDScript.
-  As you can see, all compiled languages cluster tightly together, running 45x to 150x faster than GDScript bytecode. Remarkably, Crystal matches optimized C++ and Rust step-for-step—even outperforming C++ on the Sieve of Atkin prime search due to LLVM's aggressive closure inlining. You get authentic native speed without sacrificing developer happiness.
+  As you can see, all compiled languages cluster tightly together, running 45x to 150x faster than GDScript bytecode. Crystal matches optimized C++ and Rust within single-digit milliseconds across compute-intensive loops while maintaining clean, high-level object syntax.

@@ -34,12 +34,7 @@ crystal:
   lang: crystal
   tag: Crystal (Lapis)
   code: |
-    enum State
-      Idle
-      Run
-      Attack
-      Dead
-    end
+    enum State; Idle; Run; Attack; Dead; end
 
     def handle_state(state : State, health : Int32) : Void
       # Compiler enforces exhaustiveness across all variants:
@@ -50,9 +45,9 @@ crystal:
       when .dead?   then play_anim("death")
       end
 
-      # Tuple pattern matching in a single clean expression:
+      # Tuple pattern matching in a single expression:
       case {health, state}
-      when {..0, .dead?} then nil # already dead
+      when {..0, .dead?} then nil
       when {..0, _}      then die!
       when {..20, _}     then emit(low_health_warning)
       end

@@ -25,7 +25,7 @@ left:
 
     # 2. Type-checked one-liners (catches typos at build time!):
     tween(boss.position.y, to: 150.0, in: 0.4.seconds)
-    coin.tween_to(:scale, Vector2.new(1.35, 1.35), 150.milliseconds)
+    tween(coin.scale, to: Vector2.new(1.35, 1.35), in: 150.milliseconds)
 right:
   type: card
   title: Animation & Juice Invariants

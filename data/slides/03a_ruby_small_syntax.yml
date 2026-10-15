@@ -5,14 +5,13 @@ subtitle: '~40 Keywords Fueling an Infinite Universe of Domain Usages'
 badge: RUBY HERITAGE • MINIMAL GRAMMAR
 badge_color: purple
 palette: nord_frost
-layout: two-column-layout
+layout: one-left-two-right
 ratio: 3:2
 left:
   type: code
   title: ruby_keywords.rb — The ~40 Core Keywords
   tag: Ruby
   lang: ruby
-  font_size: '0.84rem'
   code: |
     # Ruby's Core Reserved Grammar (~41 Keywords):
     class     module    def       end
@@ -24,15 +23,22 @@ left:
     begin     rescue    ensure    defined?
     true      false     nil       and/or
     BEGIN     END       __FILE__  __LINE__
-right:
+right_top:
   type: card
-  title: The Postage-Stamp Advantage
+  title: 'Fits on a Postage Stamp'
+  badge: '~40 KEYWORDS'
   color: purple
   items:
-    - '<strong>Fits on a Postage Stamp:</strong> Unlike C++ or C# with 80+ keywords, Ruby’s grammar fits on a single card (~40 words).'
-    - '<strong>Methods Over Keywords:</strong> Properties (<code>attr_accessor</code>) and access control (<code>private</code>) are plain methods.'
-    - '<strong>Blocks as Universal Primitives:</strong> A single construct (<code>do...end</code>) powers loops, resource guards, and DSLs.'
-    - '<strong>Zero Syntax Bloat:</strong> Expressive frameworks (Rails, RSpec, Lapis) require zero new parser grammar rules.'
+    - '<strong>Minimal Grammar:</strong> ~40 keywords vs. 90+ in C++20 and 100+ in C#.'
+    - '<strong>Methods Over Keywords:</strong> <code>attr_accessor</code>, <code>private</code>, and <code>loop</code> are ordinary methods.'
+right_bottom:
+  type: card
+  title: 'Universal Block Primitives'
+  badge: 'DOMAIN DSLs'
+  color: cyan
+  items:
+    - '<strong>Blocks Everywhere:</strong> A single <code>do...end</code> construct powers iteration, guards, and DSLs.'
+    - '<strong>Zero Parser Bloat:</strong> Frameworks like Rails, RSpec, and Lapis add zero grammar rules.'
 notes: |
   In computer science lore, Alan Kay famously observed that Smalltalk was so elegant that its entire grammar could fit on a postcard. Matz brought this profound insight to Ruby: you do not need 80 or 100 keywords to build a powerful programming language.
   In fact, adding keywords often restricts what developers can do. In C#, Java, or C++, if you want properties, asynchronous tasks, or access control, the language committee must invent new keywords and syntax rules.

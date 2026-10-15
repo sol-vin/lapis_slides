@@ -28,17 +28,17 @@ left:
       puts "Target ##{idx + 1}: #{enemy.name}"
     end
 
-    # Inlined Enumerable pipeline
-    active = enemies.select(&.boss?).reject(&.defeated?)
+    # Lazy Iterator pipeline (zero intermediate Arrays!)
+    active = enemies.each.select(&.boss?).reject(&.defeated?)
 right:
   type: card
   title: 'Why Internal Iterators Excel'
   color: blue
   items:
-    - '<strong>Strict Lexical Scope:</strong> Block parameters (<code>|item|</code>) never leak into surrounding functions, preventing accidental variable reuse bugs.'
-    - '<strong>Zero Off-By-One Errors:</strong> The collection encapsulates its own traversal, eliminating manual index counters and bounds violations.'
+    - '<strong>Strict Lexical Scope:</strong> Block parameters (<code>|item|</code>) never leak into surrounding functions, preventing variable reuse bugs.'
+    - '<strong>Zero Off-By-One Errors:</strong> The collection encapsulates its own traversal, eliminating manual index counters and bounds bugs.'
     - '<strong>50+ Free Query Methods:</strong> Implementing a single <code>def each(&amp;)</code> unlocks <code>map</code>, <code>select</code>, <code>reject</code>, and <code>reduce</code>.'
-    - '<strong>LLVM Direct Inlining:</strong> Crystal inlines blocks into bare-metal CPU register loops, matching hand-written C speed with zero heap allocations.'
+    - '<strong>Zero-Allocation Inlined Blocks:</strong> Non-capturing <code>yield</code> blocks (<code>each</code>, <code>times</code>, <code>any?</code>) inline into native loops without closure allocation.'
 notes: |
   When programmers coming from C, C++, Java, C#, Go, or Python learn Crystal, one of their first questions is: 'Where is the for loop?'
   Unlike languages that rely on a dedicated loop keyword, Crystal does not even have a 'for' keyword in its grammar—iteration is handled entirely via internal blocks and the Enumerable module.

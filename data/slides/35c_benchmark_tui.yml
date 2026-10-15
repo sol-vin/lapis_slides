@@ -23,17 +23,17 @@ left:
     ╔════════════════════════════════════════════════════════════════════════════════════╗
     ║ LAPIS PERFORMANCE BENCHMARK DASHBOARD                            ALL RUNS [OK]     ║
     ║ Host: windows-x64 │ Engine: Godot 4.8.0-dev7 │ Crystal: -O3 │ Iterations: 3     ║
-    ║ [██████████████████████████████████████] 100% (8/8 benchmarks • 3 iters)           ║
+    ║ [██████████████████████████████████████] 100% (27/27 suites • 3 iterations)        ║
     ╚════════════════════════════════════════════════════════════════════════════════════╝
-    ┌─ BENCHMARKS (8 SUITES) ────────┐ ┌─ LIVE PERFORMANCE & SPEEDUP RATIOS ─────────────┐
-    │ ► [OK] 01. N-Body Physics (10k)   │ │ GDScript: 184.2 ms │ Crystal: 3.1 ms [ 59.4x ]  │
-    │   [OK] 02. Perlin Noise (256x256) │ │ GDScript:  92.4 ms │ Crystal: 2.8 ms [ 33.0x ]  │
-    │   [OK] 03. A* Pathing (1k agents) │ │ GDScript:  64.8 ms │ Crystal: 4.2 ms [ 15.4x ]  │
-    │   [OK] 04. Raycast Spatial Octree │ │ GDScript:  45.6 ms │ Crystal: 5.1 ms [  8.9x ]  │
-    │   [OK] 05. Matrix 4x4 SIMD (100k) │ │ GDScript:  38.1 ms │ Crystal: 1.4 ms [ 27.2x ]  │
-    │   [OK] 06. Procedural Dungeon Gen │ │ GDScript: 112.5 ms │ Crystal: 3.9 ms [ 28.8x ]  │
-    │   [OK] 07. Particle Sim (50k)     │ │ GDScript:  78.3 ms │ Crystal: 2.1 ms [ 37.3x ]  │
-    │   [OK] 08. Multiplayer RPC Sync   │ │ ALL 8 BENCHMARKS COMPLETE (Mean Speedup: 30.1x) │
+    ┌─ BENCHMARKS (27 SUITES) ───────┐ ┌─ LIVE PERFORMANCE & SPEEDUP RATIOS ─────────────┐
+    │ ► [OK] 01. AStar2D Pathing      │ │ GDScript:  76.4 ms │ Crystal:  0.27 ms [282.9x] │
+    │   [OK] 02. N-Body Physics (50k) │ │ GDScript: 727.7 ms │ Crystal:  4.87 ms [149.4x] │
+    │   [OK] 03. Perlin Noise (300k)  │ │ GDScript:  35.5 ms │ Crystal:  0.42 ms [ 84.4x] │
+    │   [OK] 04. Dense Matmul (N=300) │ │ GDScript:2620.6 ms │ Crystal: 38.84 ms [ 67.5x] │
+    │   [OK] 05. Mandelbrot (500x500) │ │ GDScript:1079.4 ms │ Crystal: 21.94 ms [ 49.2x] │
+    │   [OK] 06. Prime Sieve (500k)   │ │ GDScript:1215.2 ms │ Crystal: 27.21 ms [ 44.7x] │
+    │   [OK] 07. VectorMath2D (1M)    │ │ GDScript:  18.5 ms │ Crystal:  0.42 ms [ 44.1x] │
+    │   [OK] 08. TransformHierarchy   │ │ ALL 27 SUITES COMPLETE (Geomean Speedup: 46.2x) │
     └────────────────────────────────┘ └─────────────────────────────────────────────────┘
      [↑↓/jk] Select Benchmark  [Enter] Detailed Metrics Modal  [q] Exit  [?] Help
 right:
@@ -41,9 +41,9 @@ right:
   title: Benchmark TUI Dashboard Invariants
   color: cyan
   items:
-    - '<strong>Double-Buffered ANSI Dashboard:</strong> <code>lapis benchmarks --tui</code> renders a zero-flicker split-pane interface with progress tracking, active suite timers, and live stdout streams.'
-    - '<strong>Cross-Language Shootout (<code>--all-languages</code>):</strong> Concurrently measures Crystal against C++, Rust, C# (.NET 8), and GDScript across all 8 canonical workloads.'
-    - '<strong>Interactive Metrics Modal:</strong> Pressing <code>[Enter]</code> reveals statistical confidence intervals (min, median, max, std dev), GC allocations, and AVX2 vectorization flags.'
-    - '<strong>Multi-Format Output Staging:</strong> Simultaneously generates console tables, visual vector charts (SVG), interactive HTML reports, and XML regression baselines.'
+    - '<strong>Double-Buffered ANSI Dashboard:</strong> <code>lapis benchmarks --tui</code> renders a flicker-free split-pane interface with live timers and stdout streams.'
+    - '<strong>Cross-Language Shootout (<code>--all-languages</code>):</strong> Measures Crystal against C++, Rust, C# (.NET 8), and GDScript across 27 comparative suites.'
+    - '<strong>Interactive Metrics Modal:</strong> Pressing <code>[Enter]</code> inspects confidence intervals (min, median, max, std dev) and memory allocations.'
+    - '<strong>Multi-Format Output Staging:</strong> Exports console tables, vector charts (SVG), interactive HTML reports, and XML regression baselines.'
 notes: |
   To verify real-world game performance across engine versions, Lapis provides a full-featured terminal UI for benchmarking. Invoking `lapis benchmarks --tui` launches a double-buffered ANSI dashboard that executes microbenchmarks and comparative stress tests side-by-side against Godot GDScript and native C++/Rust targets. As each suite runs, the TUI dynamically plots execution latency, calculates exact speedup multiples with statistical confidence intervals, and records peak memory. Developers can navigate suites with keyboard controls, drill down into sub-step iterations with Enter, and automatically export SVG comparison charts and HTML reports for documentation or CI regression tracking.

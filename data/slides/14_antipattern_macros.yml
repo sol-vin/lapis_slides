@@ -7,30 +7,25 @@ badge_color: amber
 palette: iwasbornintheusa
 layout: code-comparison-layout
 gdscript:
-  title: ':circle-xmark: GDScript: Dictionary Sprawl & String Signals'
+  title: ':circle-xmark: GDScript & C++: Untyped Signal Emits & No AST Macros'
   lang: gdscript
-  tag: GDScript
+  tag: GDScript 4
   code: |
-    # Manual dictionary definitions for editor export hints
-    func _get_property_list() -> Array[Dictionary]:
-        return [{
-            "name": "move_speed",
-            "type": TYPE_FLOAT,
-            "hint": PROPERTY_HINT_RANGE,
-            "hint_string": "10.0,500.0,5.0"
-        }]
+    @export_range(10.0, 500.0, 5.0) var move_speed: float = 150.0
 
-    # Manual signal emissions with loose string names and untyped arguments
-    signal player_hit(damage, source)
+    # Signal parameter types in GDScript 4 are documentation-only!
+    signal player_hit(damage: int, source: Node)
+
     func take_damage(dmg: int) -> void:
-        emit_signal("player_hit", dmg, self) # Typo in "player_hit" fails at runtime!
+        # Wrong argument types or counts are NOT checked by the parser:
+        player_hit.emit("not_an_int") # Compiles cleanly, fails at runtime!
+
+    # And in godot-cpp, exposing properties & signals requires manual
+    # ClassDB::bind_method + ADD_PROPERTY + ADD_SIGNAL boilerplate.
   points:
-  - <strong>Stringly-Typed Dictionaries:</strong> Requires constructing complex property
-    dictionaries in <code>_get_property_list()</code>.
-  - <strong>Brittle String Signals:</strong> Typo in signal name string fails silently
-    or crashes at runtime.
-  - <strong>No Parameter Validation:</strong> Emit calls cannot verify argument counts
-    or types at compile time.
+  - <strong>Unchecked Signal Signatures:</strong> GDScript 4 signal type annotations are documentation-only; <code>Signal.emit(...)</code> is variadic and unchecked.
+  - <strong>No User Metaprogramming:</strong> GDScript has built-in <code>@export</code> tags, but zero user-definable macros or AST transforms to eliminate repetitive code.
+  - <strong>Manual C++ Registration:</strong> In <code>godot-cpp</code>, every property and signal requires manual string registration inside <code>_bind_methods()</code>.
 crystal:
   title: ':sparkles: Crystal: Compile-Time AST Macro Synthesis'
   lang: crystal
@@ -49,19 +44,11 @@ crystal:
       # Also auto-generates listener: on player.player_hit { |dmg, src| ... }
     end
   points:
-  - <strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc
-    comments and ranges directly into Godot Inspector.
-  - <strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player_hit, dmg, self)</code> validates
-    argument types and arity at compile time.
-  - <strong>Zero Runtime Reflection:</strong> Metaprogramming executes at compile
-    time; runtime cost is exactly zero.
+  - <strong>Declarative Annotations:</strong> <code>@[Export]</code> extracts doc comments and ranges directly into Godot ClassDB at compile time.
+  - <strong>Type-Safe <code>emit</code> Macro:</strong> <code>emit(player_hit, dmg, self)</code> validates exact argument types and arity during compilation.
+  - <strong>User-Extensible AST Macros:</strong> Write your own compile-time macros for FSMs, object pools, RPCs, and serialization with zero runtime reflection.
 takeaway:
   badge: ZERO-REFLECTION METAPROGRAMMING
-  text: Crystal AST macros execute at compile time, eliminating runtime reflection
-    and catching API mismatches instantly.
-notes: 'Metaprogramming in GDScript often means writing string dictionaries in _get_property_list,
-  maintaining loose string names for signals, and relying on runtime reflection. In
-  Lapis, we use Crystal''s compile-time AST macros. When you declare an export or
-  a signal, the macro generates first-class, strongly-typed signal accessors: player_hit.emit,
-  player_hit.connect, and full ClassDB property registrations. Any typos or argument type
-  mismatches are caught immediately by the compiler.'
+  text: Crystal AST macros execute at compile time, eliminating manual C++ registration and catching signal signature mismatches before launch.
+notes: |
+  While Godot 4 added built-in @export annotations to GDScript, signal parameter types in GDScript are still documentation-only—calling player_hit.emit with the wrong types or argument count is not caught at parse time. Furthermore, GDScript does not support user-defined macros, and C++ requires manual ClassDB::_bind_methods() wiring for every property and signal. In Lapis, Crystal's compile-time AST macros generate strongly-typed signal accessors and full ClassDB registrations with zero runtime reflection.

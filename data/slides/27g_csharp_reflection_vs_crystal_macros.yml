@@ -15,17 +15,17 @@ gdscript:
   code: |
     public partial class NetworkSync : Node
     {
-        // Runtime reflection: 10-100x slower, boxes args, and stripped by AOT!
-        public void DispatchRPC(string methodName, params object[] args)
+        // Runtime reflection: slow, boxes args, fragile under AOT!
+        public void DispatchRPC(string name, params object[] args)
         {
-            var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
-            MethodInfo? method = GetType().GetMethod(methodName, flags);
-            if (method == null) throw new MissingMethodException(methodName);
+            var flags = BindingFlags.Public | BindingFlags.Instance;
+            MethodInfo? m = GetType().GetMethod(name, flags);
+            if (m == null) throw new MissingMethodException(name);
 
-            // Allocates object[] and boxes value types on every packet!
-            method.Invoke(this, args);
+            // Allocates object[] & boxes value types per packet!
+            m.Invoke(this, args);
         }
-        // Alternative Roslyn generators require separate .csproj, analyzers & MSBuild plumbing.
+        // Roslyn generators require separate Analyzer .csproj & MSBuild.
     }
   points:
     - '<strong>Runtime Reflection Tax:</strong> <code>method.Invoke()</code> is 10–100x slower than direct calls and forces dynamic string lookups on every packet.'
@@ -39,13 +39,13 @@ crystal:
   font_size: '0.82rem'
   code: |
     node NetworkSync < Node do
-      # Compile-time AST macro generates static dispatch without reflection tables
+      # AST macro synthesizes static dispatch with zero reflection
       macro generate_rpc_dispatcher(*methods)
-        def dispatch_rpc(action : String, packet : Packet) : Nil
+        def dispatch_rpc(action : String, pkt : Packet) : Nil
           case action
-          {% for method in methods %}
-          when {{ method.stringify }}
-            {{ method.id }}(packet.read_{{ method.id }}_payload) # Static dispatch!
+          {% for m in methods %}
+          when {{ m.stringify }}
+            {{ m.id }}(pkt.read_{{ m.id }}_payload) # Static call!
           {% end %}
           else raise "Unknown RPC: #{action}"
           end

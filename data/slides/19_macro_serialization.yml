@@ -27,7 +27,7 @@ left:
       property position_checkpoint : Godot::Vector3
     end
 
-    # 1. Serializing to JSON string: direct bytecode generation
+    # 1. Serializing to JSON string: streams directly to IO without reflection
     data = PlayerSaveData.new(...)
     json_str = data.to_json
 

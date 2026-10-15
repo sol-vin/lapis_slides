@@ -29,7 +29,7 @@ left:
     # 3. Non-Capturing Proc = Raw C Function Pointer
     cb = ->(id : UInt64, evt : Int32) { Godot::Bridge.dispatch(id, evt) }
 
-    # 4. Symbol-to-Proc Shorthand
+    # 4. Short Block Syntax (&.method — parsed directly to AST block)
     enemies.select(&.alive?).map(&.health)
 right:
   type: card
@@ -38,7 +38,7 @@ right:
   items:
     - '<strong>Ephemeral Blocks (<code>yield</code>):</strong> Direct control-flow transfers inlined into machine loops by LLVM with zero heap allocations.'
     - '<strong>Typed <code>Proc</code> Objects:</strong> First-class closures created via <code>-&gt;(x) { ... }</code> with strict compile-time parameter and return checking.'
-    - '<strong>Bare C Function Pointers:</strong> Non-capturing procs compile directly to native C function pointers for zero-overhead GDExtension engine callbacks.'
-    - '<strong>Symbol-to-Proc Sugar:</strong> Shorthands like <code>&amp;.alive?</code> inline property getters directly into iterator pipelines without lambda wrappers.'
+    - '<strong>Bare C Function Pointers:</strong> Non-capturing procs compile directly to native C function pointers for zero-overhead GDExtension callbacks.'
+    - '<strong>Short Block Syntax (<code>&amp;.</code>):</strong> <code>enemies.select(&amp;.alive?)</code> expands at parse time into an inlined block—no Symbol or Proc allocation.'
 notes: |
-  Closures are one of the most expressive parts of modern languages. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. When you need closures as first-class citizens to store in variables or pass into data structures, Crystal gives us Procs. Procs that capture outer scope variables allocate a closure context on the heap, but are strictly typed with compile-time parameter and return checking. Most powerfully for Godot game development, non-capturing Procs compile down to raw C function pointers—allowing us to pass Crystal callbacks directly into Godot's C-API and C++ bridge with zero wrapper overhead.
+  Closures are one of the most expressive parts of modern languages. In Crystal, we get the entire spectrum of closures with bare-metal speed. Standard blocks passed to yield are completely ephemeral: they allocate zero heap memory, and LLVM inlines the block body directly into the calling loop. Unlike Ruby's &:method which allocates a Symbol#to_proc closure, Crystal's &.method short block syntax expands directly in the parser AST into an inlined block. When you need first-class closures to store in variables, Crystal provides strictly typed Procs, and non-capturing Procs compile directly to raw C function pointers for zero-overhead GDExtension callbacks.

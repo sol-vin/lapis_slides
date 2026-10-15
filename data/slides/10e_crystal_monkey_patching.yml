@@ -6,7 +6,7 @@ badge: CRYSTAL METAPROGRAMMING • OPEN CLASSES
 badge_color: cyan
 palette: vampire_count
 layout: two-column-layout
-ratio: 1:1
+ratio: 3:2
 left:
   type: code
   title: static_open_classes.cr — Domain Vocabulary
@@ -15,12 +15,8 @@ left:
   code: |
     # 1. Re-opening standard primitives with game units:
     struct Int32
-      def tiles : Float32
-        self.to_f32 * 32.0_f32
-      end
-      def meters : Float32
-        self.to_f32 * 1.0_f32
-      end
+      def tiles : Float32;  self.to_f32 * 32.0_f32; end
+      def meters : Float32; self.to_f32 * 1.0_f32;  end
     end
 
     # 2. Extending native Godot engine types directly:
@@ -28,23 +24,21 @@ left:
       def to_iso : Godot::Vector2
         Godot::Vector2.new(x - y, (x + y) * 0.5_f32)
       end
-      def tile_snap(size : Float32 = 32.0_f32) : Godot::Vector2
-        Godot::Vector2.new((x / size).round * size, (y / size).round * size)
+      def tile_snap(s : Float32 = 32.0_f32) : Godot::Vector2
+        Godot::Vector2.new((x / s).round * s, (y / s).round * s)
       end
     end
 
     # 3. Fluent gameplay domain vocabulary in action:
-    jump_distance = 5.meters
-    map_offset = 4.tiles
-    grid_pos = Godot::Vector2.new(125.0, 75.0).tile_snap
+    jump_dist, grid_pos = 5.meters, Godot::Vector2.new(125.0, 75.0).tile_snap
 right:
   type: card
   title: The Power of Open Classes Without the Peril
   color: cyan
   items:
-    - '<strong>Compile-Time Open Classes:</strong> Any class, struct, or primitive (<code>Int32</code>, <code>String</code>, <code>Vector2</code>) can be re-opened across files to add domain-specific verbs.'
-    - '<strong>Eliminating Ruby''s Load-Order Hell:</strong> Because Crystal builds a unified whole-program AST before codegen, there are no runtime race conditions based on which <code>require</code> ran first.'
-    - '<strong>Zero Runtime Memory Overhead:</strong> Injected methods compile directly into native machine code and direct call sites—no dynamic method tables or cache invalidations.'
-    - '<strong>Extending Native Engine Types:</strong> Enrich native Godot structs and classes with project-specific mathematics without clunky wrappers or verbose helper classes.'
+    - '<strong>Compile-Time Open Classes:</strong> Re-open any class, struct, or primitive (<code>Int32</code>, <code>Vector2</code>) across files to add domain verbs.'
+    - '<strong>Deterministic Whole-Program AST:</strong> Parses all files before codegen, avoiding runtime load-order race conditions.'
+    - '<strong>Zero Runtime Overhead:</strong> Injected methods inline directly into native call sites without dynamic method-table lookups.'
+    - '<strong>Extend Engine Structs Directly:</strong> Add custom math to <code>Godot::Vector2</code> and <code>Transform3D</code> without wrapper classes.'
 notes: |
   One of Ruby's most powerful yet polarizing features is open classes—the ability to monkey patch any class, including built-ins like Numeric or String. In dynamic Ruby, monkey patching is dangerous: if two gems patch the same method, whichever file is required last overwrites the other, creating terrifying load-order bugs. In Crystal, open classes are fully embraced, but with static safety. Because Crystal parses the entire project into a single unified AST before type checking and compilation, method additions are resolved deterministically. You can re-open Int32 to add game unit converters like 5.meters, or re-open Godot's Vector2 to add isometric conversions or tile snapping. LLVM inlines these methods directly, giving you pure Ruby ergonomics with zero runtime performance cost.

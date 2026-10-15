@@ -2,7 +2,7 @@
 id: 16_antipattern_dead_pointers
 title: 'Memory Safety: Dangling Pointers vs. Protection'
 subtitle: Monotonic 64-Bit ID Tracking Eliminates 0xC0000005 Crashes
-badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
+badge: NATIVE C++ ANTI-PATTERN • MEMORY SAFETY
 badge_color: cyan
 palette: catppuccin_mocha
 layout: code-comparison-layout
@@ -11,26 +11,25 @@ gdscript:
   lang: cpp
   tag: Native C++
   code: |
-    // Combat target acquired earlier in native C++:
-    Ref<Enemy> target = get_node<Enemy>("Boss");
+    // Combat target Node* acquired earlier in godot-cpp:
+    Enemy *target = get_node<Enemy>("Boss");
+    ObjectID target_id = target->get_instance_id();
 
-    void cast_spell(Ref<Spell> spell) {
+    void cast_spell(const Ref<Spell> &spell) {
         // Boss died from poison & called queue_free()!
-        // Raw pointer still references dead C++ memory!
-        target->take_damage(spell->get_power()); 
+        // Raw Enemy* still points to freed C++ memory:
+        target->take_damage(spell->get_power());
         // FATAL: 0xC0000005 ACCESS_VIOLATION segfault!
-        // Instant crash to desktop with NO stack trace!
 
-        // Defensive guard boilerplate required:
-        if (target.is_valid() &&
-            is_instance_valid(target.ptr())) {
+        // Manual ObjectDB guard required before every call:
+        if (ObjectDB::get_instance(target_id) != nullptr) {
             target->take_damage(spell->get_power());
         }
     }
   points:
-  - <strong>Deallocated Native Memory:</strong> <code>queue_free()</code> frees native C++ memory; unshielded pointers retain dead memory addresses.
-  - <strong>Fatal Engine Segfault:</strong> Dereferencing dead unmanaged pointers crashes immediately with <code>0xC0000005 ACCESS_VIOLATION</code>.
-  - <strong>Defensive Clutter:</strong> Developers must litter code with <code>is_instance_valid</code> guards across every single scene access.
+  - <strong>Deallocated Native Memory:</strong> <code>Node</code> is not reference-counted; <code>queue_free()</code> deletes the C++ instance while raw <code>Enemy*</code> pointers remain dangling.
+  - <strong>Fatal Engine Segfault:</strong> Dereferencing a freed <code>Node*</code> crashes immediately with <code>0xC0000005 ACCESS_VIOLATION</code> and no managed stack trace.
+  - <strong>Manual ObjectID Tracking:</strong> C++ callers must manually store <code>ObjectID</code> and query <code>ObjectDB::get_instance(id)</code> before every dereference.
 crystal:
   title: ':sparkles: Crystal: Monotonic ObjectDB & Dead-Pointer Armor'
   lang: crystal

@@ -60,9 +60,9 @@ crystal:
       end
 
       private def on_health_changed(cur : Int32, max : Int32) : Void
-        @heal_sfx.try?(&.play) # Dead-pointer safe: respects both nil & freed nodes!
+        @heal_sfx.try?(&.play) # Safe: checks nil & ObjectDB liveness!
       end
-      # Zero _exit_tree boilerplate! Signal subscriptions self-prune via 64-bit ObjectDB IDs.
+      # Zero _exit_tree boilerplate: 64-bit ObjectDB IDs self-prune.
     end
   points:
     - '<strong>Dead-Pointer Armor (<code>try?</code>):</strong> <code>sfx.try?(&.play)</code> inspects both <code>nil</code> and Godot ObjectDB survival, eliminating <code>ObjectDisposedException</code> crashes.'

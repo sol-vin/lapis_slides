@@ -24,22 +24,23 @@ left:
     end
     player_died.once { game_over_director.trigger_defeat }
 
-    # 3. Positional type filtering
+    # 3. Positional type filtering (auto-downcasts body to Player)
     on area.body_entered, Player do |player|
       player.collect_coin
     end
 
-    # 4. First-class typed emission
-    health_changed.emit(75, 100)
+    # 4. Zero-allocation StaticSignalTable bind & hot-path emit
+    on_signal health_changed, ->on_hp_updated(Int32, Int32)
+    emit_health_changed(75, 100) # FNV-1a hash slot, 0 Variant boxing!
 right:
   type: card
   title: Reactive Gameplay Architecture
   color: cyan
   items:
-    - '<strong>Declarative <code>on</code> &amp; <code>connect</code>:</strong> Wire signals with clean blocks, eliminating boilerplate intermediary methods.'
-    - '<strong>First-Class Signal Accessors:</strong> <code>health_changed.emit(...)</code> provides type-checked invocation with zero namespace pollution.'
+    - '<strong>Declarative <code>on</code> &amp; <code>connect</code>:</strong> Wire signals with clean blocks, eliminating single-use callback boilerplate.'
+    - '<strong>Zero-Allocation <code>StaticSignalTable</code>:</strong> <code>on_signal</code> and <code>emit_health_changed</code> dispatch via FNV-1a hashes with zero heap closures.'
     - '<strong>Positional Type Filtering:</strong> <code>on area.body_entered, Player</code> filters collision events and downcasts targets automatically.'
-    - '<strong>One-Shot & Safe Lifecycle:</strong> <code>signal.once { ... }</code> auto-unhooks after firing, while dead-instance tracking prevents stale callback crashes.'
+    - '<strong>One-Shot &amp; Safe Lifecycle:</strong> <code>signal.once { ... }</code> auto-unhooks after firing, while 64-bit IDs prevent stale callback crashes.'
 notes: |
   Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. With our 'on' macro and 'connect' blocks, you can wire up signals with idiomatic closures—eliminating single-use handler functions.
   Signals are first-class typed accessors: 'health_changed.emit(75, 100)', 'player_died.once', and positional type filtering like 'on area.body_entered, Player' prevent method namespace pollution and collisions.

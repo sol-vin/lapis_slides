@@ -14,7 +14,7 @@ left:
   lang: crystal
   font_size: '0.78rem'
   code: |
-    # 1. Clean vector math & operator overloading (SIMD-accelerated)
+    # 1. Algebraic operator overloading (inlined stack struct math)
     velocity = direction.normalized * move_speed + gravity * delta
     new_position = global_position + velocity
 
@@ -22,30 +22,23 @@ left:
     base_friction = 0.85_f32     # Explicit 32-bit float
     name, level, score = {"Shadow Knight", 85, 142_500_u64}
 
-    # 3. Infinite range slicing (endless & beginningless ranges)
+    # 3. Endless & beginningless range slicing
     inventory = ["Potion", "Shield", "Sword", "Helm", "Boots"]
+    tail_gear = inventory[2..]   # => ["Sword", "Helm", "Boots"]
+    quick_bar = inventory[..1]   # => ["Potion", "Shield"]
+    last_two  = inventory[-2..]  # => ["Helm", "Boots"]
 
-    # Endless range [2..]: slices from index 2 all the way to the end
-    tail_gear = inventory[2..]
-    # => ["Sword", "Helm", "Boots"]
-
-    # Beginningless range [..1]: slices from the beginning up to index 1
-    quick_bar = inventory[..1]
-    # => ["Potion", "Shield"]
-
-    # Negative offset with endless range [-3..]: slices last 3 items
-    recent_events = ["Spawn", "Aggro", "Hit: 12", "Crit: 45", "Died"]
-    combat_tail   = recent_events[-3..]
-    # => ["Hit: 12", "Crit: 45", "Died"]
+    # 4. Zero-copy contiguous memory view via Slice(T)
+    view = inventory.to_unsafe_slice[2..] # Zero heap allocation!
 right:
   type: card
   title: Expressive Language Primitives
   color: cyan
   items:
-  - <strong>Operator Overloading:</strong> Natural mathematical expressions (<code>velocity = dir * speed + grav * delta</code>) with direct CPU SIMD vectorization.
-  - <strong>Explicit Numeric Precision:</strong> Literals like <code>1.0_f32</code>, <code>250_u32</code>, and <code>1_000_000_u64</code> eliminate ambiguous runtime type coercion bugs.
-  - <strong>Zero-Cost Tuples:</strong> Stack-allocated tuples provide multiple return values with instant destructuring and zero garbage collection overhead.
-  - '<strong>Infinite &amp; Endless Range Slicing:</strong> Expressive endless (<code>[2..]</code>), beginningless (<code>[..1]</code>), and negative-offset (<code>[-3..]</code>) slices on contiguous arrays with zero manual length math.'
+  - <strong>Operator Overloading:</strong> Natural math syntax (<code>dir * speed + grav * delta</code>) compiled to inlined value-type machine code.
+  - <strong>Explicit Numeric Precision:</strong> Literals like <code>1.0_f32</code>, <code>250_u32</code>, and <code>1_000_000_u64</code> prevent silent type coercion bugs.
+  - <strong>Zero-Cost Tuples:</strong> Stack-allocated tuples provide multi-value returns and instant destructuring without heap allocation.
+  - '<strong>Range Slicing &amp; Zero-Copy <code>Slice(T)</code>:</strong> Expressive <code>[2..]</code> and <code>[..1]</code> sub-arrays, plus <code>Slice(T)</code> for zero-copy pointer views.'
 notes: |
-  Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading, while compiling down to autovectorized SIMD instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
-  Notice the infinite range slicing: Crystal supports both endless ranges like inventory[2..] (from index 2 to the end of the collection) and beginningless ranges like inventory[..1] (from the start up to index 1), as well as negative index slicing like [-3..] to grab the tail. You never have to write verbose, error-prone manual array length arithmetic like inventory[2, inventory.size - 2]. It reads like natural intent while compiling to a zero-copy pointer slice.
+  Crystal brings Ruby's expressive syntax to low-level game systems. Mathematical expressions read naturally with operator overloading while compiling down to inlined stack-struct instructions. Explicit number literals prevent sneaky precision bugs, and stack-allocated tuples let you return and destructure multiple values with zero heap allocations.
+  Notice the range slicing: Crystal supports endless ranges like inventory[2..] and beginningless ranges like inventory[..1], as well as negative tail offsets like [-2..]—and when you need a true zero-copy pointer view without allocating a sub-array, Slice(T) gives you direct contiguous memory slicing.

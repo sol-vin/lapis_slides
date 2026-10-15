@@ -18,7 +18,7 @@ pillars:
     icon: "triangle-exclamation"
     color: "amber"
   - title: "Bare-Metal Zen"
-    desc: "Native binary compilation, zero VM dependency, and full iOS/Web/Console export freedom"
+    desc: "474 KB native binaries, zero 60 MB+ CLR runtime payload, and clean OS-level hot-reload"
     icon: "gem"
     color: "emerald"
 notes: |

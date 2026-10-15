@@ -22,7 +22,7 @@ left:
   code: |
     # 1. Interactive Command Center Dashboard
     $ lapis
-      LAPIS COMMAND CENTER (v0.0.255)
+      LAPIS COMMAND CENTER (v0.0.270)
       Project: void_runner (branch: main)
       Platform: windows-x64 │ Godot: 4.8.0 │ Crystal: v1.15.0
       Bridge DLL: Compiled [OK] │ Game DLL: Present [OK]

@@ -9,22 +9,22 @@ layout: two-column-layout
 ratio: 1:1
 left:
   type: terminal
-  title: Terminal — lapis benchmarks compare html
+  title: Terminal — lapis benchmarks --compare --html
   code: |
     # Run benchmarks, compare against baseline, and output HTML report
-    $ lapis benchmarks compare html --tag 4.8-dev7 --previous-tag 4.8-dev6
+    $ lapis benchmarks --compare --tag 4.8-dev7 --prev-tag 4.8-dev6 --html
       [Lapis] Loading baseline: benchmarks/reports/benchmarks_4.8-dev6.xml
-      [Lapis] Measuring 8 benchmark suites (3 iterations each)...
-      ✔ 01. N-Body Physics         : 3.10 ms vs 3.15 ms (+1.6% faster)
-      ✔ 02. Perlin Noise           : 2.80 ms vs 2.84 ms (+1.4% faster)
-      ✔ 03. A* Pathing             : 4.20 ms vs 4.31 ms (+2.6% faster)
-      ✔ 04. Raycast Octree         : 5.10 ms vs 5.12 ms (within noise)
-      ✔ 05. Matrix 4x4 SIMD        : 1.40 ms vs 1.42 ms (within noise)
-      ✔ 06. Procedural Dungeon     : 3.90 ms vs 4.05 ms (+3.7% faster)
-      ✔ 07. Particle Sim           : 2.10 ms vs 2.15 ms (+2.3% faster)
-      ✔ 08. Multiplayer RPC Sync   : 1.80 ms vs 1.95 ms (+7.7% faster)
+      [Lapis] Measuring 27 benchmark suites (3 iterations each)...
+      ✔ 01. AStar2D Pathing        :  0.27 ms vs  0.28 ms (+3.6% faster)
+      ✔ 02. N-Body Physics (50k)   :  4.87 ms vs  4.95 ms (+1.6% faster)
+      ✔ 03. Perlin Noise (300k)    :  0.42 ms vs  0.43 ms (+2.3% faster)
+      ✔ 04. Dense Matmul (N=300)   : 38.84 ms vs 39.40 ms (+1.4% faster)
+      ✔ 05. Mandelbrot (500x500)   : 21.94 ms vs 22.10 ms (within noise)
+      ✔ 06. Prime Sieve (500k)     : 27.21 ms vs 27.85 ms (+2.3% faster)
+      ✔ 07. VectorMath2D (1M)      :  0.42 ms vs  0.42 ms (within noise)
+      ✔ 08. TransformHierarchy     :  1.80 ms vs  1.92 ms (+6.3% faster)
 
-      [PASS] Regression Gate: 0 regressions detected. Mean: +2.6% faster.
+      [PASS] Regression Gate: 0 regressions detected. Geomean: 46.2x vs GDScript.
       ✔ Staged HTML Report: benchmarks/reports/comparison_4.8-dev7.html
       ✔ Staged SVG Visuals: benchmarks/reports/comparison_4.8-dev7.svg
       ✔ Appended Run to   : benchmarks/history.xml (Run ID #42)

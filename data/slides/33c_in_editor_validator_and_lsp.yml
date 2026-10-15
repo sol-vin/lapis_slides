@@ -34,11 +34,10 @@ right:
   title: In-Editor Tooling Highlights
   color: cyan
   items:
-  - <strong>Live Red & Yellow Squiggles:</strong> <code>Lapis::CrystalValidator</code> runs in under 1ms, detecting unclosed blocks (<code>def</code>, <code>class</code>, <code>do</code>), unmatched delimiters (<code>()[]{}</code>), and unterminated strings.
-  - <strong>Native C++ Bridge Integration:</strong> Plugs into Godot's <code>ScriptLanguageExtension::_validate</code> via <code>ret_dictionary_validate_ex</code> without compiler subprocess lag.
-  - <strong>Crystalline LSP Diagnostics:</strong> Asynchronous JSON-RPC pump consumes <code>publishDiagnostics</code> for full compiler type checking and error reporting.
-  - <strong>F1 Hover & Docstrings:</strong> Hovering or pressing F1 over any symbol displays harvested docstrings, types, and method signatures directly in Godot's script editor.
-  - <strong>6 Built-In Starter Templates:</strong> Implements <code>_get_built_in_templates</code> with templates for Standard Node, 2D Physics Movement, 3D Physics Movement, Tool Script (<code>@[Tool]</code>), Custom Resource, and Empty Class.
+  - <strong>Sub-ms Gutter Squiggles:</strong> <code>Lapis::CrystalValidator</code> hooks <code>ScriptLanguageExtension::_validate</code> to flag unclosed blocks and delimiters in <code>&lt;1ms</code>.
+  - <strong>Crystalline LSP Pump:</strong> Asynchronous JSON-RPC pump consumes <code>publishDiagnostics</code> for full background compiler type checking.
+  - <strong>F1 Hover &amp; Docstrings:</strong> Hovering or pressing <code>F1</code> over any symbol displays harvested docstrings and method signatures in Godot's editor.
+  - <strong>6 Built-In Starter Templates:</strong> Ships templates for Standard Node, 2D/3D Physics, <code>@[Tool]</code> Script, Custom Resource, and Empty Class.
 notes: |
-  Writing code in Godot's built-in script editor is now a first-class experience with Lapis 4.8-dev7. We implemented CrystalValidator, an ultra-fast static analyzer running in under a millisecond. As you type, it catches unclosed blocks, missing delimiters, and unterminated strings, rendering live red error squiggles directly in the editor gutter.
+  Writing code in Godot's built-in script editor is a first-class experience with Lapis. We implemented CrystalValidator, a fast static analyzer running in under a millisecond. As you type, it catches unclosed blocks, missing delimiters, and unterminated strings, rendering live red error squiggles directly in the editor gutter.
   Furthermore, our Crystalline LSP daemon pump consumes publishDiagnostics and provides rich hover tooltips and F1 docstrings right inside Godot. And when attaching a script to a new node, Godot presents 6 built-in Crystal starter templates tailored for 2D/3D physics, tool scripts, and custom resources.

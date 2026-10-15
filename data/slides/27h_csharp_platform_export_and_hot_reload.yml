@@ -29,10 +29,10 @@ gdscript:
         private void HandleSound() => GD.Print("Playing SFX");
     }
   points:
-  - <strong>AssemblyLoadContext Zombie Leaks:</strong> Hot-reloading in the editor relies on .NET ALC; lingering static events or threads pin assemblies in RAM, breaking debugger breakpoints and causing editor instability.
-  - <strong>Platform Overhead &amp; Lockout:</strong> Godot 4 C# lacks seamless out-of-the-box Web export and incurs heavy runtime overhead on mobile, requiring complex Ahead-Of-Time (AOT) toolchain workarounds.
-  - <strong>Massive Runtime Payload:</strong> Shipping a C# game requires packaging 60MB+ of .NET CLR virtual machine binaries, managed assemblies, and JIT/GC runtime dependencies.
-  - <strong>Double-Build Toolchain Tax:</strong> Developing in C# requires managing external .NET SDKs, <code>.csproj</code> XML configurations, and waiting for MSBuild on every editor play press.
+  - <strong>AssemblyLoadContext Leaks:</strong> Lingering static events or threads pin .NET assemblies in RAM during hot-reload, breaking breakpoints.
+  - <strong>Web &amp; Mobile Friction:</strong> Godot 4 C# lacks out-of-the-box Web export and requires heavy NativeAOT workarounds on mobile.
+  - <strong>60 MB+ Runtime Payload:</strong> Shipping a C# build bundles the .NET CLR virtual machine, managed assemblies, and JIT/GC runtime.
+  - <strong>Double-Build Tax:</strong> Requires external .NET SDKs, <code>.csproj</code> XML files, and MSBuild compilation on every editor play press.
 crystal:
   title: ':sparkles: Crystal: LLVM Native Portability & Clean Hot-Reload'
   lang: crystal
@@ -48,10 +48,10 @@ crystal:
       end
     end
   points:
-  - <strong>LLVM Native Platform Targets:</strong> Compiles directly to bare-metal native machine code for Windows, Linux, macOS, and ARM64 via LLVM—with WebAssembly (WASM) actively in progress (WIP).
-  - <strong>Clean Dynamic Library Unloading:</strong> GDExtension shared libraries (<code>.dll</code> / <code>.so</code> / <code>.dylib</code>) reload cleanly at the OS level (<code>FreeLibrary</code> / <code>dlclose</code>) without ALC zombie leaks.
-  - <strong>Ultra-Lean Distribution Footprint:</strong> Ships as lean 4–8MB native shared libraries with zero external virtual machine or runtime dependencies.
-  - <strong>Unified Single-CLI Toolchain:</strong> The <code>lapis</code> CLI manages compilation, bindings, testing, and hot-reload in one integrated command without MSBuild or SDK churn.
+  - <strong>LLVM Native Targets:</strong> Compiles to native machine code for Windows, Linux, macOS, and ARM64—with WebAssembly / iOS in active development.
+  - <strong>Clean OS Library Unload:</strong> GDExtension shared libraries (<code>.dll</code> / <code>.so</code> / <code>.dylib</code>) unload cleanly via <code>FreeLibrary</code> / <code>dlclose</code>.
+  - <strong>Lean Native Footprint:</strong> Ships as compact native binaries (474 KB stripped Mode B, 4–8 MB full extension) with zero VM dependencies.
+  - <strong>Unified Single-CLI Toolchain:</strong> The <code>lapis</code> CLI manages compilation, bindings, testing, and hot-reload without MSBuild or SDK churn.
 takeaway:
   badge: NATIVE PORTABILITY
   text: 'Crystal provides lean, native LLVM compilation and clean dynamic reloading across platforms—with zero VM bloat and WebAssembly support actively in progress.'

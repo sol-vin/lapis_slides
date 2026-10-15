@@ -14,27 +14,23 @@ left:
   lang: crystal
   font_size: '0.80rem'
   code: |
-    require "lapis/benchmark"
+    require "lapis"
 
-    # 1. Register standalone gameplay benchmark with metrics
-    Lapis::Benchmark.register("ProceduralDungeon", category: :compute) do |iter|
+    # 1. Register standalone gameplay benchmark with custom metrics
+    Lapis::Benchmark.register("ProceduralDungeon", category: :compute) do
       dungeon = DungeonGenerator.new(rooms: 50, corridors: 120)
       dungeon.generate!
-      Lapis::Benchmark.report_metric("rooms_per_sec", 50.0 / dungeon.elapsed_sec)
+      Lapis::Benchmark.report_metric("rooms_s", 50.0 / dungeon.elapsed_sec)
     end
 
-    # 2. Side-by-side comparison group against GDScript baseline
+    # 2. Side-by-side comparison group + zero-allocation profiler audit
     Lapis::Benchmark.group "PathfindingCrowd" do |g|
-      g.description "A* routing throughput across 5,000 active agents"
       g.category :engine
-
-      # High-performance Crystal implementation
       g.benchmark("Crystal") do
-        crowd = CrowdSim.new(agent_count: 5_000)
-        crowd.step_navigation(delta: 0.016)
+        Lapis::Profiler.audit!(:crowd_step, max_alloc_bytes: 0) do
+          @crowd.step_navigation(delta: 0.016)
+        end
       end
-
-      # Compare directly against GDScript script equivalent
       g.target "GDScript", "scripts/crowd_sim.gd", :gdscript
       g.baseline "Crystal"
     end

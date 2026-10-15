@@ -84,4 +84,4 @@ right:
     - '<strong>Zero JIT or FFI Penalty:</strong> Crystal links directly via C-ABI entrypoints without JIT warmups or P/Invoke marshalling.'
 notes: |
   Removing the GDScript baseline allows us to zoom directly into the sub-150 millisecond race between the four native compiled languages.
-  Notice how tight the competition is: on Mandelbrot and N-Body physics, Crystal is neck-and-neck with C++ and Rust within single-digit milliseconds. On BinaryTrees, we see the trade-offs of garbage collection strategies: C#'s generational GC excels at short-lived nursery allocations, while Crystal's Boehm GC performs reliably with predictable frame times and zero multi-gigabyte runtime dependencies.
+  Notice how tight the competition is: on Mandelbrot and N-Body physics, Crystal is neck-and-neck with C++ and Rust within single-digit milliseconds. On BinaryTrees, we see the trade-offs of garbage collection strategies: C#'s generational GC excels at short-lived nursery allocations, while Crystal's Boehm GC performs reliably with predictable frame times when hot loops use value structs, and ships without an 80 MB CLR runtime dependency.

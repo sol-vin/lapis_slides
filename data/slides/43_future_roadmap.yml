@@ -20,8 +20,8 @@ cards:
     title: "Multimodal AI Testing"
     color: cyan
     items:
-      - "Autonomous game QA using Set-of-Marks ActionDriver manifests."
-      - "Vision LLM feedback loops detecting visual regressions and physics glitches."
+      - "Autonomous vision-LLM agents driving Lapis's shipped Set-of-Marks <code>ActionDriver</code>."
+      - "Closed-loop visual regression and physics glitch detection in CI."
       - "Continuous headless gameplay exploration and automated bug filing."
   - phase: "MILESTONE 3"
     year: "Q3 2027"

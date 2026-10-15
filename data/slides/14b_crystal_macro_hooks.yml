@@ -18,7 +18,6 @@ left:
     module Damageable
       macro included
         property health : Int32 = 100
-
         def take_damage(amount : Int32) : Void
           @health = Math.max(0, @health - amount)
         end
@@ -33,9 +32,7 @@ left:
       end
     end
 
-    class Player < GameEntity
-      include Damageable
-    end
+    class Player < GameEntity; include Damageable; end
 right:
   type: card
   title: Compile-Time Module & Class Hooks

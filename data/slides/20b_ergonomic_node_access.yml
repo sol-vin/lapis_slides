@@ -39,6 +39,6 @@ right:
     - '<strong>Typed Path Indexers (<code>Node#[]</code>):</strong> <code>self["path", T]</code> queries deep children and unique nodes (<code>%HUD</code>).'
     - '<strong>Safe Downcasting (<code>[]?</code>):</strong> <code>self["path", T]?</code> returns <code>T?</code> on missing nodes, avoiding crashes.'
 notes: |
-  One of the biggest pain points in Godot bindings is retrieving nodes: in GDScript you use @onready or untyped $Node / %UniqueNode, but in standard GDExtension you are stuck writing verbose, untyped get_node calls followed by unsafe manual casting. Lapis completely revolutionizes this with first-class subscript ergonomics.
+  One of the biggest pain points in GDExtension bindings is retrieving child nodes: in standard C++ or Rust bindings you write verbose get_node calls followed by manual downcasting. Lapis streamlines this with first-class subscript ergonomics and lazy caching.
   Our onready macro provides 100% parity with GDScript's @onready, lazily caching and dead-pointer validating nodes with concrete types. It can even infer the node name from the property name itself.
   Furthermore, our typed subscript indexers—Node#[] and Node#[]?—provide intuitive, type-safe lookups: self["path", SomeClass] returns a strongly-typed instance with zero casting boilerplate. Safe subscripts with []? return nil if targets are absent or freed, integrating seamlessly with Crystal's flow-sensitive nil safety.

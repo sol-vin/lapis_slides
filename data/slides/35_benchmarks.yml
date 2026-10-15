@@ -13,50 +13,50 @@ left:
   badge: LOWER IS BETTER
   unit: ms
   benchmarks:
-    - name: N-Body Gravitational Physics (10k bodies)
-      speedup: 59.4x
+    - name: AStar2D Grid Pathfinding (64x64, 500 queries)
+      speedup: 282.9x
       bars:
         - platform: GDScript
           lang: gdscript
-          val: 184.2
+          val: 76.4
         - platform: Crystal
           lang: crystal
-          val: 3.1
-    - name: Procedural Perlin Terrain Generation (256x256)
-      speedup: 33.0x
+          val: 0.27
+    - name: N-Body Gravitational Physics (50k steps)
+      speedup: 149.4x
       bars:
         - platform: GDScript
           lang: gdscript
-          val: 92.4
+          val: 727.7
         - platform: Crystal
           lang: crystal
-          val: 2.8
-    - name: A* Pathfinding Grid Traversal (1,000 agents)
-      speedup: 15.4x
+          val: 4.87
+    - name: 3D Perlin Terrain Generation (300k samples)
+      speedup: 84.4x
       bars:
         - platform: GDScript
           lang: gdscript
-          val: 64.8
+          val: 35.5
         - platform: Crystal
           lang: crystal
-          val: 4.2
-    - name: Raycast Query & Entity Filtering (50,000 hits)
-      speedup: 8.9x
+          val: 0.42
+    - name: VectorMath2D Dot/Cross/Normalize (1M ops)
+      speedup: 44.1x
       bars:
         - platform: GDScript
           lang: gdscript
-          val: 45.6
+          val: 18.5
         - platform: Crystal
           lang: crystal
-          val: 5.1
+          val: 0.42
 right:
   type: card
-  title: Why Crystal Dominates
+  title: Why Compiled Crystal Excels
   color: cyan
   items:
-  - <strong>LLVM Ahead-of-Time Compilation:</strong> Compiles down to optimized machine instructions; zero bytecode interpreter overhead.
-  - <strong>Autovectorization & SIMD:</strong> Vector math operations benefit from LLVM's automatic AVX2/NEON vectorization.
-  - <strong>Flat Memory Layout:</strong> Value types and structs live contiguously on the stack or in flat arrays without pointer indirection.
-  - <strong>Minimal GC Pauses:</strong> Predictable, low-latency execution during tight 60/120 FPS frame cycles.
+  - <strong>LLVM Ahead-of-Time Compilation:</strong> Compiles directly to native machine instructions with zero bytecode interpreter dispatch overhead.
+  - <strong>Autovectorization &amp; SIMD:</strong> Contiguous math loops benefit from LLVM's automatic AVX2/NEON vectorization.
+  - <strong>Flat Memory Layout:</strong> Value types and structs live contiguously on the stack or in flat buffers without pointer chasing.
+  - <strong>Zero-Allocation Frame Loops:</strong> Stack structs and inlined iterators avoid heap allocations on the hot path, keeping GC idle.
 notes: |
-  Here are the quantitative numbers from our automated benchmark suite. On heavy gameplay calculations—N-body gravitational simulations, procedural terrain generation, and A* pathfinding—Crystal consistently outperforms GDScript by 15x to nearly 60x. It allows you to write complex, simulation-heavy gameplay systems in high-level code without having to drop down to C++.
+  Here are the quantitative numbers from our automated 27-suite benchmark harness. Across heavy gameplay calculations—AStar2D grid pathfinding, N-body gravitational simulations, 3D Perlin terrain generation, and VectorMath2D—Crystal achieves a 46.2x geometric mean speedup over GDScript (reaching 149x on N-Body and 282x on AStar2D). It lets you write simulation-heavy gameplay systems in high-level code without dropping down to C++.

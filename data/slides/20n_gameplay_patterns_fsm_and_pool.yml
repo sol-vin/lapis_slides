@@ -5,49 +5,63 @@ subtitle: 'Value-Type Union FSM, Decoupled Signal Bus & High-Throughput Node Poo
 badge: GAMEPLAY • DESIGN PATTERNS
 badge_color: green
 palette: mineshaft
-layout: two-column-layout
-ratio: 3:2
-left:
-  type: code
-  title: gameplay_patterns.cr — Optional Lapis Patterns
-  tag: Crystal (Lapis)
-  lang: crystal
-  font_size: '0.74rem'
-  code: |
-    require "lapis/fsm"
-    require "lapis/signal_bus"
-    require "lapis/pool"
+layout: three-column
+columns:
+  - type: code
+    title: '1. Value-Type Union FSM'
+    tag: 'lapis/fsm'
+    lang: crystal
+    code: |
+      require "lapis/fsm"
 
-    # 1. Value-Type Union FSM (stack records, zero heap allocations!):
-    record Idle; record Walk, speed : Float32
-    fsm PlayerState, initial: Idle.new do
-      on_enter Walk do |w|
-        Godot.print("Walk: #{w.speed} m/s")
+      # Stack records: zero heap allocations!
+      record Idle
+      record Walk, speed : Float32
+      alias PlayerState = Idle | Walk
+
+      node Player < CharacterBody2D do
+        fsm PlayerState, initial: Idle.new do
+          on_enter Walk do |w|
+            Godot.print("Walk: #{w.speed}")
+          end
+        end
       end
-    end
+  - type: code
+    title: '2. Decoupled Signal Bus'
+    tag: 'lapis/signal_bus'
+    lang: crystal
+    code: |
+      require "lapis/signal_bus"
 
-    # 2. Type-Safe Decoupled Signal Bus (lazy singleton & test reset):
-    signal_bus GameEvents do
-      signal score_changed(points : Int32)
-      signal boss_defeated(name : String, loot_id : Int32)
-    end
-    GameEvents.score_changed.connect { |pts| update_hud(pts) }
-    GameEvents.score_changed.emit(500)
-    GameEvents.reset_bus! # Clean test isolation!
+      signal_bus GameEvents do
+        signal score_changed(pts : Int32)
+        signal boss_slain(id : String)
+      end
 
-    # 3. Dead-Pointer Safe Node Pool (high-throughput recycling):
-    node_pool BulletPool, node_type: Bullet, initial: 32, max: 128
-    bullet = pool.acquire { |b| b.fire_at(target) }
-    pool.release(bullet) # Resets parent, hides, stops process
-right:
-  type: card
-  title: Modular Gameplay Patterns
-  color: green
-  items:
-    - '<strong>Strictly Optional Modules:</strong> <code>require "lapis/fsm"</code>, <code>signal_bus</code>, and <code>pool</code> guarantee zero prelude bloat in standard projects.'
-    - '<strong>Value-Type Union FSM:</strong> State transitions between value records (<code>Idle | Walk</code>) avoid heap allocations and resolve at build time.'
-    - '<strong>High-Throughput Node Pooling:</strong> <code>Lapis::Pool(T)</code> manages node recycling with automatic pre-warming and dead-pointer verification.'
-    - '<strong>Decoupled Signal Bus:</strong> <code>signal_bus Name</code> declares static event hubs with test-isolation reset (<code>reset_bus!</code>).'
+      # Lazy singleton & typed dispatch:
+      GameEvents.instance.score_changed
+        .connect { |pts| update_hud(pts) }
+      GameEvents.instance.score_changed
+        .emit(500)
+      GameEvents.reset_bus! # Test reset!
+  - type: code
+    title: '3. High-Throughput Pool'
+    tag: 'lapis/pool'
+    lang: crystal
+    code: |
+      require "lapis/pool"
+
+      node Turret < Node2D do
+        # Pre-warmed, dead-pointer safe pool:
+        node_pool bullets : Bullet, capacity: 32
+
+        def fire(target : Vector2) : Void
+          b = bullets.acquire do
+            fire_at(target)
+          end
+          bullets.release(b) # Hides & pauses
+        end
+      end
 notes: |
   Writing clean, scalable gameplay logic requires robust design patterns that don't sacrifice native performance. In Lapis, we provide high-level gameplay patterns as strictly optional requires, keeping the core prelude featherlight.
   First, our State Machine macro supports value-type record unions (Idle | Walk) with compile-time lifecycle hooks. Because struct unions live on the stack or inline in the host object, state transitions avoid allocating heap state objects.

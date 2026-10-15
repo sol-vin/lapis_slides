@@ -26,7 +26,7 @@ left:
     # 3. Bang (!): In-place mutation & non-nil assertion
     inventory.sort!      # Mutates array in place (vs pure sort)
     vector.normalize!    # Mutates Vector3 in place
-    active_target!       # Asserts non-nil or raises RecordNotFound
+    active_target!       # Asserts non-nil (raises NilAssertionError)
 right:
   type: card
   title: Punctuation as High-Signal Communication

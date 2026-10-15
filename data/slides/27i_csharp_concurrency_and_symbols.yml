@@ -47,16 +47,16 @@ crystal:
       end
 
       def on_network_packet_received(data : Bytes) : Nil
-        return unless in_group?(:network_synced) # Instant 32-bit integer cmp!
+        return unless in_group?(:network_synced) # Cached StringName bridge!
         @packet_channel.send(data)
       end
     end
   points:
     - '<strong>Microscopic Stack Fibers:</strong> <code>spawn</code> creates cooperative fibers running on the stack with negligible memory footprint.'
     - '<strong>Thread-Safe CSP Channels:</strong> <code>Channel(T)</code> provides lock-free message passing between background workers and the main thread.'
-    - '<strong>Immediate 32-Bit Symbols:</strong> Symbols like <code>:network_synced</code> are interned integers evaluated at build time without string hashing.'
+    - '<strong>Compile-Time Symbols &amp; StringNames:</strong> <code>:symbols</code> are 32-bit integers in Crystal and auto-bridge to cached Godot <code>StringName</code> handles.'
 takeaway:
   badge: CONCURRENCY & SPEED
-  text: 'Crystal replaces C#s heavy Task heap allocations and string soup with lightweight stack fibers and compile-time integer symbols.'
+  text: 'Crystal replaces C#s heavy Task heap allocations and string soup with lightweight stack fibers and cached StringName symbol bridges.'
 notes: |
-  Handling concurrency and identifiers in Godot C# is notoriously fraught. In C#, every `async Task` allocates a task state machine on the heap, and if a signal handler uses `async void`, an unhandled exception will crash the entire game executable with no recovery. Furthermore, accessing Godot nodes from background tasks causes race conditions, forcing developers into clunky `Callable.From(...).CallDeferred()` boilerplate. In identifiers, C# relies on runtime string lookups unless you declare static `StringName` constants everywhere. In Lapis, Crystal uses microscopic cooperative fibers (`spawn`) and typed CSP channels (`Channel(T)`) for deterministic, thread-safe background work. And symbols like `:network_synced` are interned integers evaluated at compile time with zero string allocation.
+  Handling concurrency and identifiers in Godot C# is notoriously fraught. In C#, every `async Task` allocates a task state machine on the heap, and if a signal handler uses `async void`, an unhandled exception will crash the entire game executable with no recovery. Furthermore, accessing Godot nodes from background tasks causes race conditions, forcing developers into clunky `Callable.From(...).CallDeferred()` boilerplate. In identifiers, C# relies on runtime string lookups unless you declare static `StringName` constants everywhere. In Lapis, Crystal uses lightweight cooperative fibers (`spawn`) and typed CSP channels (`Channel(T)`) for deterministic, thread-safe background work. And symbols like `:network_synced` are 32-bit compile-time integers in Crystal that automatically bridge to interned Godot `StringName` handles without per-frame string allocation.

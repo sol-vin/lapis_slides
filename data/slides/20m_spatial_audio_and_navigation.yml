@@ -24,7 +24,9 @@ left:
     angle = angle_to_point(player) # 2D orientation angle
 
     # 3. Continuous Input Vector Queries via Input Singleton:
-    move_dir = Godot::Input.get_vector(:move_left, :move_right, :move_up, :move_down)
+    move_dir = Godot::Input.get_vector(
+      :move_left, :move_right, :move_up, :move_down
+    )
 right:
   type: card
   title: Audio, Spatial & Math Invariants

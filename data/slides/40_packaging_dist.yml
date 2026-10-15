@@ -17,11 +17,11 @@ left:
 
     # Output artifact tree:
     bin/release_dist/
-    ├── crystal_integration-v0.1.0.zip      # Official Addon
-    ├── lapis-installer-v0.1.0-windows.exe   # Inno Setup
-    ├── lapis_0.1.0_amd64.deb               # Debian Package
+    ├── crystal_integration-v0.0.270.zip    # Official Addon
+    ├── lapis-installer-v0.0.270-win64.exe  # Inno Setup
+    ├── lapis_0.0.270_amd64.deb             # Debian Package
     ├── basic_demo-windows-x64.zip          # Playable Game
-    ├── benchmarks-report-v0.1.0.html       # Perf Charts
+    ├── benchmarks-report-v0.0.270.html     # Perf Charts
     └── SHA256SUMS.txt                      # Checksums
 right:
   type: card

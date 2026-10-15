@@ -1,7 +1,7 @@
 ---
 id: 26f_testing_multiplayer
 title: 'Multiplayer Testing & Lockstep Network Debugging'
-subtitle: Deterministic Multi-Client Simulation, Cooperative Breakpoint Lockstep & Wireshark-Style Packet Auditing
+subtitle: Deterministic Multi-Client Simulation, Cooperative Lockstep & Built-In RPC Packet Spy
 badge: MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING
 badge_color: purple
 palette: playtoy
@@ -30,7 +30,7 @@ left:
       harness.step_frames(3)
       assert_eq hero.health, 65
 
-      # 4. Wireshark-style packet auditing (< 10 KB/s budget)
+      # 4. Built-in RPC packet spy (< 10 KB/s bandwidth budget)
       harness.spy.assert_rpc_sent(from: 2, to: 1, method: :apply_damage)
       harness.spy.assert_max_bandwidth(10240.0)
     end
@@ -46,8 +46,8 @@ right:
   autoplay: true
 notes: |
   Testing and debugging multiplayer networking in game engines is notoriously difficult. Running multiple editor instances leads to port collisions and flaky CI, while hitting a breakpoint during development usually triggers network socket timeout disconnects.
-  Lapis completely solves both challenges with Lapis::Multiplayer::Harness and cooperative lockstep debugging.
-  The multiplayer_test macro spins up a full headless multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.
+  Lapis solves both challenges with Lapis::Multiplayer::Harness and cooperative lockstep debugging.
+  The multiplayer_test macro spins up a headless multi-client topology in a single in-memory test process: peer 1 is the authoritative server, and clients 1 through N are connected client peers.
   Using harness.step_frames(n), you step network packets, physics ticks, and SceneTree lifecycles synchronously and deterministically. You can pump virtual input actions like send_action(:attack) and dispatch RPCs.
   When a breakpoint or r2 inspection occurs on the host, connected clients pause in cooperative lockstep, preserving network state without socket drops.
-  Furthermore, harness.spy acts as an embedded Wireshark packet inspector. You can assert that specific RPCs were delivered (spy.assert_rpc_sent), inject network latency variance and packet loss to verify delta reconciliation, enforce strict bandwidth caps (spy.assert_max_bandwidth), and capture native r2 forensics snapshots when anomalies occur!
+  Furthermore, harness.spy acts as a built-in RPC packet recorder: you can assert that specific RPCs were delivered (spy.assert_rpc_sent), inject simulated latency and packet loss, and enforce bandwidth caps (spy.assert_max_bandwidth) in CI.

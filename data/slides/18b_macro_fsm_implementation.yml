@@ -1,7 +1,7 @@
 ---
 id: 18b_macro_fsm_implementation
 title: 'Behind the DSL: The FSM AST Macro'
-subtitle: How Crystal's Compile-Time AST Rewriting Synthesizes Enums, Typed Dispatchers & Lifecycle Hooks
+subtitle: How Lapis's Compile-Time AST Rewriting Synthesizes Lifecycle Hooks & Static Dispatchers
 badge: AST METAPROGRAMMING • UNDER THE HOOD
 badge_color: amber
 palette: speccy_48k
@@ -9,32 +9,27 @@ layout: two-column-layout
 ratio: 3:2
 left:
   type: code
-  title: fsm_macro.cr — AST Rewriting Engine
+  title: src/libgodot/fsm.cr — AST Rewriting Engine
   tag: Crystal
   lang: crystal
-  font_size: '0.80rem'
   code: |
-    macro fsm(name, &block)
-      # 1. Synthesize typed Enum from AST state declarations
-      enum {{name.id}}
-        {% for call in block.body.expressions %}
-          {% if call.name == "state" %} {{call.args[0].id}} {% end %}
+    macro fsm(name, initial = :idle, &block)
+      @{{name.id}} : Symbol = {{initial}}
+      {{block.body}}
+
+      def transition_to(new_state : Symbol) : Nil
+        old_state = @{{name.id}}
+        return if old_state == new_state
+        case old_state
+        {% for st in block.body.expressions %}
+          when {{st.args[0]}} then _fsm_exit_{{st.args[0].id}}
         {% end %}
-      end
-
-      # 2. Synthesize StateMachine with flat static dispatch
-      class {{name.id}}Machine
-        getter current_state : {{name.id}}
-
-        def trigger(event : Symbol) : Void
-          case @current_state
-          {% for state in block.body.expressions %}
-            when .{{state.args[0].id.underscore}}?
-              {% for call in state.block.body.expressions.select(&.name.== "on") %}
-                return transition_to({{name.id}}::{{call.named_args[:transition_to]}}) if event == {{call.args[0]}}
-              {% end %}
-          {% end %}
-          end
+        end
+        @{{name.id}} = new_state
+        case new_state
+        {% for st in block.body.expressions %}
+          when {{st.args[0]}} then _fsm_enter_{{st.args[0].id}}
+        {% end %}
         end
       end
     end
@@ -43,9 +38,9 @@ right:
   title: Compile-Time Metaprogramming Invariants
   color: amber
   items:
-    - '<strong>Compile-Time AST Traversal:</strong> Inspects and manipulates the AST during compilation, avoiding runtime reflection or dynamic proxies.'
-    - '<strong>Synthesizes Concrete Types:</strong> Automatically generates real <code>enum BossState</code> variants (<code>Patrol</code>, <code>Chase</code>) with exhaustiveness checks.'
-    - '<strong>Inlined Lifecycle Hooks:</strong> Inlines <code>before</code> and <code>after</code> blocks directly into native <code>case</code> branches with zero closure allocation.'
-    - '<strong>Static Branch Dispatch:</strong> <code>trigger(:event)</code> expands into direct machine jumps—zero dictionary lookups or vtables.'
+    - '<strong>Compile-Time AST Unrolling:</strong> Iterates over <code>block.body.expressions</code> during compilation with zero runtime reflection.'
+    - '<strong>Synthesizes Hook Methods:</strong> Each <code>state :chase</code> block compiles into concrete <code>_fsm_enter_chase</code> and <code>_fsm_exit_chase</code> methods.'
+    - '<strong>Zero Closure Allocations:</strong> Lifecycle blocks are spliced directly into method bodies rather than heap-allocated <code>Proc</code> closures.'
+    - '<strong>Direct Jump Tables:</strong> Both exit and enter <code>case</code> blocks lower to LLVM switch tables on interned 32-bit symbols.'
 notes: |
-  This is the actual Crystal macro code that makes the declarative FSM DSL work. Notice how it handles `before` and `after` lifecycle hooks: in transition_to, the macro inspects the AST of each state. It generates two flat case statements—first inlining the current state's `before` pre-transition hook, updating @current_state = target, and then inlining the target state's `after` post-transition hook. Because the code is inlined at compile time, there are zero closures, zero function pointers, and zero runtime dictionary lookups. You get the expressive power of a declarative DSL with structured native machine execution.
+  Here is the actual Crystal macro implementation from `src/libgodot/fsm.cr`. Notice how `transition_to` works: the macro walks `block.body.expressions` at compile time and synthesizes two flat `case` statements—first calling `_fsm_exit_<state>` for the outgoing state, updating `@state = new_state`, and then calling `_fsm_enter_<state>` for the incoming state. Because every state block is unrolled into a direct method call at compile time, there are zero heap closures, zero function pointers, and zero dictionary lookups.

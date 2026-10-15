@@ -1,6 +1,6 @@
 ---
 id: 15_antipattern_structs
-title: 'Value Types: GC Thrashing vs. Stack Structs'
+title: 'Value Types: Heap Churn vs. Stack Structs'
 subtitle: RefCounted Heap Pointers vs. Contiguous Cache-Friendly Structs
 badge: GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION
 badge_color: cyan
@@ -25,11 +25,11 @@ gdscript:
     # Cache disaster: Array of 10,000 pointers scattered in RAM
     for evt in events:
         apply_damage(evt.damage) # 10,000 pointer chases!
-    events.clear() # Mass deallocation triggers GC stutter
+    events.clear() # 10,000 synchronous atomic decrements + heap frees
   points:
-    - '<strong>Heap Thrashing for Ephemeral Data:</strong> 10,000 events require 10,000 individual <code>malloc</code> calls and atomic refcount updates.'
-    - '<strong>Pointer Chasing & Cache Misses:</strong> <code>Array[CombatEvent]</code> stores scattered 64-bit pointers, thrashing CPU L1/L2 caches.'
-    - '<strong>Deallocation Frame Stutters:</strong> Bulk disposal of thousands of <code>RefCounted</code> instances causes GC micro-freezes.'
+    - '<strong>Heap Thrashing for Ephemeral Data:</strong> 10,000 events require 10,000 individual heap allocations and atomic reference-count updates.'
+    - '<strong>Pointer Chasing &amp; Cache Misses:</strong> <code>Array[CombatEvent]</code> stores scattered 64-bit pointers, thrashing CPU L1/L2 caches.'
+    - '<strong>Synchronous Teardown Spikes:</strong> <code>events.clear()</code> runs 10,000 atomic refcount decrements and <code>memdelete</code> calls on the main thread.'
 crystal:
   title: ':sparkles: Crystal: CPU Register Value Passing & Flat Contiguous Buffers'
   lang: crystal
@@ -46,17 +46,17 @@ crystal:
       @health -= event.critical? ? event.damage * 2.0_f32 : event.damage
     end
 
-    # 2. 10,000 structs inlined into ONE flat 120 KB buffer:
+    # 2. 10,000 structs inlined into ONE flat 120 KB buffer (or FrameScratch):
     events = Array(CombatEvent).new(10_000)
     10_000.times { events << CombatEvent.new(45.0_f32, ElementType::Fire, true) }
     events.each { |evt| apply_damage(evt) } # Linear cache sweep!
   points:
     - '<strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> copies directly in CPU registers or on the stack with 0 heap bytes.'
     - '<strong>Contiguous Cache Line Saturation:</strong> <code>Array(CombatEvent)</code> embeds structs inline into a single 120 KB buffer.'
-    - '<strong>Zero Pointer Dereferencing:</strong> Flat contiguous memory maximizes CPU cache line hits and unlocks LLVM auto-vectorization.'
+    - '<strong>FrameArena Bump Allocation:</strong> Use <code>Lapis.frame_arena</code> (<code>FrameScratch</code>) for $O(1)$ per-frame scratch slices reset at frame end.'
 takeaway:
   badge: SYSTEMS SPEED • CACHE LOCALITY
-  text: Stack-allocated structs eliminate thousands of heap allocations per frame, delivering bare-metal C cache locality with elegant object syntax.
+  text: Stack-allocated structs and per-frame bump arenas eliminate thousands of heap allocations per frame, delivering C cache locality with clean object syntax.
 notes: |
-  In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types must extend RefCounted. When you spawn 10,000 projectiles or process 10,000 combat events, Godot must perform 10,000 individual heap allocations and atomic refcount updates. An array of these objects is just an array of pointer addresses scattered randomly across memory, causing massive L1 cache miss penalties on every frame. When they die, mass deallocation causes micro-stutters.
-  In Crystal, structs are first-class value types. Passing a CombatEvent to a method passes it directly in CPU registers or on the stack with zero heap allocations. Even better, an Array(CombatEvent) stores the 12-byte structs contiguously in a single flat memory block. 10,000 events take just 120 KB of contiguous RAM, maximizing CPU cache line efficiency and allowing LLVM to auto-vectorize loops with zero GC overhead.
+  In fast-paced games—bullet hells, horde survivors, ARPG combat loops, and particle engines—allocating tiny gameplay data packets on the heap is a primary cause of framerate drops. In GDScript, custom data types extend RefCounted. When you spawn 10,000 projectiles or process 10,000 combat events, Godot performs 10,000 individual heap allocations and atomic refcount updates. An array of these objects is an array of pointer addresses scattered across memory, causing L1 cache miss penalties. When cleared, 10,000 synchronous atomic decrements and heap frees run on the main thread.
+  In Crystal, structs are value types passed directly in CPU registers or on the stack. An Array(CombatEvent) stores the 12-byte structs contiguously in a single 120 KB block, and Lapis also provides Lapis.frame_arena for O(1) bump-allocated per-frame scratch buffers.

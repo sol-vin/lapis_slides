@@ -14,8 +14,8 @@ hero_feature:
   code: |
     node PlayerController < CharacterBody3D do
       # Phases 1-2: Pre-Flight Scan & Quarantine
-      @[Export] property move_speed : Float32 = 8.5_f32 # Live tweak: 12.0
-      @[Export] property inventory : Array(Item) = []   # Live state
+      @[Export] property move_speed : Float32 = 8.5_f32     # Live tweak: 12.0
+      @[Export] property inventory : Array(Item) = [] of Item # Live state
 
       # Phases 3-4: Shadow DLL Swap & Schema Drift
       @[Export] property score : Int64 = 0_i64          # Coerced from Int32
