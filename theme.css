@@ -11310,43 +11310,43 @@ body:has(#palette-swap-btn) .palette-corner-badge {
 .slide[data-palette="orchard_2"], .solvin-slide.orchard_2, [data-palette="orchard_2"] {
   /* Sol.vin Theme Variables */
   --bg-color: #e3d8be;
-  --bg-window: #e3d8be;
-  --palette-btn-bg: #e3d8be;
-  --text-color: #4a3728;
-  --text-dim: #735945;
-  --link-color: #61bb46;
+  --bg-window: #ede4ce;
+  --palette-btn-bg: #ede4ce;
+  --text-color: #3b2a1e;
+  --text-dim: #634b38;
+  --link-color: #2b7a18;
   --border-color: #4a3728;
-  --border-active: #61bb46;
-  --accent-color: #e03a3e;
-  --accent-secondary: #fdb827;
-  --accent-tertiary: #009ddc;
-  --accent-quaternary: #963d97;
+  --border-active: #2b7a18;
+  --accent-color: #c42026;
+  --accent-secondary: #a85500;
+  --accent-tertiary: #00629b;
+  --accent-quaternary: #7a267b;
   --shadow-color: #4a3728;
-  --cube: #4a3728;
-  --cube-hover: #61bb46;
+  --cube: #3b2a1e;
+  --cube-hover: #2b7a18;
   --emoji-filter: url(#emoji-filter-orchard_2);
 
   /* Semantic Palette Aliases */
-  --cyan-accent: #61bb46;
-  --godot-blue: #61bb46;
-  --crystal-purp: #fdb827;
-  --emerald-green: #e03a3e;
-  --coral-red: #fdb827;
-  --amber-gold: #009ddc;
+  --cyan-accent: #2b7a18;
+  --godot-blue: #2b7a18;
+  --crystal-purp: #a85500;
+  --emerald-green: #c42026;
+  --coral-red: #a85500;
+  --amber-gold: #00629b;
 
   /* Sunstone Modern Variables */
   --sunstone-bg: #e3d8be;
-  --sunstone-surface: #e3d8be;
-  --sunstone-surface-hover: #61bb46;
-  --sunstone-text-primary: #4a3728;
-  --sunstone-text-secondary: #735945;
-  --sunstone-text-muted: #735945;
-  --sunstone-accent: #e03a3e;
-  --sunstone-accent-secondary: #fdb827;
-  --sunstone-accent-tertiary: #009ddc;
+  --sunstone-surface: #ede4ce;
+  --sunstone-surface-hover: #2b7a18;
+  --sunstone-text-primary: #3b2a1e;
+  --sunstone-text-secondary: #634b38;
+  --sunstone-text-muted: #634b38;
+  --sunstone-accent: #c42026;
+  --sunstone-accent-secondary: #a85500;
+  --sunstone-accent-tertiary: #00629b;
   --sunstone-border: #4a3728;
-  --sunstone-border-active: #61bb46;
-  --sunstone-code-bg: #e3d8be;
+  --sunstone-border-active: #2b7a18;
+  --sunstone-code-bg: #ede4ce;
 }
 .slide[data-palette="snow_white"], .solvin-slide.snow_white, [data-palette="snow_white"] {
   /* Sol.vin Theme Variables */
