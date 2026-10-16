@@ -65,7 +65,8 @@ columns:
       - '<strong>1. <code>.try</code> vs. <code>.try?</code> (<code>if_alive</code>):</strong> Standard <code>.try</code> checks for <code>Nil</code>; Lapis''s <code>.try?</code> checks <strong>both</strong> <code>Nil</code> and <code>ObjectDB</code> liveness, returning <code>nil</code> if freed.'
       - '<strong>2. ABA Recycled-Pointer Immunity:</strong> Every wrapper snapshots its monotonic 64-bit <code>@instance_id</code>. Even if C++ reuses the heap address, IDs never collide.'
       - '<strong>3. Catchable <code>DisposedObjectError</code>:</strong> <code>onready</code> getters and <code>#check_alive!</code> zero <code>@pointer</code> and raise a clean exception instead of segfaulting.'
-      - '<strong>4. Tombstone Forensics:</strong> Compile with <code>-Dtrace_dead_pointers</code> to log the exact backtrace where the freed object was destroyed.'
+      - '<strong>4. Safe Collection &amp; Pool Pruning:</strong> <code>Array(Enemy)</code> and <code>node_pool</code> containers filter freed nodes in place via <code>.select(&amp;.alive?)</code>.'
+      - '<strong>5. Tombstone Forensics:</strong> Compile with <code>-Dtrace_dead_pointers</code> to log the exact backtrace where the freed object was destroyed.'
 takeaway:
   badge: DEFENSIVE POINTER ARMOR
   text: Lapis pairs monotonic 64-bit ObjectDB instance IDs with .try? and #check_alive!, turning fatal C++ dead-pointer segfaults and ABA bugs into safe, catchable operations.

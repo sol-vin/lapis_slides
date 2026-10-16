@@ -2450,7 +2450,8 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - 1. ClassDB Type Metadata: Lapis macros publish exact Variant::Type (INT, FLOAT, OBJECT) and class hints to Godot at startup.
   - 2. Inheritance & Liveness Gate: Incoming object pointers are verified via find_alive_instance and object_is_class before unboxing.
   - 3. Safe Enum Coercion: _godot_set_property guards enums via Enum.from_value?(v) || current, rejecting invalid integers.
-  - Zero Internal Paranoia: Malformed GDScript calls never enter Crystal—your core methods run at bare-metal speed without defensive checks.
+  - 4. Signal & RPC Payload Guard: Dynamic emit_signal and network rpc() arguments pass through the same C-ABI type check.
+  - 5. Zero Internal Paranoia: Malformed GDScript calls never enter Crystal—core methods run at native speed without defensive checks.
 
 **Presenter Notes**:
 > What happens when dynamic GDScript, an unvalidated JSON save file, or a network dictionary passes malformed data into your Crystal node? In naive C++ bindings, reinterpreting a Variant pointer without strict checks causes immediate memory corruption or garbage values.
@@ -2469,7 +2470,8 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - 1. .try vs. .try? (if_alive): Standard .try checks for Nil; Lapis's .try? checks both Nil and ObjectDB liveness, returning nil if freed.
   - 2. ABA Recycled-Pointer Immunity: Every wrapper snapshots its monotonic 64-bit @instance_id. Even if C++ reuses the heap address, IDs never collide.
   - 3. Catchable DisposedObjectError: onready getters and #check_alive! zero @pointer and raise a clean exception instead of segfaulting.
-  - 4. Tombstone Forensics: Compile with -Dtrace_dead_pointers to log the exact backtrace where the freed object was destroyed.
+  - 4. Safe Collection & Pool Pruning: Array(Enemy) and node_pool containers filter freed nodes in place via .select(&.alive?).
+  - 5. Tombstone Forensics: Compile with -Dtrace_dead_pointers to log the exact backtrace where the freed object was destroyed.
 
 **Presenter Notes**:
 > The single biggest source of hard crashes in Godot native bindings is dead-pointer dereferencing across frames. Because Godot's Node class is not reference-counted, calling queue_free() deletes the underlying C++ memory at the end of the frame. If a homing missile or combat script holds a cached pointer to that enemy, two catastrophic things happen in C++: either dereferencing the freed pointer triggers an immediate 0xC0000005 ACCESS_VIOLATION segfault, or the C++ heap allocator reuses that exact memory address for a newly spawned object—the classic ABA problem—causing vtable corruption.
@@ -3167,10 +3169,11 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **1. Runtime Reflection: The Shotgun**:
 - **2. Compile-Time Macros: The Axe**:
 - **3. Shotgun vs. Axe**:
-  - 1. Static Tree, 60 FPS Shotgun: @health and @pos are known at build time—yet reflection scans a massive metadata table every frame.
+  - 1. Static Tree, 60 FPS Shotgun: @health and @pos are known at build time—yet reflection scans a metadata table every frame.
   - 2. Heap Shrapnel (Boxing): Every f.GetValue(this) or get_property_list() boxes stack int/float/Vector3 values onto the GC heap.
   - 3. Linker & AOT Collateral: Unpredictable string lookups force NativeAOT to either ship megabytes of bloat or strip fields and crash.
   - 4. Crystal’s Compile-Time Axe: @type.instance_vars unrolls direct register reads once at build time with 0 bytes of metadata.
+  - 5. Compile-Time Error Checking: Missing fields or mismatched types fail immediately during compilation instead of throwing mid-match.
 
 **Presenter Notes**:
 > Using runtime reflection to serialize fields, bind properties, or dispatch RPCs is like using a shotgun to chop down a tree. Your struct's fields—health, stamina, position—are already 100% known the moment you press compile! Yet in C# or GDScript, runtime reflection drags an entire type-metadata dictionary into RAM, scans attribute tables at 60 frames per second, and sprays heap shrapnel across the garbage collector by boxing every primitive int, float, and Vector3 into a heap object. Worse yet, it causes massive collateral damage when exporting with NativeAOT or linker stripping: because the compiler can't see which fields a runtime string lookup might hit, the trimmer either keeps megabytes of dead metadata or strips a reflected field and crashes your release build.
