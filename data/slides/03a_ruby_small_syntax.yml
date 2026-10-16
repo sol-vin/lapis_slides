@@ -14,15 +14,15 @@ left:
   lang: ruby
   code: |
     # Ruby's Core Reserved Grammar (~41 Keywords):
-    class     module    def       end
-    self      super     alias     undef
-    if        then      elsif     else
-    unless    case      when      return
-    while     until     do        break
-    next      redo      retry     yield
-    begin     rescue    ensure    defined?
-    true      false     nil       and/or
-    BEGIN     END       __FILE__  __LINE__
+    class       module      def         end
+    self        super       alias       undef
+    if          then        elsif       else
+    unless      case        when        return
+    while       until       do          break
+    next        redo        retry       yield
+    begin       rescue      ensure      defined?
+    true        false       nil         and/or
+    BEGIN       END         __FILE__    __LINE__
 right_top:
   type: card
   title: 'Fits on a Postage Stamp'

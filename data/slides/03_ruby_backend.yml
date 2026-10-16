@@ -21,8 +21,13 @@ left:
         @name, @health, @buffs = name, health, []
       end
 
-      def alive?; @health > 0; end
-      def wounded?; alive? && @health < 100; end
+      def alive?
+        @health > 0
+      end
+
+      def wounded?
+        alive? && @health < 100
+      end
 
       def heal_party(companions, amount)
         companions.select(&:alive?).each do |ally|

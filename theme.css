@@ -8933,9 +8933,22 @@ body:has(#palette-swap-btn) .palette-corner-badge {
   font-weight: 600 !important;
 }
 
+/* ==========================================================================
+   Slide 03a (03a_ruby_small_syntax): Enlarged Code Font for ~40 Keywords Table
+   ========================================================================== */
+#slide-03a_ruby_small_syntax .column[data-slot="left"] .code-container pre,
+[data-slide-id="03a_ruby_small_syntax"] .column[data-slot="left"] .code-container pre {
+  padding: 1.25rem 1.50rem !important;
+  display: flex !important;
+  align-items: center !important;
+}
 
-
-
+#slide-03a_ruby_small_syntax .column[data-slot="left"] .code-container pre code,
+[data-slide-id="03a_ruby_small_syntax"] .column[data-slot="left"] .code-container pre code {
+  font-size: 1.18rem !important;
+  line-height: 1.75 !important;
+  width: 100% !important;
+}
 
 /* Theme-Scoped & 102-Palette Catalog CSS Rules */
 .slide[data-palette="warm_paper"], .solvin-slide.warm_paper, [data-palette="warm_paper"] {

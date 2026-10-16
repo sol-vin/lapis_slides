@@ -32,7 +32,9 @@ left:
       end
     end
 
-    class Player < GameEntity; include Damageable; end
+    class Player < GameEntity
+      include Damageable
+    end
 right:
   type: card
   title: Compile-Time Module & Class Hooks

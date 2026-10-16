@@ -140,8 +140,13 @@ end
       @name, @health, @buffs = name, health, []
     end
   
-    def alive?; @health > 0; end
-    def wounded?; alive? && @health < 100; end
+    def alive?
+      @health > 0
+    end
+  
+    def wounded?
+      alive? && @health < 100
+    end
   
     def heal_party(companions, amount)
       companions.select(&:alive?).each do |ally|
@@ -888,7 +893,9 @@ end
     end
   end
   
-  class Player < GameEntity; include Damageable; end
+  class Player < GameEntity
+    include Damageable
+  end
   ```
 - **Compile-Time Module & Class Hooks**:
   - The macro included Hook: Executes when a module is included, injecting instance variables and methods directly into the receiver.

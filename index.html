@@ -773,8 +773,13 @@ end</code></pre>
     @name, @health, @buffs = name, health, []
   end
 
-  def alive?; @health &gt; 0; end
-  def wounded?; alive? &amp;&amp; @health &lt; 100; end
+  def alive?
+    @health &gt; 0
+  end
+
+  def wounded?
+    alive? &amp;&amp; @health &lt; 100
+  end
 
   def heal_party(companions, amount)
     companions.select(&amp;:alive?).each do |ally|
@@ -919,15 +924,15 @@ party.reject(&amp;:alive?).each { |p| puts &quot;Revive #{p.name}!&quot; }</code
                 </div>
               </div>
               <pre><code class="language-ruby"># Ruby&#39;s Core Reserved Grammar (~41 Keywords):
-class     module    def       end
-self      super     alias     undef
-if        then      elsif     else
-unless    case      when      return
-while     until     do        break
-next      redo      retry     yield
-begin     rescue    ensure    defined?
-true      false     nil       and/or
-BEGIN     END       __FILE__  __LINE__</code></pre>
+class       module      def         end
+self        super       alias       undef
+if          then        elsif       else
+unless      case        when        return
+while       until       do          break
+next        redo        retry       yield
+begin       rescue      ensure      defined?
+true        false       nil         and/or
+BEGIN       END         __FILE__    __LINE__</code></pre>
             </div>
             </div>
             <div class="column-stack col slot-right" data-slot="right">
@@ -2588,7 +2593,9 @@ abstract class GameEntity
   end
 end
 
-class Player &lt; GameEntity; include Damageable; end</code></pre>
+class Player &lt; GameEntity
+  include Damageable
+end</code></pre>
             </div>
             </div>
             <div class="column col" data-slot="right">
