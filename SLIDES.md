@@ -877,9 +877,9 @@ end
 - **Code (macro_lifecycle_hooks.cr — Compile-Time Composition)**:
   ```crystal
   # 1. macro included: Synthesizes host-typed class methods & pools
-  module Poolable
+  module Poolable(N)
     macro included
-      POOL = [] of {{@type}}
+      POOL = Array({{@type}}).new(N)
       def self.acquire : {{@type}}
         POOL.pop? || {{@type}}.new
       end
@@ -895,18 +895,18 @@ end
   end
   
   class Player < GameEntity
-    include Poolable
+    include Poolable(4)
   end # => Synthesizes Player::POOL & Player.acquire : Player
   ```
 - **Compile-Time Module & Class Hooks**:
-  - The macro included Hook: Accesses {{@type}} to synthesize host-typed class methods (self.acquire) and per-class constants impossible in plain modules.
+  - The macro included Hook: Combines generic args (N) with {{@type}} to synthesize host-typed class methods (self.acquire) and pre-sized pools.
   - The macro inherited Hook: Fires the instant a class is subclassed, allowing base classes to track and configure child types.
   - Compile-Time Registries: Builds entity factories and type registries during compilation—eliminating startup reflection scans.
   - Static Inlining: All injected code participates in global type inference and compiles directly into native machine code.
 
 **Presenter Notes**:
 > A plain Crystal module can already mix in instance methods and properties, so why do we need 'macro included'? Because a plain module only mixes in instance methods and cannot parameterize constants or class methods by the including host type!
-> With 'macro included', the macro body executes inside the lexical scope of the including class with full compile-time access to @type. In this Poolable example, including the module automatically synthesizes a strongly typed 'POOL = [] of Player' array and a 'Player.acquire : Player' factory class method directly on each host class.
+> With 'macro included', the macro body executes inside the lexical scope of the including class with full compile-time access to @type. Combined with Crystal's integer generic parameters like Poolable(4), including the module automatically synthesizes a pre-allocated 'POOL = Array(Player).new(4)' constant and a 'Player.acquire : Player' factory class method directly on the host class—without redundantly passing Player as a type argument.
 > Similarly, 'macro inherited' fires the instant a class is subclassed, allowing frameworks and game engines to register derived entity types into factories at compile time without slow runtime reflection scans.
 
 ---

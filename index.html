@@ -2577,9 +2577,9 @@ end</code></pre>
                 </div>
               </div>
               <pre><code class="language-crystal code-compact"># 1. macro included: Synthesizes host-typed class methods &amp; pools
-module Poolable
+module Poolable(N)
   macro included
-    POOL = [] of {{@type}}
+    POOL = Array({{@type}}).new(N)
     def self.acquire : {{@type}}
       POOL.pop? || {{@type}}.new
     end
@@ -2595,7 +2595,7 @@ abstract class GameEntity
 end
 
 class Player &lt; GameEntity
-  include Poolable
+  include Poolable(4)
 end # =&gt; Synthesizes Player::POOL &amp; Player.acquire : Player</code></pre>
             </div>
             </div>
@@ -2605,7 +2605,7 @@ end # =&gt; Synthesizes Player::POOL &amp; Player.acquire : Player</code></pre>
                 <span>Compile-Time Module &amp; Class Hooks</span>
               </div>
               <ul class="card-list">
-                <li><strong>The <code>macro included</code> Hook:</strong> Accesses <code>{{@type}}</code> to synthesize host-typed class methods (<code>self.acquire</code>) and per-class constants impossible in plain modules.</li>
+                <li><strong>The <code>macro included</code> Hook:</strong> Combines generic args (<code>N</code>) with <code>{{@type}}</code> to synthesize host-typed class methods (<code>self.acquire</code>) and pre-sized pools.</li>
                 <li><strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to track and configure child types.</li>
                 <li><strong>Compile-Time Registries:</strong> Builds entity factories and type registries during compilation—eliminating startup reflection scans.</li>
                 <li><strong>Static Inlining:</strong> All injected code participates in global type inference and compiles directly into native machine code.</li>
@@ -2621,7 +2621,7 @@ end # =&gt; Synthesizes Player::POOL &amp; Player.acquire : Player</code></pre>
         </div>
         <aside class="notes">
           A plain Crystal module can already mix in instance methods and properties, so why do we need 'macro included'? Because a plain module only mixes in instance methods and cannot parameterize constants or class methods by the including host type!
-          With 'macro included', the macro body executes inside the lexical scope of the including class with full compile-time access to @type. In this Poolable example, including the module automatically synthesizes a strongly typed 'POOL = [] of Player' array and a 'Player.acquire : Player' factory class method directly on each host class.
+          With 'macro included', the macro body executes inside the lexical scope of the including class with full compile-time access to @type. Combined with Crystal's integer generic parameters like Poolable(4), including the module automatically synthesizes a pre-allocated 'POOL = Array(Player).new(4)' constant and a 'Player.acquire : Player' factory class method directly on the host class—without redundantly passing Player as a type argument.
           Similarly, 'macro inherited' fires the instant a class is subclassed, allowing frameworks and game engines to register derived entity types into factories at compile time without slow runtime reflection scans.
         </aside>
       </section>
