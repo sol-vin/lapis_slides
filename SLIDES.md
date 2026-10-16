@@ -1178,7 +1178,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     @[Export] property max_health : Int32 = 100
   
     @[ExportToolButton("Reset Stats")]
-    def reset_stats : Void; self.health = max_health; end
+    def reset_stats : Void
+      self.health = max_health
+    end
   
     def take_damage(amount : Int32) : Void
       self.health = Math.max(0, health - amount)
