@@ -2368,7 +2368,11 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   
   # 1. Passed by value in CPU registers: 0 heap allocations!
   def apply_damage(event : CombatEvent) : Void
-    @health -= event.critical? ? event.damage * 2.0_f32 : event.damage
+    @health -= if event.critical?
+      event.damage * 2.0_f32
+    else
+      event.damage
+    end
   end
   
   # 2. 10,000 structs inlined into ONE flat 120 KB buffer (or FrameArena):
