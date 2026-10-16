@@ -42,7 +42,7 @@ right:
     - '<strong>1 MiB Linear Bump Allocator:</strong> Pre-allocates a contiguous scratchpad (configurable via <code>FrameArena.configure</code>); allocations are an 8-byte aligned offset bump.'
     - '<strong>Typed <code>ArenaBuffer(T)</code> &amp; <code>Slice(T)</code>:</strong> Stack-allocated buffer views support <code>&lt;&lt;</code>, <code>push_line</code>, <code>each</code>, and <code>to_slice</code> with <code>@[ZeroAllocation]</code>.'
     - '<strong>Nested <code>frame_scope</code> Checkpoints:</strong> Captures <code>arena.mark</code> and automatically <code>rewind</code>s the cursor on exit to recycle L1 cache lines mid-frame.'
-    - '<strong>$O(1)$ Tick Reset &amp; Telemetry:</strong> <code>Lapis.tick_frame_arena!</code> resets <code>@offset = 0</code> in one instruction while tracking <code>high_water_mark</code> and <code>utilization</code>.'
+    - '<strong>O(1) Tick Reset &amp; Telemetry:</strong> <code>Lapis.tick_frame_arena!</code> resets <code>@offset = 0</code> in one instruction while tracking <code>high_water_mark</code> and <code>utilization</code>.'
 notes: |
   Even with value-type structs, games frequently need variable-length temporary arrays during a single frame—for spatial query results, combat event queues, signal broadcast payloads, or immediate-mode debug geometry in Diorite. Allocating and freeing those buffers on the heap every tick creates unnecessary GC pressure.
   Lapis solves this with Lapis.frame_arena (backed by Lapis::Core::FrameArena). It pre-allocates a contiguous 1 MiB linear scratchpad. Calling Lapis.frame_arena.buffer(CombatEvent, 256) or alloc_slice(Vector3, 512) simply bumps an 8-byte aligned integer offset—taking nanoseconds with strictly zero Boehm GC heap allocations.

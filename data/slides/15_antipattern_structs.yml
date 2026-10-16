@@ -61,7 +61,7 @@ crystal:
   points:
     - '<strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> to <code>apply_damage</code> copies directly in CPU registers or on the stack with 0 heap bytes.'
     - '<strong>Contiguous Cache Line Saturation:</strong> <code>Array(CombatEvent)</code> embeds structs inline into a single 120 KB buffer.'
-    - '<strong>Instant $O(1)$ Reset &amp; FrameArena:</strong> <code>events.clear</code> resets the buffer length in $O(1)$ with zero deallocations (or use <code>Lapis.frame_arena</code>).'
+    - '<strong>Instant O(1) Reset &amp; FrameArena:</strong> <code>events.clear</code> resets the buffer length in <code>O(1)</code> with zero deallocations (or use <code>Lapis.frame_arena</code>).'
 takeaway:
   badge: SYSTEMS SPEED • CACHE LOCALITY
   text: Stack-allocated structs and contiguous value buffers eliminate thousands of heap allocations and pointer chases per frame.

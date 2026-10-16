@@ -2392,7 +2392,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Solution Advantages**:
   - Zero-Heap Value Passing: Passing CombatEvent to apply_damage copies directly in CPU registers or on the stack with 0 heap bytes.
   - Contiguous Cache Line Saturation: Array(CombatEvent) embeds structs inline into a single 120 KB buffer.
-  - Instant $O(1)$ Reset & FrameArena: events.clear resets the buffer length in $O(1)$ with zero deallocations (or use Lapis.frame_arena).
+  - Instant O(1) Reset & FrameArena: events.clear resets the buffer length in O(1) with zero deallocations (or use Lapis.frame_arena).
 - **Key Takeaway**: Stack-allocated structs and contiguous value buffers eliminate thousands of heap allocations and pointer chases per frame.
 
 **Presenter Notes**:
@@ -2433,7 +2433,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - 1 MiB Linear Bump Allocator: Pre-allocates a contiguous scratchpad (configurable via FrameArena.configure); allocations are an 8-byte aligned offset bump.
   - Typed ArenaBuffer(T) & Slice(T): Stack-allocated buffer views support <<, push_line, each, and to_slice with @[ZeroAllocation].
   - Nested frame_scope Checkpoints: Captures arena.mark and automatically rewinds the cursor on exit to recycle L1 cache lines mid-frame.
-  - $O(1)$ Tick Reset & Telemetry: Lapis.tick_frame_arena! resets @offset = 0 in one instruction while tracking high_water_mark and utilization.
+  - O(1) Tick Reset & Telemetry: Lapis.tick_frame_arena! resets @offset = 0 in one instruction while tracking high_water_mark and utilization.
 
 **Presenter Notes**:
 > Even with value-type structs, games frequently need variable-length temporary arrays during a single frame—for spatial query results, combat event queues, signal broadcast payloads, or immediate-mode debug geometry in Diorite. Allocating and freeing those buffers on the heap every tick creates unnecessary GC pressure.

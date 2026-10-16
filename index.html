@@ -6152,7 +6152,7 @@ events.clear                            # O(1) reset — 0 heap frees!</code></p
               <ul class="card-list">
                 <li><strong>Zero-Heap Value Passing:</strong> Passing <code>CombatEvent</code> to <code>apply_damage</code> copies directly in CPU registers or on the stack with 0 heap bytes.</li>
                 <li><strong>Contiguous Cache Line Saturation:</strong> <code>Array(CombatEvent)</code> embeds structs inline into a single 120 KB buffer.</li>
-                <li><strong>Instant $O(1)$ Reset &amp; FrameArena:</strong> <code>events.clear</code> resets the buffer length in $O(1)$ with zero deallocations (or use <code>Lapis.frame_arena</code>).</li>
+                <li><strong>Instant O(1) Reset &amp; FrameArena:</strong> <code>events.clear</code> resets the buffer length in <code>O(1)</code> with zero deallocations (or use <code>Lapis.frame_arena</code>).</li>
               </ul>
             </div>
             </div>
@@ -6232,7 +6232,7 @@ end</code></pre>
                 <li><strong>1 MiB Linear Bump Allocator:</strong> Pre-allocates a contiguous scratchpad (configurable via <code>FrameArena.configure</code>); allocations are an 8-byte aligned offset bump.</li>
                 <li><strong>Typed <code>ArenaBuffer(T)</code> &amp; <code>Slice(T)</code>:</strong> Stack-allocated buffer views support <code>&lt;&lt;</code>, <code>push_line</code>, <code>each</code>, and <code>to_slice</code> with <code>@[ZeroAllocation]</code>.</li>
                 <li><strong>Nested <code>frame_scope</code> Checkpoints:</strong> Captures <code>arena.mark</code> and automatically <code>rewind</code>s the cursor on exit to recycle L1 cache lines mid-frame.</li>
-                <li><strong>$O(1)$ Tick Reset &amp; Telemetry:</strong> <code>Lapis.tick_frame_arena!</code> resets <code>@offset = 0</code> in one instruction while tracking <code>high_water_mark</code> and <code>utilization</code>.</li>
+                <li><strong>O(1) Tick Reset &amp; Telemetry:</strong> <code>Lapis.tick_frame_arena!</code> resets <code>@offset = 0</code> in one instruction while tracking <code>high_water_mark</code> and <code>utilization</code>.</li>
               </ul>
             </div>
             </div>
