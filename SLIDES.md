@@ -686,7 +686,7 @@ end
 - **Subtitle**: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
 - **Code (gameplay_modules.cr — Horizontal Composition)**:
   ```crystal
-  # Namespace & mixin dual use (extend self)
+  # 1. Namespace & mixin dual use (extend self)
   module SpatialMath
     extend self
     def dist_sq(a, b)
@@ -694,37 +694,38 @@ end
     end
   end
   
-  # Engine-aware traits: ClassDB metadata & signals
-  gmodule Damageable do
-    signal health_changed(current : Int32)
-    @[Export] property health : Int32 = 100
-    def take_damage(dmg)
-      @health -= dmg
-      health_changed.emit(@health)
+  # 2. Stateful trait with compile-time contracts
+  module Damageable
+    abstract def armor : Int32
+    property health : Int32 = 100
+  
+    def take_damage(raw : Int32) : Void
+      @health = Math.max(0, @health - Math.max(1, raw - armor))
     end
   end
   
-  # Horizontal composition: mix across scene trees
-  node Enemy < CharacterBody2D do
-    include Damageable # Mixed into character branch
+  # 3. Mix across unrelated classes & value structs
+  class BossEnemy < GameActor
+    include Damageable
+    getter armor : Int32 = 25
   end
   
-  # Zero virtual overhead: inlined at compile time
-  node DestructibleProp < StaticBody2D do
-    include Damageable # Direct call sites, zero vtable cost
+  struct WoodenCrate
+    include Damageable
+    getter armor : Int32 = 5
   end
   ```
 - **Zero-Cost Architectural Composition**:
   - Namespace & Mixin Dual Use: extend self lets modules act simultaneously as pure functional namespaces and mixable traits.
-  - Engine-Aware Traits (gmodule): Wires @[Export] properties and engine signals directly into Godot’s ClassDB metadata.
-  - Horizontal Composition: Mix reusable behaviors across unrelated scene nodes without deep inheritance trees or diamond problems.
+  - Stateful & Contract Traits: Modules can inject instance state (property health) and enforce abstract def contracts at compile time.
+  - Horizontal Composition: Mix reusable behaviors across unrelated classes and stack-allocated struct types without diamond inheritance.
   - Zero Virtual Overhead: Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.
 
 **Presenter Notes**:
-> In object-oriented game development, classical single inheritance quickly breaks down: an Enemy, a DestructibleProp, and a Player all take damage, but they live in completely different branches of Godot's node hierarchy.
-> In C++, solving this requires multiple inheritance with virtual tables or complex component wrappers. In Ruby, mixin modules solved this, but with the penalty of runtime ancestor lookup chains.
-> Crystal gives us zero-cost horizontal mixins and namespaces via 'extend self'.
-> However, when bridging to Godot, a standard Crystal 'module' is not enough: Godot's engine needs to know about exported properties, Inspector sliders, and engine signals in ClassDB. That is why Lapis provides the 'gmodule' macro. It acts like a Crystal module, but automatically registers exports and signals into the node's ClassDB reflection table with zero runtime overhead.
+> In object-oriented systems, classical single inheritance quickly breaks down: a BossEnemy and a stack-allocated WoodenCrate both take damage, yet one is a reference-type class hierarchy and the other is a lightweight value struct.
+> In C++, sharing behavior across unrelated hierarchies requires multiple inheritance with virtual table overhead or verbose boilerplate. In dynamic Ruby, mixin modules solved this ergonomically, but paid a runtime penalty walking ancestor lookup chains on every method call.
+> Crystal gives us zero-cost horizontal composition. A module can act as a standalone functional namespace with 'extend self', inject instance state with 'property', and enforce compile-time trait contracts with 'abstract def'.
+> Whether mixed into a class or a value struct via 'include', Crystal resolves all methods at compile time and LLVM inlines the call sites directly into native machine code with zero virtual dispatch overhead.
 
 ---
 
