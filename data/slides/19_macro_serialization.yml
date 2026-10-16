@@ -16,22 +16,25 @@ left:
   code: |
     require "json"
 
-    # Structs and classes serialize with a single macro inclusion
     struct PlayerSaveData
       include JSON::Serializable
 
-      property player_name : String
-      property level : Int32
-      property health : Float32
-      property inventory_items : Array(String)
-      property position_checkpoint : Godot::Vector3
+      property player_name : String = "Arthur"
+      property level : Int32 = 12
+      property health : Float32 = 95.5_f32
+      property inventory_items : Array(String) = ["Excalibur", "Elixir"]
     end
 
-    # 1. Serializing to JSON string: streams directly to IO without reflection
-    data = PlayerSaveData.new(...)
-    json_str = data.to_json
+    # 1. Serializing to JSON: streams directly to IO without reflection
+    json_str = PlayerSaveData.new.to_pretty_json
+    # => {
+    #      "player_name": "Arthur",
+    #      "level": 12,
+    #      "health": 95.5,
+    #      "inventory_items": ["Excalibur", "Elixir"]
+    #    }
 
-    # 2. Deserializing from JSON: type-safe, strict validation
+    # 2. Deserializing from JSON: type-safe, strict schema validation
     loaded_data = PlayerSaveData.from_json(json_str)
 right:
   type: card
