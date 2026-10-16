@@ -2121,59 +2121,57 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 68: Symbols: String Churn vs. 32-Bit IDs [Step 1: Code]
+### Slide 68: Symbols & NamedTuples: String Churn vs. 32-Bit IDs [Step 1: Code]
 - **Palette**: `sweetie_80` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
-- **:circle-xmark: GDScript: Strings / StringNames, Hash Lookups & Silent Typo Bugs**:
+- **:circle-xmark: GDScript: Ad-Hoc String Dictionaries, &"StringName" Noise & Boxing**:
   ```gdscript
-  # 1. String dictionary keys: silent null on typos
-  var blackboard: Dictionary = {"target": player}
-  var target = blackboard.get("targt") # Silent null -> crash!
-  target.take_damage(10)
+  # 1. Ad-hoc String Dictionary: Variant boxing + silent null on typo!
+  var hit: Dictionary = {"target": player, "damage": 45}
+  var victim = hit.get("targt") # Typo returns null -> crashes downstream!
+  victim.take_damage(hit["damage"])
   
-  # 2. StringName comparisons: typos compile silently!
-  var state: StringName = &"patrol"
-  if state == &"petrol": # Typo compiles silently; fails at runtime!
-      refuel_vehicle()
+  # 2. Avoiding String conversions requires noisy &"StringName" syntax:
+  var move := Input.get_vector(&"left", &"right", &"up", &"down")
+  if is_in_group(&"enemies"):
+      get_tree().call_group(&"enemies", &"alert", global_position)
   
-  # 3. Frame-by-frame string matching:
-  match current_action:
-      "idle": play_anim("idle")
-      "attack": deal_damage() # Hashed string lookup every frame
+  # 3. String / StringName keys in collections still box & refcount:
+  var resist: Dictionary = {&"fire": 0.5, &"ice": 1.25}
+  var mult: float = resist.get(damage_tag, 1.0)
   ```
-- **:sparkles: Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP & Typo Proofing**:
+- **:sparkles: Crystal: Immediate 32-Bit Symbols, NamedTuples & Cached Bridge**:
   ```crystal
-  # 1. Native Symbol key indexing & safe digging:
-  dict = Godot::Dictionary.new(target: player_node, score: 500)
-  dict[:score] = 750
-  dmg = dict.dig?(:stats, :attack, as: Int32)
+  # 1. Stack NamedTuple: Symbol literal keys are compile-time verified!
+  hit = {target: player, damage: 45} # NamedTuple(target: Player, damage: Int32)
+  hit[:target].take_damage(hit[:damage]) # 0 hashing! hit[:targt] won't compile!
   
-  # 2. Symbols are immediate 32-bit integers (cmp eax, imm32):
-  state = :patrol
-  move_to_waypoint if state == :patrol # Single CPU cycle!
-  
-  # 3. Direct integer matching (zero string hashing):
-  case state
-  when :idle   then play_animation("idle")
-  when :patrol then patrol_route
+  # 2. Clean :symbols across Lapis APIs (cached StringName bridge):
+  move = Input.vector(:left, :right, :up, :down)
+  if in_group?(:enemies)
+    group(:enemies).call(:alert, global_position)
   end
+  
+  # 3. Symbols are immediate 32-bit integers (0 heap bytes, 0 refcounting):
+  resist = {:fire => 0.5_f32, :ice => 1.25_f32} # Hash(Symbol, Float32)
+  mult = resist.fetch(damage_tag, 1.0_f32)      # 4-byte int key + unboxed Float32!
   ```
 
 ---
 
-### Slide 69: Symbols: String Churn vs. 32-Bit IDs [Step 2: Analysis & Critique]
+### Slide 69: Symbols & NamedTuples: String Churn vs. 32-Bit IDs [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - Silent Null on Typoed Keys: Misspelling a dictionary key returns null without warning, causing crashes down the line.
-  - Silent Typo Bugs in States: String and StringName comparisons never fail at compile time; &"petrol" silently evaluates to false.
-  - Intern Table Hashing: StringNames incur global intern table lookups, yet offer zero compile-time typo protection.
+  - Fragile Ad-Hoc Dictionaries: Using string-keyed Dictionary for structured data boxes every field into Variant and returns silent null on key typos.
+  - Noisy &"..." Prefix Tax: Avoiding runtime String -> StringName interning forces &"StringName" syntax across scripts.
+  - RefCounted Engine Handles: Even StringName is a reference-counted intern table pointer that incurs atomic refcount traffic when boxed in collections.
 - **Solution Advantages**:
-  - Transparent Symbol Keys: dict[:score] = 750 and dig? bring clean symbol indexing to Godot collections.
-  - Immediate 32-Bit Integers: Symbols are 32-bit compiler integer IDs—zero heap allocations and zero GC overhead.
-  - Single-Cycle CPU Comparisons: state == :patrol compiles to a single cmp instruction with zero string hashing.
-- **Key Takeaway**: Symbols solve Godot's silent dictionary typos and runtime string hash overhead by turning identifiers into immediate 32-bit integers with compile-time checked keys.
+  - Compile-Time Verified NamedTuples: {target: player, damage: 45} is a stack value where hit[:target] resolves at compile time and typos fail to compile.
+  - Immediate 32-Bit Compiler IDs: Every :symbol is a raw 32-bit integer constant (cmp eax, imm32)—zero heap allocation and zero atomic refcounting.
+  - Ergonomic Engine Bridge: Pass clean :symbols to Input.vector, in_group?, and group(:enemies) without &"..." clutter.
+- **Key Takeaway**: Crystal symbols compile directly to 32-bit integers for fast hashes and engine queries, while stack NamedTuples catch key typos at compile time with zero Variant boxing.
 
 **Presenter Notes**:
-> Symbols are one of the most beloved features inherited from Ruby and elevated to native performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, string creation involves intern table hashing.
-> In Crystal, symbols like `:target_enemy` and `:patrol` are immediate 32-bit integer IDs resolved at compile time. In pure Crystal code, comparing symbols takes a single CPU clock cycle (`cmp`) with zero heap allocations. When bridging into Godot collections, Lapis maps symbols directly to Godot's StringName or integer keys, giving you clean keyword syntax with full compile-time sanity.
+> In GDScript, developers frequently reach for untyped String or StringName Dictionaries to pass structured packets around, and must pepper their code with &"StringName" literals to avoid dynamic string interning. Even StringName is a reference-counted handle into Godot's global intern table that gets boxed into 24-byte Variants inside Dictionaries.
+> Crystal separates these concerns cleanly. When passing structured key-value records, a stack-allocated NamedTuple (`{target: player, damage: 45}`) resolves symbol literal keys (`hit[:target]`) at compile time—catching typos like `hit[:targt]` before the game even launches, with zero hashing and zero heap allocation. For open identifiers and lookup tables (`Hash(Symbol, Float32)`), Crystal `:symbols` are immediate 32-bit compiler integer IDs (`cmp eax, imm32`) with zero atomic reference counting. And across the engine boundary, Lapis lets you pass clean `:symbols` directly to `Input.vector`, `in_group?`, and `group(:enemies)` via cached `StringName` handles.
 
 ---
 

@@ -5456,8 +5456,8 @@ active_names = enemies.each.reject(&amp;.dead?).map(&amp;.name.upcase).to_a</cod
               <span class="badge badge-pill cyan" data-color="cyan">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
               <span class="badge code-view-badge step-badge">CODE VIEW</span>
             </div>
-            <h2 class="slide-title">Symbols: String Churn vs. 32-Bit IDs</h2>
-            <p class="slide-subtitle">Runtime String Lookups vs. Compile-Time 32-Bit Enums</p>
+            <h2 class="slide-title">Symbols &amp; NamedTuples: String Churn vs. 32-Bit IDs</h2>
+            <p class="slide-subtitle">Variant Dictionaries &amp; StringName Noise vs. Immediate Symbols &amp; Stack NamedTuples</p>
           </header>
           <div class="slide-body" data-layout="code-comparison" data-step="code-only">
             <div class="comparison-pane" data-slot="before">
@@ -5468,26 +5468,25 @@ active_names = enemies.each.reject(&amp;.dead?).map(&amp;.name.upcase).to_a</cod
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title"><svg aria-hidden="true" class="fa-icon fa-circle-xmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: Strings / StringNames, Hash Lookups &amp; Silent Typo Bugs</span>
+                <span class="window-title code-title"><svg aria-hidden="true" class="fa-icon fa-circle-xmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: Ad-Hoc String Dictionaries, &amp;&quot;StringName&quot; Noise &amp; Boxing</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">GDScript</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-gdscript"># 1. String dictionary keys: silent null on typos
-var blackboard: Dictionary = {&quot;target&quot;: player}
-var target = blackboard.get(&quot;targt&quot;) # Silent null -&gt; crash!
-target.take_damage(10)
+              <pre><code class="language-gdscript"># 1. Ad-hoc String Dictionary: Variant boxing + silent null on typo!
+var hit: Dictionary = {&quot;target&quot;: player, &quot;damage&quot;: 45}
+var victim = hit.get(&quot;targt&quot;) # Typo returns null -&gt; crashes downstream!
+victim.take_damage(hit[&quot;damage&quot;])
 
-# 2. StringName comparisons: typos compile silently!
-var state: StringName = &amp;&quot;patrol&quot;
-if state == &amp;&quot;petrol&quot;: # Typo compiles silently; fails at runtime!
-    refuel_vehicle()
+# 2. Avoiding String conversions requires noisy &amp;&quot;StringName&quot; syntax:
+var move := Input.get_vector(&amp;&quot;left&quot;, &amp;&quot;right&quot;, &amp;&quot;up&quot;, &amp;&quot;down&quot;)
+if is_in_group(&amp;&quot;enemies&quot;):
+    get_tree().call_group(&amp;&quot;enemies&quot;, &amp;&quot;alert&quot;, global_position)
 
-# 3. Frame-by-frame string matching:
-match current_action:
-    &quot;idle&quot;: play_anim(&quot;idle&quot;)
-    &quot;attack&quot;: deal_damage() # Hashed string lookup every frame</code></pre>
+# 3. String / StringName keys in collections still box &amp; refcount:
+var resist: Dictionary = {&amp;&quot;fire&quot;: 0.5, &amp;&quot;ice&quot;: 1.25}
+var mult: float = resist.get(damage_tag, 1.0)</code></pre>
             </div>
             </div>
             <div class="comparison-pane" data-slot="after">
@@ -5498,26 +5497,25 @@ match current_action:
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title"><svg aria-hidden="true" class="fa-icon fa-sparkles" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP &amp; Typo Proofing</span>
+                <span class="window-title code-title"><svg aria-hidden="true" class="fa-icon fa-sparkles" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Immediate 32-Bit Symbols, NamedTuples &amp; Cached Bridge</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">Crystal (Lapis)</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal"># 1. Native Symbol key indexing &amp; safe digging:
-dict = Godot::Dictionary.new(target: player_node, score: 500)
-dict[:score] = 750
-dmg = dict.dig?(:stats, :attack, as: Int32)
+              <pre><code class="language-crystal"># 1. Stack NamedTuple: Symbol literal keys are compile-time verified!
+hit = {target: player, damage: 45} # NamedTuple(target: Player, damage: Int32)
+hit[:target].take_damage(hit[:damage]) # 0 hashing! hit[:targt] won&#39;t compile!
 
-# 2. Symbols are immediate 32-bit integers (cmp eax, imm32):
-state = :patrol
-move_to_waypoint if state == :patrol # Single CPU cycle!
+# 2. Clean :symbols across Lapis APIs (cached StringName bridge):
+move = Input.vector(:left, :right, :up, :down)
+if in_group?(:enemies)
+  group(:enemies).call(:alert, global_position)
+end
 
-# 3. Direct integer matching (zero string hashing):
-case state
-when :idle   then play_animation(&quot;idle&quot;)
-when :patrol then patrol_route
-end</code></pre>
+# 3. Symbols are immediate 32-bit integers (0 heap bytes, 0 refcounting):
+resist = {:fire =&gt; 0.5_f32, :ice =&gt; 1.25_f32} # Hash(Symbol, Float32)
+mult = resist.fetch(damage_tag, 1.0_f32)      # 4-byte int key + unboxed Float32!</code></pre>
             </div>
             </div>
           </div>
@@ -5528,12 +5526,12 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          Symbols are one of the most beloved features inherited from Ruby and elevated to native performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, string creation involves intern table hashing.
-          In Crystal, symbols like `:target_enemy` and `:patrol` are immediate 32-bit integer IDs resolved at compile time. In pure Crystal code, comparing symbols takes a single CPU clock cycle (`cmp`) with zero heap allocations. When bridging into Godot collections, Lapis maps symbols directly to Godot's StringName or integer keys, giving you clean keyword syntax with full compile-time sanity.
+          In GDScript, developers frequently reach for untyped String or StringName Dictionaries to pass structured packets around, and must pepper their code with &amp;&quot;StringName&quot; literals to avoid dynamic string interning. Even StringName is a reference-counted handle into Godot&#39;s global intern table that gets boxed into 24-byte Variants inside Dictionaries.
+          Crystal separates these concerns cleanly. When passing structured key-value records, a stack-allocated NamedTuple (`{target: player, damage: 45}`) resolves symbol literal keys (`hit[:target]`) at compile time—catching typos like `hit[:targt]` before the game even launches, with zero hashing and zero heap allocation. For open identifiers and lookup tables (`Hash(Symbol, Float32)`), Crystal `:symbols` are immediate 32-bit compiler integer IDs (`cmp eax, imm32`) with zero atomic reference counting. And across the engine boundary, Lapis lets you pass clean `:symbols` directly to `Input.vector`, `in_group?`, and `group(:enemies)` via cached `StringName` handles.
         </aside>
       </section>
 
-      <!-- Slide 69: Sweetie 80 (Symbols: String Churn vs. 32-Bit IDs) -->
+      <!-- Slide 69: Sweetie 80 (Symbols & NamedTuples: String Churn vs. 32-Bit IDs) -->
       <section class="slide solvin-slide sweetie_80" data-layout="code-comparison-layout" data-palette="sweetie_80" data-background-color="#1a1c2c" data-palette-name="Sweetie 80" data-palette-cube="#41a6f6" data-palette-cube-hover="#73eff7" data-slide-id="11c_antipattern_symbols-critique" id="slide-11c_antipattern_symbols-critique">
         <div class="palette-corner-badge" title="Theme: Sweetie 80">
           <span class="palette-corner-dot"></span> PALETTE: Sweetie 80
@@ -5544,39 +5542,39 @@ end</code></pre>
               <span class="badge badge-pill cyan" data-color="cyan">GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION</span>
               <span class="badge analysis-badge step-badge" data-color="accent">ANALYSIS</span>
             </div>
-            <h2 class="slide-title">Symbols: String Churn vs. 32-Bit IDs</h2>
-            <p class="slide-subtitle">Runtime String Lookups vs. Compile-Time 32-Bit Enums</p>
+            <h2 class="slide-title">Symbols &amp; NamedTuples: String Churn vs. 32-Bit IDs</h2>
+            <p class="slide-subtitle">Variant Dictionaries &amp; StringName Noise vs. Immediate Symbols &amp; Stack NamedTuples</p>
           </header>
           <div class="slide-body" data-layout="code-comparison" data-step="critique">
             <div class="comparison-pane" data-slot="before">
             <div class="card col coral antipattern" data-color="coral antipattern">
               <div class="card-header card-title coral antipattern">
-                <span><svg aria-hidden="true" class="fa-icon fa-circle-xmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: Strings / StringNames, Hash Lookups &amp; Silent Typo Bugs</span>
+                <span><svg aria-hidden="true" class="fa-icon fa-circle-xmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512zM167 167c9.4-9.4 24.6-9.4 33.9 0l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9z"/></svg> GDScript: Ad-Hoc String Dictionaries, &amp;&quot;StringName&quot; Noise &amp; Boxing</span>
                 <span class="badge coral antipattern" data-color="coral antipattern">ANTI-PATTERN</span>
               </div>
               <ul class="card-list">
-                <li><strong>Silent Null on Typoed Keys:</strong> Misspelling a dictionary key returns <code>null</code> without warning, causing crashes down the line.</li>
-                <li><strong>Silent Typo Bugs in States:</strong> String and StringName comparisons never fail at compile time; <code>&"petrol"</code> silently evaluates to false.</li>
-                <li><strong>Intern Table Hashing:</strong> StringNames incur global intern table lookups, yet offer zero compile-time typo protection.</li>
+                <li><strong>Fragile Ad-Hoc Dictionaries:</strong> Using string-keyed <code>Dictionary</code> for structured data boxes every field into <code>Variant</code> and returns silent <code>null</code> on key typos.</li>
+                <li><strong>Noisy <code>&amp;&quot;...&quot;</code> Prefix Tax:</strong> Avoiding runtime <code>String</code> &rarr; <code>StringName</code> interning forces <code>&amp;&quot;StringName&quot;</code> syntax across scripts.</li>
+                <li><strong>RefCounted Engine Handles:</strong> Even <code>StringName</code> is a reference-counted intern table pointer that incurs atomic refcount traffic when boxed in collections.</li>
               </ul>
             </div>
             </div>
             <div class="comparison-pane" data-slot="after">
             <div class="card col emerald solution" data-color="emerald solution">
               <div class="card-header card-title emerald solution">
-                <span><svg aria-hidden="true" class="fa-icon fa-sparkles" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: 32-Bit Immediate Symbols, Single-Cycle CMP &amp; Typo Proofing</span>
+                <span><svg aria-hidden="true" class="fa-icon fa-sparkles" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: Immediate 32-Bit Symbols, NamedTuples &amp; Cached Bridge</span>
                 <span class="badge emerald solution" data-color="emerald solution">CLEAN SOLUTION</span>
               </div>
               <ul class="card-list">
-                <li><strong>Transparent Symbol Keys:</strong> <code>dict[:score] = 750</code> and <code>dig?</code> bring clean symbol indexing to Godot collections.</li>
-                <li><strong>Immediate 32-Bit Integers:</strong> Symbols are 32-bit compiler integer IDs—zero heap allocations and zero GC overhead.</li>
-                <li><strong>Single-Cycle CPU Comparisons:</strong> <code>state == :patrol</code> compiles to a single <code>cmp</code> instruction with zero string hashing.</li>
+                <li><strong>Compile-Time Verified <code>NamedTuple</code>s:</strong> <code>{target: player, damage: 45}</code> is a stack value where <code>hit[:target]</code> resolves at compile time and typos fail to compile.</li>
+                <li><strong>Immediate 32-Bit Compiler IDs:</strong> Every <code>:symbol</code> is a raw 32-bit integer constant (<code>cmp eax, imm32</code>)—zero heap allocation and zero atomic refcounting.</li>
+                <li><strong>Ergonomic Engine Bridge:</strong> Pass clean <code>:symbols</code> to <code>Input.vector</code>, <code>in_group?</code>, and <code>group(:enemies)</code> without <code>&amp;&quot;...&quot;</code> clutter.</li>
               </ul>
             </div>
             </div>
             <div class="takeaway-banner">
-              <span class="badge" data-color="accent">32-BIT IMMUTABLE IDENTITY • IMMEDIATE INTEGERS</span>
-              <span class="takeaway-text">Symbols solve Godot's silent dictionary typos and runtime string hash overhead by turning identifiers into immediate 32-bit integers with compile-time checked keys.</span>
+              <span class="badge" data-color="accent">32-BIT IMMEDIATE INTEGERS • ZERO-COST NAMEDTUPLES</span>
+              <span class="takeaway-text">Crystal symbols compile directly to 32-bit integers for fast hashes and engine queries, while stack NamedTuples catch key typos at compile time with zero Variant boxing.</span>
             </div>
           </div>
           <footer class="slide-footer">
@@ -5586,8 +5584,8 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          Symbols are one of the most beloved features inherited from Ruby and elevated to native performance in Crystal. In Godot GDScript, developers constantly rely on strings and StringNames for dictionaries, state machines, and event tags. But strings introduce two problems: first, typos fail silently—a misspelled dictionary key returns null without any compiler warning, and `if state == &"petrol"` simply evaluates to false. Second, string creation involves intern table hashing.
-          In Crystal, symbols like `:target_enemy` and `:patrol` are immediate 32-bit integer IDs resolved at compile time. In pure Crystal code, comparing symbols takes a single CPU clock cycle (`cmp`) with zero heap allocations. When bridging into Godot collections, Lapis maps symbols directly to Godot's StringName or integer keys, giving you clean keyword syntax with full compile-time sanity.
+          In GDScript, developers frequently reach for untyped String or StringName Dictionaries to pass structured packets around, and must pepper their code with &amp;&quot;StringName&quot; literals to avoid dynamic string interning. Even StringName is a reference-counted handle into Godot&#39;s global intern table that gets boxed into 24-byte Variants inside Dictionaries.
+          Crystal separates these concerns cleanly. When passing structured key-value records, a stack-allocated NamedTuple (`{target: player, damage: 45}`) resolves symbol literal keys (`hit[:target]`) at compile time—catching typos like `hit[:targt]` before the game even launches, with zero hashing and zero heap allocation. For open identifiers and lookup tables (`Hash(Symbol, Float32)`), Crystal `:symbols` are immediate 32-bit compiler integer IDs (`cmp eax, imm32`) with zero atomic reference counting. And across the engine boundary, Lapis lets you pass clean `:symbols` directly to `Input.vector`, `in_group?`, and `group(:enemies)` via cached `StringName` handles.
         </aside>
       </section>
 
