@@ -3181,58 +3181,70 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 104: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 1: Code]
-- **Palette**: `acorn_bbc` | **Badge**: `LANGUAGE SHOOTOUT • PLATFORMS & TOOLING`
-- **:circle-xmark: Godot C#: Platform Lockout & Zombie Assemblies**:
+### Slide 104: Godot C# vs Lapis: Hot-Reload Ceremony & Runtime Payload [Step 1: Code]
+- **Palette**: `acorn_bbc` | **Badge**: `LANGUAGE SHOOTOUT • HOT-RELOAD & DEPLOYMENT`
+- **:circle-xmark: Godot C#: Manual ISerializationListener & Zombie ALCs**:
   ```csharp
-  using Godot;
-  using System;
-  
-  public partial class AudioManager : Node
+  public partial class WaveSpawner : Node3D, ISerializationListener
   {
-      // Static event retains AssemblyLoadContext in RAM
-      public static event Action? OnSoundEffectPlayed;
+      [Export] public int WaveIndex { get; set; } = 1;
+      private List<int> _spawnedIds = new(); // Wiped on ALC reload!
   
-      public override void _Ready()
+      // 1. Must manually stash state before MSBuild unloads ALC:
+      public void OnBeforeSerialize()
       {
-          // Unreleased listener pins assembly as a 'zombie' ALC
-          OnSoundEffectPlayed += HandleSound;
+          GameBus.WaveTick -= OnTick; // Forget this -> Zombie ALC!
+          SetMeta("_ids", new Godot.Collections.Array(_spawnedIds));
       }
   
-      private void HandleSound() => GD.Print("Playing SFX");
+      // 2. Must manually unpack Variant collections after reload:
+      public void OnAfterDeserialize()
+      {
+          GameBus.WaveTick += OnTick;
+      }
   }
   ```
-- **:sparkles: Crystal: LLVM Native Portability & Clean Hot-Reload**:
+- **:sparkles: Crystal: Transactional Shadow DLL Swap & Native LLVM**:
   ```crystal
-  node AudioManager < Node do
-    # Native signal with automatic lifecycle cleanup in ObjectDB
-    signal sound_effect_played
+  node WaveSpawner < Node3D do
+    # 1. Auto-quarantined & hydrated across Shadow DLL swaps:
+    @[Export] property wave_index : Int64 = 1_i64     # Widened from Int32!
+    @[Export] property spawn_rate : Float32 = 2.5_f32 # New field seeded!
   
-    def play_sfx(sound_name : String) : Nil
-      emit(sound_effect_played)
+    # 2. ObjectDB signal table survives DLL swap automatically:
+    signal wave_cleared(wave : Int64)
+  
+    # 3. Clean post-reload hook (zero ISerializationListener ceremony):
+    def _on_hot_reloaded : Void
+      Godot.print("Reloaded Wave ##{@wave_index} (#{@spawn_rate}/s)")
+    end
+  
+    def advance_wave : Void
+      @wave_index += 1
+      wave_cleared.emit(@wave_index)
     end
   end
   ```
 
 ---
 
-### Slide 105: Godot C# vs Lapis: Platform Lockout & Hot-Reload Leaks [Step 2: Analysis & Critique]
+### Slide 105: Godot C# vs Lapis: Hot-Reload Ceremony & Runtime Payload [Step 2: Analysis & Critique]
 - **Critique Points**:
-  - AssemblyLoadContext Leaks: Lingering static events or threads pin .NET assemblies in RAM during hot-reload, breaking breakpoints.
-  - Web & Mobile Friction: Godot 4 C# lacks out-of-the-box Web export and requires heavy NativeAOT workarounds on mobile.
-  - 60 MB+ Runtime Payload: Shipping a C# build bundles the .NET CLR virtual machine, managed assemblies, and JIT/GC runtime.
-  - Double-Build Tax: Requires external .NET SDKs, .csproj XML files, and MSBuild compilation on every editor play press.
+  - Manual ISerializationListener: Non-exported state is wiped on assembly reload unless manually marshalled in OnBeforeSerialize.
+  - Zombie AssemblyLoadContext Leaks: One lingering static event or timer prevents the old .NET assembly from unloading in RAM.
+  - 60 MB+ CLR Runtime Payload: Shipping a C# build bundles the .NET virtual machine, managed BCL assemblies, and JIT/GC runtime.
+  - External MSBuild Tax: Requires external .NET SDKs, .csproj files, and Roslyn source generators on every build.
 - **Solution Advantages**:
-  - LLVM Native Targets: Compiles to native machine code for Windows, Linux, macOS, and ARM64—with WebAssembly / iOS in active development.
-  - Clean OS Library Unload: GDExtension shared libraries (.dll / .so / .dylib) unload cleanly via FreeLibrary / dlclose.
-  - Lean Native Footprint: Ships as compact native binaries (474 KB stripped Mode B, 4–8 MB full extension) with zero VM dependencies.
+  - Automatic State Quarantine: Lapis snapshots live properties, reconciles widened types (Int32 &rarr; Int64), and fires _on_hot_reloaded.
+  - Clean OS Library Unload: Shadow DLLs (game_PID_N.dll) swap and unload cleanly via OS FreeLibrary / dlclose with zero zombie ALCs.
+  - Lean Native Binaries: Ships as a self-contained native binary (474 KB stripped Mode B, 4–8 MB full extension) with zero VM dependencies.
   - Unified Single-CLI Toolchain: The lapis CLI manages compilation, bindings, testing, and hot-reload without MSBuild or SDK churn.
-- **Key Takeaway**: Crystal provides lean, native LLVM compilation and clean dynamic reloading across platforms—with zero VM bloat and WebAssembly support actively in progress.
+- **Key Takeaway**: Lapis eliminates C# ISerializationListener ceremony, zombie AssemblyLoadContext leaks, and 60 MB+ CLR runtime bloat with transactional Shadow DLL swaps.
 
 **Presenter Notes**:
-> Platform distribution and developer workflow reveal major architectural differences between C# and Lapis.
-> In Godot 4 C#, in-editor hot-reloading relies on .NET AssemblyLoadContexts. A single lingering static event subscription or background thread prevents an assembly from unloading, leaving 'zombie' assemblies in RAM until breakpoints fail and the editor becomes unstable. Furthermore, distributing a C# game requires bundling over 60MB of .NET CLR virtual machine binaries, managed DLLs, and runtime support. Web export remains a notorious sticking point for Godot 4 C#, requiring cumbersome workarounds.
-> In Lapis, Crystal compiles directly to native machine code via LLVM for desktop and mobile platforms with clean OS-level shared library unloading (FreeLibrary/dlclose). The entire compiled extension is only 4 to 8 MB with zero VM payload. While WASM support for Crystal is currently a work in progress on our roadmap, Lapis already delivers seamless, native performance across major platforms without MSBuild ceremony or GC runtime baggage.
+> Hot-reloading and deployment reveal a massive architectural contrast between Godot 4 C# and Lapis.
+> In Godot 4 C#, in-editor hot-reloading relies on unloading and recreating a .NET AssemblyLoadContext (ALC). Any state not explicitly backed by Godot Variant types is wiped out unless you manually implement ISerializationListener (OnBeforeSerialize and OnAfterDeserialize) on your classes. Worse yet, if a single static event subscription, reflection cache, or background timer isn't manually detached before serialization, the .NET garbage collector cannot unload the old AssemblyLoadContext—leaving "zombie" assemblies pinned in RAM until breakpoints stop working and the editor must be restarted. And when you export your game, you must ship over 60 MB of .NET CLR runtime DLLs.
+> In Lapis, our 6-phase transactional Shadow DLL hot-reload automatically quarantines live properties into engine metadata, unlinks the old DLL cleanly at the OS level via FreeLibrary or dlclose, reconciles schema drift (like widening Int32 to Int64 or seeding newly added @[Export] properties), and invokes a clean _on_hot_reloaded hook—all while compiling down to a lean 4–8 MB native LLVM binary with zero VM baggage.
 
 ---
 
