@@ -792,3 +792,55 @@
   line-height: 1.75 !important;
   width: 100% !important;
 }
+
+/* ==========================================================================
+   YellowTab Palette (Slide 10h_crystal_syntax_delights_faq & Global Override)
+   Use signature BeOS/ZETA yellow (#ffc400) as the background for badges and
+   code elements with high-contrast dark text (#141416) and navy borders (#234b75).
+   ========================================================================== */
+.slide[data-palette="yellow_tab"] .badge,
+.slide[data-palette="yellow_tab"] .badge-pill,
+.slide[data-palette="yellow_tab"] .faq-q-badge,
+.slide[data-palette="yellow_tab"] .code-lang-tag,
+.slide[data-palette="yellow_tab"] .terminal-badge,
+.slide[data-palette="yellow_tab"] .stat-kpi-badge,
+.slide[data-palette="yellow_tab"] .bar-badge,
+.slide[data-palette="yellow_tab"] .layer-badge,
+.solvin-slide.yellow_tab .badge,
+.solvin-slide.yellow_tab .badge-pill,
+.solvin-slide.yellow_tab .faq-q-badge,
+.solvin-slide.yellow_tab .code-lang-tag,
+.solvin-slide.yellow_tab .terminal-badge,
+.solvin-slide.yellow_tab .stat-kpi-badge,
+.solvin-slide.yellow_tab .bar-badge,
+.solvin-slide.yellow_tab .layer-badge,
+[data-palette="yellow_tab"] .badge[data-color],
+[data-palette="yellow_tab"] .badge-pill[data-color],
+[data-palette="yellow_tab"] .faq-q-badge[data-color] {
+  background-color: #ffc400 !important;
+  background: #ffc400 !important;
+  color: #141416 !important;
+  border: 1.5px solid #234b75 !important;
+  box-shadow: 2px 2px 0px #234b75 !important;
+}
+
+.slide[data-palette="yellow_tab"] code:not(pre code),
+.solvin-slide.yellow_tab code:not(pre code),
+[data-palette="yellow_tab"] .faq-answer code,
+[data-palette="yellow_tab"] .card ul.card-list li code {
+  background-color: #ffc400 !important;
+  background: #ffc400 !important;
+  color: #141416 !important;
+  border: 1px solid #234b75 !important;
+  font-weight: 600 !important;
+}
+
+.slide[data-palette="yellow_tab"] .code-header,
+.slide[data-palette="yellow_tab"] .terminal-header,
+.solvin-slide.yellow_tab .code-header,
+.solvin-slide.yellow_tab .terminal-header {
+  background-color: #ffc400 !important;
+  color: #141416 !important;
+  border-bottom: 2px solid #234b75 !important;
+}
+
