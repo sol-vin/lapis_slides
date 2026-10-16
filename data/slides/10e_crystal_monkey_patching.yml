@@ -15,8 +15,12 @@ left:
   code: |
     # 1. Re-opening standard primitives with game units:
     struct Int32
-      def tiles : Float32;  self.to_f32 * 32.0_f32; end
-      def meters : Float32; self.to_f32 * 1.0_f32;  end
+      def tiles : Float32
+        self.to_f32 * 32.0_f32
+      end
+      def meters : Float32
+        self.to_f32 * 1.0_f32
+      end
     end
 
     # 2. Extending native Godot engine types directly:
