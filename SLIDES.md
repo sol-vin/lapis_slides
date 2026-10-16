@@ -5,8 +5,8 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 1: Lapis for Crystal [Cover]
-- **Title**: Lapis for Crystal
+### Slide 1: Crystallized Game Development [Cover]
+- **Title**: Crystallized Game Development
 - **Subtitle**: Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
 - **Author**: Ian Rash
 - **Highlights**:
