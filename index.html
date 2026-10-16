@@ -2183,6 +2183,10 @@ end
 gmodule Damageable do
   signal health_changed(current : Int32)
   @[Export] property health : Int32 = 100
+  def take_damage(dmg)
+    @health -= dmg
+    health_changed.emit(@health)
+  end
 end
 
 # Horizontal composition: mix across scene trees

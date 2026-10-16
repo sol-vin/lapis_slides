@@ -12,7 +12,7 @@ left:
   title: gameplay_modules.cr — Horizontal Composition
   tag: Crystal
   lang: crystal
-  font_size: '0.84rem'
+  font_size: '0.76rem'
   code: |
     # Namespace & mixin dual use (extend self)
     module SpatialMath
@@ -24,6 +24,10 @@ left:
     gmodule Damageable do
       signal health_changed(current : Int32)
       @[Export] property health : Int32 = 100
+      def take_damage(dmg)
+        @health -= dmg
+        health_changed.emit(@health)
+      end
     end
 
     # Horizontal composition: mix across scene trees
