@@ -365,12 +365,12 @@ end
     getter items = [] of String # Inferred as Array(String)
   
     # 1. Zero signature noise: param & return types inferred!
-    def find_item(name)
+    def find_item?(name)
       @items.find { |item| item == name } # => String | Nil
     end
   
     def equip(name)
-      item = find_item(name)
+      item = find_item?(name)
       # item.upcase
       # Error: undefined method 'upcase' for Nil (String | Nil)
   

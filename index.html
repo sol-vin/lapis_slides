@@ -1532,12 +1532,12 @@ protected:
   getter items = [] of String # Inferred as Array(String)
 
   # 1. Zero signature noise: param &amp; return types inferred!
-  def find_item(name)
+  def find_item?(name)
     @items.find { |item| item == name } # =&gt; String | Nil
   end
 
   def equip(name)
-    item = find_item(name)
+    item = find_item?(name)
     # item.upcase
     # Error: undefined method &#39;upcase&#39; for Nil (String | Nil)
 
