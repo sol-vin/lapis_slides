@@ -5,7 +5,7 @@ subtitle: Compile-Time play_sound Macro, Self-Pruning Root Players & Relative Sp
 badge: GAMEPLAY • AUDIO & SPATIAL DSL
 badge_color: cyan
 palette: blue_cassette
-layout: two-column-layout
+layout: one-left-two-right
 ratio: 3:2
 left:
   type: code
@@ -27,14 +27,21 @@ left:
     move_dir = Godot::Input.get_vector(
       :move_left, :move_right, :move_up, :move_down
     )
-right:
+right_top:
   type: card
-  title: Audio, Spatial & Math Invariants
+  title: 'Context-Aware play_sound Macro'
+  badge: 'ROOT-MOUNTED AUDIO'
   color: cyan
   items:
-    - '<strong>Context-Aware <code>play_sound</code> Macro:</strong> Automatically selects 2D, 3D, or non-spatial audio players based on caller type.'
-    - '<strong>Root-Mounted Audio Lifecycle:</strong> Players attach to scene root, so one-shot sounds never cut off when emitters die.'
-    - '<strong>Relative Spatial Queries:</strong> <code>distance_to</code>, <code>direction_to</code>, and <code>angle_to_point</code> work directly between nodes.'
+    - '<strong>Compile-Time Selection:</strong> Automatically selects 2D, 3D, or non-spatial audio players based on caller node type.'
+    - '<strong>Root-Mounted Lifecycle:</strong> Players attach to scene root, so one-shot sounds never cut off when emitters die.'
+right_bottom:
+  type: card
+  title: 'Relative Spatial & Input Vectors'
+  badge: '2D / 3D HELPERS'
+  color: emerald
+  items:
+    - '<strong>Direct Node Queries:</strong> <code>distance_to</code>, <code>direction_to</code>, and <code>angle_to_point</code> work directly between nodes.'
     - '<strong>Input Vector Queries:</strong> <code>Godot::Input.get_vector</code> maps action symbols directly to normalized directions.'
 notes: |
   Playing audio and navigating spatial relationships are everyday tasks in game development that typically suffer from annoying engine friction.

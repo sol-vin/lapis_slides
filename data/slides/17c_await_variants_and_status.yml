@@ -5,9 +5,30 @@ subtitle: 'AwaitStatus Predicates, Typed Return Values, Tuple Destructuring & De
 badge: LAPIS ASYNC • SIGNAL AWAITING
 badge_color: cyan
 palette: oled_micro
-layout: two-column-layout
-ratio: 3:2
+layout: three-left-one-right
+ratio: 2:3
 left:
+  - type: card
+    title: '1. await(sig) — AwaitStatus(T)'
+    badge: 'PREDICATES & TUPLES'
+    color: cyan
+    items:
+      - '<strong>Status Struct:</strong> Returns <code>AwaitStatus(T)</code> with <code>.completed?</code>, <code>.timed_out?</code>, and <code>.ok?</code>.'
+      - '<strong>Tuple Destructuring:</strong> Multi-arg signals unpack directly via <code>id, name = status</code>.'
+  - type: card
+    title: '2. await!(sig) — Unwrap or Raise'
+    badge: 'STRICT ASSERT'
+    color: amber
+    items:
+      - '<strong>Direct Payload Unwrap:</strong> Returns <code>T</code> (or <code>Tuple</code>) directly and raises <code>TimeoutError</code> on expiry.'
+  - type: card
+    title: '3. await?(sig) & Dead-Pointer Armor'
+    badge: 'NIL OVER ERRORS'
+    color: emerald
+    items:
+      - '<strong>Safe Timeout:</strong> Returns <code>T | Nil</code> (or <code>Bool</code> for 0-arg signals) without throwing.'
+      - '<strong>DisposedObjectError:</strong> Raises immediately if the target node is freed—never hangs.'
+right:
   type: code
   title: signal_awaiting_triad.cr — Complete Await Architecture
   tag: Crystal (Lapis)
@@ -32,15 +53,6 @@ left:
     # 4. Engine signals & numeric duration delays
     body = await!((~Area2D).body_entered)  # => Godot::Node2D (typed engine signal)
     await(1.0)                             # => AwaitStatus (or await?(1.0) / await!(1.0))
-right:
-  type: card
-  title: Cooperative Awaiting Invariants
-  color: cyan
-  items:
-    - '<strong>Triad Return Semantics:</strong> <code>await</code> returns <code>AwaitStatus(T)</code> (<code>.completed?</code>, <code>.timed_out?</code>); <code>await!</code> unwraps or raises <code>TimeoutError</code>; <code>await?</code> returns nilable (or <code>Bool</code>).'
-    - '<strong>Tuple Destructuring:</strong> Multi-argument signals unpack via tuple destructuring (<code>id, name = status</code>) with full static type inference.'
-    - '<strong>Engine Signals &amp; Delays:</strong> Built-in Godot signals (<code>(~Area2D).body_entered</code>) are statically typed; dynamic <code>node.signal(:name)</code> yields <code>Array(Variant)</code>.'
-    - '<strong>DisposedObjectError Protection:</strong> If the awaited node is freed, Lapis raises <code>Godot::DisposedObjectError</code> instead of hanging forever.'
 notes: |
   Lapis provides a complete triad of non-blocking await primitives matching Crystal's semantic naming idioms:
   1. Standard 'await' returns an 'AwaitStatus(T)' struct with predicates like '.completed?', '.timed_out?', and '.ok?'. When awaiting multi-argument signals, it yields a Tuple that supports Crystal tuple destructuring ('id, name = status').

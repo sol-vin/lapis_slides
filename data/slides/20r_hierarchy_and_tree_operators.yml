@@ -5,7 +5,7 @@ subtitle: 'require "lapis/extras" • Path Traversal (/), Unique Nodes (%), and 
 badge: LAPIS EXTRAS • HIERARCHY OPERATORS
 badge_color: cyan
 palette: cross_cube_360
-layout: two-column-layout
+layout: one-left-three-right
 ratio: 1:1
 left:
   type: code
@@ -31,14 +31,24 @@ left:
       end
     end
 right:
-  type: card
-  title: Hierarchy Traversal & Mounting
-  color: cyan
-  items:
-    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable expressive operator sugar.'
-    - '<strong>Path Traversal (<code>/</code>):</strong> <code>self / "Visuals" / Marker2D</code> walks paths fluently with native <code>.as(T)</code>.'
-    - '<strong>Multi-Append Assembly (<code>&lt;&lt;</code>):</strong> <code>parent &lt;&lt; c1 &lt;&lt; c2</code> brings stream-append to scene trees.'
-    - '<strong>Ancestor Climbing (<code>&lt;&lt; Class</code>):</strong> <code>node &lt;&lt; Player</code> climbs parents to find requested types.'
+  - type: card
+    title: '1. Path (/) & Unique (%) Traversal'
+    badge: 'DOWNWARD'
+    color: cyan
+    items:
+      - '<strong>Fluent Path &amp; Unique Routing:</strong> <code>self / "Visuals" / Marker2D</code> and <code>self % ProgressBar</code> resolve and cast in one expression.'
+  - type: card
+    title: '2. Stream Multi-Append (<< node)'
+    badge: 'ASSEMBLY'
+    color: emerald
+    items:
+      - '<strong>Chainable Mounting:</strong> <code>parent &lt;&lt; c1 &lt;&lt; c2</code> mounts children fluently and returns the parent receiver.'
+  - type: card
+    title: '3. Ancestor Climbing (<< Class)'
+    badge: 'UPWARD'
+    color: purple
+    items:
+      - '<strong>Parent Type Search:</strong> <code>self &lt;&lt; Player</code> (or nilable <code>BossController?</code>) climbs ancestors until a match is found.'
 notes: |
   With 'require "lapis/extras"', Node gains expressive mathematical and stream operators for hierarchy manipulation.
   First, the slash operator (/) provides intuitive path traversal: 'self / "Visuals" / Marker2D' navigates down the scene tree without writing raw strings or method calls.

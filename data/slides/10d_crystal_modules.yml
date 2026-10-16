@@ -5,14 +5,12 @@ subtitle: Horizontal Behavior Composition via include/extend with Zero Virtual O
 badge: CRYSTAL ARCHITECTURE • COMPOSITION
 badge_color: cyan
 palette: vampire_count
-layout: two-column-layout
-ratio: 3:2
-left:
-  type: code
-  title: gameplay_modules.cr — Horizontal Composition
-  tag: Crystal
+layout: feature-grid
+hero_feature:
+  title: 'gameplay_modules.cr — Horizontal Composition'
+  badge: 'ZERO-COST TRAITS'
+  color: cyan
   lang: crystal
-  font_size: '0.72rem'
   code: |
     # 1. Namespace & mixin dual use (extend self)
     module SpatialMath
@@ -42,15 +40,23 @@ left:
       include Damageable
       getter armor : Int32 = 5
     end
-right:
-  type: card
-  title: Zero-Cost Architectural Composition
-  color: cyan
-  items:
-    - '<strong>Namespace & Mixin Dual Use:</strong> <code>extend self</code> lets modules act simultaneously as pure functional namespaces and mixable traits.'
-    - '<strong>Stateful & Contract Traits:</strong> Modules can inject instance state (<code>property health</code>) and enforce <code>abstract def</code> contracts at compile time.'
-    - '<strong>Horizontal Composition:</strong> Mix reusable behaviors across unrelated classes and stack-allocated <code>struct</code> types without diamond inheritance.'
-    - '<strong>Zero Virtual Overhead:</strong> Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.'
+  desc: 'Mixed-in methods resolve statically at compile time and inline directly into native machine code with zero vtable penalties.'
+features:
+  - title: 'Namespace & Mixin Dual Use'
+    badge: 'EXTEND SELF'
+    color: cyan
+    items:
+      - '<strong>Dual Role:</strong> <code>extend self</code> lets modules act as both functional namespaces and mixable traits.'
+  - title: 'Stateful & Contract Traits'
+    badge: 'ABSTRACT DEF'
+    color: purple
+    items:
+      - '<strong>State + Contracts:</strong> Inject instance state (<code>property health</code>) and enforce <code>abstract def</code> contracts at build time.'
+  - title: 'Classes & Value Structs'
+    badge: 'HORIZONTAL'
+    color: emerald
+    items:
+      - '<strong>Diamond-Free Mixins:</strong> Share behavior across reference classes and stack <code>struct</code> types with zero virtual overhead.'
 notes: |
   In object-oriented systems, classical single inheritance quickly breaks down: a BossEnemy and a stack-allocated WoodenCrate both take damage, yet one is a reference-type class hierarchy and the other is a lightweight value struct.
   In C++, sharing behavior across unrelated hierarchies requires multiple inheritance with virtual table overhead or verbose boilerplate. In dynamic Ruby, mixin modules solved this ergonomically, but paid a runtime penalty walking ancestor lookup chains on every method call.

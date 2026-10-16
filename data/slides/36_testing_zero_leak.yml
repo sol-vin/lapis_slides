@@ -5,7 +5,7 @@ subtitle: Comprehensive Spec Testing, Deterministic Simulation & ObjectDB Leak V
 badge: QUALITY GATES • LEAK VERIFICATION
 badge_color: cyan
 palette: spaces_2000
-layout: two-column-layout
+layout: one-left-two-right
 ratio: 3:2
 left:
   type: code
@@ -34,13 +34,20 @@ left:
         end
       end
     end
-right:
+right_top:
   type: card
-  title: Testing Apparatus Invariants
+  title: 'Scene Fixtures & Async Signal Specs'
+  badge: 'SPEC HARNESS'
   color: cyan
   items:
     - '<strong>Automated Fixture Tracking:</strong> <code>add_child_autofree</code> registers test nodes and safely queue-frees them upon test completion.'
     - '<strong>Async Signal Assertions:</strong> <code>assert_emits</code> steps engine frames cooperatively to verify asynchronous event delivery.'
+right_bottom:
+  type: card
+  title: 'ObjectDB Liveness & Leak Gate'
+  badge: 'ZERO LEAKS'
+  color: emerald
+  items:
     - '<strong>Engine ObjectDB Checks:</strong> <code>assert_alive</code> checks 64-bit instance IDs against ObjectDB to catch use-after-free bugs.'
     - '<strong>Deterministic Leak Gate:</strong> <code>assert_no_leak</code> tracks Godot <code>OBJECT_COUNT</code> metrics to ensure <code>ΔObjects == 0</code>.'
 notes: |

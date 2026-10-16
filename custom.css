@@ -174,66 +174,55 @@
 }
 
 /* ==========================================================================
-   Slide 17c (17c_await_variants_and_status): Async Triad Await Architecture
-   Enhanced Spacing, Margins, and Card Padding
+   Three-Card Vertical Stacks (one-left-three-right & three-left-one-right)
+   and Two-Top-One-Bottom Asymmetric Bento Sizing
    ========================================================================== */
-#slide-17c_await_variants_and_status .column[data-slot="right"] .card,
-[data-slide-id="17c_await_variants_and_status"] .column[data-slot="right"] .card {
-  padding: 1.30rem 1.60rem !important;
-  gap: 0.70rem !important;
+.column-stack-three {
+  gap: 0.55rem !important;
+}
+
+.column-stack-three .card {
+  padding: 0.72rem 1.05rem !important;
+  gap: 0.35rem !important;
   justify-content: flex-start !important;
 }
 
-#slide-17c_await_variants_and_status .column[data-slot="right"] .card-title,
-[data-slide-id="17c_await_variants_and_status"] .column[data-slot="right"] .card-title {
-  font-size: 1.12rem !important;
+.column-stack-three .card-title {
+  font-size: 0.90rem !important;
   font-weight: 700 !important;
-  letter-spacing: 0.02em !important;
-  margin-bottom: 0.75rem !important;
-  padding-bottom: 0.45rem !important;
-  border-bottom: 1.5px solid var(--border-color, rgba(0, 240, 255, 0.25)) !important;
+  margin-bottom: 0.28rem !important;
+  padding-bottom: 0.22rem !important;
 }
 
-#slide-17c_await_variants_and_status .column[data-slot="right"] ul.card-list,
-[data-slide-id="17c_await_variants_and_status"] .column[data-slot="right"] ul.card-list {
+.column-stack-three ul.card-list {
+  gap: 0.25rem !important;
+  margin: 0 !important;
   padding: 0 !important;
+}
+
+.column-stack-three ul.card-list li {
+  font-size: 0.76rem !important;
+  line-height: 1.34 !important;
+  padding-left: 1.05rem !important;
   margin: 0 !important;
-  flex: 1 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-evenly !important;
-  gap: 0.70rem !important;
 }
 
-#slide-17c_await_variants_and_status .column[data-slot="right"] ul.card-list li,
-[data-slide-id="17c_await_variants_and_status"] .column[data-slot="right"] ul.card-list li {
-  font-size: 0.86rem !important;
-  line-height: 1.45 !important;
-  padding-left: 1.40rem !important;
-  margin: 0 !important;
-  color: var(--text-color) !important;
+.column-stack-three ul.card-list li code {
+  font-size: 0.71rem !important;
+  padding: 0.04rem 0.26rem !important;
 }
 
-#slide-17c_await_variants_and_status .column[data-slot="right"] ul.card-list li strong,
-[data-slide-id="17c_await_variants_and_status"] .column[data-slot="right"] ul.card-list li strong {
-  color: var(--border-active, var(--text-color)) !important;
-  font-weight: 700 !important;
+.layout-two-top-one-bottom {
+  gap: 0.85rem !important;
 }
 
-#slide-17c_await_variants_and_status .column[data-slot="right"] ul.card-list li::before,
-[data-slide-id="17c_await_variants_and_status"] .column[data-slot="right"] ul.card-list li::before {
-  left: 0 !important;
-  top: 0.05rem !important;
-  font-size: 1.10rem !important;
+.layout-two-top-one-bottom .row-stack-two .card {
+  padding: 0.95rem 1.25rem !important;
 }
 
-#slide-17c_await_variants_and_status .column[data-slot="right"] ul.card-list li code,
-[data-slide-id="17c_await_variants_and_status"] .column[data-slot="right"] ul.card-list li code {
-  font-size: 0.80rem !important;
-  padding: 0.08rem 0.35rem !important;
-  background-color: rgba(0, 240, 255, 0.09) !important;
-  border: 1px solid rgba(0, 240, 255, 0.32) !important;
-  border-radius: 3px !important;
+.layout-two-top-one-bottom .row-bottom .card {
+  padding: 0.85rem 1.35rem !important;
+  justify-content: center !important;
 }
 
 

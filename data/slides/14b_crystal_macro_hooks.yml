@@ -5,7 +5,7 @@ subtitle: 'Compile-Time Mixins & Automated Subclass Registration'
 badge: METAPROGRAMMING • AST HOOKS
 badge_color: amber
 palette: creation
-layout: two-column-layout
+layout: one-left-two-right
 ratio: 3:2
 left:
   type: code
@@ -35,15 +35,22 @@ left:
     class Player < GameEntity
       include Poolable(4)
     end # => Synthesizes Player::POOL & Player.acquire : Player
-right:
+right_top:
   type: card
-  title: Compile-Time Module & Class Hooks
+  title: 'The macro included Hook'
+  badge: 'HOST-TYPED MIXIN'
   color: amber
   items:
-    - '<strong>The <code>macro included</code> Hook:</strong> Combines generic args (<code>N</code>) with <code>{{@type}}</code> to synthesize host-typed class methods (<code>self.acquire</code>) and pre-sized pools.'
-    - '<strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to track and configure child types.'
-    - '<strong>Compile-Time Registries:</strong> Builds entity factories and type registries during compilation—eliminating startup reflection scans.'
-    - '<strong>Static Inlining:</strong> All injected code participates in global type inference and compiles directly into native machine code.'
+    - '<strong>Host Type Parameterization:</strong> Combines generic args (<code>N</code>) with <code>{{@type}}</code> to synthesize <code>self.acquire</code> and pre-sized pools.'
+    - '<strong>Static Inlining:</strong> All injected code participates in global type inference and compiles to native machine code.'
+right_bottom:
+  type: card
+  title: 'The macro inherited Hook'
+  badge: 'SUBCLASS REGISTRY'
+  color: cyan
+  items:
+    - '<strong>Instant Subclass Tracking:</strong> Fires the moment a class is subclassed so base classes can configure child types.'
+    - '<strong>Compile-Time Registries:</strong> Builds entity factories during compilation—eliminating startup reflection scans.'
 notes: |
   A plain Crystal module can already mix in instance methods and properties, so why do we need 'macro included'? Because a plain module only mixes in instance methods and cannot parameterize constants or class methods by the including host type!
   With 'macro included', the macro body executes inside the lexical scope of the including class with full compile-time access to @type. Combined with Crystal's integer generic parameters like Poolable(4), including the module automatically synthesizes a pre-allocated 'POOL = Array(Player).new(4)' constant and a 'Player.acquire : Player' factory class method directly on the host class—without redundantly passing Player as a type argument.

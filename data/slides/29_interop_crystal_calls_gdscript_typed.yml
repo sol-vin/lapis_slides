@@ -5,14 +5,12 @@ subtitle: Automatic Strongly-Typed Proxies for GDScript Classes Generated via La
 badge: INTEROPERABILITY • AUTOMATIC TYPED BINDINGS
 badge_color: cyan
 palette: nds_aqua
-layout: two-column-layout
-ratio: 3:2
-left:
-  type: code
-  title: quest_controller.cr — Automatic Strongly-Typed GDScript Invocation
-  tag: Crystal
+layout: feature-grid
+hero_feature:
+  title: 'quest_controller.cr — Typed GDScript Proxy'
+  badge: 'LAPIS BIND PROJECT'
+  color: cyan
   lang: crystal
-  font_size: '0.84rem'
   code: |
     require "./generated/project_nodes/dialogue_system"
 
@@ -31,15 +29,23 @@ left:
         success
       end
     end
-right:
-  type: card
-  title: Automatic Typed Binding Architecture
-  color: cyan
-  items:
-    - '<strong>Zero Manual Boilerplate:</strong> <code>lapis bind project</code> inspects GDScript ASTs to synthesize typed Crystal wrappers.'
-    - '<strong>Eliminates Dynamic <code>.call()</code>:</strong> Invokes GDScript methods as native functions—eliminating stringly calls and Variant casts.'
-    - '<strong>Compile-Time Signature Verification:</strong> Statically verifies parameter types, argument counts, and return types before running.'
-    - '<strong>Full Autocomplete:</strong> Provides instant IDE parameter hinting and jump-to-definition across the GDScript-Crystal boundary.'
+  desc: 'lapis bind project inspects GDScript class_name ASTs and synthesizes strongly-typed Crystal proxy wrappers automatically.'
+features:
+  - title: 'Zero Manual Boilerplate'
+    badge: 'AST GENERATOR'
+    color: cyan
+    items:
+      - '<strong>Automated Wrapper Synthesis:</strong> <code>lapis bind project</code> scans GDScript files and generates typed Crystal proxies.'
+  - title: 'Eliminates Dynamic .call()'
+    badge: 'NATIVE CALLS'
+    color: emerald
+    items:
+      - '<strong>Direct Method Invocation:</strong> Call GDScript methods and properties natively without string lookups or Variant casts.'
+  - title: 'Compile-Time & IDE Safety'
+    badge: 'AUTOCOMPLETE'
+    color: purple
+    items:
+      - '<strong>Static Verification:</strong> Verifies parameter types, return types, and typed <code>BoundSignal</code> payloads with full LSP autocomplete.'
 notes: |
   In the previous slide, we explored dynamic dispatch using .call, .get, and .set with Variant reflection. But in production projects with established GDScript subsystems, you never want manual dynamic calls or hand-written wrappers.
   Lapis provides fully automatic strongly-typed bindings via `lapis bind project`. The CLI automatically inspects custom GDScript files declaring a `class_name` and synthesizes complete, type-safe Crystal wrappers into `src/generated/project_nodes/`.

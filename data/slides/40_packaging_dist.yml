@@ -5,17 +5,15 @@ subtitle: Automated Single-Command Bundling for Addons, Debian Packages, and Win
 badge: PRODUCTION • PACKAGING & DISTRIBUTION
 badge_color: purple
 palette: spaces_11
-layout: two-column-layout
-ratio: 1:1
-left:
+layout: two-top-one-bottom
+ratio: 2:1
+top_left:
   type: terminal
   title: Terminal — make package-release
-  font_size: '0.82rem'
+  font_size: '0.80rem'
   code: |
-    # Build complete official release distribution matrix
     $ make package-release
 
-    # Output artifact tree:
     bin/release_dist/
     ├── crystal_integration-v0.0.270.zip    # Official Addon
     ├── lapis-installer-v0.0.270-win64.exe  # Inno Setup
@@ -23,14 +21,21 @@ left:
     ├── basic_demo-windows-x64.zip          # Playable Game
     ├── benchmarks-report-v0.0.270.html     # Perf Charts
     └── SHA256SUMS.txt                      # Checksums
-right:
+top_right:
   type: card
-  title: Release Packaging Invariants
+  title: 'Addon Isolation & DLL Synchronization'
+  badge: 'CLEAN BUNDLING'
   color: purple
   items:
-  - <strong>Strict Addon Isolation:</strong> Packaging strictly bundles <code>crystal_integration</code>; dummy test addons are NEVER shipped.
-  - <strong>Automatic DLL Synchronization:</strong> Bundles required runtime DLLs: <code>gc.dll</code>, <code>iconv-2.dll</code>, <code>pcre2-8.dll</code>.
-  - <strong>Dead-Code Stripping:</strong> Release binaries are compiled with <code>--release -O3</code> and stripped of debug symbols.
-  - <strong>Cryptographic Checksums:</strong> Generates <code>SHA256SUMS.txt</code> automatically for all output archives.
+    - '<strong>Strict Addon Isolation:</strong> Packaging strictly bundles <code>crystal_integration</code>; dummy test addons are NEVER shipped.'
+    - '<strong>Automatic DLL Synchronization:</strong> Bundles required runtime DLLs: <code>gc.dll</code>, <code>iconv-2.dll</code>, and <code>pcre2-8.dll</code>.'
+bottom:
+  type: card
+  title: 'Release Hardening & Cryptographic Verification'
+  badge: 'PRODUCTION READY'
+  color: cyan
+  items:
+    - '<strong>Dead-Code Stripping:</strong> Release binaries are compiled with <code>--release -O3</code> and stripped of debug symbols for minimal footprint.'
+    - '<strong>Cryptographic Checksums:</strong> Automatically generates <code>SHA256SUMS.txt</code> across all output archives, installers, and packages.'
 notes: |
   Shipping games and addons shouldn't require tedious manual zip packaging. Lapis features a turnkey packaging system. A single command packages official GDExtension addons, Windows Inno Setup installers, Debian packages, and standalone playable games with automatic DLL dependency bundling and cryptographic checksums.

@@ -5,7 +5,7 @@ subtitle: ThreadAffinity Enforcement & Detached Graph Assembly
 badge: CONCURRENCY SAFETY • THREAD AFFINITY
 badge_color: amber
 palette: silicon_indigo
-layout: two-column-layout
+layout: one-left-two-right
 ratio: 3:2
 left:
   type: code
@@ -29,13 +29,20 @@ left:
       # => Raises Godot::ThreadAffinityError with caller context!
       Godot.on_main_thread { get_tree.root.try(&.add_child(room)) }
     end
-right:
+right_top:
   type: card
-  title: 'ThreadSafety Invariants: Policy & Scope'
-  color: amber
+  title: 'Scope Axis: TreeOnly vs. AllNodes'
+  badge: 'DETACHED GRAPHS'
+  color: cyan
   items:
     - '<strong>Scope::TreeOnly (Default):</strong> Guards only live SceneTree nodes, letting worker threads assemble detached node graphs in parallel.'
     - '<strong>Scope::AllNodes:</strong> Strict isolation mode blocking off-thread hierarchy mutations on any node, attached or detached.'
+right_bottom:
+  type: card
+  title: 'Policy Axis: Raise, Warn & Defer'
+  badge: 'AFFINITY ARMOR'
+  color: amber
+  items:
     - '<strong>Policy::Raise (Debug):</strong> Intercepts illegal cross-thread calls before C++ executes, raising a catchable <code>ThreadAffinityError</code>.'
     - '<strong>Policy::Warn / Defer / Disabled:</strong> Log non-fatal warnings, auto-queue via <code>call_deferred</code>, or strip checks in release builds.'
 notes: |

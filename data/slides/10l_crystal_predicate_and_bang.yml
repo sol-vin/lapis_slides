@@ -5,9 +5,31 @@ subtitle: Predicates, Nil Over Errors & Unmissable Mutation Flares
 badge: CRYSTAL ERGONOMICS • SEMANTIC IDENTIFIERS
 badge_color: purple
 palette: candy
-layout: two-column-layout
-ratio: 1:1
+layout: three-left-one-right
+ratio: 2:3
 left:
+  - type: card
+    title: '1. Boolean Predicates (?)'
+    badge: 'BOOL QUERY'
+    color: purple
+    items:
+      - '<strong>Semantic Questions:</strong> Methods ending in <code>?</code> ask boolean questions (<code>alive?</code>, <code>empty?</code>).'
+      - '<strong>No Prefix Bikeshedding:</strong> Eliminates awkward <code>is_</code>, <code>has_</code>, or <code>get_is_</code> naming debates.'
+  - type: card
+    title: '2. Nil Over Errors (?)'
+    badge: 'SAFE LOOKUP'
+    color: cyan
+    items:
+      - '<strong>Non-Throwing Queries:</strong> <code>first?</code>, <code>[99]?</code>, and <code>to_i?</code> return <code>T | Nil</code> instead of raising.'
+      - '<strong>Compile-Time Nil Safety:</strong> Crystal enforces union checks at build time—zero null crashes.'
+  - type: card
+    title: '3. Mutation & Assert Flares (!)'
+    badge: 'BANG FLARE'
+    color: coral
+    items:
+      - '<strong>Destructive Mutation:</strong> <code>sort!</code> and <code>normalize!</code> warn of in-place state modification.'
+      - '<strong>Strict Assertions:</strong> Trailing <code>!</code> asserts non-nil or raises on failure.'
+right:
   type: code
   title: predicates_and_bangs.cr — Expressive Punctuation
   tag: Crystal
@@ -27,15 +49,6 @@ left:
     inventory.sort!      # Mutates array in place (vs pure sort)
     vector.normalize!    # Mutates Vector3 in place
     active_target!       # Asserts non-nil (raises NilAssertionError)
-right:
-  type: card
-  title: Punctuation as High-Signal Communication
-  color: purple
-  items:
-    - '<strong>Semantic Predicates:</strong> Methods ending in <code>?</code> ask boolean questions, eliminating awkward <code>is_</code>/<code>has_</code> prefix debates.'
-    - '<strong>Nil Over Errors:</strong> Lookup methods with <code>?</code> return <code>nil</code> instead of raising exceptions, avoiding bulky try/catch blocks.'
-    - '<strong>Mutation Flares:</strong> Methods ending in <code>!</code> warn at a glance of destructive in-place alterations (<code>sort!</code>, <code>normalize!</code>).'
-    - '<strong>Strict Nil Safety:</strong> Crystal checks union returns (<code>T | Nil</code>) at compile time, eliminating null dereference crashes entirely.'
 notes: |
   In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error.
   In Crystal, punctuation is elevated into a rich semantic communication tool. First, methods ending in '?' are 'predicates'—they ask a question and return a boolean. This single convention permanently eliminates bikeshedding over whether a function should be named 'is_alive', 'has_health', or 'get_is_alive'.

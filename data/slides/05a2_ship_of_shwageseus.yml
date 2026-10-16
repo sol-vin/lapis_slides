@@ -5,7 +5,7 @@ subtitle: 'C Bindings → 1-to-1 Pointer(T) / Box(T) / malloc → Idiomatic Crys
 badge: SHIP OF SHWAGESEUS • C TO CRYSTAL
 badge_color: amber
 palette: they_fear
-layout: two-column-layout
+layout: one-left-three-right
 ratio: 3:2
 left:
   type: code
@@ -33,15 +33,24 @@ left:
       end
     end
 right:
-  type: card
-  title: 'Replacing the C Engine Plank by Plank'
-  badge: '3-STAGE PORT'
-  color: amber
-  items:
-    - '<strong>1. Bind the C Header (<code>lib CDoom</code>):</strong> Bind the header-only C library first so the game boots and runs in Crystal from day one.'
-    - '<strong>2. 1-to-1 Low-Level Translation:</strong> Port C functions one by one into Crystal using <code>Pointer(T)</code>, <code>Box(T)</code>, and <code>malloc</code>, marking the C originals <code>extern</code>.'
-    - '<strong>3. Test After Every Function:</strong> Because Crystal shares the C ABI, the hybrid binary compiles and runs after each individual function port.'
-    - '<strong>4. Refactor to Idiomatic Crystal:</strong> Once the C code is fully replaced, convert raw pointers and manual allocations into safe Crystal types.'
+  - type: card
+    title: 'Stage 1 • Bind the C Header'
+    badge: 'DAY 1 BOOT'
+    color: cyan
+    items:
+      - '<strong>Playable Immediately:</strong> Bind the header-only C library (<code>lib CDoom</code>) so the game boots in Crystal from day one.'
+  - type: card
+    title: 'Stage 2 • 1-to-1 Low-Level Port'
+    badge: 'HYBRID ABI'
+    color: amber
+    items:
+      - '<strong>Plank-by-Plank Translation:</strong> Port C functions 1-to-1 using <code>Pointer(T)</code>, <code>Box(T)</code>, and <code>malloc</code>, testing after every function.'
+  - type: card
+    title: 'Stage 3 • Idiomatic Crystal'
+    badge: 'SAFE & NATIVE'
+    color: emerald
+    items:
+      - '<strong>Clean Refactor:</strong> Once the C code is replaced, refactor raw pointers and manual allocations into safe Crystal types.'
 notes: |
   He calls this the "Ship of Shwageseus" method.
   First, bind the header-only C library so DOOM is playable in Crystal immediately.

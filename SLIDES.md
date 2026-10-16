@@ -386,37 +386,19 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 15: Bare Words & Operators: Zero-Cost Uniform Access
+### Slide 15: Bare Words & Operators: Zero-Cost Uniform Access [One-Left-Two-Right]
 - **Theme Palette**: `retro_groove` (Retro Groove)
-- **Badge**: `CRYSTAL ERGONOMICS • SYNTACTIC ELEGANCE`
 - **Title**: Bare Words & Operators: Zero-Cost Uniform Access
 - **Subtitle**: Optional Parentheses, Uniform Access Principle & LLVM-Inlined Operator Methods
-- **Code (bare_words_and_operators.cr — Zero-Cost Ergonomics)**:
-  ```crystal
-  # 1. Bare Words & Uniform Access (parentheses optional):
-  def max_health : Int32; 100; end
-  puts max_health # Property-like access, executes method!
-  render_rect at: Vector2.new(10.0, 20.0), color: :red
-  
-  # 2. Operator Overloading: Pure struct methods, LLVM inlined!
-  struct Vector2
-    getter x : Float32, y : Float32
-    def initialize(@x : Float32, @y : Float32); end
-  
-    def +(o : Vector2) : Vector2
-      Vector2.new(@x + o.x, @y + o.y)
-    end
-    def [](axis : Symbol) : Float32
-      axis == :x ? @x : @y
-    end
-  end
-  
-  v = Vector2.new(10.0_f32, 20.0_f32) + Vector2.new(5.0_f32, 5.0_f32)
-  puts v[:x] # Sugar for v.[](:x) => 15.0
-  ```
-- **Why Bare Words & Operators Excel in Crystal**:
+
+#### Left Column:
+- **bare_words_and_operators.cr — Zero-Cost Ergonomics**
+
+#### Right Stacked Containers:
+- **Uniform Access & Bare Words**
   - Uniform Access Principle: Callers cannot tell whether player.health is an ivar or calculation.
   - Fluent Human Sentences: Omitting parentheses yields natural prose while remaining 100% statically typed.
+- **Pure Operator Methods & LLVM Inlining**
   - Operators are Pure Methods: + and [] are standard methods on struct value types.
   - Direct LLVM Inlining: Math compiles to CPU registers with zero heap allocation or dynamic dispatch.
 
@@ -563,32 +545,23 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 20: Semantic Punctuation: "?" and "!" Method Endings
+### Slide 20: Semantic Punctuation: "?" and "!" Method Endings [Three-Left-One-Right]
 - **Theme Palette**: `candy` (Candy)
-- **Badge**: `CRYSTAL ERGONOMICS • SEMANTIC IDENTIFIERS`
 - **Title**: Semantic Punctuation: "?" and "!" Method Endings
-- **Subtitle**: Predicates, Nil Over Errors & Unmissable Mutation Flares
-- **Code (predicates_and_bangs.cr — Expressive Punctuation)**:
-  ```crystal
-  # 1. Predicates (?): Clean boolean queries
-  player.alive?        # => Bool (no is_ / has_ prefixes)
-  inventory.empty?     # => Bool
-  
-  # 2. Nil Over Errors (?): Non-throwing safe lookups
-  party.first?         # => Player | Nil (vs first raising)
-  items[99]?           # => Item | Nil   (vs [] raising)
-  "42".to_i?           # => Int32 | Nil  (safe parse)
-  
-  # 3. Bang (!): In-place mutation & non-nil assertion
-  inventory.sort!      # Mutates array in place (vs pure sort)
-  vector.normalize!    # Mutates Vector3 in place
-  active_target!       # Asserts non-nil (raises NilAssertionError)
-  ```
-- **Punctuation as High-Signal Communication**:
-  - Semantic Predicates: Methods ending in ? ask boolean questions, eliminating awkward is_/has_ prefix debates.
-  - Nil Over Errors: Lookup methods with ? return nil instead of raising exceptions, avoiding bulky try/catch blocks.
-  - Mutation Flares: Methods ending in ! warn at a glance of destructive in-place alterations (sort!, normalize!).
-  - Strict Nil Safety: Crystal checks union returns (T | Nil) at compile time, eliminating null dereference crashes entirely.
+
+#### Left Stacked Principles:
+- **1. Boolean Predicates (?)**
+  - Semantic Questions: Methods ending in ? ask boolean questions (alive?, empty?).
+  - No Prefix Bikeshedding: Eliminates awkward is_, has_, or get_is_ naming debates.
+- **2. Nil Over Errors (?)**
+  - Non-Throwing Queries: first?, [99]?, and to_i? return T | Nil instead of raising.
+  - Compile-Time Nil Safety: Crystal enforces union checks at build time—zero null crashes.
+- **3. Mutation & Assert Flares (!)**
+  - Destructive Mutation: sort! and normalize! warn of in-place state modification.
+  - Strict Assertions: Trailing ! asserts non-nil or raises on failure.
+
+#### Right Showcase Column:
+- **predicates_and_bangs.cr — Expressive Punctuation**
 
 **Presenter Notes**:
 > In almost every C-family language, identifiers are strictly restricted to alphanumeric characters and underscores. If you try to name a function 'alive?' in Java, C++, or Go, the compiler crashes with a syntax error.
@@ -638,47 +611,16 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 22: Modules: Mixins, Traits & Namespaces
-- **Theme Palette**: `vampire_count` (Vampire Count)
-- **Badge**: `CRYSTAL ARCHITECTURE • COMPOSITION`
-- **Title**: Modules: Mixins, Traits & Namespaces
-- **Subtitle**: Horizontal Behavior Composition via include/extend with Zero Virtual Overhead
-- **Code (gameplay_modules.cr — Horizontal Composition)**:
-  ```crystal
-  # 1. Namespace & mixin dual use (extend self)
-  module SpatialMath
-    extend self
-    def dist_sq(a, b)
-      (a.x - b.x)**2 + (a.y - b.y)**2
-    end
-  end
-  
-  # 2. Stateful trait with compile-time contracts
-  module Damageable
-    abstract def armor : Int32
-    property health : Int32 = 100
-  
-    def take_damage(raw : Int32) : Void
-      @health = Math.max(0, @health - Math.max(1, raw - armor))
-    end
-  end
-  
-  # 3. Mix across unrelated classes & value structs
-  class BossEnemy < GameActor
-    include Damageable
-    getter armor : Int32 = 25
-  end
-  
-  struct WoodenCrate
-    include Damageable
-    getter armor : Int32 = 5
-  end
-  ```
-- **Zero-Cost Architectural Composition**:
-  - Namespace & Mixin Dual Use: extend self lets modules act simultaneously as pure functional namespaces and mixable traits.
-  - Stateful & Contract Traits: Modules can inject instance state (property health) and enforce abstract def contracts at compile time.
-  - Horizontal Composition: Mix reusable behaviors across unrelated classes and stack-allocated struct types without diamond inheritance.
-  - Zero Virtual Overhead: Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.
+### Slide 22: Modules: Mixins, Traits & Namespaces [Feature Grid / Bento]
+#### gameplay_modules.cr — Horizontal Composition
+Mixed-in methods resolve statically at compile time and inline directly into native machine code with zero vtable penalties.
+
+- **Namespace & Mixin Dual Use**
+  - Dual Role: extend self lets modules act as both functional namespaces and mixable traits.
+- **Stateful & Contract Traits**
+  - State + Contracts: Inject instance state (property health) and enforce abstract def contracts at build time.
+- **Classes & Value Structs**
+  - Diamond-Free Mixins: Share behavior across reference classes and stack struct types with zero virtual overhead.
 
 **Presenter Notes**:
 > In object-oriented systems, classical single inheritance quickly breaks down: a BossEnemy and a stack-allocated WoodenCrate both take damage, yet one is a reference-type class hierarchy and the other is a lightweight value struct.
@@ -832,40 +774,21 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 27: Macro Hooks: included & inherited
+### Slide 27: Macro Hooks: included & inherited [One-Left-Two-Right]
 - **Theme Palette**: `creation` (Creation)
-- **Badge**: `METAPROGRAMMING • AST HOOKS`
 - **Title**: Macro Hooks: included & inherited
 - **Subtitle**: Compile-Time Mixins & Automated Subclass Registration
-- **Code (macro_lifecycle_hooks.cr — Compile-Time Composition)**:
-  ```crystal
-  # 1. macro included: Synthesizes host-typed class methods & pools
-  module Poolable(N)
-    macro included
-      POOL = Array({{@type}}).new(N)
-      def self.acquire : {{@type}}
-        POOL.pop? || {{@type}}.new
-      end
-    end
-  end
-  
-  # 2. macro inherited: Automated subclass registration
-  abstract class GameEntity
-    ENTITY_TYPES = [] of String
-    macro inherited
-      ENTITY_TYPES << {{@type.name.stringify}}
-    end
-  end
-  
-  class Player < GameEntity
-    include Poolable(4)
-  end # => Synthesizes Player::POOL & Player.acquire : Player
-  ```
-- **Compile-Time Module & Class Hooks**:
-  - The macro included Hook: Combines generic args (N) with {{@type}} to synthesize host-typed class methods (self.acquire) and pre-sized pools.
-  - The macro inherited Hook: Fires the instant a class is subclassed, allowing base classes to track and configure child types.
-  - Compile-Time Registries: Builds entity factories and type registries during compilation—eliminating startup reflection scans.
-  - Static Inlining: All injected code participates in global type inference and compiles directly into native machine code.
+
+#### Left Column:
+- **macro_lifecycle_hooks.cr — Compile-Time Composition**
+
+#### Right Stacked Containers:
+- **The macro included Hook**
+  - Host Type Parameterization: Combines generic args (N) with {{@type}} to synthesize self.acquire and pre-sized pools.
+  - Static Inlining: All injected code participates in global type inference and compiles to native machine code.
+- **The macro inherited Hook**
+  - Instant Subclass Tracking: Fires the moment a class is subclassed so base classes can configure child types.
+  - Compile-Time Registries: Builds entity factories during compilation—eliminating startup reflection scans.
 
 **Presenter Notes**:
 > A plain Crystal module can already mix in instance methods and properties, so why do we need 'macro included'? Because a plain module only mixes in instance methods and cannot parameterize constants or class methods by the including host type!
@@ -1041,36 +964,16 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 32: First-Class C Bindings & Low-Level Primitives
-- **Theme Palette**: `phosphor_vector` (Phosphor Vector)
-- **Badge**: `C INTEROP • ZERO-OVERHEAD ABI`
-- **Title**: First-Class C Bindings & Low-Level Primitives
-- **Subtitle**: Direct C ABI Interop Without Glue Code or Marshalling Overhead
-- **Code (c_bindings.cr)**:
-  ```crystal
-  # 1. Bind C headers directly in Crystal
-  @[Link("raylib")]
-  lib LibRaylib
-    struct Color
-      r, g, b, a : UInt8
-    end
-  
-    fun init_window = InitWindow(w : LibC::Int, h : LibC::Int, title : UInt8*)
-  end
-  
-  # 2. Raw pointers, stack addresses & manual allocation
-  buf = Pointer(UInt8).malloc(256)
-  ptr = pointerof(buf)
-  
-  # 3. Pass Crystal objects through C void* callbacks
-  user_data = Box.box(player)
-  restored  = Box(Player).unbox(user_data)
-  ```
-- **What’s Available for C Interop**:
-  - lib & @[Link]: Bind C functions (fun), structs, unions, enums, and extern globals directly in Crystal with zero C wrapper code.
-  - Pointer(T) & malloc: Typed raw pointers, pointer arithmetic, pointerof(x), and manual memory allocation.
-  - Box(T) Bridging: Pack any Crystal object into a Void* pointer for C callbacks and unbox it back to its static type.
-  - Two-Way ABI (Top-Level fun): Export Crystal functions with C calling conventions so C code can call directly into Crystal.
+### Slide 32: First-Class C Bindings & Low-Level Primitives [Feature Grid / Bento]
+#### c_bindings.cr — Native C ABI Primitives
+First-class C ABI support built directly into the Crystal compiler—zero C wrapper files or marshalling tax.
+
+- **lib & @[Link] Declarations**
+  - Zero Wrapper Code: Bind C functions (fun), structs, unions, enums, and extern globals directly in Crystal.
+- **Pointer(T) & Manual Memory**
+  - Raw Memory Control: Typed pointers, pointer arithmetic, pointerof(x), and manual malloc.
+- **Box(T) & Two-Way C ABI**
+  - Void* Bridging & Top-Level fun: Pass Crystal objects through C callbacks via Box(T) and export C ABI symbols.
 
 **Presenter Notes**:
 > Before we look at how Lapis binds Godot, let's look at what Crystal provides out of the box for talking to C.
@@ -1095,38 +998,20 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 34: The "Ship of Shwageseus" Method
+### Slide 34: The "Ship of Shwageseus" Method [One-Left-Three-Right]
 - **Theme Palette**: `they_fear` (They Fear)
-- **Badge**: `SHIP OF SHWAGESEUS • C TO CRYSTAL`
 - **Title**: The "Ship of Shwageseus" Method
-- **Subtitle**: C Bindings → 1-to-1 Pointer(T) / Box(T) / malloc → Idiomatic Crystal
-- **Code (ship_of_shwageseus.cr)**:
-  ```crystal
-  # STAGE 1: Bind the C header-only library (Playable Day 1)
-  lib CDoom
-    fun w_add_file = W_AddFile(filename : LibC::Char*)
-  end
-  
-  # STAGE 2: 1-to-1 C translation using Pointer(T), Box(T) & malloc
-  fun w_add_file(filename : Pointer(UInt8), cb_data : Pointer(Void))
-    length = numlumps * sizeof(Filelump)
-    fileinfo = LibC.malloc(length).as(Pointer(Filelump))
-    ctx = Box(WadContext).unbox(cb_data)
-    ctx.read_lumps(fileinfo, numlumps)
-  end
-  
-  # STAGE 3: Refactor into idiomatic Crystal
-  module Doocr
-    def self.add_wad_file(path : Path) : Array(LumpInfo)
-      File.open(path, "rb") { |io| WadParser.parse_lumps(io) }
-    end
-  end
-  ```
-- **Replacing the C Engine Plank by Plank**:
-  - 1. Bind the C Header (lib CDoom): Bind the header-only C library first so the game boots and runs in Crystal from day one.
-  - 2. 1-to-1 Low-Level Translation: Port C functions one by one into Crystal using Pointer(T), Box(T), and malloc, marking the C originals extern.
-  - 3. Test After Every Function: Because Crystal shares the C ABI, the hybrid binary compiles and runs after each individual function port.
-  - 4. Refactor to Idiomatic Crystal: Once the C code is fully replaced, convert raw pointers and manual allocations into safe Crystal types.
+
+#### Left Showcase Column:
+- **ship_of_shwageseus.cr**
+
+#### Right Stacked Checkpoints:
+- **Stage 1 • Bind the C Header**
+  - Playable Immediately: Bind the header-only C library (lib CDoom) so the game boots in Crystal from day one.
+- **Stage 2 • 1-to-1 Low-Level Port**
+  - Plank-by-Plank Translation: Port C functions 1-to-1 using Pointer(T), Box(T), and malloc, testing after every function.
+- **Stage 3 • Idiomatic Crystal**
+  - Clean Refactor: Once the C code is replaced, refactor raw pointers and manual allocations into safe Crystal types.
 
 **Presenter Notes**:
 > He calls this the "Ship of Shwageseus" method.
@@ -1517,31 +1402,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 48: Gameplay Architecture: Context-Aware Audio & Spatial Queries
+### Slide 48: Gameplay Architecture: Context-Aware Audio & Spatial Queries [One-Left-Two-Right]
 - **Theme Palette**: `blue_cassette` (Blue Cassette)
-- **Badge**: `GAMEPLAY • AUDIO & SPATIAL DSL`
 - **Title**: Gameplay Architecture: Context-Aware Audio & Spatial Queries
 - **Subtitle**: Compile-Time play_sound Macro, Self-Pruning Root Players & Relative Spatial Helpers
-- **Code (audio_and_spatial.cr — Audio Macro & Spatial DSL)**:
-  ```crystal
-  # 1. Context-Aware Audio (root-mounted: survives emitter queue_free!):
-  play_sound "res://audio/laser.wav", pitch_scale: 1.2_f32
-  play_sound "res://audio/explosion.wav", at: enemy.global_position
-  
-  # 2. Direct Node-to-Node Relative Spatial Queries:
-  dist  = distance_to(player)    # 2D & 3D distance
-  dir   = direction_to(player)   # Normalized unit vector
-  angle = angle_to_point(player) # 2D orientation angle
-  
-  # 3. Continuous Input Vector Queries via Input Singleton:
-  move_dir = Godot::Input.get_vector(
-    :move_left, :move_right, :move_up, :move_down
-  )
-  ```
-- **Audio, Spatial & Math Invariants**:
-  - Context-Aware play_sound Macro: Automatically selects 2D, 3D, or non-spatial audio players based on caller type.
-  - Root-Mounted Audio Lifecycle: Players attach to scene root, so one-shot sounds never cut off when emitters die.
-  - Relative Spatial Queries: distance_to, direction_to, and angle_to_point work directly between nodes.
+
+#### Left Column:
+- **audio_and_spatial.cr — Audio Macro & Spatial DSL**
+
+#### Right Stacked Containers:
+- **Context-Aware play_sound Macro**
+  - Compile-Time Selection: Automatically selects 2D, 3D, or non-spatial audio players based on caller node type.
+  - Root-Mounted Lifecycle: Players attach to scene root, so one-shot sounds never cut off when emitters die.
+- **Relative Spatial & Input Vectors**
+  - Direct Node Queries: distance_to, direction_to, and angle_to_point work directly between nodes.
   - Input Vector Queries: Godot::Input.get_vector maps action symbols directly to normalized directions.
 
 **Presenter Notes**:
@@ -1736,35 +1610,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 56: Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<)
+### Slide 56: Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<) [One-Left-Three-Right]
 - **Theme Palette**: `cross_cube_360` (CrossCube 360)
-- **Badge**: `LAPIS EXTRAS • HIERARCHY OPERATORS`
 - **Title**: Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<)
-- **Subtitle**: require "lapis/extras" • Path Traversal (/), Unique Nodes (%), and Chainable Tree Assembly (<<)
-- **Code (hierarchy_operators.cr — DSL Operator Sugar)**:
-  ```crystal
-  require "lapis/extras"
-  
-  node CombatArena < Node2D do
-    def _ready : Void
-      # 1. Path traversal (/) & Unique nodes (%):
-      mount = self / "Visuals" / Marker2D
-      bar   = self % ProgressBar
-  
-      # 2. Chainable tree assembly operator (<<):
-      self << player << hud << ambient_sound
-  
-      # 3. Upward ancestor climbing (<< Class):
-      found_player = self << Player          # Climbs parents to Player
-      found_boss   = self << BossController? # Safe nilable search
-    end
-  end
-  ```
-- **Hierarchy Traversal & Mounting**:
-  - Opt-In Require: Add require "lapis/extras" to enable expressive operator sugar.
-  - Path Traversal (/): self / "Visuals" / Marker2D walks paths fluently with native .as(T).
-  - Multi-Append Assembly (<<): parent << c1 << c2 brings stream-append to scene trees.
-  - Ancestor Climbing (<< Class): node << Player climbs parents to find requested types.
+
+#### Left Showcase Column:
+- **hierarchy_operators.cr — DSL Operator Sugar**
+
+#### Right Stacked Checkpoints:
+- **1. Path (/) & Unique (%) Traversal**
+  - Fluent Path & Unique Routing: self / "Visuals" / Marker2D and self % ProgressBar resolve and cast in one expression.
+- **2. Stream Multi-Append (<< node)**
+  - Chainable Mounting: parent << c1 << c2 mounts children fluently and returns the parent receiver.
+- **3. Ancestor Climbing (<< Class)**
+  - Parent Type Search: self << Player (or nilable BossController?) climbs ancestors until a match is found.
 
 **Presenter Notes**:
 > With 'require "lapis/extras"', Node gains expressive mathematical and stream operators for hierarchy manipulation.
@@ -2675,37 +2534,22 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 87: Async Triad: "await", "await?", and "await!"
+### Slide 87: Async Triad: "await", "await?", and "await!" [Three-Left-One-Right]
 - **Theme Palette**: `oled_micro` (OLED Micro)
-- **Badge**: `LAPIS ASYNC • SIGNAL AWAITING`
 - **Title**: Async Triad: "await", "await?", and "await!"
-- **Subtitle**: AwaitStatus Predicates, Typed Return Values, Tuple Destructuring & Dead-Pointer Armor
-- **Code (signal_awaiting_triad.cr — Complete Await Architecture)**:
-  ```crystal
-  # 1. 0-arg signal: predicates & timeout handling
-  status = await(player.died, timeout_sec: 5.0)
-  status.completed?                      # => Bool (.timed_out?, .ok?)
-  await?(player.died, timeout_sec: 5.0)  # => true on emit, false on timeout
-  
-  # 2. Single-arg signal: typed payload unboxing
-  status = await(player.health_changed)  # => AwaitStatus(Int32)
-  hp     = await!(player.health_changed) # => 42_i32 (or raises TimeoutError)
-  hp_opt = await?(player.health_changed) # => 42_i32 on emit, nil on timeout
-  
-  # 3. Multi-arg signal & tuple destructuring
-  status = await(boss.loot_dropped)      # => AwaitStatus(Tuple(Int32, String))
-  id, name = status                      # Direct Crystal tuple destructuring!
-  tup = await!(boss.loot_dropped)        # => {42, "relic"} (or raises)
-  
-  # 4. Engine signals & numeric duration delays
-  body = await!((~Area2D).body_entered)  # => Godot::Node2D (typed engine signal)
-  await(1.0)                             # => AwaitStatus (or await?(1.0) / await!(1.0))
-  ```
-- **Cooperative Awaiting Invariants**:
-  - Triad Return Semantics: await returns AwaitStatus(T) (.completed?, .timed_out?); await! unwraps or raises TimeoutError; await? returns nilable (or Bool).
-  - Tuple Destructuring: Multi-argument signals unpack via tuple destructuring (id, name = status) with full static type inference.
-  - Engine Signals & Delays: Built-in Godot signals ((~Area2D).body_entered) are statically typed; dynamic node.signal(:name) yields Array(Variant).
-  - DisposedObjectError Protection: If the awaited node is freed, Lapis raises Godot::DisposedObjectError instead of hanging forever.
+
+#### Left Stacked Principles:
+- **1. await(sig) — AwaitStatus(T)**
+  - Status Struct: Returns AwaitStatus(T) with .completed?, .timed_out?, and .ok?.
+  - Tuple Destructuring: Multi-arg signals unpack directly via id, name = status.
+- **2. await!(sig) — Unwrap or Raise**
+  - Direct Payload Unwrap: Returns T (or Tuple) directly and raises TimeoutError on expiry.
+- **3. await?(sig) & Dead-Pointer Armor**
+  - Safe Timeout: Returns T | Nil (or Bool for 0-arg signals) without throwing.
+  - DisposedObjectError: Raises immediately if the target node is freed—never hangs.
+
+#### Right Showcase Column:
+- **signal_awaiting_triad.cr — Complete Await Architecture**
 
 **Presenter Notes**:
 > Lapis provides a complete triad of non-blocking await primitives matching Crystal's semantic naming idioms:
@@ -2864,33 +2708,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 93: Thread & Scope Policies
+### Slide 93: Thread & Scope Policies [One-Left-Two-Right]
 - **Theme Palette**: `silicon_indigo` (Silicon Indigo)
-- **Badge**: `CONCURRENCY SAFETY • THREAD AFFINITY`
 - **Title**: Thread & Scope Policies
 - **Subtitle**: ThreadAffinity Enforcement & Detached Graph Assembly
-- **Code (thread_policies.cr — Configuration & Orphan Graphs)**:
-  ```crystal
-  # 1. Configure enforcement policy across environments
-  Godot::ThreadSafety.policy = Godot::ThreadSafety::Policy::Raise
-  Godot::ThreadSafety.scope  = Godot::ThreadSafety::Scope::TreeOnly
-  
-  # 2. Worker thread builds detached orphan graph in parallel
-  Thread.new do
-    room = Godot.create(Godot::Node3D) # Allowed: detached orphan
-    mesh = Godot.create(Godot::MeshInstance3D)
-    mesh.mesh = generate_room_mesh(seed: 1234)
-    room.add_child(mesh)               # Allowed: room is not in tree
-  
-    # Accidental live-tree mutation fails fast:
-    # get_tree.root.add_child(room)
-    # => Raises Godot::ThreadAffinityError with caller context!
-    Godot.on_main_thread { get_tree.root.try(&.add_child(room)) }
-  end
-  ```
-- **ThreadSafety Invariants: Policy & Scope**:
+
+#### Left Column:
+- **thread_policies.cr — Configuration & Orphan Graphs**
+
+#### Right Stacked Containers:
+- **Scope Axis: TreeOnly vs. AllNodes**
   - Scope::TreeOnly (Default): Guards only live SceneTree nodes, letting worker threads assemble detached node graphs in parallel.
   - Scope::AllNodes: Strict isolation mode blocking off-thread hierarchy mutations on any node, attached or detached.
+- **Policy Axis: Raise, Warn & Defer**
   - Policy::Raise (Debug): Intercepts illegal cross-thread calls before C++ executes, raising a catchable ThreadAffinityError.
   - Policy::Warn / Defer / Disabled: Log non-fatal warnings, auto-queue via call_deferred, or strip checks in release builds.
 
@@ -3596,36 +3426,16 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 117: Crystal Calling GDScript: Strongly-Typed Bindings
-- **Theme Palette**: `nds_aqua` (NDS Aqua)
-- **Badge**: `INTEROPERABILITY • AUTOMATIC TYPED BINDINGS`
-- **Title**: Crystal Calling GDScript: Strongly-Typed Bindings
-- **Subtitle**: Automatic Strongly-Typed Proxies for GDScript Classes Generated via Lapis CLI
-- **Code (quest_controller.cr — Automatic Strongly-Typed GDScript Invocation)**:
-  ```crystal
-  require "./generated/project_nodes/dialogue_system"
-  
-  node QuestController < Node do
-    onready dialogue : DialogueSystem = "%DialogueManager"
-  
-    def trigger_dialogue(line_id : Int64) : Bool
-      # Direct typed method call: NO .call(), NO string lookups!
-      success = dialogue.show_dialogue(speaker: "Elder", line_id: line_id)
-      dialogue.dialogue_speed = 1.5_f32
-  
-      # Strongly-typed BoundSignal subscription with argument types
-      on dialogue.line_completed, String, String do |speaker, text|
-        display_subtitles(speaker, text)
-      end
-      success
-    end
-  end
-  ```
-- **Automatic Typed Binding Architecture**:
-  - Zero Manual Boilerplate: lapis bind project inspects GDScript ASTs to synthesize typed Crystal wrappers.
-  - Eliminates Dynamic .call(): Invokes GDScript methods as native functions—eliminating stringly calls and Variant casts.
-  - Compile-Time Signature Verification: Statically verifies parameter types, argument counts, and return types before running.
-  - Full Autocomplete: Provides instant IDE parameter hinting and jump-to-definition across the GDScript-Crystal boundary.
+### Slide 117: Crystal Calling GDScript: Strongly-Typed Bindings [Feature Grid / Bento]
+#### quest_controller.cr — Typed GDScript Proxy
+lapis bind project inspects GDScript class_name ASTs and synthesizes strongly-typed Crystal proxy wrappers automatically.
+
+- **Zero Manual Boilerplate**
+  - Automated Wrapper Synthesis: lapis bind project scans GDScript files and generates typed Crystal proxies.
+- **Eliminates Dynamic .call()**
+  - Direct Method Invocation: Call GDScript methods and properties natively without string lookups or Variant casts.
+- **Compile-Time & IDE Safety**
+  - Static Verification: Verifies parameter types, return types, and typed BoundSignal payloads with full LSP autocomplete.
 
 **Presenter Notes**:
 > In the previous slide, we explored dynamic dispatch using .call, .get, and .set with Variant reflection. But in production projects with established GDScript subsystems, you never want manual dynamic calls or hand-written wrappers.
@@ -3773,37 +3583,19 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 124: Testing Framework: Writing Tests & Leak Verification
+### Slide 124: Testing Framework: Writing Tests & Leak Verification [One-Left-Two-Right]
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
-- **Badge**: `QUALITY GATES • LEAK VERIFICATION`
 - **Title**: Testing Framework: Writing Tests & Leak Verification
 - **Subtitle**: Comprehensive Spec Testing, Deterministic Simulation & ObjectDB Leak Verification
-- **Code (gameplay_spec.cr — Lapis::Test Suite)**:
-  ```crystal
-  include Lapis::Test
-  
-  test_suite "Player Combat System" do
-    test "signal dispatch & assertions" do |root|
-      player = add_child_autofree(root, Godot.create(Player))
-      assert_alive player
-  
-      assert_emits(player, "health_changed", timeout_sec: 1.0) do
-        player.take_damage(25)
-      end
-      assert_eq player.health, 75
-    end
-  
-    test "deterministic memory leak verification" do
-      # Verifies ΔObjects == 0 across 100 allocation cycles
-      assert_no_leak(max_delta_objects: 0) do
-        100.times { Godot.create(ParticleFX).destroy }
-      end
-    end
-  end
-  ```
-- **Testing Apparatus Invariants**:
+
+#### Left Column:
+- **gameplay_spec.cr — Lapis::Test Suite**
+
+#### Right Stacked Containers:
+- **Scene Fixtures & Async Signal Specs**
   - Automated Fixture Tracking: add_child_autofree registers test nodes and safely queue-frees them upon test completion.
   - Async Signal Assertions: assert_emits steps engine frames cooperatively to verify asynchronous event delivery.
+- **ObjectDB Liveness & Leak Gate**
   - Engine ObjectDB Checks: assert_alive checks 64-bit instance IDs against ObjectDB to catch use-after-free bugs.
   - Deterministic Leak Gate: assert_no_leak tracks Godot OBJECT_COUNT metrics to ensure ΔObjects == 0.
 
@@ -4125,30 +3917,20 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 139: The Packaging System: Turnkey Distribution
+### Slide 139: The Packaging System: Turnkey Distribution [Two-Top-One-Bottom]
 - **Theme Palette**: `spaces_11` (Spaces 11)
-- **Badge**: `PRODUCTION • PACKAGING & DISTRIBUTION`
 - **Title**: The Packaging System: Turnkey Distribution
-- **Subtitle**: Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers
-- **Terminal (Terminal — make package-release)**:
-  ```bash
-  # Build complete official release distribution matrix
-  $ make package-release
-  
-  # Output artifact tree:
-  bin/release_dist/
-  ├── crystal_integration-v0.0.270.zip    # Official Addon
-  ├── lapis-installer-v0.0.270-win64.exe  # Inno Setup
-  ├── lapis_0.0.270_amd64.deb             # Debian Package
-  ├── basic_demo-windows-x64.zip          # Playable Game
-  ├── benchmarks-report-v0.0.270.html     # Perf Charts
-  └── SHA256SUMS.txt                      # Checksums
-  ```
-- **Release Packaging Invariants**:
+
+#### Top Split Columns:
+- **Terminal — make package-release**
+- **Addon Isolation & DLL Synchronization**
   - Strict Addon Isolation: Packaging strictly bundles crystal_integration; dummy test addons are NEVER shipped.
-  - Automatic DLL Synchronization: Bundles required runtime DLLs gc.dll, iconv-2.dll, pcre2-8.dll.
-  - Dead-Code Stripping: Release binaries are compiled with --release -O3 and stripped of debug symbols.
-  - Cryptographic Checksums: Generates SHA256SUMS.txt automatically for all output archives.
+  - Automatic DLL Synchronization: Bundles required runtime DLLs: gc.dll, iconv-2.dll, and pcre2-8.dll.
+
+#### Bottom Full-Width Slot:
+- **Release Hardening & Cryptographic Verification**
+  - Dead-Code Stripping: Release binaries are compiled with --release -O3 and stripped of debug symbols for minimal footprint.
+  - Cryptographic Checksums: Automatically generates SHA256SUMS.txt across all output archives, installers, and packages.
 
 **Presenter Notes**:
 > Shipping games and addons shouldn't require tedious manual zip packaging. Lapis features a turnkey packaging system. A single command packages official GDExtension addons, Windows Inno Setup installers, Debian packages, and standalone playable games with automatic DLL dependency bundling and cryptographic checksums.

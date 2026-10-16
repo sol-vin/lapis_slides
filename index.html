@@ -184,7 +184,7 @@
         <feColorMatrix type="matrix" values="0.0261 0.0876 0.0088 0 0  0.0438 0.1472 0.0149 0 0  0.0896 0.3015 0.0304 0 0  0 0 0 1 0" />
       </filter>
       <filter id="emoji-filter-atomic_purple" color-interpolation-filters="sRGB">
-        <feColorMatrix type="matrix" values="0.2658 0.894 0.0902 0 0  0.1865 0.6276 0.0634 0 0  0.2178 0.7327 0.074 0 0  0 0 0 1 0" />
+        <feColorMatrix type="matrix" values="0.2084 0.7012 0.0708 0 0  0.0646 0.2174 0.0219 0 0  0.1209 0.4067 0.0411 0 0  0 0 0 1 0" />
       </filter>
       <filter id="emoji-filter-pocket_advance" color-interpolation-filters="sRGB">
         <feColorMatrix type="matrix" values="0.0594 0.1998 0.0202 0 0  0.2658 0.894 0.0902 0 0  0.0208 0.0701 0.0071 0 0  0 0 0 1 0" />
@@ -217,7 +217,7 @@
         <feColorMatrix type="matrix" values="0.0271 0.0912 0.0092 0 0  0.1657 0.5574 0.0563 0 0  0.2658 0.894 0.0902 0 0  0 0 0 1 0" />
       </filter>
       <filter id="emoji-filter-orchard_2" color-interpolation-filters="sRGB">
-        <feColorMatrix type="matrix" values="0.2043 0.6872 0.0694 0 0  0.0333 0.1122 0.0113 0 0  0.0396 0.1332 0.0134 0 0  0 0 0 1 0" />
+        <feColorMatrix type="matrix" values="0.2334 0.7853 0.0793 0 0  0.0604 0.2033 0.0205 0 0  0.0646 0.2174 0.0219 0 0  0 0 0 1 0" />
       </filter>
       <filter id="emoji-filter-snow_white" color-interpolation-filters="sRGB">
         <feColorMatrix type="matrix" values="0.0 0.0 0.0 0 0  0.0 0.0 0.0 0 0  0.0 0.0 0.0 0 0  0 0 0 1 0" />
@@ -758,7 +758,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 7: Atomic Purple (So My Front End Can Look Like This) -->
-      <section class="slide solvin-slide atomic_purple" data-layout="two-column-layout" data-palette="atomic_purple" data-background-color="#4b3869" data-palette-name="Atomic Purple" data-palette-cube="#f3eefc" data-palette-cube-hover="#ffb3d1" data-slide-id="03_ruby_frontend" id="slide-03_ruby_frontend">
+      <section class="slide solvin-slide atomic_purple" data-layout="two-column-layout" data-palette="atomic_purple" data-background-color="#4b3869" data-palette-name="Atomic Purple" data-palette-cube="#e8e0f5" data-palette-cube-hover="#c83e74" data-slide-id="03_ruby_frontend" id="slide-03_ruby_frontend">
         <div class="palette-corner-badge" title="Theme: Atomic Purple">
           <span class="palette-corner-dot"></span> PALETTE: Atomic Purple
         </div>
@@ -1270,7 +1270,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 14: Atomic Purple (Expressive Ergonomics: High-Level Language Primitives) -->
-      <section class="slide solvin-slide atomic_purple" data-layout="two-column-layout" data-palette="atomic_purple" data-background-color="#4b3869" data-palette-name="Atomic Purple" data-palette-cube="#f3eefc" data-palette-cube-hover="#ffb3d1" data-slide-id="10_expressive_ergonomics" id="slide-10_expressive_ergonomics">
+      <section class="slide solvin-slide atomic_purple" data-layout="two-column-layout" data-palette="atomic_purple" data-background-color="#4b3869" data-palette-name="Atomic Purple" data-palette-cube="#e8e0f5" data-palette-cube-hover="#c83e74" data-slide-id="10_expressive_ergonomics" id="slide-10_expressive_ergonomics">
         <div class="palette-corner-badge" title="Theme: Atomic Purple">
           <span class="palette-corner-dot"></span> PALETTE: Atomic Purple
         </div>
@@ -1342,7 +1342,7 @@ view = inventory.to_unsafe_slice[2..] # Zero heap allocation!</code></pre>
       </section>
 
       <!-- Slide 15: Retro Groove (Bare Words & Operators: Zero-Cost Uniform Access) -->
-      <section class="slide solvin-slide retro_groove" data-layout="two-column-layout" data-palette="retro_groove" data-background-color="#282828" data-palette-name="Retro Groove" data-palette-cube="#ebdbb2" data-palette-cube-hover="#8ec07c" data-slide-id="10g_crystal_bare_words_and_operators" id="slide-10g_crystal_bare_words_and_operators">
+      <section class="slide solvin-slide retro_groove" data-layout="one-left-two-right" data-palette="retro_groove" data-background-color="#282828" data-palette-name="Retro Groove" data-palette-cube="#ebdbb2" data-palette-cube-hover="#8ec07c" data-slide-id="10g_crystal_bare_words_and_operators" id="slide-10g_crystal_bare_words_and_operators">
         <div class="palette-corner-badge" title="Theme: Retro Groove">
           <span class="palette-corner-dot"></span> PALETTE: Retro Groove
         </div>
@@ -1354,8 +1354,8 @@ view = inventory.to_unsafe_slice[2..] # Zero heap allocation!</code></pre>
             <h2 class="slide-title">Bare Words &amp; Operators: Zero-Cost Uniform Access</h2>
             <p class="slide-subtitle">Optional Parentheses, Uniform Access Principle &amp; LLVM-Inlined Operator Methods</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-two-right" data-layout="one-left-two-right" data-ratio="1:1">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -1391,18 +1391,31 @@ v = Vector2.new(10.0_f32, 20.0_f32) + Vector2.new(5.0_f32, 5.0_f32)
 puts v[:x] # Sugar for v.[](:x) =&gt; 15.0</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
+            <div class="column-stack col slot-right" data-slot="right">
+              <div class="stack-slot slot-top" data-slot="top">
             <div class="card col emerald" data-color="emerald">
               <div class="card-header card-title emerald">
-                <span>Why Bare Words &amp; Operators Excel in Crystal</span>
+                <span>Uniform Access &amp; Bare Words</span>
+                <span class="badge emerald" data-color="emerald">HUMAN PROSE</span>
               </div>
               <ul class="card-list">
                 <li><strong>Uniform Access Principle:</strong> Callers cannot tell whether <code>player.health</code> is an ivar or calculation.</li>
                 <li><strong>Fluent Human Sentences:</strong> Omitting parentheses yields natural prose while remaining 100% statically typed.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-bottom" data-slot="bottom">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>Pure Operator Methods &amp; LLVM Inlining</span>
+                <span class="badge cyan" data-color="cyan">ZERO OVERHEAD</span>
+              </div>
+              <ul class="card-list">
                 <li><strong>Operators are Pure Methods:</strong> <code>+</code> and <code>[]</code> are standard methods on <code>struct</code> value types.</li>
                 <li><strong>Direct LLVM Inlining:</strong> Math compiles to CPU registers with zero heap allocation or dynamic dispatch.</li>
               </ul>
             </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -1700,7 +1713,7 @@ frame_step while simulation.running?</code></pre>
       </section>
 
       <!-- Slide 20: Candy (Semantic Punctuation: "?" and "!" Method Endings) -->
-      <section class="slide solvin-slide candy" data-layout="two-column-layout" data-palette="candy" data-background-color="#fdf0f8" data-palette-name="Candy" data-palette-cube="#4a2c58" data-palette-cube-hover="#d84b9b" data-slide-id="10l_crystal_predicate_and_bang" id="slide-10l_crystal_predicate_and_bang">
+      <section class="slide solvin-slide candy" data-layout="three-left-one-right" data-palette="candy" data-background-color="#fdf0f8" data-palette-name="Candy" data-palette-cube="#4a2c58" data-palette-cube-hover="#d84b9b" data-slide-id="10l_crystal_predicate_and_bang" id="slide-10l_crystal_predicate_and_bang">
         <div class="palette-corner-badge" title="Theme: Candy">
           <span class="palette-corner-dot"></span> PALETTE: Candy
         </div>
@@ -1712,8 +1725,46 @@ frame_step while simulation.running?</code></pre>
             <h2 class="slide-title">Semantic Punctuation: &quot;?&quot; and &quot;!&quot; Method Endings</h2>
             <p class="slide-subtitle">Predicates, Nil Over Errors &amp; Unmissable Mutation Flares</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-three-left-one-right" data-layout="three-left-one-right" data-ratio="2:3">
+            <div class="column-stack-three col slot-left" data-slot="left">
+              <div class="stack-slot slot-1" data-slot="slot-1">
+            <div class="card col purple" data-color="purple">
+              <div class="card-header card-title purple">
+                <span>1. Boolean Predicates (?)</span>
+                <span class="badge purple" data-color="purple">BOOL QUERY</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Semantic Questions:</strong> Methods ending in <code>?</code> ask boolean questions (<code>alive?</code>, <code>empty?</code>).</li>
+                <li><strong>No Prefix Bikeshedding:</strong> Eliminates awkward <code>is_</code>, <code>has_</code>, or <code>get_is_</code> naming debates.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-2" data-slot="slot-2">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>2. Nil Over Errors (?)</span>
+                <span class="badge cyan" data-color="cyan">SAFE LOOKUP</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Non-Throwing Queries:</strong> <code>first?</code>, <code>[99]?</code>, and <code>to_i?</code> return <code>T | Nil</code> instead of raising.</li>
+                <li><strong>Compile-Time Nil Safety:</strong> Crystal enforces union checks at build time—zero null crashes.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-3" data-slot="slot-3">
+            <div class="card col coral" data-color="coral">
+              <div class="card-header card-title coral">
+                <span>3. Mutation &amp; Assert Flares (!)</span>
+                <span class="badge coral" data-color="coral">BANG FLARE</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Destructive Mutation:</strong> <code>sort!</code> and <code>normalize!</code> warn of in-place state modification.</li>
+                <li><strong>Strict Assertions:</strong> Trailing <code>!</code> asserts non-nil or raises on failure.</li>
+              </ul>
+            </div>
+              </div>
+            </div>
+            <div class="column col slot-right" data-slot="right">
             <div class="code-window code-container col" data-lang="crystal">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -1740,19 +1791,6 @@ items[99]?           # =&gt; Item | Nil   (vs [] raising)
 inventory.sort!      # Mutates array in place (vs pure sort)
 vector.normalize!    # Mutates Vector3 in place
 active_target!       # Asserts non-nil (raises NilAssertionError)</code></pre>
-            </div>
-            </div>
-            <div class="column col" data-slot="right">
-            <div class="card col purple" data-color="purple">
-              <div class="card-header card-title purple">
-                <span>Punctuation as High-Signal Communication</span>
-              </div>
-              <ul class="card-list">
-                <li><strong>Semantic Predicates:</strong> Methods ending in <code>?</code> ask boolean questions, eliminating awkward <code>is_</code>/<code>has_</code> prefix debates.</li>
-                <li><strong>Nil Over Errors:</strong> Lookup methods with <code>?</code> return <code>nil</code> instead of raising exceptions, avoiding bulky try/catch blocks.</li>
-                <li><strong>Mutation Flares:</strong> Methods ending in <code>!</code> warn at a glance of destructive in-place alterations (<code>sort!</code>, <code>normalize!</code>).</li>
-                <li><strong>Strict Nil Safety:</strong> Crystal checks union returns (<code>T | Nil</code>) at compile time, eliminating null dereference crashes entirely.</li>
-              </ul>
             </div>
             </div>
           </div>
@@ -1847,7 +1885,7 @@ active = enemies.each.select(&amp;.boss?).reject(&amp;.defeated?)</code></pre>
       </section>
 
       <!-- Slide 22: Vampire Count (Modules: Mixins, Traits & Namespaces) -->
-      <section class="slide solvin-slide vampire_count" data-layout="two-column-layout" data-palette="vampire_count" data-background-color="#282a36" data-palette-name="Vampire Count" data-palette-cube="#f8f8f2" data-palette-cube-hover="#8be9fd" data-slide-id="10d_crystal_modules" id="slide-10d_crystal_modules">
+      <section class="slide solvin-slide vampire_count" data-layout="feature-grid" data-palette="vampire_count" data-background-color="#282a36" data-palette-name="Vampire Count" data-palette-cube="#f8f8f2" data-palette-cube-hover="#8be9fd" data-slide-id="10d_crystal_modules" id="slide-10d_crystal_modules">
         <div class="palette-corner-badge" title="Theme: Vampire Count">
           <span class="palette-corner-dot"></span> PALETTE: Vampire Count
         </div>
@@ -1859,22 +1897,15 @@ active = enemies.each.select(&amp;.boss?).reject(&amp;.defeated?)</code></pre>
             <h2 class="slide-title">Modules: Mixins, Traits &amp; Namespaces</h2>
             <p class="slide-subtitle">Horizontal Behavior Composition via include/extend with Zero Virtual Overhead</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
-              <div class="window-header code-header">
-                <div class="terminal-dots">
-                  <span class="terminal-dot dot-1 red" title="Close"></span>
-                  <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
-                  <span class="terminal-dot dot-3 green" title="Maximize"></span>
+          <div class="slide-body" data-layout="feature-grid">
+            <div class="bento-hero-column">
+              <div class="card bento-hero-card cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">gameplay_modules.cr — Horizontal Composition</span>
+                  <span class="badge cyan" data-color="cyan">ZERO-COST TRAITS</span>
                 </div>
-                <span class="window-title code-title">gameplay_modules.cr — Horizontal Composition</span>
-                <div class="window-controls">
-                  <span class="lang-tag code-lang-tag">Crystal</span>
-                  <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
-                </div>
-              </div>
-              <pre><code class="language-crystal code-compact"># 1. Namespace &amp; mixin dual use (extend self)
+                <div class="code-window bento-code-window" data-lang="crystal">
+                  <pre><code class="language-crystal code-compact"># 1. Namespace &amp; mixin dual use (extend self)
 module SpatialMath
   extend self
   def dist_sq(a, b)
@@ -1902,20 +1933,38 @@ struct WoodenCrate
   include Damageable
   getter armor : Int32 = 5
 end</code></pre>
-            </div>
-            </div>
-            <div class="column col" data-slot="right">
-            <div class="card col cyan" data-color="cyan">
-              <div class="card-header card-title cyan">
-                <span>Zero-Cost Architectural Composition</span>
+                </div>
+                <div class="bento-desc">Mixed-in methods resolve statically at compile time and inline directly into native machine code with zero vtable penalties.</div>
               </div>
-              <ul class="card-list">
-                <li><strong>Namespace & Mixin Dual Use:</strong> <code>extend self</code> lets modules act simultaneously as pure functional namespaces and mixable traits.</li>
-                <li><strong>Stateful & Contract Traits:</strong> Modules can inject instance state (<code>property health</code>) and enforce <code>abstract def</code> contracts at compile time.</li>
-                <li><strong>Horizontal Composition:</strong> Mix reusable behaviors across unrelated classes and stack-allocated <code>struct</code> types without diamond inheritance.</li>
-                <li><strong>Zero Virtual Overhead:</strong> Mixed-in methods resolve statically at compile time and inline directly into machine code—zero vtable penalties.</li>
-              </ul>
             </div>
+            <div class="bento-side-column">
+              <div class="card bento-subcard cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">Namespace &amp; Mixin Dual Use</span>
+                  <span class="badge cyan" data-color="cyan">EXTEND SELF</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Dual Role:</strong> <code>extend self</code> lets modules act as both functional namespaces and mixable traits.</li>
+                </ul>
+              </div>
+              <div class="card bento-subcard purple" data-color="purple">
+                <div class="card-header">
+                  <span class="card-title">Stateful &amp; Contract Traits</span>
+                  <span class="badge purple" data-color="purple">ABSTRACT DEF</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>State + Contracts:</strong> Inject instance state (<code>property health</code>) and enforce <code>abstract def</code> contracts at build time.</li>
+                </ul>
+              </div>
+              <div class="card bento-subcard emerald" data-color="emerald">
+                <div class="card-header">
+                  <span class="card-title">Classes &amp; Value Structs</span>
+                  <span class="badge emerald" data-color="emerald">HORIZONTAL</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Diamond-Free Mixins:</strong> Share behavior across reference classes and stack <code>struct</code> types with zero virtual overhead.</li>
+                </ul>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -2249,7 +2298,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 27: Creation (Macro Hooks: included & inherited) -->
-      <section class="slide solvin-slide creation" data-layout="two-column-layout" data-palette="creation" data-background-color="#141518" data-palette-name="Creation" data-palette-cube="#e8e8ed" data-palette-cube-hover="#e6222b" data-slide-id="14b_crystal_macro_hooks" id="slide-14b_crystal_macro_hooks">
+      <section class="slide solvin-slide creation" data-layout="one-left-two-right" data-palette="creation" data-background-color="#141518" data-palette-name="Creation" data-palette-cube="#e8e8ed" data-palette-cube-hover="#e6222b" data-slide-id="14b_crystal_macro_hooks" id="slide-14b_crystal_macro_hooks">
         <div class="palette-corner-badge" title="Theme: Creation">
           <span class="palette-corner-dot"></span> PALETTE: Creation
         </div>
@@ -2261,8 +2310,8 @@ end</code></pre>
             <h2 class="slide-title">Macro Hooks: included &amp; inherited</h2>
             <p class="slide-subtitle">Compile-Time Mixins &amp; Automated Subclass Registration</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-two-right" data-layout="one-left-two-right" data-ratio="3:2">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -2299,18 +2348,31 @@ class Player &lt; GameEntity
 end # =&gt; Synthesizes Player::POOL &amp; Player.acquire : Player</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
+            <div class="column-stack col slot-right" data-slot="right">
+              <div class="stack-slot slot-top" data-slot="top">
             <div class="card col amber" data-color="amber">
               <div class="card-header card-title amber">
-                <span>Compile-Time Module &amp; Class Hooks</span>
+                <span>The macro included Hook</span>
+                <span class="badge amber" data-color="amber">HOST-TYPED MIXIN</span>
               </div>
               <ul class="card-list">
-                <li><strong>The <code>macro included</code> Hook:</strong> Combines generic args (<code>N</code>) with <code>{{@type}}</code> to synthesize host-typed class methods (<code>self.acquire</code>) and pre-sized pools.</li>
-                <li><strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to track and configure child types.</li>
-                <li><strong>Compile-Time Registries:</strong> Builds entity factories and type registries during compilation—eliminating startup reflection scans.</li>
-                <li><strong>Static Inlining:</strong> All injected code participates in global type inference and compiles directly into native machine code.</li>
+                <li><strong>Host Type Parameterization:</strong> Combines generic args (<code>N</code>) with <code>{{@type}}</code> to synthesize <code>self.acquire</code> and pre-sized pools.</li>
+                <li><strong>Static Inlining:</strong> All injected code participates in global type inference and compiles to native machine code.</li>
               </ul>
             </div>
+              </div>
+              <div class="stack-slot slot-bottom" data-slot="bottom">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>The macro inherited Hook</span>
+                <span class="badge cyan" data-color="cyan">SUBCLASS REGISTRY</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Instant Subclass Tracking:</strong> Fires the moment a class is subclassed so base classes can configure child types.</li>
+                <li><strong>Compile-Time Registries:</strong> Builds entity factories during compilation—eliminating startup reflection scans.</li>
+              </ul>
+            </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -2638,7 +2700,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 32: Phosphor Vector (First-Class C Bindings & Low-Level Primitives) -->
-      <section class="slide solvin-slide phosphor_vector" data-layout="two-column-layout" data-palette="phosphor_vector" data-background-color="#070709" data-palette-name="Phosphor Vector" data-palette-cube="#39ff14" data-palette-cube-hover="#ffffff" data-slide-id="18c_crystal_c_bindings" id="slide-18c_crystal_c_bindings">
+      <section class="slide solvin-slide phosphor_vector" data-layout="feature-grid" data-palette="phosphor_vector" data-background-color="#070709" data-palette-name="Phosphor Vector" data-palette-cube="#39ff14" data-palette-cube-hover="#ffffff" data-slide-id="18c_crystal_c_bindings" id="slide-18c_crystal_c_bindings">
         <div class="palette-corner-badge" title="Theme: Phosphor Vector">
           <span class="palette-corner-dot"></span> PALETTE: Phosphor Vector
         </div>
@@ -2650,22 +2712,15 @@ end</code></pre>
             <h2 class="slide-title">First-Class C Bindings &amp; Low-Level Primitives</h2>
             <p class="slide-subtitle">Direct C ABI Interop Without Glue Code or Marshalling Overhead</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
-              <div class="window-header code-header">
-                <div class="terminal-dots">
-                  <span class="terminal-dot dot-1 red" title="Close"></span>
-                  <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
-                  <span class="terminal-dot dot-3 green" title="Maximize"></span>
+          <div class="slide-body" data-layout="feature-grid">
+            <div class="bento-hero-column">
+              <div class="card bento-hero-card cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">c_bindings.cr — Native C ABI Primitives</span>
+                  <span class="badge cyan" data-color="cyan">ZERO-GLUE ABI</span>
                 </div>
-                <span class="window-title code-title">c_bindings.cr</span>
-                <div class="window-controls">
-                  <span class="lang-tag code-lang-tag">Crystal</span>
-                  <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
-                </div>
-              </div>
-              <pre><code class="language-crystal code-compact"># 1. Bind C headers directly in Crystal
+                <div class="code-window bento-code-window" data-lang="crystal">
+                  <pre><code class="language-crystal code-compact"># 1. Bind C headers directly in Crystal
 @[Link(&quot;raylib&quot;)]
 lib LibRaylib
   struct Color
@@ -2682,21 +2737,38 @@ ptr = pointerof(buf)
 # 3. Pass Crystal objects through C void* callbacks
 user_data = Box.box(player)
 restored  = Box(Player).unbox(user_data)</code></pre>
-            </div>
-            </div>
-            <div class="column col" data-slot="right">
-            <div class="card col cyan" data-color="cyan">
-              <div class="card-header card-title cyan">
-                <span>What’s Available for C Interop</span>
-                <span class="badge cyan" data-color="cyan">TOOLKIT</span>
+                </div>
+                <div class="bento-desc">First-class C ABI support built directly into the Crystal compiler—zero C wrapper files or marshalling tax.</div>
               </div>
-              <ul class="card-list">
-                <li><strong><code>lib</code> &amp; <code>@[Link]</code>:</strong> Bind C functions (<code>fun</code>), structs, unions, enums, and extern globals directly in Crystal with zero C wrapper code.</li>
-                <li><strong><code>Pointer(T)</code> &amp; <code>malloc</code>:</strong> Typed raw pointers, pointer arithmetic, <code>pointerof(x)</code>, and manual memory allocation.</li>
-                <li><strong><code>Box(T)</code> Bridging:</strong> Pack any Crystal object into a <code>Void*</code> pointer for C callbacks and unbox it back to its static type.</li>
-                <li><strong>Two-Way ABI (Top-Level <code>fun</code>):</strong> Export Crystal functions with C calling conventions so C code can call directly into Crystal.</li>
-              </ul>
             </div>
+            <div class="bento-side-column">
+              <div class="card bento-subcard cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">lib &amp; @[Link] Declarations</span>
+                  <span class="badge cyan" data-color="cyan">DIRECT HEADERS</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Zero Wrapper Code:</strong> Bind C functions (<code>fun</code>), structs, unions, enums, and extern globals directly in Crystal.</li>
+                </ul>
+              </div>
+              <div class="card bento-subcard emerald" data-color="emerald">
+                <div class="card-header">
+                  <span class="card-title">Pointer(T) &amp; Manual Memory</span>
+                  <span class="badge emerald" data-color="emerald">LOW-LEVEL</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Raw Memory Control:</strong> Typed pointers, pointer arithmetic, <code>pointerof(x)</code>, and manual <code>malloc</code>.</li>
+                </ul>
+              </div>
+              <div class="card bento-subcard amber" data-color="amber">
+                <div class="card-header">
+                  <span class="card-title">Box(T) &amp; Two-Way C ABI</span>
+                  <span class="badge amber" data-color="amber">CALLBACKS</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Void* Bridging &amp; Top-Level <code>fun</code>:</strong> Pass Crystal objects through C callbacks via <code>Box(T)</code> and export C ABI symbols.</li>
+                </ul>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -2774,7 +2846,7 @@ restored  = Box(Player).unbox(user_data)</code></pre>
       </section>
 
       <!-- Slide 34: They Fear (The "Ship of Shwageseus" Method) -->
-      <section class="slide solvin-slide they_fear" data-layout="two-column-layout" data-palette="they_fear" data-background-color="#101014" data-palette-name="They Fear" data-palette-cube="#f5a623" data-palette-cube-hover="#3b7dd8" data-slide-id="05a2_ship_of_shwageseus" id="slide-05a2_ship_of_shwageseus">
+      <section class="slide solvin-slide they_fear" data-layout="one-left-three-right" data-palette="they_fear" data-background-color="#101014" data-palette-name="They Fear" data-palette-cube="#f5a623" data-palette-cube-hover="#3b7dd8" data-slide-id="05a2_ship_of_shwageseus" id="slide-05a2_ship_of_shwageseus">
         <div class="palette-corner-badge" title="Theme: They Fear">
           <span class="palette-corner-dot"></span> PALETTE: They Fear
         </div>
@@ -2786,8 +2858,8 @@ restored  = Box(Player).unbox(user_data)</code></pre>
             <h2 class="slide-title">The &quot;Ship of Shwageseus&quot; Method</h2>
             <p class="slide-subtitle">C Bindings → 1-to-1 Pointer(T) / Box(T) / malloc → Idiomatic Crystal</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-three-right" data-layout="one-left-three-right" data-ratio="3:2">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -2822,19 +2894,40 @@ module Doocr
 end</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
-            <div class="card col amber" data-color="amber">
-              <div class="card-header card-title amber">
-                <span>Replacing the C Engine Plank by Plank</span>
-                <span class="badge amber" data-color="amber">3-STAGE PORT</span>
+            <div class="column-stack-three col slot-right" data-slot="right">
+              <div class="stack-slot slot-1" data-slot="slot-1">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>Stage 1 • Bind the C Header</span>
+                <span class="badge cyan" data-color="cyan">DAY 1 BOOT</span>
               </div>
               <ul class="card-list">
-                <li><strong>1. Bind the C Header (<code>lib CDoom</code>):</strong> Bind the header-only C library first so the game boots and runs in Crystal from day one.</li>
-                <li><strong>2. 1-to-1 Low-Level Translation:</strong> Port C functions one by one into Crystal using <code>Pointer(T)</code>, <code>Box(T)</code>, and <code>malloc</code>, marking the C originals <code>extern</code>.</li>
-                <li><strong>3. Test After Every Function:</strong> Because Crystal shares the C ABI, the hybrid binary compiles and runs after each individual function port.</li>
-                <li><strong>4. Refactor to Idiomatic Crystal:</strong> Once the C code is fully replaced, convert raw pointers and manual allocations into safe Crystal types.</li>
+                <li><strong>Playable Immediately:</strong> Bind the header-only C library (<code>lib CDoom</code>) so the game boots in Crystal from day one.</li>
               </ul>
             </div>
+              </div>
+              <div class="stack-slot slot-2" data-slot="slot-2">
+            <div class="card col amber" data-color="amber">
+              <div class="card-header card-title amber">
+                <span>Stage 2 • 1-to-1 Low-Level Port</span>
+                <span class="badge amber" data-color="amber">HYBRID ABI</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Plank-by-Plank Translation:</strong> Port C functions 1-to-1 using <code>Pointer(T)</code>, <code>Box(T)</code>, and <code>malloc</code>, testing after every function.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-3" data-slot="slot-3">
+            <div class="card col emerald" data-color="emerald">
+              <div class="card-header card-title emerald">
+                <span>Stage 3 • Idiomatic Crystal</span>
+                <span class="badge emerald" data-color="emerald">SAFE &amp; NATIVE</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Clean Refactor:</strong> Once the C code is replaced, refactor raw pointers and manual allocations into safe Crystal types.</li>
+              </ul>
+            </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -3597,7 +3690,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 44: Orchard II (Gameplay Usability: Fluent Creation & Spawning) -->
-      <section class="slide solvin-slide orchard_2" data-layout="two-column-layout" data-palette="orchard_2" data-background-color="#e3d8be" data-palette-name="Orchard II" data-palette-cube="#3b2a1e" data-palette-cube-hover="#2b7a18" data-slide-id="20g_gameplay_fluent_spawn" id="slide-20g_gameplay_fluent_spawn">
+      <section class="slide solvin-slide orchard_2" data-layout="two-column-layout" data-palette="orchard_2" data-background-color="#e3d8be" data-palette-name="Orchard II" data-palette-cube="#4a3728" data-palette-cube-hover="#61bb46" data-slide-id="20g_gameplay_fluent_spawn" id="slide-20g_gameplay_fluent_spawn">
         <div class="palette-corner-badge" title="Theme: Orchard II">
           <span class="palette-corner-dot"></span> PALETTE: Orchard II
         </div>
@@ -3896,7 +3989,7 @@ status_icon.toggle_visibility # Flips &amp; returns new Bool state</code></pre>
       </section>
 
       <!-- Slide 48: Blue Cassette (Gameplay Architecture: Context-Aware Audio & Spatial Queries) -->
-      <section class="slide solvin-slide blue_cassette" data-layout="two-column-layout" data-palette="blue_cassette" data-background-color="#1e4d8c" data-palette-name="Blue Cassette" data-palette-cube="#c8d1d9" data-palette-cube-hover="#ff6f00" data-slide-id="20m_spatial_audio_and_navigation" id="slide-20m_spatial_audio_and_navigation">
+      <section class="slide solvin-slide blue_cassette" data-layout="one-left-two-right" data-palette="blue_cassette" data-background-color="#1e4d8c" data-palette-name="Blue Cassette" data-palette-cube="#c8d1d9" data-palette-cube-hover="#ff6f00" data-slide-id="20m_spatial_audio_and_navigation" id="slide-20m_spatial_audio_and_navigation">
         <div class="palette-corner-badge" title="Theme: Blue Cassette">
           <span class="palette-corner-dot"></span> PALETTE: Blue Cassette
         </div>
@@ -3908,8 +4001,8 @@ status_icon.toggle_visibility # Flips &amp; returns new Bool state</code></pre>
             <h2 class="slide-title">Gameplay Architecture: Context-Aware Audio &amp; Spatial Queries</h2>
             <p class="slide-subtitle">Compile-Time play_sound Macro, Self-Pruning Root Players &amp; Relative Spatial Helpers</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-two-right" data-layout="one-left-two-right" data-ratio="3:2">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col" data-lang="crystal">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -3938,18 +4031,31 @@ move_dir = Godot::Input.get_vector(
 )</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
+            <div class="column-stack col slot-right" data-slot="right">
+              <div class="stack-slot slot-top" data-slot="top">
             <div class="card col cyan" data-color="cyan">
               <div class="card-header card-title cyan">
-                <span>Audio, Spatial &amp; Math Invariants</span>
+                <span>Context-Aware play_sound Macro</span>
+                <span class="badge cyan" data-color="cyan">ROOT-MOUNTED AUDIO</span>
               </div>
               <ul class="card-list">
-                <li><strong>Context-Aware <code>play_sound</code> Macro:</strong> Automatically selects 2D, 3D, or non-spatial audio players based on caller type.</li>
-                <li><strong>Root-Mounted Audio Lifecycle:</strong> Players attach to scene root, so one-shot sounds never cut off when emitters die.</li>
-                <li><strong>Relative Spatial Queries:</strong> <code>distance_to</code>, <code>direction_to</code>, and <code>angle_to_point</code> work directly between nodes.</li>
+                <li><strong>Compile-Time Selection:</strong> Automatically selects 2D, 3D, or non-spatial audio players based on caller node type.</li>
+                <li><strong>Root-Mounted Lifecycle:</strong> Players attach to scene root, so one-shot sounds never cut off when emitters die.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-bottom" data-slot="bottom">
+            <div class="card col emerald" data-color="emerald">
+              <div class="card-header card-title emerald">
+                <span>Relative Spatial &amp; Input Vectors</span>
+                <span class="badge emerald" data-color="emerald">2D / 3D HELPERS</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Direct Node Queries:</strong> <code>distance_to</code>, <code>direction_to</code>, and <code>angle_to_point</code> work directly between nodes.</li>
                 <li><strong>Input Vector Queries:</strong> <code>Godot::Input.get_vector</code> maps action symbols directly to normalized directions.</li>
               </ul>
             </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -4481,7 +4587,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 56: CrossCube 360 (Lapis Extras: Hierarchy Traversal & Multi-Append (/, %, <<)) -->
-      <section class="slide solvin-slide cross_cube_360" data-layout="two-column-layout" data-palette="cross_cube_360" data-background-color="#e4e8ec" data-palette-name="CrossCube 360" data-palette-cube="#1e242b" data-palette-cube-hover="#107c41" data-slide-id="20r_hierarchy_and_tree_operators" id="slide-20r_hierarchy_and_tree_operators">
+      <section class="slide solvin-slide cross_cube_360" data-layout="one-left-three-right" data-palette="cross_cube_360" data-background-color="#e4e8ec" data-palette-name="CrossCube 360" data-palette-cube="#1e242b" data-palette-cube-hover="#107c41" data-slide-id="20r_hierarchy_and_tree_operators" id="slide-20r_hierarchy_and_tree_operators">
         <div class="palette-corner-badge" title="Theme: CrossCube 360">
           <span class="palette-corner-dot"></span> PALETTE: CrossCube 360
         </div>
@@ -4493,8 +4599,8 @@ end</code></pre>
             <h2 class="slide-title">Lapis Extras: Hierarchy Traversal &amp; Multi-Append (/, %, &lt;&lt;)</h2>
             <p class="slide-subtitle">require &quot;lapis/extras&quot; • Path Traversal (/), Unique Nodes (%), and Chainable Tree Assembly (&lt;&lt;)</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-three-right" data-layout="one-left-three-right" data-ratio="1:1">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -4526,18 +4632,40 @@ node CombatArena &lt; Node2D do
 end</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
+            <div class="column-stack-three col slot-right" data-slot="right">
+              <div class="stack-slot slot-1" data-slot="slot-1">
             <div class="card col cyan" data-color="cyan">
               <div class="card-header card-title cyan">
-                <span>Hierarchy Traversal &amp; Mounting</span>
+                <span>1. Path (/) &amp; Unique (%) Traversal</span>
+                <span class="badge cyan" data-color="cyan">DOWNWARD</span>
               </div>
               <ul class="card-list">
-                <li><strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable expressive operator sugar.</li>
-                <li><strong>Path Traversal (<code>/</code>):</strong> <code>self / "Visuals" / Marker2D</code> walks paths fluently with native <code>.as(T)</code>.</li>
-                <li><strong>Multi-Append Assembly (<code>&lt;&lt;</code>):</strong> <code>parent &lt;&lt; c1 &lt;&lt; c2</code> brings stream-append to scene trees.</li>
-                <li><strong>Ancestor Climbing (<code>&lt;&lt; Class</code>):</strong> <code>node &lt;&lt; Player</code> climbs parents to find requested types.</li>
+                <li><strong>Fluent Path &amp; Unique Routing:</strong> <code>self / "Visuals" / Marker2D</code> and <code>self % ProgressBar</code> resolve and cast in one expression.</li>
               </ul>
             </div>
+              </div>
+              <div class="stack-slot slot-2" data-slot="slot-2">
+            <div class="card col emerald" data-color="emerald">
+              <div class="card-header card-title emerald">
+                <span>2. Stream Multi-Append (&lt;&lt; node)</span>
+                <span class="badge emerald" data-color="emerald">ASSEMBLY</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Chainable Mounting:</strong> <code>parent &lt;&lt; c1 &lt;&lt; c2</code> mounts children fluently and returns the parent receiver.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-3" data-slot="slot-3">
+            <div class="card col purple" data-color="purple">
+              <div class="card-header card-title purple">
+                <span>3. Ancestor Climbing (&lt;&lt; Class)</span>
+                <span class="badge purple" data-color="purple">UPWARD</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Parent Type Search:</strong> <code>self &lt;&lt; Player</code> (or nilable <code>BossController?</code>) climbs ancestors until a match is found.</li>
+              </ul>
+            </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -6835,7 +6963,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 87: OLED Micro (Async Triad: "await", "await?", and "await!") -->
-      <section class="slide solvin-slide oled_micro" data-layout="two-column-layout" data-palette="oled_micro" data-background-color="#05080c" data-palette-name="OLED Micro" data-palette-cube="#00f0ff" data-palette-cube-hover="#ffffff" data-slide-id="17c_await_variants_and_status" id="slide-17c_await_variants_and_status">
+      <section class="slide solvin-slide oled_micro" data-layout="three-left-one-right" data-palette="oled_micro" data-background-color="#05080c" data-palette-name="OLED Micro" data-palette-cube="#00f0ff" data-palette-cube-hover="#ffffff" data-slide-id="17c_await_variants_and_status" id="slide-17c_await_variants_and_status">
         <div class="palette-corner-badge" title="Theme: OLED Micro">
           <span class="palette-corner-dot"></span> PALETTE: OLED Micro
         </div>
@@ -6847,8 +6975,45 @@ end</code></pre>
             <h2 class="slide-title">Async Triad: &quot;await&quot;, &quot;await?&quot;, and &quot;await!&quot;</h2>
             <p class="slide-subtitle">AwaitStatus Predicates, Typed Return Values, Tuple Destructuring &amp; Dead-Pointer Armor</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-three-left-one-right" data-layout="three-left-one-right" data-ratio="2:3">
+            <div class="column-stack-three col slot-left" data-slot="left">
+              <div class="stack-slot slot-1" data-slot="slot-1">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>1. await(sig) — AwaitStatus(T)</span>
+                <span class="badge cyan" data-color="cyan">PREDICATES &amp; TUPLES</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Status Struct:</strong> Returns <code>AwaitStatus(T)</code> with <code>.completed?</code>, <code>.timed_out?</code>, and <code>.ok?</code>.</li>
+                <li><strong>Tuple Destructuring:</strong> Multi-arg signals unpack directly via <code>id, name = status</code>.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-2" data-slot="slot-2">
+            <div class="card col amber" data-color="amber">
+              <div class="card-header card-title amber">
+                <span>2. await!(sig) — Unwrap or Raise</span>
+                <span class="badge amber" data-color="amber">STRICT ASSERT</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Direct Payload Unwrap:</strong> Returns <code>T</code> (or <code>Tuple</code>) directly and raises <code>TimeoutError</code> on expiry.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-3" data-slot="slot-3">
+            <div class="card col emerald" data-color="emerald">
+              <div class="card-header card-title emerald">
+                <span>3. await?(sig) &amp; Dead-Pointer Armor</span>
+                <span class="badge emerald" data-color="emerald">NIL OVER ERRORS</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Safe Timeout:</strong> Returns <code>T | Nil</code> (or <code>Bool</code> for 0-arg signals) without throwing.</li>
+                <li><strong>DisposedObjectError:</strong> Raises immediately if the target node is freed—never hangs.</li>
+              </ul>
+            </div>
+              </div>
+            </div>
+            <div class="column col slot-right" data-slot="right">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -6880,19 +7045,6 @@ tup = await!(boss.loot_dropped)        # =&gt; {42, &quot;relic&quot;} (or raise
 # 4. Engine signals &amp; numeric duration delays
 body = await!((~Area2D).body_entered)  # =&gt; Godot::Node2D (typed engine signal)
 await(1.0)                             # =&gt; AwaitStatus (or await?(1.0) / await!(1.0))</code></pre>
-            </div>
-            </div>
-            <div class="column col" data-slot="right">
-            <div class="card col cyan" data-color="cyan">
-              <div class="card-header card-title cyan">
-                <span>Cooperative Awaiting Invariants</span>
-              </div>
-              <ul class="card-list">
-                <li><strong>Triad Return Semantics:</strong> <code>await</code> returns <code>AwaitStatus(T)</code> (<code>.completed?</code>, <code>.timed_out?</code>); <code>await!</code> unwraps or raises <code>TimeoutError</code>; <code>await?</code> returns nilable (or <code>Bool</code>).</li>
-                <li><strong>Tuple Destructuring:</strong> Multi-argument signals unpack via tuple destructuring (<code>id, name = status</code>) with full static type inference.</li>
-                <li><strong>Engine Signals &amp; Delays:</strong> Built-in Godot signals (<code>(~Area2D).body_entered</code>) are statically typed; dynamic <code>node.signal(:name)</code> yields <code>Array(Variant)</code>.</li>
-                <li><strong>DisposedObjectError Protection:</strong> If the awaited node is freed, Lapis raises <code>Godot::DisposedObjectError</code> instead of hanging forever.</li>
-              </ul>
             </div>
             </div>
           </div>
@@ -7256,7 +7408,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 93: Silicon Indigo (Thread & Scope Policies) -->
-      <section class="slide solvin-slide silicon_indigo" data-layout="two-column-layout" data-palette="silicon_indigo" data-background-color="#1e3a8a" data-palette-name="Silicon Indigo" data-palette-cube="#00f0ff" data-palette-cube-hover="#e91e63" data-slide-id="26d_thread_safety_policies" id="slide-26d_thread_safety_policies">
+      <section class="slide solvin-slide silicon_indigo" data-layout="one-left-two-right" data-palette="silicon_indigo" data-background-color="#1e3a8a" data-palette-name="Silicon Indigo" data-palette-cube="#00f0ff" data-palette-cube-hover="#e91e63" data-slide-id="26d_thread_safety_policies" id="slide-26d_thread_safety_policies">
         <div class="palette-corner-badge" title="Theme: Silicon Indigo">
           <span class="palette-corner-dot"></span> PALETTE: Silicon Indigo
         </div>
@@ -7268,8 +7420,8 @@ end</code></pre>
             <h2 class="slide-title">Thread &amp; Scope Policies</h2>
             <p class="slide-subtitle">ThreadAffinity Enforcement &amp; Detached Graph Assembly</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-two-right" data-layout="one-left-two-right" data-ratio="3:2">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -7301,18 +7453,31 @@ Thread.new do
 end</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
-            <div class="card col amber" data-color="amber">
-              <div class="card-header card-title amber">
-                <span>ThreadSafety Invariants: Policy &amp; Scope</span>
+            <div class="column-stack col slot-right" data-slot="right">
+              <div class="stack-slot slot-top" data-slot="top">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>Scope Axis: TreeOnly vs. AllNodes</span>
+                <span class="badge cyan" data-color="cyan">DETACHED GRAPHS</span>
               </div>
               <ul class="card-list">
                 <li><strong>Scope::TreeOnly (Default):</strong> Guards only live SceneTree nodes, letting worker threads assemble detached node graphs in parallel.</li>
                 <li><strong>Scope::AllNodes:</strong> Strict isolation mode blocking off-thread hierarchy mutations on any node, attached or detached.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-bottom" data-slot="bottom">
+            <div class="card col amber" data-color="amber">
+              <div class="card-header card-title amber">
+                <span>Policy Axis: Raise, Warn &amp; Defer</span>
+                <span class="badge amber" data-color="amber">AFFINITY ARMOR</span>
+              </div>
+              <ul class="card-list">
                 <li><strong>Policy::Raise (Debug):</strong> Intercepts illegal cross-thread calls before C++ executes, raising a catchable <code>ThreadAffinityError</code>.</li>
                 <li><strong>Policy::Warn / Defer / Disabled:</strong> Log non-fatal warnings, auto-queue via <code>call_deferred</code>, or strip checks in release builds.</li>
               </ul>
             </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -9078,7 +9243,7 @@ gd_dialogue.set_meta(&quot;custom_data&quot;, &quot;persisted_value&quot;)</code
       </section>
 
       <!-- Slide 117: NDS Aqua (Crystal Calling GDScript: Strongly-Typed Bindings) -->
-      <section class="slide solvin-slide nds_aqua" data-layout="two-column-layout" data-palette="nds_aqua" data-background-color="#008b9e" data-palette-name="NDS Aqua" data-palette-cube="#ffffff" data-palette-cube-hover="#80deea" data-slide-id="29_interop_crystal_calls_gdscript_typed" id="slide-29_interop_crystal_calls_gdscript_typed">
+      <section class="slide solvin-slide nds_aqua" data-layout="feature-grid" data-palette="nds_aqua" data-background-color="#008b9e" data-palette-name="NDS Aqua" data-palette-cube="#ffffff" data-palette-cube-hover="#80deea" data-slide-id="29_interop_crystal_calls_gdscript_typed" id="slide-29_interop_crystal_calls_gdscript_typed">
         <div class="palette-corner-badge" title="Theme: NDS Aqua">
           <span class="palette-corner-dot"></span> PALETTE: NDS Aqua
         </div>
@@ -9090,22 +9255,15 @@ gd_dialogue.set_meta(&quot;custom_data&quot;, &quot;persisted_value&quot;)</code
             <h2 class="slide-title">Crystal Calling GDScript: Strongly-Typed Bindings</h2>
             <p class="slide-subtitle">Automatic Strongly-Typed Proxies for GDScript Classes Generated via Lapis CLI</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
-              <div class="window-header code-header">
-                <div class="terminal-dots">
-                  <span class="terminal-dot dot-1 red" title="Close"></span>
-                  <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
-                  <span class="terminal-dot dot-3 green" title="Maximize"></span>
+          <div class="slide-body" data-layout="feature-grid">
+            <div class="bento-hero-column">
+              <div class="card bento-hero-card cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">quest_controller.cr — Typed GDScript Proxy</span>
+                  <span class="badge cyan" data-color="cyan">LAPIS BIND PROJECT</span>
                 </div>
-                <span class="window-title code-title">quest_controller.cr — Automatic Strongly-Typed GDScript Invocation</span>
-                <div class="window-controls">
-                  <span class="lang-tag code-lang-tag">Crystal</span>
-                  <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
-                </div>
-              </div>
-              <pre><code class="language-crystal code-compact">require &quot;./generated/project_nodes/dialogue_system&quot;
+                <div class="code-window bento-code-window" data-lang="crystal">
+                  <pre><code class="language-crystal code-compact">require &quot;./generated/project_nodes/dialogue_system&quot;
 
 node QuestController &lt; Node do
   onready dialogue : DialogueSystem = &quot;%DialogueManager&quot;
@@ -9122,20 +9280,38 @@ node QuestController &lt; Node do
     success
   end
 end</code></pre>
-            </div>
-            </div>
-            <div class="column col" data-slot="right">
-            <div class="card col cyan" data-color="cyan">
-              <div class="card-header card-title cyan">
-                <span>Automatic Typed Binding Architecture</span>
+                </div>
+                <div class="bento-desc">lapis bind project inspects GDScript class_name ASTs and synthesizes strongly-typed Crystal proxy wrappers automatically.</div>
               </div>
-              <ul class="card-list">
-                <li><strong>Zero Manual Boilerplate:</strong> <code>lapis bind project</code> inspects GDScript ASTs to synthesize typed Crystal wrappers.</li>
-                <li><strong>Eliminates Dynamic <code>.call()</code>:</strong> Invokes GDScript methods as native functions—eliminating stringly calls and Variant casts.</li>
-                <li><strong>Compile-Time Signature Verification:</strong> Statically verifies parameter types, argument counts, and return types before running.</li>
-                <li><strong>Full Autocomplete:</strong> Provides instant IDE parameter hinting and jump-to-definition across the GDScript-Crystal boundary.</li>
-              </ul>
             </div>
+            <div class="bento-side-column">
+              <div class="card bento-subcard cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">Zero Manual Boilerplate</span>
+                  <span class="badge cyan" data-color="cyan">AST GENERATOR</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Automated Wrapper Synthesis:</strong> <code>lapis bind project</code> scans GDScript files and generates typed Crystal proxies.</li>
+                </ul>
+              </div>
+              <div class="card bento-subcard emerald" data-color="emerald">
+                <div class="card-header">
+                  <span class="card-title">Eliminates Dynamic .call()</span>
+                  <span class="badge emerald" data-color="emerald">NATIVE CALLS</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Direct Method Invocation:</strong> Call GDScript methods and properties natively without string lookups or Variant casts.</li>
+                </ul>
+              </div>
+              <div class="card bento-subcard purple" data-color="purple">
+                <div class="card-header">
+                  <span class="card-title">Compile-Time &amp; IDE Safety</span>
+                  <span class="badge purple" data-color="purple">AUTOCOMPLETE</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Static Verification:</strong> Verifies parameter types, return types, and typed <code>BoundSignal</code> payloads with full LSP autocomplete.</li>
+                </ul>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -9556,7 +9732,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 124: Spaces 2000 (Testing Framework: Writing Tests & Leak Verification) -->
-      <section class="slide solvin-slide spaces_2000" data-layout="two-column-layout" data-palette="spaces_2000" data-background-color="#f0f4f8" data-palette-name="Spaces 2000" data-palette-cube="#000000" data-palette-cube-hover="#18429c" data-slide-id="36_testing_zero_leak" id="slide-36_testing_zero_leak">
+      <section class="slide solvin-slide spaces_2000" data-layout="one-left-two-right" data-palette="spaces_2000" data-background-color="#f0f4f8" data-palette-name="Spaces 2000" data-palette-cube="#000000" data-palette-cube-hover="#18429c" data-slide-id="36_testing_zero_leak" id="slide-36_testing_zero_leak">
         <div class="palette-corner-badge" title="Theme: Spaces 2000">
           <span class="palette-corner-dot"></span> PALETTE: Spaces 2000
         </div>
@@ -9568,8 +9744,8 @@ end</code></pre>
             <h2 class="slide-title">Testing Framework: Writing Tests &amp; Leak Verification</h2>
             <p class="slide-subtitle">Comprehensive Spec Testing, Deterministic Simulation &amp; ObjectDB Leak Verification</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="3:2">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-two-right" data-layout="one-left-two-right" data-ratio="3:2">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -9605,18 +9781,31 @@ test_suite &quot;Player Combat System&quot; do
 end</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
+            <div class="column-stack col slot-right" data-slot="right">
+              <div class="stack-slot slot-top" data-slot="top">
             <div class="card col cyan" data-color="cyan">
               <div class="card-header card-title cyan">
-                <span>Testing Apparatus Invariants</span>
+                <span>Scene Fixtures &amp; Async Signal Specs</span>
+                <span class="badge cyan" data-color="cyan">SPEC HARNESS</span>
               </div>
               <ul class="card-list">
                 <li><strong>Automated Fixture Tracking:</strong> <code>add_child_autofree</code> registers test nodes and safely queue-frees them upon test completion.</li>
                 <li><strong>Async Signal Assertions:</strong> <code>assert_emits</code> steps engine frames cooperatively to verify asynchronous event delivery.</li>
+              </ul>
+            </div>
+              </div>
+              <div class="stack-slot slot-bottom" data-slot="bottom">
+            <div class="card col emerald" data-color="emerald">
+              <div class="card-header card-title emerald">
+                <span>ObjectDB Liveness &amp; Leak Gate</span>
+                <span class="badge emerald" data-color="emerald">ZERO LEAKS</span>
+              </div>
+              <ul class="card-list">
                 <li><strong>Engine ObjectDB Checks:</strong> <code>assert_alive</code> checks 64-bit instance IDs against ObjectDB to catch use-after-free bugs.</li>
                 <li><strong>Deterministic Leak Gate:</strong> <code>assert_no_leak</code> tracks Godot <code>OBJECT_COUNT</code> metrics to ensure <code>ΔObjects == 0</code>.</li>
               </ul>
             </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -10898,7 +11087,7 @@ $ lapis benchmarks --compare --tag 4.8-dev7 --prev-tag 4.8-dev6 --html
       </section>
 
       <!-- Slide 139: Spaces 11 (The Packaging System: Turnkey Distribution) -->
-      <section class="slide solvin-slide spaces_11" data-layout="two-column-layout" data-palette="spaces_11" data-background-color="#18191c" data-palette-name="Spaces 11" data-palette-cube="#f8f9fa" data-palette-cube-hover="#60cdff" data-slide-id="40_packaging_dist" id="slide-40_packaging_dist">
+      <section class="slide solvin-slide spaces_11" data-layout="two-top-one-bottom" data-palette="spaces_11" data-background-color="#18191c" data-palette-name="Spaces 11" data-palette-cube="#f8f9fa" data-palette-cube-hover="#60cdff" data-slide-id="40_packaging_dist" id="slide-40_packaging_dist">
         <div class="palette-corner-badge" title="Theme: Spaces 11">
           <span class="palette-corner-dot"></span> PALETTE: Spaces 11
         </div>
@@ -10910,8 +11099,9 @@ $ lapis benchmarks --compare --tag 4.8-dev7 --prev-tag 4.8-dev6 --html
             <h2 class="slide-title">The Packaging System: Turnkey Distribution</h2>
             <p class="slide-subtitle">Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-two-top-one-bottom" data-layout="two-top-one-bottom" data-ratio="2:1">
+            <div class="row-split slot-top" data-slot="top">
+              <div class="column col slot-top-left" data-slot="top-left">
             <div class="terminal-window col">
               <div class="window-header terminal-header">
                 <div class="terminal-dots">
@@ -10926,10 +11116,8 @@ $ lapis benchmarks --compare --tag 4.8-dev7 --prev-tag 4.8-dev6 --html
                 </div>
               </div>
               <div class="window-body terminal-body">
-                <pre><code class="language-bash"># Build complete official release distribution matrix
-$ make package-release
+                <pre><code class="language-bash">$ make package-release
 
-# Output artifact tree:
 bin/release_dist/
 ├── crystal_integration-v0.0.270.zip    # Official Addon
 ├── lapis-installer-v0.0.270-win64.exe  # Inno Setup
@@ -10939,17 +11127,29 @@ bin/release_dist/
 └── SHA256SUMS.txt                      # Checksums</code></pre>
               </div>
             </div>
-            </div>
-            <div class="column col" data-slot="right">
+              </div>
+              <div class="column col slot-top-right" data-slot="top-right">
             <div class="card col purple" data-color="purple">
               <div class="card-header card-title purple">
-                <span>Release Packaging Invariants</span>
+                <span>Addon Isolation &amp; DLL Synchronization</span>
+                <span class="badge purple" data-color="purple">CLEAN BUNDLING</span>
               </div>
               <ul class="card-list">
                 <li><strong>Strict Addon Isolation:</strong> Packaging strictly bundles <code>crystal_integration</code>; dummy test addons are NEVER shipped.</li>
-                <li><strong>Automatic DLL Synchronization:</strong> Bundles required runtime DLLs <code>gc.dll</code>, <code>iconv-2.dll</code>, <code>pcre2-8.dll</code>.</li>
-                <li><strong>Dead-Code Stripping:</strong> Release binaries are compiled with <code>--release -O3</code> and stripped of debug symbols.</li>
-                <li><strong>Cryptographic Checksums:</strong> Generates <code>SHA256SUMS.txt</code> automatically for all output archives.</li>
+                <li><strong>Automatic DLL Synchronization:</strong> Bundles required runtime DLLs: <code>gc.dll</code>, <code>iconv-2.dll</code>, and <code>pcre2-8.dll</code>.</li>
+              </ul>
+            </div>
+              </div>
+            </div>
+            <div class="row-hero slot-bottom" data-slot="bottom">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>Release Hardening &amp; Cryptographic Verification</span>
+                <span class="badge cyan" data-color="cyan">PRODUCTION READY</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Dead-Code Stripping:</strong> Release binaries are compiled with <code>--release -O3</code> and stripped of debug symbols for minimal footprint.</li>
+                <li><strong>Cryptographic Checksums:</strong> Automatically generates <code>SHA256SUMS.txt</code> across all output archives, installers, and packages.</li>
               </ul>
             </div>
             </div>

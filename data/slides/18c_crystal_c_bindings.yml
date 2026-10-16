@@ -5,12 +5,11 @@ subtitle: 'Direct C ABI Interop Without Glue Code or Marshalling Overhead'
 badge: C INTEROP • ZERO-OVERHEAD ABI
 badge_color: cyan
 palette: phosphor_vector
-layout: two-column-layout
-ratio: 3:2
-left:
-  type: code
-  title: c_bindings.cr
-  tag: Crystal
+layout: feature-grid
+hero_feature:
+  title: 'c_bindings.cr — Native C ABI Primitives'
+  badge: 'ZERO-GLUE ABI'
+  color: cyan
   lang: crystal
   code: |
     # 1. Bind C headers directly in Crystal
@@ -30,16 +29,23 @@ left:
     # 3. Pass Crystal objects through C void* callbacks
     user_data = Box.box(player)
     restored  = Box(Player).unbox(user_data)
-right:
-  type: card
-  title: 'What’s Available for C Interop'
-  badge: 'TOOLKIT'
-  color: cyan
-  items:
-    - '<strong><code>lib</code> &amp; <code>@[Link]</code>:</strong> Bind C functions (<code>fun</code>), structs, unions, enums, and extern globals directly in Crystal with zero C wrapper code.'
-    - '<strong><code>Pointer(T)</code> &amp; <code>malloc</code>:</strong> Typed raw pointers, pointer arithmetic, <code>pointerof(x)</code>, and manual memory allocation.'
-    - '<strong><code>Box(T)</code> Bridging:</strong> Pack any Crystal object into a <code>Void*</code> pointer for C callbacks and unbox it back to its static type.'
-    - '<strong>Two-Way ABI (Top-Level <code>fun</code>):</strong> Export Crystal functions with C calling conventions so C code can call directly into Crystal.'
+  desc: 'First-class C ABI support built directly into the Crystal compiler—zero C wrapper files or marshalling tax.'
+features:
+  - title: 'lib & @[Link] Declarations'
+    badge: 'DIRECT HEADERS'
+    color: cyan
+    items:
+      - '<strong>Zero Wrapper Code:</strong> Bind C functions (<code>fun</code>), structs, unions, enums, and extern globals directly in Crystal.'
+  - title: 'Pointer(T) & Manual Memory'
+    badge: 'LOW-LEVEL'
+    color: emerald
+    items:
+      - '<strong>Raw Memory Control:</strong> Typed pointers, pointer arithmetic, <code>pointerof(x)</code>, and manual <code>malloc</code>.'
+  - title: 'Box(T) & Two-Way C ABI'
+    badge: 'CALLBACKS'
+    color: amber
+    items:
+      - '<strong>Void* Bridging &amp; Top-Level <code>fun</code>:</strong> Pass Crystal objects through C callbacks via <code>Box(T)</code> and export C ABI symbols.'
 notes: |
   Before we look at how Lapis binds Godot, let's look at what Crystal provides out of the box for talking to C.
   In Crystal, C interop isn't a second-class FFI library—it's built directly into the compiler and language grammar.

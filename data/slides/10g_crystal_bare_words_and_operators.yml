@@ -5,7 +5,7 @@ subtitle: Optional Parentheses, Uniform Access Principle & LLVM-Inlined Operator
 badge: CRYSTAL ERGONOMICS • SYNTACTIC ELEGANCE
 badge_color: emerald
 palette: retro_groove
-layout: two-column-layout
+layout: one-left-two-right
 ratio: 1:1
 left:
   type: code
@@ -34,13 +34,20 @@ left:
 
     v = Vector2.new(10.0_f32, 20.0_f32) + Vector2.new(5.0_f32, 5.0_f32)
     puts v[:x] # Sugar for v.[](:x) => 15.0
-right:
+right_top:
   type: card
-  title: 'Why Bare Words & Operators Excel in Crystal'
+  title: 'Uniform Access & Bare Words'
+  badge: 'HUMAN PROSE'
   color: emerald
   items:
     - '<strong>Uniform Access Principle:</strong> Callers cannot tell whether <code>player.health</code> is an ivar or calculation.'
     - '<strong>Fluent Human Sentences:</strong> Omitting parentheses yields natural prose while remaining 100% statically typed.'
+right_bottom:
+  type: card
+  title: 'Pure Operator Methods & LLVM Inlining'
+  badge: 'ZERO OVERHEAD'
+  color: cyan
+  items:
     - '<strong>Operators are Pure Methods:</strong> <code>+</code> and <code>[]</code> are standard methods on <code>struct</code> value types.'
     - '<strong>Direct LLVM Inlining:</strong> Math compiles to CPU registers with zero heap allocation or dynamic dispatch.'
 notes: |
