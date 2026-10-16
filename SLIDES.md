@@ -876,12 +876,12 @@ end
 - **Subtitle**: Compile-Time Mixins & Automated Subclass Registration
 - **Code (macro_lifecycle_hooks.cr — Compile-Time Composition)**:
   ```crystal
-  # 1. macro included: Injects state & methods at compile time
-  module Damageable
+  # 1. macro included: Synthesizes host-typed class methods & pools
+  module Poolable
     macro included
-      property health : Int32 = 100
-      def take_damage(amount : Int32) : Void
-        @health = Math.max(0, @health - amount)
+      POOL = [] of {{@type}}
+      def self.acquire : {{@type}}
+        POOL.pop? || {{@type}}.new
       end
     end
   end
@@ -895,20 +895,19 @@ end
   end
   
   class Player < GameEntity
-    include Damageable
-  end
+    include Poolable
+  end # => Synthesizes Player::POOL & Player.acquire : Player
   ```
 - **Compile-Time Module & Class Hooks**:
-  - The macro included Hook: Executes when a module is included, injecting instance variables and methods directly into the receiver.
+  - The macro included Hook: Accesses {{@type}} to synthesize host-typed class methods (self.acquire) and per-class constants impossible in plain modules.
   - The macro inherited Hook: Fires the instant a class is subclassed, allowing base classes to track and configure child types.
   - Compile-Time Registries: Builds entity factories and type registries during compilation—eliminating startup reflection scans.
   - Static Inlining: All injected code participates in global type inference and compiles directly into native machine code.
 
 **Presenter Notes**:
-> In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods).
-> In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type.
-> Similarly, macro inherited fires the instant a class is subclassed. This lets frameworks and game engines automatically register derived entity types into factories or registries without manual registration boilerplate or slow runtime reflection scans.
-> Everything is resolved and validated during compilation, compiling down to direct, inlined machine instructions.
+> A plain Crystal module can already mix in instance methods and properties, so why do we need 'macro included'? Because a plain module only mixes in instance methods and cannot parameterize constants or class methods by the including host type!
+> With 'macro included', the macro body executes inside the lexical scope of the including class with full compile-time access to @type. In this Poolable example, including the module automatically synthesizes a strongly typed 'POOL = [] of Player' array and a 'Player.acquire : Player' factory class method directly on each host class.
+> Similarly, 'macro inherited' fires the instant a class is subclassed, allowing frameworks and game engines to register derived entity types into factories at compile time without slow runtime reflection scans.
 
 ---
 

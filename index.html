@@ -2576,12 +2576,12 @@ end</code></pre>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal code-compact"># 1. macro included: Injects state &amp; methods at compile time
-module Damageable
+              <pre><code class="language-crystal code-compact"># 1. macro included: Synthesizes host-typed class methods &amp; pools
+module Poolable
   macro included
-    property health : Int32 = 100
-    def take_damage(amount : Int32) : Void
-      @health = Math.max(0, @health - amount)
+    POOL = [] of {{@type}}
+    def self.acquire : {{@type}}
+      POOL.pop? || {{@type}}.new
     end
   end
 end
@@ -2595,8 +2595,8 @@ abstract class GameEntity
 end
 
 class Player &lt; GameEntity
-  include Damageable
-end</code></pre>
+  include Poolable
+end # =&gt; Synthesizes Player::POOL &amp; Player.acquire : Player</code></pre>
             </div>
             </div>
             <div class="column col" data-slot="right">
@@ -2605,7 +2605,7 @@ end</code></pre>
                 <span>Compile-Time Module &amp; Class Hooks</span>
               </div>
               <ul class="card-list">
-                <li><strong>The <code>macro included</code> Hook:</strong> Executes when a module is included, injecting instance variables and methods directly into the receiver.</li>
+                <li><strong>The <code>macro included</code> Hook:</strong> Accesses <code>{{@type}}</code> to synthesize host-typed class methods (<code>self.acquire</code>) and per-class constants impossible in plain modules.</li>
                 <li><strong>The <code>macro inherited</code> Hook:</strong> Fires the instant a class is subclassed, allowing base classes to track and configure child types.</li>
                 <li><strong>Compile-Time Registries:</strong> Builds entity factories and type registries during compilation—eliminating startup reflection scans.</li>
                 <li><strong>Static Inlining:</strong> All injected code participates in global type inference and compiles directly into native machine code.</li>
@@ -2620,10 +2620,9 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          In Ruby, developers loved mixin modules with include, but doing advanced metaprogramming required clumsy runtime hooks like def self.included(base) followed by base.extend(ClassMethods).
-          In Crystal, macro hooks elevate this to compile time. The macro included hook fires the moment a module is included, allowing you to inject instance variables, methods, and compile-time checks directly into the host class with full access to @type.
-          Similarly, macro inherited fires the instant a class is subclassed. This lets frameworks and game engines automatically register derived entity types into factories or registries without manual registration boilerplate or slow runtime reflection scans.
-          Everything is resolved and validated during compilation, compiling down to direct, inlined machine instructions.
+          A plain Crystal module can already mix in instance methods and properties, so why do we need 'macro included'? Because a plain module only mixes in instance methods and cannot parameterize constants or class methods by the including host type!
+          With 'macro included', the macro body executes inside the lexical scope of the including class with full compile-time access to @type. In this Poolable example, including the module automatically synthesizes a strongly typed 'POOL = [] of Player' array and a 'Player.acquire : Player' factory class method directly on each host class.
+          Similarly, 'macro inherited' fires the instant a class is subclassed, allowing frameworks and game engines to register derived entity types into factories at compile time without slow runtime reflection scans.
         </aside>
       </section>
 
