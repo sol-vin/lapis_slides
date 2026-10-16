@@ -3554,20 +3554,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 117: First-Class Godot Editor Integration
-- **Palette**: `gamestation_portable` | **Badge**: `GODOT EDITOR • FIRST-CLASS CITIZEN`
-- **Native Script Editor**:
-  - Attach Script Dialog: Select Crystal (*.cr) directly when attaching scripts to any node.
-  - Pure Crystal Tokenizer: Syntax highlighting in Godot's CodeEdit for keywords, macros, and symbols.
-  - 6 Starter Templates: Built-in templates for 2D/3D Physics, @[Tool], and Resource.
-- **Live Viewport & Reload**:
+### Slide 117: First-Class Godot Editor Integration [Feature Grid / Bento]
+#### Editor Citizenship: Lapis vs. C# vs. Rust
+Zero foreign-extension friction: attach, edit, hot-reload, and read F1 docs directly inside the Godot Editor.
+
+- **Native Script Editor**
+  - Attach Script & 6 Templates: Select Crystal (*.cr) directly in Godot's dialog with 6 starter templates.
+  - Pure Crystal Tokenizer: Native syntax highlighting in Godot's CodeEdit for keywords, macros, and types.
+- **Live Viewport & Reload**
   - Instant F5 Hot-Reload: Pressing Play or saving triggers shadow DLL compilation and state-preserving swap.
-  - Live @[Tool] Execution: Custom Crystal nodes render gizmos and procedural meshes live in the 3D viewport.
-  - Inspector Live Sync: Level designers tweak @[Export] properties and see immediate viewport updates.
-- **Integrated F1 Help & LSP**:
+  - Live @[Tool] & Inspector: Custom Crystal nodes render 3D gizmos and sync @[Export] tweaks in real time.
+- **Integrated F1 Help & LSP**
   - Harvested XML Docs: Crystal # doc comments appear natively inside Godot's F1 Help browser.
-  - Sub-ms Gutter Squiggles: CrystalValidator flags unclosed blocks and syntax errors as you type.
-  - Zero External IDE Required: Author, inspect, and debug Crystal inside Godot or via VS Code / Zed LSP.
+  - Sub-ms Gutter Squiggles: CrystalValidator flags syntax errors live, or pair with VS Code / Zed LSP.
 
 **Presenter Notes**:
 > A common complaint with third-party language bindings like Rust or C++—and even Godot's own C# integration—is that they feel bolted-on and force you out of the Godot Editor into an external IDE just to create scripts, read docs, or see syntax errors. In Lapis, Crystal is a true first-class editor citizen: you can attach .cr scripts from the native dialog with 6 starter templates, edit them directly in Godot's built-in CodeEdit with a native Crystal tokenizer and sub-millisecond gutter lint, hot-reload via shadow DLLs without losing scene state, and read harvested doc comments directly inside Godot's F1 Help browser.

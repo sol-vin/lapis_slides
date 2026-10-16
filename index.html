@@ -9109,7 +9109,7 @@ end</code></pre>
       </section>
 
       <!-- Slide 117: GameStationPortable (First-Class Godot Editor Integration) -->
-      <section class="slide solvin-slide gamestation_portable" data-layout="three-column" data-palette="gamestation_portable" data-background-color="#0c0d10" data-palette-name="GameStationPortable" data-palette-cube="#c8d1dc" data-palette-cube-hover="#29b6f6" data-slide-id="33_editor_integration" id="slide-33_editor_integration">
+      <section class="slide solvin-slide gamestation_portable" data-layout="feature-grid" data-palette="gamestation_portable" data-background-color="#0c0d10" data-palette-name="GameStationPortable" data-palette-cube="#c8d1dc" data-palette-cube-hover="#29b6f6" data-slide-id="33_editor_integration" id="slide-33_editor_integration">
         <div class="palette-corner-badge" title="Theme: GameStationPortable">
           <span class="palette-corner-dot"></span> PALETTE: GameStationPortable
         </div>
@@ -9121,77 +9121,91 @@ end</code></pre>
             <h2 class="slide-title">First-Class Godot Editor Integration</h2>
             <p class="slide-subtitle">Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync</p>
           </header>
-          <div class="slide-body" data-layout="three-column" data-has-matrix="true">
-            <div class="card col cyan compact" data-color="cyan" data-density="compact">
-              <div class="card-header card-title cyan">
-                <span>Native Script Editor</span>
-                <span class="badge cyan" data-color="cyan">CODEEDIT &amp; TEMPLATES</span>
+          <div class="slide-body" data-layout="feature-grid">
+            <div class="bento-hero-column">
+              <div class="card bento-hero-card cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">Editor Citizenship: Lapis vs. C# vs. Rust</span>
+                  <span class="badge cyan" data-color="cyan">EDITOR MATRIX</span>
+                </div>
+                <div class="matrix-container bento-matrix-window">
+                  <table class="matrix-table">
+                    <thead>
+                      <tr>
+                        <th class="dim-header">Capability</th>
+                        <th class="highlight highlight-col">Lapis (Crystal)</th>
+                        <th>Godot C# (.NET)</th>
+                        <th>godot-rust (gdext)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="dim-header">Built-In CodeEdit</td>
+                        <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Native .cr Tokenizer</td>
+                        <td>~ Basic Highlight Only</td>
+                        <td><span class="emoji-tint">✗</span> External IDE Only</td>
+                      </tr>
+                      <tr>
+                        <td class="dim-header">Attach Script Dialog</td>
+                        <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> .cr Dialog + 6 Templates</td>
+                        <td><span class="emoji-tint">✓</span> .cs Dialog (Partial Class)</td>
+                        <td><span class="emoji-tint">✗</span> Manual Cargo + Struct</td>
+                      </tr>
+                      <tr>
+                        <td class="dim-header">Live @[Tool] & Gizmos</td>
+                        <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Live 3D Viewport + Sync</td>
+                        <td>~ Requires Manual Rebuild</td>
+                        <td>~ Manual Registration</td>
+                      </tr>
+                      <tr>
+                        <td class="dim-header">Hot-Reload & State</td>
+                        <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Shadow DLL + Keeps State</td>
+                        <td>~ ALC Reload (Zombie Leaks)</td>
+                        <td>~ Drops Active Scene State</td>
+                      </tr>
+                      <tr>
+                        <td class="dim-header">F1 Help & Gutter Lint</td>
+                        <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Harvested # Docs + Lint</td>
+                        <td><span class="emoji-tint">✗</span> External IDE / Roslyn Only</td>
+                        <td><span class="emoji-tint">✗</span> External cargo doc Only</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="bento-desc">Zero foreign-extension friction: attach, edit, hot-reload, and read F1 docs directly inside the Godot Editor.</div>
               </div>
-              <ul class="card-list">
-                <li><strong>Attach Script Dialog:</strong> Select <code>Crystal (*.cr)</code> directly when attaching scripts to any node.</li>
-                <li><strong>Pure Crystal Tokenizer:</strong> Syntax highlighting in Godot's <code>CodeEdit</code> for keywords, macros, and symbols.</li>
-                <li><strong>6 Starter Templates:</strong> Built-in templates for 2D/3D Physics, <code>@[Tool]</code>, and <code>Resource</code>.</li>
-              </ul>
             </div>
-            <div class="card col green compact" data-color="green" data-density="compact">
-              <div class="card-header card-title green">
-                <span>Live Viewport &amp; Reload</span>
-                <span class="badge green" data-color="green">SHADOW DLL &amp; @[TOOL]</span>
+            <div class="bento-side-column">
+              <div class="card bento-subcard cyan" data-color="cyan">
+                <div class="card-header">
+                  <span class="card-title">Native Script Editor</span>
+                  <span class="badge cyan" data-color="cyan">CODEEDIT &amp; TEMPLATES</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Attach Script & 6 Templates:</strong> Select <code>Crystal (*.cr)</code> directly in Godot's dialog with 6 starter templates.</li>
+                  <li><strong>Pure Crystal Tokenizer:</strong> Native syntax highlighting in Godot's <code>CodeEdit</code> for keywords, macros, and types.</li>
+                </ul>
               </div>
-              <ul class="card-list">
-                <li><strong>Instant F5 Hot-Reload:</strong> Pressing Play or saving triggers shadow DLL compilation and state-preserving swap.</li>
-                <li><strong>Live @[Tool] Execution:</strong> Custom Crystal nodes render gizmos and procedural meshes live in the 3D viewport.</li>
-                <li><strong>Inspector Live Sync:</strong> Level designers tweak <code>@[Export]</code> properties and see immediate viewport updates.</li>
-              </ul>
-            </div>
-            <div class="card col purple compact" data-color="purple" data-density="compact">
-              <div class="card-header card-title purple">
-                <span>Integrated F1 Help &amp; LSP</span>
-                <span class="badge purple" data-color="purple">DOCS &amp; DIAGNOSTICS</span>
+              <div class="card bento-subcard emerald" data-color="emerald">
+                <div class="card-header">
+                  <span class="card-title">Live Viewport &amp; Reload</span>
+                  <span class="badge emerald" data-color="emerald">SHADOW DLL &amp; @[TOOL]</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Instant F5 Hot-Reload:</strong> Pressing Play or saving triggers shadow DLL compilation and state-preserving swap.</li>
+                  <li><strong>Live @[Tool] & Inspector:</strong> Custom Crystal nodes render 3D gizmos and sync <code>@[Export]</code> tweaks in real time.</li>
+                </ul>
               </div>
-              <ul class="card-list">
-                <li><strong>Harvested XML Docs:</strong> Crystal <code>#</code> doc comments appear natively inside Godot's <code>F1</code> Help browser.</li>
-                <li><strong>Sub-ms Gutter Squiggles:</strong> <code>CrystalValidator</code> flags unclosed blocks and syntax errors as you type.</li>
-                <li><strong>Zero External IDE Required:</strong> Author, inspect, and debug Crystal inside Godot or via VS Code / Zed LSP.</li>
-              </ul>
-            </div>
-            <div class="matrix-container three-col-matrix">
-              <table class="matrix-table">
-                <thead>
-                  <tr>
-                    <th class="dim-header">Godot Editor Capability</th>
-                    <th class="highlight highlight-col">Lapis (Crystal)</th>
-                    <th>Godot C# (.NET)</th>
-                    <th>godot-rust (gdext)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="dim-header">Built-In CodeEdit & Templates</td>
-                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Native .cr Tokenizer + 6 Node Templates</td>
-                    <td>~ Basic Highlight (External IDE Expected)</td>
-                    <td><span class="emoji-tint">✗</span> None (External Rust IDE Only)</td>
-                  </tr>
-                  <tr>
-                    <td class="dim-header">Attach Script Dialog & Registration</td>
-                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Direct .cr Attach + Auto ClassDB Sync</td>
-                    <td><span class="emoji-tint">✓</span> Built-In .cs (Requires Partial Class)</td>
-                    <td><span class="emoji-tint">✗</span> Manual Rust Struct & Macro Registration</td>
-                  </tr>
-                  <tr>
-                    <td class="dim-header">Hot-Reload & Scene State</td>
-                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Shadow DLL Swap + Preserves Field State</td>
-                    <td>~ ALC Reload (Prone to Zombie Leaks)</td>
-                    <td>~ Experimental (Drops Active State)</td>
-                  </tr>
-                  <tr>
-                    <td class="dim-header">In-Editor F1 Docs & Gutter Lint</td>
-                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Harvested # Doc Comments + Live Gutter Lint</td>
-                    <td>~ External IDE XML Docs & Roslyn Only</td>
-                    <td><span class="emoji-tint">✗</span> External cargo doc / rust-analyzer Only</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="card bento-subcard purple" data-color="purple">
+                <div class="card-header">
+                  <span class="card-title">Integrated F1 Help &amp; LSP</span>
+                  <span class="badge purple" data-color="purple">DOCS &amp; DIAGNOSTICS</span>
+                </div>
+                <ul class="card-list">
+                  <li><strong>Harvested XML Docs:</strong> Crystal <code>#</code> doc comments appear natively inside Godot's <code>F1</code> Help browser.</li>
+                  <li><strong>Sub-ms Gutter Squiggles:</strong> <code>CrystalValidator</code> flags syntax errors live, or pair with VS Code / Zed LSP.</li>
+                </ul>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">

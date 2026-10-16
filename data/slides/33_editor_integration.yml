@@ -5,59 +5,59 @@ subtitle: Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector S
 badge: GODOT EDITOR • FIRST-CLASS CITIZEN
 badge_color: cyan
 palette: gamestation_portable
-layout: three-column
-columns:
-  - type: card
-    title: "Native Script Editor"
+layout: feature-grid
+hero_feature:
+  title: "Editor Citizenship: Lapis vs. C# vs. Rust"
+  badge: "EDITOR MATRIX"
+  color: cyan
+  matrix:
+    highlight_col: 1
+    headers:
+      - "Capability"
+      - "Lapis (Crystal)"
+      - "Godot C# (.NET)"
+      - "godot-rust (gdext)"
+    rows:
+      - - "Built-In CodeEdit"
+        - "✓ Native .cr Tokenizer"
+        - "~ Basic Highlight Only"
+        - "✗ External IDE Only"
+      - - "Attach Script Dialog"
+        - "✓ .cr Dialog + 6 Templates"
+        - "✓ .cs Dialog (Partial Class)"
+        - "✗ Manual Cargo + Struct"
+      - - "Live @[Tool] & Gizmos"
+        - "✓ Live 3D Viewport + Sync"
+        - "~ Requires Manual Rebuild"
+        - "~ Manual Registration"
+      - - "Hot-Reload & State"
+        - "✓ Shadow DLL + Keeps State"
+        - "~ ALC Reload (Zombie Leaks)"
+        - "~ Drops Active Scene State"
+      - - "F1 Help & Gutter Lint"
+        - "✓ Harvested # Docs + Lint"
+        - "✗ External IDE / Roslyn Only"
+        - "✗ External cargo doc Only"
+  desc: "Zero foreign-extension friction: attach, edit, hot-reload, and read F1 docs directly inside the Godot Editor."
+features:
+  - title: "Native Script Editor"
     badge: "CODEEDIT & TEMPLATES"
-    color: cyan
+    color: "cyan"
     items:
-      - "<strong>Attach Script Dialog:</strong> Select <code>Crystal (*.cr)</code> directly when attaching scripts to any node."
-      - "<strong>Pure Crystal Tokenizer:</strong> Syntax highlighting in Godot's <code>CodeEdit</code> for keywords, macros, and symbols."
-      - "<strong>6 Starter Templates:</strong> Built-in templates for 2D/3D Physics, <code>@[Tool]</code>, and <code>Resource</code>."
-  - type: card
-    title: "Live Viewport & Reload"
+      - "<strong>Attach Script & 6 Templates:</strong> Select <code>Crystal (*.cr)</code> directly in Godot's dialog with 6 starter templates."
+      - "<strong>Pure Crystal Tokenizer:</strong> Native syntax highlighting in Godot's <code>CodeEdit</code> for keywords, macros, and types."
+  - title: "Live Viewport & Reload"
     badge: "SHADOW DLL & @[TOOL]"
-    color: green
+    color: "emerald"
     items:
       - "<strong>Instant F5 Hot-Reload:</strong> Pressing Play or saving triggers shadow DLL compilation and state-preserving swap."
-      - "<strong>Live @[Tool] Execution:</strong> Custom Crystal nodes render gizmos and procedural meshes live in the 3D viewport."
-      - "<strong>Inspector Live Sync:</strong> Level designers tweak <code>@[Export]</code> properties and see immediate viewport updates."
-  - type: card
-    title: "Integrated F1 Help & LSP"
+      - "<strong>Live @[Tool] & Inspector:</strong> Custom Crystal nodes render 3D gizmos and sync <code>@[Export]</code> tweaks in real time."
+  - title: "Integrated F1 Help & LSP"
     badge: "DOCS & DIAGNOSTICS"
-    color: purple
+    color: "purple"
     items:
       - "<strong>Harvested XML Docs:</strong> Crystal <code>#</code> doc comments appear natively inside Godot's <code>F1</code> Help browser."
-      - "<strong>Sub-ms Gutter Squiggles:</strong> <code>CrystalValidator</code> flags unclosed blocks and syntax errors as you type."
-      - "<strong>Zero External IDE Required:</strong> Author, inspect, and debug Crystal inside Godot or via VS Code / Zed LSP."
-matrix:
-  highlight_col: 1
-  headers:
-    - "Godot Editor Capability"
-    - "Lapis (Crystal)"
-    - "Godot C# (.NET)"
-    - "godot-rust (gdext)"
-  rows:
-    - - "Built-In CodeEdit & Templates"
-      - "✓ Native .cr Tokenizer + 6 Node Templates"
-      - "~ Basic Highlight (External IDE Expected)"
-      - "✗ None (External Rust IDE Only)"
-    - - "Attach Script Dialog & Registration"
-      - "✓ Direct .cr Attach + Auto ClassDB Sync"
-      - "✓ Built-In .cs (Requires Partial Class)"
-      - "✗ Manual Rust Struct & Macro Registration"
-    - - "Hot-Reload & Scene State"
-      - "✓ Shadow DLL Swap + Preserves Field State"
-      - "~ ALC Reload (Prone to Zombie Leaks)"
-      - "~ Experimental (Drops Active State)"
-    - - "In-Editor F1 Docs & Gutter Lint"
-      - "✓ Harvested # Doc Comments + Live Gutter Lint"
-      - "~ External IDE XML Docs & Roslyn Only"
-      - "✗ External cargo doc / rust-analyzer Only"
-takeaway:
-  badge: FIRST-CLASS EDITOR CITIZEN
-  text: Crystal integrates directly into Godot's Script Editor, Inspector, 3D Viewport, and F1 Help with zero foreign-extension friction.
+      - "<strong>Sub-ms Gutter Squiggles:</strong> <code>CrystalValidator</code> flags syntax errors live, or pair with VS Code / Zed LSP."
 notes: |
   A common complaint with third-party language bindings like Rust or C++—and even Godot's own C# integration—is that they feel bolted-on and force you out of the Godot Editor into an external IDE just to create scripts, read docs, or see syntax errors. In Lapis, Crystal is a true first-class editor citizen: you can attach .cr scripts from the native dialog with 6 starter templates, edit them directly in Godot's built-in CodeEdit with a native Crystal tokenizer and sub-millisecond gutter lint, hot-reload via shadow DLLs without losing scene state, and read harvested doc comments directly inside Godot's F1 Help browser.
 
