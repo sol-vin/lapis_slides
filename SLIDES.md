@@ -1572,19 +1572,19 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     player.collect_coin
   end
   
-  # 4. Zero-allocation StaticSignalTable bind & hot-path emit
-  on_signal health_changed, ->on_hp_updated(Int32, Int32)
-  emit_health_changed(75, 100) # FNV-1a hash slot, 0 Variant boxing!
+  # 4. Method proc binding & first-class typed emission
+  on health_changed, &->on_hp_updated(Int32, Int32)
+  health_changed.emit(50, 70)
   ```
 - **Reactive Gameplay Architecture**:
   - Declarative on & connect: Wire signals with clean blocks, eliminating single-use callback boilerplate.
-  - Zero-Allocation StaticSignalTable: on_signal and emit_health_changed dispatch via FNV-1a hashes with zero heap closures.
+  - First-Class Typed Signals: on health_changed, &->... and health_changed.emit(50, 70) verify signatures at compile time.
   - Positional Type Filtering: on area.body_entered, Player filters collision events and downcasts targets automatically.
   - One-Shot & Safe Lifecycle: signal.once { ... } auto-unhooks after firing, while 64-bit IDs prevent stale callback crashes.
 
 **Presenter Notes**:
 > Signals are the heartbeat of Godot game architecture. In Lapis, signals feel completely native to Crystal. With our 'on' macro and 'connect' blocks, you can wire up signals with idiomatic closures—eliminating single-use handler functions.
-> Signals are first-class typed accessors: 'health_changed.emit(75, 100)', 'player_died.once', and positional type filtering like 'on area.body_entered, Player' prevent method namespace pollution and collisions.
+> Signals are first-class typed accessors: 'health_changed.emit(50, 70)', 'player_died.once', and positional type filtering like 'on area.body_entered, Player' prevent method namespace pollution and collisions.
 > Systems stay decoupled and clean, with compile-time verification catching signature mismatches instantly with zero runtime reflection overhead.
 
 ---
