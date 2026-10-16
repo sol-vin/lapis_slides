@@ -41,9 +41,9 @@ slides:
 # ==============================================================================
 - 04b_act3_crystal_intro
 - 07_why_crystal_video
-- 21_boilerplate_elimination
-- 22_feature_matrix
 - 05_birth_of_crystal
+- 05a1_doocr_showcase
+- 05a2_ship_of_shwageseus
 - 05b_crystal_type_system
 - 10_expressive_ergonomics
 - 10b_ruby_parity_in_crystal
@@ -65,6 +65,7 @@ slides:
 - 05c_act4_lapis_intro
 - 06_what_is_lapis
 - 20_node_dsl
+- 21_boilerplate_elimination
 - 20b_ergonomic_node_access
 - 20c_node_context_tilde_operator
 - 20d_gmodule_mixins
@@ -168,6 +169,7 @@ slides:
 # --- Chapter 4.11: The Hard Numbers (Benchmarks & Shootouts) ---
 - 34n_act4_benchmarks_intro
 - 35_benchmarks
+- 22_feature_matrix
 - 35d_multilang_benchmarks
 - 35e_native_shootout
 - 35f_interop_benchmarks

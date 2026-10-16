@@ -1,0 +1,29 @@
+---
+id: 05a1_doocr_showcase
+title: 'Case Study: doo-cr (DOOM in Crystal)'
+subtitle: 'github.com/D-Shwagginz/doo-cr • By Former Mentee D. Shwagginz'
+badge: COMMUNITY SPOTLIGHT • DOO-CR
+badge_color: amber
+palette: they_fear
+layout: media-layout
+media:
+  type: image
+  src: doom_cr.png
+  title: 'D-Shwagginz/doo-cr — DOOM1.WAD Running in Crystal'
+  tag: 'GIF / Gameplay'
+  caption:
+    speaker: 'D. Shwagginz'
+    quote: 'If nothing else, this project serves as proof that Crystal can be programmed as a low-level procedural language for game development.'
+card:
+  title: 'From Mentee to Porting id Software’s Classic'
+  badge: 'DOO-CR'
+  color: amber
+  items:
+    - '<strong>The Mentee &amp; The Mission:</strong> Created by former mentee <strong>Shwagginz</strong> (<code>D-Shwagginz/doo-cr</code>), who set out to port <strong>DOOM</strong> entirely into Crystal.'
+    - '<strong>Step 1 — Header-Only C Binding:</strong> Found <strong>PureDOOM</strong> (a single-header C port of LinuxDoom) and bound it to Crystal alongside <code>raylib-cr</code> and <code>libADLMIDI</code> to get DOOM playable immediately.'
+    - '<strong>Step 2 — The "Ship of Shwageseus":</strong> Binding a C library is easy—so he didn’t stop there. He began replacing the C engine function by function from the inside out.'
+    - '<strong>Full Source Port Features:</strong> Supports DOOM, DOOM II, &amp; Final Doom WADs, networked multiplayer, DeHackEd/BEX patches, removed limits, and a custom Crystal Mod API.'
+notes: |
+  Right after talking about how Crystal marries Ruby's syntax with a bare-metal C systems core, I want to highlight a project by a former mentee of mine named Shwagginz: doo-cr.
+  He wanted to port DOOM to Crystal. So what did he do? First, he found a C header-only library source port of DOOM called PureDOOM, and bound it to Crystal using raylib-cr for rendering so he could immediately boot and play DOOM in Crystal.
+  Okay, binding a C library isn't that crazy on its own, right? But what he did next is what makes this project so unique—he used a technique we call the "Ship of Shwageseus" method to turn that C binding into pure Crystal.

@@ -1,0 +1,49 @@
+---
+id: 05a2_ship_of_shwageseus
+title: 'The "Ship of Shwageseus" Method'
+subtitle: 'C Bindings → 1-to-1 Pointer(T) / Box(T) / malloc → Idiomatic Crystal'
+badge: SHIP OF SHWAGESEUS • C TO CRYSTAL
+badge_color: amber
+palette: they_fear
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: ship_of_shwageseus.cr
+  tag: Crystal
+  lang: crystal
+  code: |
+    # STAGE 1: Bind the C header-only library (Playable Day 1)
+    lib CDoom
+      fun w_add_file = W_AddFile(filename : LibC::Char*)
+    end
+
+    # STAGE 2: 1-to-1 C translation using Pointer(T), Box(T) & malloc
+    fun w_add_file(filename : Pointer(UInt8), cb_data : Pointer(Void))
+      length = numlumps * sizeof(Filelump)
+      fileinfo = LibC.malloc(length).as(Pointer(Filelump))
+      ctx = Box(WadContext).unbox(cb_data)
+      ctx.read_lumps(fileinfo, numlumps)
+    end
+
+    # STAGE 3: Refactor into real, idiomatic Crystal!
+    module Doocr
+      def self.add_wad_file(path : Path) : Array(LumpInfo)
+        File.open(path, "rb") { |io| WadParser.parse_lumps(io) }
+      end
+    end
+right:
+  type: card
+  title: 'Replacing the C Engine Plank by Plank'
+  badge: '3-STAGE EVOLUTION'
+  color: amber
+  items:
+    - '<strong>1. Bind &amp; Boot (<code>lib CDoom</code>):</strong> Bind the header-only C port to Crystal first so the entire game runs and remains testable from minute one.'
+    - '<strong>2. 1-to-1 Unsafe Port (<code>Pointer(T)</code>, <code>Box(T)</code>, <code>malloc</code>):</strong> Translate C functions one by one into Crystal using raw <code>Pointer(T)</code>, <code>Box(T)</code>, and <code>malloc</code>, flipping each C symbol to <code>extern</code>.'
+    - '<strong>3. Continuous Live Verification:</strong> Because Crystal shares the exact C ABI, the half-C, half-Crystal Ship of Shwageseus compiles and plays after every single function swap.'
+    - '<strong>4. Idiomatic Crystalization:</strong> Once every C plank is replaced, refactor raw pointers and <code>malloc</code> into safe Crystal classes, enums, and slices—boom, DOOM 100% in Crystal!'
+notes: |
+  We call this the "Ship of Shwageseus" method—or two-way bindings.
+  First, you bind the header-only C library so you can play DOOM in Crystal immediately.
+  Second, you take the functions as they are written in C and translate them one by one into Crystal—written 1-to-1 with the C code using Pointer(T), Box(T), and malloc—while turning the original C function into an extern declaration. Because Crystal speaks the native C ABI without FFI marshalling overhead, you can test each individual function inside the live game the moment you rewrite it.
+  Third, once every C function has been moved across the border, you translate that raw pointer code into real, idiomatic Crystal. And boom—you have DOOM fully made in Crystal without ever having a broken build in between.
