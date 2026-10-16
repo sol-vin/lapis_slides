@@ -3570,7 +3570,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - Zero External IDE Required: Author, inspect, and debug Crystal inside Godot or via VS Code / Zed LSP.
 
 **Presenter Notes**:
-> A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @[Tool] scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help.
+> A common complaint with third-party language bindings like Rust or C++—and even Godot's own C# integration—is that they feel bolted-on and force you out of the Godot Editor into an external IDE just to create scripts, read docs, or see syntax errors. In Lapis, Crystal is a true first-class editor citizen: you can attach .cr scripts from the native dialog with 6 starter templates, edit them directly in Godot's built-in CodeEdit with a native Crystal tokenizer and sub-millisecond gutter lint, hot-reload via shadow DLLs without losing scene state, and read harvested doc comments directly inside Godot's F1 Help browser.
 
 ---
 

@@ -9121,8 +9121,8 @@ end</code></pre>
             <h2 class="slide-title">First-Class Godot Editor Integration</h2>
             <p class="slide-subtitle">Native Script Attachment, Pure Crystal Tokenizer, and Live Inspector Sync</p>
           </header>
-          <div class="slide-body" data-layout="three-column">
-            <div class="card col cyan" data-color="cyan">
+          <div class="slide-body" data-layout="three-column" data-has-matrix="true">
+            <div class="card col cyan compact" data-color="cyan" data-density="compact">
               <div class="card-header card-title cyan">
                 <span>Native Script Editor</span>
                 <span class="badge cyan" data-color="cyan">CODEEDIT &amp; TEMPLATES</span>
@@ -9133,7 +9133,7 @@ end</code></pre>
                 <li><strong>6 Starter Templates:</strong> Built-in templates for 2D/3D Physics, <code>@[Tool]</code>, and <code>Resource</code>.</li>
               </ul>
             </div>
-            <div class="card col green" data-color="green">
+            <div class="card col green compact" data-color="green" data-density="compact">
               <div class="card-header card-title green">
                 <span>Live Viewport &amp; Reload</span>
                 <span class="badge green" data-color="green">SHADOW DLL &amp; @[TOOL]</span>
@@ -9144,7 +9144,7 @@ end</code></pre>
                 <li><strong>Inspector Live Sync:</strong> Level designers tweak <code>@[Export]</code> properties and see immediate viewport updates.</li>
               </ul>
             </div>
-            <div class="card col purple" data-color="purple">
+            <div class="card col purple compact" data-color="purple" data-density="compact">
               <div class="card-header card-title purple">
                 <span>Integrated F1 Help &amp; LSP</span>
                 <span class="badge purple" data-color="purple">DOCS &amp; DIAGNOSTICS</span>
@@ -9155,6 +9155,44 @@ end</code></pre>
                 <li><strong>Zero External IDE Required:</strong> Author, inspect, and debug Crystal inside Godot or via VS Code / Zed LSP.</li>
               </ul>
             </div>
+            <div class="matrix-container three-col-matrix">
+              <table class="matrix-table">
+                <thead>
+                  <tr>
+                    <th class="dim-header">Godot Editor Capability</th>
+                    <th class="highlight highlight-col">Lapis (Crystal)</th>
+                    <th>Godot C# (.NET)</th>
+                    <th>godot-rust (gdext)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="dim-header">Built-In CodeEdit & Templates</td>
+                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Native .cr Tokenizer + 6 Node Templates</td>
+                    <td>~ Basic Highlight (External IDE Expected)</td>
+                    <td><span class="emoji-tint">✗</span> None (External Rust IDE Only)</td>
+                  </tr>
+                  <tr>
+                    <td class="dim-header">Attach Script Dialog & Registration</td>
+                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Direct .cr Attach + Auto ClassDB Sync</td>
+                    <td><span class="emoji-tint">✓</span> Built-In .cs (Requires Partial Class)</td>
+                    <td><span class="emoji-tint">✗</span> Manual Rust Struct & Macro Registration</td>
+                  </tr>
+                  <tr>
+                    <td class="dim-header">Hot-Reload & Scene State</td>
+                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Shadow DLL Swap + Preserves Field State</td>
+                    <td>~ ALC Reload (Prone to Zombie Leaks)</td>
+                    <td>~ Experimental (Drops Active State)</td>
+                  </tr>
+                  <tr>
+                    <td class="dim-header">In-Editor F1 Docs & Gutter Lint</td>
+                    <td class="lapis-col highlight-col"><span class="emoji-tint">✓</span> Harvested # Doc Comments + Live Gutter Lint</td>
+                    <td>~ External IDE XML Docs & Roslyn Only</td>
+                    <td><span class="emoji-tint">✗</span> External cargo doc / rust-analyzer Only</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
           <footer class="slide-footer">
             <span class="footer-left">Lapis for Crystal • Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+</span>
@@ -9163,7 +9201,7 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          A common complaint with third-party language bindings is that they feel bolted-on. In Lapis, Crystal is a first-class editor citizen. You can attach .cr scripts from the native dialog, edit them in Godot's built-in script editor with syntax highlighting, run @[Tool] scripts in the 3D viewport, and read harvested doc comments directly in Godot's F1 Help.
+          A common complaint with third-party language bindings like Rust or C++—and even Godot's own C# integration—is that they feel bolted-on and force you out of the Godot Editor into an external IDE just to create scripts, read docs, or see syntax errors. In Lapis, Crystal is a true first-class editor citizen: you can attach .cr scripts from the native dialog with 6 starter templates, edit them directly in Godot's built-in CodeEdit with a native Crystal tokenizer and sub-millisecond gutter lint, hot-reload via shadow DLLs without losing scene state, and read harvested doc comments directly inside Godot's F1 Help browser.
         </aside>
       </section>
 
