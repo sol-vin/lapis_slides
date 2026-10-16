@@ -1196,7 +1196,7 @@ BEGIN       END         __FILE__    __LINE__</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 13: They Fear (Case Study: doo-cr (DOOM in Crystal)) -->
+      <!-- Slide 13: They Fear (doo-cr: DOOM Ported to Crystal) -->
       <section class="slide solvin-slide they_fear" data-layout="media-layout" data-palette="they_fear" data-background-color="#101014" data-palette-name="They Fear" data-palette-cube="#f5a623" data-palette-cube-hover="#3b7dd8" data-slide-id="05a1_doocr_showcase" id="slide-05a1_doocr_showcase">
         <div class="palette-corner-badge" title="Theme: They Fear">
           <span class="palette-corner-dot"></span> PALETTE: They Fear
@@ -1204,10 +1204,10 @@ BEGIN       END         __FILE__    __LINE__</code></pre>
         <div class="slide-container">
           <header class="slide-header">
             <div class="slide-meta">
-              <span class="badge badge-pill amber" data-color="amber">COMMUNITY SPOTLIGHT • DOO-CR</span>
+              <span class="badge badge-pill amber" data-color="amber">CASE STUDY • DOO-CR</span>
             </div>
-            <h2 class="slide-title">Case Study: doo-cr (DOOM in Crystal)</h2>
-            <p class="slide-subtitle">github.com/D-Shwagginz/doo-cr • By Former Mentee D. Shwagginz</p>
+            <h2 class="slide-title">doo-cr: DOOM Ported to Crystal</h2>
+            <p class="slide-subtitle">github.com/D-Shwagginz/doo-cr • PureDOOM + raylib-cr + libADLMIDI</p>
           </header>
           <div class="slide-body" data-layout="two-column media" data-ratio="2:1">
             <div class="column" data-slot="left">
@@ -1218,31 +1218,27 @@ BEGIN       END         __FILE__    __LINE__</code></pre>
                     <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                     <span class="terminal-dot dot-3 green" title="Maximize"></span>
                   </div>
-                  <span class="window-title">D-Shwagginz/doo-cr — DOOM1.WAD Running in Crystal</span>
+                  <span class="window-title">doo-cr — DOOM1.WAD</span>
                   <div class="window-controls">
-                    <span class="lang-tag">GIF / Gameplay</span>
+                    <span class="lang-tag">Crystal</span>
                   </div>
                 </div>
                 <div class="window-body media-body">
-                  <img src="doom_cr.png" alt="D-Shwagginz/doo-cr — DOOM1.WAD Running in Crystal" class="slide-media" referrerpolicy="no-referrer" loading="lazy">
-                </div>
-                <div class="media-caption">
-                  <span class="caption-speaker">D. Shwagginz:</span>
-                  <span class="caption-quote">If nothing else, this project serves as proof that Crystal can be programmed as a low-level procedural language for game development.</span>
+                  <img src="doom_cr.png" alt="doo-cr — DOOM1.WAD" class="slide-media" referrerpolicy="no-referrer" loading="lazy">
                 </div>
               </div>
             </div>
             <div class="column" data-slot="right">
             <div class="card col amber" data-color="amber">
               <div class="card-header card-title amber">
-                <span>From Mentee to Porting id Software’s Classic</span>
-                <span class="badge amber" data-color="amber">DOO-CR</span>
+                <span>Porting id Software’s Classic</span>
+                <span class="badge amber" data-color="amber">SOURCE PORT</span>
               </div>
               <ul class="card-list">
-                <li><strong>The Mentee &amp; The Mission:</strong> Created by former mentee <strong>Shwagginz</strong> (<code>D-Shwagginz/doo-cr</code>), who set out to port <strong>DOOM</strong> entirely into Crystal.</li>
-                <li><strong>Step 1 — Header-Only C Binding:</strong> Found <strong>PureDOOM</strong> (a single-header C port of LinuxDoom) and bound it to Crystal alongside <code>raylib-cr</code> and <code>libADLMIDI</code> to get DOOM playable immediately.</li>
-                <li><strong>Step 2 — The "Ship of Shwageseus":</strong> Binding a C library is easy—so he didn’t stop there. He began replacing the C engine function by function from the inside out.</li>
-                <li><strong>Full Source Port Features:</strong> Supports DOOM, DOOM II, &amp; Final Doom WADs, networked multiplayer, DeHackEd/BEX patches, removed limits, and a custom Crystal Mod API.</li>
+                <li><strong>Header-Only C Base:</strong> Started by binding <strong>PureDOOM</strong> (a single-header C port of LinuxDoom) to Crystal with <code>raylib-cr</code> and <code>libADLMIDI</code>.</li>
+                <li><strong>Beyond FFI Wrappers:</strong> Instead of stopping at a C binding, every engine function was incrementally translated from C into Crystal.</li>
+                <li><strong>Full WAD Support:</strong> Runs <strong>DOOM</strong>, <strong>DOOM II</strong>, and <strong>Final Doom</strong> with engine limits removed and DeHackEd/BEX support.</li>
+                <li><strong>Extended Features:</strong> Adds networked multiplayer via a rendezvous server, runtime trig tables, and a Crystal Mod API.</li>
               </ul>
             </div>
             </div>
@@ -1254,9 +1250,9 @@ BEGIN       END         __FILE__    __LINE__</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          Right after talking about how Crystal marries Ruby's syntax with a bare-metal C systems core, I want to highlight a project by a former mentee of mine named Shwagginz: doo-cr.
-          He wanted to port DOOM to Crystal. So what did he do? First, he found a C header-only library source port of DOOM called PureDOOM, and bound it to Crystal using raylib-cr for rendering so he could immediately boot and play DOOM in Crystal.
-          Okay, binding a C library isn't that crazy on its own, right? But what he did next is what makes this project so unique—he used a technique we call the "Ship of Shwageseus" method to turn that C binding into pure Crystal.
+          Right after looking at how Crystal combines Ruby ergonomics with a C systems core, let's look at doo-cr by D-Shwagginz.
+          To port DOOM to Crystal, he started with PureDOOM—a single-header C port of LinuxDoom—and bound it to Crystal alongside raylib-cr and libADLMIDI so the game could boot and run immediately.
+          Instead of stopping at a C wrapper, he incrementally replaced the C codebase function by function until the port ran natively in Crystal.
         </aside>
       </section>
 
@@ -1301,7 +1297,7 @@ fun w_add_file(filename : Pointer(UInt8), cb_data : Pointer(Void))
   ctx.read_lumps(fileinfo, numlumps)
 end
 
-# STAGE 3: Refactor into real, idiomatic Crystal!
+# STAGE 3: Refactor into idiomatic Crystal
 module Doocr
   def self.add_wad_file(path : Path) : Array(LumpInfo)
     File.open(path, &quot;rb&quot;) { |io| WadParser.parse_lumps(io) }
@@ -1313,13 +1309,13 @@ end</code></pre>
             <div class="card col amber" data-color="amber">
               <div class="card-header card-title amber">
                 <span>Replacing the C Engine Plank by Plank</span>
-                <span class="badge amber" data-color="amber">3-STAGE EVOLUTION</span>
+                <span class="badge amber" data-color="amber">3-STAGE PORT</span>
               </div>
               <ul class="card-list">
-                <li><strong>1. Bind &amp; Boot (<code>lib CDoom</code>):</strong> Bind the header-only C port to Crystal first so the entire game runs and remains testable from minute one.</li>
-                <li><strong>2. 1-to-1 Unsafe Port (<code>Pointer(T)</code>, <code>Box(T)</code>, <code>malloc</code>):</strong> Translate C functions one by one into Crystal using raw <code>Pointer(T)</code>, <code>Box(T)</code>, and <code>malloc</code>, flipping each C symbol to <code>extern</code>.</li>
-                <li><strong>3. Continuous Live Verification:</strong> Because Crystal shares the exact C ABI, the half-C, half-Crystal Ship of Shwageseus compiles and plays after every single function swap.</li>
-                <li><strong>4. Idiomatic Crystalization:</strong> Once every C plank is replaced, refactor raw pointers and <code>malloc</code> into safe Crystal classes, enums, and slices—boom, DOOM 100% in Crystal!</li>
+                <li><strong>1. Bind the C Header (<code>lib CDoom</code>):</strong> Bind the header-only C library first so the game boots and runs in Crystal from day one.</li>
+                <li><strong>2. 1-to-1 Low-Level Translation:</strong> Port C functions one by one into Crystal using <code>Pointer(T)</code>, <code>Box(T)</code>, and <code>malloc</code>, marking the C originals <code>extern</code>.</li>
+                <li><strong>3. Test After Every Function:</strong> Because Crystal shares the C ABI, the hybrid binary compiles and runs after each individual function port.</li>
+                <li><strong>4. Refactor to Idiomatic Crystal:</strong> Once the C code is fully replaced, convert raw pointers and manual allocations into safe Crystal types.</li>
               </ul>
             </div>
             </div>
@@ -1331,10 +1327,10 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          We call this the "Ship of Shwageseus" method—or two-way bindings.
-          First, you bind the header-only C library so you can play DOOM in Crystal immediately.
-          Second, you take the functions as they are written in C and translate them one by one into Crystal—written 1-to-1 with the C code using Pointer(T), Box(T), and malloc—while turning the original C function into an extern declaration. Because Crystal speaks the native C ABI without FFI marshalling overhead, you can test each individual function inside the live game the moment you rewrite it.
-          Third, once every C function has been moved across the border, you translate that raw pointer code into real, idiomatic Crystal. And boom—you have DOOM fully made in Crystal without ever having a broken build in between.
+          He calls this the "Ship of Shwageseus" method.
+          First, bind the header-only C library so DOOM is playable in Crystal immediately.
+          Second, take the C functions one by one and translate them 1-to-1 into Crystal using Pointer(T), Box(T), and malloc, turning the C functions into extern declarations so each function can be tested live as it is rewritten.
+          Third, once the C functions are ported over, refactor that low-level pointer code into idiomatic Crystal.
         </aside>
       </section>
 
