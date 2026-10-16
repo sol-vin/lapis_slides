@@ -46,8 +46,6 @@ slides:
 - 04b_act3_crystal_intro
 - 07_why_crystal_video
 - 05_birth_of_crystal
-- 05a1_doocr_showcase
-- 05a2_ship_of_shwageseus
 - 05b_crystal_type_system
 - 10_expressive_ergonomics
 - 10g_crystal_bare_words_and_operators
@@ -67,6 +65,9 @@ slides:
 - 19_macro_serialization
 - 18_macro_state_machines
 - 18b_macro_fsm_implementation
+- 18c_crystal_c_bindings
+- 05a1_doocr_showcase
+- 05a2_ship_of_shwageseus
 
 # ==============================================================================
 # ACT IV: THE LAPIS GODOT ENGINE MASTERCLASS

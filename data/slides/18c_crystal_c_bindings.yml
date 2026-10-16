@@ -1,0 +1,47 @@
+---
+id: 18c_crystal_c_bindings
+title: 'First-Class C Bindings & Low-Level Primitives'
+subtitle: 'Direct C ABI Interop Without Glue Code or Marshalling Overhead'
+badge: C INTEROP • ZERO-OVERHEAD ABI
+badge_color: cyan
+palette: phosphor_vector
+layout: two-column-layout
+ratio: 3:2
+left:
+  type: code
+  title: c_bindings.cr
+  tag: Crystal
+  lang: crystal
+  code: |
+    # 1. Bind C headers directly in Crystal
+    @[Link("raylib")]
+    lib LibRaylib
+      struct Color
+        r, g, b, a : UInt8
+      end
+
+      fun init_window = InitWindow(w : LibC::Int, h : LibC::Int, title : UInt8*)
+    end
+
+    # 2. Raw pointers, stack addresses & manual allocation
+    buf = Pointer(UInt8).malloc(256)
+    ptr = pointerof(buf)
+
+    # 3. Pass Crystal objects through C void* callbacks
+    user_data = Box.box(player)
+    restored  = Box(Player).unbox(user_data)
+right:
+  type: card
+  title: 'What’s Available for C Interop'
+  badge: 'TOOLKIT'
+  color: cyan
+  items:
+    - '<strong><code>lib</code> &amp; <code>@[Link]</code>:</strong> Bind C functions (<code>fun</code>), structs, unions, enums, and extern globals directly in Crystal with zero C wrapper code.'
+    - '<strong><code>Pointer(T)</code> &amp; <code>malloc</code>:</strong> Typed raw pointers, pointer arithmetic, <code>pointerof(x)</code>, and manual memory allocation.'
+    - '<strong><code>Box(T)</code> Bridging:</strong> Pack any Crystal object into a <code>Void*</code> pointer for C callbacks and unbox it back to its static type.'
+    - '<strong>Two-Way ABI (Top-Level <code>fun</code>):</strong> Export Crystal functions with C calling conventions so C code can call directly into Crystal.'
+notes: |
+  Before we look at how Lapis binds Godot, let's look at what Crystal provides out of the box for talking to C.
+  In Crystal, C interop isn't a second-class FFI library—it's built directly into the compiler and language grammar.
+  With `lib` and `@[Link]`, you declare C structs, enums, and functions directly in Crystal syntax and link native libraries with zero glue code.
+  When you need low-level control, you have typed `Pointer(T)`, `pointerof`, `malloc`, and `Box(T)` for passing Crystal references as `void*` user data across C callbacks. You can even write top-level `fun` definitions in Crystal to export native C ABI symbols that C code can call directly.
