@@ -31,16 +31,18 @@ left:
 
     # 3. Postfix while & until loops:
     frame_step while simulation.running?
+    boss.regenerate! until boss.full_health?
 right:
   type: card
   title: Why Statement Modifiers Excel in Crystal
   color: amber
   items:
-    - '<strong>Conversational Alignment:</strong> Puts the primary action first, treating conditions as secondary qualifiers.'
+    - '<strong>Conversational Alignment:</strong> Puts the primary action first, treating <code>if</code>, <code>unless</code>, <code>while</code>, and <code>until</code> as secondary qualifiers.'
     - '<strong>Eliminates Pyramid of Doom:</strong> Guard clauses dispatch on single lines without nesting indentation.'
-    - '<strong>Clean Right-Aligned Guards:</strong> Conditions tuck neatly to the right without disrupting vertical flow.'
+    - '<strong>Expressive Postfix Loops:</strong> Single-line <code>while</code> and <code>until</code> modifiers express tight game-loop steps without boilerplate.'
     - '<strong>Zero-Cost LLVM Lowering:</strong> Compiles directly to standard conditional branch instructions with zero overhead.'
 notes: |
-  In virtually all mainstream programming languages—C, C++, Java, C#, Python, and Go—control flow is strictly prefix: the 'if' condition must come before the block. When developers from those languages encounter statement modifiers like 'player.drink_potion! if player.low_health?', they often wonder why the 'if' is at the end.
+  In virtually all mainstream programming languages—C, C++, Java, C#, Python, and Go—control flow is strictly prefix: the 'if' or 'while' condition must come before the block. When developers from those languages encounter statement modifiers like 'player.drink_potion! if player.low_health?' or 'boss.regenerate! until boss.full_health?', they often wonder why the keyword is at the end.
   The answer lies in human linguistics and cognitive psychology. In real conversation, the primary action—what the program is actually doing—is the most important piece of information. The condition is merely a secondary guardrail.
-  Statement modifiers also solve one of the greatest curses of software engineering: the 'Pyramid of Doom'. Instead of nesting four levels of if-statements just to validate that an actor can cast a spell, you write three flat guard clauses: 'return unless spell.ready?', 'return if target.invulnerable?', 'return unless mana >= cost'. The primary business logic stays completely un-indented at the left margin. Crystal preserves this exact postfix syntax, compiling it down to direct branch instructions with zero overhead.
+  Statement modifiers also solve one of the greatest curses of software engineering: the 'Pyramid of Doom'. Instead of nesting four levels of if-statements just to validate that an actor can cast a spell, you write three flat guard clauses: 'return unless spell.ready?', 'return if target.invulnerable?', 'return unless mana >= cost'. The primary business logic stays completely un-indented at the left margin. Crystal preserves this exact postfix syntax across if, unless, while, and until, compiling it down to direct branch instructions with zero overhead.
+
