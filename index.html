@@ -1457,9 +1457,9 @@ puts v[:x] # Sugar for v.[](:x) =&gt; 15.0</code></pre>
               <div class="card faq-card col cyan" data-color="cyan">
                 <div class="faq-question">
                   <span class="faq-q-badge badge cyan" data-color="cyan">Q2 • EXPRESSIONS</span>
-                  <span>Assigning an if statement to a variable?</span>
+                  <span>Assigning an if or case to a variable?</span>
                 </div>
-                <div class="faq-answer">Control flow constructs are expressions that evaluate to concrete values (<code>val = if cond then 1 else 2 end</code>). Plus, <code>if x = find()</code> performs static compile-time nil narrowing!</div>
+                <div class="faq-answer">Control flow constructs are expressions that evaluate to concrete values (<code>val = if cond then 1 else 2 end</code>), paired with <code>case</code> tuple matching and leading-dot predicates (<code>when .even?</code>)!</div>
               </div>
               <div class="card faq-card col emerald" data-color="emerald">
                 <div class="faq-question">
@@ -1561,21 +1561,21 @@ end</code></pre>
         </aside>
       </section>
 
-      <!-- Slide 18: FOS (Control Expressions: If, Case & Nil Narrowing) -->
-      <section class="slide solvin-slide fos" data-layout="two-column-layout" data-palette="fos" data-background-color="#0000aa" data-palette-name="FOS" data-palette-cube="#ffffff" data-palette-cube-hover="#55ffff" data-slide-id="10j_crystal_if_expressions_and_nil_narrowing" id="slide-10j_crystal_if_expressions_and_nil_narrowing">
+      <!-- Slide 18: FOS (Control Expressions: If & Case Superpowers) -->
+      <section class="slide solvin-slide fos" data-layout="one-left-two-right" data-palette="fos" data-background-color="#0000aa" data-palette-name="FOS" data-palette-cube="#ffffff" data-palette-cube-hover="#55ffff" data-slide-id="10j_crystal_if_expressions_and_nil_narrowing" id="slide-10j_crystal_if_expressions_and_nil_narrowing">
         <div class="palette-corner-badge" title="Theme: FOS">
           <span class="palette-corner-dot"></span> PALETTE: FOS
         </div>
         <div class="slide-container">
           <header class="slide-header">
             <div class="slide-meta">
-              <span class="badge badge-pill emerald" data-color="emerald">CRYSTAL TYPE SAFETY • EXPRESSION CONTROL</span>
+              <span class="badge badge-pill emerald" data-color="emerald">CRYSTAL ERGONOMICS • EXPRESSION CONTROL</span>
             </div>
-            <h2 class="slide-title">Control Expressions: If, Case &amp; Nil Narrowing</h2>
-            <p class="slide-subtitle">Expression Assignment, Range Cases &amp; Crystal&#39;s Compile-Time Static Nil Narrowing</p>
+            <h2 class="slide-title">Control Expressions: If &amp; Case Superpowers</h2>
+            <p class="slide-subtitle">Expression Assignment, Implicit Subject Calls, Type Dispatch &amp; Tuple Matching</p>
           </header>
-          <div class="slide-body" data-layout="two-column" data-ratio="1:1">
-            <div class="column col" data-slot="left">
+          <div class="slide-body layout-one-left-two-right" data-layout="one-left-two-right" data-ratio="1:1">
+            <div class="column col slot-left" data-slot="left">
             <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
               <div class="window-header code-header">
                 <div class="terminal-dots">
@@ -1583,7 +1583,7 @@ end</code></pre>
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title">control_expressions.cr — Clean Expressions &amp; Nil Safety</span>
+                <span class="window-title code-title">control_expressions.cr — Expression Assignment &amp; Case Tricks</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">Crystal</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
@@ -1597,32 +1597,46 @@ speed = if boosted?
           50
         end
 
-loot = case dice_roll
-       when 95..100 then :legendary_sword
-       when 80..94  then :rare_shield
+# 2. Ranges, Implicit &#39;.method?&#39; Calls &amp; Type Dispatch:
+loot = case roll_or_boss
+       when 95..100 then :legendary_sword        # Range (===)
+       when .even?  then :silver_coin            # Calls subject.even?!
+       when Boss    then roll_or_boss.drop_relic # Type dispatch!
        else              :rusty_dagger
        end
 
-# 2. Static Nil Narrowing (Type Flow):
-if player = find_player?(id) # returns Player | Nil
-  player.cast_spell(:protect) # Statically proven non-nil Player!
-else
-  puts &quot;Player #{id} not found.&quot;
-end</code></pre>
+# 3. Multi-Value Tuple Matching (Goodbye Nested Ifs):
+move = case {state, grounded?, stamina &gt; 0}
+       when {:dash, true, true}  then :ground_boost
+       when {:dash, false, true} then :air_dash
+       when {_, _, false}        then :exhausted
+       else                           :idle
+       end</code></pre>
             </div>
             </div>
-            <div class="column col" data-slot="right">
+            <div class="column-stack col slot-right" data-slot="right">
+              <div class="stack-slot slot-top" data-slot="top">
             <div class="card col emerald" data-color="emerald">
               <div class="card-header card-title emerald">
-                <span>Why Control Expressions Excel in Crystal</span>
+                <span>Expression Assignment &amp; Implicit Calls</span>
               </div>
               <ul class="card-list">
-                <li><strong>Expressions Over Statements:</strong> <code>if</code> and <code>case</code> evaluate to values directly, eliminating mutable dummy variables.</li>
-                <li><strong>Declarative Range Cases:</strong> <code>when 95..100</code> replaces unreadable nested ternaries with clean branching.</li>
-                <li><strong>Static Nil Narrowing:</strong> <code>if x = find_player?</code> binds and narrows <code>Player | Nil</code> to guaranteed non-nil <code>Player</code>.</li>
-                <li><strong>Zero-Cost Unions:</strong> Branches returning different types resolve to stack-allocated unions (<code>Int32 | Symbol</code>) without boxing.</li>
+                <li><strong>Expressions Over Statements:</strong> <code>if</code> and <code>case</code> evaluate directly to values, eliminating mutable dummy variables.</li>
+                <li><strong>Ranges &amp; Leading-Dot Predicates:</strong> Match ranges (<code>95..100</code>) or invoke methods directly on the subject with <code>when .even?</code>.</li>
               </ul>
             </div>
+              </div>
+              <div class="stack-slot slot-bottom" data-slot="bottom">
+            <div class="card col cyan" data-color="cyan">
+              <div class="card-header card-title cyan">
+                <span>Tuple Matching &amp; Type Dispatch</span>
+              </div>
+              <ul class="card-list">
+                <li><strong>Multi-Value Tuple Matching:</strong> Branch on multiple states at once (<code>case {state, grounded?, ...}</code>) using <code>_</code> wildcards instead of nested <code>if</code> pyramids.</li>
+                <li><strong>Type Dispatch &amp; Exhaustive <code>in</code>:</strong> Matching a type (<code>when Boss</code>) narrows the variable in-branch, while <code>case ... in</code> enforces compile-time exhaustiveness.</li>
+              </ul>
+            </div>
+              </div>
             </div>
           </div>
           <footer class="slide-footer">
@@ -1633,8 +1647,8 @@ end</code></pre>
         </div>
         <aside class="notes">
           In traditional languages like C, C++, Java, or Go, there is a strict divide between 'statements' and 'expressions'. Expressions evaluate to a value, while statements only execute actions. When developers from those languages see 'speed = if boosted? ...', their instinct is surprise.
-          The key to understanding this is the ternary operator. Every programmer knows 'speed = boosted ? 100 : 50'. In Crystal, 'if' is literally the ternary operator elevated into a first-class block structure—supporting multi-line logic, sound effects, and clean formatting.
-          Even more powerfully, Crystal combines expression assignment with its whole-program type inference: 'if x = find_player?(id)' tests for presence AND statically narrows the type of 'player' from 'Player | Nil' to guaranteed non-nil 'Player' inside the block. If you forget to handle the nil case, the compiler refuses to build your game. You get expressive syntax with 100% compile-time null safety.
+          The key to understanding this is the ternary operator. Every programmer knows 'speed = boosted ? 100 : 50'. In Crystal, 'if' and 'case' are elevated into first-class expressions—supporting multi-line logic, sound effects, and clean formatting.
+          Even better, Crystal supercharges 'case ... when' far beyond C's primitive switch statement. You can match inclusive or exclusive ranges ('when 95..100'), call predicate methods directly on the subject with leading-dot syntax ('when .even?'), dispatch on runtime types within a union ('when Boss'), or match multiple values simultaneously using stack-allocated tuple literals ('case {state, grounded?, stamina > 0}') with underscore wildcards—flattening complex game state logic into a single readable table.
         </aside>
       </section>
 

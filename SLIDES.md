@@ -415,8 +415,8 @@ Theme: `sol.vin` | Total Slides: 143
 **Q: Where is the return statement?**
 > A: Crystal treats the last evaluated expression as the return value. Whole-program type inference calculates exact return types (including union types) with zero keyword ceremony.
 
-**Q: Assigning an if statement to a variable?**
-> A: Control flow constructs are expressions that evaluate to concrete values (<code>val = if cond then 1 else 2 end</code>). Plus, <code>if x = find()</code> performs static compile-time nil narrowing!
+**Q: Assigning an if or case to a variable?**
+> A: Control flow constructs are expressions that evaluate to concrete values (<code>val = if cond then 1 else 2 end</code>), paired with <code>case</code> tuple matching and leading-dot predicates (<code>when .even?</code>)!
 
 **Q: Why is 'if' or 'unless' at the end of the line?**
 > A: Statement modifiers put the primary action up front in natural English word order (<code>return unless valid?</code>), keeping guardrails flat without nested indentation pyramids.
@@ -466,44 +466,26 @@ Theme: `sol.vin` | Total Slides: 143
 
 ---
 
-### Slide 18: Control Expressions: If, Case & Nil Narrowing
+### Slide 18: Control Expressions: If & Case Superpowers [One-Left-Two-Right]
 - **Theme Palette**: `fos` (FOS)
-- **Badge**: `CRYSTAL TYPE SAFETY • EXPRESSION CONTROL`
-- **Title**: Control Expressions: If, Case & Nil Narrowing
-- **Subtitle**: Expression Assignment, Range Cases & Crystal's Compile-Time Static Nil Narrowing
-- **Code (control_expressions.cr — Clean Expressions & Nil Safety)**:
-  ```crystal
-  # 1. 'if' and 'case' are first-class expressions returning values:
-  speed = if boosted?
-            play_sfx(:turbo)
-            100
-          else
-            50
-          end
-  
-  loot = case dice_roll
-         when 95..100 then :legendary_sword
-         when 80..94  then :rare_shield
-         else              :rusty_dagger
-         end
-  
-  # 2. Static Nil Narrowing (Type Flow):
-  if player = find_player?(id) # returns Player | Nil
-    player.cast_spell(:protect) # Statically proven non-nil Player!
-  else
-    puts "Player #{id} not found."
-  end
-  ```
-- **Why Control Expressions Excel in Crystal**:
-  - Expressions Over Statements: if and case evaluate to values directly, eliminating mutable dummy variables.
-  - Declarative Range Cases: when 95..100 replaces unreadable nested ternaries with clean branching.
-  - Static Nil Narrowing: if x = find_player? binds and narrows Player | Nil to guaranteed non-nil Player.
-  - Zero-Cost Unions: Branches returning different types resolve to stack-allocated unions (Int32 | Symbol) without boxing.
+- **Title**: Control Expressions: If & Case Superpowers
+- **Subtitle**: Expression Assignment, Implicit Subject Calls, Type Dispatch & Tuple Matching
+
+#### Left Column:
+- **control_expressions.cr — Expression Assignment & Case Tricks**
+
+#### Right Stacked Containers:
+- **Expression Assignment & Implicit Calls**
+  - Expressions Over Statements: if and case evaluate directly to values, eliminating mutable dummy variables.
+  - Ranges & Leading-Dot Predicates: Match ranges (95..100) or invoke methods directly on the subject with when .even?.
+- **Tuple Matching & Type Dispatch**
+  - Multi-Value Tuple Matching: Branch on multiple states at once (case {state, grounded?, ...}) using _ wildcards instead of nested if pyramids.
+  - Type Dispatch & Exhaustive in: Matching a type (when Boss) narrows the variable in-branch, while case ... in enforces compile-time exhaustiveness.
 
 **Presenter Notes**:
 > In traditional languages like C, C++, Java, or Go, there is a strict divide between 'statements' and 'expressions'. Expressions evaluate to a value, while statements only execute actions. When developers from those languages see 'speed = if boosted? ...', their instinct is surprise.
-> The key to understanding this is the ternary operator. Every programmer knows 'speed = boosted ? 100 : 50'. In Crystal, 'if' is literally the ternary operator elevated into a first-class block structure—supporting multi-line logic, sound effects, and clean formatting.
-> Even more powerfully, Crystal combines expression assignment with its whole-program type inference: 'if x = find_player?(id)' tests for presence AND statically narrows the type of 'player' from 'Player | Nil' to guaranteed non-nil 'Player' inside the block. If you forget to handle the nil case, the compiler refuses to build your game. You get expressive syntax with 100% compile-time null safety.
+> The key to understanding this is the ternary operator. Every programmer knows 'speed = boosted ? 100 : 50'. In Crystal, 'if' and 'case' are elevated into first-class expressions—supporting multi-line logic, sound effects, and clean formatting.
+> Even better, Crystal supercharges 'case ... when' far beyond C's primitive switch statement. You can match inclusive or exclusive ranges ('when 95..100'), call predicate methods directly on the subject with leading-dot syntax ('when .even?'), dispatch on runtime types within a union ('when Boss'), or match multiple values simultaneously using stack-allocated tuple literals ('case {state, grounded?, stamina > 0}') with underscore wildcards—flattening complex game state logic into a single readable table.
 
 ---
 
