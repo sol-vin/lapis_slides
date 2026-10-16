@@ -12,12 +12,14 @@ left:
   title: gameplay_modules.cr — Horizontal Composition
   tag: Crystal
   lang: crystal
-  font_size: '0.76rem'
+  font_size: '0.72rem'
   code: |
     # Namespace & mixin dual use (extend self)
     module SpatialMath
       extend self
-      def dist_sq(a, b); (a.x - b.x)**2 + (a.y - b.y)**2; end
+      def dist_sq(a, b)
+        (a.x - b.x)**2 + (a.y - b.y)**2
+      end
     end
 
     # Engine-aware traits: ClassDB metadata & signals

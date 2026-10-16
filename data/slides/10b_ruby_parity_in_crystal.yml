@@ -12,16 +12,20 @@ left:
   title: compile_time_dsl.cr — Pure Ruby Ergonomics, Static Dispatch
   tag: Crystal
   lang: crystal
-  font_size: '0.84rem'
+  font_size: '0.78rem'
   code: |
     class CombatRoomBuilder
       getter room : Room
-      def initialize(@room : Room); end
+      def initialize(@room : Room)
+      end
 
       def wave(enemy : String, count : Int32)
         @room.spawn_wave(enemy, count)
       end
-      def reward(item : String); @room.set_chest(item); end
+
+      def reward(item : String)
+        @room.set_chest(item)
+      end
 
       def self.build(name : String, &) : Room
         builder = new(Room.new(name))

@@ -684,7 +684,9 @@ end
   # Namespace & mixin dual use (extend self)
   module SpatialMath
     extend self
-    def dist_sq(a, b); (a.x - b.x)**2 + (a.y - b.y)**2; end
+    def dist_sq(a, b)
+      (a.x - b.x)**2 + (a.y - b.y)**2
+    end
   end
   
   # Engine-aware traits: ClassDB metadata & signals
@@ -805,12 +807,16 @@ end
   ```crystal
   class CombatRoomBuilder
     getter room : Room
-    def initialize(@room : Room); end
+    def initialize(@room : Room)
+    end
   
     def wave(enemy : String, count : Int32)
       @room.spawn_wave(enemy, count)
     end
-    def reward(item : String); @room.set_chest(item); end
+  
+    def reward(item : String)
+      @room.set_chest(item)
+    end
   
     def self.build(name : String, &) : Room
       builder = new(Room.new(name))
