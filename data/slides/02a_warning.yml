@@ -10,11 +10,11 @@ layout: "chapter-layout"
 pillars:
   - title: "Long-Form Presentation"
     desc: "This video is going to be long — grab a coffee and settle in."
-    icon: "clock"
+    icon: "triangle-exclamation"
     color: "amber"
   - title: "Timestamps in the Description"
     desc: "I will timestamp every section in the video description so you can jump to whatever interests you."
-    icon: "bookmark"
+    icon: "scroll"
     color: "cyan"
 notes: |
   A quick warning before we dive in: this is going to be a long video. I will timestamp everything in the description of the video so you can easily jump around to whatever sections you care about.
