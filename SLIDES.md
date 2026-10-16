@@ -2627,14 +2627,14 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   id, name = status                      # Direct Crystal tuple destructuring!
   tup = await!(boss.loot_dropped)        # => {42, "relic"} (or raises)
   
-  # 4. BoundSignal & numeric duration delays
-  args = await!((~Sprite2D).frame_changed) # => Array(Variant)
-  await(1.0)                               # => AwaitStatus (or await?(1.0) / await!(1.0))
+  # 4. Engine signals & numeric duration delays
+  body = await!((~Area2D).body_entered)  # => Godot::Node2D (typed engine signal)
+  await(1.0)                             # => AwaitStatus (or await?(1.0) / await!(1.0))
   ```
 - **Cooperative Awaiting Invariants**:
   - Triad Return Semantics: await returns AwaitStatus(T) (.completed?, .timed_out?); await! unwraps or raises TimeoutError; await? returns nilable (or Bool).
   - Tuple Destructuring: Multi-argument signals unpack via tuple destructuring (id, name = status) with full static type inference.
-  - BoundSignal & Delays: Dynamic untyped signals ((~Sprite2D).frame_changed) yield Array(Variant); numeric delays pause fibers cooperatively.
+  - Engine Signals & Delays: Built-in Godot signals ((~Area2D).body_entered) are statically typed; dynamic node.signal(:name) yields Array(Variant).
   - DisposedObjectError Protection: If the awaited node is freed, Lapis raises Godot::DisposedObjectError instead of hanging forever.
 
 **Presenter Notes**:

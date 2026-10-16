@@ -244,19 +244,24 @@ tup = await!(target.item_dropped, timeout_sec: 2.0) # => {42, "hello"} (or raise
 tup = await?(target.item_dropped, timeout_sec: 2.0) # => {42, "hello"} on emit, nil on timeout
 ```
 
-### BoundSignal Awaiting (Dynamic Signals)
+### Built-in Engine Signals vs. Dynamic BoundSignal Awaiting
 
-Dynamic signals on Godot nodes without static type declarations return `Array(Variant)`:
+Built-in Godot engine signals are statically typed `Godot::TypedSignal(*T)` instances (e.g., `(~Area2D).body_entered` returns `Godot::Node2D`, `(~AnimatedSprite2D).animation_finished` is 0-arg returning `nil` on `await!`). Dynamic untyped signals looked up by name at runtime via `node.signal(:name)` return a `Godot::BoundSignal`, which yields `Array(Variant)` containing the emitted signal arguments:
 ```crystal
-# Await bound signal handle or method syntax
-status = await(~AnimatedSprite2D.animation_finished)     # => AwaitStatus(Array(Variant))
-args   = await!(~AnimatedSprite2D.animation_finished)    # => Array(Variant) (or raises TimeoutError)
-args   = await?(~AnimatedSprite2D.animation_finished)    # => Array(Variant) on emit, nil on timeout
+# Built-in engine signals (statically typed via godot_signal):
+body = await!((~Area2D).body_entered)          # => Godot::Node2D (or raises TimeoutError)
+await!((~AnimatedSprite2D).animation_finished) # => nil (0-arg signal)
+
+# Dynamic untyped signal lookup via BoundSignal:
+sig    = gd_node.signal(:custom_event)
+status = await(sig)  # => AwaitStatus(Array(Variant))
+args   = await!(sig) # => Array(Variant) (or raises TimeoutError)
+args   = await?(sig) # => Array(Variant) on emit, nil on timeout
 
 # Method syntax on BoundSignal:
-~AnimatedSprite2D.animation_finished.await
-~AnimatedSprite2D.animation_finished.await!
-~AnimatedSprite2D.animation_finished.await?
+sig.await
+sig.await!
+sig.await?
 ```
 
 ### SceneTreeTimer & Numeric Duration Delays
