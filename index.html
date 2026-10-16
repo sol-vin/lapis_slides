@@ -2345,7 +2345,9 @@ calc = -&gt;(base : Int32) { (base * scale).to_i } # Proc(Int32, Int32)
 cb = -&gt;(id : UInt64, evt : Int32) { Godot::Bridge.dispatch(id, evt) }
 
 # 4. Short Block Syntax (&amp;.method — parsed directly to AST block)
-enemies.select(&amp;.alive?).map(&amp;.health)</code></pre>
+enemies.select(&amp;.alive?).map(&amp;.health)
+# Same as
+enemies.select {|e| e.alive?}.map {|e| e.health}</code></pre>
             </div>
             </div>
             <div class="column col" data-slot="right">

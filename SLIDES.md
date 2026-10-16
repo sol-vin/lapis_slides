@@ -782,6 +782,8 @@ end
   
   # 4. Short Block Syntax (&.method — parsed directly to AST block)
   enemies.select(&.alive?).map(&.health)
+  # Same as
+  enemies.select {|e| e.alive?}.map {|e| e.health}
   ```
 - **The Spectrum of Crystal Closures**:
   - Ephemeral Blocks (yield): Direct control-flow transfers inlined into machine loops by LLVM with zero heap allocations.
