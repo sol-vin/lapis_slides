@@ -36,7 +36,7 @@ gdscript:
   points:
   - <strong>Zero User-Definable Macros:</strong> GDScript has no AST macros, forcing you to copy-paste identical setter, clamping, and signal boilerplate for every attribute.
   - <strong>Silent Copy-Paste Bugs:</strong> Forgetting to rename one variable in a pasted block (e.g. clamping <code>mana</code> to <code>max_health</code>) compiles cleanly and breaks gameplay.
-  - <strong>N-Way Maintenance Tax:</strong> Adding a <code>*_depleted</code> check or network sync flag requires manually editing every duplicated setter across the codebase.
+  - <strong>Change One Rule, Edit Every Copy:</strong> Need to add combat logging or mark save data dirty when a stat changes? You have to manually hunt down and edit every pasted setter by hand.
 crystal:
   title: ':sparkles: Crystal: Write the Pattern Once with an AST Macro'
   lang: crystal

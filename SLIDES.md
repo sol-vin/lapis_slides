@@ -2324,7 +2324,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Critique Points**:
   - Zero User-Definable Macros: GDScript has no AST macros, forcing you to copy-paste identical setter, clamping, and signal boilerplate for every attribute.
   - Silent Copy-Paste Bugs: Forgetting to rename one variable in a pasted block (e.g. clamping mana to max_health) compiles cleanly and breaks gameplay.
-  - N-Way Maintenance Tax: Adding a *_depleted check or network sync flag requires manually editing every duplicated setter across the codebase.
+  - Change One Rule, Edit Every Copy: Need to add combat logging or mark save data dirty when a stat changes? You have to manually hunt down and edit every pasted setter by hand.
 - **Solution Advantages**:
   - Single Source of Truth: macro stat synthesizes the backing fields, typed signal, and clamping setter at compile time from a 1-line declaration.
   - Copy-Paste Bugs Eliminated: Identifier interpolation ({{name.id}}) guarantees mana never accidentally references max_health.
