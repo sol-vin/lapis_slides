@@ -85,14 +85,11 @@ slides:
 - 20g_gameplay_fluent_spawn
 - 20h_gameplay_tweens_and_juice
 - 20j_direct_space_physics_queries
-- 20m_spatial_audio_and_navigation
-- 20n_gameplay_patterns_fsm_and_pool
 - 20p_autoload_singletons
 
 # --- Chapter 4.2: Reactive Signals, Events & Async ---
 - 09a_act4_signals_intro
 - 09_signals_async
-- 09b_antipattern_signals_on
 
 # --- Chapter 4.3: The Lapis Extras: Optional Syntactic Sugar & Operators ---
 - 20q_act4_extras_intro
@@ -122,8 +119,6 @@ slides:
 
 # --- Chapter 4.5: Fearless Concurrency & Lockstep Multiplayer ---
 - 22b_act4_concurrency_intro
-- 23_concurrency_fibers
-- 24_concurrency_threads
 - 25_antipattern_channels
 - 26d_thread_safety_policies
 - 26e_main_thread_dispatch

@@ -1,7 +1,7 @@
 ---
 id: 17c_await_variants_and_status
 title: 'Async Triad: "await", "await?", and "await!"'
-subtitle: 'AwaitStatus Predicates, Typed Return Values, Tuple Destructuring & Dead-Pointer Armor'
+subtitle: 'Non-Blocking Cooperative Fibers via "spawn", AwaitStatus Predicates & Dead-Pointer Armor'
 badge: LAPIS ASYNC • SIGNAL AWAITING
 badge_color: cyan
 palette: oled_micro
@@ -9,12 +9,12 @@ layout: three-left-one-right
 ratio: 2:3
 left:
   - type: card
-    title: '1. await(sig) — AwaitStatus(T)'
-    badge: 'PREDICATES & TUPLES'
+    title: '1. spawn + await(sig) — AwaitStatus(T)'
+    badge: 'FIBERS & PREDICATES'
     color: cyan
     items:
-      - '<strong>Status Struct:</strong> Returns <code>AwaitStatus(T)</code> with <code>.completed?</code>, <code>.timed_out?</code>, and <code>.ok?</code>.'
-      - '<strong>Tuple Destructuring:</strong> Multi-arg signals unpack directly via <code>id, name = status</code>.'
+      - '<strong>Cooperative <code>spawn</code>:</strong> Launch lightweight main-thread fibers with <code>spawn do ... end</code> and suspend cleanly with <code>await</code>.'
+      - '<strong>Status &amp; Tuples:</strong> Returns <code>AwaitStatus(T)</code> (<code>.completed?</code>, <code>.timed_out?</code>, <code>.ok?</code>) and destructures multi-arg tuples.'
   - type: card
     title: '2. await!(sig) — Unwrap or Raise'
     badge: 'STRICT ASSERT'
@@ -30,32 +30,34 @@ left:
       - '<strong>DisposedObjectError:</strong> Raises immediately if the target node is freed—never hangs.'
 right:
   type: code
-  title: signal_awaiting_triad.cr — Complete Await Architecture
+  title: signal_awaiting_triad.cr — Cooperative Fibers & Await Triad
   tag: Crystal (Lapis)
   lang: crystal
-  font_size: '0.78rem'
+  font_size: '0.76rem'
   code: |
-    # 1. 0-arg signal: predicates & timeout handling
-    status = await(player.died, timeout_sec: 5.0)
-    status.completed?                      # => Bool (.timed_out?, .ok?)
-    await?(player.died, timeout_sec: 5.0)  # => true on emit, false on timeout
+    spawn do
+      # 1. 0-arg signal: predicates & timeout handling
+      status = await(player.died, timeout_sec: 5.0)
+      status.completed?                      # => Bool (.timed_out?, .ok?)
+      await?(player.died, timeout_sec: 5.0)  # => true on emit, false on timeout
 
-    # 2. Single-arg signal: typed payload unboxing
-    status = await(player.health_changed)  # => AwaitStatus(Int32)
-    hp     = await!(player.health_changed) # => 42_i32 (or raises TimeoutError)
-    hp_opt = await?(player.health_changed) # => 42_i32 on emit, nil on timeout
+      # 2. Single-arg signal: typed payload unboxing
+      status = await(player.health_changed)  # => AwaitStatus(Int32)
+      hp     = await!(player.health_changed) # => 42_i32 (or raises TimeoutError)
+      hp_opt = await?(player.health_changed) # => 42_i32 on emit, nil on timeout
 
-    # 3. Multi-arg signal & tuple destructuring
-    status = await(boss.loot_dropped)      # => AwaitStatus(Tuple(Int32, String))
-    id, name = status                      # Direct Crystal tuple destructuring!
-    tup = await!(boss.loot_dropped)        # => {42, "relic"} (or raises)
+      # 3. Multi-arg signal & tuple destructuring
+      status = await(boss.loot_dropped)      # => AwaitStatus(Tuple(Int32, String))
+      id, name = status                      # Direct Crystal tuple destructuring!
 
-    # 4. Engine signals & numeric duration delays
-    body = await!((~Area2D).body_entered)  # => Godot::Node2D (typed engine signal)
-    await(1.0)                             # => AwaitStatus (or await?(1.0) / await!(1.0))
+      # 4. Engine signals & numeric duration delays
+      body = await!((~Area2D).body_entered)  # => Godot::Node2D (typed engine signal)
+      await(1.0)                             # => AwaitStatus (or await? / await!)
+    end
 notes: |
-  Lapis provides a complete triad of non-blocking await primitives matching Crystal's semantic naming idioms:
-  1. Standard 'await' returns an 'AwaitStatus(T)' struct with predicates like '.completed?', '.timed_out?', and '.ok?'. When awaiting multi-argument signals, it yields a Tuple that supports Crystal tuple destructuring ('id, name = status').
+  Lapis lets you orchestrate asynchronous gameplay sequences inside lightweight cooperative 'spawn do ... end' fibers using a complete triad of non-blocking await primitives:
+  1. Standard 'await' suspends the spawned fiber and returns an 'AwaitStatus(T)' struct with predicates like '.completed?', '.timed_out?', and '.ok?'. When awaiting multi-argument signals, it yields a Tuple that supports Crystal tuple destructuring ('id, name = status').
   2. The bang variant 'await!' unwraps the payload directly or raises 'TimeoutError' if expired—ideal for sequential cinematic routines where timeouts represent abnormal interruptions.
   3. The question mark variant 'await?' follows Crystal's 'nil-over-errors' philosophy: returning the payload on emit, and nil (or false for 0-arg signals/timers) on timeout without throwing.
   Finally, if a target node is queued for deletion while a fiber is waiting, Lapis raises Godot::DisposedObjectError, permanently eliminating GDScript's notorious infinite-hang bugs.
+
