@@ -1,7 +1,7 @@
 ---
 id: 20h_gameplay_tweens_and_juice
 title: 'Game Feel & Juice: Fluent Tweens & Animation'
-subtitle: Fluent Chain & Parallel Pipelines, Compile-Time Checked tween, and Cooperative Await
+subtitle: Fluent Chain & Parallel Pipelines, Compile-Time Checked tween, and First-Class Easing
 badge: ANIMATION & JUICE • GAME FEEL
 badge_color: cyan
 palette: spaces_7
@@ -21,7 +21,7 @@ left:
       animate(scale, to: Vector2.new(1.2, 1.2), in: 0.2.seconds)
       ease(Ease.Out); trans(Trans.Cubic)
     end
-    await(tw.finished) # Cooperative non-blocking await
+    tw.finished.once { hero.play_ready_fx }
 
     # 2. Type-checked one-liners (catches typos at build time!):
     tween(boss.position.y, to: 150.0, in: 0.4.seconds)
@@ -33,12 +33,13 @@ right:
   items:
     - '<strong>Statement-Based Pipelines:</strong> Peels apart block statements into a unified tween execution pipeline.'
     - '<strong>Strict Identifier Type Safety:</strong> Targets use typed property identifiers, eliminating runtime string typos.'
-    - '<strong>First-Class Enums & Spans:</strong> <code>Ease.Out</code> and <code>Trans.Cubic</code> paired with native <code>0.4.seconds</code> durations.'
-    - '<strong>Cooperative Fiber Await:</strong> <code>await(tw.finished)</code> yields without blocking the engine process loop.'
+    - '<strong>First-Class Enums &amp; Spans:</strong> <code>Ease.Out</code> and <code>Trans.Cubic</code> paired with native <code>0.4.seconds</code> durations.'
+    - '<strong>Zero-Ceremony One-Liners:</strong> Concise <code>tween(node.prop, to: val, in: span)</code> calls for instant game feel.'
 notes: |
   Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in GDScript often involves fragmented method calls and error-prone strings like "position:y".
   Lapis introduces an expressive statement-based animation DSL:
   First, 'tween(item) do animate(...); chain(); parallel(); ease(Ease.Out) end' peels apart expressions in the block, automatically turning individual calls into a continuous, high-performance tween pipeline.
   Second, property targets require real identifiers instead of symbols, statically verifying that the property exists and matches the target value type at compile time!
   Third, first-class Ease and Trans enums ('Ease.Out', 'Trans.Cubic') provide intuitive autocomplete and runtime forwarding.
-  Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds') and cooperative fiber awaiting via 'await(tw.finished)', animation code is concise, fast, and completely type-safe.
+  Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds'), animation code is concise, fast, and completely type-safe.
+

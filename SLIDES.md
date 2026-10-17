@@ -1272,7 +1272,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Theme Palette**: `spaces_7` (Spaces 7)
 - **Badge**: `ANIMATION & JUICE • GAME FEEL`
 - **Title**: Game Feel & Juice: Fluent Tweens & Animation
-- **Subtitle**: Fluent Chain & Parallel Pipelines, Compile-Time Checked tween, and Cooperative Await
+- **Subtitle**: Fluent Chain & Parallel Pipelines, Compile-Time Checked tween, and First-Class Easing
 - **Code (tween_and_juice.cr — Fluent Animation DSL)**:
   ```crystal
   # 1. Statement-based tween pipeline DSL:
@@ -1282,7 +1282,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     animate(scale, to: Vector2.new(1.2, 1.2), in: 0.2.seconds)
     ease(Ease.Out); trans(Trans.Cubic)
   end
-  await(tw.finished) # Cooperative non-blocking await
+  tw.finished.once { hero.play_ready_fx }
   
   # 2. Type-checked one-liners (catches typos at build time!):
   tween(boss.position.y, to: 150.0, in: 0.4.seconds)
@@ -1292,7 +1292,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - Statement-Based Pipelines: Peels apart block statements into a unified tween execution pipeline.
   - Strict Identifier Type Safety: Targets use typed property identifiers, eliminating runtime string typos.
   - First-Class Enums & Spans: Ease.Out and Trans.Cubic paired with native 0.4.seconds durations.
-  - Cooperative Fiber Await: await(tw.finished) yields without blocking the engine process loop.
+  - Zero-Ceremony One-Liners: Concise tween(node.prop, to: val, in: span) calls for instant game feel.
 
 **Presenter Notes**:
 > Game feel and juice are essential to making games satisfying to play, but setting up Godot tweens in GDScript often involves fragmented method calls and error-prone strings like "position:y".
@@ -1300,7 +1300,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 > First, 'tween(item) do animate(...); chain(); parallel(); ease(Ease.Out) end' peels apart expressions in the block, automatically turning individual calls into a continuous, high-performance tween pipeline.
 > Second, property targets require real identifiers instead of symbols, statically verifying that the property exists and matches the target value type at compile time!
 > Third, first-class Ease and Trans enums ('Ease.Out', 'Trans.Cubic') provide intuitive autocomplete and runtime forwarding.
-> Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds') and cooperative fiber awaiting via 'await(tw.finished)', animation code is concise, fast, and completely type-safe.
+> Coupled with native Crystal time units ('0.4.seconds', '150.milliseconds'), animation code is concise, fast, and completely type-safe.
 
 ---
 
@@ -2280,7 +2280,22 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 79: Signals & Async: String Awaits vs. Typed Handles [Step 1: Code]
+### Slide 79: Fearless Concurrency & Multiplayer (ACT IV • CHAPTER 05)
+- **Title**: Fearless Concurrency & Multiplayer
+- **Subtitle**: Lightweight Fibers, Lock-Free Channels, Main-Thread Dispatch & Authoritative RPCs
+- **Chapter Highlights**:
+  - **M:N Green Fibers**: Thousands of concurrent coroutines with cooperative scheduling and microsecond context switching
+  - **Lock-Free CSP Channels**: Actor-style message passing replacing perilous shared-memory mutexes
+  - **Authoritative RPCs**: Declarative multiplayer annotations with lockstep verification and fuzz testing
+
+**Presenter Notes**:
+> Game engines live and die by frame budgets. Modern hardware gives us 16 cores, yet most game scripting is restricted to a single thread due to engine safety limits.
+> In Chapter 5, we tackle Concurrency and Multiplayer.
+> We'll see how Crystal's lightweight fibers and lock-free channels make concurrent background physics and asset loading painless, how Lapis enforces safe main-thread dispatch back into the Godot SceneTree, and how our declarative RPC macros power deterministic multiplayer networking.
+
+---
+
+### Slide 80: Signals & Async: String Awaits vs. Typed Handles [Step 1: Code]
 - **Palette**: `oled_micro` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Unsafe Await & Leaked Coroutines**:
   ```gdscript
@@ -2316,7 +2331,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 80: Signals & Async: String Awaits vs. Typed Handles [Step 2: Analysis & Critique]
+### Slide 81: Signals & Async: String Awaits vs. Typed Handles [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Infinite Hang Risk: await boss.died hangs indefinitely if the target node is freed before emitting.
   - No Built-In Timeouts: Adding timeouts requires manual timer nodes and complex cleanup logic.
@@ -2332,7 +2347,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 81: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 1: Code]
+### Slide 82: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 1: Code]
 - **Palette**: `oled_micro` | **Badge**: `GDSCRIPT ANTI-PATTERN VS. CRYSTAL CLEAN SOLUTION`
 - **:circle-xmark: GDScript: Dangling Timers & Node Leaks**:
   ```gdscript
@@ -2378,7 +2393,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 82: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 2: Analysis & Critique]
+### Slide 83: Gameplay Timers: Cancellable Coroutines & Timer Handles [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Node Sprawl: Creating intervals requires spawning extra Timer nodes in the scene tree and manually wiring signals.
   - Dangling Callbacks: SceneTreeTimer continues ticking even if the target node is destroyed, causing crashes on freed instances.
@@ -2396,7 +2411,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 83: Async Triad: "await", "await?", and "await!" [Three-Left-One-Right]
+### Slide 84: Async Triad: "await", "await?", and "await!" [Three-Left-One-Right]
 - **Theme Palette**: `oled_micro` (OLED Micro)
 - **Title**: Async Triad: "await", "await?", and "await!"
 
@@ -2419,21 +2434,6 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 > 2. The bang variant 'await!' unwraps the payload directly or raises 'TimeoutError' if expired—ideal for sequential cinematic routines where timeouts represent abnormal interruptions.
 > 3. The question mark variant 'await?' follows Crystal's 'nil-over-errors' philosophy: returning the payload on emit, and nil (or false for 0-arg signals/timers) on timeout without throwing.
 > Finally, if a target node is queued for deletion while a fiber is waiting, Lapis raises Godot::DisposedObjectError, permanently eliminating GDScript's notorious infinite-hang bugs.
-
----
-
-### Slide 84: Fearless Concurrency & Multiplayer (ACT IV • CHAPTER 05)
-- **Title**: Fearless Concurrency & Multiplayer
-- **Subtitle**: Lightweight Fibers, Lock-Free Channels, Main-Thread Dispatch & Authoritative RPCs
-- **Chapter Highlights**:
-  - **M:N Green Fibers**: Thousands of concurrent coroutines with cooperative scheduling and microsecond context switching
-  - **Lock-Free CSP Channels**: Actor-style message passing replacing perilous shared-memory mutexes
-  - **Authoritative RPCs**: Declarative multiplayer annotations with lockstep verification and fuzz testing
-
-**Presenter Notes**:
-> Game engines live and die by frame budgets. Modern hardware gives us 16 cores, yet most game scripting is restricted to a single thread due to engine safety limits.
-> In Chapter 5, we tackle Concurrency and Multiplayer.
-> We'll see how Crystal's lightweight fibers and lock-free channels make concurrent background physics and asset loading painless, how Lapis enforces safe main-thread dispatch back into the Godot SceneTree, and how our declarative RPC macros power deterministic multiplayer networking.
 
 ---
 
