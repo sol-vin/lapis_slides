@@ -1,7 +1,7 @@
 # Lapis for Crystal — Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+
 
 Author: sol.vin
-Theme: `sol.vin` | Total Slides: 137
+Theme: `sol.vin` | Total Slides: 136
 
 ---
 
@@ -2496,67 +2496,30 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 87: Thread & Scope Policies [One-Left-Two-Right]
+### Slide 87: Thread Policies & Main-Thread Dispatch [One-Left-Three-Right]
 - **Theme Palette**: `silicon_indigo` (Silicon Indigo)
-- **Title**: Thread & Scope Policies
-- **Subtitle**: ThreadAffinity Enforcement & Detached Graph Assembly
+- **Title**: Thread Policies & Main-Thread Dispatch
 
-#### Left Column:
-- **thread_policies.cr — Configuration & Orphan Graphs**
+#### Left Showcase Column:
+- **thread_safety_and_dispatch.cr — Orphan Graphs & Main-Thread Flush**
 
-#### Right Stacked Containers:
-- **Scope Axis: TreeOnly vs. AllNodes**
-  - Scope::TreeOnly (Default): Guards only live SceneTree nodes, letting worker threads assemble detached node graphs in parallel.
-  - Scope::AllNodes: Strict isolation mode blocking off-thread hierarchy mutations on any node, attached or detached.
-- **Policy Axis: Raise, Warn & Defer**
-  - Policy::Raise (Debug): Intercepts illegal cross-thread calls before C++ executes, raising a catchable ThreadAffinityError.
-  - Policy::Warn / Defer / Disabled: Log non-fatal warnings, auto-queue via call_deferred, or strip checks in release builds.
+#### Right Stacked Checkpoints:
+- **1. Scope: TreeOnly vs. AllNodes**
+  - Parallel Orphan Assembly: Scope::TreeOnly guards live SceneTree nodes while letting worker threads build detached graphs off-thread.
+- **2. Policy: Raise, Warn, Defer & Disabled**
+  - Fail-Fast or Auto-Defer: Intercept illegal cross-thread calls via ThreadAffinityError in debug, auto-defer, or strip checks in release.
+- **3. Godot.on_main_thread Dispatch**
+  - Deterministic Frame Queue: Buffers off-thread closures into a mutex queue drained at the next frame tick (or runs inline if already on main).
 
 **Presenter Notes**:
-> Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis provides a configurable ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled to compile out checks in release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread—such as procedurally generated dungeon rooms or terrain meshes—while strictly guarding the live scene tree.
+> Godot's SceneTree is strictly single-threaded. Mutating live node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes.
+> Lapis combines two complementary primitives to make multi-threaded world streaming effortless:
+> 1. Configurable ThreadSafety Policies and Scopes: Scope::TreeOnly lets background worker threads assemble large, detached orphan node hierarchies off-thread—such as procedural dungeon rooms or meshes—while Policy::Raise immediately catches any accidental mutation of the live SceneTree with a clear ThreadAffinityError.
+> 2. Godot.on_main_thread: Once the worker thread finishes building its detached node graph, Godot.on_main_thread buffers a type-safe closure into an engine queue that gets drained deterministically at the start of the next frame tick, mounting the finished hierarchy without string-based call_deferred boilerplate.
 
 ---
 
-### Slide 88: Main-Thread Dispatch
-- **Theme Palette**: `silicon_indigo` (Silicon Indigo)
-- **Badge**: `THREAD SYNCHRONIZATION • ENGINE QUEUE`
-- **Title**: Main-Thread Dispatch
-- **Subtitle**: Thread-Safe Queues & Frame Boundary Flush
-- **Code (room_streamer.cr — Safe Frame Synchronization)**:
-  ```crystal
-  # Background worker streams procedural geometry
-  Thread.new do
-    # 1. Heavy computation runs off-thread across CPU cores
-    room_node = assemble_dungeon_room(seed: 42)
-  
-    # 2. Dispatch safely to Godot's Main Thread:
-    Godot.on_main_thread do
-      # Mount finished hierarchy directly to the active SceneTree:
-      @world_root.add_child(room_node)
-      room_node.position = Vector3.new(x: 48.0, y: 0.0, z: 0.0)
-  
-      # Update UI & signal listeners on the render loop:
-      @minimap.reveal_room(room_node.name)
-      emit(room_loaded, room_node)
-    end
-  end
-  
-  # Main thread executes all queued blocks at frame start:
-  # - Minimal lock contention during rendering
-  # - Ensures serialized SceneTree updates
-  ```
-- **Deterministic Synchronization Invariants**:
-  - Direct Execution on Main: If already on the Main Thread, the block executes immediately inline without queuing overhead.
-  - Thread-Safe Mutex Buffer: Off-thread invocations enqueue closures into @@main_thread_queue; workers resume without blocking.
-  - Deterministic Frame Flush: The engine main loop flushes and drains the queue at the start of each frame tick, safely mounting finished nodes.
-  - Type-Safe Dispatch: Replaces fragile manual locks and string-based call_deferred with typed blocks, preventing cross-thread SceneTree mutations.
-
-**Presenter Notes**:
-> Once background workers finish crunching procedural geometry or pathfinding off-thread, how do we safely bring those nodes into the active game world? That's where Godot.on_main_thread comes in. When called from a background thread, it safely buffers the closure into a thread-safe queue that gets drained deterministically at the next frame boundary by Godot's main loop. If you call it while already on the main thread, it executes immediately inline. There are no fragile string-based callback names—just clean, type-safe closures executing safely on the rendering thread.
-
----
-
-### Slide 89: Multiplayer: Authoritative RPCs & Lockstep Sync
+### Slide 88: Multiplayer: Authoritative RPCs & Lockstep Sync
 - **Theme Palette**: `playtoy` (PlayToy)
 - **Badge**: `MULTIPLAYER ARCHITECTURE • NETWORKING`
 - **Title**: Multiplayer: Authoritative RPCs & Lockstep Sync
@@ -2597,7 +2560,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 90: Multiplayer Testing & Lockstep Network Debugging
+### Slide 89: Multiplayer Testing & Lockstep Network Debugging
 - **Theme Palette**: `playtoy` (PlayToy)
 - **Badge**: `MULTIPLAYER • SIMULATION & LOCKSTEP DEBUGGING`
 - **Title**: Multiplayer Testing & Lockstep Network Debugging
@@ -2637,7 +2600,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 91: Crystal Concurrency Patterns in Games [Process Flow / Pipeline]
+### Slide 90: Crystal Concurrency Patterns in Games [Process Flow / Pipeline]
 1. **Main-Thread Gameplay**
 2. **Immutable Job Dispatch**
 3. **Multi-Core Compute**
@@ -2652,7 +2615,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 92: The C# (.NET) Shootout (ACT IV • CHAPTER 06)
+### Slide 91: The C# (.NET) Shootout (ACT IV • CHAPTER 06)
 - **Title**: The C# (.NET) Shootout
 - **Subtitle**: Escaping Keyword Ceremony, Null Minefields, Platform Lockout & The Runtime VM Tax
 - **Chapter Highlights**:
@@ -2667,7 +2630,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 93: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 1: Code]
+### Slide 92: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 1: Code]
 - **Palette**: `boom_bap_16` | **Badge**: `LANGUAGE SHOOTOUT • C# VS LAPIS`
 - **:circle-xmark: Godot C#: Mandatory Ceremony & Keyword Bloat**:
   ```csharp
@@ -2709,7 +2672,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 94: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 2: Analysis & Critique]
+### Slide 93: Godot C# vs Lapis: Ceremony & Keyword Bloat [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Mandatory Partial Boilerplate: Forces every node to be declared public partial class for Roslyn generators.
   - Dummy Signal Delegates: Defining a signal requires declaring an auxiliary delegate with an EventHandler suffix.
@@ -2725,7 +2688,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 95: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 1: Code]
+### Slide 94: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 1: Code]
 - **Palette**: `disturbing_the_peace` | **Badge**: `LANGUAGE SHOOTOUT • SAFETY & HYGIENE`
 - **:circle-xmark: Godot C#: The ?. Operator Trap & Leaking Delegates**:
   ```csharp
@@ -2776,7 +2739,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 96: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 2: Analysis & Critique]
+### Slide 95: Godot C# vs Lapis: Null Minefields & Ghost Leaks [Step 2: Analysis & Critique]
 - **Critique Points**:
   - The ?. Bytecode Trap: C# ?. compiles to IL ldnull, bypassing Godot’s equality. Calling node?.Play() on a freed peer throws ObjectDisposedException.
   - Mandatory Guard Boilerplate: Because ?. is unsafe with engine peers, developers must litter code with GodotObject.IsInstanceValid.
@@ -2795,7 +2758,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 97: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 1: Code]
+### Slide 96: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 1: Code]
 - **Palette**: `twin_tower` | **Badge**: `LANGUAGE SHOOTOUT • PERFORMANCE & LATENCY`
 - **:circle-xmark: Godot C#: P/Invoke Overhead, Boxing & GC Spikes**:
   ```csharp
@@ -2843,7 +2806,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 98: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 2: Analysis & Critique]
+### Slide 97: Godot C# vs Lapis: The Runtime VM Tax & GC Stutter [Step 2: Analysis & Critique]
 - **Critique Points**:
   - P/Invoke Boundary Overhead: Reading engine properties repeatedly crosses the managed CLR boundary, adding marshalling latency.
   - LINQ Closure & Enumerator Churn: Where and OrderBy allocate closure classes, enumerators, and list buffers in the frame loop.
@@ -2862,7 +2825,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 99: Runtime Reflection: A Shotgun to Chop Down a Tree
+### Slide 98: Runtime Reflection: A Shotgun to Chop Down a Tree
 - **Palette**: `game_sprocket` | **Badge**: `LANGUAGE SHOOTOUT • REFLECTION VS. AST MACROS`
 - **1. Runtime Reflection: The Shotgun**:
 - **2. Compile-Time Macros: The Axe**:
@@ -2879,7 +2842,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 100: Godot C# vs Lapis: Hot-Reload Ceremony & Runtime Payload [Step 1: Code]
+### Slide 99: Godot C# vs Lapis: Hot-Reload Ceremony & Runtime Payload [Step 1: Code]
 - **Palette**: `acorn_bbc` | **Badge**: `LANGUAGE SHOOTOUT • HOT-RELOAD & DEPLOYMENT`
 - **:circle-xmark: Godot C#: Manual ISerializationListener & Zombie ALCs**:
   ```csharp
@@ -2926,7 +2889,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 101: Godot C# vs Lapis: Hot-Reload Ceremony & Runtime Payload [Step 2: Analysis & Critique]
+### Slide 100: Godot C# vs Lapis: Hot-Reload Ceremony & Runtime Payload [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Manual ISerializationListener: Non-exported state is wiped on assembly reload unless manually marshalled in OnBeforeSerialize.
   - Zombie AssemblyLoadContext Leaks: One lingering static event or timer prevents the old .NET assembly from unloading in RAM.
@@ -2946,7 +2909,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 102: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
+### Slide 101: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 1: Code]
 - **Palette**: `bento_pad` | **Badge**: `LANGUAGE SHOOTOUT • CONCURRENCY & IDENTITY`
 - **:circle-xmark: Godot C#: Task Allocations, async void, and String Soup**:
   ```csharp
@@ -2984,7 +2947,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 103: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
+### Slide 102: Godot C# vs Lapis: Concurrency Rigmarole & Stringly Lookups [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Heap Task Churn: async Task allocates state machine objects on the managed heap, degrading tight game loop performance.
   - Async Void Crash Hazard: Unhandled exceptions inside async void event handlers bypass try/catch and kill the entire process.
@@ -3000,7 +2963,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 104: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
+### Slide 103: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 1: Code]
 - **Palette**: `ranger` | **Badge**: `LANGUAGE SHOOTOUT • TYPE SYSTEM & PATTERNS`
 - **:circle-xmark: Godot C#: Unsound Type Casts & Simulated Unions**:
   ```csharp
@@ -3041,7 +3004,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 105: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
+### Slide 104: Godot C# vs Lapis: Type Unions & Flow-Sensitive Matching [Step 2: Analysis & Critique]
 - **Critique Points**:
   - No Native Union Types: Cannot express ShieldAbsorbed | CriticalDamage | Nil, forcing loose object returns or wrapper classes.
   - Non-Exhaustive Matching: C# type switches do not guarantee compile-time exhaustiveness; unhandled cases fail silently at runtime.
@@ -3057,7 +3020,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 106: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
+### Slide 105: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 1: Code]
 - **Palette**: `functionalist` | **Badge**: `LANGUAGE SHOOTOUT • TESTING & ISOLATION`
 - **:circle-xmark: Godot C#: Engine Harnesses & Async Signal Pumps**:
   ```csharp
@@ -3100,7 +3063,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 107: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
+### Slide 106: Godot C# vs Lapis: Unit Testing & Engine Decoupling [Step 2: Analysis & Critique]
 - **Critique Points**:
   - Engine Lifecycle Coupling: Godot C# nodes depend on C++ ObjectDB bindings; standard dotnet test crashes unless booted in headless Godot.
   - Heavy External Test Harnesses: Requires third-party runners like GdUnit4 or WAT, loading scene packs to test pure gameplay logic.
@@ -3117,7 +3080,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 108: Zero-Friction Interoperability (ACT IV • CHAPTER 07)
+### Slide 107: Zero-Friction Interoperability (ACT IV • CHAPTER 07)
 - **Title**: Zero-Friction Interoperability
 - **Subtitle**: GDScript Meets Crystal: Dynamic Dispatch, Strongly-Typed FFI & The Type Firewall
 - **Chapter Highlights**:
@@ -3132,7 +3095,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 109: Interoperability: GDScript Calling Crystal
+### Slide 108: Interoperability: GDScript Calling Crystal
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • GDSCRIPT TO CRYSTAL`
 - **Title**: Interoperability: GDScript Calling Crystal
@@ -3178,7 +3141,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 110: Crystal Calling GDScript: Dynamic Dispatch
+### Slide 109: Crystal Calling GDScript: Dynamic Dispatch
 - **Theme Palette**: `nds_aqua` (NDS Aqua)
 - **Badge**: `INTEROPERABILITY • DYNAMIC DISPATCH`
 - **Title**: Crystal Calling GDScript: Dynamic Dispatch
@@ -3214,7 +3177,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 
 ---
 
-### Slide 111: Crystal Calling GDScript: Strongly-Typed Bindings [Feature Grid / Bento]
+### Slide 110: Crystal Calling GDScript: Strongly-Typed Bindings [Feature Grid / Bento]
 #### quest_controller.cr — Typed GDScript Proxy
 lapis bind project inspects GDScript class_name ASTs and synthesizes strongly-typed Crystal proxy wrappers automatically.
 
@@ -3232,7 +3195,7 @@ lapis bind project inspects GDScript class_name ASTs and synthesizes strongly-ty
 
 ---
 
-### Slide 112: Inside the Godot Editor (ACT IV • CHAPTER 08)
+### Slide 111: Inside the Godot Editor (ACT IV • CHAPTER 08)
 - **Title**: Inside the Godot Editor
 - **Subtitle**: Gutter Diagnostics, In-Editor LSP, Doc Harvesting & 6-Phase Transactional Hot Reload
 - **Chapter Highlights**:
@@ -3247,7 +3210,7 @@ lapis bind project inspects GDScript class_name ASTs and synthesizes strongly-ty
 
 ---
 
-### Slide 113: First-Class Godot Editor Integration [Feature Grid / Bento]
+### Slide 112: First-Class Godot Editor Integration [Feature Grid / Bento]
 #### Editor Citizenship: Lapis vs. C# vs. Rust
 Zero foreign-extension friction: attach, edit, hot-reload, and read F1 docs directly inside the Godot Editor.
 
@@ -3266,7 +3229,7 @@ Zero foreign-extension friction: attach, edit, hot-reload, and read F1 docs dire
 
 ---
 
-### Slide 114: In-Editor Diagnostics: Real-Time Static Validator & LSP
+### Slide 113: In-Editor Diagnostics: Real-Time Static Validator & LSP
 - **Theme Palette**: `gamestation_portable` (GameStationPortable)
 - **Badge**: `EDITOR EXPERIENCE • DIAGNOSTICS & LSP`
 - **Title**: In-Editor Diagnostics: Real-Time Static Validator & LSP
@@ -3301,7 +3264,7 @@ Zero foreign-extension friction: attach, edit, hot-reload, and read F1 docs dire
 
 ---
 
-### Slide 115: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
+### Slide 114: Hot-Reload State Preserver: 6-Phase Transactional Protocol [Feature Grid / Bento]
 #### live_state_preserver.cr — Hot-Reload
 Zero state loss across GDExtension reloads: live inspector edits, runtime collections, and schema drift are automatically preserved.
 
@@ -3328,7 +3291,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 116: CLI: Command Center & Scaffolding Hub
+### Slide 115: CLI: Command Center & Scaffolding Hub
 - **Theme Palette**: `spaces_95` (Spaces 95)
 - **Badge**: `TOOLCHAIN • THE LAPIS CLI`
 - **Title**: CLI: Command Center & Scaffolding Hub
@@ -3345,7 +3308,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 117: Low-Level Binary Forensics: radare2 vs. LLDB [One-Left-Two-Right]
+### Slide 116: Low-Level Binary Forensics: radare2 vs. LLDB [One-Left-Two-Right]
 - **Theme Palette**: `trash80` (Trash80)
 - **Title**: Low-Level Binary Forensics: radare2 vs. LLDB
 - **Subtitle**: Eliminating Toolchain Bloat, Disassembly Mapping & Crash Forensics
@@ -3371,7 +3334,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 118: Testing Framework: Writing Tests & Leak Verification [One-Left-Two-Right]
+### Slide 117: Testing Framework: Writing Tests & Leak Verification [One-Left-Two-Right]
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Title**: Testing Framework: Writing Tests & Leak Verification
 - **Subtitle**: Comprehensive Spec Testing, Deterministic Simulation & ObjectDB Leak Verification
@@ -3392,7 +3355,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 119: Editor Testing: Lapis::Test::EditorDriver
+### Slide 118: Editor Testing: Lapis::Test::EditorDriver
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `TOOLING • HEADLESS EDITOR TESTING`
 - **Title**: Editor Testing: Lapis::Test::EditorDriver
@@ -3427,7 +3390,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 120: In-Editor Tool Testing & Standalone TUI Runner
+### Slide 119: In-Editor Tool Testing & Standalone TUI Runner
 - **Theme Palette**: `spaces_2000` (Spaces 2000)
 - **Badge**: `QUALITY GATES • TESTING APPARATUS`
 - **Title**: In-Editor Tool Testing & Standalone TUI Runner
@@ -3444,7 +3407,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 121: The Hard Numbers (ACT IV • CHAPTER 12)
+### Slide 120: The Hard Numbers (ACT IV • CHAPTER 12)
 - **Title**: The Hard Numbers
 - **Subtitle**: Quantitative Microbenchmarks, Nanosecond FFI Boundaries & 5-Language Shootout
 - **Chapter Highlights**:
@@ -3460,7 +3423,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 122: Quantitative Benchmarks: Crystal vs GDScript
+### Slide 121: Quantitative Benchmarks: Crystal vs GDScript
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `QUANTITATIVE BENCHMARKS • PERFORMANCE`
 - **Title**: Quantitative Benchmarks: Crystal vs GDScript
@@ -3477,7 +3440,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 123: Language & GDExtension Ecosystem Feature Matrix [Matrix]
+### Slide 122: Language & GDExtension Ecosystem Feature Matrix [Matrix]
 | Language / Binding | Execution Model | Compilation Speed | Type Safety | Metaprogramming | SceneTree Ergonomics |
 | --- | --- | --- | --- | --- | --- |
 | Lapis (Crystal) | Native LLVM AOT | Fast (AOT Incremental) | Static + Nil Safe | AST Macros (Compile-Time) | Zen DSL (Ruby-like) |
@@ -3493,7 +3456,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 124: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
+### Slide 123: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • MULTI-LANGUAGE`
 - **Title**: Cross-Language Shootout: Crystal vs C++, Rust, C# & GDScript
@@ -3511,7 +3474,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 125: Native Tier Shootout: Crystal vs C++, Rust & C#
+### Slide 124: Native Tier Shootout: Crystal vs C++, Rust & C#
 - **Theme Palette**: `deck_handheld` (Deck Handheld)
 - **Badge**: `BENCHMARKS • NATIVE TIER`
 - **Title**: Native Tier Shootout: Crystal vs C++, Rust & C#
@@ -3529,7 +3492,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 126: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
+### Slide 125: Interop & FFI Benchmarks: Nanosecond Boundary Analysis [Table / Benchmark]
 
 | Language / Binding Target | GDExtension ptrcall | Local Struct Math | Memory Allocation | Speedup vs Dynamic |
 | --- | --- | --- | --- | --- |
@@ -3545,7 +3508,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 127: Authoring Custom Benchmarks: Lapis::Benchmark
+### Slide 126: Authoring Custom Benchmarks: Lapis::Benchmark
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • CUSTOM BENCHMARKING`
 - **Title**: Authoring Custom Benchmarks: Lapis::Benchmark
@@ -3582,7 +3545,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 128: Automated Benchmark TUI: lapis benchmarks
+### Slide 127: Automated Benchmark TUI: lapis benchmarks
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `PERFORMANCE • BENCHMARK TUI`
 - **Title**: Automated Benchmark TUI: lapis benchmarks
@@ -3599,7 +3562,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 129: Benchmark Reports & CI Regression Tracking
+### Slide 128: Benchmark Reports & CI Regression Tracking
 - **Theme Palette**: `spaces_vista` (Spaces Vista)
 - **Badge**: `BENCHMARKS • CI & REPORTING`
 - **Title**: Benchmark Reports & CI Regression Tracking
@@ -3635,7 +3598,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 130: The Bridge Architecture (ACT IV • CHAPTER 13)
+### Slide 129: The Bridge Architecture (ACT IV • CHAPTER 13)
 - **Title**: The Bridge Architecture
 - **Subtitle**: 4-Tier GDExtension Architecture, ClassDB Generators & Turnkey Distribution
 - **Chapter Highlights**:
@@ -3650,7 +3613,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 131: Lapis Architecture: The Layered Bridge [Architecture]
+### Slide 130: Lapis Architecture: The Layered Bridge [Architecture]
 - **Tier 4 • Gameplay Application Layer**:
   - **Custom Nodes**: <code>node Player &lt; CharacterBody3D</code>
   - **Inspector Exports**: <code>@[Export]</code> ranges, enums, &amp; flags
@@ -3680,7 +3643,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 132: Dual Modes: Mode A vs. Mode B [Dual-Mode]
+### Slide 131: Dual Modes: Mode A vs. Mode B [Dual-Mode]
 **Overview**: Self-Hosted Tooling: Just like the Crystal compiler is self-hosted in Crystal, Lapis&apos;s Godot editor integration plugin, syntax highlighting, and tooling docks are authored 100% in Crystal.
 
 - **Mode A: GDExtension In-Editor**:
@@ -3705,7 +3668,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 133: The Packaging System: Turnkey Distribution [Two-Top-One-Bottom]
+### Slide 132: The Packaging System: Turnkey Distribution [Two-Top-One-Bottom]
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Title**: The Packaging System: Turnkey Distribution
 
@@ -3725,7 +3688,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 134: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
+### Slide 133: Live Demonstration & Roadmap (ACT V • THE GRAND FINALE)
 - **Title**: Live Demonstration & Roadmap
 - **Subtitle**: Scaffolding, Diorite Addons, In-Editor Iteration, Single-EXE Packaging & Soulantern Demo
 - **Chapter Highlights**:
@@ -3745,7 +3708,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 135: Live Demonstration: End-to-End Workflow [Demo Roadmap]
+### Slide 134: Live Demonstration: End-to-End Workflow [Demo Roadmap]
 - **STEP 1 • SCAFFOLD — Scaffold Game**:
   ```bash
   $ lapis new game my_game
@@ -3807,7 +3770,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 136: The Future of Native Scripting in Godot [Timeline]
+### Slide 135: The Future of Native Scripting in Godot [Timeline]
 - **Q1 2027 — Mobile & Wasm Targets**:
   - Compiling Lapis games to Android, iOS, and WebAssembly via Emscripten.
   - Cross-compilation toolchains with zero native tool installation friction.
@@ -3831,7 +3794,7 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 137: THANKS FOR WATCHING! [Closing]
+### Slide 136: THANKS FOR WATCHING! [Closing]
 - **Lapis & sol.vin**: Interactive 3D showcases, architecture guides, and open source repository.
   - `sol.vin • github.com/sol-vin/lapis`
 - **Crystal Language**: Official Crystal website, language reference, standard library docs, and blog.

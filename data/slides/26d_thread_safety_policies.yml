@@ -1,19 +1,20 @@
 ---
 id: 26d_thread_safety_policies
-title: 'Thread & Scope Policies'
-subtitle: ThreadAffinity Enforcement & Detached Graph Assembly
-badge: CONCURRENCY SAFETY • THREAD AFFINITY
+title: 'Thread Policies & Main-Thread Dispatch'
+subtitle: 'ThreadAffinity Enforcement, Detached Graph Assembly & Frame-Boundary Flush'
+badge: CONCURRENCY SAFETY • AFFINITY & DISPATCH
 badge_color: amber
 palette: silicon_indigo
-layout: one-left-two-right
+layout: one-left-three-right
 ratio: 3:2
 left:
   type: code
-  title: thread_policies.cr — Configuration & Orphan Graphs
+  title: thread_safety_and_dispatch.cr — Orphan Graphs & Main-Thread Flush
   tag: Crystal
   lang: crystal
+  font_size: '0.76rem'
   code: |
-    # 1. Configure enforcement policy across environments
+    # 1. Configure enforcement policy & scope
     Godot::ThreadSafety.policy = Godot::ThreadSafety::Policy::Raise
     Godot::ThreadSafety.scope  = Godot::ThreadSafety::Scope::TreeOnly
 
@@ -21,29 +22,40 @@ left:
     Thread.new do
       room = Godot.create(Godot::Node3D) # Allowed: detached orphan
       mesh = Godot.create(Godot::MeshInstance3D)
-      mesh.mesh = generate_room_mesh(seed: 1234)
-      room.add_child(mesh)               # Allowed: room is not in tree
+      mesh.mesh = generate_room_mesh(seed: 42)
+      room.add_child(mesh)               # Allowed: not in live SceneTree
 
       # Accidental live-tree mutation fails fast:
-      # get_tree.root.add_child(room)
-      # => Raises Godot::ThreadAffinityError with caller context!
-      Godot.on_main_thread { get_tree.root.try(&.add_child(room)) }
+      # get_tree.root.add_child(room) => Raises Godot::ThreadAffinityError!
+
+      # 3. Safely flush finished hierarchy on Godot's Main Thread:
+      Godot.on_main_thread do
+        @world_root.add_child(room)
+        @minimap.reveal_room(room.name)
+      end
     end
-right_top:
-  type: card
-  title: 'Scope Axis: TreeOnly vs. AllNodes'
-  badge: 'DETACHED GRAPHS'
-  color: cyan
-  items:
-    - '<strong>Scope::TreeOnly (Default):</strong> Guards only live SceneTree nodes, letting worker threads assemble detached node graphs in parallel.'
-    - '<strong>Scope::AllNodes:</strong> Strict isolation mode blocking off-thread hierarchy mutations on any node, attached or detached.'
-right_bottom:
-  type: card
-  title: 'Policy Axis: Raise, Warn & Defer'
-  badge: 'AFFINITY ARMOR'
-  color: amber
-  items:
-    - '<strong>Policy::Raise (Debug):</strong> Intercepts illegal cross-thread calls before C++ executes, raising a catchable <code>ThreadAffinityError</code>.'
-    - '<strong>Policy::Warn / Defer / Disabled:</strong> Log non-fatal warnings, auto-queue via <code>call_deferred</code>, or strip checks in release builds.'
+right:
+  - type: card
+    title: '1. Scope: TreeOnly vs. AllNodes'
+    badge: 'DETACHED GRAPHS'
+    color: cyan
+    items:
+      - '<strong>Parallel Orphan Assembly:</strong> <code>Scope::TreeOnly</code> guards live SceneTree nodes while letting worker threads build detached graphs off-thread.'
+  - type: card
+    title: '2. Policy: Raise, Warn, Defer & Disabled'
+    badge: 'AFFINITY ARMOR'
+    color: amber
+    items:
+      - '<strong>Fail-Fast or Auto-Defer:</strong> Intercept illegal cross-thread calls via <code>ThreadAffinityError</code> in debug, auto-defer, or strip checks in release.'
+  - type: card
+    title: '3. Godot.on_main_thread Dispatch'
+    badge: 'FRAME FLUSH'
+    color: emerald
+    items:
+      - '<strong>Deterministic Frame Queue:</strong> Buffers off-thread closures into a mutex queue drained at the next frame tick (or runs inline if already on main).'
 notes: |
-  Godot's SceneTree is strictly single-threaded. Mutating node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes. Lapis provides a configurable ThreadSafety guard. ThreadPolicy gives developers complete control: Raise for fail-fast debugging in development, Warn for non-fatal logging, Defer for automatic queueing, and Disabled to compile out checks in release builds. ScopePolicy::TreeOnly is particularly powerful: it permits background worker threads to assemble large, detached orphan node hierarchies off-thread—such as procedurally generated dungeon rooms or terrain meshes—while strictly guarding the live scene tree.
+  Godot's SceneTree is strictly single-threaded. Mutating live node hierarchy off-thread corrupts internal child lists and causes unrecoverable ACCESS_VIOLATION crashes.
+  Lapis combines two complementary primitives to make multi-threaded world streaming effortless:
+  1. Configurable ThreadSafety Policies and Scopes: Scope::TreeOnly lets background worker threads assemble large, detached orphan node hierarchies off-thread—such as procedural dungeon rooms or meshes—while Policy::Raise immediately catches any accidental mutation of the live SceneTree with a clear ThreadAffinityError.
+  2. Godot.on_main_thread: Once the worker thread finishes building its detached node graph, Godot.on_main_thread buffers a type-safe closure into an engine queue that gets drained deterministically at the start of the next frame tick, mounting the finished hierarchy without string-based call_deferred boilerplate.
+
