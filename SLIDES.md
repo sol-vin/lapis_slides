@@ -951,7 +951,7 @@ First-class C ABI support built directly into the Crystal compiler—zero C wrap
 ---
 
 ### Slide 33: doo-cr: DOOM Ported to Crystal [Media]
-- **Media**: doo-cr — DOOM1.WAD (`doom_cr.png`)
+- **Media**: doo-cr — DOOM1.WAD (`doom.mp4`)
 - **Porting id Software’s Classic**:
   - Header-Only C Base: Started by binding PureDOOM (a single-header C port of LinuxDoom) to Crystal with raylib-cr and libADLMIDI.
   - Beyond FFI Wrappers: Instead of stopping at a C binding, every engine function was incrementally translated from C into Crystal.

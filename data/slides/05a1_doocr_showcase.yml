@@ -7,10 +7,10 @@ badge_color: amber
 palette: they_fear
 layout: media-layout
 media:
-  type: image
-  src: doom_cr.png
+  type: video
+  src: doom.mp4
   title: 'doo-cr — DOOM1.WAD'
-  tag: 'Crystal'
+  tag: 'Video (49s)'
 card:
   title: 'Porting id Software’s Classic'
   badge: 'SOURCE PORT'
