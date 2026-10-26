@@ -15,30 +15,33 @@ describe "Flagship Lapis Slide Deck in Sunstone" do
     res = deck_yaml["resolution"]
     width = res["width"].as_i
     height = res["height"].as_i
-    stage = LapisSlides::Core::StageResolution.new(width, height)
-    stage.aspect_ratio_16_9?.should be_true
+    width.should eq(1280)
+    height.should eq(720)
+    (width * 9).should eq(height * 16)
   end
 
-  it "verifies all slides listed in deck.yml exist in data/slides" do
+  it "verifies 1:1 parity between slides listed in deck.yml and YAML files in data/slides" do
     deck_path = File.join(__DIR__, "..", "deck.yml")
     deck_yaml = YAML.parse(File.read(deck_path))
-    slides = deck_yaml["slides"].as_a
+    slides = deck_yaml["slides"].as_a.map(&.as_s)
 
     slides.size.should be >= 100
 
     slides_dir = File.join(__DIR__, "..", "data", "slides")
-    slides.each do |slide_entry|
-      slide_id = slide_entry.as_s
+    slides.each do |slide_id|
       slide_file = File.join(slides_dir, "#{slide_id}.yml")
       File.exists?(slide_file).should be_true, "Missing slide file: #{slide_file}"
     end
+
+    disk_slides = Dir.glob(File.join(slides_dir, "*.yml")).map { |f| File.basename(f, ".yml") }
+    orphaned = disk_slides - slides
+    orphaned.should be_empty, "Orphaned slide YAML files found in data/slides: #{orphaned.join(", ")}"
   end
 
   it "verifies every slide YAML satisfies Zero-Inline-Styles invariant and valid YAML schema" do
     slides_dir = File.join(__DIR__, "..", "data", "slides")
     Dir.glob(File.join(slides_dir, "*.yml")).each do |file|
       content = File.read(file)
-      # Check Zero-Inline-Styles
       content.includes?("style=\"").should be_false, "Inline style found in #{File.basename(file)}"
       content.includes?("style='").should be_false, "Inline style found in #{File.basename(file)}"
 
@@ -70,16 +73,4 @@ describe "Flagship Lapis Slide Deck in Sunstone" do
     File.exists?(slides_md_path).should be_true
     File.size(slides_md_path).should be > 50_000
   end
-
-  it "verifies conference CFP.md and 30-minute KEYNOTE_30MIN_SCRIPT.md exist and are non-empty" do
-    cfp_path = File.join(__DIR__, "..", "CFP.md")
-    keynote_path = File.join(__DIR__, "..", "KEYNOTE_30MIN_SCRIPT.md")
-
-    File.exists?(cfp_path).should be_true
-    File.size(cfp_path).should be > 5_000
-
-    File.exists?(keynote_path).should be_true
-    File.size(keynote_path).should be > 20_000
-  end
 end
-

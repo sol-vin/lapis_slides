@@ -1,4 +1,4 @@
-.PHONY: build serve validate clean casts
+.PHONY: build serve validate spec clean
 
 SUNSTONE ?= sunstone
 CRYSTAL ?= crystal
@@ -12,8 +12,8 @@ serve:
 validate:
 	$(SUNSTONE) validate
 
-casts:
-	$(CRYSTAL) run scripts/record_casts.cr -- --all
+spec:
+	$(CRYSTAL) spec
 
 clean:
 	rm -rf dist/ bin/

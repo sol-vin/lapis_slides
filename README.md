@@ -1,4 +1,4 @@
-# Lapis Presentation Deck & YAML Slide Engine
+# Lapis for Crystal — Flagship Presentation Deck
 
 <!-- carbon:badges -->
 [![CI](https://github.com/sol-vin/lapis_slides/actions/workflows/deploy.yml/badge.svg)](https://github.com/sol-vin/lapis_slides/actions/workflows/deploy.yml)
@@ -7,58 +7,66 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <!-- /carbon:badges -->
 
+The flagship technical presentation and deep-dive slide deck for **Lapis** (*Native Machine Speed • Zen Ergonomics • Godot Engine 4.8+*), authored by [sol.vin](https://www.sol.vin) and powered by the [Sunstone](https://github.com/sol-vin/sunstone) YAML presentation engine.
 
-A modular, high-performance slide presentation engine written in **Crystal**, inspired by [sol.vin](https://www.sol.vin). It converts human-readable YAML slide definitions into an interactive **Reveal.js** presentation (`index.html`) and markdown speaking reference (`SLIDES.md`).
+It compiles modular, human-readable YAML slide definitions (`deck.yml` + `data/slides/*.yml`) into an interactive 16:9 **Reveal.js** web presentation ([`index.html`](index.html)) and a comprehensive speaker reference document ([`SLIDES.md`](SLIDES.md)).
 
 ---
 
-## Features
+## Presentation Architecture (5 Acts • 113 Slides)
 
-- **Sunstone-Powered Engine**: Built on [Sunstone](https://github.com/sol-vin/sunstone), the generic, modular YAML-driven slide presentation engine with zero-inline-style semantic HTML.
-- **Human-Readable YAML Data**: Every slide lives in `data/slides/*.yml`. Adding or rearranging slides is as simple as creating a file and updating `deck.yml`.
-- **Pre-Determined Layouts**:
-  - `code-comparison-layout`: Side-by-side GDScript Anti-Pattern vs. Crystal Clean Solution with 2-step progressive reveal.
-  - `hero-layout` / `intro-layout`: Cover slide with spinning 3D isometric cube and topic badges.
-  - `two-column-layout`: Flexible two-column layout (code, cards, terminal windows, embedded Asciinema replays) with customizable ratios (`1:1`, `3:2`, `2:3`).
-  - `three-column-layout` & `four-column-layout`: Multi-column card sets and 4-way language comparisons.
-  - `matrix-layout`: Comparative tables and feature matrices.
-  - `timeline-layout`: Sequential historical or architectural milestones.
-  - `media-layout`: Video or image displays with sidebar contextual cards.
-  - `architecture-layout`: Multi-tier bridge architecture diagram.
-- **102 Retro Sol.vin Palettes**: Authentic vintage computing palettes (`monokai`, `warm_paper`, `spaces_98`, `aperture`, `m64`, `amigo`, `game_station_2`, etc.).
-- **Conference CFP Proposal Package**: Production-ready submission package in [`CFP.md`](CFP.md) with multi-title variations, 50-word elevator pitch, 150-word abstract, 500-word proposal, and conference matrix (GodotCon 2026, FOSDEM 2027, Crystal Conf).
-- **30-Minute Keynote Choreography & Teleprompter**: Complete stage script in [`KEYNOTE_30MIN_SCRIPT.md`](KEYNOTE_30MIN_SCRIPT.md) with 6 Acts, 14 granular beats, 40 AV cues, rehearsal checkpoints, and 6-question technical Q&A defense playbook.
-- **Two-Tier Talk & Keynote DSL**: Declarative Crystal DSL (`LapisSlides.cfp`, `LapisSlides.keynote`) with static invariant validators (`validate_cfp`, `validate_choreography`).
-- **Live Preview Server**: Built-in HTTP server with auto-launching browser and speaker notes view.
+- **Act I — Ethos & The Vision**: Presenter background (`sol.vin`), content & length advisory.
+- **Act II — The Ruby Heritage & The Scale Wall**: Developer happiness, postage-stamp ~40-keyword grammar, backend/frontend class ergonomics, and the enterprise dynamic typing scale wall (Sorbet/RBS).
+- **Act III — Crystal: The Compiled Synthesis**: Whole-program flow-sensitive type inference, compile-time nil safety, expressive syntax delights, modules, closures, compile-time AST macro metaprogramming, zero-overhead C bindings, `doo-cr`, and *The Ship of Shwageseus*.
+- **Act IV — The Lapis Godot Engine Masterclass**:
+  - **4.1**: The Gameplay DSL, `node` / `gmodule` composition, resource preloading, fluent spawning, tweens, physics queries, and `@[Autoload]` singletons.
+  - **4.2**: Typed signals, declarative `on` connections, and reactive async workflows.
+  - **4.3**: Optional Lapis syntactic sugar and hierarchy/scene pipeline operators (`~`, `*`, `>`, `>>`).
+  - **4.4**: The GDScript Face-Off — 10 side-by-side antipattern comparisons vs. Crystal Zen, `Lapis.frame_arena`, type firewalls, and 64-bit ObjectDB dead-pointer armor.
+  - **4.5**: Fearless concurrency, timers, `await` / `await?` / `await!`, channels, thread safety policies, and lockstep multiplayer `@[RPC]`.
+  - **4.6**: The C# (.NET) Shootout — boilerplate, nullability, GC/runtime tax, reflection vs. AST macros, hot-reload state preservation, and `crystal spec`.
+  - **4.7**: Zero-friction bidirectional GDScript ↔ Crystal interoperability.
+  - **4.8**: Inside the Godot Editor — native inspector integration, in-editor validator/LSP, and shadow-DLL hot reloading.
+  - **4.9**: The Lapis CLI Command Center (`lapis`).
+  - **4.11**: Mission-critical zero-leak testing, headless editor driver, multiplayer testing, and TUI test runner.
+  - **4.12**: Hard empirical benchmarks & multi-language shootouts (Lapis vs. C++, Rust, C#, and GDScript).
+  - **4.13**: The LibGodot / GDExtension bridge architecture, dual execution modes, and `lapis package` distribution.
+- **Act V — Live Demonstration & The Road Ahead**: 5-step live demo roadmap, future milestones, and community links.
 
 ---
 
 ## Quickstart & CLI Commands
 
 ### 1. Build the Presentation
-Compiles YAML slides into `index.html` and `SLIDES.md`:
+Compiles `deck.yml` and `data/slides/*.yml` into `index.html`, `theme.css`, and `SLIDES.md`:
 ```bash
-# Using Makefile
-make build
-
-# Or directly with Sunstone CLI
 sunstone build -o .
+# or via Makefile:
+make build
 ```
 
 ### 2. Validate Slide Schemas
-Validates that all slides have titles, valid layouts, and existing Sol.vin theme palettes:
+Audits `deck.yml`, layout schemas, and `sol.vin` theme palette names:
 ```bash
-make validate
-# or
 sunstone validate
+# or via Makefile:
+make validate
 ```
 
-### 3. Launch Local Preview Server
-Starts the built-in HTTP server on port 8000 and opens your default browser:
+### 3. Run Deck Verification Specs
+Verifies 16:9 stage resolution, 1:1 parity between `deck.yml` and `data/slides/*.yml`, zero-inline-styles invariant, and compiled HTML/Markdown outputs:
 ```bash
-make serve
-# or
+crystal spec
+# or via Makefile:
+make spec
+```
+
+### 4. Launch Local Preview Server
+Starts the live preview server on port `8000`:
+```bash
 sunstone serve
+# or via Makefile:
+make serve
 ```
 
 **Presentation Keyboard Shortcuts:**
@@ -67,96 +75,39 @@ sunstone serve
 - `ESC` or `O`: Toggle multi-slide **Overview Grid**
 - `F`: Fullscreen mode
 
-### 4. Compile & Validate CFP and 30-Minute Keynote Choreography
-Validates talk timeline invariants, word pacing, and emits updated `CFP.md` and `KEYNOTE_30MIN_SCRIPT.md`:
-```bash
-crystal run scripts/generate_keynote_and_cfp.cr
-```
+---
+
+## Authoring or Updating Slides
+
+1. **Create or edit a slide YAML in `data/slides/`** (e.g., `data/slides/20_node_dsl.yml`).
+2. **Register the slide ID in [`deck.yml`](deck.yml)** under `slides:`.
+3. **Validate, build, and test**:
+   ```bash
+   sunstone validate && sunstone build -o . && crystal spec
+   ```
 
 ---
 
-## Authoring New Slides
+## Repository Structure
 
-### Step 1: Create a YAML file in `data/slides/`
-Example: `data/slides/44_my_new_feature.yml`
-
-```yaml
-id: 44_my_new_feature
-title: "My New Feature"
-subtitle: "High-level overview of the new capability"
-badge: "GAMEPLAY • FEATURE"
-badge_color: "emerald"
-palette: "spaces_98"
-layout: "code-comparison-layout"
-
-gdscript:
-  title: "❌ GDScript Anti-Pattern: Manual Loop Mutation"
-  lang: "gdscript"
-  tag: "GDScript"
-  code: |
-    var out = []
-    for x in items:
-        if x.is_valid():
-            out.append(x.name)
-  points:
-    - "Manual heap array allocation"
-    - "Verbose loops for simple filtering"
-
-crystal:
-  title: "✨ Crystal Clean Solution: Chained Enumerable"
-  lang: "crystal"
-  tag: "Crystal (Lapis)"
-  code: |
-    out = items.select(&.valid?).map(&.name)
-  points:
-    - "Clean functional pipeline"
-    - "Inlined LLVM machine loop with zero GC overhead"
-
-takeaway:
-  badge: "KEY TAKEAWAY"
-  text: "Crystal transforms imperative loop boilerplate into expressive, zero-alloc pipelines."
-
-notes: |
-  Speaking notes for the presenter when viewing with 'S'...
-```
-
-### Step 2: Register in `data/deck.yml`
-Add the slide filename (without `.yml`) to the `slides` list in `data/deck.yml`:
-```yaml
-slides:
-  - 01_hero
-  - ...
-  - 44_my_new_feature
-```
-
-### Step 3: Rebuild
-```bash
-make build
-```
-
----
-
-## Directory Structure
-
-```
-slides/
+```text
+lapis_slides/
+├── deck.yml                    # Canonical Sunstone presentation manifest & slide order
 ├── data/
-│   ├── deck.yml                # Presentation manifest and slide ordering
-│   └── slides/                 # 43 modular YAML slide definitions
-│       ├── 01_hero.yml
-│       ├── 11_antipattern_iterators.yml
-│       ├── 12_antipattern_nil_safety.yml
-│       └── ...
-├── src/
-│   ├── models/                 # Slide, Deck, and Palette models
-│   ├── layouts/                # Pre-determined layout renderers
-│   ├── generator.cr            # Compiles HTML and SLIDES.md
-│   ├── server.cr               # Built-in HTTP static server
-│   └── builder.cr              # CLI entry point
-├── vendor/                     # Reveal.js and Highlight.js assets
-├── index.html                  # Generated Reveal.js presentation
-├── SLIDES.md                   # Generated Markdown presentation reference
-├── theme.css                   # Sol.vin presentation styling
-├── solvin_palettes.json        # 46 retro theme palettes
-└── Makefile                    # Convenience build targets
+│   └── slides/                 # 113 modular YAML slide definitions
+├── casts/                      # 6 embedded Asciinema terminal/TUI recordings (*.cast)
+├── vendor/                     # Bundled Reveal.js, Highlight.js, FontAwesome & Asciinema assets
+├── spec/
+│   ├── spec_helper.cr
+│   └── flagship_deck_spec.cr   # Automated deck, schema & artifact verification suite
+├── custom.css                  # Deck-specific layout & typography refinements
+├── theme.css                   # Compiled Sol.vin theme & retro palettes stylesheet
+├── cube.js                     # Interactive 3D isometric wireframe cube engine
+├── hold_click.js               # Hold-click interaction helper
+├── palette_engine.js           # Live Sol.vin palette switcher engine
+├── doom.mp4                    # Embedded DOOM in Crystal (doo-cr) showcase video
+├── index.html                  # Compiled Reveal.js presentation
+├── SLIDES.md                   # Compiled speaker notes & slide reference script
+├── Makefile                    # Convenience build, validate, serve & spec targets
+└── shard.yml                   # Crystal shard manifest (Sunstone dependency)
 ```
