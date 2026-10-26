@@ -10042,7 +10042,7 @@ end</code></pre>
               <span class="badge badge-pill cyan" data-color="cyan">PERFORMANCE • BENCHMARK TUI</span>
             </div>
             <h2 class="slide-title">Automated Benchmark TUI: lapis benchmarks</h2>
-            <p class="slide-subtitle">Real-Time Double-Buffered ANSI Dashboard &amp; Comparative Speedup Ratios</p>
+            <p class="slide-subtitle">Head-to-Head Comparison Groups, Category Breakdowns &amp; Interactive ANSI Visualizer</p>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="1:1">
             <div class="column col" data-slot="left">
@@ -10053,7 +10053,7 @@ end</code></pre>
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title terminal-title">Terminal — lapis benchmarks --tui --all-languages</span>
+                <span class="window-title terminal-title">Terminal — lapis benchmarks --tui</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag terminal-badge">REPLAY</span>
                   <span class="window-btn close" title="Close">✕</span>
@@ -10067,13 +10067,13 @@ end</code></pre>
             <div class="column col" data-slot="right">
             <div class="card col cyan" data-color="cyan">
               <div class="card-header card-title cyan">
-                <span>Benchmark TUI Dashboard Invariants</span>
+                <span>Head-to-Head Comparisons &amp; Categories</span>
               </div>
               <ul class="card-list">
-                <li><strong>Double-Buffered ANSI Dashboard:</strong> <code>lapis benchmarks --tui</code> renders a flicker-free split-pane interface with live timers and stdout streams.</li>
-                <li><strong>Cross-Language Shootout (<code>--all-languages</code>):</strong> Measures Crystal against C++, Rust, C# (.NET 8), and GDScript across 27 comparative suites.</li>
-                <li><strong>Interactive Metrics Modal:</strong> Pressing <code>[Enter]</code> inspects confidence intervals (min, median, max, std dev) and memory allocations.</li>
-                <li><strong>Multi-Format Output Staging:</strong> Exports console tables, vector charts (SVG), interactive HTML reports, and XML regression baselines.</li>
+                <li><strong>Head-to-Head Comparison Groups (<code>-g / --group</code>):</strong> Pit competing algorithms, data structures, or implementations directly against a reference baseline to measure exact speedup multiples.</li>
+                <li><strong>Category Organization (<code>-c / --category</code>):</strong> Organize and filter suites by domain (<code>compute</code>, <code>engine</code>, <code>toolchain</code>, <code>custom</code>) with cumulative category breakdown charts.</li>
+                <li><strong>Multi-View ANSI Visualizer (<code>--tui</code>):</strong> Switch interactively between head-to-head comparison bars, top speedup rankings, category donut charts, and multi-sample latency curves.</li>
+                <li><strong>Multi-Format Output Staging:</strong> Export console tables, vector charts (SVG), interactive HTML reports, and XML baselines for version-to-version comparisons.</li>
               </ul>
             </div>
             </div>
@@ -10085,7 +10085,7 @@ end</code></pre>
           </footer>
         </div>
         <aside class="notes">
-          To verify real-world game performance across engine versions, Lapis provides a full-featured terminal UI for benchmarking. Invoking `lapis benchmarks --tui` launches a double-buffered ANSI dashboard that executes microbenchmarks and comparative stress tests side-by-side against Godot GDScript and native C++/Rust targets. As each suite runs, the TUI dynamically plots execution latency, calculates exact speedup multiples with statistical confidence intervals, and records peak memory. Developers can navigate suites with keyboard controls, drill down into sub-step iterations with Enter, and automatically export SVG comparison charts and HTML reports for documentation or CI regression tracking.
+          While our 5-language shootout benchmarks Lapis itself, `lapis benchmarks` is built for your own game projects to pit implementations head-to-head. By organizing benchmarks into comparison groups (`--group`) and categories (`--category`), you can test competing algorithms—such as a spatial hash versus a quadtree, or a new Crystal system against an existing GDScript prototype—directly against a chosen baseline. Launching `lapis benchmarks --tui` opens an interactive ANSI visualizer where you can cycle through head-to-head bar charts, speedup rankings, category time-share donut charts, and multi-sample latency distributions, or export SVG and HTML reports for team review.
         </aside>
       </section>
 
