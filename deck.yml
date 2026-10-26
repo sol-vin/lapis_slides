@@ -122,7 +122,6 @@ slides:
 - 25_antipattern_channels
 - 26d_thread_safety_policies
 - 26b_multiplayer_rpc
-- 26f_testing_multiplayer
 - 26c_concurrency_patterns
 
 # --- Chapter 4.6: The C# (.NET) Shootout ---
@@ -151,12 +150,10 @@ slides:
 # --- Chapter 4.9: The Lapis CLI Command Center ---
 - 30_cli_lifecycle
 
-# --- Chapter 4.10: Low-Level Binary Forensics ---
-- 34_debugger_radare2
-
 # --- Chapter 4.11: Mission-Critical Testing ---
 - 36_testing_zero_leak
 - 36b_testing_editor_driver
+- 26f_testing_multiplayer
 - 37_tool_testing_tui
 
 # --- Chapter 4.12: The Hard Numbers (Benchmarks & Shootouts) ---
