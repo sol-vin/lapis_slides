@@ -1305,7 +1305,7 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 ---
 
 ### Slide 46: Direct Space Physics: Zero-Boilerplate & Fluent Raycasting [Step 1: Code]
-- **Palette**: `hazard_suit` | **Badge**: `PHYSICS • FLUENT RAYCASTING & SCENE ERGONOMICS`
+- **Palette**: `hazard_suit` | **Badge**: `PHYSICS • DIRECT SPACE QUERIES`
 - **:circle-xmark: GDScript: Manual RayQuery Setup & Untyped Dictionaries**:
   ```gdscript
   func check_line_of_sight(target_pos: Vector2) -> void:
@@ -1320,12 +1320,8 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
           var collider = result["collider"]
           if collider is Enemy:
               collider.take_damage(25)
-  
-  # Modulate alpha & manual visibility
-  hud.modulate.a = 0.85
-  shield_fx.visible = true
   ```
-- **:sparkles: Crystal: One-Line Queries, Fluent Builders & Helpers**:
+- **:sparkles: Crystal: One-Line Queries, Fluent Builders & Typed Hits**:
   ```crystal
   # 1. One-Line Raycast & Safe Downcast:
   if hit = raycast_to(target_pos, mask: 0b0001)
@@ -1338,11 +1334,6 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
     .exclude(self)
     .mask(0b0011)
     .query
-  
-  # 3. CanvasItem Visibility & Alpha Helpers:
-  hud.alpha = 0.85              # Modulate alpha shorthand
-  shield_fx.show                # Immediate visibility (or .hide)
-  status_icon.toggle_visibility # Flips & returns new Bool state
   ```
 
 ---
@@ -1352,20 +1343,17 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   - Manual Query Setup: Requires allocating PhysicsRayQueryParameters2D objects for every raycast.
   - Untyped Dictionaries: intersect_ray returns a dynamic Variant dictionary requiring string key lookups.
   - Runtime Casting Hazards: Colliders must be manually checked with is Enemy, prone to null errors.
-  - Verbose Property Ceremony: Altering opacity requires unpacking modulate.a instead of semantic helpers.
 - **Solution Advantages**:
   - One-Line & Fluent Queries: raycast_to or chained raycast2d.to.exclude.mask.query in a single expression.
   - Strongly-Typed Hits: Returns PhysicsHit2D / 3D structs with typed point, normal, and rid.
   - Dead-Pointer Guarded: hit.collider.as?(Enemy) validates survival with zero dangling pointer risks.
-  - CanvasItem Helpers: Direct node.alpha = val, show/hide, and toggle_visibility streamline UI state.
-- **Key Takeaway**: Lapis collapses Godot's multi-step raycasting ceremony into safe one-line queries, fluent builders, and scene ergonomics.
+- **Key Takeaway**: Lapis collapses Godot's multi-step raycasting ceremony into safe one-line queries, fluent builders, and strongly-typed hit structs.
 
 **Presenter Notes**:
 > Performing raycasts in Godot has historically been cumbersome. You either attach physical RayCast2D/3D nodes in the editor—which adds scene tree bloat—or write over a dozen lines of boilerplate: acquiring get_world_2d().direct_space_state, allocating PhysicsRayQueryParameters2D, executing intersect_ray, and unpacking an untyped Variant dictionary with string keys.
 > Lapis simplifies physics queries with direct space raycasting. Methods like 'raycast_to(target_pos)' and 'raycast(dir, distance)' run on Node2D and Node3D in a single line, returning strongly-typed PhysicsHit2D or PhysicsHit3D value structs.
 > For complex queries, fluent builders ('raycast2d', 'raycast3d') let you chain targets, exclusions, and collision masks before calling '.query'.
 > All colliders can be safely downcast with 'hit.collider.as?(Enemy)' protected by Lapis's 64-bit dead-pointer armor.
-> Additionally, CanvasItem gains direct 'alpha' assignment and visibility helpers ('show', 'hide', 'toggle_visibility'), eliminating boilerplate color math for routine transitions.
 
 ---
 

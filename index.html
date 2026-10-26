@@ -3826,15 +3826,15 @@ tween(coin.scale, to: Vector2.new(1.35, 1.35), in: 150.milliseconds)</code></pre
         <div class="slide-container">
           <header class="slide-header" data-align="split">
             <div class="slide-meta">
-              <span class="badge badge-pill amber" data-color="amber">PHYSICS • FLUENT RAYCASTING &amp; SCENE ERGONOMICS</span>
+              <span class="badge badge-pill amber" data-color="amber">PHYSICS • DIRECT SPACE QUERIES</span>
               <span class="badge code-view-badge step-badge">CODE VIEW</span>
             </div>
             <h2 class="slide-title">Direct Space Physics: Zero-Boilerplate &amp; Fluent Raycasting</h2>
-            <p class="slide-subtitle">One-Line Spatial Queries, Fluent Builders, Typed Hits &amp; Scene Ergonomics</p>
+            <p class="slide-subtitle">One-Line Spatial Queries, Fluent Builders &amp; Strongly-Typed Hits</p>
           </header>
           <div class="slide-body" data-layout="code-comparison" data-step="code-only">
             <div class="comparison-pane" data-slot="before">
-            <div class="code-window code-container col code-compact" data-lang="gdscript" data-density="compact">
+            <div class="code-window code-container col" data-lang="gdscript">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
@@ -3847,7 +3847,7 @@ tween(coin.scale, to: Vector2.new(1.35, 1.35), in: 150.milliseconds)</code></pre
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-gdscript code-compact">func check_line_of_sight(target_pos: Vector2) -&gt; void:
+              <pre><code class="language-gdscript">func check_line_of_sight(target_pos: Vector2) -&gt; void:
     # Pitfall: 12 lines of ceremony to cast a single ray
     var space = get_world_2d().direct_space_state
     var query = PhysicsRayQueryParameters2D.create(
@@ -3858,28 +3858,24 @@ tween(coin.scale, to: Vector2.new(1.35, 1.35), in: 150.milliseconds)</code></pre
     if not result.is_empty():
         var collider = result[&quot;collider&quot;]
         if collider is Enemy:
-            collider.take_damage(25)
-
-# Modulate alpha &amp; manual visibility
-hud.modulate.a = 0.85
-shield_fx.visible = true</code></pre>
+            collider.take_damage(25)</code></pre>
             </div>
             </div>
             <div class="comparison-pane" data-slot="after">
-            <div class="code-window code-container col code-compact" data-lang="crystal" data-density="compact">
+            <div class="code-window code-container col" data-lang="crystal">
               <div class="window-header code-header">
                 <div class="terminal-dots">
                   <span class="terminal-dot dot-1 red" title="Close"></span>
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: One-Line Queries, Fluent Builders &amp; Helpers</span>
+                <span class="window-title code-title"><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: One-Line Queries, Fluent Builders &amp; Typed Hits</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">Crystal (Lapis)</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
                 </div>
               </div>
-              <pre><code class="language-crystal code-compact"># 1. One-Line Raycast &amp; Safe Downcast:
+              <pre><code class="language-crystal"># 1. One-Line Raycast &amp; Safe Downcast:
 if hit = raycast_to(target_pos, mask: 0b0001)
   hit.collider.as?(Enemy).try(&amp;.take_damage(25))
 end
@@ -3889,12 +3885,7 @@ hit = raycast2d
   .to(target_pos)
   .exclude(self)
   .mask(0b0011)
-  .query
-
-# 3. CanvasItem Visibility &amp; Alpha Helpers:
-hud.alpha = 0.85              # Modulate alpha shorthand
-shield_fx.show                # Immediate visibility (or .hide)
-status_icon.toggle_visibility # Flips &amp; returns new Bool state</code></pre>
+  .query</code></pre>
             </div>
             </div>
           </div>
@@ -3909,7 +3900,6 @@ status_icon.toggle_visibility # Flips &amp; returns new Bool state</code></pre>
           Lapis simplifies physics queries with direct space raycasting. Methods like 'raycast_to(target_pos)' and 'raycast(dir, distance)' run on Node2D and Node3D in a single line, returning strongly-typed PhysicsHit2D or PhysicsHit3D value structs.
           For complex queries, fluent builders ('raycast2d', 'raycast3d') let you chain targets, exclusions, and collision masks before calling '.query'.
           All colliders can be safely downcast with 'hit.collider.as?(Enemy)' protected by Lapis's 64-bit dead-pointer armor.
-          Additionally, CanvasItem gains direct 'alpha' assignment and visibility helpers ('show', 'hide', 'toggle_visibility'), eliminating boilerplate color math for routine transitions.
         </aside>
       </section>
 
@@ -3921,11 +3911,11 @@ status_icon.toggle_visibility # Flips &amp; returns new Bool state</code></pre>
         <div class="slide-container">
           <header class="slide-header" data-align="split">
             <div class="slide-meta">
-              <span class="badge badge-pill amber" data-color="amber">PHYSICS • FLUENT RAYCASTING &amp; SCENE ERGONOMICS</span>
+              <span class="badge badge-pill amber" data-color="amber">PHYSICS • DIRECT SPACE QUERIES</span>
               <span class="badge analysis-badge step-badge" data-color="accent">ANALYSIS</span>
             </div>
             <h2 class="slide-title">Direct Space Physics: Zero-Boilerplate &amp; Fluent Raycasting</h2>
-            <p class="slide-subtitle">One-Line Spatial Queries, Fluent Builders, Typed Hits &amp; Scene Ergonomics</p>
+            <p class="slide-subtitle">One-Line Spatial Queries, Fluent Builders &amp; Strongly-Typed Hits</p>
           </header>
           <div class="slide-body" data-layout="code-comparison" data-step="critique">
             <div class="comparison-pane" data-slot="before">
@@ -3938,27 +3928,25 @@ status_icon.toggle_visibility # Flips &amp; returns new Bool state</code></pre>
                 <li><strong>Manual Query Setup:</strong> Requires allocating <code>PhysicsRayQueryParameters2D</code> objects for every raycast.</li>
                 <li><strong>Untyped Dictionaries:</strong> <code>intersect_ray</code> returns a dynamic Variant dictionary requiring string key lookups.</li>
                 <li><strong>Runtime Casting Hazards:</strong> Colliders must be manually checked with <code>is Enemy</code>, prone to null errors.</li>
-                <li><strong>Verbose Property Ceremony:</strong> Altering opacity requires unpacking <code>modulate.a</code> instead of semantic helpers.</li>
               </ul>
             </div>
             </div>
             <div class="comparison-pane" data-slot="after">
             <div class="card col emerald solution" data-color="emerald solution">
               <div class="card-header card-title emerald solution">
-                <span><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: One-Line Queries, Fluent Builders &amp; Helpers</span>
+                <span><svg class="fa-icon fa-sparkles" viewBox="0 0 576 512" aria-hidden="true"><path fill="currentColor" d="M391.5 53.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L448 96 469.2 152.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L512 96 568.5 74.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L512 32 490.8-24.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L448 32 391.5 53.2zm-185 20.1c-2.6-5.7-8.3-9.3-14.5-9.3s-11.9 3.6-14.5 9.3l-53.1 115-115 53.1C3.6 244.1 0 249.8 0 256s3.6 11.9 9.3 14.5l115 53.1 53.1 115c2.6 5.7 8.3 9.3 14.5 9.3s11.9-3.6 14.5-9.3l53.1-115 115-53.1c5.7-2.6 9.3-8.3 9.3-14.5s-3.6-11.9-9.3-14.5l-115-53.1-53.1-115zM416 416l-56.5 21.2c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 480 437.2 536.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 480 536.5 458.8c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 416 458.8 359.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 416z"/></svg> Crystal: One-Line Queries, Fluent Builders &amp; Typed Hits</span>
                 <span class="badge emerald solution" data-color="emerald solution">CLEAN SOLUTION</span>
               </div>
               <ul class="card-list">
                 <li><strong>One-Line &amp; Fluent Queries:</strong> <code>raycast_to</code> or chained <code>raycast2d.to.exclude.mask.query</code> in a single expression.</li>
                 <li><strong>Strongly-Typed Hits:</strong> Returns <code>PhysicsHit2D</code> / <code>3D</code> structs with typed <code>point</code>, <code>normal</code>, and <code>rid</code>.</li>
                 <li><strong>Dead-Pointer Guarded:</strong> <code>hit.collider.as?(Enemy)</code> validates survival with zero dangling pointer risks.</li>
-                <li><strong>CanvasItem Helpers:</strong> Direct <code>node.alpha = val</code>, <code>show</code>/<code>hide</code>, and <code>toggle_visibility</code> streamline UI state.</li>
               </ul>
             </div>
             </div>
             <div class="takeaway-banner">
               <span class="badge" data-color="accent">ZERO-BOILERPLATE RAYCASTING</span>
-              <span class="takeaway-text">Lapis collapses Godot's multi-step raycasting ceremony into safe one-line queries, fluent builders, and scene ergonomics.</span>
+              <span class="takeaway-text">Lapis collapses Godot's multi-step raycasting ceremony into safe one-line queries, fluent builders, and strongly-typed hit structs.</span>
             </div>
           </div>
           <footer class="slide-footer">
@@ -3972,7 +3960,6 @@ status_icon.toggle_visibility # Flips &amp; returns new Bool state</code></pre>
           Lapis simplifies physics queries with direct space raycasting. Methods like 'raycast_to(target_pos)' and 'raycast(dir, distance)' run on Node2D and Node3D in a single line, returning strongly-typed PhysicsHit2D or PhysicsHit3D value structs.
           For complex queries, fluent builders ('raycast2d', 'raycast3d') let you chain targets, exclusions, and collision masks before calling '.query'.
           All colliders can be safely downcast with 'hit.collider.as?(Enemy)' protected by Lapis's 64-bit dead-pointer armor.
-          Additionally, CanvasItem gains direct 'alpha' assignment and visibility helpers ('show', 'hide', 'toggle_visibility'), eliminating boilerplate color math for routine transitions.
         </aside>
       </section>
 
