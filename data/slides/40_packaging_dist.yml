@@ -1,41 +1,52 @@
 ---
 id: 40_packaging_dist
 title: 'The Packaging System: Turnkey Distribution'
-subtitle: Automated Single-Command Bundling for Addons, Debian Packages, and Windows Installers
+subtitle: Single-Command Game Bundles, Addons, OS Installers & Release Matrices via lapis package
 badge: PRODUCTION • PACKAGING & DISTRIBUTION
 badge_color: purple
 palette: spaces_11
-layout: two-top-one-bottom
-ratio: 2:1
-top_left:
+layout: one-left-two-right
+ratio: 3:2
+left:
   type: terminal
-  title: Terminal — make package-release
+  title: Terminal — lapis package
   font_size: '0.80rem'
   code: |
-    $ make package-release
+    # 1. Package standalone playable game (PCK + runner + DLLs)
+    $ lapis package game -p my_game -n VoidRunner --release
+    [Package] Exported VoidRunner.pck & staged runtime DLLs
+    [Lapis] Packaged archive: VoidRunner-windows-x64.zip
 
+    # 2. Package GDExtension addon & native OS installers
+    $ lapis package addon --platform windows
+    $ lapis package installer -v 0.0.270
+
+    # 3. Build complete release matrix with SHA-256 checksums
+    $ lapis package release -t bin/release_dist
     bin/release_dist/
     ├── crystal_integration-v0.0.270.zip    # Official Addon
-    ├── lapis-installer-v0.0.270-win64.exe  # Inno Setup
-    ├── lapis_0.0.270_amd64.deb             # Debian Package
+    ├── lapis-installer-v0.0.270-win64.exe  # Inno Setup (.exe)
+    ├── lapis_0.0.270_amd64.deb             # Debian Package (.deb)
     ├── basic_demo-windows-x64.zip          # Playable Game
-    ├── benchmarks-report-v0.0.270.html     # Perf Charts
-    └── SHA256SUMS.txt                      # Checksums
-top_right:
+    ├── benchmarks-windows-x64.zip          # Benchmark Suite
+    └── SHA256SUMS.txt                      # SHA-256 Checksums
+right_top:
   type: card
-  title: 'Addon Isolation & DLL Synchronization'
-  badge: 'CLEAN BUNDLING'
+  title: 'Standalone Games & Addon Isolation'
+  badge: 'LAPIS PACKAGE'
   color: purple
   items:
-    - '<strong>Strict Addon Isolation:</strong> Packaging strictly bundles <code>crystal_integration</code>; dummy test addons are NEVER shipped.'
-    - '<strong>Automatic DLL Synchronization:</strong> Bundles required runtime DLLs: <code>gc.dll</code>, <code>iconv-2.dll</code>, and <code>pcre2-8.dll</code>.'
-bottom:
+    - '<strong>Playable Game Bundles (<code>lapis package game</code>):</strong> Exports the Godot <code>.pck</code> and automatically stages <code>crystal_bridge.dll</code>, <code>gc.dll</code>, <code>iconv-2.dll</code>, and <code>pcre2-8.dll</code>.'
+    - '<strong>Strict Addon Isolation (<code>lapis package addon</code>):</strong> Packages redistributable GDExtension addons (<code>crystal_integration</code>) while stripping test/dummy artifacts.'
+right_bottom:
   type: card
-  title: 'Release Hardening & Cryptographic Verification'
+  title: 'OS Installers & Release Hardening'
   badge: 'PRODUCTION READY'
   color: cyan
   items:
-    - '<strong>Dead-Code Stripping:</strong> Release binaries are compiled with <code>--release -O3</code> and stripped of debug symbols for minimal footprint.'
-    - '<strong>Cryptographic Checksums:</strong> Automatically generates <code>SHA256SUMS.txt</code> across all output archives, installers, and packages.'
+    - '<strong>Cross-Platform Installers (<code>installer</code> / <code>deb</code>):</strong> Compiles with <code>--release -O3</code>, strips debug symbols, and builds Windows Inno Setup <code>.exe</code> and Linux <code>.deb</code> packages.'
+    - '<strong>Turnkey Release Matrix (<code>lapis package release</code>):</strong> Builds all distribution targets and generates cryptographic <code>SHA256SUMS.txt</code> checksums in a single command.'
 notes: |
-  Shipping games and addons shouldn't require tedious manual zip packaging. Lapis features a turnkey packaging system. A single command packages official GDExtension addons, Windows Inno Setup installers, Debian packages, and standalone playable games with automatic DLL dependency bundling and cryptographic checksums.
+  Shipping games and addons shouldn't require tedious manual zip packaging or hunting down missing C-runtime DLLs. Lapis features a turnkey packaging system built directly into the CLI via 'lapis package'.
+  Running 'lapis package game --release' compiles optimized game binaries, exports the Godot PCK packfile, and automatically stages every required runtime shared library—including Boehm GC, iconv, and pcre2—into a ready-to-play archive.
+  You can also package redistributable GDExtension addons with 'lapis package addon', build native Windows Inno Setup installers and Linux Debian packages with 'lapis package installer', or generate the entire release distribution matrix with SHA-256 cryptographic checksums via 'lapis package release'.

@@ -3630,23 +3630,26 @@ Zero state loss across GDExtension reloads: live inspector edits, runtime collec
 
 ---
 
-### Slide 131: The Packaging System: Turnkey Distribution [Two-Top-One-Bottom]
+### Slide 131: The Packaging System: Turnkey Distribution [One-Left-Two-Right]
 - **Theme Palette**: `spaces_11` (Spaces 11)
 - **Title**: The Packaging System: Turnkey Distribution
+- **Subtitle**: Single-Command Game Bundles, Addons, OS Installers & Release Matrices via lapis package
 
-#### Top Split Columns:
-- **Terminal — make package-release**
-- **Addon Isolation & DLL Synchronization**
-  - Strict Addon Isolation: Packaging strictly bundles crystal_integration; dummy test addons are NEVER shipped.
-  - Automatic DLL Synchronization: Bundles required runtime DLLs: gc.dll, iconv-2.dll, and pcre2-8.dll.
+#### Left Column:
+- **Terminal — lapis package**
 
-#### Bottom Full-Width Slot:
-- **Release Hardening & Cryptographic Verification**
-  - Dead-Code Stripping: Release binaries are compiled with --release -O3 and stripped of debug symbols for minimal footprint.
-  - Cryptographic Checksums: Automatically generates SHA256SUMS.txt across all output archives, installers, and packages.
+#### Right Stacked Containers:
+- **Standalone Games & Addon Isolation**
+  - Playable Game Bundles (lapis package game): Exports the Godot .pck and automatically stages crystal_bridge.dll, gc.dll, iconv-2.dll, and pcre2-8.dll.
+  - Strict Addon Isolation (lapis package addon): Packages redistributable GDExtension addons (crystal_integration) while stripping test/dummy artifacts.
+- **OS Installers & Release Hardening**
+  - Cross-Platform Installers (installer / deb): Compiles with --release -O3, strips debug symbols, and builds Windows Inno Setup .exe and Linux .deb packages.
+  - Turnkey Release Matrix (lapis package release): Builds all distribution targets and generates cryptographic SHA256SUMS.txt checksums in a single command.
 
 **Presenter Notes**:
-> Shipping games and addons shouldn't require tedious manual zip packaging. Lapis features a turnkey packaging system. A single command packages official GDExtension addons, Windows Inno Setup installers, Debian packages, and standalone playable games with automatic DLL dependency bundling and cryptographic checksums.
+> Shipping games and addons shouldn't require tedious manual zip packaging or hunting down missing C-runtime DLLs. Lapis features a turnkey packaging system built directly into the CLI via 'lapis package'.
+> Running 'lapis package game --release' compiles optimized game binaries, exports the Godot PCK packfile, and automatically stages every required runtime shared library—including Boehm GC, iconv, and pcre2—into a ready-to-play archive.
+> You can also package redistributable GDExtension addons with 'lapis package addon', build native Windows Inno Setup installers and Linux Debian packages with 'lapis package installer', or generate the entire release distribution matrix with SHA-256 cryptographic checksums via 'lapis package release'.
 
 ---
 
