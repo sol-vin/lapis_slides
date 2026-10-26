@@ -35,16 +35,15 @@ slides:
 # ==============================================================================
 - 02b_act2_ruby_intro
 - 03_ruby_philosophy
+- 03a_ruby_small_syntax
 - 03_ruby_backend
 - 03_ruby_frontend
-- 03a_ruby_small_syntax
 - 04_sorbet_dilemma
 
 # ==============================================================================
 # ACT III: CRYSTAL — THE COMPILED SYNTHESIS
 # ==============================================================================
 - 04b_act3_crystal_intro
-- 07_why_crystal_video
 - 05_birth_of_crystal
 - 05b_crystal_type_system
 - 10_expressive_ergonomics

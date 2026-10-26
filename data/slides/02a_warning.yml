@@ -1,21 +1,32 @@
 ---
 id: 02a_warning
 title: "A Quick Warning"
-subtitle: "This is going to be a long one — everything is timestamped in the video description below."
-act: "HEADS UP • LONG VIDEO AHEAD"
-badge: "DISCLAIMER • TIMESTAMPS"
+subtitle: "This is going to be a long, extremely opinionated talk with cursing — everything is timestamped below."
+act: "HEADS UP • CONTENT & LENGTH ADVISORY"
+badge: "DISCLAIMER • TIMESTAMPS • OPINIONS"
 badge_color: "amber"
 palette: "warm_paper"
 layout: "chapter-layout"
 pillars:
   - title: "Long-Form Presentation"
-    desc: "This video is going to be long — grab a coffee and settle in."
+    desc: "This video is going to be long — grab a coffee, get comfortable, and settle in."
     icon: "triangle-exclamation"
     color: "amber"
-  - title: "Timestamps in the Description"
+  - title: "Timestamps in Description"
     desc: "I will timestamp every section in the video description so you can jump to whatever interests you."
     icon: "scroll"
     color: "cyan"
+  - title: "Extremely Opinionated"
+    desc: "This talk is unapologetically opinionated on language design, ergonomics, and engine architecture."
+    icon: "bullseye"
+    color: "purple"
+  - title: "Unfiltered & Cursing"
+    desc: "Fair warning: there will be cursing and blunt, unfiltered commentary throughout this presentation."
+    icon: "comment-dots"
+    color: "coral"
 notes: |
-  A quick warning before we dive in: this is going to be a long video. I will timestamp everything in the description of the video so you can easily jump around to whatever sections you care about.
+  A quick warning before we dive in: first, this is going to be a long video, so I will timestamp every section in the description below so you can easily jump around to whatever you care about.
+  Second, this talk is extremely opinionated—I have very strong views on programming language design, developer ergonomics, and game engine architecture, and I am not going to hold back.
+  And finally, fair warning: there will be cursing.
+
 
