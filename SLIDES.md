@@ -1501,21 +1501,21 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 - **Theme Palette**: `cross_cube_360` (CrossCube 360)
 - **Badge**: `LAPIS EXTRAS • WILDCARDS & ITERATION`
 - **Title**: Lapis Extras: Wildcard Glob Queries & Streaming Iteration (*)
-- **Subtitle**: require "lapis/extras" • Wildcards (*, **), get_nodes, each_node, and GroupQuery DSL
-- **Code (scene_tree_globs.cr — Wildcards & Streaming Queries)**:
+- **Subtitle**: require "lapis/extras" • Wildcards (*, **), Regex (/.../), get_nodes, each_node & GroupQuery
+- **Code (scene_tree_globs.cr — Globs, Regex & Streaming Queries)**:
   ```crystal
   require "lapis/extras"
   
   node CombatArena < Node2D do
     def _ready : Void
-      # 1. Multi-node wildcard glob query (*) & globstar (**):
+      # 1. Glob (*, **) & Regex (/.../) queries via * and get_nodes:
       hitboxes = self * {"Enemies/*/Hitbox", Area2D}
       spawns   = self.get_nodes("Spawns/**", Marker2D)
+      fx_nodes = self * /^FX_Spark_\d+$/
   
-      # 2. Streaming receiver-scoped iteration (0 intermediate array!):
-      self.each_node("Enemies/*", Enemy) do
-        alert! # Direct method call on Enemy context
-      end
+      # 2. Streaming receiver-scoped iteration (Glob or Regex):
+      self.each_node("Enemies/*", Enemy) { alert! }
+      self.each_node(/^Turret_\d+$/, Node2D) { look_at(player.position) }
   
       # 3. Fluent typed GroupQuery DSL:
       group(:enemies).each(as: Enemy) { |e| e.alert! }
@@ -1523,9 +1523,9 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
   end
   ```
 - **Ergonomic Hierarchy Query Engine**:
-  - Opt-In Require: Add require "lapis/extras" to enable wildcard globbing and streaming query methods.
-  - Wildcard & Globstar (*): self * {"pattern", Type} searches single and recursive subtrees returning Array(T).
-  - Streaming Iteration: each_node(pattern, Type) traverses descendants without allocating intermediate arrays.
+  - Opt-In Require: Add require "lapis/extras" to enable wildcard, regex, and streaming query methods.
+  - Globs & Regex Everywhere: *, get_nodes, and each_node all accept shell globs (*, **) or Regex literals (/^FX_\d+$/).
+  - Streaming Iteration: each_node(pattern, Type) traverses descendants in receiver scope without allocating intermediate arrays.
   - Fluent GroupQuery DSL: group(:name) provides typed .each(as: Type) and broadcast .call methods.
 
 **Presenter Notes**:

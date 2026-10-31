@@ -4369,7 +4369,7 @@ end</code></pre>
               <span class="badge badge-pill cyan" data-color="cyan">LAPIS EXTRAS • WILDCARDS &amp; ITERATION</span>
             </div>
             <h2 class="slide-title">Lapis Extras: Wildcard Glob Queries &amp; Streaming Iteration (*)</h2>
-            <p class="slide-subtitle">require &quot;lapis/extras&quot; • Wildcards (*, **), get_nodes, each_node, and GroupQuery DSL</p>
+            <p class="slide-subtitle">require &quot;lapis/extras&quot; • Wildcards (*, **), Regex (/.../), get_nodes, each_node &amp; GroupQuery</p>
           </header>
           <div class="slide-body" data-layout="two-column" data-ratio="1:1">
             <div class="column col" data-slot="left">
@@ -4380,7 +4380,7 @@ end</code></pre>
                   <span class="terminal-dot dot-2 yellow" title="Minimize"></span>
                   <span class="terminal-dot dot-3 green" title="Maximize"></span>
                 </div>
-                <span class="window-title code-title">scene_tree_globs.cr — Wildcards &amp; Streaming Queries</span>
+                <span class="window-title code-title">scene_tree_globs.cr — Globs, Regex &amp; Streaming Queries</span>
                 <div class="window-controls">
                   <span class="lang-tag code-lang-tag">Crystal (Lapis)</span>
                   <span class="window-btn close" title="Close"><svg class="fa-icon fa-xmark" viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192.5 301.3 329.9 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256 375.1 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7 55.1 73.4z"/></svg></span>
@@ -4390,14 +4390,14 @@ end</code></pre>
 
 node CombatArena &lt; Node2D do
   def _ready : Void
-    # 1. Multi-node wildcard glob query (*) &amp; globstar (**):
+    # 1. Glob (*, **) &amp; Regex (/.../) queries via * and get_nodes:
     hitboxes = self * {&quot;Enemies/*/Hitbox&quot;, Area2D}
     spawns   = self.get_nodes(&quot;Spawns/**&quot;, Marker2D)
+    fx_nodes = self * /^FX_Spark_\d+$/
 
-    # 2. Streaming receiver-scoped iteration (0 intermediate array!):
-    self.each_node(&quot;Enemies/*&quot;, Enemy) do
-      alert! # Direct method call on Enemy context
-    end
+    # 2. Streaming receiver-scoped iteration (Glob or Regex):
+    self.each_node(&quot;Enemies/*&quot;, Enemy) { alert! }
+    self.each_node(/^Turret_\d+$/, Node2D) { look_at(player.position) }
 
     # 3. Fluent typed GroupQuery DSL:
     group(:enemies).each(as: Enemy) { |e| e.alert! }
@@ -4411,9 +4411,9 @@ end</code></pre>
                 <span>Ergonomic Hierarchy Query Engine</span>
               </div>
               <ul class="card-list">
-                <li><strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable wildcard globbing and streaming query methods.</li>
-                <li><strong>Wildcard & Globstar (<code>*</code>):</strong> <code>self * {"pattern", Type}</code> searches single and recursive subtrees returning <code>Array(T)</code>.</li>
-                <li><strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> traverses descendants without allocating intermediate arrays.</li>
+                <li><strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable wildcard, regex, and streaming query methods.</li>
+                <li><strong>Globs &amp; Regex Everywhere:</strong> <code>*</code>, <code>get_nodes</code>, and <code>each_node</code> all accept shell globs (<code>*</code>, <code>**</code>) or <code>Regex</code> literals (<code>/^FX_\d+$/</code>).</li>
+                <li><strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> traverses descendants in receiver scope without allocating intermediate arrays.</li>
                 <li><strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides typed <code>.each(as: Type)</code> and broadcast <code>.call</code> methods.</li>
               </ul>
             </div>

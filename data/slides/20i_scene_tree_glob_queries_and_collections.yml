@@ -1,7 +1,7 @@
 ---
 id: 20i_scene_tree_glob_queries_and_collections
 title: 'Lapis Extras: Wildcard Glob Queries & Streaming Iteration (*)'
-subtitle: 'require "lapis/extras" • Wildcards (*, **), get_nodes, each_node, and GroupQuery DSL'
+subtitle: 'require "lapis/extras" • Wildcards (*, **), Regex (/.../), get_nodes, each_node & GroupQuery'
 badge: LAPIS EXTRAS • WILDCARDS & ITERATION
 badge_color: cyan
 palette: cross_cube_360
@@ -9,23 +9,23 @@ layout: two-column-layout
 ratio: 1:1
 left:
   type: code
-  title: scene_tree_globs.cr — Wildcards & Streaming Queries
+  title: scene_tree_globs.cr — Globs, Regex & Streaming Queries
   tag: Crystal (Lapis)
   lang: crystal
-  font_size: '0.84rem'
+  font_size: '0.82rem'
   code: |
     require "lapis/extras"
 
     node CombatArena < Node2D do
       def _ready : Void
-        # 1. Multi-node wildcard glob query (*) & globstar (**):
+        # 1. Glob (*, **) & Regex (/.../) queries via * and get_nodes:
         hitboxes = self * {"Enemies/*/Hitbox", Area2D}
         spawns   = self.get_nodes("Spawns/**", Marker2D)
+        fx_nodes = self * /^FX_Spark_\d+$/
 
-        # 2. Streaming receiver-scoped iteration (0 intermediate array!):
-        self.each_node("Enemies/*", Enemy) do
-          alert! # Direct method call on Enemy context
-        end
+        # 2. Streaming receiver-scoped iteration (Glob or Regex):
+        self.each_node("Enemies/*", Enemy) { alert! }
+        self.each_node(/^Turret_\d+$/, Node2D) { look_at(player.position) }
 
         # 3. Fluent typed GroupQuery DSL:
         group(:enemies).each(as: Enemy) { |e| e.alert! }
@@ -36,9 +36,9 @@ right:
   title: Ergonomic Hierarchy Query Engine
   color: cyan
   items:
-    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable wildcard globbing and streaming query methods.'
-    - '<strong>Wildcard & Globstar (<code>*</code>):</strong> <code>self * {"pattern", Type}</code> searches single and recursive subtrees returning <code>Array(T)</code>.'
-    - '<strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> traverses descendants without allocating intermediate arrays.'
+    - '<strong>Opt-In Require:</strong> Add <code>require "lapis/extras"</code> to enable wildcard, regex, and streaming query methods.'
+    - '<strong>Globs &amp; Regex Everywhere:</strong> <code>*</code>, <code>get_nodes</code>, and <code>each_node</code> all accept shell globs (<code>*</code>, <code>**</code>) or <code>Regex</code> literals (<code>/^FX_\d+$/</code>).'
+    - '<strong>Streaming Iteration:</strong> <code>each_node(pattern, Type)</code> traverses descendants in receiver scope without allocating intermediate arrays.'
     - '<strong>Fluent GroupQuery DSL:</strong> <code>group(:name)</code> provides typed <code>.each(as: Type)</code> and broadcast <code>.call</code> methods.'
 notes: |
   Finding and managing collections of nodes across complex scene trees has always been awkward in game engines. In GDScript, you either manually loop through get_children(), write recursive traversal helper functions, or rely on stringly-typed engine groups.
