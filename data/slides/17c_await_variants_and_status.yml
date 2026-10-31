@@ -10,24 +10,23 @@ ratio: 2:3
 left:
   - type: card
     title: '1. spawn + await(sig) — AwaitStatus(T)'
-    badge: 'FIBERS & PREDICATES'
+    badge: 'DIAGNOSTIC STATUS'
     color: cyan
     items:
       - '<strong>Cooperative <code>spawn</code>:</strong> Launch lightweight main-thread fibers with <code>spawn do ... end</code> and suspend cleanly with <code>await</code>.'
-      - '<strong>Status &amp; Tuples:</strong> Returns <code>AwaitStatus(T)</code> (<code>.completed?</code>, <code>.timed_out?</code>, <code>.ok?</code>) and destructures multi-arg tuples.'
+      - '<strong>Full Outcome Status:</strong> Returns <code>AwaitStatus(T)</code> reporting whether it was <strong>ok</strong> (<code>.ok?</code>), <strong>timed out</strong> (<code>.timed_out?</code>), or <strong>object freed</strong> (<code>.disposed?</code>).'
   - type: card
-    title: '2. await!(sig) — Unwrap or Raise'
-    badge: 'STRICT ASSERT'
-    color: amber
-    items:
-      - '<strong>Direct Payload Unwrap:</strong> Returns <code>T</code> (or <code>Tuple</code>) directly and raises <code>TimeoutError</code> on expiry.'
-  - type: card
-    title: '3. await?(sig) & Dead-Pointer Armor'
+    title: '2. await?(sig) — Nil Out on Error'
     badge: 'NIL OVER ERRORS'
     color: emerald
     items:
-      - '<strong>Safe Timeout:</strong> Returns <code>T | Nil</code> (or <code>Bool</code> for 0-arg signals) without throwing.'
-      - '<strong>DisposedObjectError:</strong> Raises immediately if the target node is freed—never hangs.'
+      - '<strong>Safe Unwrap:</strong> Returns <code>T | Nil</code> (or <code>Bool</code> for 0-arg signals) and cleanly <strong>nils out</strong> if an error occurs (timeout or freed node) without throwing.'
+  - type: card
+    title: '3. await!(sig) — Unwrap or Raise'
+    badge: 'STRICT ASSERT'
+    color: amber
+    items:
+      - '<strong>Direct Payload Unwrap:</strong> Returns <code>T</code> (or <code>Tuple</code>) directly and throws <code>TimeoutError</code> on expiry or <code>ObjectDisposedError</code> if the node is freed.'
 right:
   type: code
   title: signal_awaiting_triad.cr — Cooperative Fibers & Await Triad
@@ -36,28 +35,26 @@ right:
   font_size: '0.76rem'
   code: |
     spawn do
-      # 1. 0-arg signal: predicates & timeout handling
+      # 1. await: full status (ok, timed out, or object freed)
       status = await(player.died, timeout_sec: 5.0)
-      status.completed?                      # => Bool (.timed_out?, .ok?)
-      await?(player.died, timeout_sec: 5.0)  # => true on emit, false on timeout
+      status.ok?                             # => Bool (.timed_out?, .disposed?)
 
-      # 2. Single-arg signal: typed payload unboxing
-      status = await(player.health_changed)  # => AwaitStatus(Int32)
-      hp     = await!(player.health_changed) # => 42_i32 (or raises TimeoutError)
-      hp_opt = await?(player.health_changed) # => 42_i32 on emit, nil on timeout
+      # 2. await?: nils out (or false) on timeout or freed node
+      await?(player.died, timeout_sec: 5.0)  # => true on emit, false on error
+      hp_opt = await?(player.health_changed) # => 42_i32 on emit, nil on error
 
-      # 3. Multi-arg signal & tuple destructuring
+      # 3. await!: unwraps payload or raises on timeout / freed node
+      # Raises TimeoutError or ObjectDisposedError if node is freed!
+      hp = await!(player.health_changed)     # => 42_i32
+
+      # 4. Multi-arg tuple destructuring & engine signals
       status = await(boss.loot_dropped)      # => AwaitStatus(Tuple(Int32, String))
       id, name = status                      # Direct Crystal tuple destructuring!
-
-      # 4. Engine signals & numeric duration delays
       body = await!((~Area2D).body_entered)  # => Godot::Node2D (typed engine signal)
       await(1.0)                             # => AwaitStatus (or await? / await!)
     end
 notes: |
-  Lapis lets you orchestrate asynchronous gameplay sequences inside lightweight cooperative 'spawn do ... end' fibers using a complete triad of non-blocking await primitives:
-  1. Standard 'await' suspends the spawned fiber and returns an 'AwaitStatus(T)' struct with predicates like '.completed?', '.timed_out?', and '.ok?'. When awaiting multi-argument signals, it yields a Tuple that supports Crystal tuple destructuring ('id, name = status').
-  2. The bang variant 'await!' unwraps the payload directly or raises 'TimeoutError' if expired—ideal for sequential cinematic routines where timeouts represent abnormal interruptions.
-  3. The question mark variant 'await?' follows Crystal's 'nil-over-errors' philosophy: returning the payload on emit, and nil (or false for 0-arg signals/timers) on timeout without throwing.
-  Finally, if a target node is queued for deletion while a fiber is waiting, Lapis raises Godot::DisposedObjectError, permanently eliminating GDScript's notorious infinite-hang bugs.
-
+  Lapis lets you orchestrate asynchronous gameplay sequences inside lightweight cooperative 'spawn do ... end' fibers using a complete triad of non-blocking await primitives that mirror Crystal's standard '?', '!', and base method conventions:
+  1. Standard 'await' suspends the spawned fiber and returns an 'AwaitStatus(T)' struct indicating whether the wait was ok ('.ok?' / '.completed?'), timed out ('.timed_out?'), or aborted because the target object was freed ('.disposed?'). When awaiting multi-argument signals, it also supports direct Crystal tuple destructuring ('id, name = status').
+  2. The question mark variant 'await?' follows Crystal's 'nil-over-errors' philosophy: returning the payload on emit, and cleanly nilling out (or returning false for 0-arg signals/timers) if an error occurs—whether from a timeout or a freed node—without throwing an exception.
+  3. The bang variant 'await!' unwraps the payload directly and throws 'TimeoutError' if expired or 'ObjectDisposedError' if the target node is freed while waiting, permanently eliminating GDScript's notorious infinite-hang bugs.

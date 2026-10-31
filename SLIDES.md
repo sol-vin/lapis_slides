@@ -2361,22 +2361,20 @@ Compile-time ClassDB registration with automatic doc harvesting, zero GDExtensio
 #### Left Stacked Principles:
 - **1. spawn + await(sig) — AwaitStatus(T)**
   - Cooperative spawn: Launch lightweight main-thread fibers with spawn do ... end and suspend cleanly with await.
-  - Status & Tuples: Returns AwaitStatus(T) (.completed?, .timed_out?, .ok?) and destructures multi-arg tuples.
-- **2. await!(sig) — Unwrap or Raise**
-  - Direct Payload Unwrap: Returns T (or Tuple) directly and raises TimeoutError on expiry.
-- **3. await?(sig) & Dead-Pointer Armor**
-  - Safe Timeout: Returns T | Nil (or Bool for 0-arg signals) without throwing.
-  - DisposedObjectError: Raises immediately if the target node is freed—never hangs.
+  - Full Outcome Status: Returns AwaitStatus(T) reporting whether it was ok (.ok?), timed out (.timed_out?), or object freed (.disposed?).
+- **2. await?(sig) — Nil Out on Error**
+  - Safe Unwrap: Returns T | Nil (or Bool for 0-arg signals) and cleanly nils out if an error occurs (timeout or freed node) without throwing.
+- **3. await!(sig) — Unwrap or Raise**
+  - Direct Payload Unwrap: Returns T (or Tuple) directly and throws TimeoutError on expiry or ObjectDisposedError if the node is freed.
 
 #### Right Showcase Column:
 - **signal_awaiting_triad.cr — Cooperative Fibers & Await Triad**
 
 **Presenter Notes**:
-> Lapis lets you orchestrate asynchronous gameplay sequences inside lightweight cooperative 'spawn do ... end' fibers using a complete triad of non-blocking await primitives:
-> 1. Standard 'await' suspends the spawned fiber and returns an 'AwaitStatus(T)' struct with predicates like '.completed?', '.timed_out?', and '.ok?'. When awaiting multi-argument signals, it yields a Tuple that supports Crystal tuple destructuring ('id, name = status').
-> 2. The bang variant 'await!' unwraps the payload directly or raises 'TimeoutError' if expired—ideal for sequential cinematic routines where timeouts represent abnormal interruptions.
-> 3. The question mark variant 'await?' follows Crystal's 'nil-over-errors' philosophy: returning the payload on emit, and nil (or false for 0-arg signals/timers) on timeout without throwing.
-> Finally, if a target node is queued for deletion while a fiber is waiting, Lapis raises Godot::DisposedObjectError, permanently eliminating GDScript's notorious infinite-hang bugs.
+> Lapis lets you orchestrate asynchronous gameplay sequences inside lightweight cooperative 'spawn do ... end' fibers using a complete triad of non-blocking await primitives that mirror Crystal's standard '?', '!', and base method conventions:
+> 1. Standard 'await' suspends the spawned fiber and returns an 'AwaitStatus(T)' struct indicating whether the wait was ok ('.ok?' / '.completed?'), timed out ('.timed_out?'), or aborted because the target object was freed ('.disposed?'). When awaiting multi-argument signals, it also supports direct Crystal tuple destructuring ('id, name = status').
+> 2. The question mark variant 'await?' follows Crystal's 'nil-over-errors' philosophy: returning the payload on emit, and cleanly nilling out (or returning false for 0-arg signals/timers) if an error occurs—whether from a timeout or a freed node—without throwing an exception.
+> 3. The bang variant 'await!' unwraps the payload directly and throws 'TimeoutError' if expired or 'ObjectDisposedError' if the target node is freed while waiting, permanently eliminating GDScript's notorious infinite-hang bugs.
 
 ---
 
