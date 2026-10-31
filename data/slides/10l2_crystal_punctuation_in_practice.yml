@@ -1,0 +1,64 @@
+---
+id: 10l2_crystal_punctuation_in_practice
+title: '"?" and "!" in practice'
+subtitle: 'One Core Operation, Three Caller Contracts: Full Diagnostics, Safe Nil, or Fail-Fast'
+badge: CRYSTAL ERGONOMICS • API TRIAD PATTERN
+badge_color: purple
+palette: tokyo_midnight
+layout: one-left-three-right
+ratio: 3:2
+left:
+  type: code
+  title: network_triad.cr — The complex / complex? / complex! Pattern
+  tag: Crystal
+  lang: crystal
+  font_size: '0.80rem'
+  code: |
+    # 1. Base method: full diagnostic Tuple (status/error + result)
+    def complex : {Status | Exception, Result | Nil}
+      # ... fake complex network operation ...
+      {Status::Ok, Result.new}
+    rescue ex : Exception
+      {ex, nil}
+    end
+
+    # 2. Safe query (?): returns Result | Nil (ignores error details)
+    def complex? : Result | Nil
+      _, result = complex
+      result
+    end
+
+    # 3. Strict bang (!): returns Result or throws the error
+    def complex! : Result
+      status, result = complex
+      raise status if status.is_a?(Exception)
+      result.not_nil!
+    end
+right:
+  - type: card
+    title: '1. complex — Full Diagnostic Tuple'
+    badge: 'TUPLE CONTRACT'
+    color: purple
+    items:
+      - '<strong>Complete Context:</strong> Returns <code>{Status | Exception, Result | Nil}</code> for callers that inspect status codes or retry on specific errors.'
+      - '<strong>Single Source of Truth:</strong> Houses the core logic once; both <code>?</code> and <code>!</code> wrap this base routine.'
+  - type: card
+    title: '2. complex? — Nil Over Errors'
+    badge: 'SAFE QUERY'
+    color: cyan
+    items:
+      - '<strong>Zero-Ceremony Lookup:</strong> Returns <code>Result | Nil</code> when you only care if a value came back—perfect for <code>if res = complex?</code>.'
+  - type: card
+    title: '3. complex! — Unwrap or Raise'
+    badge: 'FAIL-FAST BANG'
+    color: coral
+    items:
+      - '<strong>Guaranteed Payload:</strong> Returns a non-nil <code>Result</code> directly and throws the captured <code>Exception</code> if one occurred.'
+      - '<strong>Caller-Chosen Ergonomics:</strong> One character at the call site selects the exact error-handling model you need.'
+notes: |
+  Here is how "?" and "!" come together in practice when designing real-world APIs like a complex network operation.
+  Instead of forcing every caller into a single rigid error-handling paradigm—like Go's repetitive error tuples everywhere or Java's mandatory checked exceptions—Crystal's semantic punctuation lets you offer all three contracts from one unified implementation:
+  1. The base 'complex' method performs the operation and returns a stack-allocated Tuple containing a 'Status | Exception' alongside a 'Result | Nil'. Callers that need deep diagnostics, status inspection, or custom retry policies destructure both values directly.
+  2. The question-mark variant 'complex?' simply unpacks the tuple and returns 'Result | Nil'. When a caller doesn't care why the network call failed and just wants to branch on whether a result arrived, 'if res = complex?' handles it in one line with compile-time nil narrowing.
+  3. The bang variant 'complex!' unpacks the tuple, immediately raises the exception if one was encountered, and returns a guaranteed non-nil 'Result'.
+  Because Crystal allows '?' and '!' directly in method identifiers, all three share the same base name—giving the caller complete control over failure semantics with a single character at the call site.
