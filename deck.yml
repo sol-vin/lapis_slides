@@ -107,7 +107,6 @@ slides:
 - 11b_antipattern_anon_functions
 - 11c_antipattern_symbols
 - 12_antipattern_nil_safety
-- 13_antipattern_pattern_matching
 - 14_antipattern_macros
 - 15_antipattern_structs
 - 15b_frame_arena
